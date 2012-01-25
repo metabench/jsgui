@@ -22,3 +22,7 @@ jsgui-html:
 
 The core HTML processing system. It's most notable class is jsgui.Control. This is used as the basis for other controls in the jsgui system. Controls encapsulate functionality that is part of the Graphical User Interface of a web page - similar to the idea of (but not implementation of) Controls in the Microsoft ASP.NET and Windows Forms platforms.
 
+jsgui-touch:
+
+Used for touchscreen devices. Code to recognise swipe gestures. Code to recognise other gestures will go here. Possibility of further compression of code here.
+
