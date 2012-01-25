@@ -1,0 +1,15 @@
+jsgui library
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+
+The library had different components for different situations and platforms.
+
+It operates on both the client and the server. Some code is specialised for one environment while other code will run in both locations.
+
+jsgui-lang:
+
+Important features that are used to implement other parts of the library. Functions here avoid code repetition elsewhere in the library. One of the main goals of this module is to enable compact JavaScript code to be written.
+
+jsgui-html:
+
+The core HTML processing system. It's most notable class is jsgui.Control. This is used as the basis for other controls in the jsgui system. Controls encapsulate functionality that is part of the Graphical User Interface of a web page - similar to the idea of (but not implementation of) Controls in the Microsoft ASP.NET and Windows Forms platforms.
+
