@@ -25,6 +25,8 @@ The most complicated code in jsgui-lang implements the nested data system. This 
 obj.set(nested_property_name, value);
 obj.set('style.border', '1px solid #000000');
 obj.set('style.border.width', '15px');
+obj.set('style.border.width', '15'); // The string is parsed, units are assumed to be px
+obj.set('style.border.width', 15); // Units are assumed to be px
 
 jsgui-html:
 
