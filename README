@@ -20,7 +20,11 @@ Important features that are used to implement other parts of the library. Functi
 
 Nested data system:
 
+The most complicated code in jsgui-lang implements the nested data system. This allows properties to be set as follows:
 
+obj.set(nested_property_name, value);
+obj.set('style.border', '1px solid #000000');
+obj.set('style.border.width', '15px');
 
 jsgui-html:
 
