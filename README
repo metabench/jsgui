@@ -1,7 +1,7 @@
 jsgui library
 -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
-The library had different components for different situations and platforms.
+The library has different components for different situations and platforms.
 
 It operates on both the client and the server. Some code is specialised for one environment while other code will run in both locations.
 
