@@ -1,4 +1,13 @@
 jsgui library
+
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+
+License: MIT License
+
+Version: 0.3
+
+Many changes have been made before this has been released as an open source project. 0.3 is the first open source release. Significantly, the system is being split up into components that are packaged using the require.js syntax.
+
 -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 
 The library has different components for different situations and platforms.
