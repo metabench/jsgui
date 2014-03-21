@@ -303,7 +303,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     });
 
                     rt.set('/css/*', function(req, res) {
-                    	console.log('css wildcard routing. will send to the css resource.');
+                    	//console.log('css wildcard routing. will send to the css resource.');
 
                     	//throw 'stop';
                     	css.process(req, res);
@@ -314,7 +314,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
                     	// Want it easy to see what the wildcard part is.
 
-                    	console.log('js wildcard routing. will send to the js resource.');
+                    	//console.log('js wildcard routing. will send to the js resource.');
                     	//console.log('req', req);
                     	js.process(req, res);
                     });

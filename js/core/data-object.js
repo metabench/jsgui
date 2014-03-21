@@ -4614,7 +4614,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								}
 								*/
 								var dv;
-								console.log('tv ' + tv);
+								//console.log('tv ' + tv);
 								if (tv == 'string' || tv == 'number' || tv == 'boolean' || tv == 'date') {
 									dv = new Data_Value({'value': value});
 								} else {
