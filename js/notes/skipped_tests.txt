@@ -1,0 +1,119 @@
+
+-------------------------------------------------------------------------------------------------
+
+There is a side effect when the jsgui-lang-enh module is referenced: stringify() result changes. 
+So, trying to run all the tests (using test.cmd command file) produces an error now.
+
+-------------------------------------------------------------------------------------------------
+
+
+crash\net_crash.js 
+not sure if it's a test at all. I suppose to delete it.
+
+document\test-document.js,
+document\test-document2.js 
+it seems to be a web-server. it starts, but it crashes when a page request occurs
+(data-object.js line 108 throws an exception "stop Mini_Context typed id")
+Delayed for the second pass.
+
+
+jsgui-db\test-mongo-db.js 
+db/resource-mongo.js not exists, but it exists in the big zip archive. Delayed for the second pass.
+
+jsgui-html\test-abstract-controls.js
+data-object.js Mini_Context class "init" function "type_id" inner function throws an exception immediately (line 108).
+It looks like some TODO hook. Delayed for the second pass.
+
+jsgui-lang/test-field-collection.spec.js
+contains 2 tests, the second one is skipped because the jsgui.input_processors value seems depending of some side effect.
+Delayed for the second pass.
+
+jsgui-lang-essentials/test-async.spec.js 
+Contains 2 tests, the first one is skipped - not sure yet how it must work properly.
+Delayed for the second pass.
+
+jsgui-node-images/test-jsgui-node-images.spec.js 
+Contains 2 tests, the first one is skipped because it prints "Error decoding the input file" message to the console.
+Delayed for the second pass.
+
+jsgui-node-png/jsgui-node-png test-jsgui-node-pixel-buffer.js:
+jsgui_png.save_rgba_pixel_buffer_to_disk() method does not exists, jsgui_png.save_pixel_buffer_to_disk used instead.
+
+
+jsgui-node-png/jsgui-node-png.spec.js:
+"./source/pngsuite/f02n2c08.png" file read seems wrong (occurs for this file exactly). The test_load_pngs_to_rgba_buffer_save_as_png() test copies several files, but the only resulting file is wrong. I've added a separate test named "f02n2c08.png" to copy this file - it produces wrong result file too. Then I've tried to prepare the "test_load_png_with_scanline_filter_2" test, but it produces different output for the png.iterate_pixels() method. So, the PNG module seems unstable for now, and a detailed debug work is required. I've decided to skip all the jsgui-node-png.spec.js tests for now in order to complete the first "update existing tests" pass first.
+
+jsgui-node-png/test-jsgui-node-png-reader-cpp.js:
+The code seems not completed; delayed to the "detailed PNG code processing work" stage.
+
+jsgui-node-render-svg: 
+BTW the res_estimated differs from res
+
+jsgui-node-sprite:
+BTW the res_estimated differs from res
+3rd test skipped, producing an error
+1st test skipped, producing errors sometimes
+
+jsgui-radio-button / test-jsgui-radio-button.spec.js 
+(data-object.js line 108 throws an exception "stop Mini_Context typed id")
+Delayed for the second pass.
+
+
+jsgui-vector / test-jsgui-vector.spec.js 
+a commentary in the source states that poly1.get('stroke') should return Stroke Data_Object,
+but it returns string.
+Delayed for the second pass.
+
+native / fib.js 
+seems unused and useless. I plan to delete it.
+
+z_core/test_enhanced_data_object.spec.js
+test_1 produces an error on line 89 (flags.remove)
+
+z_core/test_data_object_collections.js 
+"test_president_class" test (line 1118) produces an error: #<Class> has no method 'party'
+Delayed for the second pass.
+
+z_core/test_data_object_collections.js 
+"test_collection_with_name_property" test (line 1483)
+sets a name, but gets back an 'undefined', probably it's not correct
+Delayed for the second pass.
+
+z_core/test_data_object_collections.js 
+"test_collection_as_field" test (line 1637)
+does nothing
+Delayed for the second pass.
+
+z_core/test_data_object_collections.js 
+"test_collection_general_event_response_to_data_object_change" test (line 1653)
+throws "stop" error from data_object.js add_event_listener() method
+Delayed for the second pass.
+
+z_core/test_data_object_collections.js 
+"test_parents_and_relationships" test (line 1774)
+tests nothing
+Delayed for the second pass.
+
+z_core / test_data_object_data_types.js 
+"test_Color" test (line 611):
+produces "noty yet implemented" error from data-object.js get() method (line 3631)
+Delayed for the second pass.
+
+z_core / test_data_object_data_types.js 
+"test_indexed_array" test (line 750):
+all the code was commented
+Delayed for the second pass.
+
+z_core / test_data_object_data_types.js 
+"test_oltrb" test (line 845):
+all the code was commented
+Delayed for the second pass.
+
+z_core / test_data_object_fields.js
+"test_coll_fields" test (line 286):
+does nothing
+Delayed for the second pass.
+
+
+
+

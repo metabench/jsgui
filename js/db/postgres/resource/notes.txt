@@ -1,0 +1,475 @@
+// Stripping down dbi-postgres to operate as a Resource_Connector
+
+// Connects the abstract postgres server resource with the postgres server.
+// Perhaps it should connect with the abstract database resource.
+
+// Once it has connected to the server, it can find out what databases are there.
+
+// This abstraction will definitely help with dealing with multiple sources of data.
+//  the new dbi-postgres will be a superclass of this resource connector.
+//   will do more things, but also follow the core resource_connector API.
+
+// This does make some things more long-winded.
+//  Hope to have things working well with a small, clear piece of boilerplate code.
+
+// The size of the code matters less here because it is server-oriented.
+
+// Client side code will stay compact where possible.
+
+// Likely to be called resource_postgres. Connects to the postgres database and provides it as a resource.
+//  Still provides access to a postgres API.
+//  Other things will make use of this postgres API.
+//   One such thing will be an rdb-simple API. Then other things will make use of that simple RDB API.
+
+// Not quite sure what the various abstract mosules are supposed to do at the moment.
+//  Coming up with code to make a and modify a Postgres database I think...
+
+// Probably want the parser, the generator, and the core.
+
+
+
+
+// No such thing as a resource-connector any longer.
+//  resources representing things that get connected to will handle the connections themselves
+// 
+
+
+
+	// will likely use Postgres-Resource-Connector
+	//  That will handle functions like execute_query.
+	// Then dbi-postgres will inherit from Postgres-Resource-Connector, and do more things too.
+	
+	// I may in fact keep dbi-postgres, but may copy the functionality into here.
+	//  dbi-postgres may get retired.
+	//  Perhaps I'll remake it using resource-connector to streamline the processes here if needed.
+	
+	
+	
+	
+	
+	
+	
+	// The interface between abstract postgres and the actual database
+	//  Make sure that abstract things are represented in a real DB.
+	
+	
+	
+	
+	// Maybe a DataObject rather than class...
+	
+	// And if it's a data object it has the event handling mechanism built in... could be very useful here.
+	//  Should re-implement this and other classes as DataObjects
+	
+	// OK, this needs database modelling.
+	//  Abstract definitions of things, like a table existing outside of a DB, but able to use code here to interact with a postgres db,
+	//  perhaps creating that table or checking if it exists / ensuring it exists / adding columns to an existing table there.
+	
+	// Could inherit from AbstractSQL classes.
+	//  Not sure of the point of that right now.
+	
+	// (Postgres)
+	
+	// Does not need to be that big to follow the postgres definition.
+	
+	// could have a whole abstract database.
+	
+	// Maybe we want these less abstract - or with less abstract methods where they can connect to the database and ensure they are there.
+	
+	// Check if a column exists within a table for example.
+	
+	// Or could have other methods that do these checks, but it seems good having it within these ones.
+	
+	// Maybe call 'disconnected'.
+	
+	// Not sure if these should have INFORMATION_SCHEMA data bolted on.
+	
+	// Should make table constraints (and column constraints)
+	
+	// Maybe call this data_model?
+	//  Or db_model?
+	//  It assumes it is generally abstract / disconnected yet parts can be syncronized with or syncronized from the database.
+	
+	
+	// Will have functions to ensure these abstract structures are in the DB.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// Want to be able to create the CRUD functions.
+	//  Could use a CRUD_Factory.
+	
+	// Will create the functions that get put into the database.
+	//  This is a part of ORM. Will be able to define some objects without too much difficulty and they will get created in the database.
+	//  Could have a nice web interface for this.
+	
+	
+	
+	
+	
+	// 2 way string map (Single_And_Plural).
+	//  could make this a data structure.
+	//  don't want this in the code that represents the external postgres connection
+	//   (and carries out operations on it).
+	//  Perhaps this could offer a very simple API, to do with executing commands. (External_Postgres_Server)
+	//   There could then be something else, maybe dbi-postgres that uses this core server and will execute particular queries, like get the names of all tables.
+	//    The new dbi-postgres could make use of abstract in order to generate the SQL to use.
+	//  I don't think that the core External_Server should be doing that much in terms of carrying out DB ops.
+	//  Possibly there will be an External_Server object for the client to use too... won't actually connect to the server.
+	//   Client versions and server versions.
+	//   May want the server version to extend the client version, with the server version being able to handle connections and operations,
+	//    client version may be able to do such things in a different way though, over the web.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	// var conString = "tcp://_postgres:5432@localhost/postgres";
+	
+	// There could be a table of singular and plural words inside the database
+	//  This can be created as part of the webapp setup.
+	//  They could possibly be located in a different schema, but won't do that for the moment.
+	
+	// This will get more advanced and may make use of DataObject too.
+	//  May make an ANSI-SQL implementation, and Postgres could use these in most cases.
+	
+	// Other SQL systems could override the ANSI-SQL where necessary.
+	
+	// Likely to model other languages too.
+	//  Already have done some JavaScript.
+	//  The tool may create some data-access code.
+	//  could maybe have db-postgres (a more limited version of dbi, but without creation of CRUD functions, other advanced features)
+	//  or could use JavaScript to make a node.js script that sets things up.
+	
+	
+	
+	
+	
+	// create_access_function('fn_create_user_role', '[i,i]', '[s,s]');
+	// original function name?
+	//  or the original function?
+	
+	// perhaps not a function to access the original function?
+	//  though this would be sure to work, could require pgSql.
+	
+	// For the moment, may be better to make a function that's the complicated linked query.
+	//  ????
+	// Or gets the data first in JavaScript.
+	//   could do the smaller queries without too much difficulty.
+	
+	// However 
+	//  Can insert the result of a query.
+	//  Not exactly sure how.
+	
+	// But may want to run queries to get user id and role id.
+	
+	// This basically represents an external_server.
+	//  Want to use classes with a more standard API to represent these external resources.
+	// Will use Collection and DataObject.
+	//  Hopefully this will make things easier
+	//  Or at least make more complicated things take less code and be clearer in the longer run.
+	
+	
+	// External servers would also help with other things with web APIs.
+	// Possibly call it an 'external resource'.
+	//  That way, we could say one small piece of information that gets updates is an 'external resource'
+	//  Could also define a site as an external resource, a server that is known to server multiple sites and may be administered.
+	
+	// Or put the thing about the resources and resource locations in the lang section?
+	//  Not sure it's really language though. ????
+	//  My toolkit is for doing internet programming with JavaScript.
+	//  Perhaps external resources should be condidered 1st class language citizens - with particular resource types being in modules.
+	
+	// May also identify a server we are running as a resource.
+	// Maybe in the HTML part?
+	
+	// Perhaps have the External_Resources module, and have that loaded by an 'internet' module that is used for both client and server programming.
+	// maybe make a jsgui-internet module?
+	
+	// External_Server.extend...
+	//  will have 'connection_info' object, which is used to connect.
+	
+	// connecting to a postgres server or to a postgres database?
+	//  could have a smaller postgres server resource, which can find out information about the databases it holds.
+	//   could then create abstract database resources to represent them.
+	//    Then one of these would get connected to.
+	//     Again long-winded, but I think provides the right structure for logic and extendability. Shortcuts could be made when using an API.
+	
+	// Connect to a database or a server with a single interface?
+	//  Probably not exactly the same interface, they are different things.
+	// We connect to the database anyway... and are able to get more information about the server.
+	//  May be able to find more abstract database resources when connected to one database.
+	
+	// Will require a lot more code to get running!
+	// Various resources will be more easily available when this is done.
+	
+	// The whole resource connector system could be used to make a web-crawler.
+	//  Resources get defined, then crawled, and put in a result set.
+	//   These result sets could be stored in the DB as JSON.
+	//    They could then get indexed in other systems.
+	//     Would determine how that indexing / storage was done within another system that requires it, or is using the remote resource to get the data.
+	
+	// A Resource could potentially be more than one website, but a collection of places it gets information from.
+	//  In which case, it may have a different address system, not quite sure how it would work but it would be a nice thing to have.
+	
+	// Some of these tools would definitely go well on the Metabench websites.
+	//  Could possibly republish some open-source data, obtained through crawling, and administered by myself.
+	
+	// Will have various applications on the website.
+	//  Will probably be quite technical in nature.
+	//  Create your own website and have it hosted?
+	//   That could work fairly well if the thing can get deployed... but I think tools for managing larger deployments would be very useful too.
+	
+	// The database connector system is definitely another side-track...
+	//  But it will get the framework / server system to be really flexible and useful.
+	//   It would be used for having a bunch of these servers configured in a network, sharing information.
+	//    It would be interesting to have this happen in P2P, on the internet.
+	
+	// Servers that get set up on the net should be able to do various things for the central server.
+	//  Replicate data - being useful if the client wants that data.
+	//  Not sure about allowing any old client to store data without checking integrity.
+	//   Becomes trickier with P2P in case anyone wants to disrupt the data.
+	
+	// Offloading work to different nodes?
+	//  I think the capabilities for sharing work over a LAN could be extended to general P2P.
+	//   Untrusted networks? How untrusted?
+	//    Securing other peoples' private data?
+	//     Probably best for them to keep it on their own node.
+	
+	// This could be very useful for bringing more server nodes online.
+	//  Maybe in the next stage we will have the current virtual server, and then hire a dedicated server.
+	//   Would quickly want to put the main workload onto that.
+	//    Could even have a benchmarking test to find the capabilities of the server.
+	//     How much HD space there is on different drives
+	//     The speed of those drives (for different operations).
+	//  If a powerful server is added, it may be that everything should get moved / replicated onto it.
+	//   The smaller web server could act as a gateway interface while services are getting moved.
+	//  We would change the DNS when ready.
+	//  Would be able to view the relevant server information over the admin system.
+	
+	// Servers could possibly do with more to define their capabilities.
+	//  API for choosing which bits of an index will run, for example.
+	
+	// Still need much more for the server system.
+	//  These resource connectors and definitions are just a part of it.
+	
+	// Will be very nice when they are connected up.
+	
+	// Need to do further work to get this system developed.
+	//  Quite a lot more on the back-end to start with.
+	// The back-end is needed to generate the front-end.
+	
+	// Lots of hard work to go in to making the back-end right... and in doing so, will have it generating a very nice front-end.
+	//  JavaScript compilation seems like a very useful feature to have... but much of it should be tested with front-end tools.
+	//   Make a working version of this, including front-end. Then use that to hold JavaScript for compilation.
+	
+	// For the moment, will carry out client-side loading with require, or a hand-made client-side build. That way there will be specific functionality available.
+	//  Specific builds will be very useful, and that is why it will be good storing the system within a database to generate builds of it.
+	
+	
+	
+	// Though much code is not yet written (for doing things such as administering it with a GUI), having a clear and consistant codebase will help a lot.
+	//  Parts separated. The pieces that could be edited on the client are considered 'abstract'. GUI components or server data components will both use them, and will
+	//  be able to provide a nice interface for getting some server tasks done.
+	
+	// May extend a  Resouece_Connector_RDB.
+	//  Able to get the names of the database.
+	// Could do more work on this when there are more database resource connectors.
+	//  Resource connectors, and their structure, will be more aparrant when there are more types of resources.
+	
+	// There will be various relatively small classes that do important things structurally.
+	
+	// Resource_Connector - this is perhaps just a resource.
+	
+	
+	// May just be called 'resource'
+	//  We know its for connecting to and from it.
+	
+	// May use the 'start' and 'requirements' terminology of resources, so that this resource knows it needs some other resources with specified
+	//  APIs to be running before it can start.
+	//  
+	
+	// Resource to connect to a Postgres DB
+	
+	// Will also extend the resource to connect to a Postgres DB, set up the web DB there, then provide an interface to that web DB.
+	//  That will be a fairly advanced resource, one that extends another.
+	// It would be possible to directly load a resource, or to adapt an existing one (Postgres DB) so that it's now a Web DB with an interface for that
+	//  purpose. Would still have the basic functionality. This one would be specifically made for Postgres.
+	
+	// There could be Postgres DB -> General RDB -> Web DB
+	// Postgres DB -> Web DB seems simpler for the moment. Perhaps it would be more optimized.
+	
+	// I like the idea of database calls going through a general layer. It makes a lot of sense for how more databases could be supported.
+	
+	// Adapter resources?
+	
+	// Postgres_DB_RDB_Adapter
+	// RDB_Web_DB_Adapter
+	// RDB__Web_DB_Adapter?
+	// RDB_To_Web_DB_Adapter?
+	//  Then this provides / has a 'web_db' interface. It requires an 'rdb' interface.
+	
+	// Don't want to do loads of work on resources. I think getting them working for the execution path is most important.
+	//  Very nice to be able to get on with this now the B+ collection indexing is out of the way (mostly).
+	
+	
+	// Postgres_To_Web_DB_Adapter
+	//  This could make use of the Postgres_To_RDB_Adapter itself.
+	
+	// Postgres_Resource
+	// Will not use Resource_Connector.
+	
+	// There are Adapters though, these require access to one (or possibly more, probably just one) resource and adapt it into something else.
+	//  May be adapting a particular database into a more generalised one.
+	
+	// This does seem like a sensible way of using Postgres, and other databases.
+	
+	//  Will provide the database object with relatively simple objects, through quite a simple interface.
+	//  The tables will have been set up already during the configuration stage.
+	
+	// Definitely worth writing up the resources API.
+	//  Will also be useful to have some JavaScript reader that will go through the JavaScript file.
+	//  Will identify which classes, functions are there, and be able to do so with the patterns I am using.
+	
+	
+	// The flexible Web DB will be very useful.
+	//  Will be dealing with the website on the level of data, should be able to build it up piece by piece. Could make front-end applications using a 
+	//  back-end API relatively soon, but would want this working within the publishing system I already have.
+	
+	// Then there will be the presentation side of things.
+	//  Different ways of doing this, can present web content from the DB.
+	//  May run transformations to HTML, perhaps using controls.
+	//  Could have controls on the page, getting their parameters using data from the DB. This would be good for responding to requests
+	//   requiring particular pieces of information. The presentation engine may cache some data from the main DB to relieve the workload.
+	//   Perhaps that won't be needed / beneficial if the main DB is indexed so things work very quickly... but I think result set caching could work very
+	//    well. It could even be aware if the client has downloaded the whole result set into the client-side app.
+	
+	// What about a Postgres Server having different resources inside?
+	//  Could wind up making loads of resource classes for loads of things?
+	
+	// Server
+	//  Database
+	//   Schema
+	//    Table
+	
+	// Making individual tables available as resources?
+	//  That could work quite well in providing a programmatic JavaScript interface to them.
+	//  Does get quite in-depth. I think it makes sense as a way to simplify the programming that is later done on them.
+	
+	// Lazy loading of resources?
+	//  So the Postgres_Server resource will know it has various DBs, and will provide info about them.
+	//   Does not actually make resources for them to start with?
+	//   I prefer it to create the resources / or at least show them.
+	//   Perhaps the resources could be created in 'discovered' mode, where it knows that they exist, but it has not connected to them, but expects them
+	//    to be there and working fine, and may know a bit about what they contain. It has not loaded or discovered their subsidiary resources.
+	
+	// Also, at the moment, resources are off, then they start, and they are on.
+	
+	// Some discovery resources may be 'on' but still may continue discovering things.
+	//  Perhaps there will be a substatus for some APIs.
+	
+	// Will do more work on providing info about these interfaces that I am using.
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	
+	
+	// Maybe just resource.
+	//  Old code, should change to a RESTful-based interface, interact with metadata using .meta.
+
+
+
+			
+			// This resource has a type / interface that will get recorded and be used to identify it.
+			
+			
+			// could identify that this is for connecting to a Postgres database, or a relational database.
+			//  Perhaps that will be identified in the abstract resource.
+			// Do more in the abstract layer where possible, it will help some parts to stay focused, and other parts to work within the client.
+			//  The codebase is likely to increase a fair bit.
+			//   Will still have fairly small sizes in the client application.
+			
+			// Doing things in the right way is important... but need to work out the way to do things on quite an abstract level to have it working right at the application
+			//  level.
+			
+			// Definitely want to document the webapp using the webapp.
+			//  Have a forum for discussing it, that uses it.
+			// Publish various pieces of code, nice interface.
+			//  Licensing agreements, have it so that user subscribes.
+			// Want to make the shop-front. May allow others to license their code through my shop.
+			//  Connect payment with easy distribution.
+			//   Also, allow access to paid for code within an IDE.
+			//    Libraries could be free to develop with, but cost to deploy.
+			//     And developers would be made aware of their license obligations.
+			
+			// Not so sure about how the code would be on github, unless it is a build of the code that gets released.
+			//  The code that gets run...
+			//  Could also get the tool to do full source distributions?
+			//   Get it to generate with different options?
+			// It's a good reason to go to my website.
+			
+			// network location
+			
+			//this.port = spec.port;
+			//this.host = spec.host;
+			
+			// authentication / user information
+			//this.username = spec.username;
+			
+			//this.db_name = spec.db_name;
+			
+			// an event to connect with a callback.
+			
+			
+			// Probably not relevant in the database connection module, this may be better in the abstract postgres section, or generator.
+			//this.single_and_plural = new Single_And_Plural(spec.single_and_plural);
+			// single and plural names table.
+			
+			// 2 way map.
+			
+			
+			
+	// maybe this will just be in the dbi-postgres section.
+	//var generate_abstract_schema_crud = 
+	
+	//DBI_Postgres.Abstract = Abstract;
+	//DBI_Postgres.CRUD = CRUD;
+	//DBI_Postgres.create_function_check_record_existance = create_function_check_record_existance;
+	//DBI_Postgres.generate_abstract_schema_crud = generate_abstract_schema_crud;
+	
+	//return DBI_Postgres;
+
+	// Also want the postgres database Resource.
+
+	
+	/*
+	
+	var res = {
+			//'Resource_Pool': Resource_Pool,
+			//'Resource_Error': Resource_Error,
+			//'Resource_Connector': Resource_Connector,
+			//'Resource': Resource
+		'Server': Postgres_Server,
+		'Database': Postgres_Database
+	}
+	*/
+	

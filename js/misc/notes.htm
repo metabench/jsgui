@@ -1,0 +1,84 @@
+<p>
+
+
+	// This is acting as a friendlier wrapper to the B+ tree.
+	//  Not so sure about it having it maintain a dict index too... but maybe it is best to have ksvs
+	//  KSVS could possibly be extended so that it makes use of both the tree and the dict.
+	
+	// I'm interested in making a data structure that uses these sibling lists as well as a dict. That will mean they can be located by full key in O(1) time.
+	//  Then the tree can be moved through.
+	//   This would mean indexing the leaf node for the object. Then it will be possible to move through the tree.
+	//   Finding the place where an item would be put... similar to finding the first key after a certain value.
+	//   Then can proceed through the tree (quick to move to the next node) until we have moved past nodes with the specified prefix.
+	
+	
+	
+	// This has got big with the B tree.
+	// Not too big I hope, but the tree's workings get a bit complicated.
+	// Should be useful, especially with standardised collection functionality.
+
+	// It's useful to have it available for the indexing.
+	// Want to be able to define an index without too much difficulty.
+	// Would require work on the Collection.
+
+	// Collection will be able to have more than one index.
+	// Some indexes will indicate a unique value or combination of values.
+
+	// Also need to check on if unique fields get indexed correctly in the
+	// postgres database.
+	// It may not be automatically put in place
+	// May wish to speicify the type of index (btree or hash) in to postgres
+	// database. May want to do that in the collection as well.
+
+	// With the hash index, will also be able to move sequentially through the
+	// records, but not with the order of the index.
+	// May have advantages with maintaining with an ordered index.
+
+	// Not so sure about a full text index though...
+	// being able to search for all substrings becomes more difficult.
+
+	// Interested in such structures, though.
+
+	// A full text index would be a different module.
+	// Searching for parts of words?
+	// Not really covered by the b+ tree so well, unless lots of records are
+	// made. They could be.
+
+	// However, compressed suffix arrays seem to offer the best performance.
+	// Don't want too much code taken up with data structures though.
+
+	// Very interested in implementing that sort of index.
+	// Compressed dynamic suffix array?
+
+	// I don't think that tree will wind up taking all that much space anyway.
+	// Could be optimized down to a few hundred bytes.
+
+	// a function to add / merge data types...?
+
+	// These may use the nested data system. May not be a requirement though.
+	// Does not do that much right now.
+
+	// Get and set may use ll get and set and also raise events
+	// That's it.
+
+	// It will be possible to listen for events, like update or change, on these
+	// DataObjects.
+
+	// Data_Wrap
+
+	// Can wrap various things, like a number, inside something, can raise an
+	// event if the value is changed.
+	// This is getting more complicated again, but hopefully it will make other
+	// things simpler.
+	// There could be different types of full-text index.
+	// Some of the more complicated ones would hold the text as well...
+
+	// Every Data_Object and collection will have its own ID (when required).
+	// Available through the ._id() function.
+
+	
+	
+	// The Data_Value wrapper system too.
+	
+
+</p>

@@ -1,0 +1,732 @@
+
+		// Starting order...
+		//  When one resource depends on another...
+		//  That will make it more difficult, but we do want them to start in the correct sequence.
+		
+		// Defining the collection with a sorted index in the fields?
+		
+
+
+			// Not so sure about the dictionary of resources by name. I think using a Key and Value store would be better.
+			//  This will allow resources to be retrieved by prefix.
+			//  KSVS keys and values storage. Multiple values possible per key
+			//  KVS key and value storage. Single value possible per key.
+			
+			// The resource pool is going to be using resource names, but these will work in a namespaced way.
+			//  Ordered_KVS being the data structure this will use
+			
+			// KVS with options about how to handle existing items already there.
+			//  May move away from KSVS name.
+			//  Sorted_KVS
+			//   option about how to handle more than one value with one key - does it support that?
+			//   then there may be options about how it gets returned.
+			//   Makes use of the B+ tree data structure, but could possibly make use of a sorted linked list without the indexing using a similar interface?
+			//    Though really I think getting the B+ tree down to a small size is a priority. That way it will be very usable for a variety of purposes.
+			//    This resource namespacing could use the B+ tree, or rather the Sorted_KVS
+			
+			// There will be a bunch of resources that start in sequence.
+			//  The resource namespacing will be for the resources in the pool. They get namespaced / allowed the possibility of longer names, within the pool.
+			//  The range / prefix search will be used to find resources in the pool matching a namespace.
+			
+			
+			// No, will have a collection of resources.
+			
+			//this._dict_resources = {};
+			
+			// Having the collection of resources as a field makes sense.
+			//  However, should not always require bits of code to be as fields.
+			
+			// Though would be better to use full Data_Object methodology.
+			
+
+
+
+			// Could the collection be indexed by interface - even when the interface is a collection of strings?
+			//  So it would index each of them, and deal with removals properly?
+					
+			// resources indexed by name / namespaced name?
+			
+			// Then when any resource has started, it should trigger its start event
+			
+			
+			// Definitely need to get this going in terms of a website.
+			//  Do want the fairly general authentication / provider mechanism working.
+			//  Having these resource components wired up with each other will be a good step.
+			
+			//  This will be a Unique_Sorted_KVS
+			
+			// 
+			
+			// an index of resources by type?
+			//  The resource itself will give some metadata that is used for the resource.
+			
+			// callbacks could be given through the spec.
+			
+			// spec.callbacks....
+			// or spec.bound_events?
+			// just spec.events?
+			// spec.event_bindings will be clearer.
+			
+			// various resources get put together...
+			
+			
+			// Need it so that the local resources can get started at the beginning.
+			//  Will raise events for particular resources once they have started.
+			
+			// Will automatically start them in the right sequence.
+			//  Some will rely on others having been loaded in order to start.
+			//   Want this to be done efficiently.
+			
+			// In both the client and the server apps, resources will be quite a central point.
+			//  It will offer some quite general functionality, will be useful as a kind of global object, where references to other objects get maintained.
+			
+			// When the system starts, it will first identify some information about the local server.
+			//  There will be the local information resource, this has no dependencies.
+			//  
+			
+			// Wiring up the dependencies...
+			//  Some things will be able to use remote resources.
+			//  I think by default they will look to use the local resources.
+			//  With some configuration settings they could look elsewhere for the resources to use.
+			//  There may be a number of different services available. The resource connectors will be local resources.
+			//   Not so sure about having it create a bunch of resource connector resources... may be fine though, that may be the best way to access things.
+			
+			// With dependencies... it's going to wait until the necessary resources have loaded.
+			//  Will want some autonomy / intelligence in connecting to the required resources... and using the correct resources when they are available.
+			
+			// Though this will know of remote resources, want to limit unnecessary chatter between them.
+			//  At a later point network effects will come into play when things are talking to each other - want this controlled well.
+			
+			// For the moment, starting the local information resource will be enough.
+			//  That will be a unique resource within the application instance.
+			
+			// I think specifying the references between things is important
+			//  Another level of code could automatically wire them up.
+			
+			// Starting up the other services/resources
+			//  The postgres web db will be told that it uses the local postgres db.
+			//   A few things will have to be set up - resources and connectors with the right access information.
+			
+			// Once this is done, much of the application can take shape around it.
+			//  
+			
+			// This resource system will enable the application to be pieced together both in terms of the code it downloads (later)
+			//  as well as the objects that make up the structure of the application, and connections between them.
+			
+			// For the moment, starting the local information resource seems like a good step.
+			//  Other things will be reliant on it.
+			
+			// One the local info resource is running, we will look for other local services.
+			//  I think having the IP address will help. May be better to use the ip addesss because of how things listen?
+			//   not sure
+			// Will look for a local Postgres database
+			//  Will connect to is as a web db
+			//  Will carry out the various configuration checks on it. It should be as described.
+			// Start the server resource, with the website resource hosted within it.
+			//  The website hosts its information from the web db, and is connected to it / uses that as its web-db resource.
+			
+			// This fairly wide ranging framework will mean that many things are up and running very quickly
+			//  It will be possible to use it both with the complexity hidden, and to access that complexity if need be.
+			//  This will work nicely because various components will be arranged declaratively.
+			//   There will also be the structure to have these things shown clearly and responsively within a GUI.
+			
+			// The local server information would be useful for connecting with its ip address on the network, rather than calling it
+			//  'localhost'.
+			
+			// Actually modelling the network could prove very useful for various configurations.
+			//  Each node would be able to act more intelligently with more information.
+			
+			// Other resources will start soon after the local information is available.
+			
+			// It's likely to be told to connect to the local postgres database
+			// Then to use that local db connection as a web db.
+			//  Not very much more to it than that. The various items involved, including the website, will be administerable through the resources' API.
+			//  There will be general components for interacting with resources.
+			//  There will also be more specific components for dealing with certain data and certain functionality.
+			//   May not only be through the website resource... the website resource gets configured, and it may use other resources too.
+			//    File resources etc. The file resources relevant to the website could get administered through that interface, but it will be a file manager
+			//     component that could be used in different situations too.
+			// This resources system will be central to many things, so it is worth spending some time to get it right.
+			// Not too long though. It will be inherantly modular so that pieces can be upgraded as need-be.
+			//  Potentially this will refer to real resources outside of the computer system, such as natural resources.
+			//   Could refer to various existing objects.
+			//   The resources and references to them could be references to information about them
+			//    Information held within this system, information outside it (possibly with metadata in the system).
+			
+			// The resource pool makes the resources more easily available within the process, manages the resources within this single node.js process.
+			
+			// Specifying which resources a particular resource uses / consumes.
+			
+			// The initial single-node configuration will be quite simple.
+			//  Another node could then be started up, but the options become a bit more complicated.
+			//  Some options that are quite simple to describe become more complicated to implement.
+			//   Replications for example.
+			
+			// The website as a resource...
+			// Resource administration through a general interface, perhaps will have an admin website as a resource.
+			//  Resources could in some cases be available through URLs, but that really is for published resources.
+			//   Unpublished resources still having a URL?
+			//    Doubt it... not sure it really makes sense. The URL is about wiring them up to the outside. Without publishing, they will still be administered, and
+			//     perhaps edited (with an editing URL?) through the server administrator.
+			// I think the server administrator will work as a tree.
+			//  So inside the web-db-postgres resource will be various pieces of functionality / references to objects.
+			//   There could be a users table resource? Views? Queries? Functions?
+			//    Or connect more directly to 'Users', and then to the individual users.
+			//     May have a sensible GUI for dealing with very large numbers of them. Would not want to load a list of all the users of a very large system at once.
+			//     In the situation where there are so many of them, it may be worth looking at the metadata.
+			//     
+			
+			
+			// Resources are going to be pieces of information that will be published.
+			// They could also be pieces of information external to the system that gets brought into it.
+			//  The astronomy demo would be a good example of this. This could use the main data and resources engine, and publish that information with a somewhat
+			//   customized publishing system.
+			
+			// The server administration tools - separate interface to the website admin?
+			//  Or the website admin / website resource available through the server admin...
+			
+			// Also, server will need system of assessing admin credentials... outside the database?
+			//  The admin user may be telling it to connect or disconnect from the database that stores the authentication information?
+			//   So, a different authentication mechanism may be necessary to administer the server, rather than the website.
+			
+			// The website could be distributed across multiple servers. 
+			//  The website object itself could work through a distributed API - it's not all kept on one machine.
+			//   It will be a resource made available from one or more machines though. There will be different replication and scaling scenarios.
+			
+			// Load balencing and having the same website resources in different instances will be done later.
+			//  There will be different configurations for doing this. Connect to a shared web-db-postgres resource on one machine?
+			//  May be better for each machine to connect to the postgres database using their own resource connectors.
+			
+			// Will be nice to have a network diagram user interface. One of the machines could be a 'network controller'
+			
+			// Thinking now about using Sqlite on each machine for persistance of some information.
+			//  There will be OS-level instructions that are done. Reconfiguring the cloud network. This will be separate to modifying the website, which really is 
+			//   the website in theory, pre-deployment. The content will be changable. Will be possible to administer things like message boards. May be done essentially
+			//   while using the website with the right permissions.
+			
+			// A separate thing is the network of nodes and processes that is used to host the website. It makes most sense to hide that complexity from the website administrator.
+			//  I think a separate OS-level set of permissions makes sense. There could potentially be more than one website running on the network.
+			//  The OS-level permissions and security would operate on a different level. Requests won't be subject to various authentication checks?
+			//   But then don't really want a layer where the security gets compromosed? Internal network? They need to trust each other to some extent.
+			//   May need to be possible for there to be remote administration. Seems important when there is a network of nodes working together.
+			
+			// Accessing information about the resources etc / administering them...
+			//  The resources are at the level of the application, something that the user will want to administer.
+			// The user does not usually want to administer where the resources are stored, what data structures they are in. This is the resources system
+			//  itself, how the things get wired together. It will be very useful to have an interface where these things can be viewed, and to some extent modified,
+			//  with a web interface. It will be talking to one node process running the network controller app. This will then interact with the other computers
+			// From, this, there will be a deeper level of control.
+			
+			// This is taking on more of the characteristics of an OS now.
+			//  Task scheduling. Memory management. OS will be providing a lower lever administrative interface.
+			//   Likely to be used for carrying out various changes, or viewing the network status, or how well the machines are performing.
+			//   Not sure about making this performance information available to the normal website administrator user.
+			//    Perhaps they would have info about how long each request takes. That could be measured and logged (or a sample of them).
+			
+			// This is getting on for quite an immense project now. I'm not sure to what extent it would be competing in the cloud computing market. It's not for running standard node
+			//  apps accross multiple servers. Perhaps it will work better because the network awareness will be baked into the node process. It's doing more to separate the 
+			//  web content from its implementation. Will be nice to have this deployed to a small number of servers, with the os-level system working on one level, while the
+			//  website system works on top of that, using resources that are made available using the OS / networking system.
+			
+			// Storing data sets on different machines... using some machines while getting data, having them transfer their data to another machine, or cloud-based service.
+			//  Using a computer at home that is in communication with the server most of the time. Specifying which data sets are available on both (and doing this through
+			//  a GUI, with a nice administration tool)
+			
+			// I think having the server connect to its mb_node.sqlite file at the beginning makes sense.
+			//  That's going to provide authentication details for process administration. Being able to administer the network on this level would be useful.
+			//   Possibly will have a website interface to the various node processes for administration anyway.
+			//    They could be given their administration username and password when this is done. They could be set to only get this info from specified IP addresses.
+			//     The initial configuration of this will be set using node.js code.
+			
+			// I do think having these multiple login levels may make things a bit more complicated in some ways.
+			//  It way work well to prevent elevation on some things. Keeping the two things very separate in how they are accessed.
+			//   When administering the server, there may not be admin rights to the data that is hosted on it. It could appear a bit as a block.
+			//    The whole block could be deleted (possibly) / moved to other machines. 
+			
+			// Having an OS / network node level of administration seems like the thing to have working on the lower level.
+			//  Then on the level above that, there will be the various services that actually do the work.
+			
+			// I'm likely to release some / all of the resources system as open-source.
+			//  Perhaps the general framework. I'll need to do that if its in the client app.
+			//  I may be able to make a cut-down version. I think the whole resources system could be put together with very little code, in a cut-down form.
+			
+			// The resources reference system would refer to various other nodes, and it would need to get information from the resources on them.
+			//  Not sure about all the nodes being allowed access to any resource. Could make sense in the beginning.
+			
+			// I think the lower level system may not do so much directly to do with the data.
+			//  It would be possible to get access to the data and modify it in that way, but that won't be the normal way it's done in use of the application.
+			//   Could be possible to log everything done for extra security - and have those logs read-only, sealed off from the data that that system administers.
+			
+			// These separate levels make sense (though it makes things somewhat more complicated)
+			//  There is the OS level (resource provisioning)
+			//  There is the application level
+			//   The application level may be given access to some OS level functionality. Functions in the application could call things in the OS.
+			//   If something has admin access to the OS level (not sure about other access levels right now), thay are able to make all sorts of changes.
+			//  On top of the OS will be the application or applications.
+			//  The OS will manage a distributed network of nodes.
+			//  An application will be a web server. Could receive requests through a load balencing system.
+			//   There will be some details to do with the application and the OS.
+			//   Both systems will need to be well developed, there needs to be interactions between these parts.
+			
+			// The application level may come about from resources operating on the OS level.
+			// I think SQLite makes a good basis for information held about the OS for each node.
+			//  It will be easy for the OS to set this file up on the local machine.
+			//  Could have multiple instances running, using that same db file.
+			//  The main reason there will be that DB file is for authentication information.
+			//   Interacting with the OS-level API will have its own security - even though it will be using the resources API like other levels.
+			//   The OS level is going to be looking at permissions to access that particular machine.
+			//    The application level authentication may be distributed. It could be using structures that come about through the OS.
+			
+			// OS allocation of resources... will use Resource class and abstraction. Resources will do their individual parts.
+			//  The OS will start up with a few resources
+			//  Platform will get its own local information (network info)
+			//  Platform will connect to its sqlite database, will load configuration info from that. It uses that for authorizing access to the os-level process.
+			
+			// Running on that OS-level process are the resources. These will be used to actually provide the website functionality.
+			//  It is likely that a super-admin app would be making use of both levels. There may be some 'organizer' nodes that take action to configure the network in
+			//   response to instructions given, or acting in its own way to keep the network healthy.
+			
+			// To begin with, this won't be running in particularly complex configurations.
+			//  I think that having these different levels running makes sense. The application level is something that can have its data, behaviours etc set, mostly
+			//   independantly from the hardware platform itself.
+			
+			// This will probably work on a higher level than many other operating systems.
+			//  It may not truely be an OS anyway.
+			//  The task scheduling may have to do with workflow as well.
+			
+			// Task scheduling may have to do with moving around data, perhaps ensuring its consistancy across the network very quickly.
+			//  Could do things like notify that some data has been updated before providing the update.
+			
+			// It may be that the OS level can be ignored in some use cases. It would run the 'os', but only on one machine.
+			//  The OS would be likely to provide API calls that the machine could use. Some of them may be making up for what node does not have.
+			// The OS will be based around these resources which can be published on machines. Eg a machine could be publishing a hash table.
+			//  There could be a sharding system in place - the information that controls this would be a small amount of data that could be replicated accross quite a few nodes.
+			
+			// I think getting things right in Sqlite first makes a lot of sense.
+			//  It would be nice to have the website running out-of-the-box with sqlite, and then through an administration that could be changed for postgres or something else.
+			//  It's likely the configuration options will stay in Postgres, but possibly the nodes will be given an address (and credentials?) to download the configuration
+			//   options from.
+			
+			// Making a start with the SQLite database...
+			//  This will be the os-node-db. sqlite-os-node-db. It may be possible to have other interfaces for it, but sqlite is nice because it's a single file, no 
+			//   setup requirements on the node. This would be a good means to store various pieces of information that could be used in setting up further services.
+			
+			// Having Sqlite built within the system seems like a good step to take.
+			//  It will help with generalizing the postgres things further... creating general SQL and then where necessary having language specific modules.
+			//  I think it's very likely I'll be releasing the OS framework code. There will be pieces that I'll keep to myself and use for subscription applications.
+			//  It's possible the open source parts will generate quite a lot of traction.
+			//   It may be worth releasing some client-side pieces first though.
+			//   I think it will be possible to make the os part very small when running on the client, and able to not look for the server.
+			//   There could possibly be an almost serverless client for some simpler things.
+			//    I think it could be done in 1 or 2 KB, but the components can rely on this OS-type API particularly for when they are on the server.
+			// I will do more work on the HTML generation and controls.
+			//  They show a lot of promise, particularly adjusting various things for different browsers.
+			//  The ASP.NET-like way of doing controls through an XML/XHTML document would be very nice as well.
+			
+			// For the moment... getting local server information.
+			// The os-node sqlite database (not holding much data to begin with). I think this will be a resource, where there is the sqlite db, which is adapted
+			//  to be the os node (config) (sqlite) db. It will then be accessed by the operating system.
+			
+			// Operating system API: (called server), maybe it will be a server OS.
+			//  The OS will have a GUI (or GUIs) available over a web interface.
+			//  Quite a bit will need to start and be running in order to provide this interface.
+			//   Though I think it will be possible to make a really concise version for public release on the client.
+			//   Some things will stay unreleased / commercially licensed for paying customers.
+			//    I really like the idea of a cheap subscription service for paying customers for the moment.
+			
+			// This whole thing will be quite versitile, but it will also be able to take some specifications and create something definite out of them.
+			
+			// The versitility and flexibility comes at the cost of a lot of work to create it.
+			// When using the app, the objective is to have:
+			//  1) A description of the website / service
+			//  2) A description of the hardware platform that it is deployed on
+			//  3) Code that (automatically) deploys the website on the platform.
+			//  There needs to be quite a lot in between to get this to work.
+			//  Translating from the description of the service to general description of implementation
+			//   Translating from the general description of implementation to the decription of how it is inplemented on the specific platform
+			//    Creating necessary code / settings to deploy it on that platform
+			//    Deploying it on that platform.
+			
+			// This may have some fairly general application frameworks that can quickly be created and deployed.
+			//  CRUD app using Mongo and without any OS layer node code (that is handled by other service).
+			
+			// Having this OS-level code in node.js may prove very advantageous to get some things done. Not so sure about it being that good for being a
+			//  platform provider to others (in terms of virtualization), but it seems like a good way to control a network of node.js processes. It could be expanded
+			//  and upgraded in the future to handle more things. More security features? There could be different ways of charging for this. When there are monitoring
+			//  systems set up it may be possible to see how much CPU any process / customer is using and then bill them accordingly.
+			
+			// Possibly they will have permission to write some code that does not have access to some things.
+			//  It may be possible to allow JavaScript to be called from within this os-like process with some restrictions.
+			//   That would be a very interesting thing. It would be something that I'd have to investigate later.
+			//    There would be a clear separation between OS and app code. Possibly the os code could create further robustness in the network, perhaps 
+			//    working like monit does in order to restart services that have crashed. There could be a fair few node.js processes on each machine, and when one crashes,
+			//    another could notice it, and restart the crashed process. Of course, I don't want process crashing much anyway.
+			
+			// Starting the local information service and the local sqlite os connection seems like a good start.
+			//  Then the server could be running on a minimal level with just these.
+			//  It could start responding to OS requests, changing various things, starting and stopping resources, loading resources, seeing what
+			//  resources are available.
+			// Another service/resource would be the server (os) administration website.
+			//  This may require various HTML resource to be loaded, I'm not sure quite yet how / if that would be wrapped in a resources layer.
+			//   Could be a server resource, similar to others.
+			//    (though this server resource's admin interface would be some application preferences)
+			//   Likely to have its own administration app. This will make use of some OS features, and be published using the publishing system.
+			//    Server_App?
+			//    Admin_Interface? These will be some HTML / controls that interact with the admin API.
+			//     It's possible/likely that on the client side they will use a Resources API to interact with / call admin functions.
+			//      The Resources API and a small distribution of the os for the client side code makes a lot of sense here.
+			//      The 'os' will be practically invisible on the client, but within it will be the hooks that provide easy access to the functions on the server.
+			
+			// I think this is going to be quite a lot of work, a couple of weeks of quite hard coding perhaps.
+			//  Maybe large pieces could get done in a couple of days.
+			// Right now, there is still more planning to do. It's very nice to have the whole system planned before building it so that it's known that it works.
+			//  It makes working on some details worth it too when it is known for certain that those details will be used.
+			
+			// Starting up the server.
+			//  Perhaps starting to call it an os-server-node.
+			//   Within it there may be servers, serving particular websites such as an admin interface or publishing various things.
+			
+			// Having this publish things in a distributed fashion makes a lot of sense.
+			//  It's likely that there will be applications within the system. They will essentially be a collection of function calls.
+			//   There will be different ways of putting algorithms within the system.
+			
+			// This will be general enough to be used for very many projects. The UK business project would be very good when it is built on a very sturdy platform.
+			//  Right now there is much more work to do to build the platform.
+			
+			// First, making sure it gets the network address in Windows.
+			//  I'll be running this from Windows quite a lot too.
+			//  I'll also want to run this on other computers. For the moment I'll be able to have it do a lot on my windows machine.
+			
+			
+			// Setting up a simple Sqlite database for authentication of os-level commands seems like a very good step.
+			//  And then building the os-level commands.
+			//   They will be published and consumed using this publishing and consumption API / automation, so that the boundry between the server and the client is
+			//    still very clearly defined, but there will be very convenient pipelines between them.
+			
+			// Could have a benchmarking application.
+			// Integrated testing would be very nice to have as well.
+			//  When a code module is put in, its output could be compared to some expected output.
+			//  This could be very useful for algorithmic improvement, with substituting data structures such as a trie for a compressed suffic array.
+			//   The improvement here will be able to be checked that has access to much simpler results.
+			//    Perhaps it could come to conclusions about the time complexity of the code too.
+			
+			//  Making this really quite a wide rangine framework enables more capabilities to be put into it in a very structured way.
+			//   I could see light editions of this server OS being used much like Express... but possibly more easily.
+			//    I'd want to look at it maybe running Express itself, perhaps as a server within itself.
+			//     Express may do some things with routing that make it difficult to host within my system.
+			//    Perhaps having similar features where suitable. It may be possible to set a few configuration options and have this running much like Express.
+			//  I think this should be done with the goal of making a deployment of the software fairly soon.
+			
+			//  Then publishing the client library. There can be a discussion of that code on my website. Would be very satisfying and a good proof to have that running through
+			//   my code.
+			
+			// Would also be good putting the system into action for the astronomy website.
+			// Would also be good making a jsgui client library demonstration website.
+			//  I think the metabench website could be made really good using this technology.
+			//  The various parts of it could work well together.
+			//   I think the tools section with a subscription to a few tools would be very cool.
+			
+			// It will be great when somewhat complicated interfaces (but also quite simple - can use tree structures) just work with a few KB of code downloaded onto
+			//  client devices. There can be quite a lot of complicated code behind the scenes making sure things run smoothly - but only a few KB needs to be delivered to the
+			//  client for them to make use of a full-featured web app.
+			// Different client library distributions, different page rendering for different clients. Will be very nice to have only a few KB being sent to an iPad
+			//  and it interacting with the data very smoothly.
+			
+			// The resource system could also be a neat way to package sprites. Various images exist - they are put into a sprite resource.
+			//  The client has access to the sprite resource, and that reveals / is adapted to be a bunch of image resources that are available where they are needed.
+			//  This will save on download time. Could possibly improve reliability with the code attempting to download the sprites again if they fail / more closely
+			//   managing their downloading.
+			
+			// For the moment... get the local server / os process recognising more about itself, such as the network address.
+			//  After that, do some things with setting up the local sqlite database.
+			//   That is likely to require quite a diversion getting the various sqlite modules set up. They will broadly follow what has already been done in
+			//   postgres, as well as there being the creation of standard SQL modules that both sqlite and postgres will descend from.
+			//  The query generators will be different.
+			//   Some of the changes to the Postgres ones may actually be the removal of functions or capabilities.
+			
+			// Those two things will be important steps closer to actually having this running system.
+			//  Want to get this supporting an app before long.
+			
+			// There are various different parts to it which must all work nicely together.
+			//  There various resource connectors will nicely encapsulate other technologies. Mongo is a very important one to do and to get right.
+			//  That's something that could be compared to distributed data systems I make using node.js. That is where a pluggable engine and benchmarking system
+			//   would prove very useful. It may be that more customized engines perform better at specific tasks. Having them all encapsulated into a resource
+			//   and resource connector system would help with testing and swapping various parts. Could be able to check that different systems produce the same results
+			//   while comparing time taken.
+			//    That's the kind of thing which would be good on a website too. Could show a few algorithms, and give them different data sets, show how fast the various ones run
+			//     compared to each other.
+			
+			// Next step... have the server / os process start up with a bit of info
+			// Connect to its local sqlite db for authentication information
+			// Have functions that actually do a few things within the OS, like viewing which resources there are, starting up new resoruces, configuring things.
+			//  Admin interface can come a bit later, it will be using the server application system.
+			
+			// Will do work on the server and CMS application system.
+			// Will have it host a website
+			// The jsgui-xml system needs to come fairly soon.
+			//  Will be very good to be producing jsgui xml pages, running smoothly, and with the items clearly named and easily wired up to JavaScript event handling.
+			//   Client side code will be able to call the appropriate code on the server with the publishing and resources system.
+			//    Will be very nice.
+			// Publishing resource configuration app...
+			//  Could make the resource configuration server a resource in its own right, have this running within the OS process.
+			//   Once there is one platform, the OS, other platforms can be built on top of it, like the distributed OS.
+			//   It is more that there will be controller nodes that can take control because they have the details needed for authenticating to each component.
+			// Possibly a central authentication server at this level?
+			//  There needs to be some authentication, I think at the server level, it won't hold so much perhaps, but may need a certificate in order to connect to something
+			//   similar to a domain controller.
+			// This software may wind up doing quite a few things that Windows networks wind up doing.
+			//  I want there to be ease of administering these networks, perhaps so easy that many things get done automatically.
+			// The software will be designed for very wide deployment on a large number of devices or even processes.
+			//  It's going to be compatable with many chips, running in Node.js.
+			// It will be nice to have a moderately high traffic website running from RAM and 8 or so Rasberry Pi / ARM chip machines.
+			// Also, automated deployment and scaling on cloud services would prove very handy.
+			
+			// A system of doing something like Heroky would be nice too. It would monitor how heavily the processes are used and get new processes running on the
+			//  new machines quickly as demand requires it.
+			
+			// I prefer doing more to offer the software platform as a service, something on top of node that is much more like an application.
+			//  With a default deployment of it, like with Drupal, it will be possible to set up and manage a website.
+			//  Unlike Drupal, it will have some built in editing tools.
+			
+			//  Not very much at the moment
+			//   Automatically starts the resource pool, gets them initialized
+			
+			// There may be a resource admin interface publisher.
+			//  This could be useful when the resource is the server itself???
+			
+			
+			// Being able to ask the resource pool for a resource of a particular type.
+			//  Also with the particular location of that resource.
+			// So local postgres db could be found.
+			
+			// I think a local sqlite resource would be useful for storing an authentication mechanism for controlling the node process itself.
+			//  That would be using the same authentication provider / authenticator api as is used elsewhere, but is controlling access to the processes of the node
+			//  resources. There will be other access mechanisms that will work work providing access to other systems.
+			
+			
+			
+			
+			
+			START:
+
+			
+			
+			// go through the items in the pool.
+			// check what the dependencies are... if they are all going to be able to start.
+			//  some may not have all that is required.
+			//  eg there could be a website resource that is not connected to a web-data (or maybe web-db) resource.
+			//   that website resource could only be started once it has the right resource(s) provided to it.
+			//   the web-db resource may in turn use other resources.
+			//  There is a chain of resources that will have to start in order to get the web-db resource started.
+			//   It would be nice to identify the sequence needed in advance. Perhaps to know right away whether a resource can be started or not.
+			//    Resources in the resource chain may be started by the resource pool if they are 
+			
+			
+			
+			// This would need to start all resources in the pool.
+			//  Resources will have dependencies set up.
+			//  They will need to consume / connect with resources that follow particular APIs.
+			//   (interface).
+			//  So a website would need to interact with a web-data resource?
+			//   Or it would effectively be the web-data resource... that is the resource that will store the necessary information.
+			//   Perhaps having the website layer will assist in making the website do more things, not just interacting with web-data.
+			//   The website would be a layer where publishing options can be set.
+			//   I think the data resource makes a lot of sense, not sure if this will have too many levels operating.
+			
+			
+			
+			// Go through all the resources, identifying if each of them has the correct dependencies to start, and the resources that are in the dependancy
+			//  chain also have access to those resources.
+			
+			// That would mean that the website resource will start once the web-db resource has started and may have done some startup database creation.
+			
+			// Assessing if something can start
+			//  Would also want to get to the reason for why it can not start if that is the case.
+			//  can_start sounds like the right function name
+			//  If it has no dependencies, I think the answer is yes.
+			//   If it has dependencies, are they matched with something with the right interface?
+			
+			// Connection to a dropbox would be a good resource
+			
+			
+			
+			
+			// if it has all the necessary resources assigned, a resource can start.
+			//  
+			
+			
+			
+			//console.log('Resource_Pool starting resource pool');
+			
+
+			Resource Server Pool
+
+
+			
+			//var authenticator = new Simple_Authentication_Provider({});
+			//var authorizor = new Simple_Authorization_Provider({});
+			
+			
+			// Web_Resource being a particular type of Resource.
+			//  Always will be able to process HTTP requests.
+			// Web Service could be a type of Web Resource.
+			//  Other JSON Web Resources will be able to process HTTP requests.
+			//  Also Html_Web_Resource
+			
+			// May wrap other (distant) resources as HTML resources so they can be accessed through an HTML interface.
+			//  Though, the website can exist in the abstract as well as have its own publisher.
+			
+			
+			
+			// But Login_Html_Resource is likely to require an authentication provider.
+			//  It's possible it would be able to find that by looking in its pool.
+			
+			
+			//var login = new Login_Html_Resource({
+			//	'name': 'Login',
+			//	'startup_type': 'auto'
+			//});
+			
+			// Login_Provider.
+			// Simple version of it 
+			
+			// Some resources can be directly accessed with HTTP - they can use a Resource_Publisher, or have their own Publisher.
+			//  May depend on the resource. A Website resource is the very thing that gets accessed through HTML. However, a Data_Store resource has a different
+			//  component that provides a web interface.
+			// GWI - Generalized Web Interface (to Resource object)
+			// Resource with its custom response handling...
+			
+			
+			
+			// and the file system resource... the server_admin will have access to it.
+			
+			
+			// The resource pool could load other resources as described in a startup script.
+			//  The resource pool will be available as a resource.
+			
+			// start the 
+			
+			
+			
+			// Can check a file that has got the username and password in the local directory.
+			//  Simply checking a JSON file in the local directory.
+			//   Could also have the hashed passwords there.
+			
+			// A spritesheet maker?
+			
+			// Authentication Provider
+			//  Are they who they say they are?
+			
+			// Authorization Provider
+			//  Does the authenticated user have permission to do something?
+			
+			
+			
+			
+			// Would be good to have a webserver resource
+			
+			// Should take in some data.
+			//  Perhaps a Data_Object could supply the data for the whole website.
+			
+			
+			// Should deal again with data on the execution path.
+			//  There is a whole lot more to do with the data here.
+			
+			// 2 way bindings with data in a database or through an API?
+			
+			// At the moment, want to present the data to the user.
+			// Using the XML-based templating / replacement system would work well.
+			
+			// Still want to be managing information.
+			//  Parhaps an integrated CMS from the start is worth making.
+			//  Would also take the database layer as well.
+			
+			// Perhaps just an execution path for some given files makes a lot of sense.
+			//  Retrieving the data from the database seems like the best option... I think I'll go for that at the moment.
+			
+			// I think having and using the local web-db server resource makes a lot of sense.
+			//  There will be some initial configuration, but after that there should be something that is relatively general and
+			//  available for storing and retrieving chunks of web data (such as pieces of XHTML, CSS, even JavaScript), and will have a more configurable
+			//  API. Looking to keep the flexibility that I'm making but also make an execution path that will run reasonably soon.
+			
+			
+			// tell it to start the local server info automatically.
+			//  this could be assumed in some cases
+			
+			// startup_type = 'manual' or 'automatic'.
+			
+			//  if it is automatic, its dependencies need to be started before it can start.
+			
+			//  not sure about all resources having 'start' and 'stop' etc.
+			//   May make sense too, so that they can be started once the various requirements are ready.
+			//    That would make sense with a website resource, because it uses other resources.
+			//     The web-db resource would be started up first.
+			//     May be able to use a separate authentication provider.
+			//      The web-db resource could be set not to do the authentication in the database.
+			//       code such as web-db-postgres could be modified so that the authentication is an optional component.
+			//     Perhaps it's worth considering that 'web-db' can be broken up into constituent parts.
+			//      web-db seems like an api, and would be wrapping various things together to provide web-db functionality.
+			//     The various parts of the web db could be done by different systems, such as a ram-auth.
+			//      Then there are the other various items and tables in the system.
+			//     May be worth using a document database system like Mongo from an earlier stage.
+			
+			//   Could have a web-db-configurable object, where the various things needed in the web db are configurable to run on different services
+			//   Could have web-db-mongo-ram-mix?
+			//    I think there will be different possibilities.
+			//    Having it customizable and configurable from the beginning seems like the best option.
+			
+			// Authentication_Provider
+			// Authorization_Provider
+			//  Keeps track of groups. Can answer a question like 'what right does a particular user have for a particular set of rights (which will apply to a particular document/
+			//   object/resource.)'
+			// Web_Catalog
+			//  Used to store most of the data for the website. The content for the website. Various objects. This will be a higher level API that will work with this server
+			//   and resoruces system. It will contain information that will be used to publish resources. Some of the data inside this object could be published using this
+			//   object and a publisher object.
+			//  Possibly this would contain the users table too, with the roles information as well?
+			//   Maybe that would be better outside this.
+			
+			//  Items as documents in the web catalog. The permissions for the documents (who is the owner, which users/groups have been granted which named permissions).
+			
+			// Web_Render_Cache
+			//  Stored cached web documents and components.
+			//   Could be mult-level, could be a bit complex. Could see which are the most frequently requested things and keep them in RAM.
+			//   Could possibly operate over a distributed environment too, so that distributed (perhaps custom) resource would be what gets referred to.
+			// Perhaps graphics card memory will be good for storing things and sticking them together.
+			//  Some procedures like rendering could perhaps be done very well using graphics cards.
+			//   It may involve moving around quite large amounts of data in quite simple ways.
+			
+			
+			// It makes sense to work on these things as separate programmatic components.
+			//  At some stage they could be integrated within a system like Postgres or MS SQL Server with stored procedures carrying out some of the 
+			//   authentication and authorization logic.
+			
+			// For the moment, I prefer the idea of using an object database with querying capabilities such as mongo.
+			
+			// Web_DB - will take various components as providers.
+			//  Will carry out the logic with JavaScript code.
+			//  Will make user of various resources such as Authentication, Authorization and Web_Catalog.
+			//  There could be integrated web db providers, like web-db-postgres would be, that use the database for stored procedures that do authentication and
+			//   / or authorization built into the functions. This seems like the right way of doing it when using those systems for the totality of the data.
+			//   Now data systems may be using different 
+			
+
+			//this.add(authenticator);
+			//this.add(authorizor);
+			//this.add(login);
+			//authorizor
+			// I think the resource pool will be started, like other resources.
+			//  By keeping it following the resource API it will be easier to build components that publish it for administration using the same tools.
+			
+			
+			// but when does it start?
+			
+			// So the resources will be running...
+			//  Available to administration.
+			
+			
+			
+			// The resource pool will be published through an admin interface
+			
+			// /admin/resource_pool - can specifically refer to the pool of resources.
+			//  maybe just admin/[resource_name]

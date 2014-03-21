@@ -1,0 +1,1510 @@
+// Not sure the server needs the controls???
+
+
+	// Server involving the resource pool is a bit complex, but will be very useful when it is working and running.
+	//  As well as this, want a way to run the existing jsgui services such as page rendering relatively easily.
+	//  It also makes sense to use Connect and / or Express for routing URLs to resources.
+	//   There could be an application defined table if the whole app receives and processes all requests through one resource.
+	
+	// This resources system, identifying, transforming and using resources, makes a lot of sense.
+	//  A Having the system to simply render HTML will be very useful, but it needs to fit within the right place.
+	
+	// Want to use this to get a server up and running fairly soon.
+	//  Perhaps a server could process these requests - take request and response.
+	
+	// Could get hooked up to an app, maybe using a connect() function.
+	
+	// Definitely want to use this controls system in a .jsui document as well.
+	//  HTML but with embedded controls
+	
+	// Will need to do a whole bunch of things for the website itself.
+	//  Various controls, templates etc.
+	// 
+	
+	// Internet module?
+	//  Server-Internet module?
+	
+	// I think this should use Abstract-External-Resource modules...
+	//  Or maybe External-Resource-Connection modules too.
+	
+	// Define the abstract resource
+	// Connect to it using either the resource connector or something that provides more of an interface than that too.
+	
+	// Yes, the server module will deal with the handling of local and remote resources
+	
+	
+	// Local resources
+	// ---------------
+	// Resources available through calling JavaScript functions within this server process.
+	//  Some may be indirect because they load remote resources
+	//  Disk considered local? Probably not for this purpose because it is not in the process.
+	
+	// Do need to interact with various other resources.
+	//  There is a lot that needs doing...
+	//   Need to have the user permissions.
+	//   Want to have some testable components made soon.
+	
+	// I think users and permissions makes sense.
+	//  There could be authentication resources / authentication providers.
+	//   The server itself could have a file authentication provider on it.
+	//   The local file system resource can be used to scan the server for various things.
+	
+	
+	
+	// Maybe have process, local and remote
+	
+	//  Hard to draw the line - a postgres server on that computer may count as remote, accessed in a similar way to a distant one.
+	
+	//   How necessary is it to draw the line?
+	//    It needs to know where to look.
+	//     App needs info, it asks a local resource.
+	//     Perhaps resource connectors should count as a local resource.
+	
+	// Resources / web resources may be hard to define.
+	//  We may even define a resource as having a database with a particular abstract representation.
+	//   Could get that representation from the database, and use that in indexes on other machines.
+	
+	// Server is being designed so that it can run from multiple nodes.
+	//  Likely to have multiple nodes on home network, connected with the web-facing server.
+	//   They are going to be talking to each other much of the time.
+	//    Perhaps some of the backup / full data set would be moved to the one with more storage.
+	//     Maybe while only what is needed for serving the website would be on the website.
+	
+	// I think a GUI tool for creating abstract databases would be very good to make...
+	//  But I also think it needs to be integrated with the greater system to do with user data, with facilities to save user data.
+	// Although some parts could work on their own, they should be hooked into the backend services.
+	
+	
+	// Before the website actually does anything, things need to be set up.
+	//  This is not so much (just) the website server, it is a node in the system.
+	//   Some of these nodes will be web-facing.
+	//   Many will not.
+	
+	// A single node system should get some information about its environment.
+	//  That is a useful thing to start with.
+	//   Could include information about local resources / remote resources available on the computer.
+	
+	// External resources I think will be the right name...
+	//  External to the app.
+	
+	// The single node system could scan the LAN as well to find postgres servers.
+	//  This kind of thing may be best done with a callback, and extra information being added should raise an event.
+	
+	
+	// This server object will be a resource (but that won't matter so much to begin with)
+	//  Saying it's a resource denotes some things about its external API. Exactly how it gets implemented in node is another question.
+	//  That also means it is configurable across a network.
+	
+	// The server will manage a few things.
+	//  It has a resource pool - resources that are available to the server, within the application.
+	//  As well as the resource pool there are resource publishers.
+	//   These publishers, perhaps should be resources too, within the pool.
+	//   The publishers are used to publish resources. They may provide an admin interface to some things, with HTML.
+	//    Could publish a postgres db, and the web-based admin would be part of that publishing system. Allows for interchangability with this modularity.
+	
+	// For the moment, want to get the content, and possibly some styling information, within the postgres database.
+	//  These will be rendered to HTML for my website.
+	
+	// It may be possible to get some things about data resources into the website in particular quite soon.
+	//  I'm not so sure about such a customizable system for scraping data from other sites.
+	//   Perhaps just show some interface to do with obtaining data from different websites.
+	//   May have some data indexed already, make it available to view, and download in different formats, provide links to the original data sources.
+	//    Could have a few nice things, like the XML viewer where it makes it look nice like it does in Internet Explorer.
+	//    Could have some very simple / subtle spreadsheet like control. Can select data, possibly keeps focus in textbox with selected CSV for easy copy (and paste?), like Bespin does though
+	//     that uses canvas.
+	//    Just a nice interface with a few data sources shown. Something similar would be useful to various organizations. Maybe about 20 data files will be visible.
+	//     May add a few visualizations.
+	
+	// Don't need a very complex system with all the parts fully developed, but it is a bit complex at the moment.
+	//  By this stage authentication and tokens, cookies will have been put into use.
+	
+	// I think this could make a nice out-of-the box website, server and CMS before all that long. Could use dreamweaver templates too.
+	//  Will become somewhat big with lots of different things it can do and ways it can connect, but I don't expect it to get out of hand regarding complexity when the framework is well
+	//   structured.
+	
+	// The resources system will be useful for image modifications.
+	//  Could have an image resource, images resources
+	//  Published by a server with modifications.
+	
+	// Having the server able to identify its own network address is the best start....
+	
+	// Identifying itself as a local resource.
+	//  May possibly be connected to different networks. Not quite sure how that will work at the moment. I think for the moment it will just be in terms of IP address,
+	//   perhaps different resources will be available through different network adapters too.
+	
+	// Remote Resources
+	// ----------------
+	// Resources available accross the network, maybe even on disk.
+	//  The main purpose of listing the remote resources is to keep track of where the things are.
+	
+	
+	
+	
+	// Abstract-Internet-Resource?
+	
+	// Abstract-External-Resource
+	
+	// Internal resources... access them in the same way?
+	//  Possibly will do, but could have something that can combine them with a shared API.
+	
+	// Not so sure that the client app would need the internet programming module...
+	//  Except possibly if the resources could be used within that to load JavaScript resources, possibly as an AMD module loader?
+	//   No need for that right now.
+	
+	// Client app could have a small amount of code that makes use of these internet resources... for a small client app.
+	//  Would be useful to have internet resources code for a larger UI app that managed connections to these internet resources.
+	
+	// Will not be so hard to put them within a simple UI...
+	//  But will be writing more UI code to do so.
+	
+	// An important part to write is to do with managing resources such as databases, will be useful for web administration tasks.
+	//  Backing up a database, changing a database, changing a whole bunch of databases.
+	//  Replicating changes, using different nodes to store and retrieve different things.
+	
+	// May test this on a cluster of Rasberry Pi computers.
+	//  Then see what happens when I throw in a Macbook Pro!
+	//   Would like to see them performing well together.
+	//    I'm sure a Rasberry Pi cluster would be able to handle quite a lot. Would be useful for testing some small scalability.
+	//    Would be very useful for deployment testing.
+	//     Deploy server to remote machine should be possible - it can log onto the machine using putty / terminal / SHL? whatever.
+	//     Would then be able to install the node app, then be able to get other running there.
+	// Full deployment accross a network when we have access to the machines.
+	
+	// Local resources (to do with the site) will be things generally that get served to the client.
+	// Remote resources will be used to help the server application, client probably won't connect to them directly much.
+	
+	// And abstract-postgres could also define the postgres external resources.
+	
+	
+	
+	//  That module could be used well within the client side.
+	//  Also would have an Internet-Resources-UI module, would function both on the server and the client.
+	
+	
+	// jsgui-internet?
+	
+	
+	
+	// What's the platform
+	//  What's the version number?
+	
+	// Need to use this to make a server.
+	//  It will be easy to run particular servers.
+	
+	// A single server here?
+	//  Or quite a few server modules that piece together.
+	
+	// Should various server modules be loaded separately?
+	
+	// I think a jsgui-server module will be able to use various different backend systems.
+	
+	// Perhaps call it Web_Server?
+	//  Internet_Server
+	// Website_Server?
+	//  And somehow, access to a postgres database could be provided through a 'resources' system.
+	//   Likely want to be careful to restrict the access to that more, using a system like 
+	
+	// This is the Server module.
+	//  There will be various things inside here which could count as servers or server components.
+	
+
+
+	
+	// This may need to be expanded to work in Windows too.
+	//  Will work in Windows.
+	// 
+	
+	// There could be various resource prototypes or classes, such as Polling_Resource prototypes
+	//  These could carry out an asynchronous poll at set intervals to update their internal information.
+	//  Their information would be made available thorugh whatever publishing the system uses for publishing that data.
+	
+	// Data publishing addresses:
+	//  Some resources will be the website that needs to be published. They will be at a specified URL
+	//   Other resources will be within that website resource and published at a URL within the website resource.
+	//  Some resources are not the website, but may be administered through the resource pool
+	//   Perhaps resource pool will be published and that will provide access to the (administer) the various resources inside.
+	//  The server needs to be able to interact with things to do with resources regardless of the website it is serving.
+	//   But may be nice to have the resource_server as a resource and address within what normally is the website.
+	//    At least two levels of administration... server node admin, application admin.
+	//     Some resources referred to could be replicated. Some servers may act as gatekeepers to resources.
+	
+	// The server administration could have its own address?
+	//  Other resources may have their own internet or network addresses, these would be available from the resource pool's address.
+	// The resource pool will be published. The resource pool will be used to interact with various resources that are running.
+	//  The server node itself will be published.
+	//   This could be done using a specific port.
+	//   The website gets published on one port, the admin on another
+	//   The website on one port, the admin available through a subpath, like /server_admin
+	//   The website on one port, the admin available by sending a code along with it saying access to the admin interface is requested.
+	//    This seems like a very interesting option, least RESTful.
+	//  I think different ways of doing this is the way to go.
+	//  Keeping them separate may work better in the interests of security... only sending the normal requests to the processes that handle them.
+	//   But then internal security is important too.
+	//  I do quite like the idea of making resources available to ports.
+	//   I think there will both be the resource's web page, and the resource's admin web page.
+	//   Possibly there will be admin components added to the standard page.
+	//  I think it likely that the administration user interface won't be provided by every component (but it could be as a fall-back)
+	//  but by the server component, showing its resource pool, with an admin interface to that.
+	
+	// I think a website resource could be published on a particular port.
+	// One particular port for the node process as well?
+	//  Each port could either be a running service / resource or the admin interface for a resource.
+	//   The admin interface for a resource would need to be available on one computer, even if that resource is distributed across a network.
+	//   Various resources would be running on a lower level in order to facilitate some network resources.
+	//    The resource could be made up of resources that are distributed across a network. This could mean that there is a 'virtual resource' that looks like a 
+	//    resource running in a resource pool within a process, but behind the API calls it uses a whole bunch of different nodes to store the data on.
+	//    I think simpler cases will be started first, then there will be more of a framework in place for making these x-network resources.
+	
+	// A resource could simply access a mongo db. That would be quite simple.
+	//  There will be various other configurations, perhaps with specific tasks like caching being done on a particular machine to speed things up.
+	
+	// May have a single interface to the network's servers.
+	//  Interface for administering a process/resource
+	//  Interface for administering all processes/resources on that physical machine
+	//  Interface for administering all processes/resources on the network
+	
+	// Want something where things get logically arranged in a tree interface.
+	//  Network / network OS level
+	//   The different nodes.
+	//    Administration of various nodes through a single port from one node.
+	//     Network Admin could be a publisher for network information?
+	//      I think being able to administer the computers / processes individually is the first thing.
+	//      Perhaps a 'network resource pool' or 'network admin tool' would be what's needed once that is working.
+	//       Perhaps this could be made available as a resource within one or more of the machines.
+	
+	// It could be that every node / many nodes will be capable of carrying out admin commands.
+	//  I think the way to do it will be to get credentials working on the level of the individual node, and then have tools that work across the network that
+	//   make use of these administrator credentials.
+	
+	// I think making this OS-level system makes a lot of sense as a platform for the processes / resources / services that the system will be running.
+	//  I think there will be differen ways in which the node-OS-process will be administered.
+	//   The server may not be on port 80 anyway?
+	//    Or there could be a process on 80 (like nginx) that does load balencing reliably.
+	//  For the moment, I think there will be a service port (default 80) and an administration port.
+	
+	// Possibly will be looking at the URL, and seeing which resource serves it.
+	//  The resource publishing options could get a bit more complicated, but that will be abstracted away from the website itself.
+	
+	// I think that after this is done there will be a very nicely configurable website system.
+	//  It will be possible to administer the website resources through the server admin screen, or something very similar.
+	//   The website could be a resource that gets administered through that one process. Then the server administration code makes the changes over the network.
+	//    It may be possible there will be the website admin interface through the server.
+	//   Perhaps the website admin interface would be available through the website too.
+	//    Other admin interfaces would need to be specifically published because they don't normally have a URL.
+	//     That is, if they are to be directly administered.
+	//  Some resources could be published to the internet with their own URLs within the website
+	//   Music files that get shared over a network... it won't exactly just be the website that is publishing them, but they will be published and the website will
+	//    refer to them? 
+	
+	// The website could possibly include resources... though maybe it will really be links to distributed resources.
+	//  The website could provide its users with the means to access the resources it uses, ie publish a resource administration interface to its users.
+	//  That could be the website administrator or the user of the website.
+	
+	// There will possibly be the standard means of doing the administration, but then there will be the unpublished resources too.
+	//  I think this could become both quite complicated and flexible.
+	
+	// The process level control offers a good point to carry out admin operations.
+	//  For the moment, the service will only be running through one node process.
+	
+	// I think serving an HTML admin interface would be a good early priority.
+	//  This could possibly make resources such as web-db-postgres visible through the pool.
+	//   If this is available to administer / interact with, there is an advantage.
+	//   
+	
+	// I think an admin app for administering the server / node process makes a lot of sense.
+	//  Some of this functionality will be similar to the website itself in places.
+	
+	// The admin app will have a tree view on the left
+	//  Server itself (not much info about this)
+	//    Node process
+	//      Resource pool
+	//       Various resources available to the process... it will be possible to administer them to varying extents.
+	//       Resources may be addressable within this resource pool. When they are published, they are made available through a path in a website
+	//        rather than through a resource pool. When accessing things through the resource pool it is done through the server administrator interface.
+	//       It may be possible to have data encrypted within the server. When a user wants to access it, they access a decryption key in a walled-off part of the system, or
+	//        provide it themselves as a password / based on a password.
+	
+	// Resources administered through a resource admin interface...
+	//  Resources like a website will have their own username and password systems.
+	//   Some operations could require admin credentials within that resource.
+	//   That could require multiple login credentials being stored within the client.
+	
+	// Possibly the server admin could be set to have control over some / all resources too.
+	//  When administering the server, credentials to use for particular resources could be stored.
+	
+	// The website credentials system may depend on a networked database / a resource.
+	// The resources that deal with credentials need to be running at a fairly early stage.
+	//  Resources may be made available in a way that requires credentials. That way, their availability could be seen through the 
+	//   'admin' resource, but they could not be accessed without accessing them as a user of the system.
+	// Some resources could be made available to the administrator of the node process as a matter of course, such as the resource pool.
+	//  Within the resource pool, some resources (such as something that connects to a network for authentication) would require some credentials from within the app
+	//   that is being used. The node admin credentials could be set to work anyway.
+	
+	// Resources within the resource pool... these are not published.
+	//  Really unsure about allowing the system admin by default to carry out operations.
+	// The admin interfaces are available through the resource pool.
+	
+	// Could be two levels of admin interface
+	//  Start, stop
+	
+	//  Do things
+	
+	// Perhaps having it only do things when the right credentials are there is the right step.
+	//  It would need to hook into a credentials provider, that's a particular resource.
+	
+	// Will have various wrappers / easy to apply layers that carry out the authentication & authorization when accessing a resource.
+	//  I think this will make for a much more performant and versitile platform than Drupal.
+	
+	// So various tasks like 'delete user' could have their interface shown fairly widely.
+	//  Node administrators would be able to see them, but calling it would only work if they supply the right administrator credentials for that sub-system.
+	
+	// Different admin credentials on different sub-systems.
+	// There may or may not be one overall system.
+	//  Some systems will store credentials needed to access others - but an administrator using this in a web browser is likely 
+	//   to be asked for passwords for different things.
+	//  May be nice to make this smoother - granting them access to various resources as a node administrator.
+	//   There could be a stage where the node administrator is granted a whole bunch of tokens, or a token that works for a whole bunch of resources.
+	//   There will be different ways of doing this.
+	// Perhaps 2 sets of credentials would be enough.
+	//  Many of the internal items could use a certain credential resource.
+	//   This credential resource could be distributed over the network too.
+	
+	// Possibly have separate credentials servers from the main web db?
+	//  That may make sense so that credential services can be worked on in isolation.
+	//  This could be something that could work a lot faster outside of postgres.
+	// Could possibly store users, roles, etc within a mongo database.
+	//  There could be different systems for credential providers.
+	//  Perhaps they could work through more general db interfaces when they are made.
+	
+	// I think a mongo and memcachd credentials system would work very well.
+	
+	// Then when someone is authenticated, they can carry out particular operations on the main database, or a database that deals with the data for a particular resource.
+	//  So there could be another API above whatever DB it is that requires the role(s) for whomever is trying to do something.
+	//  Some of the permission system would need to be in that database too, but the actual authentication is done by a different system.
+	
+	// This is becoming fairly complex, getting beyond just hosting my website.
+	// I do think it makes sense to have these well thought out and encapsulated systems.
+	
+	// Authorization system separate to authentication... the username / user id is given to the website system, having been authenticated already.
+	//  The website system then checks what permission the user has.
+	//   What roles they have
+	
+	// Authorization as a subsystem:
+	//  Would need to define various capabilities as a subsystem too - this could be done.
+	//  I think saying what roles each user has, but the roles could vary for different subsystems.
+	
+	// There will need to be some repetition of capabilities so that subsystems are very versitile.
+	// There should be a different ways of configuring these - should be easy to set things up well.
+	
+	// I think an overall simple layer is quite good. On top of that there will be various resources and credential systems.
+	//  For the moment, I think having the node process credentials as a separate level makes a lot of sense.
+	//   From that, a very professional interface can be made.
+	//    This will lead to the particular resources themselves. It may be possible to edit them within that interface, could be a very nice IDE.
+	//     Those particular resources may require further credentials to access them.
+	
+	// Most content editing will be abstracted away from the particular server it is running on, but that server is likely to be providing a useful starting point
+	//  for administration.
+	
+	// It's likely that the very same admin interface (starting with the tree root as the resource) will be used for a published admin interface.
+	
+	// Published admin interface - available over the internet
+	// Unpublished admin interface - available through the 'server os' and the resource pool. Using it will still require credentials for modifying whatever resources they are.
+	//  Being logged in as a node process's administrator gives a lot of rights, but to administer something properly (like within it, perhaps deleting it???, probably not)
+	//   will require the credentials used to access it normally as if it were published on a URL.
+	
+	// I think the admin interfaces for objects publuished on URLs will have a lot of consistancy.
+	//  That is one way to go about things
+	//  The other is 'edit-in-place' capabilities.
+	// The two could exist together. It would be useful to be able to change things in both ways. Perhaps edit-in-place could provide
+	//  a diagram of what's being changed in the system, also administering the resource could show 'before' and 'after' on the webpage.
+	
+	// For the moment, though, I need to get this os-level layer working.
+	//  It needs to deal with some simple administrator credentials
+	//  It will make an admin interface available to those who supply the right credentials.
+	//   That admin interface shows the resource pool.
+	
+	// Do want to get my own website running before too long.
+	//  This OS is a diversion, but perhaps a necessary one.
+	// I think it's going to be very helpful for administering more complicated structures.
+	//  When the code gets used, I don't think it needs to be obstructive... but it does need to provide obstruction to those who are hacking it.
+	
+	// The website resource will have different means of publishing it.
+	//  Publish as distrubuted service?
+	//  Or that the website process could be put on many machines because it calls verious resources which are distributed accross the network.
+	//  I think scalability will come from having many identical / very similar node.js processes making use of the same distributed network resources, which could 
+	//   also be node.js processes of a similar or different kind.
+	//    They could be the same codebase but configured to act differently, ie the resource pool starts the process for storing an unindexed KVS.
+	//     That way a whole bunch of processes could be started with easy deployment, only changing the configuration options.
+	//  It's likely this system will be open-sourced, not quite sure when.
+	//  I think making the various parts, piece by piece is what needs to be done.
+	//   A lot is known about the system architecture now.
+	
+	// The local file system resource may need authentication / permission to access.
+	//  Need rules about who is able to access what. Some may be immutable.
+	
+	
+	
+	// Credentials_File
+	//  Part of a process, and those credentials are used to connect to other things.
+	//   That will be something that could be administered as the node process administrator.
+	
+	// MetaBench Node Process Server OS
+	//  Not a very catch name right now.
+	//   It's likely to be released in various guises, there may be a client version that is very compact and is used to provide an API to a control that is running.
+	//    May handle things like persisting the data on the client, cookies, connecting to online processes using credentials.
+	
+	// This more complicated system is going to enable a fair few things to work simply.
+	//  Clients could listen for changes on resources or parts of them.
+	//   The request to listen for something may get put into a distributed database rather than just stored in the memory of the process that served the
+	//    request with the information they are now listening for changes about.
+	
+	// This is how thinking of the app on different levels of functionality and implementation is going to provide very good capabilities like this.
+	
+	// I hope this makes for a very good way of sharing resources over a network.
+	//  One possibility is to set up an interface to a graphics card using openCL. Perhaps some graphical rendering resources could make use of the
+	//  graphics card.
+	
+	// Could possibly have function wrappers that provide metadata about the functions.
+	//  This would be one of the things that the resource API does.
+	
+	// Not quite working in Windows.
+	//  Going to use the built in function if poss.
+	
+	// Dealing with sub-resources.
+	
+
+
+	
+	
+	
+	// Then authorization... who has access to what.
+	//  Will need to find out what a user's role us.
+	
+	// get_user_roles - takes user name, returns array of roles.
+	
+	
+	// Then a role can have various different permissions.
+	//   Granularity of accessing different things.
+	
+	// server_admin can access all files.
+	//  could have more granular access for particular resources...
+	//   but the file manager itself will be available to the server_admin from the root directory.
+	
+	// It may be available to app administrators from different paths.
+	
+	// Then find out what permissions a role has.
+	//  Or if a role has permission or what level of permission they have for it.
+	
+	// read only access
+	// and full access
+	
+	
+	// Now, this resource could have an HTML interface...
+	
+	// HTML_Resource_Provider... provides a resource as an HTML interface.
+	//  Any Resource?
+	//   Would be tricky.
+	//   Won't do that right now.
+	
+	// The Login Resource is a bit different to Authentication, it's to do with the user interface side of things.
+	
+	// Not sure about this - the login resource could require and make use of an Authentication Provider.
+	//  I think that would make sense. It will use that to get the token needed to access the system.
+	
+	// When a Data_Object is in a Context, all Data_Objects that get added to it have their _context set as that.
+	
+	
+	
+	
+	
+	
+	// Perhaps getting the network IP address will be done through the resources system.
+	//  Could have a local information resource.
+	// The advantage with through a resources system is that there won't be any confusion about if the function is one that returns its result with a callback.
+	//  All resources will by default return their results through callbacks, because they could be asynchronous. Some operations won't in fact be asynchronous, but will have that same callback pattern.
+	//   Objects that compute within the main jQuery thread may offload their computation to either worker threads or specialized C++ modules. These could work asyncronoysly to the main JavaScript thread and work well with
+	//    multi-core processors. A few of these threads running could greatly speed things up.
+	
+	// Local information resource.
+	//  Gets information about the local machine.
+	//  May have some info about its capabilities.
+	
+	
+	// And then a particular site will use particular sub-servers in different areas.
+	//  Building a whole page out of ctrls...
+	//  Parsing HTML/HTML and making controls (where needed?) using that.
+	
+	// Something will use jsgui-server and then be able to make a page using ctrls.
+	
+	// Just building a page without the routing?
+	
+	// The system could do with resources in a tree.
+	
+	// May need to load browser specific html processing as well.
+	//  Would need the various rendering systems working side-by-side.
+	
+	// Don't extend jsgui here...
+	//  Should maybe be part of Server.
+	//  Server.Page_Context
+	
+	// Page_Context part of jsgui?
+	//  Think it's part of jsgui-html.
+	
+	// Not sure if this should be a resource or not.
+	//  Best not to I think, so they can get forgotten about.
+	
+	// But perhaps that could be a closure?
+	//  But the context object also needs to hold the index of IDs and incrementor of various objects.
+	
+	// The page context will also manage the IDs of the items.
+	//  Won't just be in the HTML closures.
+	
+	// This will make for efficient pages, hopefully.
+	
+	// This may be a Response_Context.
+	
+
+
+	// And make a server class... What about using the Express server?
+	
+	// Static Server?
+	
+	// Have server functions that serve different types of files or requests?
+	//  jssapi
+	
+	// Serving documents for the site by path...
+	//  That's one common setup
+	//  Or serving by routes / different regexes on the URL.
+	
+	// Specify things as Resources - like a document. That document could be given a URL like Drupal, or URL worked out from resource description.
+	
+	// Should probably treat URLs or URL prefixes as resources.
+	//  We could make a basic resource class - could have a path (though path could be generated)
+	//  The server contains resources (like directories)
+	//  
+	
+	// FileServer could be a type of ResourceServer.
+	
+	// Extend DataObject?
+	
+	
+	// But the server itself...
+	//  Needs to start after being configured.
+	
+	// The server could work out its own network IP, hopefully.
+	
+	// The whole server.
+	//  Wraps a more specific server.
+	
+	// Should assume at the root location is a File_Resource_Server.
+	
+	
+	// The site itself could come about in a lot of ways. Want something simple and flexible.
+	//  The idea of resources and mapped resources.
+	//  Resources can have a URL.
+	//  Resources can have their own mappings within their path.
+	//   They are free to handle it however they want internally.
+	//    There will be default options which are for the kind of site I want to make.
+	//     Quite general purpose things. Want in-place editing available etc.
+	
+	// Server is a resource?
+	//  Can be described as an abstract resource.
+	
+	// Server keeps track of resources available.
+	
+	// Different resource locations
+	//  Process
+	//  Local Machine Slow Disk
+	//  Local Machine Fast Disk
+	
+	// Not so sure about local and remote difference being so important in defining what the resource is.
+	//  Sharing local resources over the network, accessing them as external resources from another server.
+	//   Would be able to make a large distributed key network.
+	//    A range search, accessing them sequentially could be handled somehow.
+	
+	// Different configurations will give different performance.
+	//  Want to be able to configure the parts of a distributed application.
+	
+	// A server could host various resources, with various out-points.
+	
+	//  Some will be available to any server on the network.
+	//  Some will be available to specific servers, identified by ip address and other authentication tokens.
+	
+	// Local resources will probably be used internally.
+	//  Sometimes that's the best use. Maybe don't want to use the local postgres connection as an interface to that DB to other computers.
+	//   Though maybe we want to expose some of it.
+	
+	// Dealing with lots of different things as 'resources' will be very helpful.
+	//  Some of them will be text/json there immediately.
+	//  But will have means of identifying itself in a wider context.
+	
+	// The resource system identifies resources / data within a wider context.
+	
+	// A cache / collection system within the local server... that could be exposed as a resource to other nodes.
+	//  With these things exposed, could have a network indexing system work well in RAM.
+	
+	// Could make it so that a fair few GB of items can be stored in RAM on my home network.
+	//  However, could experiment with moving the location of pieces of data / having it replicated.
+	//   It could be quite some effort to say 'lets store this in RAM instead' and have it removed from the RDB and persisted accross the network.
+	//   Each piece at a time. Could provision the system, then the system loads its data (connecting with the existing one / synchronizing), then it announces it is ready.
+	
+	// Will be describing the application network layout in an abstract way.
+	//  Possibly estimating scalability of app?
+	//   Working out which pieces can be moved...
+	//  Each node will be doing more than one task most likely, and these will be reassignable.
+	
+	// The server nodes need to be specific in keeping track of what is available to them.
+	//  Some things that get made available over the network could be defined as resources.
+	//  Could expose some data structures across the network.
+	//   Some data structures could essentially live on the network (using facilities of various nodes), but be co-ordinated by one node, or a smaller number of nodes providing access
+	//   to the distributed feature.
+	// Perhaps the admin user will have access to various data structures existing on live nodes.
+	//  Would be useful to be able to query various indices and tables that are used to create other data structures.
+	
+	// Defining data centres - would be useful to do.
+	//  Can be free to move data within a data centre.
+	//  Would be useful for keeping various features confined to a geographic area / network zone.
+	// Network zone may be better than data centre.
+	//  Could be nested
+	//  But could be data centres on one level.
+	
+	// Finding local resources / near external resources
+	//  Hard drives, database systems on local machine
+	//  Databases on the LAN
+	//  Other jsgui servers on the LAN
+	// Storing references to the found resources
+	// (Setting up local resources)
+	// Setting up resources that get exposed to the network
+	
+	// Mapping remote resources will be another task
+	//  May involve a lot of data, hence the nees to deal with data well in the local system.
+	
+	// Very nice if a remote Linux server could be stated as a resource
+	//  Then it is logged into, and provisioned with node, all the prerequeisies (probably postgres), jsgui, and is added to the system.
+	
+	
+	// With a distributed methodology built in from the start (a node in a distributed system), a single server should still be able to cope fine by itself.
+	//  It may be batter at making periodic backups, perhaps to Amazon or some other cloud database.
+	
+	// Need to get on with this resource definition and server system, so that I'll be able to get the server to configure itself.
+	//  Quite a lot of code fitting together here, will make something very nice.
+	
+	// Will likely be doing some more work on the abstract database.
+	//  Generating the functions that will authenticate a user has permission, and do something.
+	// Object ownership and permissions will take some more work.
+	// Website content editing will be one of the main things to get done...
+	//  with websites most likely counting as a resource and being part of that abstraction.
+	//  They would contain other resources.
+	//   Possibly the website gets defined, then served, just a resource being made available.
+	
+	// The website could be a resource served accross the network much like any other.
+	
+	// Resource_Server class being useful to make?
+	// We will eventually get all this abstraction done and have a working, very flexible web app.
+	
+	
+	// The local network scan seems like a very useful thing to do, a bit later
+	
+	// Have it check the local ports for databases
+	//  Have it scan all of the local ports?
+	
+	// I think checking 5432 for postgres is sensible.
+	//  Then connect to it.
+	// Won't be metabench specific code here, though that could be the name of the db.
+	
+	// Local resources - the directory where the app is hosted.
+	//  These may not want to be exposed so much!
+	//  But in some app configurations, may want to serve some files from the local directory system.
+	//  These would be defined in the Local_Resources section.
+	//   Perhaps they would be changable through a restful interface
+	// The whole local file system. Be careful about sharing access to this.
+	//  Not sure that node would have root access.
+	//   It easily could, but likely to run it not as root when it's serving rather than doing system admin.
+	// Node running on a computer could have access to a fair few systems.
+	
+	// This could still run very fast as a web crawler despite the extra abstraction introduced in places.
+	
+	// It seems like a lot is getting abstracted.
+	//  Abstract_Resource?
+	//  Resource_Description?
+	
+	// Resources are created (locally), such as page servers.
+	//  They are then exposed.
+	
+	// Nodes will be able to find out what different resource servers different nodes have.
+	//  Being able to serve a resource....
+	
+	// Don't want everything to be a resource down to the very finest detail.
+	
+	// Describe a database as a resource, maybe have info on what is inside.
+	//  Parhaps describe a server as a resource.
+	
+	// Resource descriptions could get quite complicated...
+	//  Some resources may be contained within others.
+	
+	// Resource: network location
+	//  Server / resource type (eg RDB)
+	//  Server / resource system name (eg Postgres)
+	//  Server / resource version (eg 9.1)
+	//   Some abstract code objects may be identified as being suitable for only particular versions.
+	
+	// Resource discovery code would be helpful.
+	
+	// Basically the 'resource' functionality will be encapsulated.
+	//  Will allow easier administration of what is available.
+	
+	// The system could work on the client too.
+	//  Would not have it in the simple builds, but could be in builds concerned with administering resources.
+	
+	// Resource_Finder
+	//  Could be a type of resource.
+	
+	// Within the app structure there will be different classes such as Resource_Finder.
+	//  The subclasses of it will do the work, but it will be nice to have things within a consistant API.
+	
+	// Resource finder is a resource...
+	//  An application level resource.
+	
+	// No need to make everything extend 'Resource' I think.
+	// Need to wrap data structures as resources?
+	//  Resources will have names.
+	//  Maybe paths.
+	//  Could be identified by URL paths,
+	//   Could be identified through a namespace system.
+	
+	// system.somthing.somethingelse
+	// Means of bringing dispirite things to availability in different places
+	//  But through the calling of a JavaScript function at the level of the application.
+	
+	// Should probably work with some resources, and resource listings outside of the context of the server.
+	//  Application Resource Index...
+	//   Indexes the application level resources.
+	//  With namespaced resource naming, perhaps having them indexed in an ordered collection will help.
+	
+	// Application_Resources object
+	//  Is a DataObject or Collection. Holds individual resources.
+	//  Gets created early on, server accesses them.
+	//   Server provides them externally.
+	
+	// Having the application aware of the various resources... won't be able to store info about all internet resources in the RAM though.
+	//  A larger resources index could use resources that load info about resources from other indexes.
+	
+	// I don't think the resources system would just be useful for the server, but that's all I'm thinking of using it for at the moment.
+	//  Perhaps the server will be a resource itself?
+	
+	// Network resource scanner
+	// Local resource system
+	// These will be used for the server app, not the client app (mainly).
+	//  Abstract resources will be available for the client app.
+	//  Basically these are resource descriptions.
+	//  Resources may generate abstract resources as descriptions of themselves.
+	//  Abstract resources may be used for the initialization of actual ones.
+	
+	// Describing a database server as a resource...
+	//  It can be initialized as an application resource.
+	//  Its abstract resource information (perhaps containing other resources too) will be made available too, maybe indexed.
+	
+	// Initializing local / near application resources...
+	//  Should be separate from the server components, though serving these resources is a major use for them.
+	
+	// Application_Resource - a resource available to the application
+	// (External_Resource) - resource external to the JavaScript code.
+	
+	// Locate external resources, make them available as application resources.
+	//  Then they could be made available as resources to other applications / servers.
+	
+	// Could start with a Local_External_Resource_Scanner as one of the few application resources.
+	//  Other things could also be available as application resources, such as a cache.
+	//  The server as an application resource? or something that serves resources?
+	//   Would be kind of neat, except could be confusing too. As an application resource, it could be accessed (maybe for modification) through the same interface.
+	
+	// I think that could work well.. various application resources get created, including the server.
+	//  The server references various resources that it serves.
+	
+	// The application is the code / process that is running.
+	//  The server is a component within the application
+	//  The server refers to various other resources in the application to do the serving.
+	//  This encapsulation means that different things can be built separately.
+	//   But HTTP generally will be the glue that sticks many things together.
+	
+	// jsgui-server should possibly bring things together, or just be the server component.
+	
+	// jsgui-server-app? The whole server application that gets run.
+	//  The 'server' may be a component of it.
+	//  Could specify things as 'resource-servers', not sure if these should be resources themselves.
+	
+	// Should maybe start with things that definitely should count as resources.
+	//  Should maybe have abstract resources, and then the resource connectors.
+	
+	// Resource server?
+	//  Serves local resources?
+	
+	// Server combines local resource access with Resource_Server.
+	
+	// Perhaps I should do more work defining and configuring local resources?
+	//  The Postgres database, and the pages that get rendered from it.
+	
+	// Then have it so that these resources get served.
+	
+	// Server:
+	//  Does the whole thing.
+	//  Maybe call it server-node.
+	
+	// Resource server: Serves a local resource.
+	// Resource: item of interest, unique item (except in cluster etc?), definable.
+	// Resource connector: Makes a remote resource available as local. Is a local resource???
+	//  Having the resource connector as a local resource makes a lot of sense.
+	
+	// Need to have a clear definition of the resources that get used by the server (node), the resources that are available to it.
+	
+	// Renderers could exist as resources and be available over the network.
+	// Have some fairly standard resource sharing APIs, be able to consume other ones, such as memcachd.
+	
+	// Getting it to render the website
+	//  Putting other features into the system
+	//  Having these added for logged-in users.
+	
+	// Very many things are getting abstracted in this system.
+	//  Will be useful if it does help with creation and deployment of cloud apps.
+	
+	// The MetaBench website will be one main thing.
+	//  The astronomy website too... would be very nice to use this system to serve some data to a mobile platform.
+	// The data could be assembled within the MetaBench system, including photos.
+	//  Then it could be published within a 'slides' app.
+	
+	// Want to put in the general structure of the full system.
+	//  Won't need everything to be very polished to make a fully working system.
+	//   Then polish it.
+	
+	// User defined data... the 'inner platform'.
+	//  Want to avoid some pitfalls to do with this.
+	// May have users defining databases anyway, and that is the platform.
+	// The platform may be 'over' the database anyway, making it more distributed accross a network and suited to this particular app.
+	// User_Objects?
+	// Defining object types in the DB, collecting together fields?
+	//  Don't much like the sound of that.
+	// Users can create their own DB with the right permission.
+	
+	// The general MetaBench data storage:
+	//  That may be best not being deep in Postgres.
+	// Really liked Tokyo Cabinet.
+	//  Could distribute it.
+	//   Unsure about concurrancy issues on single server though.
+	//   Could have a single listener for Tokyo Cabinet, like Tokyo Tyrant.
+	//    May be very good when exposing an API from Tokyo Cabinet.
+	
+	// Would be nice to have a large distributed data structure, easy to change between implementting it with Postgres on individual nodes,
+	//  or Tokyo Cabinet.
+	
+	// Would be able to have the data replicated in different Tokyo Cabinet servers.
+	//  Using a controller / transactional controller that puts them into databases.
+	//   Write commands could be put in a bunch, and sent across the network by the 100 or the 1000.
+	
+	// Need to go from this abstract thought to making the system work.
+	//  Next stage... automatic configuration of a local database.
+	
+	
+	// local resource scanner.
+	//  check for various specific local resources, load information about them.
+	//  give that information to the server node???
+	//  the server node should be doing the local resource scanning.
+	//  when it finds some local resources, it will attempt to configure them.
+	//   this should be very fast if they are already configured.
+	//   perhaps it may have checked that the configuration has not changed by looking at a hash on the configuration. Will optimize this if need be.
+	
+	// Resources API
+	//  Wrapping something as a resource.
+	
+	// Resources system will have e-commerce built in.
+	//  (Maybe nice to have a Paypal hello world example where someone actually sends me a dollar)
+	//  Subscription information - does the suer have access to the resource?
+	//   Are they allowed to administer it?
+	// These authentication mechanisms will be further developed once there has been more progress with the web database.
+	//  There will be functions, like authenticate based on tokens etc.
+	//   Maybe the web system that uses the web db, not just the web db will be usef for authentication.
+	
+	// May not have this... may have resource publishers instead.
+	
+	// First will wrap objects as resources
+	// Will put them into the process's resource pool
+	// There could be resource publishers in that resource pool.
+	//  The server would have info on which resources get published, with which publishers, and with which configuration options.
+	
+	// Website resource publisher... may publish for the admin interface.
+	//  There will likely be a general resource admin interface. The website resource will plug into that. The website resource will be arranged as a tree,
+	//  much like many other resources. Maybe not all of them... some will have non-tree graphs I expect.
+	// This could provide a very slick and user-friendly interface for administering things.
+	
+	// Could make a few nice user interface components for administering some specific things, but really I want to keep this general.
+	//  There will likely be different iterations and versions.
+	//  For the moment, the various tasks seem quite similar.
+	// Administering an art website
+	// A music website
+	
+	// It will be administering the resources / content that drive the website.
+	// Then the presentation mechanisms of that content will be administered.
+	// Perhaps also in the administration toolkit is 
+	
+	// There will be various resource publishers.
+	
+	/*
+	var Resource_Server = Class.extend({
+		
+		'init': function(spec) {
+			spec = spec || {};
+			
+			// Won't necessarily have a root URL... or that could be obtained.
+			//  No longer a first class property.
+			
+			//this.root_url = spec.root_url;
+			
+			// but a resource server may not be serving files.
+			//  they could perhaps be Websocket or Comet resources too.
+			
+			
+			
+			
+			//this.root_file_path = spec.root_file_path;
+			
+			// The root url of the resource
+			//if (this.root_url) {
+			//	this.arr_split_root_url = this.root_url.split('/');
+			//}
+			
+			
+		}
+	});
+	*/
+	
+	
+	
+	
+	
+	
+	// Server = ?
+	//  Server_Node?
+	
+	// The Server is a Resource...
+	
+	// What does that mean?
+	//  It will go in the resource pool.
+	//  It's starting will be (initially) managed by the resource pool
+	//  It won't be published (itself)???
+	//  The closest thing to it being published is its admin interface being published.
+	//  Or it being published is whatever it is serving being published.
+	
+	// The server will have access to various resources.
+	//  A website resource. (will load before the server I think). That website resource will be published.
+	// I think all the server will be really is the connection between the website resource and the website resource publisher.
+	//  Within website resource, there should probably be sub-types.
+	
+	// Maybe do that later when the differences become more aparrant.
+	//  Could possibly do a more basic open-source version.
+	//  Could possibly do customized versions for customers. It would be nice to have them namespaced in such a way that they know it's for them,
+	//   and they know which are the general components.
+	
+	// The server won't exactly be started by the application process?
+	//  It will be configured to start automatically / when its dependencies have all finished loading.
+	//  Then it will start, because the resource pool (system) gets it to.
+	
+	// Various resources will be set up / loaded by default because of a simple application configuration.
+	//  Things will get more customizable in the future, there is space within the framework for it.
+	//  The whole thing could be a number of MB in JavaScript, but I also want something that delivers things to a mobile client very fast indeed.
+	//   Perhaps it could load something on mobile clients with error checking. It would need to load some tiny HTML and JavaScript to start with, and then it would get
+	//    on with loading the basic full app, showing progress on a progress bar. Maybe showing how many KB/s are being reliably downloaded, how much there is in total to
+	//    download. This could only be up for a few seconds anyway, but it's much nicer than having to wait those few seconds without knowing if the server is working.
+	
+	
+	// Resource wrapper object?
+	//  May be very useful for wrapping any existing object as a resource and putting it in the resource pool.
+	//  Perhaps that wrapper will include the need for an authentication token, that way the publisher could publish the wrapped resource as it is.
+	//   That makes sense.
+	
+	// Different caches for page renders could be available as resources too.
+	//  Perhaps these will be distributed as well, so the resource that provides them locally may connect to other resources to get the information.
+	
+	// Some servers will contain management information about network structures, such as how the sharding works.
+	//  More systems may get added to the shard, so the sharding method may change, things would get moved.
+	//  While carrying this out, it may be that the clients requesting data from the shards attempt it with two keys at once.
+	//   It will be available in at least one place.
+	//   This would provide very good scalability for some aspects of the program. Maybe keeping an index of all the keys in one place could be done,
+	//    this would be in sequential order, rather than hashed. Various network tree structures that could scale could be used for this too.
+	
+	// Generally the system will have / be a scalability platform. There will be specific components that provide this scalability out-of-the-box.
+	//  Connecting to MongoDB will be one of them. That seems like it will be a very worthwhile thing to do.
+	
+	// The resource pool seems like an important part of this.
+	//  Resource pool
+	//   Local Server information
+	
+	
+	// Resources
+	//  the resource classes
+	// resources
+	//  the resource instances that are available
+	
+	// Resources will work differently on the client and the server. On the server they will work much more directly, on the client there will need to be options about allowing x-domain, or routing everything through the server.
+	
+	// Perhaps on some levels they will work in the same way.
+	//  Abstract resource information could be tuned to work fine on the client.
+	
+	// The resources system seems like it could be a means to reference anythin, within and outside a system.
+	// Could have it reference individual parts of a document?
+	//  Maybe not worth having them all indexed like that.
+	//   Could be very useful to have document content indexed so that 'find' works very rapidly.
+	//    The index could possibly be on the server though.
+	//     Every piece of text could fit within a resources system.
+	//      having a compressed suffix array index would be really cool!
+	//       would be easier to get it working with smaller amounts of information too.
+	// Having resources indexed by something like a CSA would help with searching a site. Perhaps indexes for search will be put in place separately.
+	//  Will have modular storage systems that can work in parallel.
+	
+	// Resource pool... that is the starting point for resources.
+	
+	// Server_Resource_Pool
+	//  Starts by getting server information, using a Resource_Server_Local_Info.
+	
+	// Browser_Resource_Pool
+	//  Will have different information about the client. This browser information could be stored within the resource pool rather than outside it for example.
+	//  These various resources could be referred to on the server, information could be sent to these client resources.
+	//   The resource connections will enable this. The client will create a resource connection with the server, and then information comes back 
+	// Perhaps the server could request some local information from the client apps, such as browser information.
+	//  This would work in a streamlined way, with the communication taking place using a plumbing system already made, rather than specific code dealing with the communication in that part.
+	
+	
+	// Perhaps it makes sense to have the Server as a Resource as well.
+	//  It could be published online, taken offline?
+	//   Or the server does not usually get published, it is the publisher.
+	
+	
+	// This seems to start, much like a resource.
+	//  Resources can have an admin interface.
+	//   Perhaps all resources will have the admin interface at /admin.
+	//    May use redirects to redirect to the main server admin page, while saying we want to administer that particular sub-resource.
+	//    Different things will be conceptualised or made available as resources. It will be nice to have various items going into
+	//     the resource framework to be easily available.
+	
+	// There will be data structures that work as resources, allowing things to work with a callback pattern well.
+	
+	// I think an admin resource makes sense...
+	//  Able to access it with the right credentials.
+	
+	// With it as a resource, could better mount it inside another resource.
+	//  Multi-level servers may make sense... they could each have their own resource pools?
+	//   They could be moved?
+	//   They have the HTTP interface
+	// Maybe not needed right now.
+
+
+	// Resource admin is not resource publishing.
+	//  It's similar though, it's an interface between the resource and the web.
+
+
+
+	// Server Administrator resource inheriting from Resource Administrator
+	//  Web Administrator
+
+	// Resources will also have their own JSON interface, but much will be automatically plumbed in.
+	//  They will have configurable security.
+
+	// Define an app / document app?
+	//  ResourceAdministrator being a FullPageControl?
+	//   Inherits from Client_Html_Document?
+	//    It may not just be a single document.
+	// It's really a resonse handling system, which is kind-of a normal node.js server app in its own right.
+
+	// The web admin interface
+	//  In terms of code, more than one class?
+
+	// Generic code for exposing a resource to the web?
+
+
+
+
+
+	//var Resource_
+
+
+
+
+
+
+	
+	// The server itself, though a resource, also serves requests with hte JSGUI system.
+	
+
+		// needs an request handler function.
+		//  could be set on init.
+
+		// However, a Resource Administrator tool could do this.
+		//  Creates the HTML document or HTML views of the resource.
+		//   Likely to send over resource info with JSON and interpret that on the client.
+
+
+// The server resource pool will also have the file system resource.
+			//  Will make the whole file system available.
+
+			// admin server?
+			//  admin resource?
+			
+			// Building the admin system into the resource framework poses challenges. However, it is a resource which will have permission
+			//  like many others.
+			
+			// Alternatively, admin can be viewed as an aspect of a resource?
+			
+			// View and administer - two main things that are needed.
+			
+			// But the server view would be fairly complicated - I think it definitely makes sense keeping things coherent where
+			//  the administration of the server is a resource of some kind - or a publisher and the server itself is a resource,
+			//  or is represented by one.
+			
+			// The local server information is a resource that holds info about the server.
+			//  Anyway, the server has resources and has a root resource.
+			//  Actually making the server a resource will help.
+			//   But I am still not sure about that.
+			//   Processing server admin requests... may be better if served by an 'admin publisher'.
+			//    Anyway, even if not done quite right, by keeping logical and clear code it will work.
+			//    So, a website will operate within the resource pool.
+			//     That website is a resource that has an admin interface.
+			//     The server itself is not a resource, but it may be available as a resource through a Connector.
+			//      Or it can be described in a resource like various web services.
+			//      Would be great to do some MetaBench code here for the general purpose web information.
+			
+			// The resource pool will have a website resource added to it - the server should be able to handle multiple websites, serve
+			//  multiple resources. Resource_Publisher or Resource_Server, or the Resource has its publishing and serving capabilities built in?
+			//  I think splitting the concerns makes more sense.
+			//   Though a resource could have a built in publisher too?
+			
+			// A website is a resource that is made available on the server.
+			//  Could be quite a general purpose resource.
+			
+			
+		// could do a 'set' override of sorts?
+		//  it needs to know not to do anything fancy when setting the resource pool.
+		//   it just assigns the value and raises whatever events.
+
+
+		
+		// The server needs an admin interface.
+		//  Resources will be shown... but perhaps the admin interface will use e_a_r commands anyway.
+		//   Lots of things can be done, could be quite a flat structure.
+		//   Will use a system of Server Routines.
+		
+		// OK, need to be sure that the resource pool starts.
+			
+			// and listen on the port.
+			//  when we get /admin, we go to the admin interface, which is essentially showing the reosurce pool.
+			//   Local server information will be useful. Perhaps have a Local_Server resource that allows configuration too?
+			
+			// need to listen on the ip address...?
+			
+			// get the ip address and listen there.
+			
+			// The resource pool has something that listens on the IP address maybe?
+			//  Can have some code to do this here, rather than a server resource component.
+			
+			// Though, I like the idea of having something that processes the requests to a port as a resource within the pool, that
+			//  could be administered using the resource_pool system.
+
+
+
+			
+			// Will need to look into the path...
+			//  Will be able to administer things...
+			//  Restful interface.
+			
+			// /admin
+			// /admin/files
+			
+			// I think checking for the admin paths is one of the first things.
+			//  This won't have routes exactly, but each level could be a resource.
+			
+			// Serving the root... There will be a root resource. That resource can have resources inside it.
+			//  Can identify the resources by name here.
+			
+			// Though there is a pool of resources, only one of them will be the server's root resource.
+			
+			// Some resources won't be published.
+			//  A resource can represent a piece of data.
+			
+			
+			// If it is /admin, do we send that to an admin resource?
+			
+			// That may make sense, using a Resource, that serves content?
+			//  However, we may want to use a Resource_Server.
+			//   Or Resource_Publisher.
+			
+			// May want to keep some of the inner mechanics separate from the serving of it.
+			
+			// So the Admin resource could make various things available?
+			//  Or is the /admin resource simply a means for the Server (Resource?) to be administered.
+			
+			// I think the admin panel will have various things that can be administered.
+			
+			// Showing an admin interface... can show a document control for when it is in /admin.
+			//  The document control would have a link to the server.
+			
+			//  Takes request parameters, and then serves the content from the server.
+			//   May need this quite abstract, also want to test users/permissions/roles within the server.
+			//    Will likely need/use a data abstraction for that.
+			
+			// This will either go to the admin resource or the root (published) resource.
+			//  The server does not have a root resource right now.
+			
+			//  Want to make a Resource_Publisher system I think?
+			///  Will be useful for providing / denying access to resources such as images, pages.
+			
+			// Will be very good to have this hooked up within a server interface.
+			//  Being able to edit resources will certainly prove useful. A resource could have its data stored as a key in the database.
+			
+			// A resource could simple by a string, maybe object in memory, but with a (basic?) Resource_Wrapper.
+			//  Resources will have systems in place for dealing with permissions.
+			
+			// We can process an admin request...
+			//  I think having the resources and resource publishers makes sense.
+			//   Not sure that I still am going the route of Resource_Publisher in the code.
+			//   Perhaps call it a Publisher.
+			
+			// But in the admin part, we need to publish a few things that are not resources.
+			//  A document control would be useful for this I think.
+			
+			// I am not sure if we need an admin resource here.
+			//  Or an admin resource publisher.
+			//  A resource publisher wraps something in the HTML / web layer... but the resource may have that functionality too.
+			
+			// Really need this admin system... but don't want it to be too complex.
+			
+			// Not sure about having an admin resource exactly.
+			//  But the server as a resource does make sense however, but may not be right exactly?
+			
+			// Need to show what items are on the server, in the resource pool.
+			//  Though local server info is a resource.
+
+			
+		/*
+		,'start': function () {
+			// When starting... 
+			//  The server is a resource within the resource pool.
+			//  It makes use of other resources within the resource pool, such as the web db resource.
+			//  Perhaps resources within the pool should be named. They can have local names, like 'web-db', or perhaps non-local names?
+			//   Referring to something on another system????
+			//   Probably not, because the resource pool is about identifying resources local to the process.
+			//    They could have a local name such as 'facebook.social_api', but these are for the resource connectors.
+			//     The resources themselves, in an abstract sense, would be remote to the system to start with.
+			//     The resource connectors would make these resources available to the local resource pool.
+			
+			// Quite a few steps for some particular things, but it's not too many steps to have the whole system running smoothly as it will be.
+			
+			// Will get something fairly simple, using this fairly complicated system online soon.
+			//  Now I've beeen thinking about it I'm clearer about the enterprise features and the expandability.
+			//  The need for defining various things in an abstract way is important.
+			//  I will have the resources and publishing system fairly flexible too.
+			//   It will be easy to expose a JavaScript object as a resource. Will be possible to wire / wrap things as resources.
+			//    Will also make it fairly easy to set it so that they are of application-level permissions, so they can only be used by this application system.
+			//    The various clients will have ways to recognise other clients authorized to make such requests.
+			//     They probably will still need to play nice with each other. Perhaps somethimes some resource access functions will be intrinsically load-balanced,
+			//      such as sharded, other times they will send their request to a load balancer, perhaps these resources will get access to load information on various
+			//      servers on the network so they can best determine where to send their requests.
+			
+			// Getting the local network address
+			//  The local server information will be a resource and should be put in the resource pool.
+			//   It is one of the first things that the service will publish.
+			
+			// The way of referring to things won't be entirely restful because the software components may do processing at different points of the URL.
+			//  There is the server itself
+			//  There is the website
+			//  They are both represented by the same URL.
+			
+	        var that = this;
+	        var net_ip = get_network_ip();
+	        
+	        var start_server = function(ip) {
+	        	
+	        	
+	        	var root_resource_server;
+	        	console.log('that.resource_servers ' + that.resource_servers);
+	        	each(that.resource_servers, function(i, resource_server) {
+	        		var resource_root_url = resource_server.root_url;
+	        		//console.log('resource_root_url ' + resource_root_url);
+	        		
+	        		if (resource_root_url == '/') {
+	        			root_resource_server = resource_server;
+	        		}
+	        	});
+	        	
+	            http.createServer(function (req, res) {
+	                //res.writeHead(200, {'Content-Type': 'text/plain'});
+	                // need to do some path comprehension.
+	                i2 = libUrl.parse(req.url);
+	                var url = i2.href;
+	                console.log('url: ' + i2.href);
+	                var ua = req.headers['user-agent'];
+	                console.log('ua: ' + ua);
+	               
+	                
+	                // and then direct it to the correct Resource_Server
+	                
+	                
+	                
+	                // But it may have another interface.
+	                //  it may need a URL.
+	                // but in working out the URL, the relative URL for the resource even.
+	                // seems simple code here... then the resource_server determines what to do
+	                //  or what subresource to pass it on as.
+	                root_resource_server.process_response(req, res);
+	                
+	                // and set up other servers like file resource servers.
+	                
+	                // Don't know about just removing that? Or the first bit of the path specifies the app?
+	                // remove it for now.
+	                
+	                // Needs to work out which resource server to send the processing to.
+	                
+	                // This may depend on how the resources in the website have been put together.
+	                // Seems more like the resource_server here
+	                //  File resource server
+	                
+	                // what about calls outside of the application URL path?
+	                //  I think monit does that. Could that be changed?
+	                
+	                
+	                //if (url.length >= app_root_url_path.length) {
+	                //    if (url.substring(0, app_root_url_path.length) == app_root_url_path) {
+	                //        // then I think we start considering the path within the app.
+	                //        var app_name = 'examples';
+	                //        var path_within_app = url.substring(app_root_url_path.length);
+	                //        console.log('path_within_app ' + path_within_app);
+	                //        // And maybe call a process_app_url function, perhaps with a callback.
+	                //        process_app_url(app_name, path_within_app, function () {
+	                //            // the result should have been set up etc.
+	                //        });
+	                //    }
+	                //}
+	                
+	                
+	                // The we need to send it to the correct resource processor by path.
+	                
+	                // Can run it through an array of regexes that may send it to different processors
+	                //  (seems easy to but maybe less efficient / specifically engineered / easy to use)
+	                
+	                // Can use resource objects to indicate where it goes.
+	                //  Will have general website resource processors.
+	                //  Serving static content, as well as the equivalent of asp pages.
+	                
+	                // As well as that, need a way of having a custom server for some resources.
+	                //  These may be pages that get generated.
+	                
+	                // Custom_Page_Server?
+	                // Page_Server?
+	                // HTML_Page_Server (I think).
+	                
+	                // We'll want customization...
+	                
+	                // The server gets configured, this bit is flexible and hopefully simple.
+	                
+	                // Server is created....
+	                
+	                // Needs a little code to determine where the response goes.
+	                
+	                // some resources should be set up by default.
+	                // serve js files from the js directory (if it exists).
+	                
+	                // Let's just have the File_Resource_Server.
+	                
+	                //
+	                // the port will depend on the server.
+	            }).listen(that.port, ip);
+	            if (that.port == 80) {
+	                console.log('Server running at http://' + ip);
+	            } else {
+	                console.log('Server running at http://' + ip + ':' + that.port);
+	            }
+	        }
+	        start_server(net_ip);
+	    }
+	    */
+
+
+// From Test Server
+
+
+		// the server could pass these through.
+
+		
+		// The server should probably listen on that port.
+
+		// We may need our own routing system for these resources. Using express for the moment makes sense though.
+
+		// need to be able to define these request handlers on the server.
+		//  Either using Express or not.
+
+		// Need to have the server continue in the process.
+
+
+		/*
+		app.listen(port, function() {
+			// say what IP address...
+			//  give the external ipv4 address?
+			console.log("Listening on " + port);
+
+			// This is the HTML administration interface.
+			//  I think we can't use Express quite like this.
+
+			// Will need to get the jsgui server to do its response handling, and then
+			//  
+
+			
+
+			app.get('/admin', function(req, res, next) {
+				//server.
+				// Response processors.
+				//  A response processor could be an object.
+				//   Basically a function?
+				//    A subclass of function?
+				//     Ie a function with a specified interface, or could have a few interfaces.
+
+				// Also need JSON commands.
+				//  May want a description of the resource.
+
+				//GET, POST, PUT, DELETE
+
+
+
+			})
+
+
+
+			app.get('/', function(req, res, next) {
+				// can get the full url out of the path.
+				//  can get the difference from the url_path
+				
+				var url = req.url;
+				console.log('url ' + url);
+				var spc = new jsgui.Server.Page_Context({
+                     'request': req,
+                     'response': res,
+                     'rendering_mode': 'html5'
+                });
+				//server.create_page_context?
+				var doc = new jsgui.Client_HTML_Document({'context': spc});
+				var basic_page = new jsgui_sample_controls.Basic_Page({
+				    'title': 'Example Basic Page',
+				    //'content': [new jsgui.p('James says hello')],
+				    //'content': [new jsgui.p({'content': ['James says hello'], 'context': spc})],
+				    'context': spc
+				});
+
+				var tn_jsh = new jsgui.textNode({'text': 'James says hello', 'context': spc});
+				//basic_page.content().add(new jsgui.p({'content': [tn_jsh], 'context': spc}));
+				var new_p = new jsgui.p({'context': spc});
+				new_p.content().add(tn_jsh);
+				basic_page.inner_content(new_p);
+				doc.body().content().add(basic_page);
+				server.serve_document(req, res, doc);
+			});
+
+			
+			
+		});
+
+		*/

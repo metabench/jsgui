@@ -1,0 +1,19 @@
+Will have a system to edit, and use within an engine, tiled sprites
+Want to arrange maps and levels
+Want to have some neat JS coding for some 2D graphics.
+Will most likely be using Canvas.
+
+Editor that shows tiled page (level / map)
+Editor for multiple tiled pages
+	(Could use a generic resource heirachy system)
+Sprite viewer, that allows sprites from a given sheet / tile sheet to be classified / grouped.
+There will be particular arrangements of sprites that the editor will allow / favour / suggest
+Background and terrain
+Then Buildings
+Then People, Plants, Other Objects
+Effects
+
+
+
+
+

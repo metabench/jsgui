@@ -1,0 +1,1 @@
+mocha -b -C "./**/*.spec.js"

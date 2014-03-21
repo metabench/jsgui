@@ -1,0 +1,864 @@
+// Likely to use the Data_Object class here.
+	
+	// Don't want this stuff growing much more in size
+	//  There will be more features, should add them sparingly
+	//   Maybe a more advanced layer... really for the server side or the most in-depth applications.
+	//   Will want some kind of later loading, the later loading system in the core layer.
+	
+	// Don't think this needs much more code at the moment.
+	//  It's got fairly large.
+	//  It should be a very useful part of the system.
+	
+	// Global collection reference...
+	//  want it so that a collection can reference another collection, so that every item gets put into this collection
+	//   also gets put into the global collection. Will check unique conflicts as well... but the global collection could have different things to index on
+	
+	// Restricting objects in collection by data type.
+	
+	// Collection can operate a lot like a normal object anyway now. It can hold objects indexed by name, just like a normal map.
+	//  However, the name property is now intrinsic to that object as well as something that gets indexed.
+
+
+// Definitiely will help the website to power quite a few things.
+	//  Having a really nice website of my own will definitely help.
+	
+	// Will have examples in different categories, such as data tools
+	//  May make some kind of database available and viewable in a read-only form, then this would be usable for queries that are done by the users of my system.
+	//  This would be good for demonstrating some front-end visualization code.
+	
+	// Will be nice to allow users / subscribers to manage some of their own data.
+	
+	
+	// Upgrade to the Data_Object set_field...
+	//  Will be able to process array of constructor function, meaning a collection of that type.
+	
+
+
+	// A whole system for collection indexes.
+	// Maybe it should be in the collection class?
+	// But maybe not if it encapsulates a fair bit of functionality and has a
+	// simple enough API.
+
+	// May make sense to keep the indexing system in one place.
+
+	// Ensure there are various indexes...
+
+	// May have both b+ and dict index at once?
+	// Combined index? Like the KSVS?
+	// Want the indexes to be fast and easy to set up primarily
+	// Make it easy to use a b+ tree alongside a dict in indexing.
+
+	// The the specific indexes...
+
+	// Will add objects to them, and be able to do searches / get by key.
+
+	// Want an index that is both b+ and dict.
+	// Dict is used for the object retrieval from key
+	// The b+ tree is used to ensure the correct order.
+
+	// Collection always has items in an array...?
+	// That array implementation could possibly change.
+	// However, I think it will be OK for the moment.
+
+	// Add and remove different types of index.
+	// Possibly say what sort of index is needed...
+	// Then the indexes could have different internal implementations
+	//  
+
+	// We may want to expand this in various ways.
+
+	// Has a collection of indexes?
+	// With them indexed?
+	// In this situation, I think we need to do the indexing within the index
+	// system on a lower level... a bit more code.
+	// This indexing system will be used in a fair few places.
+	// May wish to build on this (maybe separate module)
+	// with a disconnected / async index system.
+	// can make use of asyncronous data structures. These could be across a
+	// network.
+
+	// Collections will have different kinds of constraints to Data_Objects
+	//  Though a collection constraint could be that field constraints are required.
+	//  Data models defined using this system will then be more easily translated to DB and RDM formats.
+	//   Could use these constraints here in JavaScript for checking before putting into an object database
+	//   Can also use them in generating the SQL database and its CRUD functions.
+	//    Likely to want to continue working on the parser. Being able to parse a variety of languages would prove very useful.
+	//     It would also help for them to be integrated with the data model and JavaScript system I am using here.
+	//     Being able to graphically illustrate what could go at any point in a document would be very useful...
+	//      it would know what the objects are, and help / helpful windows could display information ready to be clicked on or tapped in order
+	//      to add that text of function call. Would be nice to have an iPad next to the keyboard to tap things and view info interactively.
+	//      Could easily be connected to an address over the LAN, I do think a Local_MB_Node system running in node.js could enhance people's
+	//       experience as they use the website. 
+	
+	// For the moment, the single client is what matters.
+	
+	// As well as the index system, are the collection_constraints
+	// These are different to field_constraints.
+	// One collection_constrint will be applying field_constraints
+	
+	
+	// When a collection is given a field constraint, it's a constraint that applies to the fields of all objects in the collection.
+	
+	// Not a Data_Object?
+	//  It would probably be safe to make this a Data_Object.
+	//  Making this Index_System use some lower level mechanisms for indexing. The index is not available here, this is used to implement indexing.
+	
+	// This kind of is the index index. Not so sure about a more complex index index inside this.
+	//  Can put a few of the operations in functions to encapsulate index search.
+	
+
+
+			// Will we always really need or use this array?
+
+			// the positopm pf new items that get put in
+
+			// OK... maintaining a sorted index to an array is one thing.
+			//  Not using the array would be another way of doing things.
+			//  It would be possible to put things into the index, and have them retrieved from that fine.
+			
+			// Not sure if it's about to get complicated co-ordinating the array and the indexes.
+			//  Would need to be re-indexing things a lot.
+			
+			// Having things re-organize an array is one way of doing things, or referencing the items in the array.
+			//  I doubt it will be too difficult. Will be robust and generic, just won't be the fastest way of storing things.
+			
+			// When removing an item from the collection, would need to re-index later items.
+			//  Could do that fairly rapidly though... probably won't be dealing with millions of items in these collections on the client.
+			
+			
+			
+			
+			
+			// primary index field as well.
+			// either a property of the collection, or the index system
+			// index system property sounds better.
+
+			// Each item has its position in the array.
+			// Corresponds to the order it was stored.
+
+			// May make other collection types, not stored using an
+			// array.
+			// Will be ordered by something.
+			// May try different types of string indexes.
+			// Dynamic compressed suffix arrays in a small amount of
+			// JavaScript would be great!
+			// Could possibly even get this using network callbacks for
+			// storage.
+			// On the server, I think.
+
+			// The index separate from the data structure...
+			// Index provides consistant API and wraps around the sata
+			// structure.
+			// Index_Type_Capabilities?
+			// So that the app knows what type of searches can be done
+			// (quickly) with an index.
+			//   
+
+			// Collection will possibly have other indexing methods.
+			// Items may be held in an order according to the values of
+			// some fields.
+			// If that is the case, then indexes within this collection
+			// would get assigned to those items.
+			// In that case, push would not add it in the normal way.
+			// Add would though, and add is going to do the same as
+			// push.
+
+			// needs the array.
+
+			// and needs to map things as well.
+
+			// there could even be string indexes for multiple
+			// properties.
+
+			// idx['first_name']
+			// idx['last_name']
+
+			// So when both are indexed, we'd be able to search for
+			// records based on the index.
+
+			// The index can actually operate when we have information
+			// about what's in the collection.
+
+			// Will define indexes.
+
+			// spec.index_on([])
+			// string field names there...
+
+			// Could have an index on two fields... first on one field,
+			// then on another.
+			// That's how the indexes could get put together.
+
+			// So, there could be a number of indexes.
+			// How to organize them?
+			// Need to be able to retrieve them quickly.
+
+			// When doing a search... may specify the search parameters
+			// in order.
+			// If so, will look for multi-level indices.
+			// Will check through indices looking for the right one.
+			// All in a few lines of code.
+
+			// indices collection.
+
+			// Maybe should make that all OO.
+			// CollectionIndex could be a Data_Object too.
+			// And there essentially needs to be a collection of
+			// indices.
+			// Don't think we can use collection here (unless it is
+			// specifically not indexed).
+			// Probably go for a lower level implementation of a
+			// collection for the collection of indices.
+			// Indices will be identified by column.
+
+			// So looking for 'first_name', will check
+			// indices['first_name'].
+			// indices['first_name'] could contain something.
+
+			// Could be one index, with the first names leading to
+			// integer numbers in the collection.
+			// Possibly connecting to the actual item.
+			// Item can have a position_in_collection[collection_id]
+			// property.
+			// Though maybe better not to do this.
+			// May depend on what gets stored in the collection. Simpler
+			// objects could be wrapped. Or wrap everything in something
+			// with a reference to the collection?
+			// Could be problematic with DOM nodes themselves re memory.
+			// Maybe not with just the one way link and wrapping items.
+
+			// they can be kept up-to-date.
+
+			// Adding something to the collection.
+			// Will need to update the indexes as well.
+
+			// Will need to update the value of the position within the
+			// collection.
+			// Numbers etc when added to a collection will have a new
+			// wrap created.
+			// Value can be changed, value change propagated.
+
+			// Maintaining the position of the various items within the
+			// collection is quite important.
+
+			// What about when certain items in the collection are
+			// selected?
+			// Perhaps that is another collection.
+			// That's when we only have some of the index values from
+			// the original collection.
+			// They may be selected and deselected in any order.
+			// Keeping track of which items in a collection are
+			// selected.
+			// That other collection would best use a B+ tree, so the
+			// order can be maintained.
+
+			// The collection could possibly use different indexing
+			// systems.
+			// Want the collection to be very general and simple to use.
+
+			// The situation where the collection needs to stay ordered
+			// by something.
+			// The order could be its position in another collection.
+			// However the items would get their own index / position
+			// within that collection.
+
+			// Order by the index in another collection?
+			// Don't see why that would be impossible to do.
+			// However, it may be tricky to have things re-order should
+			// that index change.
+			// Tricky, but not impossible though.
+			// That could be where events and MVC comes in.
+			// Would be an interesting experiment to do with a GUI,
+			// having these things stay in sync.
+			// Components would need to display updates correctly.
+
+			// A Collection, Data_Object and DataWrap could have a
+			// _relationships object.
+
+			// So that they could store _relationships.position_within {
+			// map of collections it is in to the integer position }
+			// And a change position event?
+			// Would not want 1000s of events to be generated
+			// unnecessarily though.
+			// When other records change position.
+			// Could lead to quite a lot of updates on GUIs.
+			// Maybe don't need so much detail here... let's make it.
+			// Probably don't need events to be raised for every index
+			// changed.
+			// Will have an event that the collection has changed at
+			// least, could know the operation,
+			// so could have something recheck indexes.
+
+			// Indexes on single fields?
+
+			// This indexing system has got a bit complex, but it will
+			// help other parts of the project's capabilities.
+			// Would help to make the viewing of live edits possible.
+
+			// And a well optimized collection system with MVC would
+			// make writing some GUI components good fun even.
+
+			// Data gets changed in the component (view)
+			// Data gets changed in the model
+			// Data gets sent to the server
+			// Server could then even send the updates to connected
+			// views.
+			// An event listener model using the server.
+			// If running on the same server, change would be able to be
+			// sent directly to that client.
+			// Could be sent accross network in node as signals.
+			// May be able to reach other clients very quickly.
+
+			// Mechanism for client to subscribe to updates.
+
+			// This collections and data objects system needs a fair bit
+			// of work to specify and to get right.
+
+			// It will help get changes replicated correctly.
+
+			// this._order_by = []
+			// will be able to order things by field values (the string
+			// representation of) either ascending or descending.
+			// will use the B+ tree and string keys.
+
+			// So B+ is finding its way into the 'core' language.
+			// It will be used to allow sorted / indexed collections to
+			// operate in a very fast manner.
+
+			// Won't do order_by quite yet though.
+
+			// Would be a part of the wiring that could make whole
+			// systems work.
+
+			// want to be able to load an array...
+			// a function specifically to do that?
+
+			// will it push each time?
+			// or something more optimized with indexing?
+			
+			// will need to insert an array at a position as well.
+			//  otherwise will look for collection indexing properties.
+			
+			// will want to index by certain things, like a 'name' property in particular.
+			
+			
+
+			// specifying 'the' constrain as a data_object?
+							// data_object_class property?
+							//  so it's not a constraint?
+							// data_object_class_constraint
+							
+							// also need to put together the index specification.
+							
+							// index_by may be a better / nicer api.
+							//  could have index_by as well as index.
+							
+							// could also have ensure_index, ensureIndex. multiple possible ways of specifying things.
+							//  may have option for different naming conventions to be active.
+							
+							//  similar to mongo?
+							
+							// need to get the field info from the constructor function... can we use a fields() function?
+							//  maybe best to look in the field chain for the moment.
+							
+							// **** 
+		
+
+
+
+
+		/*
+		'each': function(callback) {
+			
+			// could iterate with names or other key field.
+			
+			each(this._arr, callback);
+			
+		},
+		*/
+		// event bindings in collections...
+		
+		// need it so that the collection can listen for the data_objects's events
+		//  will have events bubbling upwards in many situations.
+		// One small piece of data gets changed, it will be recognised as a change in the collection.
+		//  Then Controls that are listening to changes in that collection will be able to be updated.
+		//  2 way data binding... will have data in the model get updated when the GUI changes
+		//   Then will have the data sent back to the server.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// having things indexed by more than one field...???
+		// so there could be a more complicated data structure for the
+		// indexes in the collections.
+		// The B+ tree could become useful in enabling this.
+
+		// For the moment, keep the actual feature reasonably simple,
+		// but have it open for expansion.
+
+		// Indexes with multiple fields...
+		// How do these indexes get indexed within this system?
+		// Have an index of every index that applies to any field.
+		// So can refer from the field to that indices associated with
+		// it.
+		// We could represent all the string names, in the order of the
+		// index, as a string, and search for the index that way.
+
+		// IndexIndex...
+		// Can be given any index. That index will refer to one or more
+		// rows.
+		// Lookup index for a single row:
+		// checks the dict object, then looks for the index object
+		// marked as single, for that one column.
+		// Lookup index for multiple rows:
+		// checks the dict object for the first row.
+		// looks for indeces that contain more rows...
+
+		// However, when doing the search, when we are given data, we
+		// must decide which is the best index (or indices) to use.
+		// Want to deal with as many rows as possible from the query.
+		// Using results from multiple indices?
+		// There are differen ways of executing such queries.
+		// It is an aspect of database performance tuning.
+		// The current bit of programming is effectively a simple
+		// client-side database system.
+		// It's going to be dealing with data from relational databases,
+		// queried from the server.
+		// It may make sense if the capabilities in some way mirror DB
+		// systems.
+
+		// Setting up the indexing system here, and integrating it will,
+		// will allow other parts of the system to work better.
+		// I found with selecting items within a GUI and then moving
+		// them quickly required some indexing of such items.
+		// When I was writing the code the indexing was taking the
+		// effort there. It formed very much the structure of the code
+		// there.
+		// It would be very nice to have advanced indexing done in a way
+		// so that DOM manipulation code that needs such indexes can
+		// make use of the
+		// index mechanism, but not have so much code written there.
+
+		// Noticing I'm writing lots more comments now.
+		// When not working on a 'build' version it's easier.
+		// Am going to do more to make a build system that puts things
+		// together as one file.
+		// Could possibly store parsed JS as well, and build it from the
+		// database.
+		// A tool for doing that online. Puts the functions together.
+		// Basically choosing the modules...
+		// But will want the various modules to have access to things as
+		// local variables.
+		// Some strings will be stored as variables that get defined at
+		// the beginning too. Will save a lot on space.
+		// Could have very small code size in sertain builds.
+		// And having the code in the DB would help a lot with feature
+		// selection.
+		// Would be possible to treat a system in the DB as an editing
+		// environment.
+		// Perhaps would hook it up to bespin?
+		// Could possibly edit code / software in a very different way.
+		// A DB system that compiles JavaScript?
+		// Because that is what the system would be, a JavaScript
+		// compiler.
+		// It may really be about compiling JavaScript files to a single
+		// module, it is still compilation.
+		// Want the advantages of local functions regarding space, but
+		// effective use requires extra maintainability tools.
+
+		// This could be another feature of MetaBench - people could pay
+		// for modules through my code editor.
+		// Could perhaps only allow them to use some modules if they are
+		// a licensed user.
+		// If they are using my editor, it could check they are not
+		// stealing my code. It could make it easy for them to license
+		// my code at good terms.
+		// Perhaps publishing their own code in the marketplace?
+		// Those are the commercial possibilities of a DB system that
+		// hosts, optimizes and serves JavaScript.
+		// Could easily allow access to more code for paid-for users.
+		// Could enable access to a subscription library for a fairly
+		// small price.
+		// Price could increase as library increases.
+		// Would be fine doing this through jsgui.org as well.
+
+		// Do need to sort out how indexes get stored though.
+		// There can be a number of different indexes.
+
+		// Each likely to be an index object.
+		// Each index object will map from the key to a record
+		// It may do other things such a provide an iterator
+		// Start at first record in the index, proceed through them.
+		// It will have an order of rows being indexed.
+		// For each row it will know the order, forward or reverse.
+		// There may need to be sort functions specified in more detail
+		// - sorting numbers and sorting strings.
+
+		// Case of indexing something or sorting something.
+		// A collection may have its items sorted as they get put into
+		// place
+		// Sorted by a particular value
+
+		// Indexes don't seem to be particularly for sorting values
+		// Often just for finding them.
+		// May be useful to maintain the objects in a particular order
+		// though.
+		// Helps with 'ORDER BY', which could even become a feature of
+		// this.
+		// Getting the search results.
+		// Re-ordering the list will be done too.
+		// Want expandability in the code and simplicity in the API.
+
+		// Tell it to search for something, it finds the records.
+		// It may find them a lot quicker if the index has been set up
+		// in advance.
+
+		// May wind up having some of these objects represent quite a
+		// few things in memory - would be very nice to have efficient
+		// general data structures.
+
+		// Need to use them in various places where they can be
+		// effective.
+		// May have the service caching various things in memory.
+		// Most data will be sent to the DB between requests though.
+
+		// The server data cache could make use of collection and
+		// indexing mechanisms by default.
+		// Just want the lang-util section to also be usable without the
+		// B tree.
+		// Or possibly make the B tree much smaller too.
+		// More optimizations there possible. Could strip out a few
+		// functions too.
+
+		// Still need to work out this index of indexes.
+
+		// Single field
+		// Fields in order
+
+		// I think moderately simple, but advanced DB code won't take so
+		// much JavaScript.
+		// Do want to test it and have it well used within my library.
+		// Will eliminate some performance bottlenecks
+		// Will enable some data flows.
+		// Sorting and displaying a few thousand records should not be
+		// too much of a problem, even in IE6.
+		// May be showing real-time updates with plenty of records.
+		// Won't slow down modern / mobile browsers either :).
+
+		// Items selected from another control:
+		// Will want to maintain the order from the original control
+		// within the new selection.
+		// Will also want to be able to iterate through the new
+		// selection quickly,
+		// an index based on the B tree seems good for this.
+		// Index in one system, finding that index
+		// Will know what collections an object is in
+		// Will know what indexes each collection has
+		// Index by position in other collection?
+		// That seems like a special case, but an important one. Would
+		// be nice to get references working smoothly so that it just
+		// works.
+		// It's an example of something that would get GUIs running very
+		// smoothly.
+
+		// Creating the indexes...
+		// Storing the indexes to the items
+		// Then the item knows the index within the array as well.
+		// Won't need to keep updating the array indexes in many places.
+
+		// But an index of all the indexes?
+		// Indexed by which fields are indexed.
+
+		// CollectionIndexIndex object - each collection has one.
+		// When indexes get changed the object gets used.
+		// When a search is done, the index index is used to get the
+		// best index for those fields, to order by those fields.
+		// Possibly the last part of the sort could be done by sort
+		// functions on the data that is mostly sorted?
+		// May wind up packing quite a lot of database functionality
+		// into this.
+		// Want it so that core methods can be used OK.
+		// Searching and creating new indexes seems like a very useful
+		// capability to have on data held in collections.
+		// When doing a search, will come up with the index that works
+		// best, and also say which fields in the specified search are /
+		// are not covered by this index.
+		// This seems like introducing bloat / clutter back into the
+		// system. It will be good to have a quick way of building it in
+		// or out.
+		// Or downloading it as required at a later stage.
+
+		// CollectionIndexIndex?
+		// CollectionIndexes?
+		// It holds the indexes too.
+
+		// CollectionIndexSystem?
+		// Because the collection can have multiple indexes.
+		// Be able to hold different types of index?
+		// Rows in the index, the index type.
+		// Chooses the index type most suited to the query.
+		// This would be fairly explicit design using classes...
+		// Was not expecting to have as much in the collection.
+
+		// Then what is the API of the index itself?
+
+		// Get a record...
+		// Do the actual search using the index???
+		// The index may link to the record.
+		// It may not
+
+		// b+ Get all the records, in order
+		// b+ Get a range of records, in order
+		// However, dict indexes could be made to expose b+ suitable
+		// functions with a slower API.
+
+		// So, when we have the index...
+		// Add a record to the index
+		// Get records from index matching query (but only do this if we
+		// know its a suitable index).
+		// Perhaps only do this for direct index matches?
+		// or check that the index has not been corrupted?
+		// Maybe have a separator sequence, like *SEP* but more obscure
+		// with ASCII that can't be in the field values.
+		// Have this customizable too. That way the indexes can be sure
+		// to correspond to the field values.
+
+		// And have CollectionIndex be a superclass of other things
+		// inheriting from it.
+		// B+ tree index
+		// dict index
+
+		// The different classes would expose different APIs, with the
+		// b+ one having an AIP about getting a range and iterating
+		// through it.
+		// Dict index just would not have that capability.
+
+		// Would not require so many classes to get these indexes
+		// working... but a few well constructed ones.
+
+		// Want to develop the API so it is easy to have indexed
+		// selections from other collections, indexed by their position
+		// in that collection. They would also have their position in
+		// the new collection.
+		// Want adding / removing from the other selection to take just
+		// one statement.
+
+		// Will also continue with the web database system.
+		// Likely to be using the (indexed) collection system, probably
+		// the dict index, to hold the collections of tables in abstract
+		// schemas, and various collections used in the abstract
+		// database system.
+		// Will be more development time to get it done...
+		// Should help lead to an easy to use API, flexible.
+		// Continue to make the web database system create a web
+		// database useful for my website.
+		// Having some structured user data, where they can add
+		// documents that they are working on, the system can save
+		// documents too.
+		// Would be very good for supporting tools like database
+		// generation and other things doing object editing within the
+		// web browser.
+
+		// Or only do one field for the moment?
+		// Or have it so that there are more indexes, so that
+
+		// And the various indexes could be defined in different ways.
+		// Some would refer to a B+ tree.
+		// Some would just be a dict index.
+		// With a dict index, would still be able to do a search based
+		// on an index lookup.
+		// With the b+ tree, would be able to do a range search too.
+		// Will still be able to get the position within the array in
+		// the collection by referring to the object.
+		// The collections, and objects in them, will all have IDs (if
+		// required).
+		// I think an interchangable indexing mechanism is the best.
+		// Have it so that the larger components can be added as
+		// required.
+		// Maybe some main UI components will rely on these larger
+		// components?
+		// But also the indexes will be wrapped. It may be a little code
+		// to write something that has the same API but higher time
+		// complexity.
+		// Really good indexing would be a fair few KBs. Could still get
+		// them down relatively small, but it just would not be
+		// necessary for many sites.
+		// Perhaps it could also be used to deliver compressed source
+		// code though, so maybe indexes would fit into small files well
+		// (some of them at least).
+
+		// Just really need to get this site made...
+		// Want to do the lang test to do with searching for items in
+		// collections.
+		// Requires the collection indexing system.
+
+		// An illustrated B+ tree web page could be nice.
+		// Could see the items go into the tree, see stored data for
+		// each tree node.
+		// Would be helpful to answer questions about expanding the
+		// tree's capabilities.
+
+		// Will want various data indexing capabilities removed for the
+		// 'micro-framework'.
+		// On an efficient, modern browser, it would not take long to
+		// search through all downloaded data anyway.
+
+		// May want it so that things can still be indexed easily just
+		// with one field?
+		// But then, may be really good for user interactions.
+		// May shrink the tree further and keep it.
+
+		// This function will make use of the indexing system object.
+		// Don't think the indexing system is too complicated really,
+		// it helps defer choosing a more complicated index too.
+		// Don't think its worth putting a very comprehensive indexing
+		// system in from the beginning...
+		// but some kind of full text index would certainly be cool.
+
+		// should set the indexes, removing other ones.
+		//
+
+
+
+
+				
+				
+				// But the index system won't be enforcing unique constraints.
+				//  It will be able to tell if an item is already there though.
+				//var can_add = this.index_system.can_add_object(value);
+				
+				
+				
+				//console.log('can_add ' + can_add);
+				
+				// if its a string will need to wrap it as well.
+				//  Maybe Native_Data
+				//  or Data_Value
+				
+				
+				//if (can_add) {
+					
+				//} else {
+
+					// but what about a debuggable / tracable exception?
+				//	console.trace("Can\'t add object. Check for unique field conflicts");
+					
+					
+				//	throw 'Can\'t add object. Check for unique field conflicts';
+
+				//}
+
+				// for the moment gets held in the array. May have it
+				// held within an index / the indexes in the future.
+
+				// need to do some things regarding indexing of the data
+				// object.
+				// may need to be indexed by name.
+
+				// retrieve by name quickly.
+				// could be done with either the dict or the B+ tree.
+
+				// the B+ index may well work out a little nicer really.
+				// but which of its capabilities would it be used for?
+				// it maintains the order nicely.
+
+				// both items have ids... so get stored as dict keys
+				// without too much difficulty.
+				// iterating through the items ordered by name...
+				// easy enough to sort them anyway?
+				// but do want very efficient code at this core.
+
+				// more work on this but for some very smoothly running
+				// large data sets.
+
+				// If indexing is to be set up for any field, it may be
+				// best to set it up with the more adaptable B+ index as
+				// a default.
+				// won't just want to be getting by the value usually.
+				// and would be useful for iterating through the values
+				// based on their order in an index.
+
+				// tell the data object what position it is within this
+				// collection.
+				// that's pretty important, it's the position within the
+				// array.
+				// more like position within than relationship.
+
+				// numeric relationship = position within.
+				// perhaps object link?
+				// or we know that anyway.
+				// keep the name for the moment.
+				// it's more expandable. Could put an object in or an
+				// array, but have more complex processing.
+				// Not needed right now.
+
+				// Do want to have it indexed by some fields.
+				// Name would be a particular field.
+				// Will have party as well (with us presidents test).
+
+				// May also test this more with Postgres examples.
+
+				// For controls, indexed by id, not sure that a b+ tree
+				// helps.
+				// can check if they exist, for example, easily
+				// having them ordered by id already could be useful
+				// when merging lists.
+
+				// It may make sense that a lot more things get stored
+				// in B+ trees.
+				// Little overhead / slowdown
+				// Extra capabilities
+				// May be good to have some indexing options for some
+				// collections specified.
+
+				// Or when keeping an index of the items in the
+				// collection by field values... a B+ key could work
+				// much better when values are not unique.
+				// So could choose to index with either a dict or a b+
+				// tree.
+				// Perhaps dict would be the default if B+ has not
+				// loaded.
+
+				// But B+ directly within lang-util?
+				// Does make sense for tight coupling of indexing.
+
+
+
+			// May push collections in place too.
+			// That will work differently regarding indexing.
+			// It may not have to do quite so much.
+
+			// tell the data item what index it is getting put in under.
+			// it keeps track of that.
+			// needs to be told that one of its parents is now this.
+			// but it will get done on a low level here for the moment
+			// at least.
+
+			// normally gets pushed into pos at this._arr_idx++
+			// if doing normal ordering. May wish to order by the values
+			// in a field.
+			// I know how to use B+ tree for this.
+			// Easy enough for when the values are unique, such as with
+			// ids.
+
+			// So from the order by, we get the ordering key, if
+			// ordering is in use.
+
+			// What about ordering the collection by multiple fields.
+			// Will we really want to do that?
+			// Quite possibly.
+			// Order by one thing, like region, then another like
+			// product category.
+			// Could work nicely with bug data sets.
+			// Then the B+ index would be set up to use the tree like
+			// that.
+			// With the indexes having the values.
+			// would not be that hard to do, perfectly feasable.
+
+			// Sorting - would refer to the order-by fields and be able
+			// to make the comparison that way.
