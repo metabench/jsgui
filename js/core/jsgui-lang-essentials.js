@@ -128,8 +128,12 @@ define(function() {
     /**
     * Break iteration callback function.
     * @example
-    * jsgui.each([1, 2, 3, 4, 5], function(index, element, **stop**){
-    *    if (element > 3) **stop();**
+    * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
+    *    if (element > 3) stop();
+    * });
+    *
+    * jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){
+    *    if (element > 3) stop();
     * });
     *
     * @callback module:core/jsgui-lang-essentials.stopIterationCallback
@@ -162,8 +166,8 @@ define(function() {
     * - an object (iterate over object properties)
     *
     * The iteration function parameters are:
-    * index, element, stopFunction (for array)
-    * key, value, stopFunction (for object)
+    * - index, element, stopFunction (for array)
+    * - key, value, stopFunction (for object)
     *
     * The stopFunction breaks the iteration if called.
     *
@@ -172,6 +176,10 @@ define(function() {
     * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback|module:core/jsgui-lang-essentials.objectIteratorCallback} fn - iterator function
     * @param {Object} [context] - context object
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
+    *    console.log(index + ":" + element);
+    * });
     */
 	// new addition with the loop being stoppable using a function call. 18/06/2012
 	var each = function(collection, fn, context) {
@@ -221,8 +229,44 @@ define(function() {
 
 	};
 
-	// better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
-	//  Useful for new code.
+    /**
+    * Array iterator callback function.
+    *
+    * @callback module:core/jsgui-lang-essentials.arrayIteratorCallback-eac
+    * @param {number} index
+    * @param {*} element
+    * @param {module:core/jsgui-lang-essentials.stopIterationCallback} stop
+    */
+
+    /**
+    * Object iterator callback function.
+    *
+    * @callback module:core/jsgui-lang-essentials.objectIteratorCallback-eac
+    * @param {string} key
+    * @param {*} value
+    * @param {module:core/jsgui-lang-essentials.stopIterationCallback} stop
+    */
+
+    /**
+    * Iterates over a collection of elements, just like the [each()]{@link module:core/jsgui-lang-essentials.each} function, but the iterator function parameters order is changed.
+    *
+    * Better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
+	*  Useful for new code.
+    *
+    * The iteration function parameters are:
+    * - element, index, stopFunction (for array)
+    * - value, key, stopFunction (for object)
+    *
+    * @func
+    * @param {Collection|Array|Object} collection - collection of elements
+    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback-eac|module:core/jsgui-lang-essentials.objectIteratorCallback-eac} fn - iterator function
+    * @param {Object} [context] - context object
+    * @memberof module:core/jsgui-lang-essentials
+    * @example
+    * jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){
+    *    console.log(index + ":" + element);
+    * });
+    */
 	var eac = function(collection, fn, context) {
 		// each that puts the results in an array or dict.
 		if (collection) {
@@ -2153,6 +2197,9 @@ define(function() {
 			//console.log('pair.length ' + pair.length);
 			
 			if (pair.length == 2) {
+			    // [context, fn]
+			    // [fn, params]
+
 				//if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && pair.length == 2) {
 				//	fn = pair[0];
 				//	params = pair[1];
@@ -2171,6 +2218,9 @@ define(function() {
 			
 			// function, array, function
 			if (pair.length == 3) {
+			    // [fn, params, fn_callback]
+			    // [context, fn, params]
+
 				if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && tof(pair[2]) == 'function') {
 					fn = pair[0];
 					params = pair[1];
@@ -2189,6 +2239,8 @@ define(function() {
 			}
 			
 			if (pair.length == 4) {
+			    // [context, fn, params, fn_callback]
+
 			    // context, function being called, params, cb
 			    context = pair[0];
 			    fn = pair[1];
