@@ -1084,6 +1084,213 @@ but the base class property name used is the rest of the initial property name (
         
             
 <dt>
+    <h4 class="name" id="eac"><span class="type-signature">&lt;static> </span>eac<span class="signature">(collection, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Iterates over a collection of elements, just like the <a href="jsgui-lang-essentials.html#each">each()</a> function, but the iterator function parameters order is changed.</p>
+<p>Better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
+ Useful for new code.</p>
+<p>The iteration function parameters are:</p>
+<ul>
+<li>element, index, stopFunction (for array)</li>
+<li>value, key, stopFunction (for object)</li>
+</ul>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+|
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>collection of elements</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jsgui-lang-essentials.html#arrayIteratorCallback-eac">module:core/jsgui-lang-essentials.arrayIteratorCallback-eac</a></span>
+|
+
+<span class="param-type"><a href="jsgui-lang-essentials.html#objectIteratorCallback-eac">module:core/jsgui-lang-essentials.objectIteratorCallback-eac</a></span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>iterator function</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>context object</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){   console.log(index + ":" + element);});</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(collection, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
     
     
@@ -1100,9 +1307,11 @@ The collection parameter can be:</p>
 <li>an array (iterate over array elements)</li>
 <li>an object (iterate over object properties)</li>
 </ul>
-<p>The iteration function parameters are:
-index, element, stopFunction (for array)
-key, value, stopFunction (for object)</p>
+<p>The iteration function parameters are:</p>
+<ul>
+<li>index, element, stopFunction (for array)</li>
+<li>key, value, stopFunction (for object)</li>
+</ul>
 <p>The stopFunction breaks the iteration if called.</p>
     </div>
     
@@ -1284,6 +1493,11 @@ key, value, stopFunction (for object)</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){   console.log(index + ":" + element);});</code></pre>
+
     
 </dd>
 
@@ -4154,7 +4368,323 @@ Possible results are:</p>
             
                 
 <dt>
+    <h4 class="name" id="arrayIteratorCallback-eac"><span class="type-signature"></span>arrayIteratorCallback-eac<span class="signature">(index, element, stop)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Array iterator callback function.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>element</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>stop</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jsgui-lang-essentials.html#stopIterationCallback">module:core/jsgui-lang-essentials.stopIterationCallback</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
     <h4 class="name" id="objectIteratorCallback"><span class="type-signature"></span>objectIteratorCallback<span class="signature">(key, value, stop)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Object iterator callback function.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>stop</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jsgui-lang-essentials.html#stopIterationCallback">module:core/jsgui-lang-essentials.stopIterationCallback</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+            
+                
+<dt>
+    <h4 class="name" id="objectIteratorCallback-eac"><span class="type-signature"></span>objectIteratorCallback-eac<span class="signature">(key, value, stop)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -4373,7 +4903,7 @@ Possible results are:</p>
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, **stop**){   if (element > 3) **stop();**});</code></pre>
+    <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){   if (element > 3) stop();});jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){   if (element > 3) stop();});</code></pre>
 
     
 </dd>
@@ -4398,7 +4928,7 @@ Possible results are:</p>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Mar 21 2014 00:21:16 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Mon Mar 24 2014 16:20:08 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
