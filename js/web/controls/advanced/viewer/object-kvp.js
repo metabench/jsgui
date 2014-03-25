@@ -182,7 +182,7 @@ define(["../../../jsgui-html-enh", "./factory", "./basic/string"],
 				if (key) {
 
 					var key_value = key.value();
-					console.log('key_value ' + key_value);
+					//console.log('key_value ' + key_value);
 
 					keyContent.add(key_value);
 
@@ -192,7 +192,7 @@ define(["../../../jsgui-html-enh", "./factory", "./basic/string"],
 
 					var ctrl_viewer = this.factory(value, this._context);
 					//console.log('ctrl_viewer', ctrl_viewer);
-					console.log('tof ctrl_viewer', tof(ctrl_viewer));
+					//console.log('tof ctrl_viewer', tof(ctrl_viewer));
 
 					vcon.push(ctrl_viewer);
 				}

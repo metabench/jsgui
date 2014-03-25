@@ -93,16 +93,34 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 		'sock_broadcast_changes': function(server) {
 
 			// with sock, need to send to every connection.
-
+			//console.log('sock_broadcast_changes');
 
 
 			var resource = this.meta.get('resource');
 			var resource_name = resource.meta.get('name');
 
+			resource.on('change', function(key_name, value) {
+				console.log('resource change');
+				// Perhaps need to put more into one parameter.
+				//  Both name and value...
 
-			resource.on('change', function(change_e) {
-				var key_name = change_e[0];
-				var value = change_e[1];
+				//console.log('change_e', change_e);
+				//var key_name = change_e[0];
+				//var value = change_e[1];
+
+				// May need to parse / encode the value.
+
+				//console.log('value', value);
+
+				var tval = tof(value);
+				//console.log('tval ' + tval);
+
+				if (tval == 'date') {
+					value = {
+						'__type': 'date-iso-8601',
+						'value': value.toISOString()
+					}
+				}
 
 				var e_res = [resource_name, 'change', key_name, value];
 
@@ -257,10 +275,25 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				
 				var body = hd.body();
 
+
+				// and the resource control will then connect to that same resource on the client through the resource pool.
+
+
 				var resource_control = new Resource_Control({
 					'context': server_page_context,
 					'resource': this.meta.get('resource')
 				});
+
+				// Need to somehow defer the rendering of the control until it is ready.
+				//  we could make an async render function that waits until they are ready before rendering.
+
+				// Controls could have a 'status' field.
+				//  Need to make controls async in this way if we are rendering them based on asyncronously obtained data.
+
+				// When rendering check all controls to see if they are ready?
+
+
+
 
 				// The resource control will be activated on the client.
 				//  It will be bound to the client-side resource.
@@ -302,6 +335,10 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				//  It could become a very useful way of encapsulating client-server functionality.
 
 				// Then on the client side, connects to the resource(s) on the server, may use websockets for communications.
+
+
+				// An async / deferred rendering function would provide the result in its callback.
+
 
 
 

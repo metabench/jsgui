@@ -17,7 +17,7 @@ define(["./jsgui-html-core"],
 	function(jsgui) {
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
-		//var Control = jsgui.Control;
+		var Control = jsgui.Control;
 
 		var fp = jsgui.fp;
 		var group = jsgui.group;
@@ -400,6 +400,8 @@ define(["./jsgui-html-core"],
 	                    if (!itemDomEl) {
 	                        //itemDomEl = e_change.item._context.document.createElement(e_change.item.get('dom.tagName'));
 	                        // render the 
+
+	                        // Are items not activated with contexts?
 
 	                        var temp_div = e_change.item._context.document.createElement('div');
 	                        temp_div.innerHTML = e_change.item.all_html_render();
@@ -2180,7 +2182,7 @@ define(["./jsgui-html-core"],
 	            }
 	        });
 	        context.set_max_ids(max_typed_ids);
-	        console.log('max_typed_ids ' + stringify(max_typed_ids));
+	        //console.log('max_typed_ids ' + stringify(max_typed_ids));
 	        //throw 'stop';
 	        //console.log('activate - finished mapping');
 
@@ -2198,8 +2200,8 @@ define(["./jsgui-html-core"],
 	        //console.log('map_controls_by_type ' + stringify(map_controls_by_type));
 	        //throw 'stop';
 
-	        console.log('context.map_controls', context.map_controls);
-			console.log('map_jsgui_types', map_jsgui_types);
+	        //console.log('context.map_controls', context.map_controls);
+			//console.log('map_jsgui_types', map_jsgui_types);
 
 	        var map_controls = context.map_controls;
 	        // Control construction and registration
@@ -2233,15 +2235,30 @@ define(["./jsgui-html-core"],
 	                //  it does not need to send the data twice.
 	                // Eg can hook up the key (viewer), the value (viewer) and the comma.
 
-	                var ctrl = new Cstr({
-	                    'context': context,
-	                    '_id': jsgui_id,
-	                    'el': el
-	                })
-	                map_controls[jsgui_id] = ctrl;
+	                if (Cstr) {
+	                	var ctrl = new Cstr({
+		                    'context': context,
+		                    '_id': jsgui_id,
+		                    'el': el
+		                })
+		                map_controls[jsgui_id] = ctrl;
+		                arr_controls.push(ctrl);
+	                } else {
+	                	console.log('Missing context.map_Controls for type ' + type + ', using generic Control');
+	                	var ctrl = new Control({
+		                    'context': context,
+		                    '_id': jsgui_id,
+		                    'el': el
+		                })
+		                map_controls[jsgui_id] = ctrl;
+		                arr_controls.push(ctrl);
+
+	                }
+
+	                
 	                //console.log('jsgui_id ' + jsgui_id);
 	                //console.log('ctrl._id() ' + ctrl._id());
-	                arr_controls.push(ctrl);
+	                
 	            }
 	            // get the constructor from the id?
 	        })

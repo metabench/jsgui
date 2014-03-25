@@ -455,9 +455,10 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 							//console.log('broadcast');
 							//console.log('map_connections', map_connections);
 							each(map_connections, function(i, conn) {
-								//console.log('conn', conn);
+								
 								if (conn) {
-									conn.write(message);
+									//console.log('conn i', i);
+									//conn.write(message);
 									//console.log('message', message);
 									//console.log('t message', tof(message));
 									conn.write(message);

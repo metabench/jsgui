@@ -95,11 +95,69 @@ if (typeof define !== 'function') {
 };
 
 
-define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool", "../resource/core/client-resource"],
+define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool", "../resource/core/client-resource", "./controls/advanced/resource",
+    "./controls/advanced/viewer/object", "./controls/advanced/viewer/basic/number"],
 //define(["./jsgui-html"],
-function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource) {
+function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Resource_Control,
+    Object_Viewer, Number_Viewer) {
 
     var fp = jsgui.fp;
+
+
+
+    // Date shim
+    (function() {
+
+        var d = window.Date,
+            regexIso8601 = /^(\d{4}|\+\d{6})(?:-(\d{2})(?:-(\d{2})(?:T(\d{2}):(\d{2}):(\d{2})\.(\d{1,3})(?:Z|([\-+])(\d{2}):(\d{2}))?)?)?)?$/;
+
+        if (d.parse('2011-11-29T15:52:30.5') !== 1322581950500 ||
+            d.parse('2011-11-29T15:52:30.52') !== 1322581950520 ||
+            d.parse('2011-11-29T15:52:18.867') !== 1322581938867 ||
+            d.parse('2011-11-29T15:52:18.867Z') !== 1322581938867 ||
+            d.parse('2011-11-29T15:52:18.867-03:30') !== 1322594538867 ||
+            d.parse('2011-11-29') !== 1322524800000 ||
+            d.parse('2011-11') !== 1320105600000 ||
+            d.parse('2011') !== 1293840000000) {
+
+            d.__parse = d.parse;
+
+            d.parse = function(v) {
+
+                var m = regexIso8601.exec(v);
+
+                if (m) {
+                    return Date.UTC(
+                        m[1],
+                        (m[2] || 1) - 1,
+                        m[3] || 1,
+                        m[4] - (m[8] ? m[8] + m[9] : 0) || 0,
+                        m[5] - (m[8] ? m[8] + m[10] : 0) || 0,
+                        m[6] || 0,
+                        ((m[7] || 0) + '00').substr(0, 3)
+                    );
+                }
+
+                return d.__parse.apply(this, arguments);
+
+            };
+        }
+
+        d.__fromString = d.fromString;
+
+        d.fromString = function(v) {
+
+            if (!d.__fromString || regexIso8601.test(v)) {
+                return new d(d.parse(v));
+            }
+
+            return d.__fromString.apply(this, arguments);
+        };
+
+    })();
+
+
+
     //jQuery, canvas and the app/sub module are all
     //loaded and can be used here now.
 
@@ -176,6 +234,10 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource) {
 
     var client_page_context = new Client_Page_Context();
 
+    client_page_context.update_Controls('ctrl_resource', Resource_Control);
+    client_page_context.update_Controls('object_viewer', Object_Viewer);
+    client_page_context.update_Controls('number_viewer', Number_Viewer);
+
     var resource_pool = client_page_context.resource_pool = new Client_Resource_Pool();
 
 
@@ -221,7 +283,20 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource) {
 
             resource_pool.start(function() {
                 console.log('client-side resource pool started');
-            })
+            });
+
+            // Also need to load some controls into jsgui.
+            //  This will be made easier somehow, but need to update a map within jsgui to include various controls which are used on the client.
+            // While activating controls, jsgui looks at the data-jsgui-type attributes of controls.
+            //  It tries to match the types it finds with the control types it has loaded.
+
+            // In this case, some controls will need specific activation in order to operate properly.
+
+
+            // 
+
+
+
 
             jsgui.activate(client_page_context);
             console.log('jsgui-html-client post activate');
@@ -254,6 +329,14 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource) {
 
                 var o_data = JSON.parse(e.data);
 
+                // Need to reconstruct dates from the data recieved.
+
+
+
+
+                // Want a way of parsing JSON data that also parses dates in ISO formats.
+                // http://stackoverflow.com/questions/3143070/javascript-regex-iso-datetime
+
                 // Could have data about a resource property being changed.
                 //  In which case, we change the value on the local resource.
                 //  Event gets raised to listeners, (but does not tell the server? tells the server it has updated the value as instucted?)
@@ -273,6 +356,21 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource) {
                 // .notify_change?
                 //  not really setting it, but notifying it that it has changed?
 
+
+                // Need to restore the data in the correct format, however the format may not be specified.
+                //  If it is a string in the time format, it may be best to reconstitute it in that time format.
+                //  In some cases we could tell by the field name.
+                //  In some cases we could tell by carrying out a test on a string for the format.
+                //   And then parse that string.
+
+                // Also, data sent over websockets in JSON may need to be parsed somewhat.
+                //  I think automatic parsing of dates will be a useful feature.
+
+
+
+
+
+
                 // A type of set that is not initializing the set operation, and won't get it broadcast on the network, but updates the value.
 
                 // Some resources would tell the server once they have been set on the client.
@@ -281,15 +379,23 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource) {
                 // Different silence levels - silent to the server but not to the client side app?
 
                 var resource_name = o_data[0];
-                console.log('resource_name', resource_name);
+                //console.log('resource_name', resource_name);
 
                 var event_name = o_data[1];
                 var property_name = o_data[2];
                 var property_value = o_data[3];
 
+                //console.log('1) property_value', property_value);
+
+                if (property_value.__type == 'date-iso-8601') {
+                    property_value = Date.fromString(property_value.value);
+                }
+
+                //console.log('2) property_value', property_value);
+
 
                 var resource = resource_pool.get_resource(resource_name);
-                console.log('resource', resource);
+                //console.log('resource', resource);
 
                 if (resource) {
                     // Need to be able to notify that it's changed from some kind of data authority?

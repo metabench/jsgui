@@ -61,13 +61,36 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 				var req = this._context.req;
 
 				if (is_defined(spec.value)) {
+
+					// Does that value become a data object?
+					//  Want to listen to change events on it.
+
 					this.set('value', spec.value);
 				}
+
+				// It may not have been initialised with a value?
+				//  Perhaps it should have been.
+				//  Could send a data-jsgui-value property.
+				//   Or could reconstruct it from the DOM.
+
+				// Anyway, there needs to be a value in the Control that can notice when it gets changed.
+
+
+
+
+
 				if (!spec.el) {
 					var ctrlOpen = new Control({
 						'context': this._context
 					})
 					ctrlOpen.set('dom.attributes.class', 'object-open');
+					// Want to make it send the controls ids in the html.
+					// Sending over the IDs of controls that gets activated seems important.
+					//  Not in all cases, but in cases where controls need to interact with each other.
+					//  Possibly for internal interaction.
+
+					//ctrlOpen.set('dom.attributes.
+
 					ctrlOpen.get('content').add('{');
 					var ctrlOpenID = ctrlOpen._id();
 
@@ -107,6 +130,9 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 				
 				var that = this;
 
+				// on this changing?
+				
+
 				/*
 
 				this.add_event_listener('change', function(e) {
@@ -137,11 +163,16 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 
 			},
 			'refresh_internal': function() {
+				console.log('object refresh_internal');
+				console.log('this._context', this._context);
+
 				var value = this.get('value');
 
 				var inner = this.get('inner');
 				console.log('object viewer refresh_internal ');
 				console.log('value ' + stringify(value));
+
+				inner.clear();
 				//console.log('value ' + tof(value));
 
 				// may need to clear the internal controls... seems likely on the client.
@@ -196,6 +227,8 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 			
 
 			'activate': function() {
+
+				console.log('activate Object_Viewer');
 				this._super();
 
 				var ctrl_open = this.get('open');
@@ -240,7 +273,31 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 						prev_comma = comma;
 
 					}
-				})
+				});
+
+
+				// This needs to listen to its value changing.
+
+				/*
+				this.get('value').on('change', function(e_change) {
+					console.log('object viewer value change');
+				});
+
+				
+				*/
+
+				this.on('change', function(e_change) {
+					console.log('object viewer change');
+
+					// rerender the html!!!
+					that.refresh_internal();
+
+				});
+
+				// should set up bound event handlers.
+
+				console.log('this._bound_events', this._bound_events);
+
 				//throw 'stop';
 
 			}

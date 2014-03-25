@@ -1,3 +1,11 @@
+// Possibly will be a core resource.
+
+// Likely to be hooked up with a DB as well.
+//  So need a functioning DB resource to handle it.
+//  An abstract DB resource that could handle a variety of different DBMSs would be nice.
+
+
+
 define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsgui-je-suis-xml', 'cookies'], 
 
 	function(jsgui, os, http, libUrl, Resource, JeSuisXML, Cookies) {
@@ -20,6 +28,85 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 
 	// Want to be able to easily set up the database.
 	//  Set up the web db.
+
+	// Some of the user / authetication resources could have specifications about how they want the database to be / how they want data access to be
+	//  Database resources then carry that out - setting up what they need to set up within the database.
+
+
+	// This Resource will not necessarily be published.
+	//  It will be possible to access this resource to carry out authentication.
+
+	// Want the base class
+	// Also want a flexible class that can plug into a variety of interfaces.
+
+	// Or we have an authentication data resource as well...
+	//  It would connect to a data resource that follows an extablished interface.
+	//  In fact it would not need complicated data.
+
+	// I think some more work on the data resources, and more fully establishing how they work will be useful.
+
+
+	// Want it to be easy to set and retrieve data from a database.
+	//  Also want that under user credentials...
+
+	// I think the the server file will link up the various resources so that they work with each other.
+	//  Will have resources connected in such a way that they get authenticated etc.
+
+	// An authenticated file system resource would be really helpful.
+	// Also a file system or virtual file system resource for users.
+
+	// So the user james can look at the file system.
+	//  They can save annotations / notes in their own user space.
+
+	// A general authentication provider connecting to a database resource.
+	//  Or connecting to an Authentication Database Resource?
+	//  There will be some specific DB routines to run.
+	//  Would be nice to have an Auth resource that connects to a DB resource, that db resource connects to the db.
+	//  I think another resource apart from Authentication Provider should set up the database.
+
+	// Authentication_Database resource?
+	//  And that is a Resource that connects to any / a variety of Database resources.
+
+	// The Authentication Provider will query the Authentication DB resource.
+	//  That will query a DB resource.
+
+
+	// I think the authentication resource will have some kind of description what db it expects.
+	//  Or would that be the authentication db resource?
+
+	// I think that setting up the users / authentication / authorization db in Postgres, using ORM, would be great.
+
+	// Need to split it into different logical units.
+	//  The authentication provider could ensure that there is the correct DB resource.
+
+	// Perhaps I need to do more work with the DB anyway to get it working right in general terms.
+
+	// I think that thinking about adapters may make sense
+	//  So there is a DB resource (for a particular DBMS)
+	//  Then there is an Adapter which means it provides an Authentication Resource interface.
+
+	// The adapter will ensure that the Database has got the right tables set up.
+	//  It will adapt between a type of DB resource (eg Postgres, Mongo), and a resource that provides Authentication.
+	//  It will use the Database resource in order to provide an Authentication resource.
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	var Authentication_Provider = Resource.extend({
 		'init': function(spec) {

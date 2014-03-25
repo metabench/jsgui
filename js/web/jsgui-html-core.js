@@ -421,6 +421,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
     
 
 
+    // Deferred rendering is going to be a fairly major feature.
+
 
 
     var Control = jsgui.Enhanced_Data_Object.extend({
@@ -1258,33 +1260,118 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         'renderEmptyNodeJqo': function () {
             return [this.renderBeginTagToHtml(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
         },
-        'all_html_render': function () {
+
+        // Need to implement deferred rendering.
+        //  Some controls will ge ttheir data from a Resource / from Resources.
+        //  This means the data is available to them asyncronously.
+        //  The control will not be ready to render immediately.
+
+        // For example, a control shows the records in a DB table. This is done through accessing a Resource.
+        //  The control will not be ready to render until it has loaded the data from the Resource.
+
+        // I think some kind of 'status' in the Control would make sense.
+        //  Assumed to be ready, but could have .__status = 'waiting'
+        // Could hold more info about waiting and timing?
+
+        // For the moment, just need to be able to delay rendering a control until all subcontrols are ready.
+
+        // Will go through the control tree like with rendering, noting down any that are not ready, and subscribing to their ready events.
+        //  We count down the number yet to be ready, when that is 0 we do the rendering like normal, except returning the result asyncronously.
+
+
+
+
+        // Should now include deferred rendering.
+
+        'all_html_render': function(callback) {
+
+            if (callback) {
+                // Get the map of any controls that have __status == 'waiting'.
+                var that = this;
+                // want to recursively iterate through controls and subconstrols.
+                var arr_waiting_controls = [];
+
+                // Worth setting up the listener on this loop?
+
+
+
+                this.iterate_this_and_subcontrols(function(control) {
+                    if (control.__status == 'waiting') arr_waiting_controls.push(control);
+                });
+
+                // then if we are waiting on any of them we listen for them to complete.
+                if (arr_waiting_controls.length == 0) {
+                    this.all_html_render();
+                    callback(null, true);
+                } else {
+                    var c = arr_waiting_controls.length;
+
+                    var complete = function() {
+                        that.pre_all_html_render();
+
+                        var dom = that.get('dom');
+
+                        if (dom) {
+                            // does it have innerHTML?
+                            //  I think that will just be a content item that gets rendered anyway.
+                            //console.log('has dom');
+
+                            /*
+
+                            var beginning = this.renderBeginTagToHtml();
+                            var middle = this.all_html_render_internal_controls();
+                            var end = this.renderEndTagToHtml();
+                            var appendment = this.renderHtmlAppendment();
+
+                            res = [beginning, middle, end, appendment].join('');
+                            */
+                            return [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
+                            //throw ('stop');
+                        }
+                    }
+
+                    each(arr_waiting_controls, function(i, control) {
+                        control.on('ready', function(e_ready) {
+                            c--;
+
+
+                        });
+                    });
+
+
+                }
+
+
+
+            } else {
+                this.pre_all_html_render();
+
+                var dom = this.get('dom');
+
+                if (dom) {
+                    // does it have innerHTML?
+                    //  I think that will just be a content item that gets rendered anyway.
+                    //console.log('has dom');
+
+                    /*
+
+                    var beginning = this.renderBeginTagToHtml();
+                    var middle = this.all_html_render_internal_controls();
+                    var end = this.renderEndTagToHtml();
+                    var appendment = this.renderHtmlAppendment();
+
+                    res = [beginning, middle, end, appendment].join('');
+                    */
+                    return [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
+                    //throw ('stop');
+                }
+            }
+
             //console.log('all_html_render ');
             //if (this.pre_all_html_render) {
             //	
             //}
-            this.pre_all_html_render();
-
-            var dom = this.get('dom');
-
-            if (dom) {
-                // does it have innerHTML?
-                //  I think that will just be a content item that gets rendered anyway.
-                //console.log('has dom');
-
-                /*
-
-                var beginning = this.renderBeginTagToHtml();
-                var middle = this.all_html_render_internal_controls();
-                var end = this.renderEndTagToHtml();
-                var appendment = this.renderHtmlAppendment();
-
-                res = [beginning, middle, end, appendment].join('');
-                */
-                return [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
-
-                //throw ('stop');
-            }
+            
 
             //return res;
         },
@@ -2386,6 +2473,12 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             // ui should react to the change.
 
             return this.get('content').clear();
+
+        },
+
+        'activate': function() {
+            // Do nothing for basic control I think.
+            //  Possibly will be doing some things depending on discovered properties.
 
         }
 

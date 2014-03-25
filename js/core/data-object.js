@@ -3207,6 +3207,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//console.log('be ' + tof(be));
 				if (be) {
 
+					// The controls that are activated on the clients need to have bound events.
+
+
+
+					//console.log('event_name', event_name);
 					var bei = be[event_name];
 					//console.log('bei ', bei);
 					if (tof(bei) == 'array') {
@@ -3225,6 +3230,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							// maybe the this context would be enough.
 
 							//v.call(target, target, event_name);
+							console.log('1) additional_args', additional_args);
 							v.apply(target, additional_args);
 							// Perhaps I have sussed out the problem.
 							//  Or some of it?
@@ -4524,7 +4530,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							
 						} else {
 						
-							//console.log('no split');
+							//console.log('2) no split');
 							
 							// not necessarily, it still may apply to a data_object.
 							
@@ -4591,7 +4597,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							// and when setting the tag_name object?
 							
 							//console.log('property_name ' + property_name);
-							//console.log('value ' + stringify(value));
+							//console.log('value ', (value));
 							//console.log('***** data_object_next ' + data_object_next);
 							if (!is_defined(data_object_next)) {
 								
@@ -4631,7 +4637,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 								//console.log('this._[property_name] ' + this._[property_name])
 								
-								this.raise_event('change', [property_name, dv]);
+								//this.raise_event('change', [property_name, dv]);
+
+								this.raise_event('change', property_name, dv);
+
+
 								//throw 'stop!!!';
 								
 								return value;
@@ -4692,8 +4702,12 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 								// this.raise_event('set', [property_name, value]);
 								// then the event tells everything that is listening to it.
+								//console.log('this', this);
 
-								this.raise_event('change', [property_name, value]);
+								//this.trigger('change', [property_name, value]);
+								//console.log('property_name', property_name);
+								//console.log('value', value);
+								this.trigger('change', property_name, value);
 
 								// want to listen to the set event for some things such as GUI components in particular.
 								
@@ -4704,7 +4718,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				} else {
 					// But maybe it should be a data_value, not a data_object.
 
-					//console.log('else sig ' + sig);
+					//console.log('3) else sig ' + sig);
 
 					// And for a Data_Object?
 					//  Basically put it into place.
@@ -4717,8 +4731,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 						// Raise a change event?
 						//  Or is set event OK?
-
-
 
 					}
 
@@ -4995,7 +5007,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					
 					// don't put these in the prototype.
 					//  they are not for the object itself.
-					console.log('property name', name);
+					//console.log('property name', name);
 					if (name == 'class_name') {
 						for_class['_class_name'] = prop_item;
 					} else if (name == 'fields') {

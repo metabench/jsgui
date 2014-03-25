@@ -41,7 +41,7 @@ define(["./jsgui-html"],
 	    		
 	    		this._super(spec);
 	    		//this.set('document', spec.document);
-	    		this.document = spec.document;
+	    		this.document = spec.document || document;
 
 	    		// Not so sure about creating the resource pool or requiring the resources.
 	    		//  Could have problems with dependencies.

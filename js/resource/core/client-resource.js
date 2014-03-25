@@ -94,6 +94,26 @@ define(['../../web/jsgui-html-enh', './resource'],
 
 			this.data = new Data_Object();
 
+			var that = this;
+
+			
+			// both in one parameter here?
+
+
+			// Why not listen to the resource's data directly?
+			//  Should not be a problem when doing it on the client?
+
+
+			this.data.on('change', function(property_name, property_value) {
+				console.log('');
+				console.log('resource data change property_name', property_name);
+				console.log('property_value', property_value);
+
+				that.trigger('change', property_name, property_value);
+
+			})
+			
+
 			//this.meta.set('custom_paths', new Data_Object({}));
 			// Those are custom file paths.
 
@@ -206,7 +226,14 @@ define(['../../web/jsgui-html-enh', './resource'],
 			//  Or only when set is called?
 
 
-			this.data.trigger('change', [property_name, property_value]);
+			this.data.trigger('change', property_name, property_value);
+
+			// Or the resource listens to data changes, triggers change on itself when the data changes.
+
+			// Or change on the resource itself I think.
+
+
+
 
 
 

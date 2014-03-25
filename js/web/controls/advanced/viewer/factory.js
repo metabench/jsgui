@@ -84,7 +84,8 @@ define(["require", "../../../jsgui-html-enh"/*, "./object", "./array", "./basic/
 
 		var create = function(obj, context) {
 			var tobj = tof(obj);
-			//console.log('tobj ' + tobj);
+			//console.log('factory tobj ' + tobj);
+			//console.log('factory obj ', obj);
 			if (tobj == 'object') {
 				var Object_Viewer = require('./object');
 				var res = new Object_Viewer({
@@ -121,6 +122,12 @@ define(["require", "../../../jsgui-html-enh"/*, "./object", "./array", "./basic/
 				var val = obj.value();
 				var tval = tof(val);
 
+				// then create it for the inner value.
+
+				return create(val, context);
+
+				/*
+
 				if (tval == 'string') {
 					var String_Viewer = require('./basic/string');
 					var res = new String_Viewer({
@@ -136,6 +143,7 @@ define(["require", "../../../jsgui-html-enh"/*, "./object", "./array", "./basic/
 						'value': obj
 					})
 				}
+				*/
 				
 				return res;
 			}

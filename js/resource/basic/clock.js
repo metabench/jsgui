@@ -24,10 +24,7 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 			//  It should also be to do with the external interface.
 			//  So likely/going to return its data as JSON, rather than programmatic objects.
 
-
-
-
-			console.log('Clock init');
+			//console.log('Clock init');
 			//this.__type_name2 = 'Clock';
 			var that = this;
 
@@ -41,14 +38,14 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 			data.set('time', time);
 			//throw 'stop';
 
-			data.on('change', function(e_change) {
-				var property_name = e_change[0];
-				var value = e_change[1];
+			data.on('change', function(property_name, property_value) {
+				//var property_name = e_change[0];
+				//var value = e_change[1];
 
 				//console.log('clock data property_name', property_name);
 				//console.log('clock data value', value);
 
-				that.trigger('change', e_change);
+				that.trigger('change', property_name, property_value);
 			});
 			
 
@@ -83,7 +80,7 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 
 				// Would be interesting to have it so that all the change events get sent through websockets.
 
-			}, 1000);
+			}, 5000);
 
 
 			// Could add a property change listener.
@@ -92,13 +89,13 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 
 
 			//console.log('this.__type_name2', this.__type_name2);
-			this.add_event_listener('change', function(e_change) {
+			//this.add_event_listener('change', function(e_change) {
 
 				// Nice if the change got broadcast automatically.
 				//  At least if anything was listening to that change and authorised to do so.
 
 				//console.log('e_change', e_change);
-			});
+			//});
 			
 			//throw 'no start function defined for web resource (subclass)'
 			// Then if we have a web resource that's bound to the clock resource, the web resource can keep clients / connected systems updated using websockets.
@@ -111,8 +108,8 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 				var callback = a[0];
 
 				var time = this.data.get('time');
-				console.log('time', time);
-				console.log('tof time', tof(time));
+				//console.log('time', time);
+				//console.log('tof time', tof(time));
 				//throw 'stop';
 
 				var res = {
