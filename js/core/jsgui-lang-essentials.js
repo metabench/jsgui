@@ -2166,6 +2166,8 @@ define(function() {
 		var c = 0;
 		var that = this;
 		
+		var count_unfinished = l;
+
 		// the number of processes going 
 		
 		// the maximum number of processes allowed.
@@ -2257,6 +2259,7 @@ define(function() {
 			
 			var cb = function(err, res2) {
 			    num_currently_executing--;
+			    count_unfinished--; 
 				//console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
 				if (err) {
 					var stack = new Error().stack;
@@ -2273,7 +2276,7 @@ define(function() {
 						res[i] = res2;
 					}
 					//console.log('pair.length ' + pair.length);
-					
+
 					if (fn_callback) {
 					    fn_callback(null, res2);
 					}
@@ -2288,7 +2291,7 @@ define(function() {
 					*/
 					
 					if (c < l) {
-					    
+
 					    // only process if the num executing is less than the max num to execute.
 					    // otherwise the process will be done when a callabck is produced from the function.
 					    
@@ -2298,7 +2301,9 @@ define(function() {
 					    
 						
 					} else {
-						callback(null, res);
+					    if (count_unfinished <= 0) {
+					        callback(null, res);
+					    }
 					}
 				}
 			}
@@ -2317,11 +2322,9 @@ define(function() {
 		
 		//console.log('arr_functions_params_pairs ' + arr_functions_params_pairs);
 		if (arr_functions_params_pairs.length > 0) {
-		    while (arr_functions_params_pairs.length > 0 && num_currently_executing < num_parallel) {
+		    while ((c < l)  && (num_currently_executing < num_parallel)) {
 		        process();
-		    }
-		
-		    //
+		    }	
 		} else {
 		    if (callback) {
 		        callback(null, null);
