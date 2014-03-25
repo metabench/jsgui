@@ -2106,8 +2106,48 @@ define(function() {
 	//  Will use some kind of polymorphic rearrangement to rearrange where suitable.
 	
     /**
-    * description...
+    * Executes several tasks one by one (default) or simultaneously (up to specified amount of tasks at the same time).
+    *
+    * Each task is an array in turn. The following task formats are supported:
+    * - [context, fn]
+    * - [fn, params]
+    * - [fn, params, fn_callback]
+    * - [context, fn, params]
+    * - [context, fn, params, fn_callback]
+    *
+    * The task parts mean:
+    * - context: execution context ("this" value)
+    * - fn - task function
+    * - params - task function parameters
+    * - fn_callback - callback function calling when the task is completed: fn_callback(null, result), where "result" is the task function result
+    *
+    * The task function must call a predefined callback function. The callback function is passed as the last parameter to the task function.
+    * The callback function looks as follows: callback(error, result)
+    * - error: an error object or null
+    * - result: the task result
+    *
+    * The "main" callback (passed to the call_multiple_callback_functions() call) looks as follows:
+    * callback(error, result), where "result" is all the tasks result array.
+    *
+    * @example
+    * var tasks = [];
+    *
+    * var task1 = function(arg1, arg2, cb) {
+    *    setTimeout(function () { cb(null, (arg1 * arg2)); }, 1000); // multiply arg1 * arg2
+    * };
+    *
+    * tasks.push([task1, [10, 2]]);   // multiply 10 * 2
+    *
+    * call_multiple_callback_functions(tasks, function(error, result) {
+    *    console.log("All the tasks are done. The first task result is " + result[0]);
+    * });
+    *
+    *
     * @func
+    * @param {array} tasks - tasks array
+    * @param {number} [num_parallel = 1] - maximum amount of tasks running simultaneously
+    * @param {function} callback - callback function called when all the tasks are completed
+    * @param {boolean} [return_params = false] - include the task parameters to the task result
     * @memberof module:core/jsgui-lang-essentials
     */
 	var call_multiple_callback_functions = fp(function(a, sig) {
