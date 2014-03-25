@@ -128,8 +128,12 @@ define(function() {
     /**
     * Break iteration callback function.
     * @example
-    * jsgui.each([1, 2, 3, 4, 5], function(index, element, **stop**){
-    *    if (element > 3) **stop();**
+    * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
+    *    if (element > 3) stop();
+    * });
+    *
+    * jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){
+    *    if (element > 3) stop();
     * });
     *
     * @callback module:core/jsgui-lang-essentials.stopIterationCallback
@@ -162,8 +166,8 @@ define(function() {
     * - an object (iterate over object properties)
     *
     * The iteration function parameters are:
-    * index, element, stopFunction (for array)
-    * key, value, stopFunction (for object)
+    * - index, element, stopFunction (for array)
+    * - key, value, stopFunction (for object)
     *
     * The stopFunction breaks the iteration if called.
     *
@@ -172,6 +176,10 @@ define(function() {
     * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback|module:core/jsgui-lang-essentials.objectIteratorCallback} fn - iterator function
     * @param {Object} [context] - context object
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
+    *    console.log(index + ":" + element);
+    * });
     */
 	// new addition with the loop being stoppable using a function call. 18/06/2012
 	var each = function(collection, fn, context) {
@@ -221,8 +229,44 @@ define(function() {
 
 	};
 
-	// better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
-	//  Useful for new code.
+    /**
+    * Array iterator callback function.
+    *
+    * @callback module:core/jsgui-lang-essentials.arrayIteratorCallback-eac
+    * @param {number} index
+    * @param {*} element
+    * @param {module:core/jsgui-lang-essentials.stopIterationCallback} stop
+    */
+
+    /**
+    * Object iterator callback function.
+    *
+    * @callback module:core/jsgui-lang-essentials.objectIteratorCallback-eac
+    * @param {string} key
+    * @param {*} value
+    * @param {module:core/jsgui-lang-essentials.stopIterationCallback} stop
+    */
+
+    /**
+    * Iterates over a collection of elements, just like the [each()]{@link module:core/jsgui-lang-essentials.each} function, but the iterator function parameters order is changed.
+    *
+    * Better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
+	*  Useful for new code.
+    *
+    * The iteration function parameters are:
+    * - element, index, stopFunction (for array)
+    * - value, key, stopFunction (for object)
+    *
+    * @func
+    * @param {Collection|Array|Object} collection - collection of elements
+    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback-eac|module:core/jsgui-lang-essentials.objectIteratorCallback-eac} fn - iterator function
+    * @param {Object} [context] - context object
+    * @memberof module:core/jsgui-lang-essentials
+    * @example
+    * jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){
+    *    console.log(index + ":" + element);
+    * });
+    */
 	var eac = function(collection, fn, context) {
 		// each that puts the results in an array or dict.
 		if (collection) {
@@ -2062,8 +2106,48 @@ define(function() {
 	//  Will use some kind of polymorphic rearrangement to rearrange where suitable.
 	
     /**
-    * description...
+    * Executes several tasks one by one (default) or simultaneously (up to specified amount of tasks at the same time).
+    *
+    * Each task is an array in turn. The following task formats are supported:
+    * - [context, fn]
+    * - [fn, params]
+    * - [fn, params, fn_callback]
+    * - [context, fn, params]
+    * - [context, fn, params, fn_callback]
+    *
+    * The task parts mean:
+    * - context: execution context ("this" value)
+    * - fn - task function
+    * - params - task function parameters
+    * - fn_callback - callback function calling when the task is completed: fn_callback(null, result), where "result" is the task function result
+    *
+    * The task function must call a predefined callback function. The callback function is passed as the last parameter to the task function.
+    * The callback function looks as follows: callback(error, result)
+    * - error: an error object or null
+    * - result: the task result
+    *
+    * The "main" callback (passed to the call_multiple_callback_functions() call) looks as follows:
+    * callback(error, result), where "result" is all the tasks result array.
+    *
+    * @example
+    * var tasks = [];
+    *
+    * var task1 = function(arg1, arg2, cb) {
+    *    setTimeout(function () { cb(null, (arg1 * arg2)); }, 1000); // multiply arg1 * arg2
+    * };
+    *
+    * tasks.push([task1, [10, 2]]);   // multiply 10 * 2
+    *
+    * call_multiple_callback_functions(tasks, function(error, result) {
+    *    console.log("All the tasks are done. The first task result is " + result[0]);
+    * });
+    *
+    *
     * @func
+    * @param {array} tasks - tasks array
+    * @param {number} [num_parallel = 1] - maximum amount of tasks running simultaneously
+    * @param {function} callback - callback function called when all the tasks are completed
+    * @param {boolean} [return_params = false] - include the task parameters to the task result
     * @memberof module:core/jsgui-lang-essentials
     */
 	var call_multiple_callback_functions = fp(function(a, sig) {
@@ -2122,6 +2206,8 @@ define(function() {
 		var c = 0;
 		var that = this;
 		
+		var count_unfinished = l;
+
 		// the number of processes going 
 		
 		// the maximum number of processes allowed.
@@ -2153,6 +2239,9 @@ define(function() {
 			//console.log('pair.length ' + pair.length);
 			
 			if (pair.length == 2) {
+			    // [context, fn]
+			    // [fn, params]
+
 				//if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && pair.length == 2) {
 				//	fn = pair[0];
 				//	params = pair[1];
@@ -2171,6 +2260,9 @@ define(function() {
 			
 			// function, array, function
 			if (pair.length == 3) {
+			    // [fn, params, fn_callback]
+			    // [context, fn, params]
+
 				if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && tof(pair[2]) == 'function') {
 					fn = pair[0];
 					params = pair[1];
@@ -2189,6 +2281,8 @@ define(function() {
 			}
 			
 			if (pair.length == 4) {
+			    // [context, fn, params, fn_callback]
+
 			    // context, function being called, params, cb
 			    context = pair[0];
 			    fn = pair[1];
@@ -2205,6 +2299,7 @@ define(function() {
 			
 			var cb = function(err, res2) {
 			    num_currently_executing--;
+			    count_unfinished--; 
 				//console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
 				if (err) {
 					var stack = new Error().stack;
@@ -2221,7 +2316,7 @@ define(function() {
 						res[i] = res2;
 					}
 					//console.log('pair.length ' + pair.length);
-					
+
 					if (fn_callback) {
 					    fn_callback(null, res2);
 					}
@@ -2236,7 +2331,7 @@ define(function() {
 					*/
 					
 					if (c < l) {
-					    
+
 					    // only process if the num executing is less than the max num to execute.
 					    // otherwise the process will be done when a callabck is produced from the function.
 					    
@@ -2246,7 +2341,9 @@ define(function() {
 					    
 						
 					} else {
-						callback(null, res);
+					    if (count_unfinished <= 0) {
+					        callback(null, res);
+					    }
 					}
 				}
 			}
@@ -2265,11 +2362,9 @@ define(function() {
 		
 		//console.log('arr_functions_params_pairs ' + arr_functions_params_pairs);
 		if (arr_functions_params_pairs.length > 0) {
-		    while (arr_functions_params_pairs.length > 0 && num_currently_executing < num_parallel) {
+		    while ((c < l)  && (num_currently_executing < num_parallel)) {
 		        process();
-		    }
-		
-		    //
+		    }	
 		} else {
 		    if (callback) {
 		        callback(null, null);
