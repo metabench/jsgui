@@ -852,7 +852,7 @@ but the base class property name used is the rest of the initial property name (
         
             
 <dt>
-    <h4 class="name" id="call_multiple_callback_functions"><span class="type-signature">&lt;static> </span>call_multiple_callback_functions<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="call_multiple_callback_functions"><span class="type-signature">&lt;static> </span>call_multiple_callback_functions<span class="signature">(tasks, <span class="optional">num_parallel</span>, callback, <span class="optional">return_params</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -860,7 +860,30 @@ but the base class property name used is the rest of the initial property name (
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Executes several tasks one by one (default) or simultaneously (up to specified amount of tasks at the same time).</p>
+<p>Each task is an array in turn. The following task formats are supported:</p>
+<ul>
+<li>[context, fn]</li>
+<li>[fn, params]</li>
+<li>[fn, params, fn_callback]</li>
+<li>[context, fn, params]</li>
+<li>[context, fn, params, fn_callback]</li>
+</ul>
+<p>The task parts mean:</p>
+<ul>
+<li>context: execution context (&quot;this&quot; value)</li>
+<li>fn - task function</li>
+<li>params - task function parameters</li>
+<li>fn_callback - callback function calling when the task is completed: fn_callback(null, result), where &quot;result&quot; is the task function result</li>
+</ul>
+<p>The task function must call a predefined callback function. The callback function is passed as the last parameter to the task function.
+The callback function looks as follows: callback(error, result)</p>
+<ul>
+<li>error: an error object or null</li>
+<li>result: the task result</li>
+</ul>
+<p>The &quot;main&quot; callback (passed to the call_multiple_callback_functions() call) looks as follows:
+callback(error, result), where &quot;result&quot; is all the tasks result array.</p>
     </div>
     
 
@@ -868,6 +891,183 @@ but the base class property name used is the rest of the initial property name (
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>tasks</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>tasks array</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>num_parallel</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+            
+            <td class="description last"><p>maximum amount of tasks running simultaneously</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>callback function called when all the tasks are completed</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>return_params</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+            
+            <td class="description last"><p>include the task parameters to the task result</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -910,6 +1110,11 @@ but the base class property name used is the rest of the initial property name (
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tasks = [];var task1 = function(arg1, arg2, cb) {   setTimeout(function () { cb(null, (arg1 * arg2)); }, 1000); // multiply arg1 * arg2};tasks.push([task1, [10, 2]]);   // multiply 10 * 2call_multiple_callback_functions(tasks, function(error, result) {   console.log("All the tasks are done. The first task result is " + result[0]);});</code></pre>
+
     
 </dd>
 
@@ -4928,7 +5133,7 @@ Possible results are:</p>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Mon Mar 24 2014 16:20:08 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Mar 25 2014 15:16:14 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
