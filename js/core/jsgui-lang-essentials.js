@@ -1387,7 +1387,21 @@ define(function() {
     var fp = functional_polymorphism;
 
     /**
-    * description...
+    * If an object argument passed:
+    * Returns an array containing [key, value] arrays of the object properties.
+    * `arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]`
+    * 
+    * If a function argument passed:
+    * Returns a function that takes an array parameter among others. This function call will calls in turn the initial function several times,
+    * passing the array items as the parameter (other parameters will be passed "as is").
+    * The array parameter position is 0 by default (i.e. the first parameter), but it can be specified by the param_index parameter.
+    * 
+    * if the last argument of the calling function is callback function, then the callback function will be called when all the array items are processed
+    * (i.e. all the calling functions are finished). The callback arguments are (null, result), where result is the function calls result array.
+    * The callback function is not passed to the calling function, but the call_multiple_callback_functions() callback is passed instead. 
+    * The calling function must call the callback in order to signal its completion.
+    * 
+    * 
     * @func
     * @memberof module:core/jsgui-lang-essentials
     */
@@ -1420,13 +1434,13 @@ define(function() {
 				//console.log('arguments.length ' + arguments.length);
 				//console.log('arguments ' + stringify(arguments));
 				var a = arr_like_to_arr(arguments), ts = atof(a), t = this;
-                //console.log('a ' + stringify(a));
+			    //console.log('a ' + stringify(a));
 
                 var last_arg = a[a.length - 1];
                 //console.log('last_arg ' + last_arg);
                 //console.log('a.length ' + a.length);
                 
-                if (tof(last_arg == 'function')) {
+                if (tof(last_arg) == 'function') {
                     // it seems like a callback function.
                     
                     // will do callback result compilation.
@@ -1493,6 +1507,7 @@ define(function() {
                 } else {
                     
                     if (typeof param_index !== 'undefined' && ts[param_index] == 'array') {
+
                         // var res = [], a2 = a.slice(1); // don't think this makes
                         // a copy of the array.
                         var res = []; // don't think this makes a copy of the
@@ -1534,7 +1549,7 @@ define(function() {
 			param_index = 0, fn = a[0];
 			process_as_fn();
 		} else if (sig == '[n,f]') {
-			param_index = a[0], fn = a[1];
+		    param_index = a[0], fn = a[1];
 			process_as_fn();
 		}
 
@@ -2118,7 +2133,7 @@ define(function() {
     * The task parts mean:
     * - context: execution context ("this" value)
     * - fn - task function
-    * - params - task function parameters
+    * - params - task function parameters array
     * - fn_callback - callback function calling when the task is completed: fn_callback(null, result), where "result" is the task function result
     *
     * The task function must call a predefined callback function. The callback function is passed as the last parameter to the task function.
@@ -2377,7 +2392,7 @@ define(function() {
 	var multi = call_multiple_callback_functions;
 	
     /**
-    * description...
+    * Alias to the [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} function.
     * @func
     * @memberof module:core/jsgui-lang-essentials
     */
