@@ -160,6 +160,27 @@ function (jsgui, assert, test_utils) {
 
         });
 
+        // -----------------------------------------------------
+        //	documentation sample
+        // -----------------------------------------------------
+
+        it("should execute the example from the documentation", function (done) {
+
+            var tasks = [];
+
+            var task1 = function (arg1, arg2, cb) {
+                setTimeout(function () { cb(null, (arg1 * arg2)); }, 1); // multiply arg1 * arg2
+            };
+
+            tasks.push([task1, [10, 2]]);   // multiply 10 * 2
+
+            jsgui.call_multiple_callback_functions(tasks, function (error, result) {
+                //console.log("All the tasks are done. The first task result is " + result[0]);
+                assert.equal(error, null);
+                assert.equal(result, 20);
+                done();
+            });
+        });
 
         // ================================================================================================================================
         //	                        test different call signatures (i.e. polymorphic versions)
