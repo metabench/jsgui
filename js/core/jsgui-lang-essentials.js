@@ -1387,23 +1387,75 @@ define(function() {
     var fp = functional_polymorphism;
 
     /**
-    * If an object argument passed:
-    * Returns an array containing [key, value] arrays of the object properties.
+    * If an **object** argument passed:
+    * Returns an array containing [key, value] arrays of the object properties:<br />
     * `arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]`
     * 
-    * If a function argument passed:
-    * Returns a function that takes an array parameter among others. This function call will calls in turn the initial function several times,
-    * passing the array items as the parameter (other parameters will be passed "as is").
-    * The array parameter position is 0 by default (i.e. the first parameter), but it can be specified by the param_index parameter.
+    * If a **function** argument passed:
+    * Returns an arrayified version of the function. The arrayified version accepts an array of values instead of single value for some parameter.
+    * For example: `func(a, b) ==> arrayified_func([a], b)`
+    * The original function will be called several times, one time for each value from the array. The result of the arrayified function
+    * will be an array containing the original function return values.
     * 
-    * if the last argument of the calling function is callback function, then the callback function will be called when all the array items are processed
-    * (i.e. all the calling functions are finished). The callback arguments are (null, result), where result is the function calls result array.
-    * The callback function is not passed to the calling function, but the call_multiple_callback_functions() callback is passed instead. 
-    * The calling function must call the callback in order to signal its completion.
+    * By default it arrayifies the first parameter. You can specify the arrayifying parameter index as the first argument of the arrayify() function: <br />
+    * `arrayify(func)  ==>  arrayified_func([a], b, c, d, ...)` <br />
+    * `arrayify(2, func)  ==>  arrayified_func(a, b, [c], d, ...)` 
     * 
+    * You can arrayify an async function as well. If the very last argument passed to the arrayified version is function, then this case is considered 
+    * as async function call. The last parameter is considered as a callback function receiving the async array processing final result. The callback
+    * format is `callback(error, result)`, where `error` is an error object or null, and `result` is the result array.
+    * 
+    * The original async function must call a callback function in turn. The callback function is passed as a last argument to the async function
+    * call, following the usual call_multiple_callback_functions() rules.
     * 
     * @func
+    * @param {number} [param_index = 0] - arrayifing parameter index
+    * @param {function} fn - arrayifing function
     * @memberof module:core/jsgui-lang-essentials
+    * 
+    * @example
+    * 
+    * 
+    * // ------- arrayifing an object: -------
+    * 
+    * arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]
+    * 
+    * 
+    * // ------- arrayifing a function: -------
+    * 
+    * var multiply = function (a, b) {
+    *     return a * b;
+    * };
+    * 
+    * // multiply([a], b):
+    *             
+    * var arrayified_multiply = jsgui.arrayify(multiply); 
+    * 
+    * console.log(arrayified_multiply([1, 5, 10], 2));  // [2, 10, 20]);
+    *             
+    * // multiply(a, [b]):
+    * 
+    * var arrayified_multiply2 = jsgui.arrayify(1, multiply); 
+    * 
+    * console.log(arrayified_multiply2(10, [1, 5, 10])); // [10, 50, 100]);
+    * 
+    * 
+    * // ------- arrayifing an async function: -------
+    * 
+    * var asyncMultiply = function (a, b, cb) {
+    *     setTimeout(function () { cb(null, a * b); }, 1000);
+    * };
+    * 
+    * var arrayified_asyncMultiply = jsgui.arrayify(asyncMultiply); // asyncMultiply([a], b, cb)
+    * 
+    * var callback = function (error, result) {
+    *     console.log(error);  // null
+    *     console.log(result); // [2, 10, 20]);
+    *     done();
+    * };
+    * 
+    * arrayified_asyncMultiply([1, 5, 10], 2, callback);
+    * 
     */
 	var arrayify = fp(function(a, sig) {
         // but when the function has it's last parameter as a function...
@@ -1572,11 +1624,12 @@ define(function() {
 		if (tt == 'function') {
 			var res = fp(function(a, sig) {
 				var that = this;
-				//console.log('mapified fn sig ' + sig);
+				console.log('mapified fn sig ' + sig);
 				if (sig == '[o]') {
 					var map = a[0];
 					each(map, function(i, v) {
-						fn.call(that, i, v);
+					    //fn.call(that, i, v);
+					    target.call(that, i, v);
 					});
 				} else if (sig == '[o,f]') {
 				    var map = a[0];
