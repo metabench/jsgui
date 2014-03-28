@@ -443,140 +443,29 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 			assert.deepEqual(jsgui.arr_trim_undefined([1,2,3]), [1,2,3]);
 		});
 					
-		// -----------------------------------------------------
-		//	functional_polymorphism()
-		// -----------------------------------------------------
-			
-		it("functional_polymorphism() should prepare the function for a polymorphic use", function() {
-
-			assert.equal(jsgui.functional_polymorphism, jsgui.fp);
-
-            var f1 = jsgui.functional_polymorphism(function(a, sig){
-                return a.l + jsgui.stringify(a) + ":" + sig;
-            });
-
-			assert.deepEqual(f1(), "0[]:[]");
-			assert.deepEqual(f1(1), "1[1]:[n]");
-			assert.deepEqual(f1(1,2), "2[1, 2]:[n,n]");
-			assert.deepEqual(f1(1, "a", [null]), '3[1, "a", [null]]:[n,s,a]');
-
-			//assert.deepEqual(f1(1,2,undefined), "2[1, 2]:[n,n]"); -> "3[1, 2]:[n,n]"  !!!
-
-		});
-					
 	    // -----------------------------------------------------
-	    //	arrayify()
+	    //	functional_polymorphism()
 	    // -----------------------------------------------------
 
-		it("arrayify() should ...", function () {
+		it("functional_polymorphism() should prepare the function for a polymorphic use", function () {
 
-		    // sig == '[o]'
+		    assert.equal(jsgui.functional_polymorphism, jsgui.fp);
 
-		    assert.deepEqual(jsgui.arrayify({}), []);
-		    assert.deepEqual(jsgui.arrayify({ a: 1, b: 2 }), [["a", 1], ["b", 2]]);
-
-		    // sig == '[f]'
-
-		    var multiply = function (a, b) {
-		        return a * b;
-		    };
-
-		    var arr_multiply = jsgui.arrayify(multiply);
-
-		    assert.deepEqual(arr_multiply([1, 5, 10], 2), [2, 10, 20]);
-
-		    var arr_multiply2 = jsgui.arrayify(1, multiply);
-
-		    assert.deepEqual(arr_multiply2(10, [1, 5, 10]), [10, 50, 100]);
-
-		    // ===================================================================
-
-
-		    var func1 = jsgui.arrayify(function () {
-		        var args = Array.prototype.slice.call(arguments);
-		        return args;
-		        //return jsgui.stringify(args);
-		        //return args.toString();
+		    var f1 = jsgui.functional_polymorphism(function (a, sig) {
+		        return a.l + jsgui.stringify(a) + ":" + sig;
 		    });
 
-		    //assert.deepEqual(func1(1, 2, "a"), [1, 2, "a"]);
+		    assert.deepEqual(f1(), "0[]:[]");
+		    assert.deepEqual(f1(1), "1[1]:[n]");
+		    assert.deepEqual(f1(1, 2), "2[1, 2]:[n,n]");
+		    assert.deepEqual(f1(1, "a", [null]), '3[1, "a", [null]]:[n,s,a]');
 
-		    //assert.deepEqual(func1([1, 2, "a"]), [[1], [2], ["a"]]);
-
-		    //assert.deepEqual(func1([1, 2, 3], "a", "b"), [[1, "a", "b"], [2, "a", "b"], [3, "a", "b"]]);
-
-
-		    // ===========================================
-
-		    var func2 = jsgui.arrayify(function (a, b, cb) {
-		        var args = Array.prototype.slice.call(arguments);
-		        //console.log('=' + jsgui.stringify(args) + '=');
-		        //console.log('=' + args + '=');
-		        //cb(null, args);
-		        //cb(null, [a, b]);
-		        cb(null, { a: a, b: b });
-		        //return jsgui.stringify(args);
-		        //return args.toString();
-		    });
-
-		    var callback = function () {
-		        var args = Array.prototype.slice.call(arguments);
-		        //return args;
-		        console.log('*' + jsgui.stringify(args) + '*');
-		        return '*' + jsgui.stringify(args) + '*';
-		        //return args.toString();
-		    };
-
-		    //assert.deepEqual(func2([1, 2, "a"], 100, callback), [[1], [2], ["a"]]);
-
-		});
-
-	    // -----------------------------------------------------
-	    //	arrayify() - async1
-	    // -----------------------------------------------------
-
-		it("arrayify() should ...", function (done) {
-
-		    var asyncMultiply = function (a, b, cb) {
-		        setTimeout(function () { cb(null, a * b); }, 1);
-		    };
-
-		    var arr_asyncMultiply = jsgui.arrayify(asyncMultiply);
-
-		    var callback = function (error, result) {
-		        assert.equal(error, null);
-		        assert.deepEqual(result, [2, 10, 20]);
-		        done();
-		    };
-
-		    arr_asyncMultiply([1, 5, 10], 2, callback);
-
-		});
-
-	    // -----------------------------------------------------
-	    //	arrayify() - async2
-	    // -----------------------------------------------------
-
-		it("arrayify() should ...", function (done) {
-
-		    var asyncMultiply = function (a, b, cb) {
-		        setTimeout(function () { cb(null, a * b); }, 1);
-		    };
-
-		    var arr_asyncMultiply = jsgui.arrayify(1, asyncMultiply);
-
-		    var callback = function (error, result) {
-		        assert.equal(error, null);
-		        assert.deepEqual(result, [10, 50, 100]);
-		        done();
-		    };
-
-		    arr_asyncMultiply(10, [1, 5, 10], callback);
+		    //assert.deepEqual(f1(1,2,undefined), "2[1, 2]:[n,n]"); -> "3[1, 2]:[n,n]"  !!!
 
 		});
 
 
-		// -----------------------------------------------------
+	    // -----------------------------------------------------
 		//	clone()
 		// -----------------------------------------------------
 			
