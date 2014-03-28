@@ -607,7 +607,7 @@ but the base class property name used is the rest of the initial property name (
         
             
 <dt>
-    <h4 class="name" id="arrayify"><span class="type-signature">&lt;static> </span>arrayify<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="arrayify"><span class="type-signature">&lt;static> </span>arrayify<span class="signature">(<span class="optional">param_index</span>, fn)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -615,9 +615,22 @@ but the base class property name used is the rest of the initial property name (
     
     
     <div class="description">
-        <p>If an object parameter passed:
-Returns an array containing [key, value] arrays of the object properties.
+        <p>If an <strong>object</strong> argument passed:
+Returns an array containing [key, value] arrays of the object properties:<br />
 <code>arrayify({a: 1, b: 2})  ==&gt; [[&quot;a&quot;, 1], [&quot;b&quot;, 2]]</code></p>
+<p>If a <strong>function</strong> argument passed:
+Returns an arrayified version of the function. The arrayified version accepts an array of values instead of single value for some parameter.
+For example: <code>func(a, b) ==&gt; arrayified_func([a], b)</code>
+The original function will be called several times, one time for each value from the array. The result of the arrayified function
+will be an array containing the original function return values.</p>
+<p>By default it arrayifies the first parameter. You can specify the arrayifying parameter index as the first argument of the arrayify() function: <br />
+<code>arrayify(func)  ==&gt;  arrayified_func([a], b, c, d, ...)</code> <br />
+<code>arrayify(2, func)  ==&gt;  arrayified_func(a, b, [c], d, ...)</code> </p>
+<p>You can arrayify an async function as well. If the very last argument passed to the arrayified version is function, then this case is considered 
+as async function call. The last parameter is considered as a callback function receiving the async array processing final result. The callback
+format is <code>callback(error, result)</code>, where <code>error</code> is an error object or null, and <code>result</code> is the result array.</p>
+<p>The original async function must call a callback function in turn. The callback function is passed as a last argument to the async function
+call, following the usual <a href="jsgui-lang-essentials.html#call_multiple_callback_functions">call_multiple_callback_functions()</a> rules.</p>
     </div>
     
 
@@ -625,6 +638,109 @@ Returns an array containing [key, value] arrays of the object properties.
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>param_index</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+            
+            <td class="description last"><p>arrayifing parameter index</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last"><p>arrayifing function</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -667,6 +783,11 @@ Returns an array containing [key, value] arrays of the object properties.
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// ------- arrayifing an object: -------arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]// ------- arrayifing a function: -------var multiply = function (a, b) {    return a * b;};// multiply([a], b):            var arrayified_multiply = jsgui.arrayify(multiply); console.log(arrayified_multiply([1, 5, 10], 2));  // [2, 10, 20]);            // multiply(a, [b]):var arrayified_multiply2 = jsgui.arrayify(1, multiply); console.log(arrayified_multiply2(10, [1, 5, 10])); // [10, 50, 100]);// ------- arrayifing an async function: -------var asyncMultiply = function (a, b, cb) {    setTimeout(function () { cb(null, a * b); }, 1000);};var arrayified_asyncMultiply = jsgui.arrayify(asyncMultiply); // asyncMultiply([a], b, cb)var callback = function (error, result) {    console.log(error);  // null    console.log(result); // [2, 10, 20]);    done();};arrayified_asyncMultiply([1, 5, 10], 2, callback);</code></pre>
+
     
 </dd>
 
@@ -3604,7 +3725,7 @@ If only one parameter is passed, the extends <code>this</code>.</p>
         
             
 <dt>
-    <h4 class="name" id="mapify"><span class="type-signature">&lt;static> </span>mapify<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mapify"><span class="type-signature">&lt;static> </span>mapify<span class="signature">(fn, <span class="optional">by_property_name</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3612,7 +3733,23 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>If an <strong>array</strong> argument passed: <br />
+Returns an object containing keys and values from the [key, value] pairs of the array:<br />
+<code>mapify([[&quot;a&quot;, 1], [&quot;b&quot;, 2]])  ==&gt; {a: 1, b: 2}</code></p>
+<p>If an <strong>array</strong> and <strong>by_property_name</strong> arguments passed: <br />
+The array is an objects array. The mapify() function gathers values of the (by_property_name) properties. The values will be keys (property names) of the 
+returning object. The values of the returning object will be the objects itself:<br />
+<code>mapify([{ name: &quot;Larry&quot;, age: 21 }, { name: &quot;John&quot;, age: 22 }], &quot;name&quot;)  ==&gt; { Larry: { name: &quot;Larry&quot;, age: 21 }, John: { name: &quot;John&quot;, age: 22 } }</code></p>
+<p>If a <strong>function</strong> argument passed:<br />
+Returns an mapified version of the function. The orginal function receives 2 parameters: key and value. The mapified version receives an object, and
+calls the original function for each key/value pair of the object.</p>
+<p>You can mapify an async function as well. If you pass a function as the second parameter to the mapified version call, then this case is considered 
+as async function call. The second parameter is considered as a callback function receiving the async object processing final result. The callback
+format is <code>callback(error, result)</code>, where <code>error</code> is an error object or null, and <code>result</code> is the result array.</p>
+<p>The original async function must call a callback function in turn. The callback function is passed as a last argument to the async function
+call, following the usual <a href="jsgui-lang-essentials.html#call_multiple_callback_functions">call_multiple_callback_functions()</a> rules.</p>
+<p>So, the mapified function parameters are (object) or (object, function). You can call the mapified function with other parameters type, but in
+this case it will just call the original function (if the parameters number &gt;= 2).</p>
     </div>
     
 
@@ -3620,6 +3757,100 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>mapifying array or function</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>by_property_name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>mapping property name</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3662,6 +3893,11 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// ------- mapify an array: -------mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }// ------- mapify an array by property name: -------mapify([{ name: "Larry", age: 21 }, { name: "John", age: 22 }], "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }// ------- mapify a function: -------var keys = [];var values = [];var addKeyValue = function (key, value) {    keys.push(key);    values.push(value);};var mapified_addKeyValue = jsgui.mapify(addKeyValue);mapified_addKeyValue({ a: 1, b: 2, name: "John" });console.log(keys); // ["a", "b", "name"]console.log(values); // [1, 2, "John"]// ------- mapify an async function: -------var keys = [];var values = [];var asyncAddKeyValue = function (key, value, cb) {    setTimeout(function () {        keys.push(key);        values.push(value);        cb(null, key + "=" + value);    }, 1000);};var callback = function (error, result) {    console.log(result); // ["a=1", "b=2", "name=John"]    //    console.log(keys);   // ["a", "b", "name"]    console.log(values); // [1, 2, "John"]};var mapified_asyncAddKeyValue = jsgui.mapify(asyncAddKeyValue);mapified_asyncAddKeyValue({ a: 1, b: 2, name: "John" }, callback);// ------- call the original function: -------var func = function (a, b, c) {    console.log(a + " " + b + " " + c);  // 1 5 10};var mapified_func = jsgui.mapify(func);mapified_func(1, 5, 10);</code></pre>
+
     
 </dd>
 
@@ -5135,7 +5371,7 @@ Possible results are:</p>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Wed Mar 26 2014 14:05:18 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Mar 28 2014 17:38:28 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
