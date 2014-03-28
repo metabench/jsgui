@@ -1406,7 +1406,7 @@ define(function() {
     * format is `callback(error, result)`, where `error` is an error object or null, and `result` is the result array.
     * 
     * The original async function must call a callback function in turn. The callback function is passed as a last argument to the async function
-    * call, following the usual call_multiple_callback_functions() rules.
+    * call, following the usual [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} rules.
     * 
     * @func
     * @param {number} [param_index = 0] - arrayifing parameter index
@@ -1613,9 +1613,102 @@ define(function() {
 	});
 
     /**
-    * description...
+    * If an **array** argument passed: <br />
+    * Returns an object containing keys and values from the [key, value] pairs of the array:<br />
+    * `mapify([["a", 1], ["b", 2]])  ==> {a: 1, b: 2}`
+    * 
+    * If an **array** and **by_property_name** arguments passed: <br />
+    * The array is an objects array. The mapify() function gathers values of the (by_property_name) properties. The values will be keys (property names) of the 
+    * returning object. The values of the returning object will be the objects itself:<br />
+    * `mapify([{ name: "Larry", age: 21 }, { name: "John", age: 22 }], "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }`
+    * 
+    * If a **function** argument passed:<br />
+    * Returns an mapified version of the function. The orginal function receives 2 parameters: key and value. The mapified version receives an object, and
+    * calls the original function for each key/value pair of the object.
+    *
+    * You can mapify an async function as well. If you pass a function as the second parameter to the mapified version call, then this case is considered 
+    * as async function call. The second parameter is considered as a callback function receiving the async object processing final result. The callback
+    * format is `callback(error, result)`, where `error` is an error object or null, and `result` is the result array.
+    *
+    * The original async function must call a callback function in turn. The callback function is passed as a last argument to the async function
+    * call, following the usual [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} rules.
+    *
+    * So, the mapified function parameters are (object) or (object, function). You can call the mapified function with other parameters type, but in
+    * this case it will just call the original function (if the parameters number >= 2).
+    * 
     * @func
+    * @param {object|function} fn - mapifying array or function
+    * @param {string} [by_property_name] - mapping property name
     * @memberof module:core/jsgui-lang-essentials
+    * 
+    * @example
+    * 
+    * 
+    * // ------- mapify an array: -------
+    * 
+    * mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }
+    * 
+    * 
+    * // ------- mapify an array by property name: -------
+    * 
+    * mapify([{ name: "Larry", age: 21 }, { name: "John", age: 22 }], "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }
+    * 
+    * 
+    * // ------- mapify a function: -------
+    * 
+    * var keys = [];
+    * var values = [];
+    * 
+    * var addKeyValue = function (key, value) {
+    *     keys.push(key);
+    *     values.push(value);
+    * };
+    * 
+    * var mapified_addKeyValue = jsgui.mapify(addKeyValue);
+    * 
+    * mapified_addKeyValue({ a: 1, b: 2, name: "John" });
+    * 
+    * console.log(keys); // ["a", "b", "name"]
+    * console.log(values); // [1, 2, "John"]
+    * 
+    * 
+    * // ------- mapify an async function: -------
+    * 
+    * 
+    * var keys = [];
+    * var values = [];
+    * 
+    * var asyncAddKeyValue = function (key, value, cb) {
+    *     setTimeout(function () {
+    *         keys.push(key);
+    *         values.push(value);
+    *         cb(null, key + "=" + value);
+    *     }, 1000);
+    * };
+    * 
+    * var callback = function (error, result) {
+    *     console.log(result); // ["a=1", "b=2", "name=John"]
+    *     //
+    *     console.log(keys);   // ["a", "b", "name"]
+    *     console.log(values); // [1, 2, "John"]
+    * };
+    * 
+    * var mapified_asyncAddKeyValue = jsgui.mapify(asyncAddKeyValue);
+    * 
+    * mapified_asyncAddKeyValue({ a: 1, b: 2, name: "John" }, callback);
+    * 
+    * 
+    * // ------- call the original function: -------
+    * 
+    * var func = function (a, b, c) {
+    *     console.log(a + " " + b + " " + c);  // 1 5 10
+    * };
+    * 
+    * var mapified_func = jsgui.mapify(func);
+    * 
+    * mapified_func(1, 5, 10);
+    * 
+    * 
     */
     // that target function could take a callback(err, res) parameter.
     //  that means, when calling the function, if the last function is a callback, we can act differently.
@@ -1624,7 +1717,7 @@ define(function() {
 		if (tt == 'function') {
 			var res = fp(function(a, sig) {
 				var that = this;
-				console.log('mapified fn sig ' + sig);
+				//console.log('mapified fn sig ' + sig);
 				if (sig == '[o]') {
 					var map = a[0];
 					each(map, function(i, v) {
