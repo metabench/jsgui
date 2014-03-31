@@ -3668,7 +3668,7 @@ If only one parameter is passed, the extends <code>this</code>.</p>
         
             
 <dt>
-    <h4 class="name" id="ll_get"><span class="type-signature">&lt;static> </span>ll_get<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ll_get"><span class="type-signature">&lt;static> </span>ll_get<span class="signature">(obj, prop_name)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3676,7 +3676,11 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Returns a property value of the object using a qualified (dotted) property name.</p>
+<p>Returns <code>undefined</code> if the property does not exists.</p>
+<p>Throwns an exception if an inner object containing the property does not exists.</p>
+<p>if the object contains an internal object named &quot;_&quot;, then return the value of the internal object property.</p>
+<p>Allows to pass &quot;.&quot; (dot) as the <code>prop_name</code> parameter returning a value of the '.' property for the object or internal &quot;_&quot; object (if the value exists).</p>
     </div>
     
 
@@ -3684,6 +3688,77 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>object</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>prop_name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>property name</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3725,14 +3800,29 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>property value</p>
+</div>
+
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// object itself:jsgui.ll_get({}, "a");  ==> undefinedjsgui.ll_get({ a: 1 }, "a");  ==> 1jsgui.ll_get({ '.': 1 }, ".");  ==> 1jsgui.ll_get({ a: { b: { c: 1 } } }, "a.b.c");  ==> 1jsgui.ll_get({ a: { b: { } } }, "a.b.c");  ==> undefinedjsgui.ll_get({ a: { } }, "a.b.c");  ==> exceptionjsgui.ll_get({ }, "a.b.c");  ==> exception// internal object:jsgui.ll_get({ _ : { '.': 1 } }, ".");  ==> 1jsgui.ll_get({ _ : { a: { b: { c: 1 } } } }, "a.b.c");  ==> 1jsgui.ll_get({ _ : { '.': 1 } }, "a.b.c");  ==> exception</code></pre>
+
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="ll_set"><span class="type-signature">&lt;static> </span>ll_set<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ll_set"><span class="type-signature">&lt;static> </span>ll_set<span class="signature">(obj, prop_name, prop_value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3740,7 +3830,8 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Assigns a property value of the object using a qualified (dotted) property name. Nested sub-objects are created if needed.</p>
+<p>if the object contains an internal object named &quot;_&quot;, then assigns the internal object property.</p>
     </div>
     
 
@@ -3748,6 +3839,100 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>target object</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>prop_name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>property name</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>prop_value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>property value</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3789,7 +3974,22 @@ If only one parameter is passed, the extends <code>this</code>.</p>
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>property value</p>
+</div>
+
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// object itself:var obj1 = {};jsgui.ll_set(obj1, "a", 1);  // obj1 == { a: 1 }var obj2 = {};jsgui.ll_set(obj2, "a.b.c", 1);  // obj2 == { a: { b: { c: 1 } } }var obj3 = { a: { b: { c: 1 } };jsgui.ll_set(obj3, "a.b.c", 100);  // obj3 == { a: { b: { c: 100 } } }// internal object:var obj4 = { _: {}, a: 100 };jsgui.ll_set(obj4, "a", 1);  // obj4 == { _: { a: 1 }, a: 100 }</code></pre>
+
     
 </dd>
 
@@ -4103,7 +4303,7 @@ this case it will just call the original function (if the parameters number &gt;
         
             
 <dt>
-    <h4 class="name" id="set_vals"><span class="type-signature">&lt;static> </span>set_vals<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="set_vals"><span class="type-signature">&lt;static> </span>set_vals<span class="signature">(obj, map)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -4111,7 +4311,7 @@ this case it will just call the original function (if the parameters number &gt;
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Assigns property values from map to obj.</p>
     </div>
     
 
@@ -4119,6 +4319,77 @@ this case it will just call the original function (if the parameters number &gt;
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>target object</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>map</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>source key/value object</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -4160,7 +4431,22 @@ this case it will just call the original function (if the parameters number &gt;
     
     
     
+    <h5>Returns:</h5>
     
+            
+<div class="param-desc">
+    <p>undefined</p>
+</div>
+
+
+
+        
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var obj1 = {};jsgui.set_vals(obj1, { a: 1, b: 2});  // obj1 == { a: 1, b: 2 }var obj2 = { a: 1, b: 2};jsgui.set_vals(obj2, { b: 200, c: 300});  // obj2 == { a: 1, b: 200, c: 300 }</code></pre>
+
     
 </dd>
 
@@ -4175,7 +4461,7 @@ this case it will just call the original function (if the parameters number &gt;
     
     
     <div class="description">
-        <p>Converts a value to JSON string.</p>
+        <p>Outputting a string in a convenient format - currently JSON.</p>
     </div>
     
 
@@ -5442,7 +5728,7 @@ Possible results are:</p>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Mon Mar 31 2014 18:41:11 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Mon Mar 31 2014 20:55:05 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
