@@ -1861,9 +1861,28 @@ define(function() {
 	});
 
     /**
-    * description...
+    * Returns true if all the passed arguments are equals. Performs a "deep equals" for objects and arrays.
+    * 
+    * If one array argiment passed, then returns true if all the array elements are equals.
+    * 
+    * If one other (non-array) argument passed, returns true.
+    * 
+    * If no arguments passed, returns null.
+    * 
     * @func
+    * @param {...*} obj - values to compare.
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    * are_equal(1, 1, 1) => true
+    * are_equal(1, 2, 1) => false
+    *  
+    * are_equal([1, 1, 1]) => true
+    * are_equal([1, 2, 1]) => false
+    *  
+    * are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: "2", b2: 2 }, 3]) => true
+    * are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: 2, b2: 2 }, 3]) => false
+    *  
     */
 	var are_equal = function() {
 		var a = arguments;
@@ -1911,10 +1930,14 @@ define(function() {
 			    });
 			    if (c1 != c2)
 			        return false;
+			    var objects_are_equal = true;
 			    each(merged_key_truth_map, function (i, v) {
-			        if (!jsgui.are_equal(a[0][i], a[1][i]))
-			            return false;
+			        if (!jsgui.are_equal(a[0][i], a[1][i])) {
+			            objects_are_equal = false;
+			            return;
+                    }
 			    });
+			    return objects_are_equal;
 			} else {
 			    return a[0] == a[1];
 			}
