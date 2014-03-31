@@ -804,7 +804,7 @@ define(function() {
 	}
 
     /**
-    * Converts a value to JSON string.
+    * Outputting a string in a convenient format - currently JSON.
     * @func
     * @param {*} obj - value to convert
     * @param {bool} [includeFunctions] - if true, then include functions to the result
