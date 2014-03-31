@@ -529,6 +529,100 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 		});
 
 					
+	    // -----------------------------------------------------
+	    //	are_equal()
+	    // -----------------------------------------------------
+
+		it("are_equal() should ....", function () {
+
+		    // ==============
+		    // a.length == 0
+		    // ==============
+
+		    assert.equal(jsgui.are_equal(), null);
+
+		    // =====================
+		    // a.length == 1, array
+		    // =====================
+
+		    assert.equal(jsgui.are_equal([]), true);
+		    assert.equal(jsgui.are_equal([false]), true);
+
+		    assert.equal(jsgui.are_equal([1, 1]), true);
+		    assert.equal(jsgui.are_equal([1, 2]), false);
+		    assert.equal(jsgui.are_equal([1, "1"]), false);
+		    assert.equal(jsgui.are_equal(["1", "1"]), true);
+
+		    assert.equal(jsgui.are_equal([1, 1, 1, 1, 1, 1, 1]), true);
+		    assert.equal(jsgui.are_equal([1, 1, 1, 1, 1, 2, 1]), false);
+
+		    // =========================
+		    // a.length == 1, not array
+		    // =========================
+
+		    assert.equal(jsgui.are_equal(null), true);
+		    assert.equal(jsgui.are_equal(undefined), true);
+		    assert.equal(jsgui.are_equal(0), true);
+		    assert.equal(jsgui.are_equal(1), true);
+		    assert.equal(jsgui.are_equal(false), true);
+		    assert.equal(jsgui.are_equal(true), true);
+		    assert.equal(jsgui.are_equal(""), true);
+		    assert.equal(jsgui.are_equal("abc"), true);
+
+            // ==============
+		    // a.length == 2
+		    // ==============
+
+		    assert.equal(jsgui.are_equal(undefined, undefined), true);
+		    assert.equal(jsgui.are_equal(null, null), true);
+		    assert.equal(jsgui.are_equal(0, 0), true);
+		    assert.equal(jsgui.are_equal(1, 1), true);
+		    assert.equal(jsgui.are_equal("", ""), true);
+		    assert.equal(jsgui.are_equal("abc", "abc"), true);
+		    assert.equal(jsgui.are_equal(false, false), true);
+		    assert.equal(jsgui.are_equal(true, true), true);
+
+		    assert.equal(jsgui.are_equal("0", 0), false);
+		    assert.equal(jsgui.are_equal(0, "0"), false);
+		    assert.equal(jsgui.are_equal("", 0), false);
+		    assert.equal(jsgui.are_equal(true, false), false);
+		    assert.equal(jsgui.are_equal(false, true), false);
+		    assert.equal(jsgui.are_equal(setInterval, setTimeout), false);
+
+            // arrays
+
+		    assert.equal(jsgui.are_equal([], []), true);
+		    assert.equal(jsgui.are_equal([1, "2", 3], [1, "2", 3]), true);
+		    assert.equal(jsgui.are_equal([1, "2", 3], [1, 2, 3]), false);
+		    assert.equal(jsgui.are_equal([1, ["2", 2], 3], [1, ["2", 2], 3]), true);
+		    assert.equal(jsgui.are_equal([1, ["2", 2], 3], [1, [2, 2], 3]), false);
+
+		    assert.equal(jsgui.are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: "2", b2: 2 }, 3]), true);
+		    assert.equal(jsgui.are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: 2, b2: 2 }, 3]), false);
+
+		    // objects
+
+		    assert.equal(jsgui.are_equal({}, {}), true);
+		    assert.equal(jsgui.are_equal({ a: 1, b: "2", c: 3 }, { a: 1, b: "2", c: 3 }), true);
+
+		    assert.equal(jsgui.are_equal({ a: 1, b: "2", c: 3 }, { a: 1, b: 3, c: 3 }), false);
+		    assert.equal(jsgui.are_equal({x: 100, c: 300, b: null}, { a: 1, b: "2", c: 3 }), false);
+
+		    assert.equal(jsgui.are_equal({ a: 1, b: { b1: "2", b2: 2 }, c: 3 }, { a: 1, b: { b1: "2", b2: 2 }, c: 3 }), true);
+		    assert.equal(jsgui.are_equal({ a: 1, b: { b1: "2", b2: 2 }, c: 3 }, { a: 1, b: { b1: 2, b2: 2 }, c: 3 }), false);
+
+		    assert.equal(jsgui.are_equal({ a: 1, b: [{ b1: "2", b2: 2 }], c: 3 }, { a: 1, b: [{ b1: "2", b2: 2 }], c: 3 }), true);
+		    assert.equal(jsgui.are_equal({ a: 1, b: [{ b1: "2", b2: 2 }], c: 3 }, { a: 1, b: [{ b1: 2, b2: 2 }], c: 3 }), false);
+
+		    // ==============
+		    // a.length > 2
+		    // ==============
+
+		    assert.equal(jsgui.are_equal(1, 1, 1, 1, 1, 1, 1), true);
+		    assert.equal(jsgui.are_equal(1, 1, 1, 1, 1, 2, 1), false);
+
+		});
+
 
 	});
 
