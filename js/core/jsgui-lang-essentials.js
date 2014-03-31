@@ -1966,10 +1966,10 @@ define(function() {
     * @example
     *  
     *  var obj1 = {};
-    *  jsgui.set_vals(obj1, { a: 1, b: 2});  // obj1 == { a: 1, b: 2}
+    *  jsgui.set_vals(obj1, { a: 1, b: 2});  // obj1 == { a: 1, b: 2 }
     *  
     *  var obj2 = { a: 1, b: 2};
-    *  jsgui.set_vals(obj2, { b: 200, c: 300});  // obj2 == { a: 1, b: 200, c: 300}
+    *  jsgui.set_vals(obj2, { b: 200, c: 300});  // obj2 == { a: 1, b: 200, c: 300 }
     *  
     */
 	var set_vals = function(obj, map) {
@@ -1980,9 +1980,33 @@ define(function() {
 	
 
     /**
-    * description...
+    * Assigns a property value of the object using a qualified (dotted) property name. Nested sub-objects are created if needed.
+    *
+    * if the object contains an internal object named "_", then assigns the internal object property.
+    *
     * @func
+    * @param {object} obj - target object
+    * @param {string} prop_name - property name
+    * @param {*} prop_value - property value
+    * @returns property value
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  // object itself:
+    *  
+    *  var obj1 = {};
+    *  jsgui.ll_set(obj1, "a", 1);  // obj1 == { a: 1 }
+    *  
+    *  var obj2 = {};
+    *  jsgui.ll_set(obj2, "a.b.c", 1);  // obj2 == { a: { b: { c: 1 } } }
+    *  
+    *  var obj3 = { a: { b: { c: 1 } };
+    *  jsgui.ll_set(obj3, "a.b.c", 100);  // obj3 == { a: { b: { c: 100 } } }
+    *  
+    *  // internal object:
+    *  
+    *  var obj4 = { _: {}, a: 100 };
+    *  jsgui.ll_set(obj4, "a", 1);  // obj4 == { _: { a: 1 }, a: 100 }
     */
 	var ll_set = function(obj, prop_name, prop_value) {
 		// not setting sub-properties specifically. sub-properties are
@@ -2059,9 +2083,40 @@ define(function() {
 	
 
     /**
-    * description...
+    * Returns a property value of the object using a qualified (dotted) property name.
+    *
+    * Returns `undefined` if the property does not exists.
+    *
+    * Throwns an exception if an inner object containing the property does not exists.
+    *
+    * if the object contains an internal object named "_", then return the value of the internal object property.
+    *
+    * Allows to pass "." (dot) as the `prop_name` parameter returning a value of the '.' property for the object or internal "_" object (if the value exists).
+    *
     * @func
+    * @param {object} obj - object
+    * @param {string} prop_name - property name
+    * @returns property value
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  // object itself:
+    *  
+    *  jsgui.ll_get({}, "a");  ==> undefined
+    *  jsgui.ll_get({ a: 1 }, "a");  ==> 1
+    *  jsgui.ll_get({ '.': 1 }, ".");  ==> 1
+    *
+    *  jsgui.ll_get({ a: { b: { c: 1 } } }, "a.b.c");  ==> 1
+    *  jsgui.ll_get({ a: { b: { } } }, "a.b.c");  ==> undefined
+    *  jsgui.ll_get({ a: { } }, "a.b.c");  ==> exception
+    *  jsgui.ll_get({ }, "a.b.c");  ==> exception
+    *  
+    *  // internal object:
+    *  
+    *  jsgui.ll_get({ _ : { '.': 1 } }, ".");  ==> 1
+    *  jsgui.ll_get({ _ : { a: { b: { c: 1 } } } }, "a.b.c");  ==> 1
+    *  jsgui.ll_get({ _ : { '.': 1 } }, "a.b.c");  ==> exception
+    *
     */
 	var ll_get = function(a0, a1) {
 

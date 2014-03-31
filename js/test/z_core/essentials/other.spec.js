@@ -645,6 +645,92 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 
 		});
 
+	    // -----------------------------------------------------
+	    //	ll_set()
+	    // -----------------------------------------------------
+
+		it("ll_set() should set a value of a property by the qualified (dotted) name.", function () {
+
+		    function _ll_set(obj, prop_name, prop_value) {
+		        jsgui.ll_set(obj, prop_name, prop_value);
+		        return obj;
+		    }
+
+		    // obj
+
+		    assert.deepEqual(_ll_set({}, "a", 1), { a: 1 });
+		    assert.deepEqual(_ll_set({}, "a.b.c", 1), { a: { b: { c: 1 } } });
+
+		    assert.deepEqual(_ll_set({ a: {} }, "a.b.c", 100), { a: { b: { c: 100 } } });
+		    assert.deepEqual(_ll_set({ a: { b: {} } }, "a.b.c", 100), { a: { b: { c: 100 } } });
+		    assert.deepEqual(_ll_set({ a: { b: { c: 1 } } }, "a.b.c", 100), { a: { b: { c: 100 } } });
+
+		    // obj._
+
+		    assert.deepEqual(_ll_set({ _: {} }, "a", 1), { _: { a: 1 } });
+		    assert.deepEqual(_ll_set({ _: {} }, "a.b.c", 1), { _: { a: { b: { c: 1 } } } });
+
+		    assert.deepEqual(_ll_set({ _: { a: {} } }, "a.b.c", 100), { _: { a: { b: { c: 100 } } } });
+		    assert.deepEqual(_ll_set({ _: { a: { b: {} } } }, "a.b.c", 100), { _: { a: { b: { c: 100 } } } });
+		    assert.deepEqual(_ll_set({ _: { a: { b: { c: 1 } } } }, "a.b.c", 100), { _: { a: { b: { c: 100 } } } });
+
+
+		    assert.deepEqual(_ll_set({ _: {}, a: 100 }, "a", 1), { _: { a: 1 }, a: 100 });
+
+		});
+
+	    // -----------------------------------------------------
+	    //	ll_get()
+	    // -----------------------------------------------------
+
+		it("ll_get() should get a value of a property by the qualified (dotted) name.", function () {
+
+		    // obj
+
+		    assert.deepEqual(jsgui.ll_get({}, "a"), undefined);
+		    assert.deepEqual(jsgui.ll_get({a:1}, "a"), 1);
+
+		    assert.deepEqual(jsgui.ll_get({ }, "."), undefined);
+		    assert.deepEqual(jsgui.ll_get({ '.': "dot" }, "."), "dot");
+
+		    assert.deepEqual(jsgui.ll_get({ a: { b: { c: 100 } } }, "a.b.c"), 100);
+
+		    var exception_thrown = false;
+		    try {
+		        jsgui.ll_get({}, "a.b.c");
+		    } catch (ex) {
+		        exception_thrown = true;
+		    }
+		    assert.ok(exception_thrown);
+
+		    assert.deepEqual(jsgui.ll_get({ a: { b: { } } }, "a.b.c"), undefined);
+
+		    // obj._
+
+		    assert.deepEqual(jsgui.ll_get({ _: {} }, "a"), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: {}, a: 1 }, "a"), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: { a: 1 } }, "a"), 1);
+		    assert.deepEqual(jsgui.ll_get({ _: { a: 1 }, a: 100 }, "a"), 1);
+
+		    assert.deepEqual(jsgui.ll_get({ _: {} }, "."), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: {}, '.': 1 }, "."), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: { '.': 1 } }, "."), 1);
+		    assert.deepEqual(jsgui.ll_get({ _: { '.': 1 }, '.': 100 }, "."), 1);
+
+
+		    assert.deepEqual(jsgui.ll_get({ _: { a: { b: { c: 100 } } } }, "a.b.c"), 100);
+
+		    var exception_thrown_2 = false;
+		    try {
+		        jsgui.ll_get({ _: {} }, "a.b.c");
+		    } catch (ex) {
+		        exception_thrown_2 = true;
+		    }
+		    assert.ok(exception_thrown_2);
+
+		    assert.deepEqual(jsgui.ll_get({ _: { a: { b: {} } } }, "a.b.c"), undefined);
+		});
+
 	});
 
 });
