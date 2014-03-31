@@ -477,9 +477,16 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 			assert.equal(jsgui.clone(undefined), undefined);
 			assert.equal(jsgui.clone("abc"), "abc");
 
-			assert.deepEqual(jsgui.clone(1), {});      // !!!
-			assert.deepEqual(jsgui.clone(null), {});   // !!!
-			assert.deepEqual(jsgui.clone(true), {});   // !!!
+			assert.deepEqual(jsgui.clone(0), 0);
+			assert.deepEqual(jsgui.clone(1), 1);
+
+			var newNaN = jsgui.clone(NaN);
+			assert.ok(isNaN(newNaN)); // NaN is not equals anything including itself
+
+			assert.deepEqual(jsgui.clone(null), null);
+			assert.deepEqual(jsgui.clone(true), true);
+			assert.deepEqual(jsgui.clone(false), false);
+			assert.deepEqual(jsgui.clone(setInterval), setInterval);
 
             // array
 

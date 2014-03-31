@@ -1786,8 +1786,11 @@ define(function() {
     * - array: an array containing reference-copies of the input array elements
     * - undefined: undefined
     * - string: same string
-    * - object: deep copy of the object
-    * - <mark>other (number, boolean, null etc.): empty object (i.e. {})</mark>
+    * - number: same number
+    * - function: same function reference
+    * - boolean: same boolean value
+    * - null: null
+    * - other (object): deep copy of the object
     *
     * If the second parameter is passed, then returns an array containing the requested number of the clones.
     * @func
@@ -1795,6 +1798,8 @@ define(function() {
     * @param {number} [count] - number of the output values
     * @memberof module:core/jsgui-lang-essentials
     * @example
+    *  clone(1) ==> 1
+    *
     *  clone("abc") ==> "abc"
     *  clone("abc", 3) ==> ["abc", "abc", "abc"]
     *
@@ -1802,7 +1807,6 @@ define(function() {
     *
     *  clone({a: 1, b:{c:2}}) ==> {a: 1, b:{c:2}}
     *
-    *  clone(1) ==> {}
     */
 	// had x_clones folded into it
 	var clone = fp(function(a, sig) {
@@ -1827,7 +1831,15 @@ define(function() {
 			} else if (t == 'undefined') {
 				return undefined;
 			} else if (t == 'string') {
-				return obj;
+			    return obj;
+			} else if (t == 'number') {
+			    return obj;
+			} else if (t == 'function') {
+			    return obj;
+			} else if (t == 'boolean') {
+			    return obj;
+			} else if (t == 'null') {
+			    return obj;
 			} else {
 
 				// extend not cloning the undefined values in the array properly,
