@@ -1,6 +1,8 @@
 
-
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../web/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+};
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
     
 	
 	
@@ -12,11 +14,47 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../web/
 	
 	
 	var Postgres_Server = Resource.extend({
+
+		// Does not seem quite like a Resource with its wide variety of functions.
+
+		// Needs to expose a few things through the Resouce interface.
+		//  May be a somewhat nested interface too.
+
+		// Put could put a database
+		//  If there is the authorization?
+
+		// db.table.id
+		//  reference records like that
+
+		// /schemas/schema/dbs/db/tables/table
+
+
+		//  May need to be more longwinded to avoid ambiguity.
+
+
+		// db/table/id
+		//  Could process three level paths.
+
+
+
+		// schema/db/table/row_key
+
+		// .get('')
+
+		// Ability to interact with a Postgres server as a Resource.
+
+		// Then something
+
+		// Could present a fairly general DB interface.
+		//  Get and set being standardised accress different 
+
+
+
+
+
 		
 		// Connects to a Postgres Server.
 		// Want most functionality through get, set, and meta.get, meta.set.
-
-		
 		
 		
 		'init': function(spec) {
@@ -51,7 +89,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../web/
 			// When it connects, it could get the information about the tables.
 			//  Perhaps this will be done with dbi-postgres though.
 			
-			
+			// Makes use of dbi-postgres, a utility module.
 			
 			
 			pg.connect(cs, function(err, client) {

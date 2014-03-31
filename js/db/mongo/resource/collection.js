@@ -1,9 +1,11 @@
-
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+};
 var Mongo = require('mongodb'), MongoClient = Mongo.MongoClient;
 
 //var Mongo_Server  
 
-define(["../../../core/jsgui-lang-util", "../../../web/resource"], function(jsgui, Resource) {
+define(["../../../core/jsgui-lang-util", "../../../resource/core/resource"], function(jsgui, Resource) {
 	
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
 	var is_defined = jsgui.is_defined, tof = jsgui.tof, stringify = jsgui.stringify, each = jsgui.each;

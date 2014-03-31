@@ -20,7 +20,14 @@ define(["./jsgui-lang-util", './abstract-postgres-parser'], function(jsgui, Abst
 	//  Abstract RDB
 	//   Then translation to Postgres.
 
+	// Will map from the domain model to database models.
+	//  Both to odb models, and to rdb models.
+	//  One model that encompasses both?
+
+	// Want automatic code generation from the domain model.
 	
+	
+
 	
 	
 	

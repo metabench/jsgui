@@ -5,6 +5,10 @@
 //  Do we need to load 3 sepearate files?
 //   Or use an 'all' file within the mongo/resource directory?
 
+// This is the general db resource?
+// Or base class db resource?
+// Or both?
+
 // 
 
 
@@ -38,6 +42,28 @@ define(["module", "path",
 	// The Database-Server would also refer to the database I assume.
 
 	// I think getting this working to a reasonable standard with both Mongo and Postgres would be good.
+	//  Need to tell the difference between base classes and advanced classes.
+	//  Specific classes inherit from base classes
+	//  Advanced classes make use of various specific classes to serve a general case, making use of the correct specific classes
+
+	// So, we could tell an advanced database class to do various things, with a setting being postgres or whatever (alongside the info needed
+	//  to connect to the db. )
+
+	// The base database class would not actually be usable by itself (except possibly in abstract?)
+
+	// Defining a Data Object, with constraints etc is how it can be done.
+	//  Then that gets translated into being an actual database.
+	// Then, we could actually connect the data models once the DB has been persisted (somehow, use the JS data classes for only a partial set of data)
+
+	// Defining the relations between items, or defining items in such a way that they could be persisted as relational.
+
+	// The Authentication Resource would have a node (jsgui) implementation of the database.
+
+
+
+
+
+
 
 	//var Server;
 	
@@ -256,9 +282,13 @@ define(["module", "path",
 					'server': server_info
 				});
 
-
-
 			}
+
+			// Start the specific database
+			//  Then that will have the functionality needed.
+
+			
+
 
 			if (specific) {
 				console.log('has specific db');

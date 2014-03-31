@@ -2,6 +2,25 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
+// Used to represent a database.
+//  Want a class for a domain model as well.
+
+// Domain model gets created, then that gets used to create database models.
+//  Possibly domain model -> Abstract RDB -> Abstract Postgres
+
+// I think a user interface to specify the domain model would help a lot...
+//  but then I'd want to use resources etc to save it.
+
+// Perhaps making authentication without all the ORM.
+//  The ORM project seems big, it may be best to put that on hold for the moment.
+
+// Get the more basic service / platform set up, it can specifically use Postgres / Mongo / whatever.
+//  Should be relatively simple components that can be swapped with more complex ones.
+
+// Naming of them... they won't exactly be THE classes to do this, but maybe earlier versions.
+//  Name them sensibly and then replace in the future.
+
+
 
 define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 	
