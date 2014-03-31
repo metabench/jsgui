@@ -804,7 +804,7 @@ define(function() {
 	}
 
     /**
-    * Converts a value to JSON string.
+    * Outputting a string in a convenient format - currently JSON.
     * @func
     * @param {*} obj - value to convert
     * @param {bool} [includeFunctions] - if true, then include functions to the result
@@ -1786,8 +1786,11 @@ define(function() {
     * - array: an array containing reference-copies of the input array elements
     * - undefined: undefined
     * - string: same string
-    * - object: deep copy of the object
-    * - <mark>other (number, boolean, null etc.): empty object (i.e. {})</mark>
+    * - number: same number
+    * - function: same function reference
+    * - boolean: same boolean value
+    * - null: null
+    * - other (object): deep copy of the object
     *
     * If the second parameter is passed, then returns an array containing the requested number of the clones.
     * @func
@@ -1795,6 +1798,8 @@ define(function() {
     * @param {number} [count] - number of the output values
     * @memberof module:core/jsgui-lang-essentials
     * @example
+    *  clone(1) ==> 1
+    *
     *  clone("abc") ==> "abc"
     *  clone("abc", 3) ==> ["abc", "abc", "abc"]
     *
@@ -1802,7 +1807,6 @@ define(function() {
     *
     *  clone({a: 1, b:{c:2}}) ==> {a: 1, b:{c:2}}
     *
-    *  clone(1) ==> {}
     */
 	// had x_clones folded into it
 	var clone = fp(function(a, sig) {
@@ -1827,7 +1831,15 @@ define(function() {
 			} else if (t == 'undefined') {
 				return undefined;
 			} else if (t == 'string') {
-				return obj;
+			    return obj;
+			} else if (t == 'number') {
+			    return obj;
+			} else if (t == 'function') {
+			    return obj;
+			} else if (t == 'boolean') {
+			    return obj;
+			} else if (t == 'null') {
+			    return obj;
 			} else {
 
 				// extend not cloning the undefined values in the array properly,
@@ -1849,9 +1861,28 @@ define(function() {
 	});
 
     /**
-    * description...
+    * Returns true if all the passed arguments are equals. Performs a "deep equals" for objects and arrays.
+    * 
+    * If one array argiment passed, then returns true if all the array elements are equals.
+    * 
+    * If one other (non-array) argument passed, returns true.
+    * 
+    * If no arguments passed, returns null.
+    * 
     * @func
+    * @param {...*} obj - values to compare.
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    * are_equal(1, 1, 1) => true
+    * are_equal(1, 2, 1) => false
+    *  
+    * are_equal([1, 1, 1]) => true
+    * are_equal([1, 2, 1]) => false
+    *  
+    * are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: "2", b2: 2 }, 3]) => true
+    * are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: 2, b2: 2 }, 3]) => false
+    *  
     */
 	var are_equal = function() {
 		var a = arguments;
@@ -1884,25 +1915,31 @@ define(function() {
 				}
 				;
 			} else if (typeof a[0] == 'object') {
-				// get the dict of keys for both, compare the lengths, (compare
-				// the keys), get merged key map
-				var merged_key_truth_map = {};
-				var c1 = 0;
-				each(a[0], function(i, v) {
-					merged_key_truth_map[i] = true;
-					c1++;
-				});
-				var c2 = 0;
-				each(a[1], function(i, v) {
-					merged_key_truth_map[i] = true;
-					c2++;
-				});
-				if (c1 != c2)
-					return false;
-				each(merged_key_truth_map, function(i, v) {
-					if (!jsgui.are_equal(a[0][i], a[1][i]))
-						return false;
-				});
+			    // get the dict of keys for both, compare the lengths, (compare
+			    // the keys), get merged key map
+			    var merged_key_truth_map = {};
+			    var c1 = 0;
+			    each(a[0], function (i, v) {
+			        merged_key_truth_map[i] = true;
+			        c1++;
+			    });
+			    var c2 = 0;
+			    each(a[1], function (i, v) {
+			        merged_key_truth_map[i] = true;
+			        c2++;
+			    });
+			    if (c1 != c2)
+			        return false;
+			    var objects_are_equal = true;
+			    each(merged_key_truth_map, function (i, v) {
+			        if (!jsgui.are_equal(a[0][i], a[1][i])) {
+			            objects_are_equal = false;
+			            return;
+                    }
+			    });
+			    return objects_are_equal;
+			} else {
+			    return a[0] == a[1];
 			}
 		}
 		if (a.length > 2) {
@@ -1920,9 +1957,20 @@ define(function() {
 
 	
     /**
-    * description...
+    * Assigns property values from map to obj.
     * @func
+    * @param {object} obj - target object
+    * @param {object} map - source key/value object
+    * @returns undefined
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  var obj1 = {};
+    *  jsgui.set_vals(obj1, { a: 1, b: 2});  // obj1 == { a: 1, b: 2 }
+    *  
+    *  var obj2 = { a: 1, b: 2};
+    *  jsgui.set_vals(obj2, { b: 200, c: 300});  // obj2 == { a: 1, b: 200, c: 300 }
+    *  
     */
 	var set_vals = function(obj, map) {
 		each(map, function(i, v) {
@@ -1932,9 +1980,33 @@ define(function() {
 	
 
     /**
-    * description...
+    * Assigns a property value of the object using a qualified (dotted) property name. Nested sub-objects are created if needed.
+    *
+    * if the object contains an internal object named "_", then assigns the internal object property.
+    *
     * @func
+    * @param {object} obj - target object
+    * @param {string} prop_name - property name
+    * @param {*} prop_value - property value
+    * @returns property value
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  // object itself:
+    *  
+    *  var obj1 = {};
+    *  jsgui.ll_set(obj1, "a", 1);  // obj1 == { a: 1 }
+    *  
+    *  var obj2 = {};
+    *  jsgui.ll_set(obj2, "a.b.c", 1);  // obj2 == { a: { b: { c: 1 } } }
+    *  
+    *  var obj3 = { a: { b: { c: 1 } };
+    *  jsgui.ll_set(obj3, "a.b.c", 100);  // obj3 == { a: { b: { c: 100 } } }
+    *  
+    *  // internal object:
+    *  
+    *  var obj4 = { _: {}, a: 100 };
+    *  jsgui.ll_set(obj4, "a", 1);  // obj4 == { _: { a: 1 }, a: 100 }
     */
 	var ll_set = function(obj, prop_name, prop_value) {
 		// not setting sub-properties specifically. sub-properties are
@@ -2011,9 +2083,40 @@ define(function() {
 	
 
     /**
-    * description...
+    * Returns a property value of the object using a qualified (dotted) property name.
+    *
+    * Returns `undefined` if the property does not exists.
+    *
+    * Throwns an exception if an inner object containing the property does not exists.
+    *
+    * if the object contains an internal object named "_", then return the value of the internal object property.
+    *
+    * Allows to pass "." (dot) as the `prop_name` parameter returning a value of the '.' property for the object or internal "_" object (if the value exists).
+    *
     * @func
+    * @param {object} obj - object
+    * @param {string} prop_name - property name
+    * @returns property value
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  // object itself:
+    *  
+    *  jsgui.ll_get({}, "a");  ==> undefined
+    *  jsgui.ll_get({ a: 1 }, "a");  ==> 1
+    *  jsgui.ll_get({ '.': 1 }, ".");  ==> 1
+    *
+    *  jsgui.ll_get({ a: { b: { c: 1 } } }, "a.b.c");  ==> 1
+    *  jsgui.ll_get({ a: { b: { } } }, "a.b.c");  ==> undefined
+    *  jsgui.ll_get({ a: { } }, "a.b.c");  ==> exception
+    *  jsgui.ll_get({ }, "a.b.c");  ==> exception
+    *  
+    *  // internal object:
+    *  
+    *  jsgui.ll_get({ _ : { '.': 1 } }, ".");  ==> 1
+    *  jsgui.ll_get({ _ : { a: { b: { c: 1 } } } }, "a.b.c");  ==> 1
+    *  jsgui.ll_get({ _ : { '.': 1 } }, "a.b.c");  ==> exception
+    *
     */
 	var ll_get = function(a0, a1) {
 

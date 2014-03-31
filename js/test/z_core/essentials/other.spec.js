@@ -477,9 +477,16 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 			assert.equal(jsgui.clone(undefined), undefined);
 			assert.equal(jsgui.clone("abc"), "abc");
 
-			assert.deepEqual(jsgui.clone(1), {});      // !!!
-			assert.deepEqual(jsgui.clone(null), {});   // !!!
-			assert.deepEqual(jsgui.clone(true), {});   // !!!
+			assert.deepEqual(jsgui.clone(0), 0);
+			assert.deepEqual(jsgui.clone(1), 1);
+
+			var newNaN = jsgui.clone(NaN);
+			assert.ok(isNaN(newNaN)); // NaN is not equals anything including itself
+
+			assert.deepEqual(jsgui.clone(null), null);
+			assert.deepEqual(jsgui.clone(true), true);
+			assert.deepEqual(jsgui.clone(false), false);
+			assert.deepEqual(jsgui.clone(setInterval), setInterval);
 
             // array
 
@@ -522,6 +529,207 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 		});
 
 					
+	    // -----------------------------------------------------
+	    //	are_equal()
+	    // -----------------------------------------------------
+
+		it("are_equal() should return true if all the arguments are equals.", function () {
+
+		    // ==============
+		    // a.length == 0
+		    // ==============
+
+		    assert.equal(jsgui.are_equal(), null);
+
+		    // =====================
+		    // a.length == 1, array
+		    // =====================
+
+		    assert.equal(jsgui.are_equal([]), true);
+		    assert.equal(jsgui.are_equal([false]), true);
+
+		    assert.equal(jsgui.are_equal([1, 1]), true);
+		    assert.equal(jsgui.are_equal([1, 2]), false);
+		    assert.equal(jsgui.are_equal([1, "1"]), false);
+		    assert.equal(jsgui.are_equal(["1", "1"]), true);
+
+		    assert.equal(jsgui.are_equal([1, 1, 1, 1, 1, 1, 1]), true);
+		    assert.equal(jsgui.are_equal([1, 1, 1, 1, 1, 2, 1]), false);
+
+		    // =========================
+		    // a.length == 1, not array
+		    // =========================
+
+		    assert.equal(jsgui.are_equal(null), true);
+		    assert.equal(jsgui.are_equal(undefined), true);
+		    assert.equal(jsgui.are_equal(0), true);
+		    assert.equal(jsgui.are_equal(1), true);
+		    assert.equal(jsgui.are_equal(false), true);
+		    assert.equal(jsgui.are_equal(true), true);
+		    assert.equal(jsgui.are_equal(""), true);
+		    assert.equal(jsgui.are_equal("abc"), true);
+
+            // ==============
+		    // a.length == 2
+		    // ==============
+
+		    assert.equal(jsgui.are_equal(undefined, undefined), true);
+		    assert.equal(jsgui.are_equal(null, null), true);
+		    assert.equal(jsgui.are_equal(0, 0), true);
+		    assert.equal(jsgui.are_equal(1, 1), true);
+		    assert.equal(jsgui.are_equal("", ""), true);
+		    assert.equal(jsgui.are_equal("abc", "abc"), true);
+		    assert.equal(jsgui.are_equal(false, false), true);
+		    assert.equal(jsgui.are_equal(true, true), true);
+
+		    assert.equal(jsgui.are_equal("0", 0), false);
+		    assert.equal(jsgui.are_equal(0, "0"), false);
+		    assert.equal(jsgui.are_equal("", 0), false);
+		    assert.equal(jsgui.are_equal(true, false), false);
+		    assert.equal(jsgui.are_equal(false, true), false);
+		    assert.equal(jsgui.are_equal(setInterval, setTimeout), false);
+
+            // arrays
+
+		    assert.equal(jsgui.are_equal([], []), true);
+		    assert.equal(jsgui.are_equal([1, "2", 3], [1, "2", 3]), true);
+		    assert.equal(jsgui.are_equal([1, "2", 3], [1, 2, 3]), false);
+		    assert.equal(jsgui.are_equal([1, ["2", 2], 3], [1, ["2", 2], 3]), true);
+		    assert.equal(jsgui.are_equal([1, ["2", 2], 3], [1, [2, 2], 3]), false);
+
+		    assert.equal(jsgui.are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: "2", b2: 2 }, 3]), true);
+		    assert.equal(jsgui.are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: 2, b2: 2 }, 3]), false);
+
+		    // objects
+
+		    assert.equal(jsgui.are_equal({}, {}), true);
+		    assert.equal(jsgui.are_equal({ a: 1, b: "2", c: 3 }, { a: 1, b: "2", c: 3 }), true);
+
+		    assert.equal(jsgui.are_equal({ a: 1, b: "2", c: 3 }, { a: 1, b: 3, c: 3 }), false);
+		    assert.equal(jsgui.are_equal({x: 100, c: 300, b: null}, { a: 1, b: "2", c: 3 }), false);
+
+		    assert.equal(jsgui.are_equal({ a: 1, b: { b1: "2", b2: 2 }, c: 3 }, { a: 1, b: { b1: "2", b2: 2 }, c: 3 }), true);
+		    assert.equal(jsgui.are_equal({ a: 1, b: { b1: "2", b2: 2 }, c: 3 }, { a: 1, b: { b1: 2, b2: 2 }, c: 3 }), false);
+
+		    assert.equal(jsgui.are_equal({ a: 1, b: [{ b1: "2", b2: 2 }], c: 3 }, { a: 1, b: [{ b1: "2", b2: 2 }], c: 3 }), true);
+		    assert.equal(jsgui.are_equal({ a: 1, b: [{ b1: "2", b2: 2 }], c: 3 }, { a: 1, b: [{ b1: 2, b2: 2 }], c: 3 }), false);
+
+		    // ==============
+		    // a.length > 2
+		    // ==============
+
+		    assert.equal(jsgui.are_equal(1, 1, 1, 1, 1, 1, 1), true);
+		    assert.equal(jsgui.are_equal(1, 1, 1, 1, 1, 2, 1), false);
+
+		});
+
+	    // -----------------------------------------------------
+	    //	set_vals()
+	    // -----------------------------------------------------
+
+		it("set_vals() should set target object properties from the source map.", function () {
+
+		    function _set_vals(obj, map) {
+		        jsgui.set_vals(obj, map);
+		        return obj;
+		    }
+
+		    // most probably jsgui.set_vals() is not intended for the arrays..
+		    //assert.deepEqual(_set_vals([], []), []);
+		    //assert.deepEqual(_set_vals([], [3, 2, 1]), [3, 2, 1]);
+		    //assert.deepEqual(_set_vals([1, 2, 3, 4, 5, 6, 7], [3, 2, 1]), [3, 2, 1, 4, 5, 6, 7]);
+
+		    assert.deepEqual(_set_vals({}, {}), {});
+		    assert.deepEqual(_set_vals({}, { a: 1, b: 2 }), { a: 1, b: 2 });
+		    assert.deepEqual(_set_vals({ x: 100, y: 200 }, { a: 1, b: 2 }), { a: 1, b: 2, x: 100, y: 200 });
+
+		});
+
+	    // -----------------------------------------------------
+	    //	ll_set()
+	    // -----------------------------------------------------
+
+		it("ll_set() should set a value of a property by the qualified (dotted) name.", function () {
+
+		    function _ll_set(obj, prop_name, prop_value) {
+		        jsgui.ll_set(obj, prop_name, prop_value);
+		        return obj;
+		    }
+
+		    // obj
+
+		    assert.deepEqual(_ll_set({}, "a", 1), { a: 1 });
+		    assert.deepEqual(_ll_set({}, "a.b.c", 1), { a: { b: { c: 1 } } });
+
+		    assert.deepEqual(_ll_set({ a: {} }, "a.b.c", 100), { a: { b: { c: 100 } } });
+		    assert.deepEqual(_ll_set({ a: { b: {} } }, "a.b.c", 100), { a: { b: { c: 100 } } });
+		    assert.deepEqual(_ll_set({ a: { b: { c: 1 } } }, "a.b.c", 100), { a: { b: { c: 100 } } });
+
+		    // obj._
+
+		    assert.deepEqual(_ll_set({ _: {} }, "a", 1), { _: { a: 1 } });
+		    assert.deepEqual(_ll_set({ _: {} }, "a.b.c", 1), { _: { a: { b: { c: 1 } } } });
+
+		    assert.deepEqual(_ll_set({ _: { a: {} } }, "a.b.c", 100), { _: { a: { b: { c: 100 } } } });
+		    assert.deepEqual(_ll_set({ _: { a: { b: {} } } }, "a.b.c", 100), { _: { a: { b: { c: 100 } } } });
+		    assert.deepEqual(_ll_set({ _: { a: { b: { c: 1 } } } }, "a.b.c", 100), { _: { a: { b: { c: 100 } } } });
+
+
+		    assert.deepEqual(_ll_set({ _: {}, a: 100 }, "a", 1), { _: { a: 1 }, a: 100 });
+
+		});
+
+	    // -----------------------------------------------------
+	    //	ll_get()
+	    // -----------------------------------------------------
+
+		it("ll_get() should get a value of a property by the qualified (dotted) name.", function () {
+
+		    // obj
+
+		    assert.deepEqual(jsgui.ll_get({}, "a"), undefined);
+		    assert.deepEqual(jsgui.ll_get({a:1}, "a"), 1);
+
+		    assert.deepEqual(jsgui.ll_get({ }, "."), undefined);
+		    assert.deepEqual(jsgui.ll_get({ '.': "dot" }, "."), "dot");
+
+		    assert.deepEqual(jsgui.ll_get({ a: { b: { c: 100 } } }, "a.b.c"), 100);
+
+		    var exception_thrown = false;
+		    try {
+		        jsgui.ll_get({}, "a.b.c");
+		    } catch (ex) {
+		        exception_thrown = true;
+		    }
+		    assert.ok(exception_thrown);
+
+		    assert.deepEqual(jsgui.ll_get({ a: { b: { } } }, "a.b.c"), undefined);
+
+		    // obj._
+
+		    assert.deepEqual(jsgui.ll_get({ _: {} }, "a"), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: {}, a: 1 }, "a"), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: { a: 1 } }, "a"), 1);
+		    assert.deepEqual(jsgui.ll_get({ _: { a: 1 }, a: 100 }, "a"), 1);
+
+		    assert.deepEqual(jsgui.ll_get({ _: {} }, "."), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: {}, '.': 1 }, "."), undefined);
+		    assert.deepEqual(jsgui.ll_get({ _: { '.': 1 } }, "."), 1);
+		    assert.deepEqual(jsgui.ll_get({ _: { '.': 1 }, '.': 100 }, "."), 1);
+
+
+		    assert.deepEqual(jsgui.ll_get({ _: { a: { b: { c: 100 } } } }, "a.b.c"), 100);
+
+		    var exception_thrown_2 = false;
+		    try {
+		        jsgui.ll_get({ _: {} }, "a.b.c");
+		    } catch (ex) {
+		        exception_thrown_2 = true;
+		    }
+		    assert.ok(exception_thrown_2);
+
+		    assert.deepEqual(jsgui.ll_get({ _: { a: { b: {} } } }, "a.b.c"), undefined);
+		});
 
 	});
 
