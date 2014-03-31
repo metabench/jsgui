@@ -26,7 +26,23 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		// db.table.id
 		//  reference records like that
 
-		// /schemas/schema/dbs/db/tables/table
+		// /dbs/db/schemas/schema/tables/table/records/record/fields/field
+		//  full, unambiguous RESTful address notation.
+
+		// It seems like connecting to the Database is the thing to do.
+		//  The Server could be connected to on its default database, if there is one.
+
+		// It could perhaps do a query to find all databases.
+
+		// Need to deal with the interaction between Server and Database resources.
+		//  Want to have it easy to access one through the other.
+
+
+
+
+
+
+
 
 
 		//  May need to be more longwinded to avoid ambiguity.
@@ -37,7 +53,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-		// schema/db/table/row_key
+		// /db/schema/table/row_key
 
 		// .get('')
 
@@ -55,13 +71,39 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		
 		// Connects to a Postgres Server.
 		// Want most functionality through get, set, and meta.get, meta.set.
+
+		// this.set('schemas');
+
+
 		
 		
 		'init': function(spec) {
 			
 			this._super(spec);
+
+			// The server should connect on starting.
+
+			// Also have login info for the server... username, password etc?
+
+			var meta = this.meta;
+			meta.set('status', 'off');
+
+			if (spec.host) {
+				meta.set('host', spec.host);
+			}
+			if (spec.port) {
+				meta.set('port', spec.port);
+			}
+
+			// Needs a separate connection per DB?
+
+
 			
 			
+		},
+
+		'start': function(callback) {
+			callback(null, true);
 		},
 		
 		// and reconnect?
@@ -80,6 +122,15 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		// Will be on start
 		'connect': function(callback) {
 			var that = this;
+
+			// I think we generally connect to the database rather than the server.
+			//  Or in this case, we connect to postgres, the default database.
+
+			// When connected to that we could run a query that gets all database names.
+
+			
+
+
 			var get_connection_string = function() {
 				var res = 'tcp://' + that.username + ':' + that.port + '@' + that.host + '/' + that.db_name;
 				return res;

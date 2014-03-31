@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
 }
 
 //define(["./jsgui-lang-util", './abstract-resource'], function(jsgui, AR) {
-define(["../core/jsgui-lang-util"], function(jsgui) {
+define(["../../core/jsgui-lang-util"], function(jsgui) {
 	
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
 	var is_defined = jsgui.is_defined, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsgui.tof;
@@ -20,7 +20,9 @@ define(["../core/jsgui-lang-util"], function(jsgui) {
 	// meta.phase
 
 
+	// Or Resource.extend?
 
+	
 
 	var Resource_Collection = Collection.extend({
 		// The link between the abstract resource and the resource on the internet / network / computer.

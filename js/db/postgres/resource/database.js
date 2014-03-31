@@ -2,7 +2,8 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../../../resource/core/collection',
+	'../dbi-postgres'], function(jsgui, pg, Abstract, Resource, Resource_Collection, DBI_Postgres) {
     
 	
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp;
@@ -92,13 +93,20 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			}
 
 			this.meta.set('status', 'off');
-			
+
 			var tables = this.set('tables', new Resource_Collection({
 				'fields': {
 					'name': 'unique string'
 				}
 			}));
-			colls.index_by('name');
+			tables.index_by('name');
+
+			// Need to load the actual collection of tables from the database.
+			//  Would create a Table object for each of them.
+			//  However, the RESTful interface will probably be used through the Server.
+
+			// Possibility of making a Postgres-Web-DB module that does not use the RESTful interface of the Postgres resource?
+			//  Probably better to make the Postgres RESTful resource first.
 
 			// 
 			
@@ -119,6 +127,51 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		*/
 		'connect': function(callback) {
 			
+
+			var that = this, meta = this.meta;
+
+			var username = meta.get('username');
+			var password = meta.get('password');
+
+			var server = meta.get('server');
+			var host = server.meta.get('host');
+
+			var db_name = meta.get('name');
+
+			var get_connection_string = function() {
+
+				//var conString = "postgres://YOURUSER:YOURPASSWORD@localhost/dev";
+				var res = 'postgres://' + username + ':' + password + '@' + host + '/' + db_name;
+				return res;
+			}
+			var cs = get_connection_string();
+			
+			// When it connects, it could get the information about the tables.
+			//  Perhaps this will be done with dbi-postgres though.
+			
+			// Makes use of dbi-postgres, a utility module.
+			
+			
+			pg.connect(cs, function(err, client) {
+
+				if (err) {
+					throw err;
+				} else {
+					client.query("SELECT NOW() as when", function(err, result) {
+						console.log("Row count: %d",result.rows.length);  // 1
+						console.log("Current year: %d", result.rows[0].when.getYear());
+						
+						// a little test.
+						that.client = client;
+						callback.call(null, that);
+						
+					});
+				}
+
+				// So, we are connected now, basically.
+				
+				
+			});	
 		},
 		
 		// disconnect?
@@ -126,6 +179,12 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		'end': function() {
 			pg.end();
 			delete this.client;
+		},
+
+		'start': function(callback) {
+
+			this.connect(callback);
+			//callback(null, true);
 		},
 		
 		// dbi-postgres will do this, making use of the more basic connector API.

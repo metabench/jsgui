@@ -150,6 +150,10 @@ define(["module", "path",
 			if (spec.name) {
 				this.meta.set('name', spec.name);
 			}
+
+			// Set on the database resource?
+			//  Or on the server?
+
 			if (spec.username) {
 				this.meta.set('username', spec.username);
 			}
