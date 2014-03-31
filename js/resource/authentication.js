@@ -89,7 +89,27 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 	//  It will adapt between a type of DB resource (eg Postgres, Mongo), and a resource that provides Authentication.
 	//  It will use the Database resource in order to provide an Authentication resource.
 
+	// Having this connect to a Postgres DB resource...
+	//  Maybe make a specific Postgres-Auth resource.
+	//  That resource could set up the DB for use as Postgres.
+	//   Then when more flexibility is introduced elsewhere, this postgres-auth could call on that.
+
+	// I think a Postgres users DB (resource) would make the most sense.
+	//  Exposes the users system as a resource, uses Postgres internally.
+
+	// Exposes a Web-DB resource.
+	//  Maybe Web-DB-Postgres would be worth doing, it will handle authentication and functionality for a fairly basic website - users can
+	//  save information, maybe just key-value store by user.
+
+	// Web-db-postgres could later be refactored so that it sets up the web db using any database resource. For the moment, having it work using Postgres
+	//  makes sense.
+
 	
+
+
+
+
+
 
 
 

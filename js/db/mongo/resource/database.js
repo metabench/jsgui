@@ -1,10 +1,14 @@
 
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+};
+
 var Mongo = require('mongodb'), MongoClient = Mongo.MongoClient;
 
 //var Mongo_Server  
 
 define(["module", "path",
-	"../../../core/jsgui-lang-util", "../../../web/resource", "../../../web/resource-collection", "./collection"], 
+	"../../../core/jsgui-lang-util", "../../../resource/core/resource", "../../../resource/core/resource-collection", "./collection"], 
 
 	// Or server should have the referece to database? Server is the larger one.
 	//  May need to side-load the server at some point.
@@ -57,6 +61,10 @@ define(["module", "path",
 
 
 	// Perhaps further testing of fields will help, fields that are declares like below?
+
+	// DB gets given a reference to the server.
+
+	// Providing RESTful access to the database.
 
 	
 	var Mongo_Database = Rsce.extend({

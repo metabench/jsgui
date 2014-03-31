@@ -1,6 +1,8 @@
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+};
 
-
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../web/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
     
 	
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp;
@@ -8,6 +10,45 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../web/
 	var get_item_sig = jsgui.get_item_sig, trim_sig_brackets = jsgui.trim_sig_brackets;
 	
 	
+	// This needs to provide resource access to a Postgres database.
+	//  Want get and set to be working through a normal interface.
+	//  Other database systems will also need to work through such an interface.
+
+	// It will need to be possible to set the schema for the database (way the db is set up)
+
+	// Setting up objects that get put through ORM as well.
+	//  Basically want to define the objects.
+	//  User...
+	//   fields within this
+	//  Role
+	//  Setting up the relationships between those objects.
+	//   That could hopefully be done using Data_Objects.
+	//  So, a database resource could be given a Database type Data_Object for it to represent.
+	//   Possibly using an Abstract Database?
+	
+	// Need to get postgres DB operating as a Resource.
+	//  That means setting up a RESTful (like) interface to it.
+
+	// Postgres would also have a 'Schema' Resource.
+
+	// Setting a single field i nthe DB.
+	// db/tables/table/row_id/field
+
+
+
+
+
+
+
+
+
+
+
+	// db.meta.tables
+
+
+	// Extend a base database class?
+
 	
 	var Postgres_Database = Resource.extend({
 
@@ -26,6 +67,40 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../web/
 		'init': function(spec) {
 			
 			this._super(spec);
+
+			this.meta.set('type_levels', ['database', 'rdb', 'postgres']);
+
+			// Meta.get('table_names')
+
+			// At some point it will need to be a flat interface without objects.
+
+			// The database resource will need to be flexible in some ways.
+
+			// Will need to give it the plans for an authentication database, then the resource is going to ensure that database is set up.
+
+			if (spec.server) {
+				this.meta.set('server', spec.server);
+			}
+			if (spec.name) {
+				this.meta.set('name', spec.name);
+			}
+			if (spec.username) {
+				this.meta.set('username', spec.username);
+			}
+			if (spec.password) {
+				this.meta.set('password', spec.password);
+			}
+
+			this.meta.set('status', 'off');
+			
+			var tables = this.set('tables', new Resource_Collection({
+				'fields': {
+					'name': 'unique string'
+				}
+			}));
+			colls.index_by('name');
+
+			// 
 			
 			
 		},
