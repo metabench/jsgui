@@ -1896,25 +1896,27 @@ define(function() {
 				}
 				;
 			} else if (typeof a[0] == 'object') {
-				// get the dict of keys for both, compare the lengths, (compare
-				// the keys), get merged key map
-				var merged_key_truth_map = {};
-				var c1 = 0;
-				each(a[0], function(i, v) {
-					merged_key_truth_map[i] = true;
-					c1++;
-				});
-				var c2 = 0;
-				each(a[1], function(i, v) {
-					merged_key_truth_map[i] = true;
-					c2++;
-				});
-				if (c1 != c2)
-					return false;
-				each(merged_key_truth_map, function(i, v) {
-					if (!jsgui.are_equal(a[0][i], a[1][i]))
-						return false;
-				});
+			    // get the dict of keys for both, compare the lengths, (compare
+			    // the keys), get merged key map
+			    var merged_key_truth_map = {};
+			    var c1 = 0;
+			    each(a[0], function (i, v) {
+			        merged_key_truth_map[i] = true;
+			        c1++;
+			    });
+			    var c2 = 0;
+			    each(a[1], function (i, v) {
+			        merged_key_truth_map[i] = true;
+			        c2++;
+			    });
+			    if (c1 != c2)
+			        return false;
+			    each(merged_key_truth_map, function (i, v) {
+			        if (!jsgui.are_equal(a[0][i], a[1][i]))
+			            return false;
+			    });
+			} else {
+			    return a[0] == a[1];
 			}
 		}
 		if (a.length > 2) {
