@@ -533,7 +533,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 	    //	are_equal()
 	    // -----------------------------------------------------
 
-		it("are_equal() should ....", function () {
+		it("are_equal() should return true if all the arguments are equals.", function () {
 
 		    // ==============
 		    // a.length == 0
@@ -623,6 +623,27 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 
 		});
 
+	    // -----------------------------------------------------
+	    //	set_vals()
+	    // -----------------------------------------------------
+
+		it("set_vals() should set target object properties from the source map.", function () {
+
+		    function _set_vals(obj, map) {
+		        jsgui.set_vals(obj, map);
+		        return obj;
+		    }
+
+		    // most probably jsgui.set_vals() is not intended for the arrays..
+		    //assert.deepEqual(_set_vals([], []), []);
+		    //assert.deepEqual(_set_vals([], [3, 2, 1]), [3, 2, 1]);
+		    //assert.deepEqual(_set_vals([1, 2, 3, 4, 5, 6, 7], [3, 2, 1]), [3, 2, 1, 4, 5, 6, 7]);
+
+		    assert.deepEqual(_set_vals({}, {}), {});
+		    assert.deepEqual(_set_vals({}, { a: 1, b: 2 }), { a: 1, b: 2 });
+		    assert.deepEqual(_set_vals({ x: 100, y: 200 }, { a: 1, b: 2 }), { a: 1, b: 2, x: 100, y: 200 });
+
+		});
 
 	});
 

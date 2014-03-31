@@ -1957,9 +1957,20 @@ define(function() {
 
 	
     /**
-    * description...
+    * Assigns property values from map to obj.
     * @func
+    * @param {object} obj - target object
+    * @param {object} map - source key/value object
+    * @returns undefined
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  var obj1 = {};
+    *  jsgui.set_vals(obj1, { a: 1, b: 2});  // obj1 == { a: 1, b: 2}
+    *  
+    *  var obj2 = { a: 1, b: 2};
+    *  jsgui.set_vals(obj2, { b: 200, c: 300});  // obj2 == { a: 1, b: 200, c: 300}
+    *  
     */
 	var set_vals = function(obj, map) {
 		each(map, function(i, v) {
