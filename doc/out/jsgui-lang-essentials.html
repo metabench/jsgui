@@ -209,7 +209,7 @@ but the base class property name used is the rest of the initial property name (
 <dd>
     
     <div class="description">
-        <p>description...</p>
+        <p><mark>description... TODO</mark></p>
     </div>
     
     
@@ -258,7 +258,7 @@ but the base class property name used is the rest of the initial property name (
 <dd>
     
     <div class="description">
-        <p>description...</p>
+        <p><mark>description... TODO</mark></p>
     </div>
     
     
@@ -2741,7 +2741,7 @@ Possible results are:</p>
         
             
 <dt>
-    <h4 class="name" id="is_arr_of_arrs"><span class="type-signature">&lt;static> </span>is_arr_of_arrs<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="is_arr_of_arrs"><span class="type-signature">&lt;static> </span>is_arr_of_arrs<span class="signature">(obj)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2749,7 +2749,7 @@ Possible results are:</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Returns <code>true</code> if the passed object is an array containing arrays in turn.</p>
     </div>
     
 
@@ -2757,6 +2757,54 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>object to check</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -2799,13 +2847,18 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>jsgui.is_arr_of_arrs([])  ==>  truejsgui.is_arr_of_arrs(["1", "2", "3"])  ==>  falsejsgui.is_arr_of_arrs([[], [1, "2"]])  ==>  true</code></pre>
+
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="is_arr_of_strs"><span class="type-signature">&lt;static> </span>is_arr_of_strs<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="is_arr_of_strs"><span class="type-signature">&lt;static> </span>is_arr_of_strs<span class="signature">(obj)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2813,7 +2866,7 @@ Possible results are:</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Returns <code>true</code> if the passed object is an array containing strings only.</p>
     </div>
     
 
@@ -2821,6 +2874,54 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>object to check</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -2863,13 +2964,18 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>jsgui.is_arr_of_strs("1")  ==>  falsejsgui.is_arr_of_strs([])  ==>  truejsgui.is_arr_of_strs(["1", "2", "3"])  ==>  truejsgui.is_arr_of_strs(["1", 2, "3"])  ==>  false</code></pre>
+
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="is_arr_of_t"><span class="type-signature">&lt;static> </span>is_arr_of_t<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="is_arr_of_t"><span class="type-signature">&lt;static> </span>is_arr_of_t<span class="signature">(obj, type_name)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2877,7 +2983,7 @@ Possible results are:</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Returns <code>true</code> if the passed object is an array containing values of the specified type only.</p>
     </div>
     
 
@@ -2885,6 +2991,77 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>object to check</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type_name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>estimated type name</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -2927,6 +3104,11 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>jsgui.is_arr_of_t("1", "string")  ==>  falsejsgui.is_arr_of_t([], "string")  ==>  truejsgui.is_arr_of_t(["1", "2", "3"], "string")  ==>  truejsgui.is_arr_of_t(["1", 2, "3"], "string")  ==>  false</code></pre>
+
     
 </dd>
 
@@ -3402,7 +3584,7 @@ Possible results are:</p>
         
             
 <dt>
-    <h4 class="name" id="iterate_ancestor_classes"><span class="type-signature">&lt;static> </span>iterate_ancestor_classes<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="iterate_ancestor_classes"><span class="type-signature">&lt;static> </span>iterate_ancestor_classes<span class="signature">(obj, callback)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -3410,7 +3592,8 @@ Possible results are:</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Iterates over ancestor classes hierarchy calling the callback function for each class in the inheritance tree. Starts from the passed class, ends on jsgui.Class.</p>
+<p>The iteration can be broken calling the <code>stop()</code> function (the callback second parameter).</p>
     </div>
     
 
@@ -3418,6 +3601,77 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">jsgui.Class</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>class to start the iteration</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>callback function (obj, stop).</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3460,6 +3714,11 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var Class = jsgui.Class;var Person = Class.extend({});var Ninja = Person.extend({});var classes = [];var callback = function (_class, stop) {  classes.push(_class);};jsgui.iterate_ancestor_classes(Ninja, callback);  // classes == [Ninja, Person, Class]</code></pre>
+
     
 </dd>
 
@@ -4940,7 +5199,7 @@ Possible results are:</p>
         
             
 <dt>
-    <h4 class="name" id="truth"><span class="type-signature">&lt;static> </span>truth<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="truth"><span class="type-signature">&lt;static> </span>truth<span class="signature">(value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -4948,7 +5207,7 @@ Possible results are:</p>
     
     
     <div class="description">
-        <p>description...</p>
+        <p>Returns true only if the passed value is a boolean true.</p>
     </div>
     
 
@@ -4956,6 +5215,54 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>value to check</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -4998,6 +5305,11 @@ Possible results are:</p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>jsgui.truth(true)  ==> truejsgui.truth(1)  ==> false</code></pre>
+
     
 </dd>
 
@@ -5728,7 +6040,7 @@ Possible results are:</p>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Mon Mar 31 2014 20:55:05 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Apr 01 2014 19:56:20 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
