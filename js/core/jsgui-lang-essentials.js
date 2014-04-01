@@ -2237,18 +2237,45 @@ define(function() {
 	*/
 	
     /**
-    * description...
+    * Returns true only if the passed value is a boolean true.
+    * @param {*} value - value to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.truth(true)  ==> true
+    *  jsgui.truth(1)  ==> false
+    *  
+    *  
+    *  
     */
 	var truth = function(value) {
 		return value === true;
 	};
 	
     /**
-    * description...
+    * Iterates over ancestor classes hierarchy calling the callback function for each class in the inheritance tree. Starts from the passed class, ends on jsgui.Class.
+    *
+    * The iteration can be broken calling the `stop()` function (the callback second parameter).
+    *
     * @func
+    * @param {jsgui.Class} obj - class to start the iteration
+    * @param {function} callback - callback function (obj, stop).
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+	*  var Class = jsgui.Class;
+	*  var Person = Class.extend({});
+	*  var Ninja = Person.extend({});
+    *  
+	*  var classes = [];
+    * 
+	*  var callback = function (_class, stop) {
+	*    classes.push(_class);
+	*  };
+	*  
+	*  jsgui.iterate_ancestor_classes(Ninja, callback);  // classes == [Ninja, Person, Class]
+    *  
     */
 	var iterate_ancestor_classes = function(obj, callback) {
 		
@@ -2281,9 +2308,21 @@ define(function() {
 	
 
     /**
-    * description...
+    * Returns `true` if the passed object is an array containing values of the specified type only.
+    * @param {*} obj - object to check
+    * @param {string} type_name - estimated type name
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_arr_of_t("1", "string")  ==>  false
+    *  
+    *  jsgui.is_arr_of_t([], "string")  ==>  true
+    *  
+    *  jsgui.is_arr_of_t(["1", "2", "3"], "string")  ==>  true
+    *  
+    *  jsgui.is_arr_of_t(["1", 2, "3"], "string")  ==>  false
+    *  
     */
 	var is_arr_of_t = function(obj, type_name) {
 		var t = tof(obj), tv;
@@ -2305,9 +2344,18 @@ define(function() {
 	}
 	
     /**
-    * description...
+    * Returns `true` if the passed object is an array containing arrays in turn.
+    * @param {*} obj - object to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_arr_of_arrs([])  ==>  true
+    *  
+    *  jsgui.is_arr_of_arrs(["1", "2", "3"])  ==>  false
+    *  
+    *  jsgui.is_arr_of_arrs([[], [1, "2"]])  ==>  true
+    *  
     */
 	var is_arr_of_arrs = function(obj) {
 		return is_arr_of_t(obj, 'array');
@@ -2315,9 +2363,20 @@ define(function() {
 
 
     /**
-    * description...
+    * Returns `true` if the passed object is an array containing strings only.
+    * @param {*} obj - object to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_arr_of_strs("1")  ==>  false
+    *  
+    *  jsgui.is_arr_of_strs([])  ==>  true
+    *  
+    *  jsgui.is_arr_of_strs(["1", "2", "3"])  ==>  true
+    *  
+    *  jsgui.is_arr_of_strs(["1", 2, "3"])  ==>  false
+    *  
     */
 	var is_arr_of_strs = function(obj) {
 		//console.log('obj ' + stringify(obj));
@@ -2326,14 +2385,14 @@ define(function() {
 	
 	
     /**
-    * description...
+    * <mark>description... TODO</mark>
     * @member
     * @memberof module:core/jsgui-lang-essentials
     */
 	var input_processors = {};
 
     /**
-    * description...
+    * <mark>description... TODO</mark>
     * @member
     * @memberof module:core/jsgui-lang-essentials
     */
