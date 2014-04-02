@@ -863,7 +863,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
     //	is_constructor_fn()
     // -----------------------------------------------------
 
-	it("is_constructor_fn() should return true if ....", function () {
+	it("is_constructor_fn() should return true if the object has a prototype property.", function () {
 
 	    function Book() {
 	        this.author = null;
@@ -875,9 +875,77 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 
 	    assert.deepEqual(jsgui.is_constructor_fn(Book), true);
 
+	    assert.deepEqual(jsgui.is_constructor_fn(Object), true);
+	    assert.deepEqual(jsgui.is_constructor_fn(new Object()), false);
+
 	    assert.deepEqual(jsgui.is_constructor_fn(add), true);
 	    assert.deepEqual(jsgui.is_constructor_fn(setInterval), true);
 
+	    assert.deepEqual(jsgui.is_constructor_fn({ prototype: null }), true);
+
+	});
+
+    // -----------------------------------------------------
+    //	Fns()
+    // -----------------------------------------------------
+
+	it("Fns() should returns a call_multiple_callback_functions() helper object.", function (done) {
+
+	    var taskPlus = function (a, b, cb) { cb(null, a + b); };
+	    var taskMinus = function (a, b, cb) { cb(null, a - b); };
+
+	    var fns = jsgui.Fns();
+
+	    fns.push([taskPlus, [1, 2]]);
+	    fns.push([taskPlus, [3, 4]]);
+	    fns.push([taskMinus, [1, 2]]);
+	    fns.push([taskPlus, [10, 12]]);
+
+	    fns.go(function (error, result) {
+	        assert.deepEqual(error, null);
+	        assert.deepEqual(result, [3, 7, -1, 22]);
+	        done();
+	    });
+
+	});
+
+    // -----------------------------------------------------
+    //	native_constructor_tof()
+    // -----------------------------------------------------
+
+	it("native_constructor_tof() should returns a passed native constructor function name.", function () {
+
+	    assert.deepEqual(jsgui.native_constructor_tof(), undefined);
+	    assert.deepEqual(jsgui.native_constructor_tof(null), undefined);
+	    assert.deepEqual(jsgui.native_constructor_tof(1), undefined);
+	    assert.deepEqual(jsgui.native_constructor_tof("1"), undefined);
+
+	    assert.deepEqual(jsgui.native_constructor_tof(jsgui.Class), undefined);
+
+	    assert.deepEqual(jsgui.native_constructor_tof(String), 'String');
+	    assert.deepEqual(jsgui.native_constructor_tof(Number), 'Number');
+	    assert.deepEqual(jsgui.native_constructor_tof(Boolean), 'Boolean');
+	    assert.deepEqual(jsgui.native_constructor_tof(Array), 'Array');
+	    assert.deepEqual(jsgui.native_constructor_tof(Object), 'Object');
+
+	    assert.deepEqual(jsgui.native_constructor_tof(Date), undefined);
+
+	});
+
+    // -----------------------------------------------------
+    //	get(), set()
+    // -----------------------------------------------------
+
+	it("get(), set() should get/set values of the internal storage.", function () {
+
+	    assert.deepEqual(jsgui.get("a"), undefined);
+	    jsgui.set("a", 1);
+	    assert.deepEqual(jsgui.get("a"), 1);
+	    jsgui.set("a", "2");
+	    assert.deepEqual(jsgui.get("a"), "2");
+
+	    jsgui.set(100, "2");
+	    assert.deepEqual(jsgui.get(100), "2");
 
 	});
 
