@@ -110,9 +110,16 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 
 
 
+				// only if it's not got the element...
+				//  or no document?
+
+				// On the client, this connects through the Resource Pool.
 
 
-				if (resource) {
+				if (typeof document == 'undefined' && resource) {
+
+
+
 					var name = resource.meta.get('name');
 					var ctrl_title_bar = new Title_Bar({
 						'context': this._context,
@@ -266,7 +273,7 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 					});
 
 				} else {
-					throw 'resource not found';
+					//throw 'resource not found';
 
 					//console.log('Resource, which should be associated with Resource Control not found.')
 				}

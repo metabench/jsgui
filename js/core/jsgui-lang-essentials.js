@@ -2888,6 +2888,12 @@ define(function() {
 		storage_map[key] = value;
 	}
 
+	var ends = function(str, target) {
+		if (str.length <= target.length) return false;
+		if (str.substr(str.length - target.length) == target) return true;
+		return false;
+	} 
+
 
 	/*
 
@@ -2942,7 +2948,8 @@ define(function() {
 		'native_constructor_tof': native_constructor_tof,
 		'Fns': Fns,
 		'get': get,
-		'set': set
+		'set': set,
+		'ends': ends
 	};
 
 	

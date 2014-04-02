@@ -131,13 +131,19 @@ define(['../../web/jsgui-html-enh', './resource'],
 			// jsgui lang essentials ends function
 			//  test if a string ends with something.
 
+			var ends_dot_json = jsgui.ends(url, '.json');
+			console.log('ends_dot_json', ends_dot_json);
 
+			var json_url;
 
+			if (!ends_dot_json) {
+				json_url = url + '.json';
+			} else {
+				json_url = url;
+			}
 
-			
-
-			console.log('url', url);
-			jsgui.http(url, function(err, res) {
+			console.log('json_url', json_url);
+			jsgui.http(json_url, function(err, res) {
 				if (err) {
 					callback(err);
 				} else {

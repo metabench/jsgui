@@ -1349,8 +1349,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 console.log('arr_waiting_controls.length', arr_waiting_controls.length);
 
                 if (arr_waiting_controls.length == 0) {
-                    this.all_html_render();
-                    callback(null, true);
+                    var html = this.all_html_render();
+                    callback(null, html);
                 } else {
                     var c = arr_waiting_controls.length;
 
@@ -1376,8 +1376,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                             res = [beginning, middle, end, appendment].join('');
                             */
                             //return [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
-
-                            callback(null, [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join(''));
+                            var html = [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
+                            console.log('html', html);
+                            callback(null, html);
                             //throw ('stop');
                         }
                     }
