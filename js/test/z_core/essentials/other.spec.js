@@ -733,6 +733,222 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 
 	});
 
+    // -----------------------------------------------------
+    //	truth()
+    // -----------------------------------------------------
+
+	it("truth() should detect the true value.", function () {
+
+	    assert.equal(jsgui.truth(true), true);
+
+	    assert.equal(jsgui.truth(false), false);
+	    assert.equal(jsgui.truth(1), false);
+	    assert.equal(jsgui.truth(0), false);
+	    assert.equal(jsgui.truth("1"), false);
+	    assert.equal(jsgui.truth(""), false);
+	    assert.equal(jsgui.truth(null), false);
+	    assert.equal(jsgui.truth(undefined), false);
+	    assert.equal(jsgui.truth(), false);
+
+	});
+
+    // -----------------------------------------------------
+    //	iterate_ancestor_classes()
+    // -----------------------------------------------------
+
+	it("iterate_ancestor_classes() should iterate ancestors of the class.", function () {
+
+	    var Class = jsgui.Class;
+	    var Person = Class.extend({});
+	    var Ninja = Person.extend({});
+
+	    function getAncestors(startingClass) {
+	        var classes = [];
+	        //
+	        var callback = function (_class, stop) {
+	            classes.push(_class);
+	        };
+	        //
+	        jsgui.iterate_ancestor_classes(startingClass, callback);
+	        //
+	        return classes;
+	    }
+
+	    assert.deepEqual(getAncestors(Ninja), [Ninja, Person, Class]);
+	    assert.deepEqual(getAncestors(Person), [Person, Class]);
+	    assert.deepEqual(getAncestors(Class), [Class]);
+
+	    // not a spec, but implementation details:
+	    //assert.deepEqual(getAncestors(String), [String]);
+	    //assert.deepEqual(getAncestors(1), [1]);
+
+	});
+
+    // -----------------------------------------------------
+    //	is_arr_of_t()
+    // -----------------------------------------------------
+
+	it("is_arr_of_t() should return true if all the array elements are values of the specified type.", function () {
+
+	    // non-arrays:
+
+	    assert.deepEqual(jsgui.is_arr_of_t(1, "string"), false);
+	    assert.deepEqual(jsgui.is_arr_of_t("1", "string"), false);
+	    assert.deepEqual(jsgui.is_arr_of_t(null, "string"), false);
+
+	    // empty array conforms to any type:
+
+	    assert.deepEqual(jsgui.is_arr_of_t([], "string"), true);
+	    assert.deepEqual(jsgui.is_arr_of_t([], "number"), true);
+
+	    // real arrays:
+
+	    assert.deepEqual(jsgui.is_arr_of_t(["1", "2", "3"], "string"), true);
+	    assert.deepEqual(jsgui.is_arr_of_t([1, 2, 3], "string"), false);
+	    assert.deepEqual(jsgui.is_arr_of_t(["1", "2", 3], "string"), false);
+
+	    assert.deepEqual(jsgui.is_arr_of_t([1, 2, 3], "number"), true);
+	    assert.deepEqual(jsgui.is_arr_of_t([1, "2", 3], "number"), false);
+
+	});
+
+    // -----------------------------------------------------
+    //	is_arr_of_arrs()
+    // -----------------------------------------------------
+
+	it("is_arr_of_arrs() should return true if all the array elements are arrays.", function () {
+
+	    // non-arrays:
+
+	    assert.deepEqual(jsgui.is_arr_of_arrs(1), false);
+	    assert.deepEqual(jsgui.is_arr_of_arrs("1"), false);
+	    assert.deepEqual(jsgui.is_arr_of_arrs(null), false);
+
+	    // empty array conforms to any type:
+
+	    assert.deepEqual(jsgui.is_arr_of_arrs([]), true);
+
+	    // real arrays:
+
+	    assert.deepEqual(jsgui.is_arr_of_arrs(["1", "2", "3"]), false);
+	    assert.deepEqual(jsgui.is_arr_of_arrs([[], [1, "2"]]), true);
+
+	});
+
+    // -----------------------------------------------------
+    //	is_arr_of_strs()
+    // -----------------------------------------------------
+
+	it("is_arr_of_strs() should return true if all the array elements are strings.", function () {
+
+	    // non-arrays:
+
+	    assert.deepEqual(jsgui.is_arr_of_strs(1), false);
+	    assert.deepEqual(jsgui.is_arr_of_strs("1"), false);
+	    assert.deepEqual(jsgui.is_arr_of_strs(null), false);
+
+	    // empty array conforms to any type:
+
+	    assert.deepEqual(jsgui.is_arr_of_strs([]), true);
+
+	    // real arrays:
+
+	    assert.deepEqual(jsgui.is_arr_of_strs(["1", "2", "3"]), true);
+	    assert.deepEqual(jsgui.is_arr_of_strs(["1", 2, "3"]), false);
+	    assert.deepEqual(jsgui.is_arr_of_strs([[], [1, "2"]]), false);
+
+	});
+
+    // -----------------------------------------------------
+    //	is_constructor_fn()
+    // -----------------------------------------------------
+
+	it("is_constructor_fn() should return true if the object has a prototype property.", function () {
+
+	    function Book() {
+	        this.author = null;
+	    }
+
+	    function add(a, b) {
+	        return a + b;
+	    }
+
+	    assert.deepEqual(jsgui.is_constructor_fn(Book), true);
+
+	    assert.deepEqual(jsgui.is_constructor_fn(Object), true);
+	    assert.deepEqual(jsgui.is_constructor_fn(new Object()), false);
+
+	    assert.deepEqual(jsgui.is_constructor_fn(add), true);
+	    assert.deepEqual(jsgui.is_constructor_fn(setInterval), true);
+
+	    assert.deepEqual(jsgui.is_constructor_fn({ prototype: null }), true);
+
+	});
+
+    // -----------------------------------------------------
+    //	Fns()
+    // -----------------------------------------------------
+
+	it("Fns() should returns a call_multiple_callback_functions() helper object.", function (done) {
+
+	    var taskPlus = function (a, b, cb) { cb(null, a + b); };
+	    var taskMinus = function (a, b, cb) { cb(null, a - b); };
+
+	    var fns = jsgui.Fns();
+
+	    fns.push([taskPlus, [1, 2]]);
+	    fns.push([taskPlus, [3, 4]]);
+	    fns.push([taskMinus, [1, 2]]);
+	    fns.push([taskPlus, [10, 12]]);
+
+	    fns.go(function (error, result) {
+	        assert.deepEqual(error, null);
+	        assert.deepEqual(result, [3, 7, -1, 22]);
+	        done();
+	    });
+
+	});
+
+    // -----------------------------------------------------
+    //	native_constructor_tof()
+    // -----------------------------------------------------
+
+	it("native_constructor_tof() should returns a passed native constructor function name.", function () {
+
+	    assert.deepEqual(jsgui.native_constructor_tof(), undefined);
+	    assert.deepEqual(jsgui.native_constructor_tof(null), undefined);
+	    assert.deepEqual(jsgui.native_constructor_tof(1), undefined);
+	    assert.deepEqual(jsgui.native_constructor_tof("1"), undefined);
+
+	    assert.deepEqual(jsgui.native_constructor_tof(jsgui.Class), undefined);
+
+	    assert.deepEqual(jsgui.native_constructor_tof(String), 'String');
+	    assert.deepEqual(jsgui.native_constructor_tof(Number), 'Number');
+	    assert.deepEqual(jsgui.native_constructor_tof(Boolean), 'Boolean');
+	    assert.deepEqual(jsgui.native_constructor_tof(Array), 'Array');
+	    assert.deepEqual(jsgui.native_constructor_tof(Object), 'Object');
+
+	    assert.deepEqual(jsgui.native_constructor_tof(Date), undefined);
+
+	});
+
+    // -----------------------------------------------------
+    //	get(), set()
+    // -----------------------------------------------------
+
+	it("get(), set() should get/set values of the internal storage.", function () {
+
+	    assert.deepEqual(jsgui.get("a"), undefined);
+	    jsgui.set("a", 1);
+	    assert.deepEqual(jsgui.get("a"), 1);
+	    jsgui.set("a", "2");
+	    assert.deepEqual(jsgui.get("a"), "2");
+
+	    jsgui.set(100, "2");
+	    assert.deepEqual(jsgui.get(100), "2");
+
+	});
+
 });
 
 

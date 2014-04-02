@@ -157,6 +157,54 @@ define(function() {
     * @param {module:core/jsgui-lang-essentials.stopIterationCallback} stop
     */
 
+
+    /**
+    * Iterates over a collection calling the collection.each(fn, context) method.
+    *
+    * @name each
+    * @func
+    * @param {Collection} collection - collection of elements
+    * @param {function} fn - iterator function
+    * @param {Object} [context] - context object
+    * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *
+    * // TODO..............
+    *
+    */
+
+
+    /**
+    * Iterates over the passed array elements. The iterator function calls for each element: fn(index, element, stop):
+    * - index: the element index
+    * - element: the element value
+    * - stop: 
+    *
+    *
+    * The iterator function is bound to the context object, if passed.
+    * The collection parameter can be:
+    * - a Collection object (the Collection.each() method is used in this case)
+    * - an array (iterate over array elements)
+    * - an object (iterate over object properties)
+    *
+    * The iteration function parameters are:
+    * - index, element, stopFunction (for array)
+    * - key, value, stopFunction (for object)
+    *
+    * The stopFunction breaks the iteration if called.
+    *
+    * @func
+    * @param {Collection|Array|Object} collection - collection of elements
+    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback|module:core/jsgui-lang-essentials.objectIteratorCallback} fn - iterator function
+    * @param {Object} [context] - context object
+    * @memberof module:core/jsgui-lang-essentials
+    * @example
+    * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
+    *    console.log(index + ":" + element);
+    * });
+    */
+
+
     /**
     * Iterates over a collection of elements. Each element is passed to an iterator function. 
     * The iterator function is bound to the context object, if passed.
@@ -1386,12 +1434,23 @@ define(function() {
     */
     var fp = functional_polymorphism;
 
+
     /**
-    * If an **object** argument passed:
-    * Returns an array containing [key, value] arrays of the object properties:<br />
-    * `arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]`
+    * Returns an array containing [key, value] arrays of the passed object properties.<br />
     * 
-    * If a **function** argument passed:
+    * @name arrayify
+    * @func
+    * @param {object} obj - arrayifing object
+    * @memberof module:core/jsgui-lang-essentials
+    * 
+    * @example
+    * 
+    * arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]
+    * 
+    */
+
+
+    /**
     * Returns an arrayified version of the function. The arrayified version accepts an array of values instead of single value for some parameter.
     * For example: `func(a, b) ==> arrayified_func([a], b)`
     * The original function will be called several times, one time for each value from the array. The result of the arrayified function
@@ -1414,12 +1473,6 @@ define(function() {
     * @memberof module:core/jsgui-lang-essentials
     * 
     * @example
-    * 
-    * 
-    * // ------- arrayifing an object: -------
-    * 
-    * arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]
-    * 
     * 
     * // ------- arrayifing a function: -------
     * 
@@ -1612,17 +1665,40 @@ define(function() {
 		return res;
 	});
 
+
     /**
-    * If an **array** argument passed: <br />
-    * Returns an object containing keys and values from the [key, value] pairs of the array:<br />
-    * `mapify([["a", 1], ["b", 2]])  ==> {a: 1, b: 2}`
+    * Returns an object containing keys and values from the [key, value] pairs of the array.
     * 
-    * If an **array** and **by_property_name** arguments passed: <br />
+    * @name mapify
+    * @func
+    * @param {array} arr - mapifying array
+    * @memberof module:core/jsgui-lang-essentials
+    * 
+    * @example
+    * 
+    * mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }
+    * 
+    */
+
+    /**
     * The array is an objects array. The mapify() function gathers values of the (by_property_name) properties. The values will be keys (property names) of the 
-    * returning object. The values of the returning object will be the objects itself:<br />
-    * `mapify([{ name: "Larry", age: 21 }, { name: "John", age: 22 }], "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }`
+    * returning object. The values of the returning object will be the objects itself.
     * 
-    * If a **function** argument passed:<br />
+    * @name mapify
+    * @func
+    * @param {array} arr - mapifying array
+    * @param {string} by_property_name - mapping property name
+    * @memberof module:core/jsgui-lang-essentials
+    * 
+    * @example
+    * 
+    * var obj_arr = [{ name: "Larry", age: 21 }, { name: "John", age: 22 }];
+    * 
+    * mapify(obj_arr, "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }
+    * 
+    */
+
+    /**
     * Returns an mapified version of the function. The orginal function receives 2 parameters: key and value. The mapified version receives an object, and
     * calls the original function for each key/value pair of the object.
     *
@@ -1637,24 +1713,10 @@ define(function() {
     * this case it will just call the original function (if the parameters number >= 2).
     * 
     * @func
-    * @param {object|function} fn - mapifying array or function
-    * @param {string} [by_property_name] - mapping property name
+    * @param {function} fn - mapifying function
     * @memberof module:core/jsgui-lang-essentials
     * 
     * @example
-    * 
-    * 
-    * // ------- mapify an array: -------
-    * 
-    * mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }
-    * 
-    * 
-    * // ------- mapify an array by property name: -------
-    * 
-    * mapify([{ name: "Larry", age: 21 }, { name: "John", age: 22 }], "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }
-    * 
-    * 
-    * // ------- mapify a function: -------
     * 
     * var keys = [];
     * var values = [];
@@ -2237,18 +2299,45 @@ define(function() {
 	*/
 	
     /**
-    * description...
+    * Returns true only if the passed value is a boolean true.
+    * @param {*} value - value to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.truth(true)  ==> true
+    *  jsgui.truth(1)  ==> false
+    *  
+    *  
+    *  
     */
 	var truth = function(value) {
 		return value === true;
 	};
 	
     /**
-    * description...
+    * Iterates over ancestor classes hierarchy calling the callback function for each class in the inheritance tree. Starts from the passed class, ends on jsgui.Class.
+    *
+    * The iteration can be broken calling the `stop()` function (the callback second parameter).
+    *
     * @func
+    * @param {jsgui.Class} obj - class to start the iteration
+    * @param {function} callback - callback function (obj, stop).
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+	*  var Class = jsgui.Class;
+	*  var Person = Class.extend({});
+	*  var Ninja = Person.extend({});
+    *  
+	*  var classes = [];
+    * 
+	*  var callback = function (_class, stop) {
+	*    classes.push(_class);
+	*  };
+	*  
+	*  jsgui.iterate_ancestor_classes(Ninja, callback);  // classes == [Ninja, Person, Class]
+    *  
     */
 	var iterate_ancestor_classes = function(obj, callback) {
 		
@@ -2281,9 +2370,21 @@ define(function() {
 	
 
     /**
-    * description...
+    * Returns `true` if the passed object is an array containing values of the specified type only.
+    * @param {*} obj - object to check
+    * @param {string} type_name - estimated type name
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_arr_of_t("1", "string")  ==>  false
+    *  
+    *  jsgui.is_arr_of_t([], "string")  ==>  true
+    *  
+    *  jsgui.is_arr_of_t(["1", "2", "3"], "string")  ==>  true
+    *  
+    *  jsgui.is_arr_of_t(["1", 2, "3"], "string")  ==>  false
+    *  
     */
 	var is_arr_of_t = function(obj, type_name) {
 		var t = tof(obj), tv;
@@ -2305,9 +2406,18 @@ define(function() {
 	}
 	
     /**
-    * description...
+    * Returns `true` if the passed object is an array containing arrays in turn.
+    * @param {*} obj - object to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_arr_of_arrs([])  ==>  true
+    *  
+    *  jsgui.is_arr_of_arrs(["1", "2", "3"])  ==>  false
+    *  
+    *  jsgui.is_arr_of_arrs([[], [1, "2"]])  ==>  true
+    *  
     */
 	var is_arr_of_arrs = function(obj) {
 		return is_arr_of_t(obj, 'array');
@@ -2315,9 +2425,20 @@ define(function() {
 
 
     /**
-    * description...
+    * Returns `true` if the passed object is an array containing strings only.
+    * @param {*} obj - object to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_arr_of_strs("1")  ==>  false
+    *  
+    *  jsgui.is_arr_of_strs([])  ==>  true
+    *  
+    *  jsgui.is_arr_of_strs(["1", "2", "3"])  ==>  true
+    *  
+    *  jsgui.is_arr_of_strs(["1", 2, "3"])  ==>  false
+    *  
     */
 	var is_arr_of_strs = function(obj) {
 		//console.log('obj ' + stringify(obj));
@@ -2326,14 +2447,14 @@ define(function() {
 	
 	
     /**
-    * description...
+    * <mark>description... TODO</mark>
     * @member
     * @memberof module:core/jsgui-lang-essentials
     */
 	var input_processors = {};
 
     /**
-    * description...
+    * <mark>description... TODO</mark>
     * @member
     * @memberof module:core/jsgui-lang-essentials
     */
@@ -2345,9 +2466,17 @@ define(function() {
 	
 	
     /**
-    * description...
+    * <mark>Returns `true` if the passed object has a prototype (typically the object is a function).</mark>
     * @func
+    * @param {function} fn - object to check
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *  
+    *  jsgui.is_constructor_fn(Object)  ==>  true
+    *  jsgui.is_constructor_fn(new Object())  ==>  false
+    *  
+    *  jsgui.is_constructor_fn(setInterval)  ==>  true
+    *  
     */
 	var is_constructor_fn = function(fn) {
 		return is_defined(fn.prototype);
@@ -2649,9 +2778,26 @@ define(function() {
 	
 	
     /**
-    * description...
+    * Returns a [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} helper object. The object is an array with `go()` method added.
+    * You can add the [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} tasks to the array, then call the go() method passing the callback function.
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *
+	*   var taskPlus = function (a, b, cb) { cb(null, a + b); };
+	*   var taskMinus = function (a, b, cb) { cb(null, a - b); };
+    *
+	*   var fns = jsgui.Fns();
+    *
+	*   fns.push([taskPlus, [1, 2]]);
+	*   fns.push([taskPlus, [3, 4]]);
+	*   fns.push([taskMinus, [1, 2]]);
+	*   fns.push([taskPlus, [10, 12]]);
+    *
+	*   fns.go(function (error, result) {
+	*       console.log(result);  //  [3, 7, -1, 22]
+	*   });
+    *
     */
 	var Fns = function() {
 	    var fns = [];
@@ -2662,9 +2808,20 @@ define(function() {
 	}
 	
     /**
-    * description...
+    * Returns a name of the passed native constructor function, or `undefined` for unknown values (<mark>e.g. Date</mark>). The following names are known:
+    * - String
+    * - Number
+    * - Boolean
+    * - Array
+    * - Object
     * @func
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *
+    * jsgui.native_constructor_tof(String)  ==>  "String"
+    *
+    * jsgui.native_constructor_tof(Date)  ==>  undefined
+    *
     */
 	var native_constructor_tof = function(value) {
 		if (value === String) {
@@ -2693,18 +2850,39 @@ define(function() {
 
 
     /**
-    * description...
+    * Gets value from the module's internal key/value storage.
     * @func
+    * @param {string|*} key - the value key
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *
+    * jsgui.set("a", 1);
+    * jsgui.set(100, 2);
+    *
+    *
+    * jsgui.get("a")  ==>  1
+    * jsgui.get(100)  ==>  2
+    *
     */
 	var get = function(key) {
 		return storage_map[key];
 	}
 
     /**
-    * description...
+    * Sets value for the module's internal key/value storage.
     * @func
+    * @param {string|*} key - the value key
+    * @param {*} value - the value 
     * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *
+    * jsgui.set("a", 1);
+    * jsgui.set(100, 2);
+    *
+    *
+    * jsgui.get("a")  ==>  1
+    * jsgui.get(100)  ==>  2
+    *
     */
 	var set = function(key, value) {
 		storage_map[key] = value;
