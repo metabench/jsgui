@@ -39,7 +39,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 			this._super(spec);
-			console.log('spec.resource', spec.resource);
+			//console.log('spec.resource', spec.resource);
 			if (spec.resource) this.meta.set('resource', spec.resource);
 
 
@@ -49,7 +49,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				//throw 'stop';
 			//var meta = this.meta;
 
-			console.log('Publisher this.meta', this.meta);
+			//console.log('Publisher this.meta', this.meta);
 
 		},
 		'start': function(callback) {
@@ -135,8 +135,45 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 		},
 
 
+		// also needs to respond to resource-client.js.
 
-		'respond': function(req, res, content_type) {
+
+
+
+		'respond': fp(function(a, sig) {
+
+			var req, res, content_type, my_Resource_Control, resource_client_path;
+
+			if (a.l == 3) {
+				req = a[0];
+				res = a[1];
+				content_type = a[2];
+			}
+
+			if (a.l == 4) {
+				req = a[0];
+				res = a[1];
+				content_type = a[2];
+				my_Resource_Control = a[3];
+			}
+
+			if (a.l == 5) {
+				req = a[0];
+				res = a[1];
+				content_type = a[2];
+				my_Resource_Control = a[3];
+				resource_client_path = a[4];
+			}
+
+
+
+			// May have some further data.
+			// best not to hide it in the req I think
+
+			// The other data being the control to use.
+			//  Not using a standard Resource_Control perhaps.
+
+
 			// Probably should not pay attention to the full URL path like this.
 			//  It's root URL could be assigned in the application resource router.
 
@@ -160,12 +197,285 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
+			// We could read the content type from the end of the req...
+			console.log('req keys', Object.keys(req));
+
+			var url = req.url;
+			var method = req.method;
+			var params = req.params;
+			var wildcard_value;
+			console.log('url', url);
+			console.log('method', method);
+			console.log('params', params);
+
+			if (params) {
+				wildcard_value = params.wildcard_value;
+			}
+
+			
+
+			// Detect if we are looking for JSON
+
+			var ends_dot_json = function(str) {
+				console.log('str', str);
+				if (!str || (str.length < 5)) return false;
+				return (str.substr(str.length - 5) == '.json');
+			}
+
+			var edj = ends_dot_json(wildcard_value) || ends_dot_json(url);
+			console.log('edj', edj);
+
+			if (edj) {
+				var pre_dot_json_path = '';
+				if (wildcard_value) pre_dot_json_path = wildcard_value.substr(0, wildcard_value.length - 5);
+
+				var resource = this.meta.get('resource');
+				//console.log('resource', resource);
+				resource.get(pre_dot_json_path, function(err, res_resource) {
+					if (err) {
+						throw err;
+					} else {
+						// And include metadata.
+
+						var output = {
+							'resource': {
+								'meta': {
+									'name': resource.meta.get('name')
+								},
+								'data': res_resource
+							}
+						}
+
+						var resource_type_levels = resource.meta.get('type_levels');
+						console.log('resource_type_levels', resource_type_levels);
+
+						if (resource_type_levels) {
+							output.resource.meta.types = resource_type_levels;
+						}
+
+						if (pre_dot_json_path) {
+							output.inner_path = pre_dot_json_path;
+						}
+
+						var json = JSON.stringify(output);
+						var mime_type = 'application/json';
+						res.writeHead(200, { 'Content-Type': mime_type });
+						res.end(json, 'utf-8');
+					}
+				})
+
+			} else {
+				if (!wildcard_value) {
 
 
-			content_type = content_type || 'html';
+					console.log('Resource_Publisher_HTTP html respond');
+
+					// Put together a JSGUI page.
+					//  It should be easy to generate a page and access the body.
+
+					var server_page_context = new Server_Page_Context({
+						'req': req,
+						'res': res
+					});
+
+					var hd = new jsgui.Client_HTML_Document({
+						'context': server_page_context
+					});
+
+
+
+
+					hd.include_client_css();
+
+					// also include the jsgui-client JavaScript.
+					//  Therw will not be much / any extra JavaScript that needs to run alongside the client.
+
+					// On this page, want to render a component that will keep updating continuously.
+					//  Want it to be very easy to set up, but not at the expense of clarity.
+
+					// So there will be a resource client?
+					//  I think a general resource client HTML component would be useful.
+					//  Resource client bootstrap could be a useful way of starting up a real-time / data driven project.
+
+					// For the moment will not got through a communications broker / channel.
+					//  The client side resource consumer will connect directly with the server.
+
+					//hd.include_css('css/app.css');
+
+					//hd.include_js('js/modernizr-latest.js');
+
+					// Possibly need an easier way of including the JSGUI client.
+					//  Not so sure about having the client connect to the server by default.
+
+					// Could have different versions of jsgui-client, one of which autoconnects back to the server on a socket connection.
+					//  Not so sure about it haveing all the resource stuff.
+
+					// Perhaps jsgui-resource-client would autoconnect back to the resource it was served from.
+					//  Could have it access other resources too, but there would be client controls for doing so.
+
+					// And want to be able to serve framework files easily under /js
+
+					
+					//hd.include_jsgui_client('js/app.js');
+
+
+					// Not necessarily...
+					hd.include_js('http://cdn.sockjs.org/sockjs-0.3.min.js');
+
+					// Somehow send the resource name along as well?
+					//  Or it can get information on the resource by calling the url + '.json', and that does a 'get' on the resource, including the resource's name.
+					//  At some point will have in improved way of loading initial data into the client.
+
+
+
+					// More like we need to serve a specific resource client JavaScript.
+					//  I think that would mean putting an entry into the Routing Tree.
+
+
+
+					console.log('resource_client_path', resource_client_path);
+					hd.include_jsgui_resource_client(resource_client_path);
+
+					// <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
+	  				//</script>
+
+
+
+					// This needs to include the resource client in this case.
+					//  Will not always be connecting to a resource server - however we can keep this concise and have a small amount delivered to the client.
+
+
+
+					// The jsgui client would include the necessary client resource / resource connection info.
+					// Would need a Resource class on the client side too.
+
+					
+					// I send something to the client, as JS, with a bit of information about the resource it's connecting to.
+					//  The client code should already have the necessary code for the actual resource classes.
+
+					// It just needs some info.
+					//  Probably need more work on client side resources.
+					//  It may be able to connect to the URL for the resource it is looking at / the page's resource.
+
+					// Want to return some kind of client-side app JS.
+					// perhaps published-resource-client.
+
+					// Will have the client check back to the server to get more information about the resource (I think)
+					//  Will do a JSON HTTP get request.
+
+					
+
+
+
+
+
+
+
+					
+					var body = hd.body();
+
+
+					// and the resource control will then connect to that same resource on the client through the resource pool.
+
+
+					var resource_control = new (my_Resource_Control || Resource_Control)({
+						'context': server_page_context,
+						'resource': this.meta.get('resource')
+					});
+
+					// Need to somehow defer the rendering of the control until it is ready.
+					//  we could make an async render function that waits until they are ready before rendering.
+
+					// Controls could have a 'status' field.
+					//  Need to make controls async in this way if we are rendering them based on asyncronously obtained data.
+
+					// When rendering check all controls to see if they are ready?
+
+					resource_control.active();
+
+
+					// The resource control will be activated on the client.
+					//  It will be bound to the client-side resource.
+					//  Updates to the client side resource will cause the resource_control to update.
+
+					// Updates done by the user would also be sent to the server.
+					//  Possibly validated at different stages too.
+
+
+
+
+					body.add(resource_control);
+
+					// Also, include a resource control
+
+
+
+					// Inside the body, we need a table of some sort showing the data.
+					//  Could do resource.get as well, and then handle the results.
+					//  Want to send something to the client that can refer back to the resource on the server.
+
+
+					// Rendering an HTML table, and then on the client it gets activasted?
+
+					// I think we need to use some kind of connected data control.
+					//  On the client, it will activate, it will know what resource to ask for, and it will connect to that resource, either directly, or using the resource
+					//  broker.
+					// 
+
+					// Could use an object or data object viewer of some type.
+
+					// Directly referencing a Resource with a Control that gets rendered...
+					//  Need to have it so that some pathways get put in automatically.
+
+					// Resource_Control?
+					//  Something that renders a resource, first on the server, then on the client it connects to the resource on the server.
+
+					// Want a general control that interacts with a resource on the server.
+					//  It could become a very useful way of encapsulating client-server functionality.
+
+					// Then on the client side, connects to the resource(s) on the server, may use websockets for communications.
+
+
+					// An async / deferred rendering function would provide the result in its callback.
+
+
+
+					/*
+					var html = hd.all_html_render();
+					
+					var mime_type = 'text/html';
+					//console.log('mime_type ' + mime_type);
+						
+					res.writeHead(200, { 'Content-Type': mime_type });
+					res.end(html, 'utf-8');
+					*/
+					console.log('pre deferred render');
+
+					hd.all_html_render(function(err, deferred_html) {
+						if (err) {
+							throw err;
+						} else {
+							console.log('deferred_html', deferred_html);
+
+							var mime_type = 'text/html';
+							//console.log('mime_type ' + mime_type);
+								
+							res.writeHead(200, { 'Content-Type': mime_type });
+							res.end(deferred_html, 'utf-8');
+						}
+					});
+
+				}
+			}
+
+
+
+			//throw 'stop';
+
+			//content_type = content_type || 'html';
 
 			// This should display it as HTML?
-
+			/*
 			if (content_type == 'html') {
 				// I think showing the data and streaming updates is the best basic HTML display for a Resource.
 				//  Sends an HTML client that connects back to the Resource, using websockets / socks.js
@@ -177,178 +487,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
-				console.log('Resource_Publisher_HTTP html respond');
-
-				// Put together a JSGUI page.
-				//  It should be easy to generate a page and access the body.
-
-				var server_page_context = new Server_Page_Context({
-					'req': req,
-					'res': res
-				});
-
-				var hd = new jsgui.Client_HTML_Document({
-					'context': server_page_context
-				});
-
-
-
-
-				hd.include_client_css();
-
-				// also include the jsgui-client JavaScript.
-				//  Therw will not be much / any extra JavaScript that needs to run alongside the client.
-
-				// On this page, want to render a component that will keep updating continuously.
-				//  Want it to be very easy to set up, but not at the expense of clarity.
-
-				// So there will be a resource client?
-				//  I think a general resource client HTML component would be useful.
-				//  Resource client bootstrap could be a useful way of starting up a real-time / data driven project.
-
-				// For the moment will not got through a communications broker / channel.
-				//  The client side resource consumer will connect directly with the server.
-
-				//hd.include_css('css/app.css');
-
-				//hd.include_js('js/modernizr-latest.js');
-
-				// Possibly need an easier way of including the JSGUI client.
-				//  Not so sure about having the client connect to the server by default.
-
-				// Could have different versions of jsgui-client, one of which autoconnects back to the server on a socket connection.
-				//  Not so sure about it haveing all the resource stuff.
-
-				// Perhaps jsgui-resource-client would autoconnect back to the resource it was served from.
-				//  Could have it access other resources too, but there would be client controls for doing so.
-
-				// And want to be able to serve framework files easily under /js
-
 				
-				//hd.include_jsgui_client('js/app.js');
-
-				hd.include_js('http://cdn.sockjs.org/sockjs-0.3.min.js');
-
-				// Somehow send the resource name along as well?
-				//  Or it can get information on the resource by calling the url + '.json', and that does a 'get' on the resource, including the resource's name.
-				//  At some point will have in improved way of loading initial data into the client.
-
-
-
-				hd.include_jsgui_resource_client();
-
-				// <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
-  				//</script>
-
-
-
-				// This needs to include the resource client in this case.
-				//  Will not always be connecting to a resource server - however we can keep this concise and have a small amount delivered to the client.
-
-
-
-				// The jsgui client would include the necessary client resource / resource connection info.
-				// Would need a Resource class on the client side too.
-
-				
-				// I send something to the client, as JS, with a bit of information about the resource it's connecting to.
-				//  The client code should already have the necessary code for the actual resource classes.
-
-				// It just needs some info.
-				//  Probably need more work on client side resources.
-				//  It may be able to connect to the URL for the resource it is looking at / the page's resource.
-
-				// Want to return some kind of client-side app JS.
-				// perhaps published-resource-client.
-
-				// Will have the client check back to the server to get more information about the resource (I think)
-				//  Will do a JSON HTTP get request.
-
-				
-
-
-
-
-
-
-
-				
-				var body = hd.body();
-
-
-				// and the resource control will then connect to that same resource on the client through the resource pool.
-
-
-				var resource_control = new Resource_Control({
-					'context': server_page_context,
-					'resource': this.meta.get('resource')
-				});
-
-				// Need to somehow defer the rendering of the control until it is ready.
-				//  we could make an async render function that waits until they are ready before rendering.
-
-				// Controls could have a 'status' field.
-				//  Need to make controls async in this way if we are rendering them based on asyncronously obtained data.
-
-				// When rendering check all controls to see if they are ready?
-
-
-
-
-				// The resource control will be activated on the client.
-				//  It will be bound to the client-side resource.
-				//  Updates to the client side resource will cause the resource_control to update.
-
-				// Updates done by the user would also be sent to the server.
-				//  Possibly validated at different stages too.
-
-
-
-
-				body.add(resource_control);
-
-				// Also, include a resource control
-
-
-
-				// Inside the body, we need a table of some sort showing the data.
-				//  Could do resource.get as well, and then handle the results.
-				//  Want to send something to the client that can refer back to the resource on the server.
-
-
-				// Rendering an HTML table, and then on the client it gets activasted?
-
-				// I think we need to use some kind of connected data control.
-				//  On the client, it will activate, it will know what resource to ask for, and it will connect to that resource, either directly, or using the resource
-				//  broker.
-				// 
-
-				// Could use an object or data object viewer of some type.
-
-				// Directly referencing a Resource with a Control that gets rendered...
-				//  Need to have it so that some pathways get put in automatically.
-
-				// Resource_Control?
-				//  Something that renders a resource, first on the server, then on the client it connects to the resource on the server.
-
-				// Want a general control that interacts with a resource on the server.
-				//  It could become a very useful way of encapsulating client-server functionality.
-
-				// Then on the client side, connects to the resource(s) on the server, may use websockets for communications.
-
-
-				// An async / deferred rendering function would provide the result in its callback.
-
-
-
-
-				var html = hd.all_html_render();
-				
-				var mime_type = 'text/html';
-				//console.log('mime_type ' + mime_type);
-					
-				res.writeHead(200, { 'Content-Type': mime_type });
-				res.end(html, 'utf-8');
 
 
 				// Would be good to include some kind of connected data view / control.
@@ -356,12 +495,12 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
-				/*
-				var html = '<html><head></head><body><h1>Resource_Publisher_HTTP response</h1></body></html>';
-				var mime_type = 'text/html';
-				res.writeHead(200, { 'Content-Type': mime_type });
-				res.end(html, 'utf-8');
-				*/
+				
+				//var html = '<html><head></head><body><h1>Resource_Publisher_HTTP response</h1></body></html>';
+				//var mime_type = 'text/html';
+				//res.writeHead(200, { 'Content-Type': mime_type });
+				//res.end(html, 'utf-8');
+				
 			}
 
 			if (content_type == 'json') {
@@ -393,12 +532,13 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 					
 			}
+			*/
 
 
 
 			
 			
-		}
+		})
 	});
 	
 	

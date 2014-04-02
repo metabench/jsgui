@@ -68,12 +68,6 @@ define(['../../web/jsgui-html-enh', './resource'],
 	//  however, it may be that the user control will just be making use of the client-side resources or client-side resource pool.
 
 
-
-
-
-
-
-
 	var Client_Resource = Resource.extend({
 		//'fields': {
 		//	'url': String
@@ -131,7 +125,17 @@ define(['../../web/jsgui-html-enh', './resource'],
 
 		},
 		'get': function(callback) {
+
 			var url = this.meta.get('url').value();
+
+			// jsgui lang essentials ends function
+			//  test if a string ends with something.
+
+
+
+
+			
+
 			console.log('url', url);
 			jsgui.http(url, function(err, res) {
 				if (err) {
@@ -231,28 +235,6 @@ define(['../../web/jsgui-html-enh', './resource'],
 			// Or the resource listens to data changes, triggers change on itself when the data changes.
 
 			// Or change on the resource itself I think.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

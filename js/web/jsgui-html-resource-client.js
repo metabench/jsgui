@@ -83,7 +83,9 @@
 
 
 
+// Some resources probably won't use websockets.
 
+// Also will want something to automatically serve the resource client.
 
 
 
@@ -237,6 +239,21 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Res
     client_page_context.update_Controls('ctrl_resource', Resource_Control);
     client_page_context.update_Controls('object_viewer', Object_Viewer);
     client_page_context.update_Controls('number_viewer', Number_Viewer);
+
+
+
+    // May need to load in other controls.
+    //  Perhaps we need another client.js file for different situations.
+
+    // When making a database resource, perhaps we need a database resource client page?
+    //  Or to serve the normal client page, but with specified controls being loaded on the client.
+
+
+
+
+
+
+
 
     var resource_pool = client_page_context.resource_pool = new Client_Resource_Pool();
 

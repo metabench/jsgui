@@ -163,14 +163,14 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 
 			},
 			'refresh_internal': function() {
-				console.log('object refresh_internal');
-				console.log('this._context', this._context);
+				//console.log('object refresh_internal');
+				//console.log('this._context', this._context);
 
 				var value = this.get('value');
 
 				var inner = this.get('inner');
-				console.log('object viewer refresh_internal ');
-				console.log('value ' + stringify(value));
+				//console.log('object viewer refresh_internal ');
+				//console.log('value ' + stringify(value));
 
 				inner.clear();
 				//console.log('value ' + tof(value));

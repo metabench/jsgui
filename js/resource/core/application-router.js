@@ -619,9 +619,15 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//console.log('splitPath.length ' + splitPath.length);
 
 			// There could be a default application router that sets these paths up in the routing tree.
+			//  With the route_res...
+			//  Want to find out variuous parameters, such as the wildcard/
+
+
 
 
 			var route_res = rt.get(req.url);
+
+			//console.log('route_res', route_res);
 
 			//Want the route_res to tell us the path within the resource and the name of the resource.
 			//  Some resources will be routed with wildcards.

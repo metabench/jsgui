@@ -41,7 +41,25 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 				// Could have the name as a title.
 				//	var name = this.get('name');
 
+				// Resource would have been set on the server.
+				//  The resource class runs on the client too.
+				//  It is best when linked with a resource on the client. It should be able to get the resource name from the DOM.
+
+
 				var resource = this.get('resource');
+
+				// The resource may be in the pool.
+
+				if (!resource) {
+					var resource_name = this.get('dom.el').getAttribute('data-jsgui-resource-name');
+					console.log('resource_name', resource_name);
+
+					//console.log('this._context', this._context);
+					var rp = this._context.resource_pool;
+					resource = rp.get_resource(resource_name);
+				}
+
+
 
 
 
@@ -220,6 +238,12 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 							//  It could identify features of the data, such as if it is tabular data.
 
 							
+							console.log('name', name);
+							//throw 'stop';
+
+							// Of course, this gets set asyncronously.
+							//  Need to do deferred rendering.
+							//   Call render in such a way that it only renders the page once it's ready.
 
 
 
@@ -241,6 +265,10 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 						}
 					});
 
+				} else {
+					throw 'resource not found';
+
+					//console.log('Resource, which should be associated with Resource Control not found.')
 				}
 
 				//if (!spec.el) {
@@ -330,49 +358,50 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 
 				// Need to listen for change events on the resource.
 
-				resource.on('change', function(property_name, property_value) {
-					//console.log('resource change event', e_change);
+				if (resource) {
+					resource.on('change', function(property_name, property_value) {
+						//console.log('resource change event', e_change);
 
-					// Now we have the change event, we change the UI.
+						// Now we have the change event, we change the UI.
 
-					// Can just do a re render?
-					//  That's less efficient than going in and only changing what needs to be changed.
+						// Can just do a re render?
+						//  That's less efficient than going in and only changing what needs to be changed.
 
-					// use the change data to set ctrl_object_viewer's data.
-
-
-					
-					//\var val = e_change[1];\\
-					var val = property_value;
-					//console.log('tof(val) ' + tof(val));
-					console.log('val', val);
-					// Should be recieving this as a unix timestamp?
+						// use the change data to set ctrl_object_viewer's data.
 
 
-
-					var value = {
-						'unix_time': val.getTime()
-					}
-
-					//console.log('value', value);
-
-
-					// And the object viewer should listen for changes in its value.
-					
-					// That should raise necessary events.
-					//  Should raise change on the ctrl_object_viewer
-					//   (or on ctrl_object_viewer's value data_object?)
+						
+						//\var val = e_change[1];\\
+						var val = property_value;
+						//console.log('tof(val) ' + tof(val));
+						console.log('val', val);
+						// Should be recieving this as a unix timestamp?
 
 
+						var value = {
+							'unix_time': val.getTime()
+						}
 
-					ctrl_object_viewer.set('value', value);
-
-					//console.log('ctrl_object_viewer._bound_events ' + ctrl_object_viewer._bound_events);
-
-					
-				})
+						//console.log('value', value);
 
 
+						// And the object viewer should listen for changes in its value.
+						
+						// That should raise necessary events.
+						//  Should raise change on the ctrl_object_viewer
+						//   (or on ctrl_object_viewer's value data_object?)
+
+
+
+						ctrl_object_viewer.set('value', value);
+
+						//console.log('ctrl_object_viewer._bound_events ' + ctrl_object_viewer._bound_events);
+
+						
+					})
+				} else {
+					throw 'resource not found';
+				}
 
 				// need to look at the childnodes...
 			}

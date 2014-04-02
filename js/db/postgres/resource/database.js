@@ -10,7 +10,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.each, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
 	var get_item_sig = jsgui.get_item_sig, trim_sig_brackets = jsgui.trim_sig_brackets;
 	
-	
+	var Data_Object = jsgui.Data_Object;
 	// This needs to provide resource access to a Postgres database.
 	//  Want get and set to be working through a normal interface.
 	//  Other database systems will also need to work through such an interface.
@@ -71,6 +71,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 			this.meta.set('type_levels', ['database', 'rdb', 'postgres']);
 
+			//console.log('spec.resource', spec.resource);
+			//throw 'stop';
+
 			// Meta.get('table_names')
 
 			// At some point it will need to be a flat interface without objects.
@@ -94,7 +97,14 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 			this.meta.set('status', 'off');
 
-			var tables = this.set('tables', new Resource_Collection({
+			this.data = new Data_Object({});
+
+			// Tables should be meta?
+			//  Or data?
+			//  
+
+
+			var tables = this.data.set('tables', new Resource_Collection({
 				'fields': {
 					'name': 'unique string'
 				}
@@ -191,8 +201,260 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		
 		// quite possibly the resource connector should be dealing with the DB names.
 		//  it will be used to connect to other DBs as well.
+
+		// get /tables
+
+		// need a way of processing get requests at different paths, and getting variables out of them.
+		//  need some kind of path interpretation here.
+		// Perhaps using routing tree?
+
+		// RFC 3986: 'The query component contains non-hierarchical data that, along with data in the path component (Section 3.3), serves to identify a resource'
+
+		'get': fp(function(a, sig) {
+			console.log('database resource get sig', sig);
+
+			var query_component;
+			var callback;
+			if (sig == '[f]') {
+				callback = a[0];
+			} else {
+				query_component = a[0];
+				callback = a[1];
+			}
+
+			var that = this;
+
+			if (query_component) {
+
+				console.log('query_component', query_component);
+
+				// Need to look for schemas...
+
+				// specific one for tables?
+
+				if (query_component == 'schemas') {
+
+					// Could refresh the local cache of table data?
+
+					this.get_schema_names(function(err, schema_names) {
+						if (err) {
+							console.log('error getting schema names', err);
+							callback(err);
+						} else {
+							console.log('schema_names', schema_names);
+
+							// This level being meta anyway?
+							//  Or meta are things outside of the heirachical path?
+							//  Was thinking that the tables could be meta. I'm not sure.
+
+
+
+							//var res = {
+								//'name': that.meta.get('name'),
+							//	'tables': table_names
+							//}
+							callback(null, schema_names);
+						}
+					})
+				}
+
+				var sqc = query_component.split('/');
+				if (sqc.length > 1) {
+					if (sqc.length == 2) {
+						if (sqc[0] == 'schemas') {
+							var schema_name = sqc[1];
+							console.log('schema_name', schema_name);
+
+							// need to get all tables in that schema.
+							//  However, dealing with nested resources may be the best way.
+							//  For the moment this has not been coded that way because there's quite a fixed heirachy of resources and I just want to get the code written.
+							//  Nested resources would work differently.
+
+							// Get the table names in schema
+
+
+
+
+							throw 'stop;'
+						}
+
+					}
+
+				}
+
+
+
+			} else {
+				console.log('get db resource root');
+
+				// Returns info such as the database name, and the names of tables
+				//  Will just return the table names.
+
+				// Could also say which are navigable child fields.
+				//  Maybe arrays of strings will be that.
+
+				// Also get the latest list of tables...
+
+				this.get_schema_names(function(err, schema_names) {
+					if (err) {
+						console.log('error getting schema names', err);
+						callback(err);
+					} else {
+						console.log('schema_names', schema_names);
+
+						// This level being meta anyway?
+						//  Or meta are things outside of the heirachical path?
+						//  Was thinking that the tables could be meta. I'm not sure.
+
+
+						
+						var res = {
+							//'name': that.meta.get('name'),
+							'schemas': schema_names
+						}
+						callback(null, res);
+					}
+				})
+
+				
+
+
+
+			}
+			// Only work with 2 params?
+			//  Maybe there will be a querystring in there too.
+
+			// Need to parse that query component.
+			//  There could be some complexity in how resources interpret that query component.
+
+			// get returns info about the database itself.
+
+			// And this resource could be published over HTTP.
+
+		}),
+
+		// I think resources will talk HTTP to some extent, with put and post methods, but at some point its going to use set, and that distinction could be lost.
+		//  repeated put requests will act as if its been sent once.
+
+		// A put request would be used to create a table
+		// A post request, with that table description, could be used in order to update the table to what is described.
+		//  Post being like doing a diff operation?
+		//   Post just having some fields for the object?
+		//  Put containing all the data?
+
 		
-		'get_table_names': function(callback) {
+
+
+
+
+		// Would call the Resource's Put or Post method.
+		//  Not sure if that will be the Set method in some cases.
+		//  Set does not have the distinction between (create or overwrite) and (update existing)
+		//  Updating existing may overwrite data.
+
+		/*
+		I think one cannot stress enough the fact that PUT is idempotent: if the network is botched and the client is not sure whether his request made it through, it can just send it a second (or 100th) time, and it is guaranteed by the HTTP spec that this has exactly the same effect as sending once.
+		*/
+
+
+
+
+		// PUT - Create or Overwrite
+		// POST - Update existing. Error if does not exist already (404).
+
+
+		// Put will do this in some cases.
+		'create_table': function(table_def, callback) {
+			// This could use some of the abstract Postgres functionality.
+
+			// Want to be able to interpret fairly simple json to make a table
+
+			var example_table_def = {
+				'name': 'users',
+				'columns': [
+					'id serial pk',
+					'username unique indexed char(32) not null',
+					'password_hash char(256) not null'
+				]
+			}
+			table_def = example_table_def;
+
+			// The abstract Postgres DB objects get created from this table def.
+			// Postgres abstract core should be very useful for this.
+
+			var apg_table = new Abstract.Table(table_def);
+			var sql_create = apg_table.get_create_statement();
+
+			console.log('sql_create', sql_create);
+
+
+
+
+		},
+
+		'get_schema_names': function(callback) {
+			/*
+			select schema_name
+			from information_schema.schemata
+			where schema_name <> 'information_schema' -- exclude 'system' schemata
+			  and schema_name !~ E'^pg_'
+  			*/
+
+  			var sql = [
+	  			"select schema_name",
+				"from information_schema.schemata",
+				"where schema_name <> 'information_schema'",
+				  "and schema_name !~ E'^pg_'"
+  			].join(' ');
+
+  			//this.execute_multirow_to_callback(sql, callback);
+  			// Don't want the full names in there.
+
+  			// Want to execte multirow to callback, but have the results as an array
+  			//  Works with single result per row.
+
+  			this.execute_multirow_univalue_to_callback(sql, callback);
+
+		},
+
+
+		//SELECT * FROM information_schema.tables 
+		//WHERE table_schema = 'public'
+
+		'get_table_names': function(schema_name, callback) {
+			var client = this.client;
+			
+			// Will do a select exists query.
+			
+			var sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = "' + schema_name + '"';
+			var query = client.query(sql);
+
+			var res = [];
+			
+			//can stream row results back 1 at a time
+			query.on('row', function(row) {
+			  console.log(row);
+			  //console.log("row", row); //Beatle name: John
+			  //console.log("Beatle birth year: %d", row.birthday.getYear()); //dates are returned as javascript dates
+			  //console.log("Beatle height: %d' %d\"", Math.floor(row.height/12), row.height%12); //integers are returned as javascript ints
+			  
+			  res.push(row.table_name);
+			  
+			  
+			});
+			query.on('end', function() {
+				//fired once and only once, after the last row has been returned and after all 'row' events are emitted
+				//in this example, the 'rows' array now contains an ordered set of all the rows which we received from postgres
+				//client.end();
+				//console.log('res ' + stringify(res));
+				callback(null, res);
+			});
+			
+			
+		},
+
+
+		'get_database_names': function(callback) {
 			// run the query.
 			
 			// Could use something to put the select statement together.
@@ -234,13 +496,13 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 				//in this example, the 'rows' array now contains an ordered set of all the rows which we received from postgres
 				//client.end();
 				//console.log('res ' + stringify(res));
-				callback(res);
+				callback(null, res);
 			});
 			
 			
 		},
 		
-		'teble_exists': function(db_name, callback) {
+		'table_exists': function(db_name, callback) {
 			// SELECT d.datname as "Name", u.usename as "Owner", pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT EXISTS(d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid WHERE... ORDER BY 1);
@@ -451,6 +713,49 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 					//console.log('get_sequence_names exists row ' + stringify(row));
 					//res = row;
 					res.push(row);
+				},
+				'end': function() {
+					callback.call(that, undefined, res);
+				},
+				'error': function(error) {
+					
+					// error if the schema already exists.
+					//  not sure about throwing a JavaScript error - they are not that useful
+					
+					// May have a way of indicating the query has ended with an error.
+					
+					// Could maybe return it as parameter 0 all the time.
+					//  Maybe return a query_result object
+					//  array: [error, result]
+					
+					// [undefined, true]
+					// [error, undefined]
+					console.log(error);
+					callback.call(that, error);
+					
+					
+					
+					// however, this means an error in the SQL.
+					//  May not want SQL errors going outside of here so much.
+					
+					
+				}
+			});
+		},
+
+		'execute_multirow_univalue_to_callback': function(sql, callback) {
+			var res = [];
+			var that = this;
+			this.execute_query({
+				'sql': sql,
+				'row': function(row) {
+					//console.log('get_sequence_names exists row ' + stringify(row));
+					//res = row;
+
+					var keys = Object.keys(row);
+					res.push(row[keys[0]]);
+
+					//res.push(row);
 				},
 				'end': function() {
 					callback.call(that, undefined, res);

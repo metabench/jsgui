@@ -1279,13 +1279,58 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         //  We count down the number yet to be ready, when that is 0 we do the rendering like normal, except returning the result asyncronously.
 
 
+        'iterate_this_and_subcontrols': function(ctrl_callback) {
+            ctrl_callback(this);
 
+            var content = this.get('content');
+            var that = this;
+
+            content.each(function(i, v) {
+                //console.log('v', v);
+
+                tv = tof(v);
+                if (tv == 'string') {
+                    // escape the string.
+
+                    //var output = jsgui.output_processors['string'](n);
+                    //res.push(output);
+                    //res.push(jsgui.output_processors['string'](n));
+
+                }
+                /*
+                if (tof(n) == 'string') {
+                    // escape the string.
+
+                    var output = jsgui.output_processors['string'](n);
+                    res.push(output);
+
+                }
+                */
+                if (tv == 'data_value') {
+                    //var output = jsgui.output_processors['string'](n.get());
+                    //res.push(jsgui.output_processors['string'](n.get()));
+                } else {
+                    //htm = n.all_html_render();
+                    //res.push(n.all_html_render());
+                    v.iterate_this_and_subcontrols.call(v, ctrl_callback);
+                }
+
+                
+
+            });
+
+
+        },
 
         // Should now include deferred rendering.
 
         'all_html_render': function(callback) {
 
             if (callback) {
+
+                console.log('deferred rendering');
+                //throw 'stop';
+
                 // Get the map of any controls that have __status == 'waiting'.
                 var that = this;
                 // want to recursively iterate through controls and subconstrols.
@@ -1300,6 +1345,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 });
 
                 // then if we are waiting on any of them we listen for them to complete.
+
+                console.log('arr_waiting_controls.length', arr_waiting_controls.length);
+
                 if (arr_waiting_controls.length == 0) {
                     this.all_html_render();
                     callback(null, true);
@@ -1307,9 +1355,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     var c = arr_waiting_controls.length;
 
                     var complete = function() {
+                        console.log('complete');
                         that.pre_all_html_render();
 
                         var dom = that.get('dom');
+                        console.log('dom', dom);
 
                         if (dom) {
                             // does it have innerHTML?
@@ -1325,24 +1375,27 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                             res = [beginning, middle, end, appendment].join('');
                             */
-                            return [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
+                            //return [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
+
+                            callback(null, [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join(''));
                             //throw ('stop');
                         }
                     }
 
                     each(arr_waiting_controls, function(i, control) {
                         control.on('ready', function(e_ready) {
+                            console.log('control ready');
                             c--;
-
+                            console.log('c');
+                            if (c == 0) {
+                                complete();
+                            }
 
                         });
                     });
 
 
                 }
-
-
-
             } else {
                 this.pre_all_html_render();
 
@@ -2933,7 +2986,12 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">\n';
         },
 
+
+        /*
         'all_html_render': function () {
+
+
+
             //if (this.pre_all_html_render) {
             //	
             //}
@@ -2973,16 +3031,17 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 //throw ('stop');
             }
 
-            /*
+            
         	
-        	if (this.dom && this.dom._ && this.dom._.innerHtml) {
-        		res = [this.renderBeginTagToHtml(), this.dom._.innerHtml, this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
-        	} else {
-        		res = [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
-        	};
-        	*/
+        	//if (this.dom && this.dom._ && this.dom._.innerHtml) {
+        	//	res = [this.renderBeginTagToHtml(), this.dom._.innerHtml, this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
+        	//} else {
+        	//	res = [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
+        	//};
+        	
             return res.join('');
         }
+        */
 
     });
 
@@ -3147,7 +3206,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         },
 
-        'include_jsgui_resource_client': function() {
+        'include_jsgui_resource_client': function(path) {
 
             // Could add the default client file.
 
@@ -3157,7 +3216,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             // could include a specific parameter for js_file_require_data_main
 
-            var js_file_require_data_main = '/js/web/jsgui-html-resource-client';
+            var js_file_require_data_main = path || '/js/web/jsgui-html-resource-client';
             this.include_jsgui_client(js_file_require_data_main);
 
         },
