@@ -68,7 +68,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 
             // empty objects and arrays
 
-			assert.deepEqual([], {}); // !!!
+			assert.deepEqual([], {}); // :)
 			assert.deepEqual(jsgui.extend({}, []), []);
 			assert.deepEqual(jsgui.extend({}, []), {});
 
@@ -184,7 +184,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 			assert.equal(jsgui.tof(Number.MAX_VALUE), "number");
 			assert.equal(jsgui.tof(Number.MIN_VALUE), "number");
 
-			assert.equal(jsgui.tof(NaN), "number"); // ???
+			assert.equal(jsgui.tof(NaN), "number"); // ?
 
 			assert.equal(jsgui.tof(new Number()), "object");
 			assert.equal(jsgui.tof(new Number(123)), "object");
@@ -204,7 +204,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 			assert.equal(jsgui.tof(setInterval), "function");
 			assert.equal(jsgui.tof(Object), "function");
 
-			assert.equal(jsgui.tof(new Function()), "function");  // !!!
+			assert.equal(jsgui.tof(new Function()), "function");  // ?
 
             // boolean
 
@@ -460,7 +460,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 		    assert.deepEqual(f1(1, 2), "2[1, 2]:[n,n]");
 		    assert.deepEqual(f1(1, "a", [null]), '3[1, "a", [null]]:[n,s,a]');
 
-		    //assert.deepEqual(f1(1,2,undefined), "2[1, 2]:[n,n]"); -> "3[1, 2]:[n,n]"  !!!
+		    assert.deepEqual(f1(1,2,undefined), "2[1, 2]:[n,n]");
 
 		});
 
