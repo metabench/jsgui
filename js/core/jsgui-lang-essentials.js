@@ -175,59 +175,53 @@ define(function() {
 
 
     /**
-    * Iterates over the passed array elements. The iterator function calls for each element: fn(index, element, stop):
+    * Iterates over the array elements. The iterator function calls for each element: fn(index, element, stop):
     * - index: the element index
     * - element: the element value
-    * - stop: 
-    *
+    * - stop: call this function to prevent further iterations
     *
     * The iterator function is bound to the context object, if passed.
-    * The collection parameter can be:
-    * - a Collection object (the Collection.each() method is used in this case)
-    * - an array (iterate over array elements)
-    * - an object (iterate over object properties)
     *
-    * The iteration function parameters are:
-    * - index, element, stopFunction (for array)
-    * - key, value, stopFunction (for object)
-    *
-    * The stopFunction breaks the iteration if called.
-    *
+    * @name each
     * @func
-    * @param {Collection|Array|Object} collection - collection of elements
-    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback|module:core/jsgui-lang-essentials.objectIteratorCallback} fn - iterator function
+    * @param {Array} arr - array of elements
+    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback} fn - iterator function
     * @param {Object} [context] - context object
     * @memberof module:core/jsgui-lang-essentials
     * @example
+    *
     * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
-    *    console.log(index + ":" + element);
+    *    console.log(index + ":" + element);  // 0:1 1:2 2:3 3:4 4:5
+    *    if (index > 1000) stop();
     * });
+    *
     */
 
 
     /**
-    * Iterates over a collection of elements. Each element is passed to an iterator function. 
+    * Iterates over the object properties. The iterator function calls for each element: fn(key, value, stop):
+    * - key: the property key
+    * - value: the property value
+    * - stop: call this function to prevent further iterations
+    *
     * The iterator function is bound to the context object, if passed.
-    * The collection parameter can be:
-    * - a Collection object (the Collection.each() method is used in this case)
-    * - an array (iterate over array elements)
-    * - an object (iterate over object properties)
     *
-    * The iteration function parameters are:
-    * - index, element, stopFunction (for array)
-    * - key, value, stopFunction (for object)
-    *
-    * The stopFunction breaks the iteration if called.
-    *
+    * @name each
     * @func
-    * @param {Collection|Array|Object} collection - collection of elements
-    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback|module:core/jsgui-lang-essentials.objectIteratorCallback} fn - iterator function
+    * @param {Object} obj - object
+    * @param {module:core/jsgui-lang-essentials.objectIteratorCallback} fn - iterator function
     * @param {Object} [context] - context object
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    * jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){
-    *    console.log(index + ":" + element);
+    *
+    * jsgui.each({a: 1, b: 2}, function(key, value, stop){
+    *    if (key == "secretKey"){ 
+    *      stop();
+    *      return;
+    *    }
+    *    console.log(key + ":" + value);  // a:1  b:2
     * });
+    *
     */
 	// new addition with the loop being stoppable using a function call. 18/06/2012
 	var each = function(collection, fn, context) {
@@ -296,26 +290,69 @@ define(function() {
     */
 
     /**
-    * Iterates over a collection of elements, just like the [each()]{@link module:core/jsgui-lang-essentials.each} function, but the iterator function parameters order is changed.
+    * Iterates over a collection calling the collection.each(fn, context) method.
+    *
+    * <mark>maybe collection.each() must be changed to collection.eac()?</mark>
+    *
+    * @name eac
+    * @func
+    * @param {Collection} collection - collection of elements
+    * @param {function} fn - iterator function
+    * @param {Object} [context] - context object
+    * @memberof module:core/jsgui-lang-essentials
+    * @example
+    * 
+    * // TODO.......
+    * 
+    */
+
+    /**
+    * Iterates over an array, just like the [each()]{@link module:core/jsgui-lang-essentials.each} function, but the iterator function parameters order is changed:<br>
+    * `fn(element, index, stop)` instead of `fn(index, element, stop)`
     *
     * Better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
 	*  Useful for new code.
     *
-    * The iteration function parameters are:
-    * - element, index, stopFunction (for array)
-    * - value, key, stopFunction (for object)
-    *
+    * @name eac
     * @func
-    * @param {Collection|Array|Object} collection - collection of elements
-    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback-eac|module:core/jsgui-lang-essentials.objectIteratorCallback-eac} fn - iterator function
+    * @param {Array} arr - array of elements
+    * @param {module:core/jsgui-lang-essentials.arrayIteratorCallback-eac} fn - iterator function
     * @param {Object} [context] - context object
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    * jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){
-    *    console.log(index + ":" + element);
+    *
+    * jsgui.each([1, 2, 3, 4, 5], function(element, index, stop){
+    *    console.log(index + ":" + element);  // 0:1 1:2 2:3 3:4 4:5
+    *    if (index > 1000) stop();
     * });
+    *
     */
-	var eac = function(collection, fn, context) {
+
+    /**
+    * Iterates over the object properties, just like the [each()]{@link module:core/jsgui-lang-essentials.each} function, but the iterator function parameters order is changed:<br />
+    * `fn(value, key, stop)` instead of `fn(key, value, stop)`
+    *
+    * Better each function, first param of callback is obj, 2nd is index. Will replace all each functions with this version then change the name to each.
+	*  Useful for new code.
+    *
+    * @name eac
+    * @func
+    * @param {Object} obj - object
+    * @param {module:core/jsgui-lang-essentials.objectIteratorCallback-eac} fn - iterator function
+    * @param {Object} [context] - context object
+    * @memberof module:core/jsgui-lang-essentials
+    * @example
+    *
+    * jsgui.eac({a: 1, b: 2}, function(value, key, stop){
+    *    if (key == "secretKey"){ 
+    *      stop();
+    *      return;
+    *    }
+    *    console.log(key + ":" + value);  // a:1  b:2
+    * });
+    *
+    */
+	var eac = function (collection, fn, context) {
 		// each that puts the results in an array or dict.
 		if (collection) {
 
@@ -1415,7 +1452,7 @@ define(function() {
 				//var sig = get_item_sig(arr, 1);
 				sig = get_item_sig(arr, 1);
 				arr.l = l;
-				//console.log('arr.l ' + arr.l);
+			    //console.log('arr.l ' + arr.l);
 				//return fn.call(that, arr, sig, _super);
 				return fn.call(this, arr, sig);
 			} else if (a.length == 0) {
@@ -2888,12 +2925,6 @@ define(function() {
 		storage_map[key] = value;
 	}
 
-	var ends = function(str, target) {
-		if (str.length <= target.length) return false;
-		if (str.substr(str.length - target.length) == target) return true;
-		return false;
-	} 
-
 
 	/*
 
@@ -2948,8 +2979,7 @@ define(function() {
 		'native_constructor_tof': native_constructor_tof,
 		'Fns': Fns,
 		'get': get,
-		'set': set,
-		'ends': ends
+		'set': set
 	};
 
 	
