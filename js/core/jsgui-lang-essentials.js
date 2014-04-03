@@ -728,6 +728,7 @@ define(function() {
     * - "undefined"
     * - "null"
     * - <mark>obj.__type</mark>
+    * - "date"
     * - "array"
     * - "control"
     * - "regex" (obj instanceof RegExp)
@@ -2846,12 +2847,14 @@ define(function() {
 	}
 	
     /**
-    * Returns a name of the passed native constructor function, or `undefined` for unknown values (<mark>e.g. Date</mark>). The following names are known:
-    * - String
-    * - Number
-    * - Boolean
-    * - Array
-    * - Object
+    * Returns a name of the passed native constructor function. Possible return values are:
+    * - "String"
+    * - "Number"
+    * - "Boolean"
+    * - "Array"
+    * - "Object"
+    * - undefined (for all other arguments)
+    *
     * @func
     * @memberof module:core/jsgui-lang-essentials
     * @example
