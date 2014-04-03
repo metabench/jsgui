@@ -5174,6 +5174,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 		return Class;
 	};
+
+	
 	// Will have actual Constraint programming objects.
 	//  They may translate to the database level as well.
 	//  In many cases the constraints will be expressed as strings such as 'text(32)'.

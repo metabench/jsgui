@@ -319,12 +319,20 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	js.process(req, res);
                     });
 
+                    /*
                     rt.set('/images/*', function(req, res) {
                     	console.log('images wildcard routing. will send to the images resource.');
 
                     	//throw 'stop';
                     	images.process(req, res);
 
+                    });
+					*/
+
+                    rt.set('/img/*', function(req, res) {
+                    	console.log('images wildcard routing. will send to the images resource.');
+                    	//throw 'stop';
+                    	images.process(req, res);
                     });
 
                     rt.set('/admin/*', function(req, res) {

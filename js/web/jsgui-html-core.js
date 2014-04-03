@@ -566,6 +566,38 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 }
 
                 var that = this;
+
+                if (spec.size) {
+                    var size = spec.size;
+                    var t_size = tof(size);
+                    if (t_size == 'array') {
+                        var width = size[0];
+                        var height = size[1];
+
+                        // far from ideal
+                        //  Really should set inline styles separately.
+                        //  I had lost some of the JSGUI style system before because I redid control based on Data_Object, it may have got too complicated before though.
+                        //  
+
+                        // Want to be able to access css styles.
+                        //  Want to be able to access styles on a different level though - things which may not be supported by CSS directly.
+                        //  Will do things more based on the CSS standard where possible, and shifting to use other methods when not possible.
+
+
+
+
+
+                        this.set('dom.attributes.style', 'width: ' + width + 'px; height: ' + height + 'px;');
+
+                        // Needs to set inline styles.
+                    }
+                }
+
+                if (spec['class']) {
+                    this.set('dom.attributes.class', spec['class']);
+                }
+
+
                 // When content gets added, need to update the relationships. 
 
                 // Perhaps change is the better event to use.
@@ -929,7 +961,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'post_init': function (spec) {
             //throw 'stop';
-            if (spec.id === true) {
+            if (spec && spec.id === true) {
                 // get the id from the context.
                 //if (t)
                 this.set('dom.attributes.id', this._id());
@@ -1921,6 +1953,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         'add': function (new_content) {
 
             var tnc = tof(new_content);
+            console.log('tnc', tnc);
 
             if (tnc == 'array') {
                 var res = [], that = this;
@@ -2585,7 +2618,127 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         }
     };
 
+    var initializing = false, fnTest = /xyz/.test(function() {
+        xyz;
+    }) ? /\b_super\b/ : /.*/;
+
     Control.prototype._module_jsgui = jsgui;
+
+    Control.extend = function(prop, post_init) {
+        var _super = this.prototype;
+        initializing = true;
+        var prototype = new this();
+        var for_class = {};
+        initializing = false;
+        if (typeof prop === 'string') {
+            var data_type_name = prop;
+            var dtis = jsgui.data_types_info;
+            var data_type_info = dtis[data_type_name];
+            for_class[data_type_name] = data_type_name;
+            for_class[data_type_info] = data_type_info;
+            prototype['__type_name'] = data_type_name;
+            prototype['__data_type_info'] = data_type_info;
+            prop = {};
+        }
+        var prop_item, t_prop_item, tmp, name, res;
+        for (name in prop) {
+            prop_item = prop[name];
+            if (name.charAt(0) === '#') {
+                prototype[name.substring(1)] = prototype[prop_item];
+            } else {
+                t_prop_item = typeof prop_item;
+                if (t_prop_item === 'function') {
+                    prototype[name] = typeof _super[name] === 'function' && fnTest.test(prop_item) ?
+                    (function(name, fn) {
+                        return function() {
+                            tmp = this._super;
+                            this._super = _super[name];
+                            res = fn.apply(this, arguments);
+                            this._super = tmp;
+                            return res;
+                        };
+                    })(name, prop[name]) : prop[name];
+                } else if (t_prop_item === 'object' || t_prop_item === 'boolean') {
+                    if (name == 'class_name') {
+                        for_class['_class_name'] = prop_item;
+                    } else if (name == 'fields') {
+                        for_class['_fields'] = prop_item;
+                    } else if (name == 'connect_fields') {
+                        for_class['_connect_fields'] = prop_item;
+                    } else {
+                        prototype[name] = prop[name];
+                    }
+                }  else {
+                    prototype[name] = prop[name];
+                }
+            };
+        };
+        var Class = function() {
+            if (!initializing) {
+                if (this.init) {
+                    var that = this;
+                    var the_make_function = function(abstract_control) {
+                        // needs to create a real control out of an abstract one.
+                       // var instance = new abstract_control
+
+                       console.log('the make function');
+                       console.log('abstract_control', abstract_control);
+                       //console.log('abstract_control.constructor', abstract_control.constructor);
+
+                       var spec = abstract_control._spec;
+                       spec.abstract = null;
+                       spec.context = that._context;
+                       console.log('that._context', that._context);
+                       var instance = new abstract_control.constructor(spec);
+                       //throw 'stop';
+
+                       return instance;
+
+
+                    };
+
+                    var the_add_function = function(abstract_control) {
+                        var instance = the_make_function(abstract_control);
+                        return that.add(instance);
+                    }
+
+                    var l = arguments.length;
+                    var a2 = new Array(l + 2);
+                    for (var c = 0; c < l; c++) {
+                        a2[c] = arguments[c];
+                    }
+                    a2[l] = the_add_function;
+                    a2[l + 1] = the_make_function;
+
+                    this.init.apply(this, a2);
+                    if (this.post_init) {
+                        //this.post_init();
+                        this.post_init.apply(this, arguments);
+                    }
+                    if (post_init) {
+                        post_init.call(this);
+                    }
+                } else {
+                    var spec = arguments[0] || {};
+                    spec.abstract = true;
+                    return new Class(spec);
+                }
+            }
+        };
+        Class.prototype = prototype;
+        Class.prototype.constructor = Class;
+        Class.extend = arguments.callee;
+        for (i in for_class) {
+            Class[i] = for_class[i];
+        }
+        if (Class['class_name']) {
+            jsgui.map_classes[Class['class_name']] = Class;
+        }
+        Class._superclass = this;
+        return Class;
+    };
+
+
 
     // function to set up access functions on a prototype?
     //  aliases?

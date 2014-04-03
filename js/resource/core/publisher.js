@@ -3,7 +3,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/controls/advanced/resource',
+define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/controls/advanced/resource-base',
 	'../../web/jsgui-je-suis-xml', 'cookies', '../../web/server-page-context'], 
 
 	function(jsgui, os, http, libUrl, Web_Resource, Resource_Control,
@@ -142,7 +142,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 		'respond': fp(function(a, sig) {
 
-			var req, res, content_type, my_Resource_Control, resource_client_path;
+			var req, res, content_type, my_Resource_Control, resource_client_path, included_css;
 
 			if (a.l == 3) {
 				req = a[0];
@@ -163,6 +163,15 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				content_type = a[2];
 				my_Resource_Control = a[3];
 				resource_client_path = a[4];
+			}
+
+			if (a.l == 6) {
+				req = a[0];
+				res = a[1];
+				content_type = a[2];
+				my_Resource_Control = a[3];
+				resource_client_path = a[4];
+				included_css = a[5];
 			}
 
 
@@ -198,7 +207,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 			// We could read the content type from the end of the req...
-			console.log('req keys', Object.keys(req));
+			//console.log('req keys', Object.keys(req));
 
 			var url = req.url;
 			var method = req.method;
@@ -287,6 +296,14 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 					hd.include_client_css();
 
+					if (included_css) {
+						hd.include_css(included_css);
+					}
+
+					// want to be able to include some specific css files.
+
+
+
 					// also include the jsgui-client JavaScript.
 					//  Therw will not be much / any extra JavaScript that needs to run alongside the client.
 
@@ -320,7 +337,8 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 					// Not necessarily...
-					hd.include_js('http://cdn.sockjs.org/sockjs-0.3.min.js');
+					//hd.include_js('http://cdn.sockjs.org/sockjs-0.3.min.js');
+
 
 					// Somehow send the resource name along as well?
 					//  Or it can get information on the resource by calling the url + '.json', and that does a 'get' on the resource, including the resource's name.

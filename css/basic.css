@@ -366,3 +366,9 @@ div.single-line.selected {
 	vertical-align: middle;
 	line-height: 32px;
 }
+
+
+.window .title.bar {
+	height: 32px;
+	background-color: #0D4F8B;
+}

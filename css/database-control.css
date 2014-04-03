@@ -1,0 +1,50 @@
+
+.title.bar {
+	height: 94px;
+	width: 100%;
+	text-align: center;
+	background-color: #FFFFFF;
+
+	-webkit-box-shadow: inset 0px -2px 2px -2px rgba(0,0,0,0.75);
+	-moz-box-shadow: inset 0px -2px 2px -2px rgba(0,0,0,0.75);
+	box-shadow: inset 0px -2px 2px -2px rgba(0,0,0,0.75);
+
+}
+
+.title.bar span {
+	vertical-align: middle;
+	line-height: 32px;
+}
+
+.title.bar img {
+	margin-top: 4px;
+	height: 64px;
+	width: 64px;
+}
+
+.title.bar .left {
+	float: left;
+}
+.title.bar .right {
+	float: left;
+}
+
+.title.bar .centered {
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+}
+
+.title.bar .centered .left h4 {
+	margin-top: 4px;
+}
+
+.title.bar .centered .right h1 {
+	position: relative;
+	left: 28px;
+	top: 28px;
+}
+
+.window {
+	border: 1px solid #AAAAAA ;
+}

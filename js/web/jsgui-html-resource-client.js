@@ -97,7 +97,7 @@ if (typeof define !== 'function') {
 };
 
 
-define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool", "../resource/core/client-resource", "./controls/advanced/resource",
+define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool", "../resource/core/client-resource", "./controls/advanced/resource-base",
     "./controls/advanced/viewer/object", "./controls/advanced/viewer/basic/number"],
 //define(["./jsgui-html"],
 function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Resource_Control,

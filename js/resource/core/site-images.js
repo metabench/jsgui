@@ -69,15 +69,34 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		// then return the right MIME type for that extension.
 
-		fs2.load_file_as_string(filePath, function (err, data) {
-			if (err) { 
+		// No, don't load the image file as a string.
+
+		// fs loadfile
+		//  async, then serve it with the correct mime type, write to the response buffer.
+
+		// can this be streamed to the response buffer?
+
+		fs.readFile(filePath, function(err, data) {
+			if (err) {
 				throw err;
 			} else {
-				//var servableJs = updateReferencesForServing(data);
-				response.writeHead(200, {'Content-Type': mime_types[extension]});
-				response.end(data);
+
+				response.writeHead(200, {'Content-Type': mime_types[extension] });
+    			response.end(data, 'binary');
+
 			}
 		});
+
+
+		//fs2.load_file_as_string(filePath, function (err, data) {
+		//	if (err) { 
+		//		throw err;
+		//	} else {
+		//		//var servableJs = updateReferencesForServing(data);
+		//		response.writeHead(200, {'Content-Type': mime_types[extension]});
+		//		response.end(data);
+		//	}
+		//});
 	}
 
 
@@ -158,7 +177,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					if (tval == 'string') {
 						// then it should be a local file path, serve it.
 
-						serve_css_file_from_disk(val, res);
+						serve_image_file_from_disk(val, res);
 
 					}
 
@@ -166,6 +185,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//throw 'stop';
 			} else {
+				console.log('splitPath', splitPath);
 				if (splitPath.length > 0) {
 
 					// Can check for /js folder.
@@ -181,7 +201,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					//   Could become more advanced at some points, serving particular builds.
 
 
-					if (splitPath[0] == 'images') {
+					if (splitPath[0] == 'img') {
 						//var sjs = pool.get_resource('Site JavaScript');
 						//console.log('sjs ' + sjs);
 
@@ -202,9 +222,9 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 								//var diskPath = val2 + '/../../images/' + fileName;
 
-								var diskPath = '../../ws/images/' + fileName;
+								var diskPath = '../../ws/img/' + fileName;
 
-								serve_css_file_from_disk(diskPath, res);
+								serve_image_file_from_disk(diskPath, res);
 
 								/*
 								fs2.load_file_as_string(diskPath, function (err, data) {
@@ -219,6 +239,24 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								*/
 							} else {
 								if (splitPath.length == 3) {
+
+									// need to put the rest of it together...
+
+									var fileName = splitPath.slice(1, splitPath.length).join('/');
+									console.log('fileName', fileName);
+
+
+									var filePath = url_parts.path.substr(1);
+									//console.log('module.uri ' + module.uri);
+									var val2 =  path.dirname(module.uri);
+									console.log('val2 ' + val2);
+									//throw '9) stop';
+
+									//var diskPath = val2 + '/../../images/' + fileName;
+
+									var diskPath = '../../ws/img/' + fileName;
+
+									serve_image_file_from_disk(diskPath, res);
 									// /js/core/jsgui-lang-enh
 									//console.log('!*!*!*! url_parts.path ' + url_parts.path);
 									/*
