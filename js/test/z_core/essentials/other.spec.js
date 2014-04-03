@@ -232,7 +232,11 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
 
 			assert.equal(jsgui.tof({__type: "myType"}), "myType");
 
-            // array
+		    // date
+
+			assert.equal(jsgui.tof(new Date()), "date");
+
+		    // array
 
 			assert.equal(jsgui.tof([]), "array");
 			assert.equal(jsgui.tof([1, 2, "3"]), "array");
