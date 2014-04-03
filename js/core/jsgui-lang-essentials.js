@@ -1451,7 +1451,8 @@ define(function() {
 				//arr = arr_trim_undefined(arr);
 				//var sig = get_item_sig(arr, 1);
 				sig = get_item_sig(arr, 1);
-				arr.l = l;
+				//arr.l = l;
+				arr.l = arr.length;
 			    //console.log('arr.l ' + arr.l);
 				//return fn.call(that, arr, sig, _super);
 				return fn.call(this, arr, sig);
