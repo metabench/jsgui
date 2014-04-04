@@ -56,6 +56,18 @@ define(["../../jsgui-html"],
 					title_h2.add(title);
 					title_bar.add(title_h2);
 
+					// Define this as having inner_content.
+
+					// I think that would also be a control field that gets activated as such.
+					// .add needs to work with inner_content.
+					// .add also needs to work with abstract controls. It should make them into an instance in the right context and add them, then
+					//  return them.
+
+
+					var inner_content = add(Control({'class': 'inner'}));
+					this.set('inner_control', inner_content);
+
+
 
 
 					// May want some code to set this up as a dockable dialog window.

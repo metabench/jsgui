@@ -8,8 +8,8 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 
 define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base',
-	'../../../web/controls/advanced/window'], 
-	function(jsgui, Resouce_Control, Window) {
+	'../../../web/controls/advanced/window', '../../../web/controls/advanced/tree-node'], 
+	function(jsgui, Resouce_Control, Window, Tree_Node) {
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
@@ -185,6 +185,12 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 								'size': [300, 500],
 								'title': 'Database Tree'
 							}));
+
+							var db_tree_root_node = make(Tree_Node({}));
+
+							win.add(db_tree_root_node);
+
+
 							//console.log('win', win);
 
 							//var win = new Window({

@@ -2,6 +2,13 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
+
+// JV - 04/04/14
+// I think that would also be a control field that gets activated as such.
+// .add needs to work with inner_content.
+// .add also needs to work with abstract controls. It should make them into an instance in the right context and add them, then
+//  return them.
+
 define(["../core/jsgui-lang-enh"], function (jsgui) {
     //This function is called when scripts/helper/util.js is loaded.
 
@@ -434,6 +441,12 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         // need to make sure that the fields makes these with the right contexts.
 
         // Say it's a collection of controls?
+            // Could possibly have an inner content?
+            //  Inner control?
+            //  And that inner control's content is the inner content.
+            //  Not all will have an inner control.
+            //   Could check a control to see if it has it.
+            //   Add will add to the inner control.
 
             ['content', 'collection'],
             ['dom', 'control_dom'],
@@ -1950,7 +1963,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             //return content.add(new_content);
             return this.get('content').add(new_content);
         },
-        'add': function (new_content) {
+        'add': function(new_content) {
 
             var tnc = tof(new_content);
             console.log('tnc', tnc);
@@ -1996,9 +2009,25 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 // Maybe listen out for content being added.
                 //  So we can do content.add rather than just .add, and it updates the parent and index values.
 
+                // Could check for an inner control.
+
+                // Also could instantiate the content if it is abstract.
+                // Also could express content as JSON in some cases.
+                //  Possibly could add XML.
+
+                
 
 
-                return this.get('content').add(new_content);
+                var inner_control = this.get('inner_control');
+
+                if (inner_control) {
+                    return inner_control.get('content').add(new_content);
+                } else {
+                    return this.get('content').add(new_content);
+                }
+
+
+                
                 // then it should know it's been added, and update the DOM.
                 //  should render the control to the DOM too.
 

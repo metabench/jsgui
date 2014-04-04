@@ -2,7 +2,7 @@
 .title.bar {
 	height: 94px;
 	width: 100%;
-	text-align: center;
+	/* text-align: center; */
 	background-color: #FFFFFF;
 
 	-webkit-box-shadow: inset 0px -2px 2px -2px rgba(0,0,0,0.75);
@@ -24,9 +24,11 @@
 
 .title.bar .left {
 	float: left;
+	text-align: center;
 }
 .title.bar .right {
 	float: left;
+	text-align: center;
 }
 
 .title.bar .centered {
