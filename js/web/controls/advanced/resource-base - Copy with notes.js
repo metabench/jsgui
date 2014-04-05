@@ -33,7 +33,7 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 
 				this.set('dom.attributes.class', 'resource');
 				this.__type_name = 'ctrl_resource';
-				//this.set('dom.attributes.data-jsgui-properties', "{'selection_scope': true}");
+				//this.set('dom.attributes.data-jsgui-fields', "{'selection_scope': true}");
 
 				// Could have the name as a title.
 				//	var name = this.get('name');

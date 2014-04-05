@@ -619,10 +619,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 //  Fewer event listeners to add.
 
                 // 
-                /*
+                
                 this.get('content').on('change', function(e_change) {
-                    console.log('e_change', e_change);
+                    console.log('Control content e_change', e_change);
 
+                    /*
                     if (e_change.type == 'insert') {
                         // then we need to insert it into the DOM
 
@@ -662,8 +663,14 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                         el.insertBefore(itemDomEl, el.childNodes[0]);
 
                     }
+                    */
+
+                    // Need to update the DOM to reflect the change.
+
+
+
                 })
-                */
+                
 
                 /*
                 this.get('content').add_event_listener('add', function(e_content) {
@@ -1373,7 +1380,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             if (callback) {
 
-                console.log('deferred rendering');
+                //console.log('deferred rendering');
                 //throw 'stop';
 
                 // Get the map of any controls that have __status == 'waiting'.
@@ -1391,7 +1398,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 // then if we are waiting on any of them we listen for them to complete.
 
-                console.log('arr_waiting_controls.length', arr_waiting_controls.length);
+                //console.log('arr_waiting_controls.length', arr_waiting_controls.length);
 
                 if (arr_waiting_controls.length == 0) {
                     var html = this.all_html_render();
@@ -1400,11 +1407,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     var c = arr_waiting_controls.length;
 
                     var complete = function() {
-                        console.log('complete');
+                        //console.log('complete');
                         that.pre_all_html_render();
 
                         var dom = that.get('dom');
-                        console.log('dom', dom);
+                        //console.log('dom', dom);
 
                         if (dom) {
                             // does it have innerHTML?
@@ -1422,7 +1429,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                             */
                             //return [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
                             var html = [that.renderBeginTagToHtml(), that.all_html_render_internal_controls(), that.renderEndTagToHtml(), that.renderHtmlAppendment()].join('');
-                            console.log('html', html);
+                            //console.log('html', html);
                             callback(null, html);
                             //throw ('stop');
                         }
@@ -1430,9 +1437,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                     each(arr_waiting_controls, function(i, control) {
                         control.on('ready', function(e_ready) {
-                            console.log('control ready');
+                            //console.log('control ready');
                             c--;
-                            console.log('c');
+                            //console.log('c');
                             if (c == 0) {
                                 complete();
                             }
@@ -1966,7 +1973,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         'add': function(new_content) {
 
             var tnc = tof(new_content);
-            console.log('tnc', tnc);
+            //console.log('tnc', tnc);
 
             if (tnc == 'array') {
                 var res = [], that = this;
@@ -2015,7 +2022,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 // Also could express content as JSON in some cases.
                 //  Possibly could add XML.
 
-                
+
 
 
                 var inner_control = this.get('inner_control');
@@ -2710,14 +2717,15 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                         // needs to create a real control out of an abstract one.
                        // var instance = new abstract_control
 
-                       console.log('the make function');
-                       console.log('abstract_control', abstract_control);
+                       //console.log('the make function');
+                       //console.log('abstract_control', abstract_control);
                        //console.log('abstract_control.constructor', abstract_control.constructor);
 
                        var spec = abstract_control._spec;
                        spec.abstract = null;
+                       spec._abstract = null;
                        spec.context = that._context;
-                       console.log('that._context', that._context);
+                       //console.log('that._context', that._context);
                        var instance = new abstract_control.constructor(spec);
                        //throw 'stop';
 
@@ -3048,7 +3056,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
     jsgui.textNode = Control.extend({
         'init': function (spec) {
+
+
             spec = spec || {};
+            this._super(spec);
+
             if (typeof spec == 'string') {
                 //this._.text = spec;
                 //this.innerHtml = spec;
@@ -3077,7 +3089,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 	    		this._.no_escape = spec.no_escape;
 	    	}
 	    	*/
-            ctrl_init_call(this, spec);
+            //ctrl_init_call(this, spec);
 
             //this._super(spec);
 

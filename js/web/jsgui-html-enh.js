@@ -409,6 +409,7 @@ define(["./jsgui-html-core"],
 
 	                        e_change.item.set('dom.el', itemDomEl);
 	                    };
+	                    console.log('itemDomEl', itemDomEl);
 
 	                    //el.insertBefore(itemDomEl, el.childNodes[0]);
 	                    el.appendChild(itemDomEl);
@@ -445,12 +446,13 @@ define(["./jsgui-html-core"],
 	                this.set('dom.attributes.class', map_classes);
 	            }
 
-	            var str_properties = el.getAttribute('data-jsgui-properties');
+	            var str_properties = el.getAttribute('data-jsgui-fields');
+	            console.log('str_properties', str_properties);
 	            if (str_properties) {
 	                //console.log('str_ctrl_fields ' + str_ctrl_fields);
 	                //console.log('str_properties', str_properties);
 	                var props = JSON.parse(str_properties.replace(/'/g, '"'));
-	                //console.log('props ' + stringify(props));
+	                console.log('props ' + stringify(props));
 	                //throw 'stop';
 	                this.set(props);
 

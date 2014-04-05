@@ -11,7 +11,7 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 	'../../../web/controls/advanced/window', '../../../web/controls/advanced/tree-node'], 
 	function(jsgui, Resouce_Control, Window, Tree_Node) {
 		
-		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
+		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 		var Control = jsgui.Control;
 		
 		// The basic controls should not do too much on top of normal HTML, but make it easier to do a few things
@@ -65,7 +65,22 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 						if (err) {
 							throw err;
 						} else {
+
+							// The database control could act in different modes.
+							//  One mode is simply representing itself in a list.
+
+							// This could represent a databse in 'app' mode.
+							// Or 'list' mode.
+
+							// Is it possible to cache the resource result so it only is got once per rendering?
+
+							// I think just using a simple list mode item would be worthwhile.
+							//  Image and text is all that is needed there.
+
+
+
 							console.log('resource_res', resource_res);
+							//throw 'stop';
 
 							// Want to render the various parts of the database into a tree.
 							//  Not sure which of them need to be represented by resources.
@@ -112,10 +127,8 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 
 
 
-							var title_img = new jsgui.img({
-
-							})
-							title_img.set('dom.attributes.src', '/img/postgres/postgres-database-512x512.png');
+							var title_img = make(jsgui.img({}));
+							title_img.set('dom.attributes.src', '/img/db/postgres/postgres-database-512x512.png');
 							//title_img.set('dom.attributes.class', 'title-img');
 
 							title_bar.add(centered);
@@ -127,13 +140,13 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 							h4_description.add('Postgres Database');
 
 
-
+							var db_name = resource.meta.get('name');
 
 
 							var h1_title = new jsgui.h1({
 								'context': that._context
 							});
-							h1_title.add(resource.meta.get('name'));
+							h1_title.add(db_name);
 							//centered.set('dom.attributes.class', 'centered');
 
 							centered.add(div_left);
@@ -186,9 +199,101 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 								'title': 'Database Tree'
 							}));
 
-							var db_tree_root_node = make(Tree_Node({}));
+							var db_tree_root_node = make(Tree_Node({
+								'img_src': '/img/db/postgres/postgres-database-512x512.png',
+								'text': db_name
+							}));
+
+
+
+							// Then we want something to represent the database.
+							//  Not a full database-control though?
+							//   or use it, but a light version?
+
+							// an image in the root node to show its a postgres db.
+
+							/*
+							var title_pg_db = make(jsgui.img({}));
+							title_pg_db.set('dom.attributes.src', '/img/postgres/postgres-database-512x512.png');
+							db_tree_root_node.add(title_pg_db);
+
+							// In the tree node, there is the inner section.
+							// Also need a section that gets expanded and collapsed.
+							//  Inner?
+							//  There is a title section at the top?
+
+							// I'm doing some programming right now, so may not respond immediately, but I'm still here.
+
+
+							// as well as that have the text for the db root node
+
+
+							var db_root_node_label = make(jsgui.span({}));
+							db_root_node_label.add(db_name);
+							db_tree_root_node.add(db_root_node_label);
+
+
+							// want to create a new node for the schemas.
+
+							var db_tree_schemas_node = make(Tree_Node({}));
+							db_tree_root_node.add(db_tree_schemas_node);
+
+							var img_pg_schemas = make(jsgui.img({}));
+							img_pg_schemas.set('dom.attributes.src', '/img/postgres/schemas_512.png');
+							db_tree_schemas_node.add(img_pg_schemas);
+
+							var db_schemas_node_label = make(jsgui.span({}));
+							db_schemas_node_label.add('Schemas');
+							db_tree_schemas_node.add(db_schemas_node_label);
+							*/
+
+							//
+
+
+							// then in the root node we have the schemas node.
+
+
 
 							win.add(db_tree_root_node);
+
+
+							var db_tree_schemas_node = make(Tree_Node({
+								'img_src': '/img/db/postgres/schemas-512.png',
+								'text': 'Schemas'
+							}));
+							db_tree_root_node.add(db_tree_schemas_node);
+							// Then we have the extended part...
+							//  other tree nodes.
+
+							// Will have a tree node for schemas.
+							//  Then a tree node for each schema
+
+							// consolt resource_res
+							// schema names
+							var schemas = resource_res.schemas;
+							each(schemas, function(schema) {
+								var db_tree_schema_node = make(Tree_Node({
+									'img_src': '/img/db/postgres/schema-512.png',
+									'text': schema
+								}));
+								db_tree_schemas_node.add(db_tree_schema_node);
+								
+								var db_tree_schema_tables_node = make(Tree_Node({
+									'img_src': '/img/db/tables-512.png',
+									'text': 'Tables'
+								}));
+								db_tree_schema_node.add(db_tree_schema_tables_node);
+
+								// Then for each schema we put in the tables?
+								//  I think we may as well.
+
+
+
+							});
+
+							// Could have the schemas actually load the tables when the user clicks to expand it.
+
+
 
 
 							//console.log('win', win);
@@ -198,14 +303,7 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 							//})
 							//that.add(win);
 
-
-
-
-
-
-
-
-
+							// Find out what schemas are in the system.
 
 
 
@@ -234,7 +332,12 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 				
 
 				
+			},
+			'activate': function() {
+				console.log('Activating Postgres Database Resource Control');
 			}
+
+
 		});
 
 

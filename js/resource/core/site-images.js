@@ -238,7 +238,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								});
 								*/
 							} else {
-								if (splitPath.length == 3) {
+								if (splitPath.length > 2) {
 
 									// need to put the rest of it together...
 

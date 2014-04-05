@@ -232,6 +232,20 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 				// specific one for tables?
 
+				// But getting the inner data of the schemas - such as tables and columns in those tables?
+				//  I think a /full query could do that best.
+				// Returning the basic data, as well as inner data.
+				//  Would return a much more comprehensive data structure.
+				//   Maybe return all the data in the database?
+				//  /full-structure
+				//  /structure (does not imply its so full)
+
+				// 
+
+
+
+
+
 				if (query_component == 'schemas') {
 
 					// Could refresh the local cache of table data?

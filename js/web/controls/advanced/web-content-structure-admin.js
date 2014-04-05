@@ -1,6 +1,8 @@
 // Maybe make this into a page control.
 //  That means it will always take up the whole page or be full screen in a window if suitable.
 
+// Likely to be done with some more general purpose administration of resources.
+
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 

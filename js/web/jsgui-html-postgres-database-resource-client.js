@@ -18,14 +18,14 @@ if (typeof define !== 'function') {
 
 
 define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool", "../resource/core/client-resource", 
-    "../db/postgres/resource/database-control",
+    "../db/postgres/resource/database-control", "../web/controls/advanced/toggle-button"
     //"../../../web/controls/advanced/viewer/object", "../../../web/controls/advanced/viewer/basic/number"
     ],
 //define(["./jsgui-html"],
 
 
 // And will use a Postgres DB Resource Control.
-function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Postgres_Database_Resource_Control //,
+function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Postgres_Database_Resource_Control, Toggle_Button //,
     //Object_Viewer, Number_Viewer
     ) {
 
@@ -86,6 +86,7 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Pos
     var client_page_context = new Client_Page_Context();
 
     client_page_context.update_Controls('postgres_database_resource', Postgres_Database_Resource_Control);
+    client_page_context.update_Controls('toggle-button', Toggle_Button);
 
     var resource_pool = client_page_context.resource_pool = new Client_Resource_Pool();
 

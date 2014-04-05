@@ -376,3 +376,64 @@ div.single-line.selected {
 	line-height: 32px;
 	text-indent: 4px;
 }
+
+.tree-node {
+	/* height: 32px; */
+	border-bottom: #CCCCCC;
+	/* position: relative; */
+	clear: both;
+	cursor: default;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.tree-node img {
+	width: 24px;
+	height: 24px;
+}
+
+.tree-node .inner {
+	float: left;
+	/* width: 120px; */
+	/* background-color: #EEEEEE; */
+}
+
+.toggle-button.plus-minus {
+	width: 14px;
+	height: 14px;
+	border: 1px solid #888888 ;
+	float: left;
+	font-family: monospace;
+	text-indent: 3px;
+	line-height: 14px;
+	position: relative;
+	top: 3px;
+
+}
+
+.tree-node .expander {
+	padding-left: 18px;
+	margin-top: 2px;
+}
+
+.tree-node .top-line img {
+	margin-left: 4px;
+	/* display: inline; */
+	float:left;
+}
+
+.tree-node .top-line {
+	/* clear: both; */
+	height: 24px;
+}
+
+.tree-node .top-line span {
+	/* clear: both; */
+	line-height: 24px;
+	margin-left: 4px;
+}
