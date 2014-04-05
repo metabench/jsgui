@@ -64,35 +64,6 @@ function (jsgui, Data_Structures, assert) {
 	describe("z_core /test_data_structures.spec.js ", function() {
 	
 		// -----------------------------------------------------
-		//	test_doubly_linked_list
-		// -----------------------------------------------------
-			
-		it("test_doubly_linked_list", function() {
-				
-			var test_doubly_linked_list = function() {
-				//console.log('test_doubly_linked_list');
-				var dll = new Data_Structures.Doubly_Linked_List();
-				
-				dll.push('James');
-				dll.push('Vickers');
-				
-				//console.log('dll ' + stringify(dll));
-				
-				//console.log('dll.length ' + dll.length);
-				assert.equal(dll.length, 2);
-				
-				var expected = "";
-				dll.each(function(value, stop) {
-					//console.log('value ' + value);
-					expected += value + "/";
-				});
-				assert.equal(expected, "James/Vickers/");				
-			}
-			test_doubly_linked_list();
-				
-		});
-					
-		// -----------------------------------------------------
 		//	test_ordered_kvs
 		// -----------------------------------------------------
 			

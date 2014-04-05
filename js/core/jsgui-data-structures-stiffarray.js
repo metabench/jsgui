@@ -30,33 +30,90 @@ define(["./jsgui-lang-essentials"], function (jsgui) {
     // it seems that this array is usually faster (excluding IE javascript engine)
     // probably there is a reason to provide IE implementation based on usual dynamic arrays
 
+    /** 
+    * Stiff Array module.
+    * @module core/jsgui-data-structures-stiffarray
+    * @exports StiffArray
+    */
+
+
     var StiffArray = function (capacity) {
 
         // -----------------------------------------
         //              public interface:
         // -----------------------------------------
 
+        /**
+        * Creates the stiff array.
+        * @constructor
+        * @classdesc 
+        * An array with pre-allocated items.
+        * It seems that this array is usually faster (excluding IE javascript engine).
+        * Probably there is a reason to provide IE implementation based on usual dynamic arrays.
+        *
+        * @alias StiffArray
+        * @param {number} capacity - array capacity (maximum possible number of items).
+        * @memberof  module:core/jsgui-data-structures-stiffarray
+        * @example
+        *
+        * var array = new StiffArray(7);
+        */
+
         var m_public = {
+            /** 
+            * internal storage array 
+            * @type {Array}
+            * @instance
+            */
             items: new Array(capacity),
+            /** 
+            * items count
+            * @type {number}
+            * @instance
+            */
             count: 0,
+            /** 
+            * Returns the first item
+            * @instance
+            */
             first: function () {
                 if (this.count == 0) throw "StiffArray.first()";
                 return this.items[0];
             },
+            /** 
+            * Returns the last item
+            * @instance
+            */
             last: function () {
                 if (this.count == 0) throw "StiffArray.last()";
                 return this.items[this.count - 1];
             },
+            /** 
+            * Adds item
+            * @instance
+            * @param {*} item - item to add
+            */
             add: function (item) {
                 if (this.count >= capacity) throw "StiffArray.add()";
                 //
                 this.items[this.count++] = item;
             },
+            /** 
+            * Adds all the items from the  source (to the end of the existing items)
+            * @param {StiffArray} source - source stiff array
+            * @instance
+            */
             add_from: function (source) {
                 if (this.count + source.count > capacity) throw "StiffArray.add_from()";
                 //
                 for (var i = 0; i < source.count; i++) this.items[this.count++] = source.items[i];
             },
+            /** 
+            * Inserts the item at the specified index.
+            * @param {number} index - index for the new item (zero-based)
+            * @param {*} item - item to insert
+            * @instance
+            */
             insert: function (index, item) {
                 if ((index < 0) || (index > this.count)) throw "StiffArray.insert(): index";
                 if (this.count >= capacity) throw "StiffArray.insert(): overflow";
@@ -65,24 +122,50 @@ define(["./jsgui-lang-essentials"], function (jsgui) {
                 this.items[index] = item;
                 this.count++;
             },
+            /** 
+            * Removes the item at the specified index.
+            * @param {number} index - index of the removing item (zero-based)
+            * @instance
+            */
             removeAt: function (index) {
                 if ((index < 0) || (index >= this.count)) throw "StiffArray.removeAt()";
                 //
                 this.count--;
                 for (var i = index; i < this.count; i++) this.items[i] = this.items[i + 1];
             },
+            /** 
+            * Removes the first item.
+            * @instance
+            */
             removeFirst: function () {
                 this.removeAt(0);
             },
+            /** 
+            * Removes the last item.
+            * @instance
+            */
             removeLast: function () {
                 this.removeAt(this.count - 1);
             },
+            /** 
+            * Replaces all the items to the subset of the other StiffArray items.
+            * @param {StiffArray} source - source stiff array
+            * @param {number} index - index of the first item of the subset
+            * @param {number} count - number of items in the subset
+            * @instance
+            */
             copy_from: function (source, index, count) {
                 for (var i = 0; i < count; i++) {
                     this.items[i] = source.items[i + index];
                 }
                 this.count = count;
             },
+            /** 
+            * Performs a binary search for the item.
+            * @param {*} item - item to search
+            * @returns 
+            * @instance
+            */
             search_first: function (item) {
                 var cnt = this.count;
                 var first = 0;
