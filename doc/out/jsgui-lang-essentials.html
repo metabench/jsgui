@@ -675,123 +675,6 @@ but the base class property name used is the rest of the initial property name (
         
             
 <dt>
-    <h4 class="name" id="arrayify"><span class="type-signature">&lt;static> </span>arrayify<span class="signature">(obj)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Returns an array containing [key, value] arrays of the passed object properties.<br /></p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>arrayifing object</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]</code></pre>
-
-    
-</dd>
-
-        
-            
-<dt>
     <h4 class="name" id="arrayify"><span class="type-signature">&lt;static> </span>arrayify<span class="signature">(<span class="optional">param_index</span>, fn)</span><span class="type-signature"></span></h4>
     
     
@@ -968,6 +851,123 @@ call, following the usual <a href="jsgui-lang-essentials.html#call_multiple_call
         <h5>Example</h5>
         
     <pre class="prettyprint"><code>// ------- arrayifing a function: -------var multiply = function (a, b) {    return a * b;};// multiply([a], b):            var arrayified_multiply = jsgui.arrayify(multiply); console.log(arrayified_multiply([1, 5, 10], 2));  // [2, 10, 20]);            // multiply(a, [b]):var arrayified_multiply2 = jsgui.arrayify(1, multiply); console.log(arrayified_multiply2(10, [1, 5, 10])); // [10, 50, 100]);// ------- arrayifing an async function: -------var asyncMultiply = function (a, b, cb) {    setTimeout(function () { cb(null, a * b); }, 1000);};var arrayified_asyncMultiply = jsgui.arrayify(asyncMultiply); // asyncMultiply([a], b, cb)var callback = function (error, result) {    console.log(error);  // null    console.log(result); // [2, 10, 20]);    done();};arrayified_asyncMultiply([1, 5, 10], 2, callback);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="arrayify"><span class="type-signature">&lt;static> </span>arrayify<span class="signature">(obj)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns an array containing [key, value] arrays of the passed object properties.<br /></p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>arrayifing object</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]</code></pre>
 
     
 </dd>
@@ -1790,6 +1790,198 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
         
             
 <dt>
+    <h4 class="name" id="eac"><span class="type-signature">&lt;static> </span>eac<span class="signature">(collection, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Iterates over a collection calling the collection.each(fn, context) method.</p>
+<p><mark>maybe collection.each() must be changed to collection.eac()?</mark></p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>collection of elements</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>iterator function</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>context object</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// TODO.......</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="eac"><span class="type-signature">&lt;static> </span>eac<span class="signature">(arr, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
     
     
@@ -1984,7 +2176,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
         
             
 <dt>
-    <h4 class="name" id="eac"><span class="type-signature">&lt;static> </span>eac<span class="signature">(collection, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(obj, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -1992,202 +2184,10 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
     
     
     <div class="description">
-        <p>Iterates over a collection calling the collection.each(fn, context) method.</p>
-<p><mark>maybe collection.each() must be changed to collection.eac()?</mark></p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>collection</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Collection</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"><p>collection of elements</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>fn</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"><p>iterator function</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>context</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"><p>context object</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// TODO.......</code></pre>
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(arr, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Iterates over the array elements. The iterator function calls for each element: fn(index, element, stop):</p>
+        <p>Iterates over the object properties. The iterator function calls for each element: fn(key, value, stop):</p>
 <ul>
-<li>index: the element index</li>
-<li>element: the element value</li>
+<li>key: the property key</li>
+<li>value: the property value</li>
 <li>stop: call this function to prevent further iterations</li>
 </ul>
 <p>The iterator function is bound to the context object, if passed.</p>
@@ -2226,13 +2226,13 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
 	
         <tr>
             
-                <td class="name"><code>arr</code></td>
+                <td class="name"><code>obj</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">Object</span>
 
 
             
@@ -2250,7 +2250,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
             
             
             
-            <td class="description last"><p>array of elements</p></td>
+            <td class="description last"><p>object</p></td>
         </tr>
 	
 	
@@ -2263,7 +2263,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
             <td class="type">
             
                 
-<span class="param-type"><a href="jsgui-lang-essentials.html#arrayIteratorCallback">module:core/jsgui-lang-essentials.arrayIteratorCallback</a></span>
+<span class="param-type"><a href="jsgui-lang-essentials.html#objectIteratorCallback">module:core/jsgui-lang-essentials.objectIteratorCallback</a></span>
 
 
             
@@ -2365,7 +2365,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){   console.log(index + ":" + element);  // 0:1 1:2 2:3 3:4 4:5   if (index > 1000) stop();});</code></pre>
+    <pre class="prettyprint"><code>jsgui.each({a: 1, b: 2}, function(key, value, stop){   if (key == "secretKey"){      stop();     return;   }   console.log(key + ":" + value);  // a:1  b:2});</code></pre>
 
     
 </dd>
@@ -2564,7 +2564,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
         
             
 <dt>
-    <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(obj, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(arr, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -2572,10 +2572,10 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
     
     
     <div class="description">
-        <p>Iterates over the object properties. The iterator function calls for each element: fn(key, value, stop):</p>
+        <p>Iterates over the array elements. The iterator function calls for each element: fn(index, element, stop):</p>
 <ul>
-<li>key: the property key</li>
-<li>value: the property value</li>
+<li>index: the element index</li>
+<li>element: the element value</li>
 <li>stop: call this function to prevent further iterations</li>
 </ul>
 <p>The iterator function is bound to the context object, if passed.</p>
@@ -2614,13 +2614,13 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
 	
         <tr>
             
-                <td class="name"><code>obj</code></td>
+                <td class="name"><code>arr</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">Array</span>
 
 
             
@@ -2638,7 +2638,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
             
             
             
-            <td class="description last"><p>object</p></td>
+            <td class="description last"><p>array of elements</p></td>
         </tr>
 	
 	
@@ -2651,7 +2651,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
             <td class="type">
             
                 
-<span class="param-type"><a href="jsgui-lang-essentials.html#objectIteratorCallback">module:core/jsgui-lang-essentials.objectIteratorCallback</a></span>
+<span class="param-type"><a href="jsgui-lang-essentials.html#arrayIteratorCallback">module:core/jsgui-lang-essentials.arrayIteratorCallback</a></span>
 
 
             
@@ -2753,7 +2753,7 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>jsgui.each({a: 1, b: 2}, function(key, value, stop){   if (key == "secretKey"){      stop();     return;   }   console.log(key + ":" + value);  // a:1  b:2});</code></pre>
+    <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){   console.log(index + ":" + element);  // 0:1 1:2 2:3 3:4 4:5   if (index > 1000) stop();});</code></pre>
 
     
 </dd>
@@ -7304,13 +7304,13 @@ Possible results are:</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Apr 04 2014 20:30:01 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Apr 08 2014 20:55:14 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
