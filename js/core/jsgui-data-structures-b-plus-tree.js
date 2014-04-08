@@ -8,6 +8,12 @@ if (typeof define !== 'function') {
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], function (jsgui, StiffArray) {
 
+    /** 
+    * B+ Tree module.
+    * @module core/jsgui-data-structures-b-plus-tree
+    * @exports B_Plus_Tree
+    */
+
 
     // B+ Tree
 
@@ -174,6 +180,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
     // Using Crockford's Module Pattern.
     //  Need to be careful about how it is not initialized with a constructor and the 'new' keyword.
 
+
     var FindInfo = function (key, value, isPrefixSearch) {
         isPrefixSearch = !!isPrefixSearch;
         var isKeyPresent = (key != undefined);
@@ -187,7 +194,22 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
             }
         }
         //
+
+
+        /**
+        *
+        * @constructor
+        * @alias FindInfo
+        * @augments module:core/jsgui-data-structures-b-plus-tree
+        * 
+        */
+
+        // @memberof  module:core/jsgui-data-structures-b-plus-tree
+
+        /* * @lends FindInfo.prototype */
+
         return {
+            /** key to find */
             key: key,     // key to find (if present)
             value: value, // value to find (if present)
             isPrefixSearch: isPrefixSearch, // prefix search mode
@@ -224,23 +246,105 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
         //              public interface:
         // -----------------------------------------
 
+        /**
+        * Creates the B+ Tree.
+        * @constructor
+        * @classdesc 
+        *
+        * B+ Tree
+        *
+        * some B+ Tree description can be found here:
+        *
+        * {@link http://www.cs.berkeley.edu/~kamil/teaching/su02/080802.pdf}
+        *
+        * {@link http://baze.fri.uni-lj.si/dokumenti/B+%20Trees.pdf}
+        *
+        * sample tree classic presentation:
+        *
+        * <pre>
+        * <code>
+        *                 [] 7 []
+        *                 /     \
+        *                /       -----------------
+        *               /                         \
+        *              /                           \
+        *        [] 3 [] 5 []                  [] 8 [] 8 []
+        *        /    |     \                  /     \    \
+        *       /     |      \                /       |    ----
+        *      /      |       \              /         \       \
+        *   {1,2}   {3,4}    {5,6,7}      {8,8,8}    {8,8}    {8,9}
+        * </code>
+        * </pre>
+        *
+        *   the diagram notation:
+        *   numbers are "keys" array items
+        *   "[]" figures are "children" array items
+        *
+        * @alias B_Plus_Tree
+        * @param {number} [nodeCapacity=10] - tree node capacity (maximum possible number of items in each node).
+        * @memberof  module:core/jsgui-data-structures-b-plus-tree
+        * @example
+        *
+        * var tree = new B_Plus_Tree();
+        */
+
+
         var m_public = {
+            /** 
+            * the tree root node
+            * @type {B_Plus_Node|B_Plus_Leaf}
+            * @instance
+            */
             // tree root:
             root: new B_Plus_Leaf(nodeCapacity),
             //
+            /** 
+            * first leaf in the "all leaves" chain
+            * @type {B_Plus_Leaf}
+            * @instance
+            */
             // leafs chain:
             firstLeaf: null,
+            //
+            /** 
+            * last leaf in the "all leaves" chain
+            * @type {B_Plus_Leaf}
+            * @instance
+            */
             lastLeaf: null,
             //
             // ---------------------
             //     editing:
             // ---------------------
             //
+            /** 
+            * clear the tree
+            * @func
+            * @instance
+            */
             // clear the tree:
             clear: function () {
                 p_Clear();
             },
             //
+
+            /** 
+            * insert key and value
+            * @name insert
+            * @func
+            * @param {*} key
+            * @param {*} value
+            * @instance
+            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
+            */
+
+            /** 
+            * insert key and value: key is arr[0], value is arr[1]; i.e. `insert([key, value])`
+            * @func
+            * @param {array} arr
+            * @instance
+            */
+
             // insert(key, value)
             // insert([key, value])
             insert: function (key, value) {
@@ -251,6 +355,25 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
                 }
             },
             //
+
+            /** 
+            * remove all values with given key
+            * @name remove
+            * @func
+            * @param {*} key
+            * @instance
+            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
+            */
+
+            /** 
+            * remove one value occurrence
+            * @func
+            * @param {*} key
+            * @param {*} value
+            * @instance
+            */
+
+
             // remove(key) - remove all values with given key
             // remove(key, value) - remove one value occurrence
             remove: function (key, value) {
@@ -314,10 +437,29 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
             // dictionary-like usage:
             // ---------------------
             //
+            /** 
+            * get one value by key (or null if the key not found)
+            *
+            * getValue() and setValue() methods pair offer a dictionary-like usage pattern
+            *
+            * @func
+            * @param {*} key
+            * @instance
+            */
             // get one value by key (or null):
             getValue: function (key) {
                 return p_GetValue(key);
             },
+            /** 
+            * set one value by key (insert or update)
+            *
+            * getValue() and setValue() methods pair offer a dictionary-like usage pattern
+            *
+            * @func
+            * @param {*} key
+            * @param {*} value
+            * @instance
+            */
             // set one value by key (insert or update):
             setValue: function (key, value) {
                 p_SetValue(key, value);
@@ -328,6 +470,22 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
             //   other functions:
             // ---------------------
             //
+
+            /** 
+            * count all values
+            * @name count
+            * @func
+            * @instance
+            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
+            */
+
+            /** 
+            * count values with the given key
+            * @func
+            * @param {*} key
+            * @instance
+            */
+
             // count() - count all values
             // count(key) - count values with the given key
             count: function (key) {
@@ -338,6 +496,12 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
                 }
             },
             //
+
+            /** 
+            * returns the tree nodes capacity (also referred somewhere as "node order")
+            * @func
+            * @instance
+            */
             // tree capacity:
             getCapacity: function () {
                 return m_nodeMaxCount;
@@ -347,33 +511,68 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
             // additional functions:
             // ---------------------
             //
+            /** 
+            * iterate through each key + value pair<br />
+            * callback is `function(key, value)`
+            * @func
+            * @param {function} callback
+            * @instance
+            */
             // iterate through each key + value pair
             // callback is function(key, value)
             'each': function (callback) {
                 return p_each(callback);
             },
             //
+            /** 
+            * get all keys
+            * @func
+            * @instance
+            */
             // get all keys
             'keys': function () {
                 return p_keys();
             },
             //
+            /** 
+            * get all [key, value] pairs
+            * @func
+            * @instance
+            */
             // get all [key, value] pairs
             'keys_and_values': function () {
                 return p_keys_and_values();
             },
             //
             //
+            /** 
+            * get keys and values by prefix
+            * @func
+            * @param {string} prefix
+            * @instance
+            */
             // get keys and values by prefix
             'get_by_prefix': function (prefix) {
                 return p_get_by_prefix(prefix);
             },
             //
+            /** 
+            * get keys by prefix
+            * @func
+            * @param {string} prefix
+            * @instance
+            */
             // get keys by prefix
             'get_keys_by_prefix': function (prefix) {
                 return p_get_keys_by_prefix(prefix);
             },
             //
+            /** 
+            * get values at key...
+            * @func
+            * @param {*} key
+            * @instance
+            */
             // get values at key...
             'get_values_by_key': function (key) {
                 return p_get_values_by_key(key);
