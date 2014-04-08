@@ -161,10 +161,27 @@ define(["./jsgui-lang-essentials"], function (jsgui) {
                 this.count = count;
             },
             /** 
-            * Performs a binary search for the item.
+            * Performs a binary search for the first occurrence of the item in the stiff array. Uses an usual JavaScript items comparison: item1 < item2.
             * @param {*} item - item to search
-            * @returns 
+            * @returns {object} { found: f, index: i } object:
+            * - found: true if the item is found, false otherwise
+            * - index: index of the found item, or index to insert new (non-found) item
             * @instance
+            * @example
+            *
+            * var arr = new StiffArray(10);
+            * arr.add(1); // [0]
+            * arr.add(2); // [1]
+            * arr.add(2); // [2]
+            * arr.add(3); // [3]
+            * arr.add(3); // [4]
+            * arr.add(3); // [5]
+            *
+            * arr.search_first(0)  ==>  { found: false, index: 0 }
+            * arr.search_first(1)  ==>  { found: true, index: 0 }
+            * arr.search_first(2)  ==>  { found: true, index: 1 }
+            * arr.search_first(3)  ==>  { found: true, index: 3 }
+            * arr.search_first(4)  ==>  { found: false, index: 6 }
             */
             search_first: function (item) {
                 var cnt = this.count;
@@ -185,6 +202,29 @@ define(["./jsgui-lang-essentials"], function (jsgui) {
                 }
                 return { found: false, index: first };
             },
+            /** 
+            * Performs a binary search for the last occurrence of the item in the stiff array. Uses an usual JavaScript items comparison: item1 >= item2.
+            * @param {*} item - item to search
+            * @returns {object} { found: f, index: i } object:
+            * - found: true if the item is found, false otherwise
+            * - index: index of the found item, or index to insert new (non-found) item
+            * @instance
+            * @example
+            *
+            * var arr = new StiffArray(10);
+            * arr.add(1); // [0]
+            * arr.add(2); // [1]
+            * arr.add(2); // [2]
+            * arr.add(3); // [3]
+            * arr.add(3); // [4]
+            * arr.add(3); // [5]
+            *
+            * arr.search_last(0)  ==>  { found: false, index: 0 }
+            * arr.search_last(1)  ==>  { found: true, index: 0 }
+            * arr.search_last(2)  ==>  { found: true, index: 2 }
+            * arr.search_last(3)  ==>  { found: true, index: 5 }
+            * arr.search_last(4)  ==>  { found: false, index: 6 }
+            */
             search_last: function (item) {
                 var cnt = this.count;
                 var first = 0;
@@ -206,6 +246,39 @@ define(["./jsgui-lang-essentials"], function (jsgui) {
                 }
                 return { found: false, index: first };
             },
+            /** 
+            * Performs a binary search for the last occurrence of the prefix in the stiff array. Useful when the stiff array items are strings.
+            *
+            * A search_first_prefix() method is not implemented because search_first() can be used instead; but search_last() cannot be used instead of the search_last_prefix().
+            *
+            * @param {string} prefix - prefix to search
+            * @returns {object} { found: f, index: i } object:
+            * - found: true if the prefixed item is found, false otherwise
+            * - index: index of the found item, or index to insert new (non-found) item
+            * @instance
+            * @example
+            *
+            * var arr = new StiffArray(10);
+            * arr.add("111"); // [0]
+            * arr.add("121"); // [1]
+            * arr.add("122"); // [2]
+            * arr.add("131"); // [3]
+            *
+            * arr.search_last_prefix("")  ==>  { found: true, index: 3 }
+            *
+            * arr.search_last_prefix("0")  ==>  { found: false, index: 0 }
+            * arr.search_last_prefix("1")  ==>  { found: true, index: 3 }
+            * arr.search_last_prefix("2")  ==>  { found: false, index: 4 }
+            *
+            * arr.search_last_prefix("10")  ==>  { found: false, index: 0 }
+            * arr.search_last_prefix("11")  ==>  { found: true, index: 0 }
+            * arr.search_last_prefix("12")  ==>  { found: true, index: 2 }
+            * arr.search_last_prefix("13")  ==>  { found: true, index: 3 }
+            * arr.search_last_prefix("14")  ==>  { found: false, index: 4 }
+            *
+            *
+            *
+            */
             search_last_prefix: function (prefix) {
                 var prefix_length = prefix.length;
                 //
