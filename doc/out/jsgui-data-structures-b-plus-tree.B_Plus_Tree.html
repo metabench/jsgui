@@ -52,9 +52,11 @@
 </code>
 </pre>
 
-<p>  the diagram notation:
-  numbers are &quot;keys&quot; array items
-  &quot;[]&quot; figures are &quot;children&quot; array items</p></div>
+<p>  the diagram notation:</p>
+<ul>
+<li>numbers are &quot;keys&quot; array items</li>
+<li>&quot;[]&quot; figures are &quot;children&quot; array items</li>
+</ul></div>
     
 </header>  
 
@@ -412,7 +414,71 @@
     
     
     <div class="description">
-        <p>clear the tree</p>
+        <p>clear the tree (remove all items)</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="count"><span class="type-signature"></span>count<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>count all values</p>
     </div>
     
 
@@ -580,70 +646,6 @@
         
             
 <dt>
-    <h4 class="name" id="count"><span class="type-signature"></span>count<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>count all values</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
     <h4 class="name" id="each"><span class="type-signature"></span>each<span class="signature">(callback)</span><span class="type-signature"></span></h4>
     
     
@@ -750,6 +752,1321 @@ callback is <code>function(key, value)</code></p>
     
     
     
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.insert(101, "value 101");tree.insert(102, "value 102");tree.insert(103, "value 103");//tree.each(function(key, value) {  console.log("key=" + key + " value=" + value);});</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findFirst"><span class="type-signature"></span>findFirst<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the very first item</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findFirst"><span class="type-signature"></span>findFirst<span class="signature">(key)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the first item for the given key</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findFirst"><span class="type-signature"></span>findFirst<span class="signature">(key, value)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the first key+value occurrence</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findFirstPrefix"><span class="type-signature"></span>findFirstPrefix<span class="signature">(prefix)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find first key matching the prefix</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findLast"><span class="type-signature"></span>findLast<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the very last item</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findLast"><span class="type-signature"></span>findLast<span class="signature">(key)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the last item for the given key</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findLast"><span class="type-signature"></span>findLast<span class="signature">(key, value)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the last key+value occurrence</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findLastPrefix"><span class="type-signature"></span>findLastPrefix<span class="signature">(prefix)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find last key matching the prefix</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>prefix</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findNext"><span class="type-signature"></span>findNext<span class="signature">(findInfo)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find next search conditions occurence</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>findInfo</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findPrevious"><span class="type-signature"></span>findPrevious<span class="signature">(findInfo)</span><span class="type-signature"> &rarr; {<a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find previous search conditions occurence</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>findInfo</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    <ul>
+<li>find info</li>
+</ul>
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">module:core/jsgui-data-structures-b-plus-tree.FindInfo</a></span>
+
+
+	</dd>
+</dl>
+
+        
     
     
 </dd>
@@ -864,6 +2181,11 @@ callback is <code>function(key, value)</code></p>
     
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.insert("111", "value 111");tree.insert("122", "value 122");tree.insert("123", "value 123");//console.log(tree.get_by_prefix("12")); // ["122","value 122"],["123","value 123"]</code></pre>
+
+    
 </dd>
 
         
@@ -976,6 +2298,11 @@ callback is <code>function(key, value)</code></p>
     
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.insert("111", "value 111");tree.insert("122", "value 122");tree.insert("123", "value 123");//console.log(tree.get_keys_by_prefix("12")); // "122","123"</code></pre>
+
+    
 </dd>
 
         
@@ -989,7 +2316,7 @@ callback is <code>function(key, value)</code></p>
     
     
     <div class="description">
-        <p>get values at key...</p>
+        <p>get values related to the passed key</p>
     </div>
     
 
@@ -1088,6 +2415,11 @@ callback is <code>function(key, value)</code></p>
     
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.insert("101", "value 101");tree.insert("102", "value 102.1");tree.insert("102", "value 102.2");//console.log(tree.get_values_by_key("102")); // "value 102.1","value 102.2"</code></pre>
+
+    
 </dd>
 
         
@@ -1166,7 +2498,7 @@ callback is <code>function(key, value)</code></p>
     
     <div class="description">
         <p>get one value by key (or null if the key not found)</p>
-<p>getValue() and setValue() methods pair offer a dictionary-like usage pattern</p>
+<p><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html#getValue">getValue()</a> and <a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html#setValue">setValue()</a> methods pair provides a dictionary-like usage pattern.</p>
     </div>
     
 
@@ -1201,6 +2533,146 @@ callback is <code>function(key, value)</code></p>
         <tr>
             
                 <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.setValue(101, "value 101");tree.setValue(101, "value 101.2");tree.getValue(101) // "value 101.2"tree.getValue(102) // null</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="insert"><span class="type-signature"></span>insert<span class="signature">(key, value)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>insert key and value</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
             
             
             <td class="type">
@@ -1382,141 +2854,6 @@ callback is <code>function(key, value)</code></p>
         
             
 <dt>
-    <h4 class="name" id="insert"><span class="type-signature"></span>insert<span class="signature">(key, value)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>insert key and value</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
     <h4 class="name" id="keys"><span class="type-signature"></span>keys<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
@@ -1575,6 +2912,11 @@ callback is <code>function(key, value)</code></p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.insert(101, "value 101");tree.insert(102, "value 102");tree.insert(103, "value 103");//console.log(tree.keys()); // 101,102,103</code></pre>
+
     
 </dd>
 
@@ -1639,6 +2981,11 @@ callback is <code>function(key, value)</code></p>
     
     
     
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.insert(101, "value 101");tree.insert(102, "value 102");tree.insert(103, "value 103");//console.log(tree.keys_and_values()); // [101,"value 101"],[102,"value 102"],[103,"value 103"]</code></pre>
+
     
 </dd>
 
@@ -1901,7 +3248,7 @@ callback is <code>function(key, value)</code></p>
     
     <div class="description">
         <p>set one value by key (insert or update)</p>
-<p>getValue() and setValue() methods pair offer a dictionary-like usage pattern</p>
+<p><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html#getValue">getValue()</a> and <a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html#setValue">setValue()</a> methods pair provides a dictionary-like usage pattern.</p>
     </div>
     
 
@@ -2023,6 +3370,11 @@ callback is <code>function(key, value)</code></p>
     
     
     
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var tree = new B_Plus_Tree();//tree.setValue(101, "value 101");   // inserttree.setValue(101, "value 101.2"); // updatetree.getValue(101) // "value 101.2"tree.getValue(102) // null</code></pre>
+
+    
 </dd>
 
         </dl>
@@ -2041,13 +3393,13 @@ callback is <code>function(key, value)</code></p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Ordered_String_List.html">Ordered_String_List</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">FindInfo</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Tue Apr 08 2014 20:55:14 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Apr 11 2014 20:41:55 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
