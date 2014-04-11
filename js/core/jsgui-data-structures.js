@@ -68,6 +68,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 	var stringify = jsgui.stringify;
 	var each = jsgui.each;
 	var fp = jsgui.fp;
+	var tof = jsgui.tof;
+
 	// Also will get the Doubly_Linked_List.
 	// Various data structures will be defined separately and this will link them together.
 	
@@ -788,6 +790,17 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 
 
 
+    /**
+    * Creates the Ordered_String_List.
+    * @classdesc Represents an unsorted string list.
+    * @constructor
+    * @param {string} [values] - space-separated list of values
+    * @memberof module:core/jsgui-data-structures
+    * @example
+    * var list1 = new Data_Structures.Ordered_String_List();
+    * var list2 = new Data_Structures.Ordered_String_List("value1 value2 value3");
+    */
+
 	// This could be useful for a few things, like storing tables in a DB
 	// schema.
 	// Maybe quite a few more things.
@@ -811,12 +824,28 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				}
 			}
 
-			// (add), remove, get, get_all, has, put, move, splice
+		    /**
+            * Returns `true` if the passed value exists in the list.
+            * @func
+            * @alias has
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+		    // (add), remove, get, get_all, has, put, move, splice
 			this.has = function(value) {
 				return (typeof dict_indexes[value] !== 'undefined');
 			}
 
-			this.put = function(value) {
+		    /**
+            * Adds the passed value to the end of the list. Does nothing if the value already exists in the list.
+            * @func
+            * @alias put
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.put = function (value) {
 				// by default puts it at the end.
 				if (this.has(value)) {
 					// stays in same place.
@@ -830,7 +859,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 
 			}
 
-			this.out = function(value) {
+		    /**
+            * Removes the passed value from the list. Does nothing if the value does not exists in the list.
+            * @func
+            * @alias out
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.out = function (value) {
 				if (this.has(value)) {
 					var idx = dict_indexes[value];
 					arr.splice(idx, 1);
@@ -846,7 +883,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				}
 			}
 
-			this.toggle = function(value) {
+		    /**
+            * Toggles the passed value presence in the list: if the value already exists then removes it, or adds the value on other case.
+            * @func
+            * @alias toggle
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.toggle = function (value) {
 				if (this.has(value)) {
 					this.out(value);
 				} else {
@@ -854,7 +899,20 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				}
 			}
 
-			this.move_value = function(value, index) {
+		    /**
+            * Toggles the passed value to the specified position in the list. Does nothing if the value does not exists in the list.
+            * @func
+            * @alias move_value
+            * @param {string} value
+            * @param {number} index - new index for the value (zero-based)
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            * @example
+            * var list = new Data_Structures.Ordered_String_List("v0 v1 v2");
+            * list.move_value("v0", 1);
+            * console.log(list.toString()); // "v1 v0 v2"
+            */
+			this.move_value = function (value, index) {
 				if (this.has(value) && dict_indexes[value] != index) {
 
 					// gets removed from current position, causes items after it
@@ -896,14 +954,29 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				};
 			}
 
-			this.toString = function() {
+		    /**
+            * Returns the string representation of the list: all the string values separated by space.
+            * @func
+            * @alias toString
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.toString = function () {
 				var res = arr.join(' ');
 				return res;
 			}
 
 			this.toString.stringify = true;
 
-			this.set = fp(function(a, sig) {
+		    /**
+            * Sets the values in the list.
+            * @func
+            * @alias set
+            * @param {string} values - space-separated list of values
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.set = fp(function (a, sig) {
 				if (sig == '[s]') {
 					arr = a[0].split(' ');
 					// console.log('arr ' + jsgui.stringify(arr));
