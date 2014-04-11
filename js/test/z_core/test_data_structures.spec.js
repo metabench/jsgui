@@ -60,112 +60,11 @@ function (jsgui, Data_Structures, assert) {
 	//  probably less useful.
 	
 	
-	
-	describe("z_core /test_data_structures.spec.js ", function() {
-	
-		// -----------------------------------------------------
-		//	test_ordered_kvs
-		// -----------------------------------------------------
-			
-		it("test_ordered_kvs", function() {
-		
-			var test_ordered_kvs = function() {
-				var okvs = new Data_Structures.Ordered_KVS();
-				
-				okvs.push('id', {
-					'name': 'id',
-					'str_def': 'pk guid',
-					'obj_def': {
-						'is_pk': true,
-						'data_type': 'guid'
-					}
-				});
-				
-				okvs.push('username', {
-					'name': 'username',
-					'str_def': 'unique text(32)',
-					'obj_def': {
-						'is_unique': true,
-						'data_type': 'text',
-						'length': 32
-					}
-				});
-				
-				var actual_keys = [];
-				var actual_values = [];
+    // ---------------------------------------------------------------------------
+    //      test_doubly_linked_list() moved to doubly-linked-list.spec.js
+    //           test_ordered_kvs() moved to Ordered_KVS.spec.js
+    // ---------------------------------------------------------------------------
 
-				var expected_value_id = '{"name": "id", "str_def": "pk guid", "obj_def": {"is_pk": true, "data_type": "guid"}}';
-				var expected_value_username = '{"name": "username", "str_def": "unique text(32)", "obj_def": {"is_unique": true, "data_type": "text", "length": 32}}';
-
-				// =============================================================================
-				
-				actual_keys = [];
-				actual_values = [];
-				
-				okvs.each(function(key, value, stop) {
-					//console.log('key ' + key);
-					//console.log('value ' + stringify(value));
-					actual_keys.push(key);
-					actual_values.push(stringify(value));
-				});
-				
-				assert.equal(actual_keys.length, 2);
-				assert.equal(actual_values.length, 2);				
-				assert.equal(actual_keys[0], "id");
-				assert.equal(actual_keys[1], "username");
-				assert.equal(actual_values[0], expected_value_id);
-				assert.equal(actual_values[1], expected_value_username);
-				
-				// =============================================================================
-
-				var actual_nodes = [];
-				var actual_node_neighbours = [];
-				
-				okvs.dll.each_node(function(node, stop) {
-					//console.log('node ' + node);
-					//console.log('node.neighbours ' + node.neighbours);
-					//console.log('value ' + stringify(value));
-					actual_nodes.push(node);
-					actual_node_neighbours.push(node.neighbours);
-				});
-
-				assert.equal(actual_nodes.length, 2);
-				assert.equal(actual_node_neighbours.length, 2);				
-				assert.equal(actual_nodes[0].toString(), "[object Object]");
-				assert.equal(actual_nodes[1].toString(), "[object Object]");
-				assert.equal(actual_node_neighbours[0].toString(), ",[object Object]");
-				assert.equal(actual_node_neighbours[1].toString(), "[object Object],");
-				
-				// =============================================================================
-				
-				okvs.out('id');				
-				//okvs.out('username');
-
-				//console.log('--------------------------------');
-				
-				actual_keys = [];
-				actual_values = [];
-
-				okvs.each(function(key, value, stop) {
-					//console.log('key ' + key);
-					//console.log('value ' + stringify(value));
-					actual_keys.push(key);
-					actual_values.push(stringify(value));
-				});
-				
-				assert.equal(actual_keys.length, 1);
-				assert.equal(actual_values.length, 1);				
-				assert.equal(actual_keys[0], "username");
-				assert.equal(actual_values[0], expected_value_username);
-				
-			}
-			test_ordered_kvs();
-		
-		
-			assert.equal(11111, 11111);
-		});
-										
-	});
 	
 	
 });
