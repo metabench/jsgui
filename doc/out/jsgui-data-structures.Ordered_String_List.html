@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Doubly_Linked_List</title>
+    <title>JSDoc: Class: Ordered_String_List</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Doubly_Linked_List</h1>
+    <h1 class="page-title">Class: Ordered_String_List</h1>
     
     
 
@@ -27,12 +27,12 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a>.</span>
+        <span class="ancestors"><a href="jsgui-data-structures.html">core/jsgui-data-structures</a>.</span>
     
-    Doubly_Linked_List
+    Ordered_String_List
     </h2>
     
-        <div class="class-description"><p>Represents a doubly linked list.</p></div>
+        <div class="class-description"><p>Represents an unsorted string list.</p></div>
     
 </header>  
 
@@ -43,7 +43,7 @@
     
         
 <dt>
-    <h4 class="name" id="Doubly_Linked_List"><span class="type-signature"></span>new Doubly_Linked_List<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Ordered_String_List"><span class="type-signature"></span>new Ordered_String_List<span class="signature">(<span class="optional">values</span>)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -51,7 +51,7 @@
     
     
     <div class="description">
-        <p>Creates the doubly linked list.</p>
+        <p>Creates the Ordered_String_List.</p>
     </div>
     
 
@@ -60,82 +60,67 @@
     
     
     
-    
-    
-<dl class="details">
-    
+        <h5>Parameters:</h5>
         
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-    
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
             
-<dt>
-    <h4 class="name" id="Doubly_Linked_List.Node"><span class="type-signature">&lt;static> </span>Doubly_Linked_List.Node<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The list node class.</p>
-    </div>
-    
-    
-    
+                <td class="name"><code>values</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>space-separated list of values</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
     
 <dl class="details">
     
@@ -167,9 +152,36 @@
 
     
     
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>var list1 = new Data_Structures.Ordered_String_List();var list2 = new Data_Structures.Ordered_String_List("value1 value2 value3");</code></pre>
+
+    
 </dd>
 
-        </dl>
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -178,7 +190,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="each"><span class="type-signature"></span>each<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -186,7 +198,7 @@
     
     
     <div class="description">
-        <p>Iterates over the list nodes calling the function for each node's value.</p>
+        <p>Returns <code>true</code> if the passed value exists in the list.</p>
     </div>
     
 
@@ -220,13 +232,13 @@
 	
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>value</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
             
@@ -236,11 +248,142 @@
             
             
             
-            <td class="description last"><p>callback function: callback(value, stop)</p>
-<ul>
-<li>value: the list node value</li>
-<li>stop: function to break iterations.</li>
-</ul></td>
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="move_value"><span class="type-signature"></span>move_value<span class="signature">(value, index)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Toggles the passed value to the specified position in the list. Does nothing if the value does not exists in the list.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>new index for the value (zero-based)</p></td>
         </tr>
 	
 	
@@ -291,7 +434,7 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>function getValues(list) {    var result = [];    //    list.each(function (value) { result.push(value); });    //    return result;}</code></pre>
+    <pre class="prettyprint"><code>var list = new Data_Structures.Ordered_String_List("v0 v1 v2");list.move_value("v0", 1);console.log(list.toString()); // "v1 v0 v2"</code></pre>
 
     
 </dd>
@@ -299,7 +442,7 @@
         
             
 <dt>
-    <h4 class="name" id="each_node"><span class="type-signature"></span>each_node<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="out"><span class="type-signature"></span>out<span class="signature">(value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -307,7 +450,7 @@
     
     
     <div class="description">
-        <p>Iterates over the list nodes calling the function for each node.</p>
+        <p>Removes the passed value from the list. Does nothing if the value does not exists in the list.</p>
     </div>
     
 
@@ -341,13 +484,13 @@
 	
         <tr>
             
-                <td class="name"><code>callback</code></td>
+                <td class="name"><code>value</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
             
@@ -357,11 +500,7 @@
             
             
             
-            <td class="description last"><p>callback function: callback(node, stop)</p>
-<ul>
-<li>node: the list node</li>
-<li>stop: function to break iterations.</li>
-</ul></td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -409,18 +548,13 @@
     
     
     
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>function getNodes(list) {    var result = [];    //    list.each_node(function (node) { result.push(node); });    //    return result;}</code></pre>
-
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="insert_after"><span class="type-signature"></span>insert_after<span class="signature">(val, node)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="put"><span class="type-signature"></span>put<span class="signature">(value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -428,7 +562,7 @@
     
     
     <div class="description">
-        <p>Inserts the node after the specified node.</p>
+        <p>Adds the passed value to the end of the list. Does nothing if the value already exists in the list.</p>
     </div>
     
 
@@ -462,16 +596,13 @@
 	
         <tr>
             
-                <td class="name"><code>val</code></td>
+                <td class="name"><code>value</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Node</span>
-|
-
-<span class="param-type">*</span>
+<span class="param-type">string</span>
 
 
             
@@ -481,30 +612,7 @@
             
             
             
-            <td class="description last"><p>node to insert, or node value</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>node</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Node</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>insert point</p></td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -552,18 +660,13 @@
     
     
     
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>var list = new Doubly_Linked_List();var node101 = new Doubly_Linked_List.Node({ value: 101 });list.push(node101);list.insert_after(102, node101);// list values: 101, 102</code></pre>
-
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="insert_before"><span class="type-signature"></span>insert_before<span class="signature">(val, node)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="set"><span class="type-signature"></span>set<span class="signature">(values)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -571,7 +674,7 @@
     
     
     <div class="description">
-        <p>Inserts the node before the specified node.</p>
+        <p>Sets the values in the list.</p>
     </div>
     
 
@@ -605,16 +708,13 @@
 	
         <tr>
             
-                <td class="name"><code>val</code></td>
+                <td class="name"><code>values</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Node</span>
-|
-
-<span class="param-type">*</span>
+<span class="param-type">string</span>
 
 
             
@@ -624,30 +724,7 @@
             
             
             
-            <td class="description last"><p>node to insert, or node value</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>node</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Node</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>insert point</p></td>
+            <td class="description last"><p>space-separated list of values</p></td>
         </tr>
 	
 	
@@ -695,18 +772,13 @@
     
     
     
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>var list = new Doubly_Linked_List();var node101 = new Doubly_Linked_List.Node({ value: 101 });list.push(node101);list.insert_before(102, node101);// list values: 102, 101</code></pre>
-
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="insert_beginning"><span class="type-signature"></span>insert_beginning<span class="signature">(node)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toggle"><span class="type-signature"></span>toggle<span class="signature">(value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -714,7 +786,7 @@
     
     
     <div class="description">
-        <p>Inserts the node at the beginning of the list.</p>
+        <p>Toggles the passed value presence in the list: if the value already exists then removes it, or adds the value on other case.</p>
     </div>
     
 
@@ -748,16 +820,13 @@
 	
         <tr>
             
-                <td class="name"><code>node</code></td>
+                <td class="name"><code>value</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">Node</span>
-|
-
-<span class="param-type">*</span>
+<span class="param-type">string</span>
 
 
             
@@ -767,7 +836,7 @@
             
             
             
-            <td class="description last"><p>node to insert, or node value</p></td>
+            <td class="description last"></td>
         </tr>
 	
 	
@@ -815,18 +884,13 @@
     
     
     
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>var list = new Doubly_Linked_List();var node101 = new Doubly_Linked_List.Node({ value: 101 });list.insert_beginning(node101);list.insert_beginning(102);// list values: 102, 101</code></pre>
-
     
 </dd>
 
         
             
 <dt>
-    <h4 class="name" id="push"><span class="type-signature"></span>push<span class="signature">(val)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -834,7 +898,7 @@
     
     
     <div class="description">
-        <p>Inserts the node at the end of the list.</p>
+        <p>Returns the string representation of the list: all the string values separated by space.</p>
     </div>
     
 
@@ -842,57 +906,6 @@
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>val</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Node</span>
-|
-
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>node to insert, or node value</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -935,128 +948,6 @@
     
     
     
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>var list = new Doubly_Linked_List();var node101 = new Doubly_Linked_List.Node({ value: 101 });list.push(node101);list.push(102);// list values: 101, 102</code></pre>
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(node)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Removes the node from the list.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>node</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Node</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>node to remove</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>var list = new Doubly_Linked_List();var node101 = new Doubly_Linked_List.Node({ value: 101 });list.push(node101);list.remove(node101);// the list is empty now</code></pre>
-
     
 </dd>
 

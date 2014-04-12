@@ -86,14 +86,12 @@
     
     
     
-    
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Methods</h3>
         
         <dl>
-                
+            
 <dt>
-    <h4 class="name" id="stopIterationCallback"><span class="type-signature"></span>stopIterationCallback<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="findFirst"><span class="type-signature"></span>findFirst<span class="signature">(key, value)</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -101,7 +99,254 @@
     
     
     <div class="description">
-        <p>Break iteration callback function.</p>
+        <p>find the first key+value occurrence</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findFirst"><span class="type-signature"></span>findFirst<span class="signature">(key)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the first item for the given key</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="findFirst"><span class="type-signature"></span>findFirst<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>find the very first item</p>
     </div>
     
 
@@ -152,14 +397,11 @@
     
     
     
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){   if (element > 3) stop();});jsgui.eac([1, 2, 3, 4, 5], function(element, index, stop){   if (element > 3) stop();});</code></pre>
-
-    
 </dd>
 
-            </dl>
+        </dl>
+    
+    
     
     
     
@@ -173,13 +415,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Ordered_String_List.html">Ordered_String_List</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">FindInfo</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul><h3>Global</h3><ul><li><a href="global.html#findFirst">findFirst</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Mon Mar 24 2014 16:16:34 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Apr 11 2014 18:07:49 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>

@@ -50,6 +50,13 @@ if (typeof define !== 'function') {
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list", "./jsgui-data-structures-b-plus-tree"], function(jsgui, Doubly_Linked_List, B_Plus_Tree) {
 	
+    /** 
+    * Data structures module.
+    * @module core/jsgui-data-structures
+    * @exports Data_Structures
+    */
+
+
 	// The data structures will be needed to support some components
 	
 	var Class = jsgui.Class;
@@ -61,6 +68,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 	var stringify = jsgui.stringify;
 	var each = jsgui.each;
 	var fp = jsgui.fp;
+	var tof = jsgui.tof;
+
 	// Also will get the Doubly_Linked_List.
 	// Various data structures will be defined separately and this will link them together.
 	
@@ -312,10 +321,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 	 */
 	
 	
+    /**
+    * Creates the Sorted_KVS.
+    * @constructor
+    * @classdesc Represents a sorted key/value pairs storage (with fast access by the key).
+    * @memberof module:core/jsgui-data-structures
+    */
 	
 	// Multiple items could be stored in one position.
 	//  This may have another layer of functionality beyond the tree.
-	
 	
 	var Sorted_KVS = Class.extend({
 		'init': function(spec) {
@@ -334,11 +348,29 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			
 			
 		},
-		'clear': function() {
+
+	    /**
+        * Clears the storage, removing all the key/value pairs.
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'clear': function () {
 			this.tree.clear();
 			//this.dict = {};
 		},
-		'put': mapify(function(key, value) {
+
+	    /**
+        * Puts the key/value pairs from the passed object into the storage.
+        * @func
+        * @param {object} obj
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        * @example
+        * var kvs = new Data_Structures.Sorted_KVS();
+        * kvs.put({ a: 1});
+        * kvs.put({ b: 2, c: 3});
+        */
+		'put': mapify(function (key, value) {
 			// inserting a bunch of things at once... could that be done more efficiently, such as in one traversal?
 			//  sort the items, then can skip through the tree a bit quicker?
 			
@@ -354,7 +386,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			//console.log('put insert_res ' + insert_res);
 			//this.dict[key] = value;
 		}),
-		'out': function(key) {
+
+
+	    /**
+        * Removes from the storage values for the passed key.
+        * @func
+        * @param {*} key
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'out': function (key) {
 			//console.log('key ' + key);
 			//
 		
@@ -363,7 +404,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			//throw '2.stop';
 			//delete this.dict[key];
 		},
-		'get': function(key) {
+
+	    /**
+        * Gets from the storage values for the passed key, returns the values array.
+        * @func
+        * @param {*} key
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'get': function (key) {
 			//console.log('Sorted_KVS get');
 			//console.log('key ' + stringify(key));
 
@@ -384,7 +433,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			
 			//return this.dict[key];
 		},
-		'has': function(key) {
+
+
+	    /**
+        * Returns true if the storage contains the passed key.
+        * @func
+        * @param {*} key
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'has': function (key) {
 			//return (typeof this.dict[key] !== 'undefined');
 			
 			return this.key_count(key) > 0;
@@ -395,13 +453,28 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			//res.move_first();
 			//return res;
 		},
-		'keys': function() {
+
+
+	    /**
+        * Returns an array of all the keys in the storage.
+        * @func
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'keys': function () {
 			
 			return this.tree.keys();
 			
 			//return this.tree.keys();
 		},
-		'keys_and_values': function() {
+
+	    /**
+        * Returns an array of [key, value] arrays for all the items in the storage.
+        * @func
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'keys_and_values': function () {
 			return this.tree.keys_and_values();
 		},
 		
@@ -420,7 +493,22 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 		},
 		*/
 		
-		'key_count': function(key) {
+	    /**
+        * Returns an amount of all the keys in the storage.
+        * @name key_count
+        * @func
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+
+	    /**
+        * Returns an amount of the passed key occurrences in the storage.
+        * @func
+        * @param {*} key
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'key_count': function (key) {
 			
 			if (is_defined(key)) {
 				return this.tree.count(key);
@@ -468,21 +556,54 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 		
 		*/
 		
-		'get_keys_by_prefix': function(prefix) {
+	    /**
+        * Returns an array of the keys that start from the passed prefix.
+        * @func
+        * @param {string} prefix
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'get_keys_by_prefix': function (prefix) {
 			return this.tree.get_keys_by_prefix(prefix);
 		},
 		
-		'each': function(callback) {
+	    /**
+        * Invokes the callback function for each item in the storage: `callback(key, value)`
+        * @func
+        * @param {function} callback
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'each': function (callback) {
 			// iterate through every item
 			//  key, value
 			return this.tree.each(callback);
 		},
 		
-		'get_by_prefix': function(prefix) {
+	    /**
+        * Returns an array of [key, value] arrays for the keys that start from the passed prefix.
+        * @func
+        * @param {string} prefix
+        * @memberof module:core/jsgui-data-structures.Sorted_KVS
+        * @instance
+        */
+		'get_by_prefix': function (prefix) {
 			
 	        return this.tree.get_by_prefix(prefix);
 		}
 	});
+
+
+
+    /**
+    * Creates the Ordered_KVS.
+    * @constructor
+    * @classdesc Represents an unsorted key/value pairs storage, but with fast access by the key. The each()-based operations 
+    * (e.g. keys(), values() etc.) returns the items in the same order as they was added. But the get() and out() operations 
+    * use a fast key access. Unfortunately these operation works with the last added value only if several values have equal keys.
+    * @memberof module:core/jsgui-data-structures
+    */
+
 	// Double Linked List inside, as well as a simple dict with references to the nodes.
 	// Use liked list nodes?
 	
@@ -496,15 +617,43 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			this.dll = new Doubly_Linked_List();
 			this.node_map = {};
 		},
-		'length': function() {
+
+
+	    /**
+        * Returns an amount of items in the storage.
+        * @func
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'length': function () {
 			return this.dll.length;
 		},
-		'put': function(key, value) {
+
+
+	    /**
+        * Adds the key/value pair to the storage.
+        * @func
+        * @param {*} key
+        * @param {*} value
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'put': function (key, value) {
 			// does it already exist with that key - if so that item gets replaced, stays in the same position?
 			// or maybe push - that means the item that goes in gets added to the end.
 			return this.push(key, value);
 		},
-		'get': function(key) {
+
+
+	    /**
+        * Returns the value for the passed key, or `undefined` if the key does not exists. <br />
+        * If the key was added several times, then returns the latest added value.
+        * @func
+        * @param {*} key
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'get': function (key) {
 			//console.log('get key ' + key);
 			var kvs_node = this.node_map[key];
 			if (kvs_node) {
@@ -514,19 +663,46 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				//throw 'Missing KVS node: ' + key;
 			}
 		},
-		'push': function(key, value) {
+
+
+	    /**
+        * Adds the key/value pair to the storage.
+        * @func
+        * @param {*} key
+        * @param {*} value
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'push': function (key, value) {
 			// does it already have a node with that key?
 			var node = this.dll.push(value);
 			node.key = key;
 			this.node_map[key] = node;
 		},
-		'out': function(key) {
+
+	    /**
+        * Removes the pair with the passed key from the storage. Throws an exception if the key does not exists. <br />
+        * If the key was added several times, then removes the latest added pair only (and throws an exception for the next time).
+        * @func
+        * @param {*} key
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'out': function (key) {
 			var node = this.node_map[key];
 			//delete node.key;
 			delete this.node_map[key]
 			
 			this.dll.remove(node);
 		},
+
+	    /**
+        * Invokes the callback function for each item in the storage: `callback(key, value, stop)`
+        * @func
+        * @param {function} callback
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
 		'each': function(callback) {
 			
 			// return the key as well as the value in the callback.
@@ -537,21 +713,42 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 			
 			//this.dll.each(callback);
 		},
-		'values': function() {
+
+	    /**
+        * Returns an array of all the values in the storage.
+        * @func
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'values': function () {
 			var res = [];
 			this.each(function(key, value) {
 				res.push(value);
 			});
 			return res;
 		},
-		'keys': function() {
+
+	    /**
+        * Returns an array of all the keys in the storage.
+        * @func
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'keys': function () {
 			var res = [];
 			this.each(function(key, value) {
 				res.push(key);
 			});
 			return res;
 		},
-		'keys_and_values': function() {
+
+	    /**
+        * Returns an array of [key, value] arrays for all the items in the storage.
+        * @func
+        * @memberof module:core/jsgui-data-structures.Ordered_KVS
+        * @instance
+        */
+		'keys_and_values': function () {
 			var res = [];
 			this.each(function(key, value) {
 				res.push([key, value]);
@@ -591,6 +788,19 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 	});
 	*/
 
+
+
+    /**
+    * Creates the Ordered_String_List.
+    * @classdesc Represents an unsorted string list.
+    * @constructor
+    * @param {string} [values] - space-separated list of values
+    * @memberof module:core/jsgui-data-structures
+    * @example
+    * var list1 = new Data_Structures.Ordered_String_List();
+    * var list2 = new Data_Structures.Ordered_String_List("value1 value2 value3");
+    */
+
 	// This could be useful for a few things, like storing tables in a DB
 	// schema.
 	// Maybe quite a few more things.
@@ -614,12 +824,28 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				}
 			}
 
-			// (add), remove, get, get_all, has, put, move, splice
+		    /**
+            * Returns `true` if the passed value exists in the list.
+            * @func
+            * @alias has
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+		    // (add), remove, get, get_all, has, put, move, splice
 			this.has = function(value) {
 				return (typeof dict_indexes[value] !== 'undefined');
 			}
 
-			this.put = function(value) {
+		    /**
+            * Adds the passed value to the end of the list. Does nothing if the value already exists in the list.
+            * @func
+            * @alias put
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.put = function (value) {
 				// by default puts it at the end.
 				if (this.has(value)) {
 					// stays in same place.
@@ -633,7 +859,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 
 			}
 
-			this.out = function(value) {
+		    /**
+            * Removes the passed value from the list. Does nothing if the value does not exists in the list.
+            * @func
+            * @alias out
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.out = function (value) {
 				if (this.has(value)) {
 					var idx = dict_indexes[value];
 					arr.splice(idx, 1);
@@ -649,7 +883,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				}
 			}
 
-			this.toggle = function(value) {
+		    /**
+            * Toggles the passed value presence in the list: if the value already exists then removes it, or adds the value on other case.
+            * @func
+            * @alias toggle
+            * @param {string} value
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.toggle = function (value) {
 				if (this.has(value)) {
 					this.out(value);
 				} else {
@@ -657,7 +899,20 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				}
 			}
 
-			this.move_value = function(value, index) {
+		    /**
+            * Toggles the passed value to the specified position in the list. Does nothing if the value does not exists in the list.
+            * @func
+            * @alias move_value
+            * @param {string} value
+            * @param {number} index - new index for the value (zero-based)
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            * @example
+            * var list = new Data_Structures.Ordered_String_List("v0 v1 v2");
+            * list.move_value("v0", 1);
+            * console.log(list.toString()); // "v1 v0 v2"
+            */
+			this.move_value = function (value, index) {
 				if (this.has(value) && dict_indexes[value] != index) {
 
 					// gets removed from current position, causes items after it
@@ -699,14 +954,29 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 				};
 			}
 
-			this.toString = function() {
+		    /**
+            * Returns the string representation of the list: all the string values separated by space.
+            * @func
+            * @alias toString
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.toString = function () {
 				var res = arr.join(' ');
 				return res;
 			}
 
 			this.toString.stringify = true;
 
-			this.set = fp(function(a, sig) {
+		    /**
+            * Sets the values in the list.
+            * @func
+            * @alias set
+            * @param {string} values - space-separated list of values
+            * @memberof module:core/jsgui-data-structures.Ordered_String_List
+            * @instance
+            */
+			this.set = fp(function (a, sig) {
 				if (sig == '[s]') {
 					arr = a[0].split(' ');
 					// console.log('arr ' + jsgui.stringify(arr));

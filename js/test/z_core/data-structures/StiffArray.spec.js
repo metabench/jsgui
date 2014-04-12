@@ -95,6 +95,23 @@ function (StiffArray, assert, test_utils) {
             expect(array.toString()).toEqual("");
         });
 
+        it("test search_first - doc example", function () {
+            var arr = new StiffArray(10);
+            //
+            arr.add(1); // [0]
+            arr.add(2); // [1]
+            arr.add(2); // [2]
+            arr.add(3); // [3]
+            arr.add(3); // [4]
+            arr.add(3); // [5]
+            //
+            assert.deepEqual(arr.search_first(0), { found: false, index: 0 });
+            assert.deepEqual(arr.search_first(1), { found: true, index: 0 });
+            assert.deepEqual(arr.search_first(2), { found: true, index: 1 });
+            assert.deepEqual(arr.search_first(3), { found: true, index: 3 });
+            assert.deepEqual(arr.search_first(4), { found: false, index: 6 });
+        });
+
         it("test search_first", function () {
             var array = new StiffArray(10);
             var searchResult = null;
@@ -281,6 +298,23 @@ function (StiffArray, assert, test_utils) {
             expect(search_first([1, 3, 5, 7], 6)).toEqual({ found: false, index: 3 });
             expect(search_first([1, 3, 5, 7], 7)).toEqual({ found: true, index: 3 });
             expect(search_first([1, 3, 5, 7], 8)).toEqual({ found: false, index: 4 });
+        });
+
+        it("test search_last - doc example", function () {
+            var arr = new StiffArray(10);
+            //
+            arr.add(1); // [0]
+            arr.add(2); // [1]
+            arr.add(2); // [2]
+            arr.add(3); // [3]
+            arr.add(3); // [4]
+            arr.add(3); // [5]
+            //
+            assert.deepEqual(arr.search_last(0), { found: false, index: 0 });
+            assert.deepEqual(arr.search_last(1), { found: true, index: 0 });
+            assert.deepEqual(arr.search_last(2), { found: true, index: 2 });
+            assert.deepEqual(arr.search_last(3), { found: true, index: 5 });
+            assert.deepEqual(arr.search_last(4), { found: false, index: 6 });
         });
 
         it("test search_last", function () {

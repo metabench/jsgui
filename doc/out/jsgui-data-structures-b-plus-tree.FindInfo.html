@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Doubly_Linked_List.Node</title>
+    <title>JSDoc: Class: FindInfo</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Class: Doubly_Linked_List.Node</h1>
+    <h1 class="page-title">Class: FindInfo</h1>
     
     
 
@@ -27,12 +27,20 @@
     
 <header>
     <h2>
-        <span class="ancestors"><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a>.</span>
+        <span class="ancestors"><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a>.</span>
     
-    Doubly_Linked_List.Node
+    FindInfo
     </h2>
     
-        <div class="class-description"><p>Represents a doubly linked list item (named &quot;node&quot;).</p></div>
+        <div class="class-description"><p>This class is used for the findFirst/findNext iteration pattern:</p>
+<ul>
+<li>findFirst() gets the search criteria, finds the first item, store the search state to FindInfo
+(including the criteria, found item, and all other related information), and returns the FindInfo.</li>
+<li>the client process the found item (from the returned FindInfo), and calls findNext() passing the FindInfo.</li>
+<li>findNext() uses the search state from FindInfo to find next item, updates the search state, and returns the updated FindInfo.</li>
+<li>the client process the found item, and calls findNext() again and again - until null will be returned.</li>
+</ul>
+<p>The FindInfo() constructor is intended for internal use only. You should call findFirst(), findNext(), findLast() etc. to get the FindInfo object.</p></div>
     
 </header>  
 
@@ -43,70 +51,18 @@
     
         
 <dt>
-    <h4 class="name" id="Doubly_Linked_List.Node"><span class="type-signature"></span>new Doubly_Linked_List.Node<span class="signature">(spec)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="FindInfo"><span class="type-signature"></span>new FindInfo<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
 <dd>
     
     
-    <div class="description">
-        <p>Creates the node.</p>
-    </div>
-    
 
     
     
     
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>spec</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>{value: (node value)}</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
     
     
     
@@ -152,7 +108,7 @@
     
         <h5>Example</h5>
         
-    <pre class="prettyprint"><code>var node101 = new Doubly_Linked_List.Node({ value: 101 });</code></pre>
+    <pre class="prettyprint"><code>// get all the key/value pairs:var findInfo = tree.findFirst();while (findInfo !== null) {  console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());  findInfo = tree.findNext(findInfo);}// get all the key/value pairs in reverse order:var findInfo = tree.findLast();while (findInfo !== null) {  console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());  findInfo = tree.findPrevious(findInfo);}// get all the values for "010" key:var findInfo = tree.findFirst("010");while (findInfo !== null) {  console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());  findInfo = tree.findNext(findInfo);}// get all the key/value pairs prefixed by "01" in reverse order:var findInfo = tree.findLastPrefix("01");while (findInfo !== null) {  console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());  findInfo = tree.findPrevious(findInfo);}</code></pre>
 
     
 </dd>
@@ -170,59 +126,6 @@
     
     
     
-    
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl>
-            
-<dt>
-    <h4 class="name" id="value"><span class="type-signature"></span>value<span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>The node's value.</p>
-    </div>
-    
-    
-    
-
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
     
     
     
@@ -231,7 +134,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="next"><span class="type-signature"></span>next<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="foundKey"><span class="type-signature"></span>foundKey<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -239,7 +142,7 @@
     
     
     <div class="description">
-        <p>Returns next node in the list.</p>
+        <p>found items's key</p>
     </div>
     
 
@@ -295,7 +198,7 @@
         
             
 <dt>
-    <h4 class="name" id="previous"><span class="type-signature"></span>previous<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="foundValue"><span class="type-signature"></span>foundValue<span class="signature">()</span><span class="type-signature"></span></h4>
     
     
 </dt>
@@ -303,7 +206,7 @@
     
     
     <div class="description">
-        <p>Returns previous node in the list.</p>
+        <p>found item's value</p>
     </div>
     
 
