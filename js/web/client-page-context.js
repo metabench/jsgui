@@ -33,7 +33,7 @@ define(["./jsgui-html"],
 		var Collection = jsgui.Collection;
 		// Need to find out what this one requires to put it in its own module.
 
-		console.log('jsgui.Page_Context', jsgui.Page_Context);
+		//console.log('jsgui.Page_Context', jsgui.Page_Context);
 		var Client_Page_Context = jsgui.Page_Context.extend({
 			'init': function(spec) {
 				spec = spec || {};

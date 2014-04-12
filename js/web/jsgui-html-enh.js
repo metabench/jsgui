@@ -447,12 +447,12 @@ define(["./jsgui-html-core"],
 	            }
 
 	            var str_properties = el.getAttribute('data-jsgui-fields');
-	            console.log('str_properties', str_properties);
+	            //console.log('str_properties', str_properties);
 	            if (str_properties) {
 	                //console.log('str_ctrl_fields ' + str_ctrl_fields);
 	                //console.log('str_properties', str_properties);
 	                var props = JSON.parse(str_properties.replace(/'/g, '"'));
-	                console.log('props ' + stringify(props));
+	                //console.log('props ' + stringify(props));
 	                //throw 'stop';
 	                this.set(props);
 
@@ -490,6 +490,36 @@ define(["./jsgui-html-core"],
 
 	            }
 	        },
+	        'hide': function() {
+	        	// set the style to hidden.
+	        	//  Could add a hidden class.
+
+	        	//  I think a variety of tests on styling would make sense.
+
+	        	// Want to set styles with easy syntax.
+
+	        	// ctrl.style(style_name, value);
+	        	//  I think the Control needs to maintain its own dict or data structure of its inline styles.
+	        	//   These could get rendered differently to dom.attributes.style.
+
+	        	// Or, the dom.sttributes.style gets producted from the jsgui styles that are set.
+	        	//  These styles could also operate a bit differently, or be rendered differently to account for browser differeces.
+	        	// Eg with rounded corners, could use a polyfill for earlier browsers.
+
+	        	// Will interact with dom.attributes.style.
+
+	        	// When active, needs to respond to changes in dom.attributes etc
+	        	//  Will need to listen for those changes and re-render as appropriate.
+
+	        	
+
+
+
+
+
+
+
+	        },
 	        'activate_content_controls': function() {
 
 	        	//console.log('activate_content_controls');
@@ -503,8 +533,10 @@ define(["./jsgui-html-core"],
 
 
 	            var el = this.get('dom.el');
+	            var context = this._context;
 
 	            var ctrl_fields = {};
+	            var that = this;
 
 	            var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
 	            if (str_ctrl_fields) {
@@ -515,13 +547,21 @@ define(["./jsgui-html-core"],
 
 	            //console.log('ctrl_fields ' + stringify(ctrl_fields));
 
-	            var fields_ctrl = {};
+	            //var fields_ctrl = {};
 	            //var selection_scope;
 
 	            each(ctrl_fields, function(i, v) {
-	                fields_ctrl[v] = i;
-	            })
+	            	//fields_ctrl.set(i, v);
 
+	               	//fields_ctrl[v] = i;
+	               	var referred_to_control = context.map_controls[v];
+	               	//console.log('referred_to_control', referred_to_control);
+
+	               	that.set(i, referred_to_control);
+
+
+	            })
+	            // context.map_controls
 
 
 
@@ -539,10 +579,13 @@ define(["./jsgui-html-core"],
 
 	            //console.log('el ' + el);
 
+	            // Works in an overly complicated way?
+
+
 	            var cns = el.childNodes;
 
-	            var context = this._context;
-	            var that = this;
+	            
+	            
 
 	            var content = this.get('content');
 
@@ -574,11 +617,11 @@ define(["./jsgui-html-core"],
 
 	                    // not sure that ._id() was so well named... but anyway.
 
-
-	                    if (fields_ctrl[cn_jsgui_id]) {
-	                        //console.log('fields_ctrl[cn_jsgui_id] ' + fields_ctrl[cn_jsgui_id]);
-	                        that.set(fields_ctrl[cn_jsgui_id], cctrl);
-	                    }
+	                    //
+	                    //if (fields_ctrl[cn_jsgui_id]) {
+	                    //    //console.log('fields_ctrl[cn_jsgui_id] ' + fields_ctrl[cn_jsgui_id]);
+	                    //    that.set(fields_ctrl[cn_jsgui_id], cctrl);
+	                    //}
 
 	                    // Not doing recursive selection scope setting here?
 	                }

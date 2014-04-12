@@ -16,7 +16,7 @@ define(["../../jsgui-html"],
 			
 			'init': function(spec, add, make) {
 				this._super(spec);
-				this.__type_name = 'toggle-button';
+				this.__type_name = 'toggle_button';
 
 				this.set('dom.attributes.class', 'toggle-button');
 
@@ -135,6 +135,9 @@ define(["../../jsgui-html"],
 					//that.set('content', e_change.value);
 					that.clear();
 					that.get('content').add(new jsgui.textNode({'context': that._context, 'text': e_change.value}));
+
+
+					that.raise('toggle', e_change);
 
 				});
 

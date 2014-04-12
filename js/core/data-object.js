@@ -552,7 +552,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							// maybe the this context would be enough.
 
 							//v.call(target, target, event_name);
-							console.log('1) additional_args', additional_args);
+							//console.log('1) additional_args', additional_args);
 							v.apply(target, additional_args);
 							// Perhaps I have sussed out the problem.
 							//  Or some of it?

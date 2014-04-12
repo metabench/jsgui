@@ -109,6 +109,16 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         }
     });
 
+    // Want an underlying system that represents CSS well.
+    //  Making it a lot easier to work with CSS, as it is in the browser.
+    //  On top of that we have another style layer. Maybe jsgui-style? A different way of interacting with the style system.
+    //  It may be that some .style instructions will be interpreted to go through the jsgui style layer.
+    //   When setting border-radius in a Page_Context that does not support it.
+
+
+
+
+
     
     Enhanced_Data_Object.register_data_type('control_dom', jsgui.data_types_info['control_dom']);
     Enhanced_Data_Object.register_data_type('dom_attributes', jsgui.data_types_info['dom_attributes']);
@@ -621,7 +631,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 // 
                 
                 this.get('content').on('change', function(e_change) {
-                    console.log('Control content e_change', e_change);
+                    //console.log('Control content e_change', e_change);
 
                     /*
                     if (e_change.type == 'insert') {
@@ -1790,6 +1800,16 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 });
             }
         },
+
+        // I think .animate syntax would be very helpful.
+        //  syntax similar to jQuery but likely to allow more possible options???
+        //   more ways of expressing the options.
+
+
+
+
+
+
         // This could probably be defined as an alias.
 
         // transition -> style.transition
@@ -2067,6 +2087,16 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             //  This could do the document update or not....
 
             if (sig == '[s]') {
+
+                // Best not to refer to the computed styles probably?
+                //  Really want to interact with inline styles here.
+
+                // maybe have some syntax for computed styles, such as .style('computed', style_name);
+                //  Or just don't have it, get it from the element if needed.
+
+
+
+
                 // Want to get a style value.
                 //  This could get fairly complicated when getComputedStyle is not around, in older browsers.
 
@@ -2078,6 +2108,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 console.log('get style ' + styleName);
 
                 var el = this.get('dom.el');
+
+                // Should probably return a copy of the style, not read from the DOM.
 
                 var res = getComputedStyle(el)[styleName];
                 return res;
@@ -2091,6 +2123,10 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             if (sig == '[s,s,b]') {
                 var styleName = a[0];
                 var styleValue = a[1];
+
+                // Modify dom by default if there is a DOM.
+                
+
                 var modifyDom = a[2];
 
                 var style = this.get('dom.attributes.style');
@@ -2123,6 +2159,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     //throw 'stop';
                 }
 
+                // Should modigy the DOM by default I think.
                 if (modifyDom) {
                     var style = this.get('dom.attributes.style');
                     var el = this.get('dom.el');
@@ -2131,8 +2168,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                         el.style.cssText = style;
                     }
                 }
-
-                
 
             }
 

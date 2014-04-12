@@ -41,8 +41,8 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./resource"],
 				//  Having events trigger so that data gets updated on the server / through a Resource, and the 
 				//  update gets carried out in a way such that minimal boilerplate is needed.
 
-				//this.set('dom.attributes.data-jsgui-properties', '{"selection_scope": true}');
-				this.set('dom.attributes.data-jsgui-properties', "{'selection_scope': true}");
+				//this.set('dom.attributes.data-jsgui-fields', '{"selection_scope": true}');
+				this.set('dom.attributes.data-jsgui-fields', "{'selection_scope': true}");
 				// Creating a Title_Bar may be an easy step though.
 
 

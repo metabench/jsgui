@@ -87,7 +87,7 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 				//  it has that by default but objects internal to it do not, that would be best.
 
 				// Also, selection scope is a property that could be passed onto the client.
-				// data-jsgui-properties 'selection_scope': true
+				// data-jsgui-fields 'selection_scope': true
 
 				// Then it activates with selection scope.
 
@@ -140,7 +140,7 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 						'value': testObj
 					})
 
-					objv.set('dom.attributes.data-jsgui-properties', "{'selection_scope': true}");
+					objv.set('dom.attributes.data-jsgui-fields', "{'selection_scope': true}");
 
 					this.add(objv);
 					*/
