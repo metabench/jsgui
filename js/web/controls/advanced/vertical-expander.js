@@ -60,8 +60,6 @@ define(["../../jsgui-html"],
 				//  Will use css transitions where applicable.
 
 
-
-
 				// Listen to the state being changed.
 				// Then update the UI based on that
 				var that = this;
@@ -95,7 +93,15 @@ define(["../../jsgui-html"],
 
 					setTimeout(function() {
 						el.style.height = '0px';
-					}, 0)
+					}, 0);
+
+					// Better control over styles will help.
+					//  Need the inline css layer.
+					//  Then have the JSGUI style layer on top of that.
+
+					
+
+
 				}
 
 

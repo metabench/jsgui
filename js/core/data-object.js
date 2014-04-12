@@ -6,14 +6,10 @@ if (typeof define !== 'function') {
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"], 
 	function(jsgui, Data_Structures, Constraint, Fields_Collection) {
 	
-	// May need to test controls and data objects separately before running a document server with them.
-	
-	// Constraints as well as a modular bolt-on?
-	
 	// Creates the Constraints data type... so a constraint specified with a string can be tested against
 	//  also a cache of the constraints that have been made through the string - quick to get them again for reuse when testing.
 	
-	// Constraint objects can be saves and used in various places.
+	// Constraint objects can be saved and used in various places.
 	//  They may not always be referred to directly, that would save on the amount of code needed.
 	
 	// They will help in making a model of what gets put into a database.

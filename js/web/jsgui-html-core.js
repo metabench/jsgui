@@ -78,6 +78,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             'tagName': 'string'
         },
         'control': {
+
+            // Another type of style inside here?
             'style': 'style',
             // that may be automatically done from its relationship to its parent.
             //'index': 'int',
@@ -159,7 +161,10 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
     //  Some of them may output to other shim controls, or similar.
     /// Will eventually output to HTML.
 
-    
+    // Need the lower level style system working.
+    //  On top of that, the jsgui style system will be built.
+
+
 
     jsgui.output_processors['string'] = function (value) {
         // need to escapr it
@@ -434,10 +439,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         return arr_res.join('');
     }
 
-
-    
-
-
     // Deferred rendering is going to be a fairly major feature.
 
 
@@ -489,6 +490,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         // We are likely to need a better style function in HTML.
 
         // may be good in some ways having it work as a field.
+
+        // Keep dom.style.attributes as it is, but modify that when changing inline styles.
 
 
 
@@ -566,6 +569,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 //dom = this.get('dom');
                 //dom.set('tagName', 'div'); // Though may depend on spec...
                 this.set('dom.tagName', 'div');
+
+                this._icss = {};
                 //this._.dom = {'tagName': 'div'};
 
                 // Abstract controls won't have 
@@ -916,9 +921,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             //  such as 'hidden' or 'selected' or maybe 'clearall'.
 
             // Think we need something that listens for content being added (or removed).
-
-
-
         },
 
         // Needs activate, and behaviour fields (or similar).
@@ -1006,8 +1008,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             // Flags that appear in CSS.
             //  Also have some other effect, most likely.
 
-
-
             if (!css_flags.has(flag_name)) {
                 css_flags.add(flag_name);
             }
@@ -1027,17 +1027,13 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         },
 
         // Maybe consider these part of rendering, move them.
-        'get_amalgamated_style': function (arr_contexts) {
+        '_get_amalgamated_style': function (arr_contexts) {
             //console.log('this._.style ' + stringify(this._.style));
 
             // Do we have style as a field that uses data objects?
 
-
-
             //res = clone(this._.style);
-
-
-                //that = this;
+            //that = this;
 
 
 
@@ -1047,12 +1043,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             //  There will need to be overrides in various places.
 
             // Sometimes new elements would need to be put in (maybe into the background)
-
-
-
-
-
-
 
             //console.log('res ' + stringify(res));
             // OK, needs the style object.
@@ -1072,6 +1062,13 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         	});
         	*/
             //return res;
+
+            // Not going to use this._.style.
+            //  will have this._icss for inline css
+
+
+
+
             return clone(this._.style);
         },
 
@@ -1236,9 +1233,18 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             var arr = [];
 
+            // Maintaining a dict, or some data structure of the inline styles will help.
+
+
+
 
             //var arr = new Array(dom_attrs.length * 5);
             if (dom_attrs) {
+
+                // Going to handle the style attribute differently.
+                //  Maybe at a different level though.
+
+
 
                 dom_attrs.each(function (i, v) {
                     /*
@@ -2086,6 +2092,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             //  This could do the document update or not....
 
+            var style_name, style_value, modify_dom = true;
+
             if (sig == '[s]') {
 
                 // Best not to refer to the computed styles probably?
@@ -2125,7 +2133,31 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 var styleValue = a[1];
 
                 // Modify dom by default if there is a DOM.
-                
+
+
+                var modifyDom = a[2];
+
+            };
+
+            if (sig == '[s,s]') {
+                var styleName = a[0];
+                var styleValue = a[1];
+
+                // Modify dom by default if there is a DOM.
+                //var modifyDom = a[2];
+
+            };
+
+
+
+
+            /*
+            if (sig == '[s,s,b]') {
+                var styleName = a[0];
+                var styleValue = a[1];
+
+                // Modify dom by default if there is a DOM.
+
 
                 var modifyDom = a[2];
 
@@ -2170,16 +2202,47 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 }
 
             }
+            */
 
-            if (sig == '[s,s]') {
-                var styleName = a[0];
-                var styleValue = a[1];
+            if (styleName && typeof styleValue !== 'undefined') {
+                //var styleName = a[0];
+                //var styleValue = a[1];
+
+                // dom.attributes.style - as a normal data_object?
+                //  Or a particular type of attribute that is dealt with differently?
+
+
+                // Need to set the inline css dict
 
                 // will update the dom attributes string from the style?
                 //  will set an item in the inline_css_dict
 
+                this._icss[styleName] = styleValue;
+
+                // then rebuild the dom attributes style from that one.
+
+                // produce the inline css from that dict...
+
+                var str_css = '';
+                //var first = true;
+                each(this._icss, function(item_style_name, item_style_value) {
+                    //if (!first) {
+                    //    str_css = str_css + '';
+                    //}
+                    str_css = str_css + item_style_name + ':' + item_style_value + ';';
+                })
+                console.log('str_css', str_css);
+
+                
+                if (modify_dom) {
+                    this.set('dom.attributes.style', str_css);
+                }
+
+
             }
             var that = this;
+
+
             if (sig == '[o]') {
 
                 // could recompute the whole style string in a more optimized way.
@@ -2189,7 +2252,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 each(a[0], function(i, v) {
                     that.style(i, v, false);
-                })
+                });
 
                 var style = this.get('dom.attributes.style');
 
