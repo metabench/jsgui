@@ -422,6 +422,19 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 	}
 
+	// A way of serving a file so that it includes custom code.
+	//  Or have a standard client template that is easy to serve.
+
+	// Maybe do more with custom controls, such as custom page controls.
+	//  Those page controls would know which control types are within them.
+	//  That info could then be used to write JS code that sets up the references on the client.
+
+
+
+	// Possibly this should have its own routing tree to connect paths with js files?
+	//  Need to set up custom paths.
+
+
 
 	var Site_JavaScript = Resource.extend({
 		//'fields': {
@@ -461,6 +474,33 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		},
 
+		// Want to be able to serve specific js files.
+
+		// Need better syntax than this:
+		//  //site_js.meta.set('custom_paths.js/modernizr-latest☺js', './client/js/modernizr-latest.js');
+
+		// .set_custom_path(url, fileName)
+		//  would need to appear in the main routing tree perhaps?
+
+		'set_custom_path': function(url, file_path) {
+			// But change the URL to have a smiley face instead of fullstops
+			console.log('url', url);
+			var escaped_url = url.replace(/\./g, '☺');
+			console.log('escaped_url', escaped_url);
+
+
+			//this.meta.set('custom_paths.' + escaped_url, file_path);
+			var custom_paths = this.meta.get('custom_paths');
+			console.log('custom_paths', custom_paths);
+
+			custom_paths.set(escaped_url, file_path);
+
+
+		},
+
+
+
+
 		'process': function(req, res) {
 			//console.log('Site_JavaScript processing');
 
@@ -485,52 +525,31 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			var custom_paths = this.meta.get('custom_paths');
 
-			//console.log('custom_paths');
+			console.log('custom_paths', custom_paths);
 
+			var rurl = req.url.replace(/\./g, '☺');
 
+			console.log('rurl', rurl);
 
-			//console.log('this.parent() ' + stringify(this.parent()));
-			// then 
+			var custom_response_entry = custom_paths.get(rurl);
+			console.log('custom_response_entry', custom_response_entry);
 
 			var pool = this.meta.get('pool');
-			// should have a bunch of resources from the pool.
-
-			//var pool_resources = pool.resources();
-			//console.log('pool_resources ' + stringify(pool_resources));
-			var served_directories = this.meta.get('served_directories');
+			if (custom_response_entry) {
+				// we serve the file pointed to.
 
 
-			
-			var url_parts = url.parse(req.url, true);
-			//console.log('url_parts ' + stringify(url_parts));
-			var splitPath = url_parts.path.substr(1).split('/');
+				var file_path = custom_response_entry.value();
 
-			//console.log('splitPath ' + stringify(splitPath));
-
-
-			//console.log('req.url ' + req.url);
-
-			// Could make a few special cases.
-
-
-			var wildcard_value = req.params.wildcard_value;
-			//console.log('*** wildcard_value', wildcard_value);
-
-			if (wildcard_value == 'web/require.js') {
-				//console.log('serving require.js');
-
-				// Could even have the whole JS as a variable in the code here!
-				//  Better to load it and serve it from disk though.
-
-				// Don't want to have to load it each time though...
-				//  But that's convenient for developing anyway.
-
-				// Should not be running from apps!
-				//  Got a problem with the file location here!
+				console.log('file_path', file_path);
 
 
 
-				fs2.load_file_as_string('../../ws/js/web/require.js', function (err, data) {
+				//throw 'stop';
+
+				//var disk_path = '../../ws/js/' + wildcard_value;
+					
+				fs2.load_file_as_string(file_path, function (err, data) {
 					if (err) { 
 						throw err;
 					} else {
@@ -546,29 +565,96 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						res.end(data);
 					}
 				});
+
+
 			} else {
-				// Can get the path on disk...
+				//throw 'stop';
 
-				var disk_path = '../../ws/js/' + wildcard_value;
+
+
+				//console.log('this.parent() ' + stringify(this.parent()));
+				// then 
+
 				
-				fs2.load_file_as_string(disk_path, function (err, data) {
-					if (err) { 
-						throw err;
-					} else {
-						//console.log('');
-						//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
-						
+				// should have a bunch of resources from the pool.
 
-						//console.log('data ' + data);
-						//var servableJs = updateReferencesForServing(data);
+				//var pool_resources = pool.resources();
+				//console.log('pool_resources ' + stringify(pool_resources));
+				var served_directories = this.meta.get('served_directories');
 
-						res.writeHead(200, {'Content-Type': 'text/javascript'});
-						//response.end(servableJs);
-						res.end(data);
-					}
-				});
+
+				
+				var url_parts = url.parse(req.url, true);
+				//console.log('url_parts ' + stringify(url_parts));
+				var splitPath = url_parts.path.substr(1).split('/');
+
+				//console.log('splitPath ' + stringify(splitPath));
+
+
+				//console.log('req.url ' + req.url);
+
+				// Could make a few special cases.
+
+
+				var wildcard_value = req.params.wildcard_value;
+				//console.log('*** wildcard_value', wildcard_value);
+
+				if (wildcard_value == 'web/require.js') {
+					//console.log('serving require.js');
+
+					// Could even have the whole JS as a variable in the code here!
+					//  Better to load it and serve it from disk though.
+
+					// Don't want to have to load it each time though...
+					//  But that's convenient for developing anyway.
+
+					// Should not be running from apps!
+					//  Got a problem with the file location here!
+
+
+
+					fs2.load_file_as_string('../../ws/js/web/require.js', function (err, data) {
+						if (err) { 
+							throw err;
+						} else {
+							//console.log('');
+							//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
+							
+
+							//console.log('data ' + data);
+							//var servableJs = updateReferencesForServing(data);
+
+							res.writeHead(200, {'Content-Type': 'text/javascript'});
+							//response.end(servableJs);
+							res.end(data);
+						}
+					});
+				} else {
+					// Can get the path on disk...
+
+					var disk_path = '../../ws/js/' + wildcard_value;
+					
+					fs2.load_file_as_string(disk_path, function (err, data) {
+						if (err) { 
+							throw err;
+						} else {
+							//console.log('');
+							//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
+							
+
+							//console.log('data ' + data);
+							//var servableJs = updateReferencesForServing(data);
+
+							res.writeHead(200, {'Content-Type': 'text/javascript'});
+							//response.end(servableJs);
+							res.end(data);
+						}
+					});
+
+				}
 
 			}
+				
 
 			// For the moment, can load other files from the system.
 			//  Though this will need to check security later on too.

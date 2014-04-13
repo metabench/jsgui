@@ -2238,7 +2238,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     this.set('dom.attributes.style', str_css);
                 }
 
-
             }
             var that = this;
 

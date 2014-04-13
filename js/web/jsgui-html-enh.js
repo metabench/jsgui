@@ -368,6 +368,40 @@ define(["./jsgui-html-core"],
 
 	            this.activate_content_listen();
 
+	            // Activate style change listen?
+	            //  Or generally dom attributes change listen?
+
+	            this.activate_other_changes_listen();
+
+
+	        },
+	        'activate_other_changes_listen': function() {
+
+	        	/*
+	        	var style = this.get('dom.attributes.style');
+
+	        	console.log('style', style);
+
+	        	style.on('change', function(e_change) {
+	        		console.log('style change', e_change);
+	        	})
+				*/
+				var dom_attributes = this.get('dom.attributes');
+				console.log('dom_attributes', dom_attributes);
+
+				var el = this.get('dom.el');
+
+				dom_attributes.on('change', function(property_name, dval) {
+					console.log('dom_attributes change', property_name, dval);
+					if (property_name == 'style') {
+						// need to update it on the element.
+
+						el.setAttribute('style', dval.value());
+					}
+
+				});
+
+
 	        },
 	        'activate_content_listen': function() {
 	        	var content = this.get('content');
@@ -431,6 +465,111 @@ define(["./jsgui-html-core"],
 
 	            // may not have el....?
 
+	            for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
+				    //arr.push(attrs.item(i).nodeName);
+				    var item = attrs.item(i);
+				    console.log('item', item);
+
+				    console.log('item.name', item.name);
+				    console.log('item.value', item.value);
+
+				    var name = item.name;
+				    var value = item.value;
+
+				    if (name == 'data-jsgui-id') {
+				    	// Handled elsewhere - not so sure it should be but won't change that right now.
+				    } else if (name == 'data-jsgui-type') {
+				    	// ^
+				    } else if (name == 'style') {
+
+				    	console.log('inline style value', value);
+
+				    	// Need to parse that style value.
+				    	//  Put it into the control's inline style dict.
+
+				    	//._icss
+
+				    	console.log('1) ._icss', this._icss);
+
+				    	var map_inline_css = this._icss;
+
+				    	var arr_style_items = value.split(';');
+				    	console.log('arr_style_items', arr_style_items);
+
+				    	//each(arr_style_items)
+				    	for (var c = 0, l2 = arr_style_items.length; c < l2; c++) {
+				    		//map_inline_css[]
+
+				    		var style_item = arr_style_items[c];
+				    		//var style_item_name = 
+				    		var arr_style_item = style_item.split(':');
+
+				    		if (arr_style_item[0]) {
+				    			map_inline_css[arr_style_item[0]] = arr_style_item[1];
+				    		}
+				    	}
+
+				    	console.log('2) ._icss', this._icss);
+
+				    	// and the dom.attributes.style will get set from the ._icss as a later point.
+
+
+
+
+				    	// ^
+				    } else if (name == 'data-jsgui-fields') {
+				    	var str_properties = value;
+
+				    	if (str_properties) {
+			                //console.log('str_ctrl_fields ' + str_ctrl_fields);
+			                //console.log('str_properties', str_properties);
+			                var props = JSON.parse(str_properties.replace(/'/g, '"'));
+			                //console.log('props ' + stringify(props));
+			                //throw 'stop';
+			                this.set(props);
+
+			                // Could be set through flags?
+
+			                //  We can set it to be a selection scope at an earlier stage, on the server,
+			                //  and tell it to retain that information going to the client, so that when it is activated there
+			                //  it is also a selection scope.
+
+			                // I think another useful function would just set the selection scope to be at the current level.
+
+			                // ctrl.selection_scope(ctrl);
+			                //  otherwise it could be getting the selection scope.
+			                //  nice set syntax, consistant with other code too.
+
+
+			                var ss = this.get('selection_scope');
+			                //console.log('ss ' + ss);
+			                // if we have the selection scope, better to create a proper Selection_Scope object.
+
+			                if (ss && ss.value() === true) {
+			                    // will create a proper selection scope
+
+			                    var selection_scope = new Selection_Scope({
+			                        'control': this
+			                    });
+
+			                    this.set('selection_scope', selection_scope);
+			                    //throw 'stop';
+			                }
+
+			                //if (ss) throw 'stop';
+
+			                //throw 'sty';
+
+			            }
+				    } else {
+				    	
+				    }
+
+				}
+
+				/*
+
+
 	            var cls = el.className;
 
 	            //console.log('cls ' + cls);
@@ -445,6 +584,10 @@ define(["./jsgui-html-core"],
 
 	                this.set('dom.attributes.class', map_classes);
 	            }
+
+	            // Need to read through all of the DOM atributes.
+	            //  
+
 
 	            var str_properties = el.getAttribute('data-jsgui-fields');
 	            //console.log('str_properties', str_properties);
@@ -489,6 +632,7 @@ define(["./jsgui-html-core"],
 	                //throw 'sty';
 
 	            }
+	            */
 	        },
 	        'hide': function() {
 	        	// set the style to hidden.
@@ -511,7 +655,7 @@ define(["./jsgui-html-core"],
 	        	// When active, needs to respond to changes in dom.attributes etc
 	        	//  Will need to listen for those changes and re-render as appropriate.
 
-	        	
+
 
 
 
