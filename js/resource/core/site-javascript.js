@@ -21,10 +21,10 @@ if (typeof define !== 'function') {
 
 
 define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
-	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core'], 
+	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core', 'uglify-js', 'zlib'], 
 
 	function(module, path, fs, url, jsgui, os, http, libUrl,
-		Resource, JeSuisXML, Cookies, fs2) {
+		Resource, JeSuisXML, Cookies, fs2, UglifyJS, zlib) {
 
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
@@ -525,14 +525,14 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			var custom_paths = this.meta.get('custom_paths');
 
-			console.log('custom_paths', custom_paths);
+			//console.log('custom_paths', custom_paths);
 
 			var rurl = req.url.replace(/\./g, '☺');
 
-			console.log('rurl', rurl);
+			//console.log('rurl', rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			console.log('custom_response_entry', custom_response_entry);
+			//console.log('custom_response_entry', custom_response_entry);
 
 			var pool = this.meta.get('pool');
 			if (custom_response_entry) {
@@ -633,23 +633,76 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					// Can get the path on disk...
 
 					var disk_path = '../../ws/js/' + wildcard_value;
+
+					// Would be good to uglify and gzip what gets served.
+
+
+					var compress = false;
+
+					if (compress) {
+						fs2.load_file_as_string(disk_path, function (err, data) {
+							if (err) { 
+								throw err;
+							} else {
+
+								// And gzipped too...
+
+								var minified = UglifyJS.minify(data, {
+									fromString: true
+								});
+								//console.log('minified', minified);
+
+								zlib.deflate(minified.code, function (err, buffer) {
+						            if (err) throw err;
+
+						            res.writeHead(200, {
+						                'Content-Encoding': 'deflate',
+						                'Content-Type': 'text/javascript'
+						            });
+
+						            res.end(buffer);
+
+						            //res.writeHead(200, {'Content-Type': 'text/javascript'});
+									//response.end(servableJs);
+									//res.end(minified.code);
+						        });
+
+
+								//console.log('minified', minified);
+
+								//console.log('');
+								//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
+								
+
+								//console.log('data ' + data);
+								//var servableJs = updateReferencesForServing(data);
+
+								
+							}
+						});
+					} else {
+
+						fs2.load_file_as_string(disk_path, function (err, data) {
+							if (err) { 
+								throw err;
+							} else {
+
+								// And gzipped too...
+
+								
+								res.writeHead(200, {'Content-Type': 'text/javascript'});
+								//response.end(servableJs);
+								res.end(data);
+
+
+
+							}
+						});
+
+						
+					}
 					
-					fs2.load_file_as_string(disk_path, function (err, data) {
-						if (err) { 
-							throw err;
-						} else {
-							//console.log('');
-							//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
-							
-
-							//console.log('data ' + data);
-							//var servableJs = updateReferencesForServing(data);
-
-							res.writeHead(200, {'Content-Type': 'text/javascript'});
-							//response.end(servableJs);
-							res.end(data);
-						}
-					});
+					
 
 				}
 

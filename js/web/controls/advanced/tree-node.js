@@ -125,6 +125,13 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						// Hide sets the display to none.
 						plus_minus.hide();
 
+						// And show the plus_minus if there is any content inside.
+
+
+						// Listen for tree node content changes.
+
+
+
 
 						// The plus minus only visible if the tree_node contains any control
 
@@ -185,11 +192,29 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 						this.set('inner_control', inner_control);
 
+						var inner_control_content = inner_control.get('content');
+						inner_control_content.on('change', function(e_change) {
+							console.log('Tree_Node inner_control_content change', e_change);
+							//throw 'stop';
+
+							var l = inner_control_content.length();
+							console.log('l', l);
+
+							if (l > 0) {
+								plus_minus.show();
+							}
+
+							//throw 'stop';
+						})
+
+
 						var ctrl_fields = {
 							'toggle_button': plus_minus._id(),
 							'inner_control': inner_control._id(),
 							'expander': expander._id()
 						}
+
+
 
 						// use different quotes...
 

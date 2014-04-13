@@ -2476,20 +2476,25 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'add_class': function(class_name) {
             // Should have already set these up on activation.
-
+            console.log('Control add_class ' + class_name);
             var cls = this.get('dom.attributes.class');
-            //console.log('cls ' + cls);
+            console.log('cls ' + cls);
             var el = this.get('dom.el');
 
-            //console.log('add_class el ' + el);
+            console.log('add_class el ' + el);
             if (!cls) {
 
                 this.set('dom.attributes.class', class_name);
+
+
                 // as well as that, need to have the class in the doc respond to this chaging.
-                if (el) el.className = class_name;
+                //  event listener listening for dom changes will update this.
+
+                //if (el) el.className = class_name;
+
             } else {
                 var tCls = tof(cls);
-                //console.log('tCls ' + tCls);
+                console.log('tCls ' + tCls);
                 if (tCls == 'object') {
                     //cls
                     cls[class_name] = true;
@@ -2501,8 +2506,30 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     })
                     var str_class = arr_class.join(' ');
                     el.className = str_class;
+                } else if (tCls == 'string') {
+                    var arr_classes = cls.split(' ');
+                    var already_has_class = false, l = arr_classes.length, c = 0;
+                    while (c < l &! already_has_class) {
+                        if (arr_classes[c] == class_name) {
+                            already_has_class = true;
+                        }
+                        c++;
+                    }
+                    if (!already_has_class) {
+                        arr_classes.push(class_name);
+                    }
+                    var str_cls = arr_classes.join(' ');
+                    console.log('str_cls', str_cls);
+                    this.set('dom.attributes.class', str_cls);
+                    // And the DOM should update itself when one of these 'model' objects gets changed - depending on if its activated or not.
+
+
+
+
+
                 }
             }
+            //throw 'stop';
 
         },
 
@@ -2516,6 +2543,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             //console.log('el', el);
             if (cls) {
                 var tCls = tof(cls);
+                console.log('tCls', tCls);
+                //throw 'stop';
                 if (tCls == 'object') {
                     //el.
 
@@ -2527,9 +2556,31 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                         if (cls[i]) arr_class.push(i);
                     })
                     var str_class = arr_class.join(' ');
-                    el.className = str_class;
+                    this.set('dom.attributes.class', str_cls);
+                    //el.className = str_class;
 
                     //console.log('str_class ' + str_class);
+                }
+                if (tCls == 'string') {
+                    console.log('cls', cls);
+                    var arr_classes = cls.split(' ');
+                    var arr_res = [];
+                    var l = arr_classes.length, c = 0;
+                    console.log('arr_classes', arr_classes);
+                    while (c < l) {
+                        if (arr_classes[c] != class_name) {
+                            //already_has_class = true;
+                            arr_res.push(arr_classes[c]);
+                        }
+                        c++;
+                    }
+                    console.log('arr_res', arr_res);
+                    var str_cls = arr_res.join(' ');
+                    console.log('str_cls ', str_cls);
+                    this.set('dom.attributes.class', str_cls);
+
+                    console.log('str_cls ' + str_cls);
+                    //throw 'stop';
                 }
             }
         },

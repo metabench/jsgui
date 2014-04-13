@@ -396,7 +396,13 @@ define(["./jsgui-html-core"],
 					if (property_name == 'style') {
 						// need to update it on the element.
 
-						el.setAttribute('style', dval.value());
+						if (tof(dval) == 'string') {
+							el.setAttribute('style', dval);
+						} else {
+							el.setAttribute('style', dval.value());
+						}
+
+						
 					}
 
 				});
@@ -656,12 +662,18 @@ define(["./jsgui-html-core"],
 	        	//  Will need to listen for those changes and re-render as appropriate.
 
 
+	        	this.add_class('hidden');
+	        	// Probably needs a lower level index / system of maintaining the classes 
 
 
 
 
 
 
+
+	        },
+	        'show': function() {
+	        	this.remove_class('hidden');
 
 	        },
 	        'activate_content_controls': function() {

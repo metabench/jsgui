@@ -98,7 +98,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);
-				console.log('tcr ' + tcr);
+				//console.log('tcr ' + tcr);
 
 				if (tcr == 'data_value') {
 					val = custom_response_entry.value();

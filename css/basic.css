@@ -12,6 +12,12 @@ body {
 	clear: both;
 }
 
+.hidden {
+	display: none;
+}
+
+
+
 .field {
 	/* clear: both; */
 }
@@ -399,6 +405,7 @@ div.single-line.selected {
 
 .tree-node .inner {
 	float: left;
+	position: relative;
 	/* width: 120px; */
 	/* background-color: #EEEEEE; */
 }
@@ -419,12 +426,15 @@ div.single-line.selected {
 .tree-node .expander {
 	padding-left: 18px;
 	margin-top: 2px;
+	position: relative;
 }
 
 .tree-node .top-line img {
-	margin-left: 4px;
+	position: absolute;
+	left: 24px;
+	/* margin-left: 4px; */
 	/* display: inline; */
-	float:left;
+	/* float:left; */
 }
 
 .tree-node .top-line {
@@ -434,6 +444,10 @@ div.single-line.selected {
 
 .tree-node .top-line span {
 	/* clear: both; */
+	/*
 	line-height: 24px;
 	margin-left: 4px;
+	*/
+	position: absolute;
+	left: 54px;
 }
