@@ -241,7 +241,7 @@ define(function() {
 			}
 			
 			if (is_array(collection)) {
-				var res = [], res_item;
+			    var res = [], res_item;
 				for (var c = 0, l = collection.length; c < l; c++) {
 					res_item;
 					if (ctu == false) break;
@@ -260,9 +260,9 @@ define(function() {
 				for (name in collection) {
 					if (ctu == false) break;
 					if (context) {
-						res[name] = fn.call(context, name, collection[name], stop);
+					    res[name] = fn.call(context, name, collection[name], stop);
 					} else {
-						res[name] = fn(name, collection[name]);
+						res[name] = fn(name, collection[name], stop);
 					}
 				}
 				return res;

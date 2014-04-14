@@ -105,10 +105,10 @@ define(['../../../core/jsgui-lang-essentials', '../../../core/collection', '../.
         });
 
         // -----------------------------------------------------
-        //	stop
+        //	stop - array
         // -----------------------------------------------------
 
-        it("should should break iteration when the stop function is called", function () {
+        it("should should break array iteration when the stop function is called", function () {
             var result = "";
             //
             jsgui.each([1, 2, 3, 4, 5], function (index, element, stop) {
@@ -117,6 +117,21 @@ define(['../../../core/jsgui-lang-essentials', '../../../core/collection', '../.
             });
             //
             assert.equal(result, "0:1/1:2/2:3/");
+        });
+
+        // -----------------------------------------------------
+        //	stop - object
+        // -----------------------------------------------------
+
+        it("should should break object iteration when the stop function is called", function () {
+            var result = "";
+            //
+            jsgui.each({a: 1, b:2, c:3, d:4, e:5}, function (index, element, stop) {
+                result += index + ":" + element + "/";
+                if (element >= 3) stop();
+            });
+            //
+            assert.equal(result, "a:1/b:2/c:3/");
         });
 
 
@@ -222,10 +237,10 @@ define(['../../../core/jsgui-lang-essentials', '../../../core/collection', '../.
         });
 
         // -----------------------------------------------------
-        //	stop
+        //	stop - array
         // -----------------------------------------------------
 
-        it("should should break iteration when the stop function is called", function () {
+        it("should should break array iteration when the stop function is called", function () {
             var result = "";
             //
             jsgui.eac([1, 2, 3, 4, 5], function (element, index, stop) {
@@ -234,6 +249,21 @@ define(['../../../core/jsgui-lang-essentials', '../../../core/collection', '../.
             });
             //
             assert.equal(result, "0:1/1:2/2:3/");
+        });
+
+        // -----------------------------------------------------
+        //	stop - object
+        // -----------------------------------------------------
+
+        xit("should should break object iteration when the stop function is called", function () {
+            var result = "";
+            //
+            jsgui.eac({a: 1, b:2, c:3, d:4, e:5}, function (element, index, stop) {
+                result += index + ":" + element + "/";
+                if (element >= 3) stop();
+            });
+            //
+            assert.equal(result, "a:1/b:2/c:3");
         });
 
 
