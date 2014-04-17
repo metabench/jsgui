@@ -568,11 +568,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], f
 
 
 						if (ioa_sig == '[]') {
-							
+						    
 
 						} if (ioa_sig == '[o]') {
-							console.log('ioa sig is an object ');
-							console.log('item_or_arr ' + stringify(item_or_arr));
+							//console.log('ioa sig is an object ');
+							//console.log('item_or_arr ' + stringify(item_or_arr));
 							throw 'stop';
 						} else {
 							//console.log('pre stop');
@@ -739,7 +739,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], f
 					
 					if (aoa) {
 						each(item_or_arr, function(i, v) {
-							that.set(v);
+						    that.set(v);
 						});
 					}
 					/*
@@ -758,9 +758,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], f
 				// add each one
 				//var that = this;
 				var this_set_call = this.set.call, a0 = a[0];
-
 				for (i in a0) {
-					this_set_call(this, [i, a0[i]]);
+				    //console.log(this_set_call);
+				    //this_set_call(this, [i, a0[i]]);
+				    this.set.call(this, [i, a0[i]]);
 
 				}
 				/*
