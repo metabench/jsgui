@@ -102,103 +102,98 @@ function (Fields_Collection, assert) {
             return fieldsCollection;
         }
 
+        function check_set() {
+            // check_set(arg1, arg2,... , estimatedResult);
+            //
+            var last = arguments.length - 1;
+            assert.ok(last >= 1);
+            var args = Array.prototype.slice.call(arguments, 0, last);
+            var estimatedResult = arguments[last];
+            //
+            var fc = create_and_set.apply(this, args);
+            assert.deepEqual(fc.get(), estimatedResult);
+        }
+
+        function check_set_throws() {
+            // check_set(arg1, arg2,... , estimatedError);
+            //
+            var last = arguments.length - 1;
+            assert.ok(last >= 1);
+            var args = Array.prototype.slice.call(arguments, 0, last);
+            var estimatedError = arguments[last];
+            //
+            assert.throws(function () { create_and_set.apply(this, args); }, estimatedError);
+        }
+
         it("fieldsCollection.set() cases", function () {
-            var fc = null;
+
+            check_set(
+                [["field1", "int"], ["field2", "string"]], // set() parameters
+                [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]] // estimated result
+            );
 
             // [a], [s,s]
 
-            fc = create_and_set([["field1", "int"], ["field2", "string"]]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
-
-            fc = create_and_set(["field1", "int"]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }]]);
+            check_set(["field1", "int"], [["field1", "int", { data_type: "int" }]]);
 
             // [a], [s,f]
 
-            fc = create_and_set(["field1", Number]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "Class", Number]]);
+            check_set(["field1", Number], [["field1", "Class", Number]]);
 
             // [a], [s,s,o]
 
-            fc = create_and_set(["field1", "int", { data_type: "int" }]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }]]);
+            check_set(["field1", "int", { data_type: "int" }], [["field1", "int", { data_type: "int" }]]);
 
-            fc = create_and_set(["field1", "int", {}]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", {}]]);
+            check_set(["field1", "int", {}], [["field1", "int", {}]]);
 
             // [a], [n,[s,s]]
 
-            fc = create_and_set([0, ["field1", "int"]]); assert.deepEqual(fc.get(), [["field1", "int"]]);  // ??? !!!
-            fc = create_and_set([1, ["field1", "int"]]); assert.deepEqual(fc.get(), [["field1", "int"]]);
-            fc = create_and_set([2, ["field1", "int"]]); assert.deepEqual(fc.get(), [["field1", "int"]]);
+            check_set([0, ["field1", "int"]], [["field1", "int"]]); // ??? !!!
+            check_set([1, ["field1", "int"]], [["field1", "int"]]);
+            check_set([2, ["field1", "int"]], [["field1", "int"]]);
 
-            fc = create_and_set([0, ["field1", "collection"]]); assert.deepEqual(fc.get(), [["field1", "collection"]]); // "if (field_item_type_name)" never true
+            check_set([0, ["field1", "collection"]], [["field1", "collection"]]); // "if (field_item_type_name)" never true
 
             // [a], [n,[s,s,?]]
 
-            fc = create_and_set([0, ["field1", "int", 100]]); assert.deepEqual(fc.get(), [["field1", "int", 100]]);  // ??? !!!
+            check_set([0, ["field1", "int", 100]], [["field1", "int", 100]]);  // ??? !!!
 
-            //var collectionDefaultValueThrown = false;
-            //try {
-            //    fc = create_and_set([0, ["field1", "collection", 100]]);
-            //} catch (err) {
-            //    if (err === 'Default values for Collection not supported') collectionDefaultValueThrown = true;
-            //}
-            //assert.ok(collectionDefaultValueThrown);
-            assert.throws(function () { create_and_set([0, ["field1", "collection", 100]]) }, 'Default values for Collection not supported');
+            check_set_throws([0, ["field1", "collection", 100]], 'Default values for Collection not supported');
 
             // [a], [s,[s,s]]
 
-            fc = create_and_set(["field1", ["collection", "int"]]); assert.deepEqual(fc.get(), [["field1", ["collection", "int"]]]);
-            fc = create_and_set(["field1", ["dictionary", "int"]]); assert.deepEqual(fc.get(), []); // !!! ?
+            check_set(["field1", ["collection", "int"]], [["field1", ["collection", "int"]]]);
+            check_set(["field1", ["dictionary", "int"]], []); // !!! ?
 
             // [a], []
-
-            fc = create_and_set([]); assert.deepEqual(fc.get(), []);
+            
+            check_set([], []);
 
             // [a], [o]
 
-            assert.throws(function () { create_and_set([{}]); }, 'stop');
-
+            check_set_throws([{}], 'stop');
+            
             // [a], [s,o]
 
-            fc = create_and_set(["field1", {}]); assert.deepEqual(fc.get(), [["field1", ["data_object", {}]]]);
+            check_set(["field1", {}], [["field1", ["data_object", {}]]]);
 
             // [a], [s,[o]]
 
-            fc = create_and_set(["field1", [{}]]); assert.deepEqual(fc.get(), [["field1", ["collection", {}]]]);
+            check_set(["field1", [{}]], [["field1", ["collection", {}]]]);
 
             // [a], [s,~C]
 
             // not tested because "collection" module is not processed yet  // !!!
 
             // [o]
-
-            var o = {
-                field1: "int",
-                field2: "string",
-            };
-
-            fc = create_and_set(o);
-            //fc = new Fields_Collection();
-            //fc.set(o);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
+            
+            check_set({ field1: "int", field2: "string" },  [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
 
             // (a.l > 1)
+            
+            check_set(["field1", "int"], ["field2", "string"], [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
 
-            fc = create_and_set(["field1", "int"], ["field2", "string"]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
-
-            fc = create_and_set("field1", "int", { data_type: "int" });
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }]]);
+            check_set("field1", "int", { data_type: "int" }, [["field1", "int", { data_type: "int" }]]);
 
         });
 
@@ -207,24 +202,15 @@ function (Fields_Collection, assert) {
 
             // [a], [s,s]
 
-            fc = create_and_set(["field1", "int"]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }]]);
-
-            fc = create_and_set([["field1", "int"]]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "int", { data_type: "int" }]]);
-
+            check_set( ["field1", "int"],  [["field1", "int", { data_type: "int" }]]);
+            check_set([["field1", "int"]], [["field1", "int", { data_type: "int" }]]);
 
             // [a], [s,f]
 
-            fc = create_and_set(["field1", Number]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "Class", Number]]);
-
-            fc = create_and_set([["field1", Number]]);
-            //
-            assert.deepEqual(fc.get(), [["field1", "Class", Number]]);
+            check_set(   ["field1", Number],    [["field1", "Class", Number]]);
+            check_set(  [["field1", Number]],   [["field1", "Class", Number]]);
+            check_set( [[["field1", Number]]],  [["field1", "Class", Number]]);
+            check_set([[[["field1", Number]]]], [["field1", "Class", Number]]);
 
         });
 
