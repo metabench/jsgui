@@ -329,7 +329,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], f
 			
 			// Will have fairly versitile field definitions.
 			
-			// [[['content', ['collection', 'control]]]]
+		    // [[['content', ['collection', 'control]]]]
+			//console.log(">>> sig=" + sig);
 			if (sig == '[a]') {
 			
 				//console.log('a.l ' + a.l);
