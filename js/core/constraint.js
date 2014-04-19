@@ -1088,7 +1088,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			var obj = a[0];
 			
-			var obj_sig = get_item_sig(obj);
+			var obj_sig = get_item_sig(obj, 1);  // was get_item_sig(obj);
 			//console.log('obj_sig ' + obj_sig);
 			//console.log('obj ' + stringify(obj));
 			
@@ -1300,7 +1300,6 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	Constraint.Field_Data_Type = Field_Data_Type_Constraint;
 	Constraint.Guid = Guid_Constraint;
 
-	
 	return Constraint;
 });
 
