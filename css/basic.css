@@ -375,11 +375,11 @@ div.single-line.selected {
 
 
 .window .title.bar {
-	height: 32px;
+	height: 28px;
 	background-color: #0D4F8B;
 	color: #FFFFFF;
 	font-size: 13px;
-	line-height: 32px;
+	line-height: 28px;
 	text-indent: 4px;
 }
 

@@ -20,6 +20,32 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 		// This should not only operate in full-screen mode.
 		//  ???
 		// Or say that this control is an 'app?'
+
+
+		// Also need some other controls for Postgres.
+		//  A table editor, and table specifying control.
+		//  Want the user to be able to specify a table as easily as possible. User-friendly menus.
+		//  Maybe a combobox would help.
+
+
+		// This may need to work as a full screen app / windowed app
+		//  or as a menu / list item.
+
+		// Also need to have a table structure editor.
+		//  Maybe a table control?
+
+		// Postgres_Table_Structure_Control
+		//  Postgres Table Resource Meta?
+		// Anyway, need to make something that can put together and edit a postgres table structure.
+
+		// Will then use that tool to deploy and edit tables in a Postgres database.
+
+
+
+
+		// The DB Resource control requires menus - both a horizontal menu at the top, and context menus for right clicking on things.
+
+
 		
 		var Postgres_Database_Resource_Control = Resouce_Control.extend({
 			// is an Input element.
@@ -31,6 +57,8 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 			//	['type', String]
 			//
 			//],
+
+			// Could operate in window mode.
 			
 			'init': function(spec, add, make) {
 				
@@ -165,6 +193,16 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 							//centered.add(h1_title);
 
 							that.add(title_bar);
+
+							// Add a menu as well.
+
+
+							// A new project with a control with a menu, another with a context menu could be a good way of 
+							//  getting started with menus.
+
+							// Introducing new functionailty into small projects that are easier to test, with less debug info.
+
+							
 
 
 							// Then a few other parts.

@@ -632,6 +632,12 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		}),
 
 
+		// insert_before could be useful.
+		//  In some HTML controls want to insert one control before another one.
+
+
+		// Will a control always know what position it's in?
+
        /** 
         * @func
         * @param ...
@@ -1403,6 +1409,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
         * @func
         * @param value
         */
+
+        // Sometimes wrap a normal JS obj as a Data_Value, Data_Object or Collection?
+
+
+
 		'push': function(value) {
 
 			var tv = tof(value);
@@ -1544,6 +1555,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 					//value._relationships[this._id()] = this._arr_idx;
 					//console.log('adding data_object to collection event being raised');
 					// this, and the position it's going to.
+
+
+					// Should set the parent and the position within the parent.
+					//  __index perhaps?
+
 					value.parent(this, pos);
 
 					// item can have multiple parents... that should be possible.

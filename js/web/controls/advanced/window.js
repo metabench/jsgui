@@ -3,8 +3,8 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html"], 
-	function(jsgui) {
+define(["../../jsgui-html", "./horizontal-menu"], 
+	function(jsgui, Horizontal_Menu) {
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
@@ -49,12 +49,21 @@ define(["../../jsgui-html"],
 					var title_bar = add(Control({'class': 'title bar'}));
 
 
-					var title = this.get('title').value();
-					console.log('title', title);
+					var dv_title = this.get('title');
 
 					var title_h2 = make(jsgui.h2());
-					title_h2.add(title);
+					
 					title_bar.add(title_h2);
+
+					if (dv_title) {
+						var title = dv_title.value();
+						title_h2.add(title);
+					}
+
+					
+					console.log('title', title);
+
+					
 
 					// Define this as having inner_content.
 
@@ -64,8 +73,8 @@ define(["../../jsgui-html"],
 					//  return them.
 
 
-					var inner_content = add(Control({'class': 'inner'}));
-					this.set('inner_control', inner_content);
+					var inner_control = add(Control({'class': 'inner'}));
+					this.set('inner_control', inner_control);
 
 
 
@@ -116,6 +125,49 @@ define(["../../jsgui-html"],
 				top_bar.drag_handle_to(this);
 
 				// 
+
+			},
+			'menu': function(menu_spec) {
+				console.log('window menu menu_spec', menu_spec);
+
+				// Need to build up the menu out of menu nodes.
+				//  Probably create a new Horizontal_Menu control?
+				//   Fixed_Menu control may be better... css could make it either horizontal or vertical.
+
+				// Make a Horizontal_Menu for the moment.
+
+				// Create a horizontal menu with that menu spec.
+
+				// insert_before and insert_after.
+
+
+
+
+				menu_spec.context = this._context;
+				var h_menu = new Horizontal_Menu(menu_spec);
+
+				// thien it needs to get inserted before the inner content.
+
+				// Need content collection insert before.
+
+				var ic = this.get('inner_control');
+
+				var ic_parent = ic.parent();
+				console.log('ic_parent', ic_parent);
+				//throw 'stop';
+				//console.log('ic', ic);
+
+				h_menu.insert_before(ic);
+				// So needs to be able to access parent controls.
+
+				h_menu.active();
+
+				//throw 'stop;'
+
+
+
+
+
 
 			}
 		})

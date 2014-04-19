@@ -95,6 +95,30 @@ if (typeof define !== 'function') {
 };
 
 
+// Rather than just jsgui-html-enh, it would be good to load a jsgui module that has got a lot of controls
+//  and possibly resources built in.
+
+// jsgui.Window
+// jsgui.Calendar
+// jsgui.Date_Range_Editor
+
+// I think making a general purpose set of tools would be quite a good idea
+
+
+
+//  so that's available
+
+
+
+// jsgui-html-toolkit
+// jsgui-html-with-controls
+
+// Want a fairly large set of controls to come in the bundle.
+
+
+
+
+
 define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool"],
 //define(["./jsgui-html"],
 function (jsgui, Client_Page_Context, Client_Resource_Pool) {

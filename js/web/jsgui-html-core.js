@@ -634,8 +634,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 //  Fewer event listeners to add.
 
                 // 
+
+                var content = this.get('content');
+                content._parent = this;
                 
-                this.get('content').on('change', function(e_change) {
+                content.on('change', function(e_change) {
                     //console.log('Control content e_change', e_change);
 
                     /*
@@ -2082,6 +2085,49 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             
             //console.log('post content add');
         },
+
+        'insert_before': function(target) {
+            console.log('target', target);
+
+            console.log('pre find parent');
+            //throw 'stop';
+
+            // The parent of a content Collection being a Control?
+            //  Probably makes sense.
+
+
+            var target_parent = target.parent().parent();
+
+            console.log('target_parent', target_parent);
+
+            var target_index = target._index;
+
+            console.log('target_index', target_index);
+
+            // insert into the content collection.
+
+            var content = target_parent.get('content');
+
+            content.insert(this, target_index);
+
+
+
+            //console.log('');
+            //console.log('target', target);
+
+            // Controls need to better keep track of their index within the parent, and what their parent control is.
+            //  Adds a bit of effort to keep track of what the indexes are.
+            //  It's worth having the controls stay aware of what their index is where possible.
+
+            // This 'parent' and relationship info could be integral to Data_Objects and Collections, not just Controls.
+
+
+
+
+
+            //throw 'stop';
+        },
+
         'stringify': function () {
             var res = [];
             res.push('Control(' + stringify(this._) + ')');

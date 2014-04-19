@@ -1046,16 +1046,17 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			return this.__id;
 
 		},
-		'parent': function(obj, index) {
-			if (is_defined(index)) {
-				
-			} else {
-				// get the object's id...
-				
-				// setting the parent... the parent may have a context.
-				
-				
-				
+		'parent': fp(function(a, sig) {
+			var obj, index;
+			console.log('parent sig', sig);
+
+
+			if (a.l == 0) {
+				return this._parent;
+			}
+			if (a.l == 1) {
+				obj = a[0];
+
 				if (!this._context && obj._context) {
 					this._context = obj._context;
 				}
@@ -1068,9 +1069,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				
 				// Can have a single parent, or multiple parents.
 				//  May want something to be the only parent. Could have a different mode for multiple parents.
-				
-				
-				
 				
 				//  this._parent = obj?
 				
@@ -1092,9 +1090,45 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					this._parent = obj;
 				}
 				relate_by_ref();
+			}
+			if (a.l == 2) {
+				obj = a[0];
+				index = a[1];
+
+				if (!this._context && obj._context) {
+					this._context = obj._context;
+				}
+
+				this._parent = obj;
+				this._index = index;
+			}
+
+			if (is_defined(index)) {
+				// I think we just set the __index property.
+				//  I think a __parent property and a __index property would do the job here.
+				//  Suits DOM heirachy.
+				// A __relationships property could make sense for wider things, however, it would be easy (for the moment?)
+				// to just have .__parent and .__index
+				//  
+
+
+				// Not sure all Data_Objects will need contexts.
+				//  It's mainly useful for Controls so far
+
+				
+
+
+			} else {
+				// get the object's id...
+				
+				// setting the parent... the parent may have a context.
+				
+				
+				
+				
 				
 			}
-		}
+		})
 	});
 	
 	
@@ -1932,6 +1966,95 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 		// Duck type collection detect -- __type == 'collection'
 
+		// Don't have the array of parents.
+
+		// One parent and one index for the moment. That's what DOM nodes need.
+
+		'parent': fp(function(a, sig) {
+			var obj, index;
+			console.log('parent sig', sig);
+
+
+			if (a.l == 0) {
+				return this._parent;
+			}
+			if (a.l == 1) {
+				obj = a[0];
+
+				if (!this._context && obj._context) {
+					this._context = obj._context;
+				}
+				
+				// IDs will only work within the context.
+				
+				
+				
+				// Another way of expressing this?
+				
+				// Can have a single parent, or multiple parents.
+				//  May want something to be the only parent. Could have a different mode for multiple parents.
+				
+				//  this._parent = obj?
+				
+				
+				//console.log('parent obj_id ' + obj_id);
+				//throw 'stop'
+				//console.log('obj ' + stringify(obj));
+				// should maybe rename or subdivide _relationships.
+				//  it will also be useful for databases.
+				//  however, would need to work with the constraint system.
+				//   likely that they would be syncronised through code.
+				
+				var relate_by_id = function() {
+					var obj_id = obj._id();
+					this._relationships[obj_id] = true;
+				}
+				
+				var relate_by_ref = function() {
+					this._parent = obj;
+				}
+				relate_by_ref();
+			}
+			if (a.l == 2) {
+				obj = a[0];
+				index = a[1];
+
+				if (!this._context && obj._context) {
+					this._context = obj._context;
+				}
+
+				this._parent = obj;
+				this._index = index;
+			}
+
+			if (is_defined(index)) {
+				// I think we just set the __index property.
+				//  I think a __parent property and a __index property would do the job here.
+				//  Suits DOM heirachy.
+				// A __relationships property could make sense for wider things, however, it would be easy (for the moment?)
+				// to just have .__parent and .__index
+				//  
+
+
+				// Not sure all Data_Objects will need contexts.
+				//  It's mainly useful for Controls so far
+
+				
+
+
+			} else {
+				// get the object's id...
+				
+				// setting the parent... the parent may have a context.
+				
+				
+				
+				
+				
+			}
+		}),
+
+		/*
 		'parent': function(a1, a2) {
 			var ta1 = typeof a1, ta2 = typeof a2, tri, info;
 			if (ta1 == 'undefined') {
@@ -1981,6 +2104,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				}
 			}
 		},
+		*/
 
 		'_fp_parent': fp(function(a, sig) {
 
