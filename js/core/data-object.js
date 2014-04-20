@@ -479,6 +479,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					//console.log('tof bei', tof(bei));
 					if (tof(bei) == 'array') {
 						//console.log('1) raise_event bei.length ' + bei.length);
+						var res = [];
+
 						each(bei, function(i, v) {
 							// I think it knows what the name of the event
 							// is already.
@@ -497,13 +499,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 							//v.call(target, target, event_name);
 							//console.log('pre call');
-							v.call(target);
+							res.push(v.call(target));
 
 							// Perhaps I have sussed out the problem.
 							//  Or some of it?
 
 
 						});
+
+						console.log('Evented_Class raise_event [s] res', res);
+						return res;
 					}// else if (tof(bei) == 'function') {
 					//	bei.call(target, target, event_name);
 					//}
@@ -534,6 +539,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					//console.log('bei ', bei);
 					if (tof(bei) == 'array') {
 						//console.log('1) raise_event bei.length ' + bei.length);
+						var res = [];
+
 						each(bei, function(i, v) {
 							// I think it knows what the name of the event
 							// is already.
@@ -549,12 +556,14 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 							//v.call(target, target, event_name);
 							//console.log('1) additional_args', additional_args);
-							v.apply(target, additional_args);
+							res.push(v.apply(target, additional_args));
 							// Perhaps I have sussed out the problem.
 							//  Or some of it?
 
 
 						});
+						console.log('Evented_Class raise_event [s] res', res);
+						return res;
 						//console.log('2) raised the bound events');
 					}
 					// Or if it's just a function?
@@ -567,7 +576,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			// Click events get raised, but they would have a result.
 			//  DO)M events are a bit different to the standard events but work within the same system.
-			
+
 
 
 
