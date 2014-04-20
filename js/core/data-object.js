@@ -563,6 +563,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			}
 
+			// With a single event handler being raised, it's hard to pass on the result of that event.
+
+			// Click events get raised, but they would have a result.
+			//  DO)M events are a bit different to the standard events but work within the same system.
+			
+
+
+
+
 			// Raise event with multiple arguments?
 			//  First argument is the event name. Arguments after that are the arguments for the handler.
 			

@@ -3,6 +3,9 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
+
+// Also want to make an MDI window system (Multiple Document Interface)
+
 define(["../../jsgui-html", "./horizontal-menu"], 
 	function(jsgui, Horizontal_Menu) {
 		

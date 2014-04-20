@@ -103,6 +103,8 @@ define(["../../jsgui-html", "./menu-node"],
 
 				console.log('activate Horizontal_Menu');
 
+				// While it is open, clicking outside of the menu should close it.
+
 				
 
 				// 

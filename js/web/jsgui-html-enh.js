@@ -21,6 +21,8 @@ define(["./jsgui-html-core"],
 
 		var fp = jsgui.fp;
 		var group = jsgui.group;
+		var str_arr_mapify = jsgui.str_arr_mapify;
+		var map_Controls = jsgui.map_Controls;
 
 		var hover_class = fp(function(a, sig) {
 			//console.log('hover_class sig ' + sig);
@@ -296,7 +298,7 @@ define(["./jsgui-html-core"],
 
 		
 
-		jsgui.Control = jsgui.Control.extend({
+		Control = jsgui.Control = jsgui.Control.extend({
 			'fields': {
 				'selection_scope': Object
 			},
@@ -351,6 +353,8 @@ define(["./jsgui-html-core"],
 
 	        // not recursive
 	        'activate': function(el) {
+	        	console.log('enh ctrl activate');
+
 	            this.__active = true;
 	            if (el) {
 	                this.set('dom.el', el);
@@ -674,7 +678,7 @@ define(["./jsgui-html-core"],
 
 
 	        	this.add_class('hidden');
-	        	// Probably needs a lower level index / system of maintaining the classes 
+	        	// Probably needs a lower level index / system of maintaining the classes - think it has one now apr 2014
 
 
 
@@ -687,9 +691,74 @@ define(["./jsgui-html-core"],
 	        	this.remove_class('hidden');
 
 	        },
+
+	        'context_menu': fp(function(a, sig) {
+	        	var menu_def;
+	        	if (sig == '[o]') {
+	        		menu_def = a[0];
+	        	}
+
+	        	// Respond to right clicks only.
+
+	        	this.on('click', function(e_click) {
+	        		console.log('e_click', e_click);
+	        	})
+
+	        	this.on('contextmenu', function(e_contextmenu) {
+	        		console.log('e_contextmenu', e_contextmenu);
+	        		return false;
+	        		//console.log('e_click', e_click);
+	        	})
+
+
+
+
+	        	this.on('mousedown', function(e_mousedown) {
+	        		console.log('e_mousedown', e_mousedown);
+
+	        		var int_button = e_mousedown.which;
+
+	        		if (int_button == 3) {
+	        			e_mousedown.preventDefault();
+	        			window.event.returnValue = false;
+	        			return false;
+	        		}
+	        	})
+
+	        	this.on('mouseup', function(e_mouseup) {
+	        		console.log('e_mouseup', e_mouseup);
+
+	        		var int_button = e_mouseup.which;
+
+	        		if (int_button == 3) {
+	        			console.log('right button');
+	        			e_mouseup.preventDefault();
+	        			window.event.returnValue = false;
+	        			return false;
+	        		}
+	        	})
+
+	        	// Create a context menu with those nodes.
+
+	        	// When control is right clicked on, create and show a context menu?
+	        	//  I think keeping the menu within the control, rendered by hidden would work. Maybe?
+	        	//  Or easier to show in an overlay if it is generated?
+	        	//  I think absolute positioning would be OK, but then it could run into problems with the element's overflow: hidden
+	        	//  So rendering in an absolute div may make the most sense.
+	        	//   Could then keep the DOM el once it exists.
+
+	        	// This would mean Context_Menu would be a requirement of html-enh, which means a whole load of other
+	        	//  components could also fit in that space in the heirachy, logically.
+
+
+
+
+
+
+	        }),
 	        'activate_content_controls': function() {
 
-	        	//console.log('activate_content_controls');
+	        	console.log('activate_content_controls');
 	            // needs to have an el.
 
 	            // Every internal control has its selection scope set?
@@ -712,7 +781,7 @@ define(["./jsgui-html-core"],
 
 	            }
 
-	            //console.log('ctrl_fields ' + stringify(ctrl_fields));
+	            console.log('ctrl_fields ' + stringify(ctrl_fields));
 
 	            //var fields_ctrl = {};
 	            //var selection_scope;
@@ -2486,7 +2555,7 @@ define(["./jsgui-html-core"],
 	            //console.log('nt ' + nt);
 	            if (nt == 1) {
 	                var jsgui_id = el.getAttribute('data-jsgui-id');
-	                //console.log('jsgui_id ' + jsgui_id);
+	                console.log('* jsgui_id ' + jsgui_id);
 	                if (jsgui_id) {
 	                    
 	                    var ctrl = map_controls[jsgui_id];
@@ -2543,6 +2612,404 @@ define(["./jsgui-html-core"],
 
 	    }
 
+	    var core_extension = str_arr_mapify(function (tagName) {
+	        jsgui[tagName] = Control.extend({
+	            'init': function (spec) {
+	                //spec.tagName = tagName;
+
+	                //console.log('core extension tagName ' + tagName);
+
+	                this._super(spec);
+
+	                this.get('dom').set('tagName', tagName);
+	                // dom.tagName?
+
+	            }
+	        });
+	        jsgui[tagName].prototype._tag_name = tagName;
+	        map_Controls[tagName] = jsgui[tagName];
+	    });
+
+	    var core_extension_no_closing_tag = str_arr_mapify(function (tagName) {
+	        jsgui[tagName] = Control.extend({
+	            'init': function (spec) {
+	                //spec.tagName = tagName;
+
+	                //console.log('core extension tagName ' + tagName);
+
+	                this._super(spec);
+
+	                this.get('dom').set('tagName', tagName);
+	                this.get('dom').set('noClosingTag', true);
+	                // dom.tagName?
+
+	            }
+	        });
+	        jsgui[tagName].prototype._tag_name = tagName;
+	        map_Controls[tagName] = jsgui[tagName];
+	    });
+
+
+
+
+	    core_extension('html head title body div span h1 h2 h3 h4 h5 label p a script button form img ul li');
+	    core_extension_no_closing_tag('link input');
+	    // link tag needs to have no closing tag.
+	    //  core_extension_no_closing_tag
+
+
+	    // the jsgui.script object needs more fields.
+	    //  the jsgui data system has become more restrictive, in that fields / attributes need to be specified.
+
+	    // dom.attributes.type being part of script.
+
+	    // jsgui.script.fields().add('dom.attributes.type')
+
+	    //  It may be nice to have this more flexible again.
+
+	    // but with label we want a bit more...
+
+	    jsgui.Label = Control.extend({
+	        // a field for 'for'
+	        'fields': [
+	            ['for', 'control']
+	            // needs to be able to deal with fields of the type 'control'.
+
+
+	        ],
+
+	        'init': function (spec) {
+	            // for property, and it's tagName gets set too.
+	            this._super(spec);
+	            this.set('dom.tagName', 'label');
+
+
+	            //console.log(spec.for);
+	            //throw stop;
+	            // content rather than text.
+	        },
+	        'beforeRenderDomAttributes': function () {
+	            //this.set('dom.name')
+
+	            //var dom = this.get('dom');
+	            //console.log('');
+
+	            //console.log('');
+	            //var dom_attributes = this.get('dom.attributes');
+
+	            //console.log('dom ' + stringify(dom));
+	            //console.log('dom_attributes ' + dom_attributes);
+
+	            //throw 'stop';
+
+	            
+	            //console.log('domAttributes ' + stringify(domAttributes));
+	            //if (this.)
+	            //console.log('this._ ' + stringify(this._));
+	            var _for = this.get('for');
+
+
+
+	            //console.log('tof(_for) ' + tof(_for));
+	            //throw 'stop';
+
+	            if (tof(_for) == 'control') {
+	                // we use that control's _id() as thr for in the dom attributes.
+	                var domAttributes = this.get('dom.attributes');
+	                domAttributes.set('for', _for._id());
+	            }
+
+	            //console.log('_for ' + stringify(_for));
+	            //throw 'stop';
+	            /*
+				var groupName = this.get('group_name').get();
+				var checked = this.get('checked').get();
+				var value = this.get('value').get();
+				//console.log('checked ' + stringify(checked));
+				//throw 'stop';
+				if (groupName) {
+					domAttributes.set('name', groupName);
+				}
+				if (checked) {
+					domAttributes.set('checked', checked.toString());
+				}
+				if (is_defined(value)) {
+					domAttributes.set('value', value);
+				}
+				*/
+	        }
+	    });
+
+		var HTML_Document = jsgui.html.extend({
+	        // no tag to render...
+	        //  but has dtd.
+
+	        'render_dtd': function () {
+	            return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">\n';
+	        },
+
+
+	        /*
+	        'all_html_render': function () {
+
+
+
+	            //if (this.pre_all_html_render) {
+	            //	
+	            //}
+	            var that = this;
+	            var res = [];
+
+	            this.pre_all_html_render();
+
+	            var dom = this.get('dom');
+
+	            if (dom) {
+
+	                res.push(that.render_dtd());
+
+	                // the super all_html_render.
+
+
+	                res.push(this._super());
+	                //res.push(that.render_content());
+
+	                //res.push(
+
+	                // does it have innerHTML?
+	                //  I think that will just be a content item that gets rendered anyway.
+	                //console.log('has dom');
+
+	                //var beginning = this.renderBeginTagToHtml();
+	                //var middle = this.all_html_render_internal_controls();
+	                //var end = this.renderEndTagToHtml();
+	                //var appendment = this.renderHtmlAppendment();
+
+	                //console.log('beginning ' + beginning);
+	                //console.log('middle ' + middle);
+	                //console.log('end ' + end);
+
+	                //res = [beginning, middle, end, appendment].join('');
+	                //throw ('stop');
+	            }
+
+	            
+	        	
+	        	//if (this.dom && this.dom._ && this.dom._.innerHtml) {
+	        	//	res = [this.renderBeginTagToHtml(), this.dom._.innerHtml, this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
+	        	//} else {
+	        	//	res = [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
+	        	//};
+	        	
+	            return res.join('');
+	        }
+	        */
+
+	    });
+
+	    var Blank_HTML_Document = HTML_Document.extend({
+	        'init': function (spec) {
+	            this._super(spec);
+
+	            var context = this._context;
+	            //console.log('context ' + context);
+
+	            var head = new jsgui.head({
+	                'context': context
+	            });
+	            this.get('content').add(head);
+
+	            var title = new jsgui.title({
+	                'context': context
+	            });
+	            head.get('content').add(title);
+
+	            var body = new jsgui.body({
+	                'context': context
+	            });
+	            this.get('content').add(body);
+
+	            // and have .head, .title, .body?
+
+	            // useful shortcuts?
+	            this.set('head', head);
+	            this.set('title', title);
+	            this.set('body', body);
+
+	            //this.head = head;
+	            //this.title = title;
+	            //this.body = body;
+
+	            this.connect_fields(['head', 'body', 'title']);
+
+	            //console.log('content ' + stringify(this.get('content')));
+
+	            //throw 'stop';
+
+	            //console.log('');
+	            //console.log('end init Blank_HTML_Document this._ ' + stringify(this._));
+	        }
+	    });
+
+	    var Client_HTML_Document = Blank_HTML_Document.extend({
+	        'init': function (spec) {
+	            this._super(spec);
+
+	        },
+
+	        'include_js': function(url) {
+	            var head = this.get('head');
+	            // create jsgui.script
+
+	            var script = new jsgui.script({
+	                //<script type="text/JavaScript" src="abc.js"></script>
+	                'context': this._context
+	            })
+	            // <script data-main="scripts/main" src="scripts/require.js"></script>
+	            var dom = script.get('dom');
+	            //console.log('* dom ' + stringify(dom));
+
+	            //var domAttributes = script.get('dom.attributes');
+	            var domAttributes = dom.get('attributes');
+	            //console.log('domAttributes ' + domAttributes);
+
+	            domAttributes.set('type', 'text/javascript');
+	            //domAttributes.set('src', '/js/require.js');
+	            domAttributes.set('src', url);
+	            head.content().add(script);
+	        },
+
+	        'include_css': function(url) {
+	            var head = this.get('head');
+	            // create jsgui.script
+	            
+	            // <link rel="stylesheet" type="text/css" href="theme.css">
+
+	            var link = new jsgui.link({
+	                //<script type="text/JavaScript" src="abc.js"></script>
+	                'context': this._context
+	            })
+	            // <script data-main="scripts/main" src="scripts/require.js"></script>
+	            var dom = link.get('dom');
+	            //console.log('* dom ' + stringify(dom));
+
+	            //var domAttributes = script.get('dom.attributes');
+	            var domAttributes = dom.get('attributes');
+	            //console.log('domAttributes ' + domAttributes);
+
+	            domAttributes.set('rel', 'stylesheet');
+	            domAttributes.set('type', 'text/css');
+	            //domAttributes.set('src', '/js/require.js');
+	            domAttributes.set('href', url);
+	            head.content().add(link);
+	        },
+
+	        
+	        'include_jsgui_client': function(js_file_require_data_main) {
+
+	        	// Could add the default client file.
+
+	        	// Or a specific client file with a control that also has client-side code.
+	        	//  The client-side code won't get processed on the server.
+	        	//  There will be a specific place where client side code gets called upon activation.
+
+	        	// could include a specific parameter for js_file_require_data_main
+
+	        	js_file_require_data_main = js_file_require_data_main || '/js/web/jsgui-html-client';
+
+	            // Needs to add various script references to the body.
+	            //  May just be one client.js file
+	            //  Then will work on having it build quickly
+	            //  Then will work on making it stay fast to build and be smaller.
+
+	            // include the script in the body?
+	            //  is there a way to keep it at the end of the body?
+	            //  could put it in the head for the moment.
+
+	            var head = this.get('head');
+	            // create jsgui.script
+
+	            var script = new jsgui.script({
+	                //<script type="text/JavaScript" src="abc.js"></script>
+	                'context': this._context
+	            })
+	            // <script data-main="scripts/main" src="scripts/require.js"></script>
+
+	            //var dom = script.get('dom');
+	            //console.log('* dom ' + stringify(dom));
+
+	            //var domAttributes = script.get('dom.attributes');
+	            //var domAttributes = dom.get('attributes');
+	            var domAttributes = script.get('dom.attributes');
+
+	            //console.log('domAttributes ' + domAttributes);
+
+
+
+	            //domAttributes.set('type', 'text/javascript');
+	            //domAttributes.set('src', '/js/require.js');
+	            //domAttributes.set('data-main', js_file_require_data_main);
+	            domAttributes.set({
+	                'type': 'text/javascript',
+	                'src': '/js/web/require.js',
+	                'data-main': js_file_require_data_main
+	            });
+
+
+	            //script.set('dom.attributes.type', 'text/javascript');
+	            //script.set('dom.attributes.src', 'js/jsgui-client.js');
+	            //script.set('dom.attributes.src', 'js/require.js');
+	            //script.set('dom.attributes.data-main', 'js/jsgui-client.js');
+	            //script.set('dom.attributes.data-main', js_file_require_data_main);
+
+
+	            head.add(script);
+	            //throw 'stop';
+
+	        },
+
+	        'include_jsgui_resource_client': function(path) {
+
+	            // Could add the default client file.
+
+	            // Or a specific client file with a control that also has client-side code.
+	            //  The client-side code won't get processed on the server.
+	            //  There will be a specific place where client side code gets called upon activation.
+
+	            // could include a specific parameter for js_file_require_data_main
+
+	            var js_file_require_data_main = path || '/js/web/jsgui-html-resource-client';
+	            this.include_jsgui_client(js_file_require_data_main);
+
+	        },
+	        'include_client_css': function() {
+	            var head = this.get('head');
+	            var link = new jsgui.link({
+	                //<script type="text/JavaScript" src="abc.js"></script>
+	                'context': this._context
+
+	            });
+	            //var lda = link.get('dom.attributes');
+	            //var dom = link.get('dom');
+	            //console.log('* dom ' + stringify(dom));
+
+	            //var domAttributes = script.get('dom.attributes');
+	            var domAttributes = link.get('dom.attributes');
+
+	            domAttributes.set('rel', 'stylesheet');
+	            domAttributes.set('type', 'text/css');
+	            domAttributes.set('href', '/css/basic.css');
+
+	            head.content().add(link);
+	            // <link rel="stylesheet" type="text/css" href="theme.css">
+	        }
+
+	        // also need to include jsgui client css
+
+
+
+	    });
+
 
 
 
@@ -2560,6 +3027,7 @@ define(["./jsgui-html-core"],
 		jsgui.recursive_dom_iterate = recursive_dom_iterate;
 		jsgui.recursive_dom_iterate_depth = recursive_dom_iterate_depth;
 		jsgui.get_window_size = get_window_size;
+		jsgui.Client_HTML_Document = Client_HTML_Document;
 
 		// And a Page_Control as well...
 
