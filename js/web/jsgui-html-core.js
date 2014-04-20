@@ -2087,9 +2087,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         },
 
         'insert_before': function(target) {
-            console.log('target', target);
+            //console.log('target', target);
 
-            console.log('pre find parent');
+            //console.log('pre find parent');
             //throw 'stop';
 
             // The parent of a content Collection being a Control?
@@ -2098,11 +2098,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             var target_parent = target.parent().parent();
 
-            console.log('target_parent', target_parent);
+            //console.log('target_parent', target_parent);
 
             var target_index = target._index;
 
-            console.log('target_index', target_index);
+            //console.log('target_index', target_index);
 
             // insert into the content collection.
 
@@ -2522,12 +2522,12 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'add_class': function(class_name) {
             // Should have already set these up on activation.
-            console.log('Control add_class ' + class_name);
+            //console.log('Control add_class ' + class_name);
             var cls = this.get('dom.attributes.class');
-            console.log('cls ' + cls);
+            //console.log('cls ' + cls);
             var el = this.get('dom.el');
 
-            console.log('add_class el ' + el);
+            //console.log('add_class el ' + el);
             if (!cls) {
 
                 this.set('dom.attributes.class', class_name);
@@ -2540,7 +2540,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             } else {
                 var tCls = tof(cls);
-                console.log('tCls ' + tCls);
+                //console.log('tCls ' + tCls);
                 if (tCls == 'object') {
                     //cls
                     cls[class_name] = true;
@@ -2565,12 +2565,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                         arr_classes.push(class_name);
                     }
                     var str_cls = arr_classes.join(' ');
-                    console.log('str_cls', str_cls);
+                    //console.log('str_cls', str_cls);
                     this.set('dom.attributes.class', str_cls);
                     // And the DOM should update itself when one of these 'model' objects gets changed - depending on if its activated or not.
-
-
-
 
 
                 }
@@ -2580,13 +2577,13 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         },
 
         'remove_class': function(class_name) {
-            //console.log('remove_class ' + class_name);
+            console.log('remove_class ' + class_name);
 
 
             var cls = this.get('dom.attributes.class');
-            //console.log('cls ' + stringify(cls));
+            console.log('cls ' + stringify(cls));
             var el = this.get('dom.el');
-            //console.log('el', el);
+            console.log('el', el);
             if (cls) {
                 var tCls = tof(cls);
                 console.log('tCls', tCls);
@@ -2628,6 +2625,31 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     console.log('str_cls ' + str_cls);
                     //throw 'stop';
                 }
+
+                // and if it's a data value, do similar...
+
+                if (tCls == 'data_value') {
+                    var cls2 = cls.value();
+
+                    var arr_classes = cls2.split(' ');
+                    var arr_res = [];
+                    var l = arr_classes.length, c = 0;
+                    //console.log('arr_classes', arr_classes);
+                    while (c < l) {
+                        if (arr_classes[c] != class_name) {
+                            //already_has_class = true;
+                            arr_res.push(arr_classes[c]);
+                        }
+                        c++;
+                    }
+                    //console.log('arr_res', arr_res);
+                    var str_cls = arr_res.join(' ');
+                    //console.log('str_cls ', str_cls);
+                    this.set('dom.attributes.class', str_cls);
+
+                    //console.log('str_cls ' + str_cls);
+                }
+
             }
         },
 

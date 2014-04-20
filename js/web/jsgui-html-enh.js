@@ -387,12 +387,14 @@ define(["./jsgui-html-core"],
 	        	})
 				*/
 				var dom_attributes = this.get('dom.attributes');
-				console.log('dom_attributes', dom_attributes);
+				//console.log('dom_attributes', dom_attributes);
 
 				var el = this.get('dom.el');
 
 				dom_attributes.on('change', function(property_name, dval) {
 					console.log('dom_attributes change', property_name, dval);
+
+
 					if (property_name == 'style') {
 						// need to update it on the element.
 
@@ -401,8 +403,14 @@ define(["./jsgui-html-core"],
 						} else {
 							el.setAttribute('style', dval.value());
 						}
+					} else if (property_name == 'class') {
+						// need to update it on the element.
 
-						
+						if (tof(dval) == 'string') {
+							el.setAttribute('class', dval);
+						} else {
+							el.setAttribute('class', dval.value());
+						}
 					}
 
 				});
@@ -421,8 +429,8 @@ define(["./jsgui-html-core"],
 	            	var type = e_change.type;
 
 	            	if (type == 'insert') {
-	            		console.log('control content change');
-		                console.log('e_change ', e_change);
+	            		//console.log('control content change');
+		                //console.log('e_change ', e_change);
 		                //item._.parent = that;
 	                    //item._.index = position;
 
@@ -449,7 +457,7 @@ define(["./jsgui-html-core"],
 
 	                        e_change.item.set('dom.el', itemDomEl);
 	                    };
-	                    console.log('itemDomEl', itemDomEl);
+	                    //console.log('itemDomEl', itemDomEl);
 
 	                    //el.insertBefore(itemDomEl, el.childNodes[0]);
 	                    el.appendChild(itemDomEl);
@@ -470,14 +478,15 @@ define(["./jsgui-html-core"],
 	            var el = this.get('dom.el');
 
 	            // may not have el....?
-
+	            var that = this;
+	            var dom_attributes = this.get('dom.attributes');
 	            for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
 				    //arr.push(attrs.item(i).nodeName);
 				    var item = attrs.item(i);
-				    console.log('item', item);
+				    //console.log('item', item);
 
-				    console.log('item.name', item.name);
-				    console.log('item.value', item.value);
+				    //console.log('item.name', item.name);
+				    //console.log('item.value', item.value);
 
 				    var name = item.name;
 				    var value = item.value;
@@ -488,19 +497,19 @@ define(["./jsgui-html-core"],
 				    	// ^
 				    } else if (name == 'style') {
 
-				    	console.log('inline style value', value);
+				    	//console.log('inline style value', value);
 
 				    	// Need to parse that style value.
 				    	//  Put it into the control's inline style dict.
 
 				    	//._icss
 
-				    	console.log('1) ._icss', this._icss);
+				    	//console.log('1) ._icss', this._icss);
 
 				    	var map_inline_css = this._icss;
 
 				    	var arr_style_items = value.split(';');
-				    	console.log('arr_style_items', arr_style_items);
+				    	//console.log('arr_style_items', arr_style_items);
 
 				    	//each(arr_style_items)
 				    	for (var c = 0, l2 = arr_style_items.length; c < l2; c++) {
@@ -515,7 +524,7 @@ define(["./jsgui-html-core"],
 				    		}
 				    	}
 
-				    	console.log('2) ._icss', this._icss);
+				    	//console.log('2) ._icss', this._icss);
 
 				    	// and the dom.attributes.style will get set from the ._icss as a later point.
 
@@ -568,7 +577,9 @@ define(["./jsgui-html-core"],
 
 			            }
 				    } else {
-				    	
+				    	// set the dom attributes value... silent set?
+
+				    	dom_attributes.set(name, value);
 				    }
 
 				}

@@ -128,6 +128,13 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 			},
 			'menu': function(menu_spec) {
+
+				// Should probably take a JS object that holds the menu structure.
+				//  Possibly event handlers as well?
+
+
+
+
 				console.log('window menu menu_spec', menu_spec);
 
 				// Need to build up the menu out of menu nodes.
@@ -141,10 +148,18 @@ define(["../../jsgui-html", "./horizontal-menu"],
 				// insert_before and insert_after.
 
 
+				var h_menu_spec = {
+					'value': menu_spec,
+					'context': this._context
+				}
+
+				//menu_spec.context = this._context;
+
+				// the menu spec includes a menu value...
+				//  it renders that into the necessary nested controls.
 
 
-				menu_spec.context = this._context;
-				var h_menu = new Horizontal_Menu(menu_spec);
+				var h_menu = new Horizontal_Menu(h_menu_spec);
 
 				// thien it needs to get inserted before the inner content.
 
@@ -153,7 +168,7 @@ define(["../../jsgui-html", "./horizontal-menu"],
 				var ic = this.get('inner_control');
 
 				var ic_parent = ic.parent();
-				console.log('ic_parent', ic_parent);
+				//console.log('ic_parent', ic_parent);
 				//throw 'stop';
 				//console.log('ic', ic);
 

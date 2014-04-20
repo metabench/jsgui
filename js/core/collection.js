@@ -150,7 +150,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			// Probably should act differently for an abstract collection.
 			this.__type = 'collection';
 			if (spec.abstract === true) {
-				console.log('init abstract collection');
+				//console.log('init abstract collection');
 
 				// An abstract collection does no have an index system - though maybe has got abstract indexes?
 				// We may initialise it using a constructor for another function.

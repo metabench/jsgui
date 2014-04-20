@@ -1048,7 +1048,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 		},
 		'parent': fp(function(a, sig) {
 			var obj, index;
-			console.log('parent sig', sig);
+			//console.log('parent sig', sig);
 
 
 			if (a.l == 0) {
@@ -1972,7 +1972,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 		'parent': fp(function(a, sig) {
 			var obj, index;
-			console.log('parent sig', sig);
+			//console.log('parent sig', sig);
 
 
 			if (a.l == 0) {

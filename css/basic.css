@@ -373,6 +373,10 @@ div.single-line.selected {
 	line-height: 32px;
 }
 
+.window {
+	position: absolute;
+	border: 1px solid #CCCCCC;
+}
 
 .window .title.bar {
 	height: 28px;
@@ -450,4 +454,23 @@ div.single-line.selected {
 	*/
 	position: absolute;
 	left: 54px;
+}
+
+.horizontal.menu {
+	cursor: default;
+}
+
+.horizontal.menu .menu-node {
+	float: left;
+	width: 94px;
+	background: #EEEEEE;
+	border-right: 1px solid #CCCCCC;
+	border-bottom: 1px solid #CCCCCC;
+	height: 24px;
+	line-height: 24px;
+	/* padding-left: 6px; */
+}
+
+.horizontal.menu .menu-node .main {
+	padding-left: 6px;
 }
