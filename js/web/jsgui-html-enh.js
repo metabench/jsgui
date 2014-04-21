@@ -13,6 +13,13 @@ if (typeof define !== 'function') {
 // However, this I think was intended only for the client anyway.
 
 //define(["./jsgui-html-core", "./client-page-context"], 
+//define(["./jsgui-html-core", "./controls/advanced/context-menu"],
+
+// Handle circular dependencies...
+
+
+
+//define(["./jsgui-html-core"], 
 define(["./jsgui-html-core"], 
 	function(jsgui) {
 		
@@ -23,6 +30,22 @@ define(["./jsgui-html-core"],
 		var group = jsgui.group;
 		var str_arr_mapify = jsgui.str_arr_mapify;
 		var map_Controls = jsgui.map_Controls;
+
+		var Context_Menu;
+
+		var ensure_Context_Menu_loaded = function(callback) {
+			console.log('ensure_Context_Menu_loaded');
+			require(['./controls/advanced/context-menu'], function(_Context_Menu) {
+				console.log('_Context_Menu', _Context_Menu);
+				Context_Menu = _Context_Menu;
+    			callback(Context_Menu);
+    		});
+		}
+
+
+		//require(['./controls/advanced/context-menu'], function(Context_Menu) {		
+    	//	
+    	//});
 
 		var hover_class = fp(function(a, sig) {
 			//console.log('hover_class sig ' + sig);
@@ -422,6 +445,8 @@ define(["./jsgui-html-core"],
 
 	        },
 	        'activate_content_listen': function() {
+	        	console.log('activate_content_listen');
+
 	        	var content = this.get('content');
 	        	var that = this;
 	        	
@@ -429,6 +454,8 @@ define(["./jsgui-html-core"],
 	        	// var el = that.get('dom.el');
 
 	            content.on('change', function(e_change) {
+	            	console.log('activate control content change');
+
 	            	var el = that.get('dom.el');
 	            	var type = e_change.type;
 
@@ -470,10 +497,6 @@ define(["./jsgui-html-core"],
 	            	if (type == 'clear') {
 	            		el.innerHTML = '';
 	            	}
-
-	                
-
-
 
 
 	            });
@@ -694,8 +717,67 @@ define(["./jsgui-html-core"],
 
 	        'context_menu': fp(function(a, sig) {
 	        	var menu_def;
-	        	if (sig == '[o]') {
+	        	if (sig == '[o]' || sig == '[a]') {
 	        		menu_def = a[0];
+	        	}
+
+
+
+	        	var Context_Menu = Context_Menu || require('./controls/advanced/context-menu');
+
+
+
+	        	var context_menu;
+	        	var that = this;
+
+	        	var show_context_menu = function() {
+	        		console.log('show_context_menu');
+
+	        		console.log('Context_Menu', Context_Menu);
+
+	        		if (!context_menu) {
+	        			console.log('menu_def', menu_def);
+
+	        			context_menu = new Context_Menu({
+	        				'context': that._context,
+	        				'value': menu_def
+	        			})
+
+	        			// Then put it into the dom.
+
+	        			// Need to render it?
+	        			//  Add it to the document Control's body (the body control) and then
+	        			//  the rendering should be done automatically.
+
+	        			// Not sure I can get the body control like that.
+	        			// A different way to get the body?
+	        			//  Make a body function?
+
+	        			var context = that._context;
+	        			console.log('context', context);
+
+
+	        			// The context should have access to the document and body controls?
+	        			//  There is already the document reference.
+
+
+	        			// Should have both the document and the document control available in the Page_Context.
+
+
+
+	        			var body = context.ctrl_document.body(); 
+	        			console.log('body', body);
+	        			body.add(context_menu);
+
+	        			// I think we need another demo / test of dynamically adding content to a control.
+	        			//  Should try insert as well as add.
+
+	        			// Want the coder to update it within the control system, the framework renders and inserts into the DOM as necessary.
+
+	        			console.log('post add context menu to body');
+
+	        		}
+
 	        	}
 
 	        	// Respond to right clicks only.
@@ -734,6 +816,9 @@ define(["./jsgui-html-core"],
 	        			console.log('right button');
 	        			e_mouseup.preventDefault();
 	        			window.event.returnValue = false;
+
+	        			show_context_menu();
+
 	        			return false;
 	        		}
 	        	})
@@ -2396,177 +2481,181 @@ define(["./jsgui-html-core"],
 
 	        // Not so sure we can have the client page context here - does it use resources?
 
+	        ensure_Context_Menu_loaded(function(_Context_Menu) {
+	        	Context_Menu = _Context_Menu;
 
+	        	if (!context) {
+		        	throw 'jsgui-html-enh activate(context) - need to supply context parameter.';
+		        }
+		        //context = context || new Page_Context();
+
+		        //console.log('jsgui-html-enh activate context', context);
+
+		        var map_jsgui_els = {};
+		        var map_jsgui_types = {};
+
+		        //console.log('activate - beginning mapping');
+
+		        // Could put together the array of controls in order found.
+
+		        var arr_controls = [];
+		        // element registration
+		        // Recursive iteration where the innermost get called first....
+		        //  Would be useful here.
+
+		        // counting up the typed id numbers.
+
+		        var max_typed_ids = {};
+
+		        var id_before__ = function(id) {
+		            var pos1 = id.lastIndexOf('_');
+		            var res = id.substr(0, pos1);
+		            return res;
+		        }
+
+		        var num_after = function(id) {
+		            var pos1 = id.lastIndexOf('_');
+		            var res = parseInt(id.substr(pos1 + 1), 10);
+		            return res;
+		        }
+
+		        recursive_dom_iterate(document, function(el) {
+		            //console.log('el ' + el);
+		            var nt = el.nodeType;
+		            //console.log('nt ' + nt);
+		            if (nt == 1) {
+		                var jsgui_id = el.getAttribute('data-jsgui-id');
+
+		                //console.log('jsgui_id ' + jsgui_id);
+		                if (jsgui_id) {
+		                    var ib = id_before__(jsgui_id);
+		                    var num =  num_after(jsgui_id);
+		                    if (!max_typed_ids[ib]) {
+		                        max_typed_ids[ib] = num;
+		                    } else {
+		                        if (num > max_typed_ids[ib]) max_typed_ids[ib] = num;
+		                    }
+
+		                    map_jsgui_els[jsgui_id] = el;
+		                    var jsgui_type = el.getAttribute('data-jsgui-type');
+		                    //console.log('jsgui_type ' + jsgui_type);
+		                    map_jsgui_types[jsgui_id] = jsgui_type;
+		                    //console.log('jsgui_type ' + jsgui_type);
+		                }
+		            }
+		        });
+		        context.set_max_ids(max_typed_ids);
+		        //console.log('max_typed_ids ' + stringify(max_typed_ids));
+		        //throw 'stop';
+		        //console.log('activate - finished mapping');
+
+		        // Then activate
+		        //  (but an activation where it does not yet know the references to various necessary other controls)
+		        //  This is about creating the controls, within the page_context.
+
+		        // if the control does not have its own recursive activation...
+		        //  Do the control creation, then there should be various properties and behaviours that get set.
+
+		        // create the controls.
+		        //console.log('map_jsgui_types ' + stringify(map_jsgui_types));
+		        //console.log('map_jsgui_els ' + stringify(map_jsgui_els));
+
+		        //console.log('map_controls_by_type ' + stringify(map_controls_by_type));
+		        //throw 'stop';
+
+		        //console.log('context.map_controls', context.map_controls);
+				//console.log('map_jsgui_types', map_jsgui_types);
+
+		        var map_controls = context.map_controls;
+		        // Control construction and registration
+		        each(map_jsgui_els, function(jsgui_id, el) {
+		            //console.log('jsgui_id ' + jsgui_id);
+		            //console.log('el ' + el);
+
+		            if (jsgui_id) {
+		                var type = map_jsgui_types[jsgui_id];
+		                //console.log('type ' + type);
+		                //var cstr = jsgui.constructor_from_type(type);
+
+		                //var cstr = jsgui.constructor_from_type(type);
+
+		                //console.log('cstr ' + cstr);
+
+		                // use the context's map_Controls
+
+		                var Cstr = context.map_Controls[type];
+		                //console.log('Cstr ' + Cstr.prototype);
+
+		                // then we can construct the control, and put it within the map.
+		                //  A later stage of activation will recreate the relationships between the controls.
+
+		                // OK, but have we got variables to initialize the controls with?
+		                //  It would maybe be most efficient to take delivery of them as one object.
+		                //   With just the control types and the data contained in them we can do a lot of reconstruction of the actual controls.
+
+		                // With the object viewer, we can even reconstruct the initial object from the rendered view.
+		                //  Not sure quite how much point there is in doing that. May work out most efficient because 1st view is prerendered and
+		                //  it does not need to send the data twice.
+		                // Eg can hook up the key (viewer), the value (viewer) and the comma.
+
+		                if (Cstr) {
+		                	var ctrl = new Cstr({
+			                    'context': context,
+			                    '_id': jsgui_id,
+			                    'el': el
+			                })
+			                map_controls[jsgui_id] = ctrl;
+			                arr_controls.push(ctrl);
+		                } else {
+		                	console.log('Missing context.map_Controls for type ' + type + ', using generic Control');
+		                	var ctrl = new Control({
+			                    'context': context,
+			                    '_id': jsgui_id,
+			                    'el': el
+			                })
+			                map_controls[jsgui_id] = ctrl;
+			                arr_controls.push(ctrl);
+
+		                }
+
+		                
+		                //console.log('jsgui_id ' + jsgui_id);
+		                //console.log('ctrl._id() ' + ctrl._id());
+		                
+		            }
+		            // get the constructor from the id?
+		        })
+		        //console.log('arr_controls ' + stringify(arr_controls));
+		        // depth-first activation?
+		        //  But connecting up the activated subcontrols with the control getting activated?
+		        //   They could be the content.
+
+
+		        recursive_dom_iterate_depth(document, function(el) {
+		            //console.log('el ' + el);
+		            var nt = el.nodeType;
+		            //console.log('nt ' + nt);
+		            if (nt == 1) {
+		                var jsgui_id = el.getAttribute('data-jsgui-id');
+		                console.log('* jsgui_id ' + jsgui_id);
+		                if (jsgui_id) {
+		                    
+		                    var ctrl = map_controls[jsgui_id];
+		                    ctrl.__activating == true;
+		                    //console.log('tof ctrl ' + tof(ctrl));
+		                    ctrl.activate();
+		                    ctrl.__activating == false;
+		                    //console.log('jsgui_type ' + jsgui_type);
+		                }
+		            }
+		        })
+	        })
 
 	        //  constructors.
 
 	        // should activate with the context.
 
-	        if (!context) {
-	        	throw 'jsgui-html-enh activate(context) - need to supply context parameter.';
-	        }
-	        //context = context || new Page_Context();
-
-	        //console.log('jsgui-html-enh activate context', context);
-
-	        var map_jsgui_els = {};
-	        var map_jsgui_types = {};
-
-	        //console.log('activate - beginning mapping');
-
-	        // Could put together the array of controls in order found.
-
-	        var arr_controls = [];
-	        // element registration
-	        // Recursive iteration where the innermost get called first....
-	        //  Would be useful here.
-
-	        // counting up the typed id numbers.
-
-	        var max_typed_ids = {};
-
-	        var id_before__ = function(id) {
-	            var pos1 = id.lastIndexOf('_');
-	            var res = id.substr(0, pos1);
-	            return res;
-	        }
-
-	        var num_after = function(id) {
-	            var pos1 = id.lastIndexOf('_');
-	            var res = parseInt(id.substr(pos1 + 1), 10);
-	            return res;
-	        }
-
-	        recursive_dom_iterate(document, function(el) {
-	            //console.log('el ' + el);
-	            var nt = el.nodeType;
-	            //console.log('nt ' + nt);
-	            if (nt == 1) {
-	                var jsgui_id = el.getAttribute('data-jsgui-id');
-
-	                //console.log('jsgui_id ' + jsgui_id);
-	                if (jsgui_id) {
-	                    var ib = id_before__(jsgui_id);
-	                    var num =  num_after(jsgui_id);
-	                    if (!max_typed_ids[ib]) {
-	                        max_typed_ids[ib] = num;
-	                    } else {
-	                        if (num > max_typed_ids[ib]) max_typed_ids[ib] = num;
-	                    }
-
-	                    map_jsgui_els[jsgui_id] = el;
-	                    var jsgui_type = el.getAttribute('data-jsgui-type');
-	                    //console.log('jsgui_type ' + jsgui_type);
-	                    map_jsgui_types[jsgui_id] = jsgui_type;
-	                    //console.log('jsgui_type ' + jsgui_type);
-	                }
-	            }
-	        });
-	        context.set_max_ids(max_typed_ids);
-	        //console.log('max_typed_ids ' + stringify(max_typed_ids));
-	        //throw 'stop';
-	        //console.log('activate - finished mapping');
-
-	        // Then activate
-	        //  (but an activation where it does not yet know the references to various necessary other controls)
-	        //  This is about creating the controls, within the page_context.
-
-	        // if the control does not have its own recursive activation...
-	        //  Do the control creation, then there should be various properties and behaviours that get set.
-
-	        // create the controls.
-	        //console.log('map_jsgui_types ' + stringify(map_jsgui_types));
-	        //console.log('map_jsgui_els ' + stringify(map_jsgui_els));
-
-	        //console.log('map_controls_by_type ' + stringify(map_controls_by_type));
-	        //throw 'stop';
-
-	        //console.log('context.map_controls', context.map_controls);
-			//console.log('map_jsgui_types', map_jsgui_types);
-
-	        var map_controls = context.map_controls;
-	        // Control construction and registration
-	        each(map_jsgui_els, function(jsgui_id, el) {
-	            //console.log('jsgui_id ' + jsgui_id);
-	            //console.log('el ' + el);
-
-	            if (jsgui_id) {
-	                var type = map_jsgui_types[jsgui_id];
-	                //console.log('type ' + type);
-	                //var cstr = jsgui.constructor_from_type(type);
-
-	                //var cstr = jsgui.constructor_from_type(type);
-
-	                //console.log('cstr ' + cstr);
-
-	                // use the context's map_Controls
-
-	                var Cstr = context.map_Controls[type];
-	                //console.log('Cstr ' + Cstr.prototype);
-
-	                // then we can construct the control, and put it within the map.
-	                //  A later stage of activation will recreate the relationships between the controls.
-
-	                // OK, but have we got variables to initialize the controls with?
-	                //  It would maybe be most efficient to take delivery of them as one object.
-	                //   With just the control types and the data contained in them we can do a lot of reconstruction of the actual controls.
-
-	                // With the object viewer, we can even reconstruct the initial object from the rendered view.
-	                //  Not sure quite how much point there is in doing that. May work out most efficient because 1st view is prerendered and
-	                //  it does not need to send the data twice.
-	                // Eg can hook up the key (viewer), the value (viewer) and the comma.
-
-	                if (Cstr) {
-	                	var ctrl = new Cstr({
-		                    'context': context,
-		                    '_id': jsgui_id,
-		                    'el': el
-		                })
-		                map_controls[jsgui_id] = ctrl;
-		                arr_controls.push(ctrl);
-	                } else {
-	                	console.log('Missing context.map_Controls for type ' + type + ', using generic Control');
-	                	var ctrl = new Control({
-		                    'context': context,
-		                    '_id': jsgui_id,
-		                    'el': el
-		                })
-		                map_controls[jsgui_id] = ctrl;
-		                arr_controls.push(ctrl);
-
-	                }
-
-	                
-	                //console.log('jsgui_id ' + jsgui_id);
-	                //console.log('ctrl._id() ' + ctrl._id());
-	                
-	            }
-	            // get the constructor from the id?
-	        })
-	        //console.log('arr_controls ' + stringify(arr_controls));
-	        // depth-first activation?
-	        //  But connecting up the activated subcontrols with the control getting activated?
-	        //   They could be the content.
-
-
-	        recursive_dom_iterate_depth(document, function(el) {
-	            //console.log('el ' + el);
-	            var nt = el.nodeType;
-	            //console.log('nt ' + nt);
-	            if (nt == 1) {
-	                var jsgui_id = el.getAttribute('data-jsgui-id');
-	                console.log('* jsgui_id ' + jsgui_id);
-	                if (jsgui_id) {
-	                    
-	                    var ctrl = map_controls[jsgui_id];
-	                    ctrl.__activating == true;
-	                    //console.log('tof ctrl ' + tof(ctrl));
-	                    ctrl.activate();
-	                    ctrl.__activating == false;
-	                    //console.log('jsgui_type ' + jsgui_type);
-	                }
-	            }
-	        })
+		        
 
 	        //console.log('done activate rdi');
 
@@ -2814,33 +2903,38 @@ define(["./jsgui-html-core"],
 	            var context = this._context;
 	            //console.log('context ' + context);
 
-	            var head = new jsgui.head({
-	                'context': context
-	            });
-	            this.get('content').add(head);
+	            if (!spec.el) {
+	            	var head = new jsgui.head({
+		                'context': context
+		            });
+		            this.get('content').add(head);
 
-	            var title = new jsgui.title({
-	                'context': context
-	            });
-	            head.get('content').add(title);
+		            var title = new jsgui.title({
+		                'context': context
+		            });
+		            head.get('content').add(title);
 
-	            var body = new jsgui.body({
-	                'context': context
-	            });
-	            this.get('content').add(body);
+		            var body = new jsgui.body({
+		                'context': context
+		            });
+		            this.get('content').add(body);
 
-	            // and have .head, .title, .body?
+		            // and have .head, .title, .body?
 
-	            // useful shortcuts?
-	            this.set('head', head);
-	            this.set('title', title);
-	            this.set('body', body);
+		            // useful shortcuts?
+		            this.set('head', head);
+		            this.set('title', title);
+		            this.set('body', body);
 
-	            //this.head = head;
-	            //this.title = title;
-	            //this.body = body;
+		            //this.head = head;
+		            //this.title = title;
+		            //this.body = body;
 
-	            this.connect_fields(['head', 'body', 'title']);
+		            // Maybe connecting control fields?
+		            this.connect_fields(['head', 'body', 'title']);
+	            }
+
+	            
 
 	            //console.log('content ' + stringify(this.get('content')));
 
@@ -2848,7 +2942,19 @@ define(["./jsgui-html-core"],
 
 	            //console.log('');
 	            //console.log('end init Blank_HTML_Document this._ ' + stringify(this._));
-	        }
+	        },
+	        'body': fp(function(a, sig) {
+	        	if (sig =='[]') {
+	        		// find the body control.
+
+	        		var content = this.get('content');
+	        		var body = content.get(1);
+	        		//console.log('body', body);
+	        		//throw 'stop';
+
+	        		return body;
+	        	}
+	        })
 	    });
 
 	    var Client_HTML_Document = Blank_HTML_Document.extend({

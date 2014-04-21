@@ -639,7 +639,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 content._parent = this;
                 
                 content.on('change', function(e_change) {
-                    //console.log('Control content e_change', e_change);
+                    console.log('Control content e_change', e_change);
+
+                    // This gets called on both the client and the server.
+                    //  With controls that get activated
+
 
                     /*
                     if (e_change.type == 'insert') {
@@ -2110,6 +2114,10 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             content.insert(this, target_index);
 
+            // An enhanced / activated control needs to listen for content change in particular.
+
+
+
 
 
             //console.log('');
@@ -2443,6 +2451,26 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                                 var res_raise = that.raise(event_name, e);
                                 console.log('res_raise', res_raise);
+
+                                // then if any results are false, we return false.
+
+                                var any_are_false = false;
+                                var c = 0, l = res_raise.length;
+
+                                while (!any_are_false && c < l) {
+                                    if (res_raise[c] === false) {
+                                        any_are_false = true;
+                                    }
+
+                                    c++;
+                                }
+
+                                console.log('any_are_false', any_are_false);
+
+                                if (any_are_false) {
+                                    e.preventDefault();
+                                    return false;
+                                }
                                 // Would like to respond to the event.
                                 //  Eg if the dom event handler returns false, it would be good to return false in the listener.
 

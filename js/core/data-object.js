@@ -538,8 +538,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					var bei = be[event_name];
 					//console.log('bei ', bei);
 					if (tof(bei) == 'array') {
-						//console.log('1) raise_event bei.length ' + bei.length);
+						console.log('1) raise_event bei.length ' + bei.length);
 						var res = [];
+
+						// They are handlers that get called.
 
 						each(bei, function(i, v) {
 							// I think it knows what the name of the event

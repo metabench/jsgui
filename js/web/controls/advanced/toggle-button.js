@@ -1,7 +1,7 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html"], 
+define(["../../jsgui-html-enh"], 
 	function(jsgui) {
 		
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;

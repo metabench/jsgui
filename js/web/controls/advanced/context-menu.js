@@ -15,7 +15,7 @@ define(["../../jsgui-html", "./menu-node"],
 
 		var group = jsgui.group;
 
-		var Horizontal_Menu = Control.extend({
+		var Context_Menu = Control.extend({
 
 			// could have a title field.
 			//'fields': {
@@ -133,6 +133,6 @@ define(["../../jsgui-html", "./menu-node"],
 
 
 
-		return Horizontal_Menu;
+		return Context_Menu;
 	}
 );
