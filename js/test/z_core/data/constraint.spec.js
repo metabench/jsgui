@@ -346,18 +346,18 @@ function (Constraint, Data_Object, assert) {
             //
             c = new Constraint.Collection_Data_Type(Number);
             //
-            assert.deepEqual(c.__data_type, undefined); // instead of "collection_constraint", because _super() was not called in the constructor
+            assert.deepEqual(c.__data_type, "collection_constraint");
             assert.deepEqual(c._constraint_type, "data_type");
             //
             assert.equal(c.match(1), true);
-            assert.equal(c.match("1"), undefined); // !!!
+            assert.equal(c.match("1"), false);
             //
             //  String
             //
             c = new Constraint.Collection_Data_Type(String);
             //
             assert.equal(c.match("1"), true);
-            assert.equal(c.match(1), undefined); // !!!
+            assert.equal(c.match(1), false);
             //
             //  Book
             //
@@ -365,17 +365,10 @@ function (Constraint, Data_Object, assert) {
             c = new Constraint.Collection_Data_Type(Book);
             //
             assert.equal(c.match(new Book()), true);
-            assert.equal(c.match("Book"), undefined); // !!!
+            assert.equal(c.match("Book"), false);
             //
-            //
-            // there is a separate code branch for Data_Object in the match() method implementation,
-            // but it works exactly as for other objects.
-            // Probably there is a reason to remove the specific code branch from match():
-            //
-            // The same seems true for Collection (not tested, just code review)
             //
             c = new Constraint.Collection_Data_Type(Data_Object);
-            //
             assert.equal(c.match(new Data_Object()), true);
         });
 

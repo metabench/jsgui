@@ -534,7 +534,10 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	// Perhaps rename to Collection_Data_Type_Constructor_Constraint
 	var Collection_Data_Type_Constraint = Collection_Constraint.extend({
 		'init': function(spec) {
-			//if (tof(spec) == 'function' && is_constructor_fn(spec)) {
+
+		    this._super();
+
+		    //if (tof(spec) == 'function' && is_constructor_fn(spec)) {
 			//	this.data_type_constructor = spec;
 			//}
 			//console.log('tof(spec) ' + tof(spec));
@@ -571,81 +574,77 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 				return true;
 			}
 			
-			if (sig == '[D]') {
-				// matching a Data_Object against these constraints.
+			//if (sig == '[D]') {
+			//	// matching a Data_Object against these constraints.
 				
-				//var c_res = this.data_object.obj_matches_field_constraints(a[0]);
-				//return c_res;
+			//	//var c_res = this.data_object.obj_matches_field_constraints(a[0]);
+			//	//return c_res;
 				
-				if (this.data_type_constructor) {
-					return a[0] instanceof this.data_type_constructor;
-				}
+			//	if (this.data_type_constructor) {
+			//		return a[0] instanceof this.data_type_constructor;
+			//	}
 				
-				//return 
+			//	//return 
 				
-			}
+			//}
 			
-			// May be given a collection here.
-			if (sig == '[C]') {
-				// A collection may hold constraints for a type of collection.
+			//// May be given a collection here.
+			//if (sig == '[C]') {
+			//	// A collection may hold constraints for a type of collection.
 				
-				// Database holds Tables Collection, which is of the Table item.
+			//	// Database holds Tables Collection, which is of the Table item.
 				
-				// let's have a look at that collection.
-				var obj = a[0];
-				//console.log('obj ' + stringify(obj));
+			//	// let's have a look at that collection.
+			//	var obj = a[0];
+			//	//console.log('obj ' + stringify(obj));
 				
-				// eg collection of tables.
-				///  probably should have its data type constraint?
+			//	// eg collection of tables.
+			//	///  probably should have its data type constraint?
 				
-				var obj_name = obj.get('name');
-				//console.log('obj_name ' + obj_name);
-				
-				
-				
-				// we may be able to get the data_type_constraint of that collection.
-				//  It may be a dtc that implies it can take a collection, maybe a collection of a particular type of object.
-				
-				//console.log('obj._data_type_constraint ' + stringify(obj._data_type_constraint));
-				// so, a collection when given a typed collection as it's data_type will need to respond correctly.
-				//  setting its _data_type_constraint
-				
-				//console.log('obj._data_type_constraint.data_type_constructor ' + stringify(obj._data_type_constraint.data_type_constructor));
-				
-				//data_type_constructor
-				
-				//console.log('this.data_type_constructor ' + stringify(this.data_type_constructor));
-				//var stack = new Error().stack
-				//console.log( stack )				
-				//throw('13) stop');
-				
-				//var res = obj instanceof obj._data_type_constraint.data_type_constructor;
-				var res = obj instanceof this.data_type_constructor;
-				//console.log('res ' + res);
-				// nice, seems to work.
-				
-				return res;
-				// see if the collection's _data_type_constraint matches the constructor in this constraint.
-				
-				
-				// this does get a bit complicated with the same code being used on different nested levels.
-				//  I'll need to cut down on feature addition on this, and make sure the API is working and stable.
-				//  Document it too.
-				
-				// Just need it to generate these relational, or semi-relational databases.
-				//  Need to get the whole web platform running.
-				
-				// The system has got pretty big, still will need a bit more for the whole database support.
-				//  Will likely make some database connected extensions... or maybe more sync code in the 'Database' class.
-				
-				
-				//return 
+			//	var obj_name = obj.get('name');
+			//	//console.log('obj_name ' + obj_name);
 				
 				
 				
-			}
-			
-			
+			//	// we may be able to get the data_type_constraint of that collection.
+			//	//  It may be a dtc that implies it can take a collection, maybe a collection of a particular type of object.
+				
+			//	//console.log('obj._data_type_constraint ' + stringify(obj._data_type_constraint));
+			//	// so, a collection when given a typed collection as it's data_type will need to respond correctly.
+			//	//  setting its _data_type_constraint
+				
+			//	//console.log('obj._data_type_constraint.data_type_constructor ' + stringify(obj._data_type_constraint.data_type_constructor));
+				
+			//	//data_type_constructor
+				
+			//	//console.log('this.data_type_constructor ' + stringify(this.data_type_constructor));
+			//	//var stack = new Error().stack
+			//	//console.log( stack )				
+			//	//throw('13) stop');
+				
+			//	//var res = obj instanceof obj._data_type_constraint.data_type_constructor;
+			//	var res = obj instanceof this.data_type_constructor;
+			//	//console.log('res ' + res);
+			//	// nice, seems to work.
+				
+			//	return res;
+			//	// see if the collection's _data_type_constraint matches the constructor in this constraint.
+				
+				
+			//	// this does get a bit complicated with the same code being used on different nested levels.
+			//	//  I'll need to cut down on feature addition on this, and make sure the API is working and stable.
+			//	//  Document it too.
+				
+			//	// Just need it to generate these relational, or semi-relational databases.
+			//	//  Need to get the whole web platform running.
+				
+			//	// The system has got pretty big, still will need a bit more for the whole database support.
+			//	//  Will likely make some database connected extensions... or maybe more sync code in the 'Database' class.
+								
+			//	//return 
+			//}
+			//
+			return false;
 			
 		})
 	});
