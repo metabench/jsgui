@@ -776,117 +776,117 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	
 	
 	
-	var Relationship_Constraint = Collection_Constraint.extend({
-		'init': function(spec) {
-			this._super(spec);
+	//var Relationship_Constraint = Collection_Constraint.extend({
+	//	'init': function(spec) {
+	//		this._super(spec);
 			
-			// which other collection(s) and field(s) does it reference?
+	//		// which other collection(s) and field(s) does it reference?
 			
-			// what form does the relationship take?
+	//		// what form does the relationship take?
 			
-			// files in a folder
-			//  aggregation
-			//  has (composed of)
-			//  many-to-one
-			//   aggregation_to_item (but maybe we would be saying the folder 'has' files)
+	//		// files in a folder
+	//		//  aggregation
+	//		//  has (composed of)
+	//		//  many-to-one
+	//		//   aggregation_to_item (but maybe we would be saying the folder 'has' files)
 			
 			
-			// friends
-			//  many-to-many
-			//  association
-			//  has (as friend) / is associated with
-			//   use join table
-			//   association_between_items
+	//		// friends
+	//		//  many-to-many
+	//		//  association
+	//		//  has (as friend) / is associated with
+	//		//   use join table
+	//		//   association_between_items
 			
-			// employees-projects
-			//  many-to-many
-			//  association
-			//  is associated with 
-			//   use join table
-			//   association_between_items
+	//		// employees-projects
+	//		//  many-to-many
+	//		//  association
+	//		//  is associated with 
+	//		//   use join table
+	//		//   association_between_items
 			
 			
-			// user_roles
-			//  aggregation? 
-			//  maybe association
-			//  one-to-many
-			//  user is associated with roles
+	//		// user_roles
+	//		//  aggregation? 
+	//		//  maybe association
+	//		//  one-to-many
+	//		//  user is associated with roles
 			
-			// employee-pay_band
-			//  association?
-			//  one_to_one
-			//  user has that pay band
+	//		// employee-pay_band
+	//		//  association?
+	//		//  one_to_one
+	//		//  user has that pay band
 			
-			// Compositon for sub-items?
+	//		// Compositon for sub-items?
 			
-			// May be interested in mapping inheritance for this object system
-			//  At the moment, need to just map the JavaScript structures into the database, then we'll get to work with
-			//  building up the database and components of it that deal with website functionality.
+	//		// May be interested in mapping inheritance for this object system
+	//		//  At the moment, need to just map the JavaScript structures into the database, then we'll get to work with
+	//		//  building up the database and components of it that deal with website functionality.
 			
-			// Once things can quickly be declared and then created in the database, it should be relatively fast to implement programmatic
-			//  components that work quickly with the DB and also can be created quickly.
+	//		// Once things can quickly be declared and then created in the database, it should be relatively fast to implement programmatic
+	//		//  components that work quickly with the DB and also can be created quickly.
 			
-			// There is some more to do with this work, but now it is at a really good stage where it is able to do a lot of things in the background.
-			//  With some more coding, it will do a whole bunch more things.
+	//		// There is some more to do with this work, but now it is at a really good stage where it is able to do a lot of things in the background.
+	//		//  With some more coding, it will do a whole bunch more things.
 			
-			// Will do some more work on the XML / HTML transformation.
-			//  That would be one of the really amazing things if I were to release it with that.
+	//		// Will do some more work on the XML / HTML transformation.
+	//		//  That would be one of the really amazing things if I were to release it with that.
 			
-			// The declarative writing of these pages would be very interesting and get people interested with the JSGUI platform.
-			//  That part is also something it would be interesting to get written in C++ or C.
+	//		// The declarative writing of these pages would be very interesting and get people interested with the JSGUI platform.
+	//		//  That part is also something it would be interesting to get written in C++ or C.
 			
-			// Also, will be interesting to have bits and pieces about technology on the website.
-			//  Presentations.
+	//		// Also, will be interesting to have bits and pieces about technology on the website.
+	//		//  Presentations.
 			
-			// I think it could be very good advertising for my own services, and releasing the JSGUI open source framework will do a lot to help this.
-			//  I'm likely to release the client-side framework, as well as a server distribution.
-			//  I doubt it would be the full / development / internal distribution, but one that has various very useful features.
+	//		// I think it could be very good advertising for my own services, and releasing the JSGUI open source framework will do a lot to help this.
+	//		//  I'm likely to release the client-side framework, as well as a server distribution.
+	//		//  I doubt it would be the full / development / internal distribution, but one that has various very useful features.
 			
-			// I would likely license commercial modules as well, such as a Postgres Connector.
-			//  Also would have a marketplace for those who wish to sell their own components - and may well be selling advertising to those who
-			//  want to sell their own components for it, possibly through Google.
+	//		// I would likely license commercial modules as well, such as a Postgres Connector.
+	//		//  Also would have a marketplace for those who wish to sell their own components - and may well be selling advertising to those who
+	//		//  want to sell their own components for it, possibly through Google.
 			
-			// May do deals with component makes, could have sponsored listings? 
+	//		// May do deals with component makes, could have sponsored listings? 
 			
-			// The basic framework should probably be released as open-source, then I should be set for employing people and getting paid to develop this code
-			//  further for clients in their systems.
+	//		// The basic framework should probably be released as open-source, then I should be set for employing people and getting paid to develop this code
+	//		//  further for clients in their systems.
 			
-			// I think this could make it easy to get a high performance web server running.
-			//  That will be very nice indeed. I think both the ease of use and customizability will be high.
+	//		// I think this could make it easy to get a high performance web server running.
+	//		//  That will be very nice indeed. I think both the ease of use and customizability will be high.
 			
-			// It will be very nice to have an advanced admin interface going alongside it.
-			//  Won't require installing files, images etc, could be using a few vector images.
-			//  It may surprise people when they see it, thinking, where did that come from, when they are doing simple, easily,
-			//   but there is quite a complicated enabling system allowing it to work.
+	//		// It will be very nice to have an advanced admin interface going alongside it.
+	//		//  Won't require installing files, images etc, could be using a few vector images.
+	//		//  It may surprise people when they see it, thinking, where did that come from, when they are doing simple, easily,
+	//		//   but there is quite a complicated enabling system allowing it to work.
 			
-			// Am getting much closer to the software goals.
-			//  Think I'll get a really nice system online. Don't know quite how long.
-			//  I'll get a lot done over the next few days.
+	//		// Am getting much closer to the software goals.
+	//		//  Think I'll get a really nice system online. Don't know quite how long.
+	//		//  I'll get a lot done over the next few days.
 			
-			// There may be a few more things to get really right along the execution path.
-			//  There is quite a lot to do with the HTML that needs to work.
-			//  Some of this will be expressed in terms of field corrections and constraints.
+	//		// There may be a few more things to get really right along the execution path.
+	//		//  There is quite a lot to do with the HTML that needs to work.
+	//		//  Some of this will be expressed in terms of field corrections and constraints.
 			
-			// There is maybe another 3000 more lines that needs to be written for this?
+	//		// There is maybe another 3000 more lines that needs to be written for this?
 			
-			// The server side library will be big, but will be focused on producing efficient client-side output
-			//  I'll do work on documenting it.
+	//		// The server side library will be big, but will be focused on producing efficient client-side output
+	//		//  I'll do work on documenting it.
 			
-			// It would be interesting to see how big a build (sequentially ordered) of the JavaScript file is.
-			//  Perhaps some things would need to be renamed so that lots of vars in the global namespace would work together.
-			//  There would be a large amount of gain possible in the build process.
+	//		// It would be interesting to see how big a build (sequentially ordered) of the JavaScript file is.
+	//		//  Perhaps some things would need to be renamed so that lots of vars in the global namespace would work together.
+	//		//  There would be a large amount of gain possible in the build process.
 			
-			// The size of the small client library is nudging upwards. Perhaps it will be a 24KB download? Even 32?
-			//  It will definitely be impressive though, will enable lots of things, useful business interactions.
+	//		// The size of the small client library is nudging upwards. Perhaps it will be a 24KB download? Even 32?
+	//		//  It will definitely be impressive though, will enable lots of things, useful business interactions.
 			
-			// Could have a very useful system for conference attendees.
-			//  However, need to do the constraints.
+	//		// Could have a very useful system for conference attendees.
+	//		//  However, need to do the constraints.
 			
 			
 			
 			
-			// Likely to go into more detail on the relationship constraints when actually making them.
-			//  Perhaps will be related to something in the same collection or Data_Object?
+	//		// Likely to go into more detail on the relationship constraints when actually making them.
+	//		//  Perhaps will be related to something in the same collection or Data_Object?
 			
 			
 			
@@ -908,8 +908,8 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			
 			
-			// Could talk to D about setting up the implementations of it.
-			//  
+	//		// Could talk to D about setting up the implementations of it.
+	//		//  
 			
 			
 			
@@ -924,7 +924,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			
 			
-			// Also like the idea of having a donate for feature box.
+	//		// Also like the idea of having a donate for feature box.
 			
 			
 			
@@ -940,23 +940,23 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			
 			
-			/*
-			 * “Each Order is associated with one or more OrderLines.”
+	//		/*
+	//		 * “Each Order is associated with one or more OrderLines.”
 
-				“Each OrderLine is associated with one and only one Order.”
+	//			“Each OrderLine is associated with one and only one Order.”
 				
-				“Each OrderLine is associated with one and only one Product.”
+	//			“Each OrderLine is associated with one and only one Product.”
 				
-				“Each Product is associated with zero or more OrderLines.”
-			 * 
-			 */
+	//			“Each Product is associated with zero or more OrderLines.”
+	//		 * 
+	//		 */
 			
 			
 			
-		}
-		// not really sure the constraint will do much here... it requires an index to be set up.
-		//  perhaps tells the index not to accept duplicates?
-	});
+	//	}
+	//	// not really sure the constraint will do much here... it requires an index to be set up.
+	//	//  perhaps tells the index not to accept duplicates?
+	//});
 	
 	
 	// Relationship
