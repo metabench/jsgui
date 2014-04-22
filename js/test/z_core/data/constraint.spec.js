@@ -176,12 +176,12 @@ function (Constraint, Data_Object, assert) {
             //
             assert.deepEqual(c.__data_type, "data_object_def_constraint");
             //
-            assert.deepEqual(c.match(1), undefined); // !!! because not object
-            assert.deepEqual(c.match("1"), undefined); // !!! 
+            assert.deepEqual(c.match(1), false);
+            assert.deepEqual(c.match("1"), false);
             //
             assert.deepEqual(c.match({}), true); // (?) c.data_def is not set, any object matches
             //
-            c.data_def = { name: "string", age: "number" }; // !!! cannot be set in constructor
+            c = new Constraint.Data_Object_Def_Constraint({ name: "string", age: "number" });
             //
             assert.deepEqual(c.match({ name: "John", age: 25 }), true);
             assert.deepEqual(c.match({ name: "John", age: "25" }), false);

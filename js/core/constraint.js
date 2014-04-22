@@ -161,7 +161,11 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 
 	var Data_Object_Def_Constraint = Constraint.extend({
 		'init': function(spec) {
-			this.__data_type = 'data_object_def_constraint';
+		    this.__data_type = 'data_object_def_constraint';
+		    //
+		    if (tof(spec) === 'object') {
+		        this.data_def = spec;
+		    }
 		},
 		'match': function(value) {
 			// value must be an object?
@@ -184,7 +188,8 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 				return allMatch;
 				//throw 'stop';
 			}
-
+            //
+			return false;
 		} 
 	});
 
