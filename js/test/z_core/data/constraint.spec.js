@@ -75,6 +75,9 @@ function (Constraint, Data_Object, assert) {
             c = Constraint.from_str("text(10)"); // Text_Constraint
             assert.deepEqual(c.to_info_obj(), ["text", 10]);
 
+            c = Constraint.from_str("text"); // Text_Constraint
+            assert.deepEqual(c.to_info_obj(), "text");
+
             c = Constraint.from_str("guid"); // Guid_Constraint
             assert.deepEqual(c.to_info_obj(), "guid");
 
@@ -237,12 +240,11 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c.match({}), false);
             assert.deepEqual(c.match(["aaa"]), false);
             //
-            // to_info_obj() code implies something like "any length text" constraint,
-            // but there are no direct way to create it, and match() doesn't works:
+            // "any length text" constraint:
             //
-            delete c.length;
+            c = Constraint.from_obj("text")
             assert.deepEqual(c.to_info_obj(), "text");
-            assert.deepEqual(c.match("a b c"), false);
+            assert.deepEqual(c.match("a b c"), true);
         });
 
         // -----------------------------------------------------

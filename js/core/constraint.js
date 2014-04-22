@@ -300,7 +300,11 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 		},
 		'match': function(v) {
-			return (tof(v) == 'string' && v.length <= this.length);
+		    if (is_defined(this.length)) {
+		        return (tof(v) == 'string' && v.length <= this.length);
+		    } else {
+		        return (tof(v) == 'string');
+		    }
 		},
 		'to_info_obj': function() {
 			if (is_defined(this.length)) {
@@ -1261,11 +1265,16 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			return constraint;
 		}
 		
-		if (str === 'int') {
-			var constraint = new Int_Constraint({})
-			return constraint;
+		if (str === 'text') {
+		    var constraint = new Text_Constraint({})
+		    return constraint;
 		}
-		
+
+		if (str === 'int') {
+		    var constraint = new Int_Constraint({})
+		    return constraint;
+		}
+
 		if (str === 'number') {
 			var constraint = new Number_Constraint({})
 			return constraint;
