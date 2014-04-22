@@ -107,6 +107,9 @@ function (Constraint, Data_Object, assert) {
             c = Constraint.from_obj("text(10)"); // Text_Constraint
             assert.deepEqual(c.to_info_obj(), ["text", 10]);
 
+            c = Constraint.from_obj("text"); // Text_Constraint
+            assert.deepEqual(c.to_info_obj(), "text");
+
             c = Constraint.from_obj("guid"); // Guid_Constraint
             assert.deepEqual(c.to_info_obj(), "guid");
 
@@ -122,10 +125,10 @@ function (Constraint, Data_Object, assert) {
 
             c = Constraint.from_obj(["unique", "SomeID"]); // Unique_Constraint
             assert.deepEqual(c._constraint_type, "unique");
-            assert.deepEqual(c.fields, undefined); // !!!
+            assert.deepEqual(c.fields, "SomeID");
 
-            c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint
-            assert.deepEqual(c._constraint_type, "data_object");
+            //c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint - removed
+            //assert.deepEqual(c._constraint_type, "data_object");
 
             assert.deepEqual(Constraint.from_obj({}), undefined);
             assert.deepEqual(Constraint.from_obj([]), undefined);
@@ -378,17 +381,17 @@ function (Constraint, Data_Object, assert) {
         //	Collection_Data_Object_Constraint
         // -----------------------------------------------------
 
-        it("Collection_Data_Object_Constraint", function () {
-            //var c = new Constraint.Collection_Data_Object(new Data_Object());
-            //
-            // the Collection_Data_Object_Constraint class seems not used anywhere,
-            // and uses an implicit cyclic dependencies to Data_Object and Collection classes.
-            //
-            // no tests made. it seems better to remove the class.
-            //
-            var c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint
-            assert.deepEqual(c._constraint_type, "data_object");
-        });
+        //it("Collection_Data_Object_Constraint", function () {
+        //    //var c = new Constraint.Collection_Data_Object(new Data_Object());
+        //    //
+        //    // the Collection_Data_Object_Constraint class seems not used anywhere,
+        //    // and uses an implicit cyclic dependencies to Data_Object and Collection classes.
+        //    //
+        //    // no tests made. it seems better to remove the class.
+        //    //
+        //    var c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint
+        //    assert.deepEqual(c._constraint_type, "data_object");
+        //});
 
         // -----------------------------------------------------
         //	Unique_Constraint
@@ -407,7 +410,7 @@ function (Constraint, Data_Object, assert) {
             //
             c = Constraint.from_obj(["unique", "SomeID"]); // Unique_Constraint
             assert.deepEqual(c._constraint_type, "unique");
-            assert.deepEqual(c.fields, undefined); // !!! from_obj() bug
+            assert.deepEqual(c.fields, "SomeID");
         });
 
         // -----------------------------------------------------

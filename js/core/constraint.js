@@ -1121,7 +1121,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 					// we don't have the actual field, but got its name.
 					//  the name would do for the moment.
 					var constraint = new Unique_Constraint({
-						'field': field_name
+						'fields': field_name
 					});
 					//console.log('constraint ' + constraint);
 					return constraint;
@@ -1148,12 +1148,11 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 		}
 		
-		if (sig == '[D]') {
-			
-			var constraint = new Collection_Data_Object_Constraint(a[0]);
-			//console.log('constraint ' + constraint);
-			return constraint;
-		}
+		//if (sig == '[D]') {			
+		//	var constraint = new Collection_Data_Object_Constraint(a[0]);
+		//	//console.log('constraint ' + constraint);
+		//	return constraint;
+		//}
 		
 		
 		
