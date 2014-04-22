@@ -488,7 +488,10 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	
 	var Collection_Data_Def_Constraint = Collection_Constraint.extend({
 		'init': function(spec) {
-			//if (tof(spec) == 'function' && is_constructor_fn(spec)) {
+
+		    this._super();
+
+		    //if (tof(spec) == 'function' && is_constructor_fn(spec)) {
 			//	this.data_type_constructor = spec;
 			//}
 			//console.log('tof(spec) ' + tof(spec));

@@ -312,7 +312,7 @@ function (Constraint, Data_Object, assert) {
         it("Collection_Data_Def_Constraint", function () {
             var c = new Constraint.Collection_Data_Def({ name: "string", age: "number" });
             //
-            assert.deepEqual(c.__data_type, undefined); // instead of "collection_constraint", because _super() was not called in the constructor
+            assert.deepEqual(c.__data_type, "collection_constraint"); 
             assert.deepEqual(c._constraint_type, "data_def");
             //
             assert.equal(c.match({ name: "John", age: 25 }), true);
