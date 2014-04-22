@@ -260,12 +260,14 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c.__data_type, "field_constraint");
             assert.deepEqual(c.to_info_obj(), "guid");
             //
-            // match() is not implemented:
+            assert.deepEqual(c.match("{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"), true);
             //
-            assert.deepEqual(c.match("{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"), undefined);
-            assert.deepEqual(c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C"), undefined);
-            assert.deepEqual(c.match(1), undefined);
-            assert.deepEqual(c.match([1]), undefined);
+            assert.deepEqual(c.match("{ZZZZZZZZ-31AC-4F20-B552-4D1503D0D11C}"), false);
+            assert.deepEqual(c.match("{________-31AC-4F20-B552-4D1503D0D11C}"), false);
+            //
+            assert.deepEqual(c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C"), false);
+            assert.deepEqual(c.match(1), false);
+            assert.deepEqual(c.match([1]), false);
         });
 
         // -----------------------------------------------------

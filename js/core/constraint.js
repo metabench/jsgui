@@ -354,6 +354,13 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			//  this will really be for translating to Mongo or SQL Server or other DB GUID types.
 			
+		    // "{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"
+		    if (tof(v) === "string") {
+		        var reg = /^{[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}}$/;
+		        return reg.test(v);
+            }
+            //
+		    return false;
 			
 		},
 		'to_info_obj': function() {
