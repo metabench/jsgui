@@ -824,79 +824,79 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	//  Not just for checking the data_type... must check that the objects conform to the Data_Object's constraints.
 	//  May be able to make a data_object that can't be constructed without the right fields...
 	
-	var Collection_Data_Object_Constraint = Collection_Constraint.extend({
-		'init': function(spec) {
-			if (tof(spec) == 'data_object') {
-				this.data_object = spec;
-			}
+	//var Collection_Data_Object_Constraint = Collection_Constraint.extend({
+	//	'init': function(spec) {
+	//		if (tof(spec) == 'data_object') {
+	//			this.data_object = spec;
+	//		}
 
-			// May also want to define a table data object constraint like:
-			//  {"address": "string", "family": "string", "internal": "boolean"}
-			//  (is it a constraint really? or just a collection of fields?)
-			//   I think it's a constraint because it restricts their types.
+	//		// May also want to define a table data object constraint like:
+	//		//  {"address": "string", "family": "string", "internal": "boolean"}
+	//		//  (is it a constraint really? or just a collection of fields?)
+	//		//   I think it's a constraint because it restricts their types.
 
-			//console.log('Collection_Data_Object_Constraint tof(spec) ' + tof(spec));
+	//		//console.log('Collection_Data_Object_Constraint tof(spec) ' + tof(spec));
 
 
 			
-			this._constraint_type = 'data_object';
+	//		this._constraint_type = 'data_object';
 			
-		},
-		'match': fp(function(a, sig) {
-			//console.log('match sig ' + sig);
-			//console.log('match a ' + stringify(a));
-			if (sig == '[D]') {
-				// matching a Data_Object against these constraints.
+	//	},
+	//	'match': fp(function(a, sig) {
+	//		//console.log('match sig ' + sig);
+	//		//console.log('match a ' + stringify(a));
+	//		if (sig == '[D]') {
+	//			// matching a Data_Object against these constraints.
 				
-				var c_res = this.data_object.obj_matches_field_constraints(a[0]);
-				return c_res;
-			}
+	//			var c_res = this.data_object.obj_matches_field_constraints(a[0]);
+	//			return c_res;
+	//		}
 			
-			// May be given a collection here.
-			if (sig == '[C]') {
-				// A collection may hold constraints for a type of collection.
+	//		// May be given a collection here.
+	//		if (sig == '[C]') {
+	//			// A collection may hold constraints for a type of collection.
 				
-				// Database holds Tables Collection, which is of the Table item.
+	//			// Database holds Tables Collection, which is of the Table item.
 				
-				// let's have a look at that collection.
-				var obj = a[0];
-				//console.log('obj ' + stringify(obj));
+	//			// let's have a look at that collection.
+	//			var obj = a[0];
+	//			//console.log('obj ' + stringify(obj));
 				
-				// get the constraint for that field...
-				//  it should have been put in when the field gets specified.
+	//			// get the constraint for that field...
+	//			//  it should have been put in when the field gets specified.
 				
-				//each(obj, function(i, v) {
-				//	console.log('i ' + i);
-				//	console.log('v ' + v);
-				//});
+	//			//each(obj, function(i, v) {
+	//			//	console.log('i ' + i);
+	//			//	console.log('v ' + v);
+	//			//});
 				
-				// a lower level each?
-				//  The Collection object has got fairly big and complicated.
-				//  want to be able to view all its constraints easily.
+	//			// a lower level each?
+	//			//  The Collection object has got fairly big and complicated.
+	//			//  want to be able to view all its constraints easily.
 				
-				// it may have a data_type_constraint.
-				/*
-				var coll_dtc = obj._data_type_constraint;
-				console.log('coll_dtc ' + coll_dtc);
-				//console.log('coll_dtc ' + stringify(coll_dtc));
-				
-				
+	//			// it may have a data_type_constraint.
+	//			/*
+	//			var coll_dtc = obj._data_type_constraint;
+	//			console.log('coll_dtc ' + coll_dtc);
+	//			//console.log('coll_dtc ' + stringify(coll_dtc));
 				
 				
-				var stack = new Error().stack
-				console.log( stack )
 				
 				
-				throw('14) stop');
-				*/
-				return true;
+	//			var stack = new Error().stack
+	//			console.log( stack )
 				
 				
-			}
+	//			throw('14) stop');
+	//			*/
+	//			return true;
+				
+				
+	//		}
 			
-		})
+	//	})
 		
-	});
+	//});
 	
 	
 	
@@ -1477,7 +1477,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	Constraint.Not_Null = Not_Null_Constraint;
 	Constraint.Unique = Unique_Constraint;
 	Constraint.Data_Object_Def_Constraint = Data_Object_Def_Constraint;
-	Constraint.Collection_Data_Object = Collection_Data_Object_Constraint;
+	//Constraint.Collection_Data_Object = Collection_Data_Object_Constraint;
 	Constraint.Collection_Data_Type = Collection_Data_Type_Constraint;
 	Constraint.Collection_Data_Def = Collection_Data_Def_Constraint;
 	Constraint.Field_Data_Type = Field_Data_Type_Constraint;
