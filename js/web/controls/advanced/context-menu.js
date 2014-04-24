@@ -27,10 +27,10 @@ define(["../../jsgui-html", "./menu-node"],
 			'init': function(spec, add, make) {
 				this._super(spec);
 
-				this.__type_name = 'horizontal_menu';
+				this.__type_name = 'context_menu';
 
-				this.set('dom.attributes.class', 'horizontal menu');
-				console.log('spec.el', spec.el);
+				this.set('dom.attributes.class', 'context menu');
+				console.log('Context_Menu init spec.el', spec.el);
 
 				// Then inside the menu we want a variety of menu nodes.
 
@@ -42,7 +42,8 @@ define(["../../jsgui-html", "./menu-node"],
 
 				// May be given the menu object, and need to create the menu nodes from that.
 
-				if (!spec.abstract && !spec.el) {
+				//if (!spec.abstract && !spec.el) {
+				if (!spec.abstract) {
 					// the bar at the top.
 
 					// It's going to act as a drag handle for this.
@@ -67,6 +68,7 @@ define(["../../jsgui-html", "./menu-node"],
 					var that = this;
 
 					var tobj = tof(obj);
+					console.log('tobj', tobj);
 					if (tobj == 'object') {
 						each(obj, function(v, key) {
 							var menu_node = make(Menu_Node({
@@ -77,6 +79,43 @@ define(["../../jsgui-html", "./menu-node"],
 							that.add(menu_node);
 
 						})
+
+					}
+					if (tobj == 'array') {
+						each(obj, function(v, index) {
+
+							var tv = tof(v);
+							console.log('tv', tv);
+
+							// then if it's string and function...
+
+							var vsig = jsgui.get_item_sig(v, 1);
+							console.log('vsig', vsig);
+
+							if (vsig == '[s,f]') {
+								var text = v[0];
+								var item_callback = v[1];
+
+								var menu_node = make(Menu_Node({
+									'text': text,
+									'value': text,
+									'menu': that
+								}))
+								that.add(menu_node);
+							}
+
+
+							/*
+							var menu_node = make(Menu_Node({
+								'text': key,
+								'value': v,
+								'menu': that
+							}))
+							that.add(menu_node);
+							*/
+							console.log('v', v);
+						})
+						//throw 'stop';
 
 					}
 

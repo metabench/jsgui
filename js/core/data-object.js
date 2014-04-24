@@ -538,7 +538,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					var bei = be[event_name];
 					//console.log('bei ', bei);
 					if (tof(bei) == 'array') {
-						console.log('1) raise_event bei.length ' + bei.length);
+						//console.log('1) raise_event bei.length ' + bei.length);
 						var res = [];
 
 						// They are handlers that get called.
@@ -564,7 +564,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 
 						});
-						console.log('Evented_Class raise_event [s] res', res);
+						//console.log('Evented_Class raise_event [s] res', res);
 						return res;
 						//console.log('2) raised the bound events');
 					}

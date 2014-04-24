@@ -639,7 +639,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 content._parent = this;
                 
                 content.on('change', function(e_change) {
-                    console.log('Control content e_change', e_change);
+                    //console.log('Control content e_change', e_change);
 
                     // This gets called on both the client and the server.
                     //  With controls that get activated
@@ -2285,7 +2285,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     //}
                     str_css = str_css + item_style_name + ':' + item_style_value + ';';
                 })
-                console.log('str_css', str_css);
+                //console.log('str_css', str_css);
 
                 
                 if (modify_dom) {

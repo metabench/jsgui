@@ -213,9 +213,9 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 			var method = req.method;
 			var params = req.params;
 			var wildcard_value;
-			console.log('url', url);
-			console.log('method', method);
-			console.log('params', params);
+			//console.log('url', url);
+			//console.log('method', method);
+			//console.log('params', params);
 
 			if (params) {
 				wildcard_value = params.wildcard_value;
@@ -226,13 +226,13 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 			// Detect if we are looking for JSON
 
 			var ends_dot_json = function(str) {
-				console.log('str', str);
+				//console.log('str', str);
 				if (!str || (str.length < 5)) return false;
 				return (str.substr(str.length - 5) == '.json');
 			}
 
 			var edj = ends_dot_json(wildcard_value) || ends_dot_json(url);
-			console.log('edj', edj);
+			//console.log('edj', edj);
 
 			if (edj) {
 				var pre_dot_json_path = '';
@@ -351,7 +351,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
-					console.log('resource_client_path', resource_client_path);
+					//console.log('resource_client_path', resource_client_path);
 					hd.include_jsgui_resource_client(resource_client_path);
 
 					// <script src="http://cdn.sockjs.org/sockjs-0.3.min.js">
@@ -467,13 +467,13 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 					res.writeHead(200, { 'Content-Type': mime_type });
 					res.end(html, 'utf-8');
 					*/
-					console.log('pre deferred render');
+					//console.log('pre deferred render');
 
 					hd.all_html_render(function(err, deferred_html) {
 						if (err) {
 							throw err;
 						} else {
-							console.log('deferred_html', deferred_html);
+							//console.log('deferred_html', deferred_html);
 
 							var mime_type = 'text/html';
 							//console.log('mime_type ' + mime_type);

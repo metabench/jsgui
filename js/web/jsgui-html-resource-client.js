@@ -339,7 +339,7 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool, Client_Resource, Res
             sock.onopen = function() {
                 console.log('sock open');
 
-                sock.send('Client started');
+                //sock.send('Client started');
             };
             sock.onmessage = function(e) {
                 console.log('sock message', e.data);

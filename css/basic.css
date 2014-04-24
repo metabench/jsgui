@@ -474,3 +474,72 @@ div.single-line.selected {
 .horizontal.menu .menu-node .main {
 	padding-left: 6px;
 }
+
+.context.menu {
+	/* Working out their size could be tricky though, could use overflow visible */
+
+	position: absolute;
+	z-index: 1000000;
+	background-color: #FFFFFF;
+	padding: 4px;
+	border: 1px solid #CCCCCC;
+}
+
+.context.menu .menu-node {
+	padding-left: 18px;
+}
+
+/* Custom CSS, just for the moment */
+
+.window {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.tweets {
+	background-color: #FFFFFF;
+	margin-left: 10px;
+	margin-top: 10px;
+	width: 760px;
+	height: 500px;
+	padding: 10px;
+	overflow-y: scroll;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.window .inner {
+	margin-top: 10px;
+}
+
+label {
+	margin-left: 10px;
+}
+
+input {
+	margin-left: 10px;
+}
+
+button {
+	margin-left: 10px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.tweet {
+	margin-bottom: 10px;
+
+}
+
+.tweet .user {
+	color: #CC9999;
+}

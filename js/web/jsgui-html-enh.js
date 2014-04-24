@@ -34,9 +34,9 @@ define(["./jsgui-html-core"],
 		var Context_Menu;
 
 		var ensure_Context_Menu_loaded = function(callback) {
-			console.log('ensure_Context_Menu_loaded');
+			//console.log('ensure_Context_Menu_loaded');
 			require(['./controls/advanced/context-menu'], function(_Context_Menu) {
-				console.log('_Context_Menu', _Context_Menu);
+				//console.log('_Context_Menu', _Context_Menu);
 				Context_Menu = _Context_Menu;
     			callback(Context_Menu);
     		});
@@ -376,7 +376,7 @@ define(["./jsgui-html-core"],
 
 	        // not recursive
 	        'activate': function(el) {
-	        	console.log('enh ctrl activate');
+	        	//console.log('enh ctrl activate');
 
 	            this.__active = true;
 	            if (el) {
@@ -445,7 +445,7 @@ define(["./jsgui-html-core"],
 
 	        },
 	        'activate_content_listen': function() {
-	        	console.log('activate_content_listen');
+	        	//console.log('activate_content_listen');
 
 	        	var content = this.get('content');
 	        	var that = this;
@@ -454,7 +454,7 @@ define(["./jsgui-html-core"],
 	        	// var el = that.get('dom.el');
 
 	            content.on('change', function(e_change) {
-	            	console.log('activate control content change');
+	            	//console.log('activate control content change');
 
 	            	var el = that.get('dom.el');
 	            	var type = e_change.type;
@@ -730,18 +730,45 @@ define(["./jsgui-html-core"],
 	        	var context_menu;
 	        	var that = this;
 
-	        	var show_context_menu = function() {
-	        		console.log('show_context_menu');
+	        	var show_context_menu = fp(function(a, sig) {
 
-	        		console.log('Context_Menu', Context_Menu);
+	        		var pos;
+
+
+	        		if (sig == '[a]') {
+	        			// A position?
+
+	        			pos = a[0];
+
+	        		}
+
+	        		//console.log('show_context_menu');
+
+	        		//console.log('Context_Menu', Context_Menu);
 
 	        		if (!context_menu) {
-	        			console.log('menu_def', menu_def);
+	        			//console.log('menu_def', menu_def);
 
 	        			context_menu = new Context_Menu({
 	        				'context': that._context,
 	        				'value': menu_def
-	        			})
+	        			});
+
+	        			if (pos) {
+	        				context_menu.style({
+		        				'left': (pos[0] - 1) + 'px',
+		        				'top': (pos[1] - 1) + 'px'
+		        			});
+		        			
+	        			} else {
+	        				context_menu.style({
+		        				'left': '100px',
+		        				'top': '100px'
+		        			});
+
+	        			}
+
+	        			
 
 	        			// Then put it into the dom.
 
@@ -754,7 +781,7 @@ define(["./jsgui-html-core"],
 	        			//  Make a body function?
 
 	        			var context = that._context;
-	        			console.log('context', context);
+	        			//console.log('context', context);
 
 
 	        			// The context should have access to the document and body controls?
@@ -764,21 +791,27 @@ define(["./jsgui-html-core"],
 	        			// Should have both the document and the document control available in the Page_Context.
 
 
+	        			// It should find the body...
+	        			//console.log('context.ctrl_document', context.ctrl_document);
 
 	        			var body = context.ctrl_document.body(); 
-	        			console.log('body', body);
-	        			body.add(context_menu);
+	        			//console.log('body', body);
+
+	        			setTimeout(function() {
+	        				body.add(context_menu);
+	        			}, 0);
+	        			
 
 	        			// I think we need another demo / test of dynamically adding content to a control.
 	        			//  Should try insert as well as add.
 
 	        			// Want the coder to update it within the control system, the framework renders and inserts into the DOM as necessary.
 
-	        			console.log('post add context menu to body');
+	        			//console.log('post add context menu to body');
 
 	        		}
 
-	        	}
+	        	})
 
 	        	// Respond to right clicks only.
 
@@ -787,7 +820,7 @@ define(["./jsgui-html-core"],
 	        	})
 
 	        	this.on('contextmenu', function(e_contextmenu) {
-	        		console.log('e_contextmenu', e_contextmenu);
+	        		//console.log('e_contextmenu', e_contextmenu);
 	        		return false;
 	        		//console.log('e_click', e_click);
 	        	})
@@ -796,7 +829,7 @@ define(["./jsgui-html-core"],
 
 
 	        	this.on('mousedown', function(e_mousedown) {
-	        		console.log('e_mousedown', e_mousedown);
+	        		//console.log('e_mousedown', e_mousedown);
 
 	        		var int_button = e_mousedown.which;
 
@@ -808,7 +841,7 @@ define(["./jsgui-html-core"],
 	        	})
 
 	        	this.on('mouseup', function(e_mouseup) {
-	        		console.log('e_mouseup', e_mouseup);
+	        		//console.log('e_mouseup', e_mouseup);
 
 	        		var int_button = e_mouseup.which;
 
@@ -817,7 +850,14 @@ define(["./jsgui-html-core"],
 	        			e_mouseup.preventDefault();
 	        			window.event.returnValue = false;
 
-	        			show_context_menu();
+	        			// Need to work out the position of the click.
+
+	        			// pageX, pageY
+
+	        			var pos = [e_mouseup.pageX, e_mouseup.pageY];
+
+
+	        			show_context_menu(pos);
 
 	        			return false;
 	        		}
@@ -843,7 +883,7 @@ define(["./jsgui-html-core"],
 	        }),
 	        'activate_content_controls': function() {
 
-	        	console.log('activate_content_controls');
+	        	//console.log('activate_content_controls');
 	            // needs to have an el.
 
 	            // Every internal control has its selection scope set?
@@ -866,7 +906,7 @@ define(["./jsgui-html-core"],
 
 	            }
 
-	            console.log('ctrl_fields ' + stringify(ctrl_fields));
+	            //console.log('ctrl_fields ' + stringify(ctrl_fields));
 
 	            //var fields_ctrl = {};
 	            //var selection_scope;
@@ -2637,7 +2677,7 @@ define(["./jsgui-html-core"],
 		            //console.log('nt ' + nt);
 		            if (nt == 1) {
 		                var jsgui_id = el.getAttribute('data-jsgui-id');
-		                console.log('* jsgui_id ' + jsgui_id);
+		                //console.log('* jsgui_id ' + jsgui_id);
 		                if (jsgui_id) {
 		                    
 		                    var ctrl = map_controls[jsgui_id];
