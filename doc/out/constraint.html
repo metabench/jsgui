@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: core/constraint</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Module: core/constraint</h1>
+    
+    
+
+
+
+<section>
+    
+<header>
+    <h2>
+    core/constraint
+    </h2>
+    
+</header>  
+
+<article>
+    <div class="container-overview">
+    
+    
+    
+        
+            <div class="description"><p>Constraints module.</p>
+<h5 id="classes-hierarchy-">Classes hierarchy:</h5>
+<p>&nbsp;&nbsp;&nbsp;      <a href="constraint.Constraint.html">Constraint</a> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;       <mark>  <a href="constraint.Data_Object_Constraint.html">Data_Object_Constraint</a> </mark><br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;         <a href="constraint.Data_Object_Def_Constraint.html">Data_Object_Def_Constraint</a> <strong>Data_Object_Def_Constraint</strong> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;         <a href="constraint.Field_Constraint.html">Field_Constraint</a>  <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            <a href="constraint.Not_Null_Constraint.html">Not_Null_Constraint</a> <strong>Not_Null</strong> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            <a href="constraint.Field_Data_Type_Constraint.html">Field_Data_Type_Constraint</a> <strong>Field_Data_Type</strong> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               <a href="constraint.Text_Constraint.html">Text_Constraint</a> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               <a href="constraint.Guid_Constraint.html">Guid_Constraint</a> <strong>Guid</strong> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               <a href="constraint.Number_Constraint.html">Number_Constraint</a> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;                  <a href="constraint.Int_Constraint.html">Int_Constraint</a> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;         <a href="constraint.Collection_Constraint.html">Collection_Constraint</a> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            <a href="constraint.Collection_Data_Def_Constraint.html">Collection_Data_Def_Constraint</a> <strong>Collection_Data_Def</strong> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            <a href="constraint.Collection_Data_Type_Constraint.html">Collection_Data_Type_Constraint</a> <strong>Collection_Data_Type</strong> <br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            <a href="constraint.Unique_Constraint.html">Unique_Constraint</a> <strong>Unique</strong> <br /></p></div>
+        
+        
+        
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+        
+        
+    
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Classes</h3>
+        
+        <dl>
+            <dt><a href="constraint.Collection_Constraint.html">Collection_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Collection_Data_Def_Constraint.html">Collection_Data_Def_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Collection_Data_Type_Constraint.html">Collection_Data_Type_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Constraint.html">Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Data_Object_Constraint.html">Data_Object_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Data_Object_Def_Constraint.html">Data_Object_Def_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Field_Constraint.html">Field_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Field_Data_Type_Constraint.html">Field_Data_Type_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Guid_Constraint.html">Guid_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Int_Constraint.html">Int_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Not_Null_Constraint.html">Not_Null_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Number_Constraint.html">Number_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Text_Constraint.html">Text_Constraint</a></dt>
+            <dd></dd>
+        
+            <dt><a href="constraint.Unique_Constraint.html">Unique_Constraint</a></dt>
+            <dd></dd>
+        </dl>
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl>
+            
+<dt>
+    <h4 class="name" id="from_obj"><span class="type-signature">&lt;static> </span>from_obj<span class="signature">(str)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a constraint using the definition string. See <a href="constraint.html#from_str">from_str()</a> for possible definition strings.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>str</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>constraint definition string</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>c = Constraint.from_obj("int");c = Constraint.from_obj("text(10)");</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="from_obj"><span class="type-signature">&lt;static> </span>from_obj<span class="signature">(arr_of_str_and_num)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a constraint using the &quot;string and number&quot; definition. The following definitions are supported:</p>
+<ul>
+<li><code>[&quot;text&quot;, &lt;length&gt;]</code> - creates <a href="constraint.Text_Constraint.html">Text_Constraint</a>, where &quot;<code>&lt;length&gt;</code>&quot; is the max text length allowed</li>
+</ul>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>arr_of_str_and_num</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>constraint definition</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>c = Constraint.from_obj(["text", 10]);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="from_obj"><span class="type-signature">&lt;static> </span>from_obj<span class="signature">(arr_of_str_and_str)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a constraint using the &quot;string and string&quot; definition. The following definitions are supported:</p>
+<ul>
+<li><code>[&quot;unique&quot;, &lt;fieldName&gt;]</code> - creates <a href="constraint.Unique_Constraint.html">Unique_Constraint</a>, where &quot;<code>&lt;fieldName&gt;</code>&quot; is the unique field name</li>
+</ul>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>arr_of_str_and_str</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>constraint definition</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>c = Constraint.from_obj(["unique", "SomeID"]);</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="from_str"><span class="type-signature">&lt;static> </span>from_str<span class="signature">(str)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Creates a constraint using the definition string. The following definitions are supported:</p>
+<ul>
+<li>&quot;int&quot; - creates <a href="constraint.Int_Constraint.html">Int_Constraint</a></li>
+<li>&quot;number&quot; - creates <a href="constraint.Number_Constraint.html">Number_Constraint</a></li>
+<li>&quot;text&quot; - creates <a href="constraint.Text_Constraint.html">Text_Constraint</a> without max length restriction</li>
+<li>&quot;text(<length>)&quot; - creates <a href="constraint.Text_Constraint.html">Text_Constraint</a>, where &quot;<length>&quot; is the max text length allowed</li>
+<li>&quot;guid&quot; - creates <a href="constraint.Guid_Constraint.html">Guid_Constraint</a></li>
+</ul>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>str</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>constraint definition</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>c = Constraint.from_str("int");c = Constraint.from_str("text(10)");</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="obj_matches_constraint"><span class="type-signature">&lt;static> </span>obj_matches_constraint<span class="signature">(obj, constraint)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns true if the <code>obj</code> value matches the <code>constraint</code> definition.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>object to check</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>constraint</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>constraint definition</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>obj_matches_constraint(1, "int") ==> trueobj_matches_constraint("1", "int") ==> falseobj_matches_constraint("1", "text(3)") ==> true</code></pre>
+
+    
+</dd>
+
+        </dl>
+    
+    
+    
+    
+    
+</article>
+
+</section>  
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="constraint.html">core/constraint</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="constraint.Collection_Constraint.html">Collection_Constraint</a></li><li><a href="constraint.Collection_Data_Def_Constraint.html">Collection_Data_Def_Constraint</a></li><li><a href="constraint.Collection_Data_Type_Constraint.html">Collection_Data_Type_Constraint</a></li><li><a href="constraint.Constraint.html">Constraint</a></li><li><a href="constraint.Data_Object_Constraint.html">Data_Object_Constraint</a></li><li><a href="constraint.Data_Object_Def_Constraint.html">Data_Object_Def_Constraint</a></li><li><a href="constraint.Field_Constraint.html">Field_Constraint</a></li><li><a href="constraint.Field_Data_Type_Constraint.html">Field_Data_Type_Constraint</a></li><li><a href="constraint.Guid_Constraint.html">Guid_Constraint</a></li><li><a href="constraint.Int_Constraint.html">Int_Constraint</a></li><li><a href="constraint.Not_Null_Constraint.html">Not_Null_Constraint</a></li><li><a href="constraint.Number_Constraint.html">Number_Constraint</a></li><li><a href="constraint.Text_Constraint.html">Text_Constraint</a></li><li><a href="constraint.Unique_Constraint.html">Unique_Constraint</a></li><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Ordered_String_List.html">Ordered_String_List</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">FindInfo</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Thu Apr 24 2014 17:27:00 GMT+0600 (Уральское время (зима))
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
