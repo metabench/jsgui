@@ -75,6 +75,9 @@ function (Constraint, Data_Object, assert) {
             c = Constraint.from_str("text(10)"); // Text_Constraint
             assert.deepEqual(c.to_info_obj(), ["text", 10]);
 
+            c = Constraint.from_str("text"); // Text_Constraint
+            assert.deepEqual(c.to_info_obj(), "text");
+
             c = Constraint.from_str("guid"); // Guid_Constraint
             assert.deepEqual(c.to_info_obj(), "guid");
 
@@ -104,6 +107,9 @@ function (Constraint, Data_Object, assert) {
             c = Constraint.from_obj("text(10)"); // Text_Constraint
             assert.deepEqual(c.to_info_obj(), ["text", 10]);
 
+            c = Constraint.from_obj("text"); // Text_Constraint
+            assert.deepEqual(c.to_info_obj(), "text");
+
             c = Constraint.from_obj("guid"); // Guid_Constraint
             assert.deepEqual(c.to_info_obj(), "guid");
 
@@ -119,10 +125,10 @@ function (Constraint, Data_Object, assert) {
 
             c = Constraint.from_obj(["unique", "SomeID"]); // Unique_Constraint
             assert.deepEqual(c._constraint_type, "unique");
-            assert.deepEqual(c.fields, undefined); // !!!
+            assert.deepEqual(c.fields, "SomeID");
 
-            c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint
-            assert.deepEqual(c._constraint_type, "data_object");
+            //c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint - removed
+            //assert.deepEqual(c._constraint_type, "data_object");
 
             assert.deepEqual(Constraint.from_obj({}), undefined);
             assert.deepEqual(Constraint.from_obj([]), undefined);
@@ -170,12 +176,12 @@ function (Constraint, Data_Object, assert) {
             //
             assert.deepEqual(c.__data_type, "data_object_def_constraint");
             //
-            assert.deepEqual(c.match(1), undefined); // !!! because not object
-            assert.deepEqual(c.match("1"), undefined); // !!! 
+            assert.deepEqual(c.match(1), false);
+            assert.deepEqual(c.match("1"), false);
             //
             assert.deepEqual(c.match({}), true); // (?) c.data_def is not set, any object matches
             //
-            c.data_def = { name: "string", age: "number" }; // !!! cannot be set in constructor
+            c = new Constraint.Data_Object_Def_Constraint({ name: "string", age: "number" });
             //
             assert.deepEqual(c.match({ name: "John", age: 25 }), true);
             assert.deepEqual(c.match({ name: "John", age: "25" }), false);
@@ -237,12 +243,11 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c.match({}), false);
             assert.deepEqual(c.match(["aaa"]), false);
             //
-            // to_info_obj() code implies something like "any length text" constraint,
-            // but there are no direct way to create it, and match() doesn't works:
+            // "any length text" constraint:
             //
-            delete c.length;
+            c = Constraint.from_obj("text")
             assert.deepEqual(c.to_info_obj(), "text");
-            assert.deepEqual(c.match("a b c"), false);
+            assert.deepEqual(c.match("a b c"), true);
         });
 
         // -----------------------------------------------------
@@ -255,12 +260,14 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c.__data_type, "field_constraint");
             assert.deepEqual(c.to_info_obj(), "guid");
             //
-            // match() is not implemented:
+            assert.deepEqual(c.match("{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"), true);
             //
-            assert.deepEqual(c.match("{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"), undefined);
-            assert.deepEqual(c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C"), undefined);
-            assert.deepEqual(c.match(1), undefined);
-            assert.deepEqual(c.match([1]), undefined);
+            assert.deepEqual(c.match("{ZZZZZZZZ-31AC-4F20-B552-4D1503D0D11C}"), false);
+            assert.deepEqual(c.match("{________-31AC-4F20-B552-4D1503D0D11C}"), false);
+            //
+            assert.deepEqual(c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C"), false);
+            assert.deepEqual(c.match(1), false);
+            assert.deepEqual(c.match([1]), false);
         });
 
         // -----------------------------------------------------
@@ -305,7 +312,7 @@ function (Constraint, Data_Object, assert) {
         it("Collection_Data_Def_Constraint", function () {
             var c = new Constraint.Collection_Data_Def({ name: "string", age: "number" });
             //
-            assert.deepEqual(c.__data_type, undefined); // instead of "collection_constraint", because _super() was not called in the constructor
+            assert.deepEqual(c.__data_type, "collection_constraint"); 
             assert.deepEqual(c._constraint_type, "data_def");
             //
             assert.equal(c.match({ name: "John", age: 25 }), true);
@@ -339,18 +346,18 @@ function (Constraint, Data_Object, assert) {
             //
             c = new Constraint.Collection_Data_Type(Number);
             //
-            assert.deepEqual(c.__data_type, undefined); // instead of "collection_constraint", because _super() was not called in the constructor
+            assert.deepEqual(c.__data_type, "collection_constraint");
             assert.deepEqual(c._constraint_type, "data_type");
             //
             assert.equal(c.match(1), true);
-            assert.equal(c.match("1"), undefined); // !!!
+            assert.equal(c.match("1"), false);
             //
             //  String
             //
             c = new Constraint.Collection_Data_Type(String);
             //
             assert.equal(c.match("1"), true);
-            assert.equal(c.match(1), undefined); // !!!
+            assert.equal(c.match(1), false);
             //
             //  Book
             //
@@ -358,17 +365,10 @@ function (Constraint, Data_Object, assert) {
             c = new Constraint.Collection_Data_Type(Book);
             //
             assert.equal(c.match(new Book()), true);
-            assert.equal(c.match("Book"), undefined); // !!!
+            assert.equal(c.match("Book"), false);
             //
-            //
-            // there is a separate code branch for Data_Object in the match() method implementation,
-            // but it works exactly as for other objects.
-            // Probably there is a reason to remove the specific code branch from match():
-            //
-            // The same seems true for Collection (not tested, just code review)
             //
             c = new Constraint.Collection_Data_Type(Data_Object);
-            //
             assert.equal(c.match(new Data_Object()), true);
         });
 
@@ -376,17 +376,17 @@ function (Constraint, Data_Object, assert) {
         //	Collection_Data_Object_Constraint
         // -----------------------------------------------------
 
-        it("Collection_Data_Object_Constraint", function () {
-            //var c = new Constraint.Collection_Data_Object(new Data_Object());
-            //
-            // the Collection_Data_Object_Constraint class seems not used anywhere,
-            // and uses an implicit cyclic dependencies to Data_Object and Collection classes.
-            //
-            // no tests made. it seems better to remove the class.
-            //
-            var c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint
-            assert.deepEqual(c._constraint_type, "data_object");
-        });
+        //it("Collection_Data_Object_Constraint", function () {
+        //    //var c = new Constraint.Collection_Data_Object(new Data_Object());
+        //    //
+        //    // the Collection_Data_Object_Constraint class seems not used anywhere,
+        //    // and uses an implicit cyclic dependencies to Data_Object and Collection classes.
+        //    //
+        //    // no tests made. it seems better to remove the class.
+        //    //
+        //    var c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint
+        //    assert.deepEqual(c._constraint_type, "data_object");
+        //});
 
         // -----------------------------------------------------
         //	Unique_Constraint
@@ -405,7 +405,7 @@ function (Constraint, Data_Object, assert) {
             //
             c = Constraint.from_obj(["unique", "SomeID"]); // Unique_Constraint
             assert.deepEqual(c._constraint_type, "unique");
-            assert.deepEqual(c.fields, undefined); // !!! from_obj() bug
+            assert.deepEqual(c.fields, "SomeID");
         });
 
         // -----------------------------------------------------
