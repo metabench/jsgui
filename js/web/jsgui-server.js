@@ -411,14 +411,23 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
 						// Or the resource_pool?
 
-						that.sock = sock_server;
+						// Can have more than 1 sock server attached.
+						//  So when data is recieved from any of the running sock servers, it needs to be dealt with as a sock message for the server.
+
+						// server = that.
+
+
+
+
+
+						//that.sock = sock_server;
 
 
 						
 
 						sock_server.on('connection', function(conn) {
 
-							//console.log('sock_server on connection');
+							console.log('sock_server on connection');
 
 							var connection_id = i_connections;
 							conn.id = connection_id;
@@ -434,12 +443,24 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 							// Or more frequent updates maybe...
 
 							conn.on('data', function(message) {
-					        	//conn.write(message);
+
+
+					        	//conn.write('received', message);
 
 					        	// Broadcast the message?
 					        	//  Nothin to do here.
 
-					        	//console.log('socks connection on data: ', message);
+					        	console.log('tof message', tof(message));
+
+					        	console.log('socks connection on data: ', message);
+					        	console.log('sock_server.recieved', sock_server.recieved);
+
+					        	//if (typeof _sock != 'undefined') {
+					        	if (typeof that.recieved_sock != 'undefined') {
+					        		that.recieved_sock(JSON.parse(message));
+					        	}
+					        	//}
+
 					        	//console.log('conn.id', conn.id);
 
 					        	// But it needs to be for the right connection.
@@ -508,7 +529,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 						sock_server.installHandlers(http_server, {prefix:'/ws'});
 
 						http_server.listen(port, ipAddress);
-                    	console.log('Server running at http://' + ipAddress + ':' + port + '/');
+                    	console.log('* Server running at http://' + ipAddress + ':' + port + '/');
 
 
                     	

@@ -637,7 +637,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					// Would be good to uglify and gzip what gets served.
 
 
-					var compress = false;
+					var compress = true;
 
 					if (compress) {
 						fs2.load_file_as_string(disk_path, function (err, data) {
