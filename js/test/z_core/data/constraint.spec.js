@@ -185,6 +185,7 @@ function (Constraint, Data_Object, assert) {
             //
             assert.deepEqual(c.match({ name: "John", age: 25 }), true);
             assert.deepEqual(c.match({ name: "John", age: "25" }), false);
+            assert.deepEqual(c.match({ name: "John" }), false);
             //
             assert.deepEqual(c.match({}), false); 
         });
@@ -227,7 +228,7 @@ function (Constraint, Data_Object, assert) {
         // -----------------------------------------------------
 
         it("Text_Constraint", function () {
-            var c = Constraint.from_obj("text(10)")
+            var c = Constraint.from_obj("text(10)");
             //
             assert.deepEqual(c.__data_type, "field_constraint");
             assert.deepEqual(c.to_info_obj(), ["text", 10]);
@@ -245,7 +246,7 @@ function (Constraint, Data_Object, assert) {
             //
             // "any length text" constraint:
             //
-            c = Constraint.from_obj("text")
+            c = Constraint.from_obj("text");
             assert.deepEqual(c.to_info_obj(), "text");
             assert.deepEqual(c.match("a b c"), true);
         });
@@ -268,6 +269,13 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C"), false);
             assert.deepEqual(c.match(1), false);
             assert.deepEqual(c.match([1]), false);
+            //
+            //
+            //
+            c = new Constraint.Guid();
+            //
+            assert.deepEqual(c.match("{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"), true);
+            assert.deepEqual(c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C"), false);
         });
 
         // -----------------------------------------------------
