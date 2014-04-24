@@ -374,6 +374,7 @@ function (Constraint, Data_Object, assert) {
             //
             assert.equal(c.match(new Book()), true);
             assert.equal(c.match("Book"), false);
+            assert.equal(c.match(new Number(1)), false);
             //
             //
             c = new Constraint.Collection_Data_Type(Data_Object);
@@ -407,22 +408,30 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c._constraint_type, "unique");
             //
             assert.deepEqual(c.fields, ["ID"]);
-            assert.deepEqual(c.match, undefined); // !!!
+            assert.deepEqual(c.match, undefined); // (?)
+            //
+            //
+            c = new Constraint.Unique({ fields: "ID" });
+            assert.deepEqual(c.fields, "ID");
+            //
             //
             // from_obj():
             //
             c = Constraint.from_obj(["unique", "SomeID"]); // Unique_Constraint
             assert.deepEqual(c._constraint_type, "unique");
             assert.deepEqual(c.fields, "SomeID");
+            //
+            c = Constraint.from_obj(["unique", ["FirstName", "LastName"]]);
+            assert.deepEqual(c, undefined); // !!!
         });
 
         // -----------------------------------------------------
         //	Relationship_Constraint
         // -----------------------------------------------------
 
-        it("Relationship_Constraint", function () {
-            // the Relationship_Constraint class does nothing, and is not public
-        });
+        //it("Relationship_Constraint", function () {
+        //    // the Relationship_Constraint class does nothing, and is not public
+        //});
 
     });
 

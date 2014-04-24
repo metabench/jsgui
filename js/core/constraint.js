@@ -15,17 +15,16 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;       <mark>  {@link module:core/constraint.Data_Object_Constraint|Data_Object_Constraint} </mark><br />
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;         {@link module:core/constraint.Data_Object_Def_Constraint|Data_Object_Def_Constraint} <strong>Data_Object_Def_Constraint</strong> <br />
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;         {@link module:core/constraint.Field_Constraint|Field_Constraint}  <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Not_Null_Constraint|Not_Null_Constraint} <strong>xxxxxxxxxxx</strong> <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Field_Data_Type_Constraint|Field_Data_Type_Constraint} <strong>xxxxxxxxxxx</strong> <br />
+    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Not_Null_Constraint|Not_Null_Constraint} <strong>Not_Null</strong> <br />
+    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Field_Data_Type_Constraint|Field_Data_Type_Constraint} <strong>Field_Data_Type</strong> <br />
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               {@link module:core/constraint.Text_Constraint|Text_Constraint} <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               {@link module:core/constraint.Guid|Guid} <strong>xxxxxxxxxxx</strong> <br />
+    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               {@link module:core/constraint.Guid_Constraint|Guid_Constraint} <strong>Guid</strong> <br />
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;               {@link module:core/constraint.Number_Constraint|Number_Constraint} <br />
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;                  {@link module:core/constraint.Int_Constraint|Int_Constraint} <br />
     * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;         {@link module:core/constraint.Collection_Constraint|Collection_Constraint} <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Collection_Data_Def_Constraint|Collection_Data_Def_Constraint} <strong>xxxxxxxxxxx</strong> <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Collection_Data_Type_Constraint|Collection_Data_Type_Constraint} <strong>xxxxxxxxxxx</strong> <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Collection_Data_Object_Constraint|Collection_Data_Object_Constraint} <strong>xxxxxxxxxxx</strong> <br />
-    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Unique_Constraint|Unique_Constraint} <strong>xxxxxxxxxxx</strong> <br />
+    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Collection_Data_Def_Constraint|Collection_Data_Def_Constraint} <strong>Collection_Data_Def</strong> <br />
+    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Collection_Data_Type_Constraint|Collection_Data_Type_Constraint} <strong>Collection_Data_Type</strong> <br />
+    * &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;            {@link module:core/constraint.Unique_Constraint|Unique_Constraint} <strong>Unique</strong> <br />
     *
     * @module core/constraint
     * @exports Constraint
@@ -276,7 +275,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	var Field_Constraint = Constraint.extend({
 
 	    /** 
-        * @classdesc Field constraint base class
+        * @classdesc Field constraint base class. The class is private.
         * @constructs module:core/constraint.Field_Constraint 
         * 
         */
@@ -345,7 +344,9 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	var Field_Data_Type_Constraint = Field_Constraint.extend({
 
 	    /** 
-        * @classdesc Typed field constraint base class
+        * @classdesc Typed field constraint base class. 
+        *
+        * The class public name is <strong>Field_Data_Type</strong> (e.g. `new Constraint.Field_Data_Type()`).
         * @constructs module:core/constraint.Field_Data_Type_Constraint 
         * 
         */
@@ -364,7 +365,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	var Text_Constraint = Field_Data_Type_Constraint.extend({
 
 	    /** 
-        * The constructor is private. Use from_obj() or from_str() to create this constraint.
+        * The constructor is private. Use from_obj() or {@link module:core/constraint.from_str|from_str()} to create this constraint.
         * @classdesc Text field constraint: checks value type (string) and possibly max length.
         * @constructs module:core/constraint.Text_Constraint 
         * @param {object} spec - constraint properties: `{}` or `{length: maxlength}`
@@ -448,7 +449,9 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	var Not_Null_Constraint = Field_Constraint.extend({
 		
 	    /** 
-        * @classdesc "Not null" constraint: checks a value to be not null.
+        * @classdesc "Not null" constraint: checks a value to be not null. 
+        *
+        * The class public name is <strong>Not_Null</strong> (e.g. `new Constraint.Not_Null()`).
         * @constructs module:core/constraint.Not_Null_Constraint 
         */
 	    'init': function (spec) {
@@ -479,8 +482,10 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	var Guid_Constraint =  Field_Data_Type_Constraint.extend({
 
 	    /** 
-        * @classdesc GUID field constraint: checks a value to a GUID string (e.g. `"{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"`).
-        * @constructs module:core/constraint.Guid 
+        * @classdesc GUID field constraint: checks a value to a GUID string (e.g. `"{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}"`). 
+        *
+        * The class public name is <strong>Guid</strong> (e.g. `new Constraint.Guid()`).
+        * @constructs module:core/constraint.Guid_Constraint 
         */
 	    'init': function (spec) {
 			// if the spec is a string, then parse the string.
@@ -492,7 +497,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	    /**
         * Returns `true` if the `value` matches the constraint (i.e. value is a GUID string).
         * @param {*} value - value to check
-        * @memberof module:core/constraint.Guid
+        * @memberof module:core/constraint.Guid_Constraint
         * @instance
         * @example
         * var c = new Constraint.Guid();
@@ -517,8 +522,8 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	    },
 
 	    /**
-        * Returns the constraint information object (i.e. "guid").
-        * @memberof module:core/constraint.Guid
+        * Returns the constraint information object (i.e. "guid" string).
+        * @memberof module:core/constraint.Guid_Constraint
         * @instance
         * @example
         * var c = Constraint.from_obj("guid");
@@ -532,32 +537,81 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	
 	
 	var Number_Constraint = Field_Data_Type_Constraint.extend({
-		'init': function(spec) {
+
+	    /** 
+        * The constructor is private. Use from_obj() or {@link module:core/constraint.from_str|from_str()} to create this constraint.
+        * @classdesc Number field constraint: checks value to be a number.
+        * @constructs module:core/constraint.Number_Constraint 
+        */
+	    'init': function (spec) {
 			// if the spec is a string, then parse the string.
 			this._super(spec);
-			
-			
-		},
-		'match': function(v) {
+	    },
+
+	    /**
+        * Returns `true` if the `value` matches the constraint (i.e. value is a number).
+        * @param {*} value - value to check
+        * @memberof module:core/constraint.Number_Constraint
+        * @instance
+        * @example
+        * var c = Constraint.from_obj("number");
+        * c.match(1)  ==> true
+        * c.match("1")  ==> false
+        */
+	    'match': function (v) {
 			return tof(v) == 'number';
 		},
-		'to_info_obj': function() {
+
+	    /**
+        * Returns the constraint information object (i.e. "number" string).
+        * @memberof module:core/constraint.Number_Constraint
+        * @instance
+        * @example
+        * var c = Constraint.from_obj("number");
+        * c.to_info_obj()  ==> "number"
+        */
+		'to_info_obj': function () {
 			return 'number';
 		}
 		
 	})
 	
 	var Int_Constraint = Number_Constraint.extend({
-		'init': function(spec) {
+
+	    /** 
+        * The constructor is private. Use from_obj() or {@link module:core/constraint.from_str|from_str()} to create this constraint.
+        * @classdesc Int field constraint: checks value to be an integer number.
+        * @constructs module:core/constraint.Int_Constraint 
+        */
+	    'init': function (spec) {
 			// if the spec is a string, then parse the string.
 			this._super(spec);
-			
-			
-		},
-		'match': function(v) {
+	    },
+
+	    /**
+        * Returns `true` if the `value` matches the constraint (i.e. value is an integer number).
+        * @param {*} value - value to check
+        * @memberof module:core/constraint.Int_Constraint
+        * @instance
+        * @example
+        * var c = Constraint.from_obj("int");
+        * c.match(1)  ==> true
+        * c.match(1.5)  ==> false
+        * c.match("1")  ==> false
+        */
+	    'match': function (v) {
 			return tof(v) == 'number' && parseInt(v) === v;
 		},
-		'to_info_obj': function() {
+
+	    /**
+        * Returns the constraint information object (i.e. "int" string).
+        * @memberof module:core/constraint.Int_Constraint
+        * @instance
+        * @example
+        * var c = Constraint.from_obj("int");
+        * c.to_info_obj()  ==> "int"
+        */
+	    'to_info_obj': function () {
 			return 'int';
 		}
 		
@@ -589,7 +643,12 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	
 	var Collection_Constraint = Constraint.extend({
 		
-		'init': function(spec) {
+	    /** 
+        * The class is private. 
+        * @classdesc Collection constraints base class.
+        * @constructs module:core/constraint.Collection_Constraint 
+        */
+	    'init': function (spec) {
 			// if the spec is a string, then parse the string.
 			
 			// it may make reference to various data types.
@@ -648,7 +707,16 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 
 	
 	var Collection_Data_Def_Constraint = Collection_Constraint.extend({
-		'init': function(spec) {
+
+	    /** 
+        * @classdesc Collection fields definition constraint.
+        *
+        * The class public name is <strong>Collection_Data_Def</strong> (e.g. `new Constraint.Collection_Data_Def({})`).
+        * @constructs module:core/constraint.Collection_Data_Def_Constraint 
+        * @param {object} spec - data definition
+        * 
+        */
+	    'init': function (spec) {
 
 		    this._super();
 
@@ -666,7 +734,19 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			this._constraint_type = 'data_def';
 			
 		},
-		'match': function(value) {
+
+	    /**
+        * Returns `true` if the `value` matches the fields constraint.
+        * @param {object} value - object to check
+        * @memberof module:core/constraint.Collection_Data_Def_Constraint
+        * @instance
+        * @example
+        * var c = new Constraint.Collection_Data_Def({ name: "string", age: "number" });
+        * c.match({ name: "John", age: 25 })  ==> true
+        * c.match({ name: "John", age: "25" })  ==> false
+        * c.match({ name: "John" })  ==> false
+        */
+	    'match': function (value) {
 			// value must be an object?
 			var that = this;
 
@@ -694,7 +774,16 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	
 	// Perhaps rename to Collection_Data_Type_Constructor_Constraint
 	var Collection_Data_Type_Constraint = Collection_Constraint.extend({
-		'init': function(spec) {
+
+	    /** 
+        * @classdesc Collection item type constraint.
+        *
+        * The class public name is <strong>Collection_Data_Type</strong> (e.g. `new Constraint.Collection_Data_Type(Object)`).
+        * @constructs module:core/constraint.Collection_Data_Type_Constraint 
+        * @param {function} spec - item type constructor function
+        * 
+        */
+	    'init': function (spec) {
 
 		    this._super();
 
@@ -711,7 +800,23 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			this._constraint_type = 'data_type';
 			
 		},
-		'match': fp(function(a, sig) {
+	    /**
+        * Returns `true` if the `value` matches the item type constraint.
+        * @param {object} value - object to check
+        * @memberof module:core/constraint.Collection_Data_Type_Constraint
+        * @instance
+        * @example
+        * var c = new Constraint.Collection_Data_Type(Number);
+        * c.match(1)  ==> true
+        * c.match("1")  ==> false
+        * 
+        * 
+        * var c2 = new Constraint.Collection_Data_Type(MyBook);
+        * c2.match(new MyBook())  ==> true
+        * c2.match(new Number(1))  ==> false
+        * 
+        */
+	    'match': fp(function (a, sig) {
 			//console.log('');
 			//console.log('*  match sig ' + sig);
 			//console.log('this.data_type_constructor ' + this.data_type_constructor);
@@ -905,7 +1010,18 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	//  The order of the unique indexes matters.
 	
 	var Unique_Constraint = Collection_Constraint.extend({
-		'init': function(spec) {
+
+	    /** 
+        * @classdesc Collection unique constraint.
+        *
+        * The class does not provide the `match()` method, but provides `.fields` property for the unique field names.
+        *
+        * The class public name is <strong>Unique</strong> (e.g. `new Constraint.Unique()`).
+        * @constructs module:core/constraint.Unique_Constraint 
+        * @param {string|string[]} spec - unique field name(s)
+        * 
+        */
+	    'init': function (spec) {
 			this._super(spec);
 			
 			//this.set('constraint_type', 'unique');
@@ -921,10 +1037,22 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			if (tof(this.fields) == 'array') {
 				this._sorted_fields = clone(this.fields).sort();
-			}
-			
-			
-		}
+			}		
+	    }
+
+	    /** 
+        * @name fields
+        * @member
+        * @type {string|string[]}
+        * @memberof module:core/constraint.Unique_Constraint
+        * @instance
+        * @example
+        * var c = new Constraint.Unique("ID");
+        * c.fields  ==> "ID"
+        * 
+        */
+
+
 		// not really sure the constraint will do much here... it requires an index to be set up.
 		//  perhaps tells the index not to accept duplicates?
 	
@@ -1200,8 +1328,48 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 		
 	}
 	*/
+
+
 	
-	
+    /** 
+    * Creates a constraint using the definition string. See {@link module:core/constraint.from_str|from_str()} for possible definition strings.
+    * @func
+    * @name from_obj
+    * @variation 1
+    * @param {string} str - constraint definition string
+    * @memberof module:core/constraint
+    * @example
+    * c = Constraint.from_obj("int");
+    * c = Constraint.from_obj("text(10)");
+    */
+
+    /** 
+    * Creates a constraint using the "string and number" definition. The following definitions are supported:
+    * - `["text", <length>]` - creates {@link module:core/constraint.Text_Constraint|Text_Constraint}, where "`<length>`" is the max text length allowed
+    * @func
+    * @name from_obj
+    * @variation 2
+    * @param {array} arr_of_str_and_num - constraint definition
+    * @memberof module:core/constraint
+    * @example
+    * c = Constraint.from_obj(["text", 10]);
+    */
+
+    /** 
+    * Creates a constraint using the "string and string" definition. The following definitions are supported:
+    * - `["unique", <fieldName>]` - creates {@link module:core/constraint.Unique_Constraint|Unique_Constraint}, where "`<fieldName>`" is the unique field name
+    * @func
+    * @name from_obj
+    * @variation 3
+    * @param {array} arr_of_str_and_str - constraint definition
+    * @memberof module:core/constraint
+    * @example
+    * c = Constraint.from_obj(["unique", "SomeID"]);
+    */
+
+
+
+
 	var from_obj = fp(function(a, sig) {
 		// Should be able to interpret things as either Field or Collection constraints.
 		//  Nice how Field constraints will be applyable to a Collection.
@@ -1369,7 +1537,21 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	})
 	
 	
-	var constraint_from_str = function(str) {
+    /**
+    * Creates a constraint using the definition string. The following definitions are supported:
+    * - "int" - creates {@link module:core/constraint.Int_Constraint|Int_Constraint}
+    * - "number" - creates {@link module:core/constraint.Number_Constraint|Number_Constraint}
+    * - "text" - creates {@link module:core/constraint.Text_Constraint|Text_Constraint} without max length restriction
+    * - "text(<length>)" - creates {@link module:core/constraint.Text_Constraint|Text_Constraint}, where "<length>" is the max text length allowed
+    * - "guid" - creates {@link module:core/constraint.Guid_Constraint|Guid_Constraint}
+    * @func from_str
+    * @param {string} str - constraint definition
+    * @memberof module:core/constraint
+    * @example
+    * c = Constraint.from_str("int");
+    * c = Constraint.from_str("text(10)");
+    */
+	var constraint_from_str = function (str) {
 		//console.log('constraint_from_str str ' + str);
 		// will check the cache for it though.
 		
