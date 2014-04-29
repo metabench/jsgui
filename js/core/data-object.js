@@ -507,7 +507,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 						});
 
-						console.log('Evented_Class raise_event [s] res', res);
+						//console.log('Evented_Class raise_event [s] res', res);
 						return res;
 					}// else if (tof(bei) == 'function') {
 					//	bei.call(target, target, event_name);
@@ -760,8 +760,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 		//  Maybe fp will only work for anonymous functons?
 		//   we could come up with another way of defining them if necessary.
 		// I don't think this made the difference - I think fp is working and tested with
-		//  context.
-		'__add_event_listener': function(eventName, handler) {
+	    //  context.
+        /* ************************* */
+        /* *** not used anywhere *** */
+	    /* ************************* */
+		'__add_event_listener': function (eventName, handler) {
 			var a = arguments;
 			if (a.length == 1) {
 				handler = eventName;
@@ -894,8 +897,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 						}
 					}
 					if (found) {
-						bei.slice(c, 1);
-					}
+					    //bei.slice(c, 1);
+					    bei.splice(c, 1);
+                    }
 				};
 			}
 
