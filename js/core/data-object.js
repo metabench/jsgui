@@ -1105,16 +1105,26 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//  however, would need to work with the constraint system.
 				//   likely that they would be syncronised through code.
 				
-				var relate_by_id = function() {
-					var obj_id = obj._id();
-					this._relationships[obj_id] = true;
+				//var relate_by_id = function () {
+				//    var obj_id = obj._id();
+				//    this._relationships[obj_id] = true;
+				//}
+
+				//var relate_by_ref = function () {
+				//    this._parent = obj;
+				//}
+				//relate_by_ref();
+
+				var relate_by_id = function (that) {
+				    var obj_id = obj._id();
+				    that._relationships[obj_id] = true;
 				}
-				
-				var relate_by_ref = function() {
-					this._parent = obj;
+
+				var relate_by_ref = function (that) {
+				    that._parent = obj;
 				}
-				relate_by_ref();
-			}
+				relate_by_ref(this);
+            }
 			if (a.l == 2) {
 				obj = a[0];
 				index = a[1];
