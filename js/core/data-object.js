@@ -892,21 +892,21 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			// needs to go through the whole array?
 			// think so....
 
-			console.log('remove_event_listener');
-			console.log('this._bound_events', this._bound_events);
+			//console.log('remove_event_listener');
+			//console.log('this._bound_events', this._bound_events);
 			if (this._bound_events) {
-				console.log('event_name', event_name);
+				//console.log('event_name', event_name);
 				var bei = this._bound_events[event_name] || [];
 
 				var tbei = tof(bei);
-				console.log('tbei', tbei);
+				//console.log('tbei', tbei);
 
 				if (tbei == 'array') {
 					// bei.push(fn_listener);
 
 					var c = 0, l = bei.length, found = false;
 
-					console.log('l', l);
+					//console.log('l', l);
 
 					while (!found && c < l) {
 						if (bei[c] === fn_listener) {
@@ -915,8 +915,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							c++;
 						}
 					}
-					console.log('found', found);
-					console.log('c', c);
+					//console.log('found', found);
+					//console.log('c', c);
 					if (found) {
 						bei.splice(c, 1);
 					}
