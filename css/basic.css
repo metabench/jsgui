@@ -489,7 +489,13 @@ div.single-line.selected {
 	padding-left: 18px;
 }
 
+.relative {
+	position: relative;
+}
+
 /* Custom CSS, just for the moment */
+
+/*
 
 .window {
 	-webkit-touch-callout: none;
@@ -542,4 +548,54 @@ button {
 
 .tweet .user {
 	color: #CC9999;
+}
+
+*/
+
+.resize-handle {
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	background-color: #FF0000;
+}
+
+/* Audio Player */
+
+/* Could have audio player in different size modes 
+
+Full screen desktop - tablet landscape
+Full screen tablet portrait
+Full screen iPhone 5 portrait & landscape
+Full screen iPhone 4 portrait & landscape
+
+Smaller / compact modes such as when there is an audio player acting as a component of a web page, rather than having the page be the player
+
+*/
+
+
+.horizontal.slider .h-bar {
+	position: absolute;
+	height: 3px;
+	width: 100px;
+	top: 34px;
+	left: 5px;
+	background-color: #FFFFFF;
+}
+
+.horizontal.slider .v-bar {
+	position: absolute;
+	height: 22px;
+	width: 6px;
+	top: 25px;
+	left: 3px;
+	background-color: #FFFFFF;
+}
+
+html.dragging {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }

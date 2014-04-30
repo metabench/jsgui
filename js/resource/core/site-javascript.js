@@ -84,17 +84,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 	//  Better to try serving the files in their paths without modification.
 
 
-
-
-
-
-
-
-
-
-
-
-
 	var _updateReferencesForServing = function(jsInput) {
 		// Needs to update a few references so that they are within the app structure.
 		//console.log('updateReferencesForServing');
@@ -213,7 +202,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 							//newDefinition = newDefinition + '.js';
 						}
 
-						console.log('newDefinition ' + newDefinition);
+						//console.log('newDefinition ' + newDefinition);
 
 
 
@@ -245,7 +234,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 							//console.log('theRest ' + theRest);
 							//var newRef = '"js/' + theRest + '"';
 							var newRef = '"' + theRest + '"';
-							console.log('newRef ' + newRef);
+							//console.log('newRef ' + newRef);
 							newDefinitionItems.push(newRef);
 						} else {
 							//throw 'stop';
@@ -327,16 +316,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			var newDefinition = newDefinitionItems.join(',');
 
 			var res = jsInput.substring(0, definitionBeginning) + newDefinition + jsInput.substr(definitionEnd);
-
-
-
 			return res;
 		} else {
 			return jsInput;
 		}
-
-
-
 	}
 
 	var serve_js_file_from_disk_updated_refs = function(filePath, response, callback) {
@@ -346,14 +329,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			} else {
 				//console.log('');
 				//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
-				
 
 				//console.log('data ' + data);
 				//var servableJs = updateReferencesForServing(data);
 
 				response.writeHead(200, {'Content-Type': 'text/javascript'});
 				//response.end(servableJs);
-
 				response.end(data);
 			}
 		});
@@ -362,11 +343,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 	var check_served_directories_for_requested_file = function(arr_served_paths, split_path_within_js, callback) {
 		//console.log('check_served_directories_for_requested_file');
 		//console.log('split_path_within_js ' + stringify(split_path_within_js));
-
 		//console.log('arr_served_paths ' + stringify(arr_served_paths));
-
 		// use call_multi.
-
 		// maybe we get a result from them all.
 
 		var fns = [
@@ -378,7 +356,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			// so, from that path, we use the split_path_within_js for the rest of the file path.
 
 			// then we check if such a (JS) file exists.
-
 		}
 
 		// fns.push([fs2.load_file_as_string, [source_path_item], function(err, res_loaded) {
@@ -416,10 +393,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		})
 
 		// add a function check for each of the 
-
-
-		
-
 	}
 
 	// A way of serving a file so that it includes custom code.
@@ -467,10 +440,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//console.log('served_directories ' + stringify(served_directories));
 			//console.log('path ' + path);
 
-
 			//throw 'stop';
-
-
 
 		},
 
@@ -484,27 +454,19 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		'set_custom_path': function(url, file_path) {
 			// But change the URL to have a smiley face instead of fullstops
-			console.log('url', url);
+			//console.log('url', url);
 			var escaped_url = url.replace(/\./g, '☺');
-			console.log('escaped_url', escaped_url);
-
+			//console.log('escaped_url', escaped_url);
 
 			//this.meta.set('custom_paths.' + escaped_url, file_path);
 			var custom_paths = this.meta.get('custom_paths');
-			console.log('custom_paths', custom_paths);
-
+			//console.log('custom_paths', custom_paths);
 			custom_paths.set(escaped_url, file_path);
-
 
 		},
 
-
-
-
 		'process': function(req, res) {
 			//console.log('Site_JavaScript processing');
-
-
 			var remoteAddress = req.connection.remoteAddress;
 			//console.log('remoteAddress ' + remoteAddress);
 			
@@ -541,7 +503,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				var file_path = custom_response_entry.value();
 
-				console.log('file_path', file_path);
+				//console.log('file_path', file_path);
 
 
 
@@ -637,7 +599,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					// Would be good to uglify and gzip what gets served.
 
 
-					var compress = true;
+					var compress = false;
 
 					if (compress) {
 						fs2.load_file_as_string(disk_path, function (err, data) {
@@ -952,7 +914,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						}
 					}
 				}
-
 				
 			}
 

@@ -419,7 +419,7 @@ define(["./jsgui-html-core"],
 				var el = this.get('dom.el');
 
 				dom_attributes.on('change', function(property_name, dval) {
-					console.log('dom_attributes change', property_name, dval);
+					//console.log('dom_attributes change', property_name, dval);
 
 
 					if (property_name == 'style') {
@@ -1006,6 +1006,10 @@ define(["./jsgui-html-core"],
 
 	            var screen_down_x, screen_down_y;
 
+	            // Want ways of restricting or cancelling a drag.
+
+	            
+
 	            this.add_event_listener('mousedown', function(e) {
 	                //console.log('hover mouseover');
 
@@ -1152,11 +1156,6 @@ define(["./jsgui-html-core"],
 
 	                // This will need to be revised - making adjustment for when dragging from an anchored position.
 	                //  Should maintain some info about the drag so it knows if it starts/ends anchored anywhere.
-
-
-
-
-
 	                var target = e_mousedown.target;
 
 	                // want to get the position within the thing it's a handle to?
@@ -1496,6 +1495,67 @@ define(["./jsgui-html-core"],
 	            });
 	        },
 	        */
+
+	        'resize_handle_to': function(ctrl, handle_position) {
+	        	// The control needs to be draggable normally?
+	        	//  And then from the positions of where it is adjust the size of what it's a resize handle to?
+
+	        	console.log('resize_handle_to');
+
+	        	if (handle_position == 'right-bottom') {
+	        		var fn_move = function(e_move) {
+	        			console.log('e_move', e_move);
+	        		}
+	        		var fn_up = function(e_up) {
+	        			console.log(e_up);
+	        		}
+
+	        		var doc = ctrl._context.ctrl_document;
+
+	        		console.log('ctrl._context', ctrl._context);
+
+	        		//var body = doc.get('content').get(1);
+	        		//console.log('body', body);
+
+	        		// The context should have access to the control_document.
+	        		//throw 'stop';
+
+	        		// Need to store the inital positions to work out differences between them.
+
+	        		// pageX and PageY are reliable accross browsers.
+	        		//  can be used to work out movement vector.
+
+	        		// Maybe we use the original measured position of the window to work out the new size, along with the movement vector.
+
+
+
+
+	        		var fn_move = function(e_move) {
+        				console.log('e_move', e_move);
+        			}
+
+        			var fn_up = function(e_up) {
+        				console.log('e_up', e_up);
+
+        				doc.off('mousemove', fn_move);
+        				doc.off('mouseup', fn_up);
+        			}
+
+	        		ctrl.on('mousedown', function(e_mousedown) {
+
+
+	        			console.log('e_mousedown', e_mousedown);
+
+
+	        			doc.on('mousemove', fn_move);
+	        			doc.on('mouseup', fn_up);
+	        		})
+
+
+
+	        	}
+
+	        },
 
 	        'selectable': function(ctrl) {
 	        	var that = this;
@@ -2515,6 +2575,12 @@ define(["./jsgui-html-core"],
 	    }
 
 
+	    // Want the document node to be linked with the context when activated (automatically)
+
+	    // We find the html element control. That is the one that gets set to be the context's ctrl_document.
+
+
+
 
 		var activate = function(context) {
 	        // The context should already have the map of controls.
@@ -2560,11 +2626,19 @@ define(["./jsgui-html-core"],
 		        }
 
 		        recursive_dom_iterate(document, function(el) {
-		            //console.log('el ' + el);
+		            //console.log('2) el.tagName ' + el.tagName);
 		            var nt = el.nodeType;
 		            //console.log('nt ' + nt);
+
+		            // So for the 'HTML' tag name...
+		            //  We should make a control for the HTML document - or it should get activated.
+
+
+
 		            if (nt == 1) {
 		                var jsgui_id = el.getAttribute('data-jsgui-id');
+		                // Give the HTML document an ID?
+
 
 		                //console.log('jsgui_id ' + jsgui_id);
 		                if (jsgui_id) {
@@ -2610,8 +2684,8 @@ define(["./jsgui-html-core"],
 		        // Control construction and registration
 		        each(map_jsgui_els, function(jsgui_id, el) {
 		            //console.log('jsgui_id ' + jsgui_id);
-		            //console.log('el ' + el);
-
+		            //console.log('3) el.tagName ' + el.tagName);
+		            var l_tag_name = el.tagName.toLowerCase();
 		            if (jsgui_id) {
 		                var type = map_jsgui_types[jsgui_id];
 		                //console.log('type ' + type);
@@ -2638,6 +2712,10 @@ define(["./jsgui-html-core"],
 		                //  it does not need to send the data twice.
 		                // Eg can hook up the key (viewer), the value (viewer) and the comma.
 
+		                // for the document element we specifically add the control to the context.
+
+
+
 		                if (Cstr) {
 		                	var ctrl = new Cstr({
 			                    'context': context,
@@ -2646,6 +2724,17 @@ define(["./jsgui-html-core"],
 			                })
 			                map_controls[jsgui_id] = ctrl;
 			                arr_controls.push(ctrl);
+
+			                //console.log('el.tagName', el.tagName);
+
+			                if (l_tag_name === 'html') {
+			                	//console.log('el is document root el');
+
+			                	// The html element represents the root of a document.
+			                	//throw '2) stop';
+
+			                	context.ctrl_document = ctrl;
+			                }
 		                } else {
 		                	console.log('Missing context.map_Controls for type ' + type + ', using generic Control');
 		                	var ctrl = new Control({
@@ -3000,6 +3089,9 @@ define(["./jsgui-html-core"],
 	    var Client_HTML_Document = Blank_HTML_Document.extend({
 	        'init': function (spec) {
 	            this._super(spec);
+
+	            //spec.context.ctrl_document = this;
+	            this.active();
 
 	        },
 

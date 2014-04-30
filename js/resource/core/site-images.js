@@ -9,7 +9,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		Resource, JeSuisXML, Cookies, fs2) {
 
 	
-	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
+	var stringify = jsgui.stringify, each = jsgui.eac, arrayify = jsgui.arrayify, tof = jsgui.tof;
+	var call_multi = jsgui.call_multi;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
@@ -224,7 +225,67 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 								var diskPath = '../../ws/img/' + fileName;
 
-								serve_image_file_from_disk(diskPath, res);
+								// Also making use of custom paths...
+
+								// First check if such an image is in a specifically served directory.
+
+								var served_directories = this.meta.get('served_directories');
+								console.log('served_directories ' + stringify(served_directories));
+
+								// see if the file exists in any of the served directories
+
+								// search for the file in the served directories.
+								//  will be an asyncronous search, and use an array of function calls with call_multi.
+
+								var fns = [];
+								var found_path;
+
+
+								each(served_directories, function(served_directory) {
+									console.log('served_directory', served_directory);
+									var dir_val = served_directory.value();
+									console.log('dir_val', dir_val);
+									var dir_name = dir_val.name;
+									console.log('dir_name', dir_name);
+
+									var search_path = dir_name + '/' + fileName;
+									console.log('search_path', search_path);
+									fns.push(function(callback) {
+										// check that directory
+
+										fs.exists(search_path, function(exists) {
+											console.log('exists', exists);
+
+											if (!found_path && exists) {
+												found_path = search_path;
+											}
+											callback(null, exists);
+										})
+
+
+									})
+								});
+
+								call_multi(fns, function(err, res2) {
+									if (err) {
+										throw err;
+									} else {
+										console.log('found_path', found_path);
+										if (found_path) {
+											diskPath = found_path;
+											serve_image_file_from_disk(diskPath, res);
+										}
+									}
+
+								});
+
+								//throw 'stop';
+
+
+
+
+
+								
 
 								/*
 								fs2.load_file_as_string(diskPath, function (err, data) {

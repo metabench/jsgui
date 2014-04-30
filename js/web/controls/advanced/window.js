@@ -1,5 +1,3 @@
-// object viewer
-
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
@@ -14,7 +12,21 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 		var group = jsgui.group;
 
+		// Extensions of inner frames within inner frames...
+		//  The relative frame container, which has an inner frame. Then if something extends that, it would be good for that
+		//  to have an inner_control of its own and seamlessly expose that one while using the one above that.
+
+		// Relate the inner_control more to that level of the control heirachy.
+		//	Then make it so that they are navigable in sequence.
+		//  Not for the moment though.
+		//  I'll just have the Window control contain a relative div.
+
+
+		//var Relative_Frame = Control.
+
 		var Window = Control.extend({
+
+
 
 			// could have a title field.
 			'fields': {
@@ -30,6 +42,15 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 				this.set('dom.attributes.class', 'window');
 				console.log('spec.el', spec.el);
+
+				// Window should have a relative frame inside it.
+				//  However, a relative frame control could be useful.
+				//  It's a control with a relative inner control inside.
+				//  Would help with positioning absolutely positioned items within another absolutely positioned div / control.
+
+
+
+
 
 
 
@@ -47,9 +68,13 @@ define(["../../jsgui-html", "./horizontal-menu"],
 					//	'context': this._context
 					//})
 					//top_bar.set('dom.attributes.class', 'title bar');
+
+
 					//this.add(top_bar);
 
-					var title_bar = add(Control({'class': 'title bar'}));
+					var div_relative = add(Control({'class': 'relative'}))
+
+					var title_bar = div_relative.add(make(Control({'class': 'title bar'})));
 
 
 					var dv_title = this.get('title');
@@ -76,7 +101,7 @@ define(["../../jsgui-html", "./horizontal-menu"],
 					//  return them.
 
 
-					var inner_control = add(Control({'class': 'inner'}));
+					var inner_control = div_relative.add(make(Control({'class': 'inner'})));
 					this.set('inner_control', inner_control);
 
 
@@ -111,21 +136,121 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 					// Should also have a map of its contents.
 
+					// Need to give it a 'resizable' property / behaviour. Maybe use field.
+
+					// Would be best activating resize (including with the handle) purely on the client.
+
+					//var resizable = this.get('resizable')
+
+					// It needs to carry accross info about which is its internal relative container.
+
+					var ctrl_fields = {
+						'ctrl_relative': div_relative._id(),
+						'title_bar': title_bar._id()
+					}
+
+
+
+					// use different quotes...
+
+					this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
+
 					
 				}
+
+			},
+			'resizable': function() {
+				this.set('resizable', 'right-bottom');
+
+				// This needs to be a property that gets sent to the client.
+				//  Call them active_fields?
+
+				this.set('dom.attributes.data-jsgui-fields', "{'resizable': 'right-bottom'}");
+
+
+
+
+
+				// Want the resizable field to go to the client as well.
+				// Want a convenient way of specifying that something gets sent to the client as a field / property.
+
 
 			},
 			'activate': function() {
 				// May need to register Flexiboard in some way on the client.
 				this._super();
 
+				var ctrl_relative = this.get('ctrl_relative');
+
 				console.log('activate Window');
 
-				var content = this.get('content');
+				//var content = this.get('content');
 				
-				console.log('content.length ' + content.length());
-				var top_bar = content.get(0);
+				//console.log('content.length ' + content.length());
+				var top_bar = this.get('title_bar');
+
 				top_bar.drag_handle_to(this);
+
+
+				// Need better get system, can either get as data_value or normal js value.
+				var resizable = this.get('resizable');
+				if (resizable && resizable.value) resizable = resizable.value();
+
+				console.log('resizable', resizable);
+
+				if (resizable == 'right-bottom') {
+					// Use absolute position rather than css right and css bottom, more compatability with older browsers.
+					//  However, older browesers are having problems using require.js
+					//  Browserify may work a lot better.
+
+					// Absolutely positioned element within the window.
+					//  Act as resize handles to the window.
+
+					// resize_handle_to will be in ctrl enh (I think)
+
+					// create the resize handle (basic control), then use resize_handle_to.
+
+					var resize_handle = new Control({
+						'class': 'right-bottom resize-handle'
+					});
+
+
+					//resize_handle.resize_handle_to(this, 'right-bottom');
+
+					// ANd inline style for where it is...
+					//  need to know the size of the window.
+
+					var size = this.size();
+					console.log('size', size);
+
+					// for the moment resize handle height is 16px...
+					//  We maybe measure this from CSS.
+
+
+					var resize_handle_width = 16;
+					var resize_handle_height = 16;
+
+					var x = size[0] - resize_handle_width;
+					var y = size[1] - resize_handle_height;
+
+					resize_handle.style({
+						'left': x + 'px',
+						'top': y + 'px'
+					});
+
+					// size is the computed size + borders?
+					//  outer size?
+
+					// this.size('inner')
+
+
+					//throw 'stop';
+
+
+					ctrl_relative.add(resize_handle);
+					resize_handle.resize_handle_to(this, 'right-bottom');
+
+				}
 
 				// 
 

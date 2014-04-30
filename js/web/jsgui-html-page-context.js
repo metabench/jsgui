@@ -24,6 +24,10 @@ define(["./jsgui-html-core"],
 	                this.browser_info = spec.browser_info;
 	            };
 
+	            if (spec.resource_pool) {
+	            	this.resource_pool = spec.resource_pool;
+	            }
+
 	            /*
 	    		this.itemIndex = function(obj, item) {
 	    		    var c = -1;
