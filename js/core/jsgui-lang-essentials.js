@@ -357,7 +357,7 @@ define(function() {
 		if (collection) {
 
 			if (collection.__type == 'collection') {
-				return collection.each(fn, context);
+				return collection.eac(fn, context);
 			}
 
 			// could have a break function that stops the loop from continuing.
@@ -2597,13 +2597,15 @@ define(function() {
 		//console.log('a.l ' + a.l);
 		//console.log('');
 		//console.log('');
-		//console.log('call_multi sig ' + sig);
+		console.log('call_multi sig ' + sig);
 		
 		var num_parallel = 1;
-		
+		console.log('a.l', a.l);
 		if (a.l == 2) {
 			arr_functions_params_pairs = a[0];
+			//console.log('arr_functions_params_pairs', arr_functions_params_pairs);
 			callback = a[1];
+			//console.log('callback', callback);
 		}
 		if (a.l == 3) {
 		    // look at the sig
@@ -2650,12 +2652,12 @@ define(function() {
 		var process = function() {
 		    num_currently_executing++;
 			// they may not be pairs, they could be a triple with a callback.
-			//console.log('num_currently_executing ' + num_currently_executing);
-			//console.log('c ' + c);
+			console.log('num_currently_executing ' + num_currently_executing);
+			console.log('c ' + c);
 			
 			var pair = arr_functions_params_pairs[c];
 			
-			//console.log('pair ' + pair);
+			console.log('pair', pair);
 			
 			// object (context / caller), function, params
 			// object (context / caller), function, params, fn_callback
@@ -2668,59 +2670,73 @@ define(function() {
 			var pair_sig = get_item_sig(pair);
 			//console.log('pair_sig ' + pair_sig);
 			//console.log(jsgui.atof(pair));
-			//console.log('pair.length ' + pair.length);
-			
-			if (pair.length == 2) {
-			    // [context, fn]
-			    // [fn, params]
+			console.log('pair.length ' + pair.length);
 
-				//if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && pair.length == 2) {
-				//	fn = pair[0];
-				//	params = pair[1];
-				//}
-				// ?, function
+			var t_pair = tof(pair);
+			console.log('t_pair', t_pair);
+
+			if (t_pair == 'function') {
+				fn = pair;
+				params = [];
+			} else {
+				if (pair.length == 1) {
+
+				}
 				
-				if (tof(pair[1]) == 'function') {
-					context = pair[0];
-					fn = pair[1];
-					params = [];
-				} else {
-					fn = pair[0];
-					params = pair[1];
-				}			
-			}
-			
-			// function, array, function
-			if (pair.length == 3) {
-			    // [fn, params, fn_callback]
-			    // [context, fn, params]
+				if (pair.length == 2) {
+				    // [context, fn]
+				    // [fn, params]
 
-				if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && tof(pair[2]) == 'function') {
-					fn = pair[0];
-					params = pair[1];
-					fn_callback = pair[2];
-				}
-				// object / data_object?
-				// ?, function, array
-				if (tof(pair[1]) == 'function' && tof(pair[2]) == 'array') {
-				    //console.log('has context');
-					context = pair[0];
-					fn = pair[1];
-					params = pair[2];
+					//if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && pair.length == 2) {
+					//	fn = pair[0];
+					//	params = pair[1];
+					//}
+					// ?, function
 					
-					// may not be a fn_callback in this case.
+					if (tof(pair[1]) == 'function') {
+						context = pair[0];
+						fn = pair[1];
+						params = [];
+					} else {
+						fn = pair[0];
+						params = pair[1];
+					}			
+				}
+				
+				// function, array, function
+				if (pair.length == 3) {
+				    // [fn, params, fn_callback]
+				    // [context, fn, params]
+
+					if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && tof(pair[2]) == 'function') {
+						fn = pair[0];
+						params = pair[1];
+						fn_callback = pair[2];
+					}
+					// object / data_object?
+					// ?, function, array
+					if (tof(pair[1]) == 'function' && tof(pair[2]) == 'array') {
+					    //console.log('has context');
+						context = pair[0];
+						fn = pair[1];
+						params = pair[2];
+						
+						// may not be a fn_callback in this case.
+					}
+				}
+				
+				if (pair.length == 4) {
+				    // [context, fn, params, fn_callback]
+
+				    // context, function being called, params, cb
+				    context = pair[0];
+				    fn = pair[1];
+				    params = pair[2];
+				    fn_callback = pair[3];
 				}
 			}
-			
-			if (pair.length == 4) {
-			    // [context, fn, params, fn_callback]
 
-			    // context, function being called, params, cb
-			    context = pair[0];
-			    fn = pair[1];
-			    params = pair[2];
-			    fn_callback = pair[3];
-			}
+				
 			
 			var i = c;
 			// not sure it keeps this same value of i.
@@ -2732,7 +2748,7 @@ define(function() {
 			var cb = function(err, res2) {
 			    num_currently_executing--;
 			    count_unfinished--; 
-				//console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
+				console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
 				if (err) {
 					var stack = new Error().stack;
 					console.log(stack);
@@ -2761,18 +2777,21 @@ define(function() {
 						fn_callback(null, res2);
 					}
 					*/
+					console.log('c', c);
+					console.log('l', l);
 					
 					if (c < l) {
 
 					    // only process if the num executing is less than the max num to execute.
 					    // otherwise the process will be done when a callabck is produced from the function.
-					    
+					    console.log('num_currently_executing', num_currently_executing);
 					    if (num_currently_executing < num_parallel) {
 					        process();
 					    }
 					    
 						
 					} else {
+						console.log('count_unfinished', count_unfinished);
 					    if (count_unfinished <= 0) {
 					        callback(null, res);
 					    }
@@ -2780,10 +2799,14 @@ define(function() {
 				}
 			}
 			
-			var arr_to_call = clone(params);
+			var arr_to_call = clone(params) || [];
+			console.log('params', params);
+			console.log('arr_to_call', arr_to_call);
 			//console.log('params ' + params);
 			//console.log('fn ' + fn);
 			arr_to_call.push(cb);
+
+			// but if the function does not have a callback?
 			//console.log('context ' + context);
 			if (context) {
 				fn.apply(context, arr_to_call);
@@ -2792,7 +2815,7 @@ define(function() {
 			}
 		}
 		
-		//console.log('arr_functions_params_pairs ' + arr_functions_params_pairs);
+		console.log('** arr_functions_params_pairs.length ' + arr_functions_params_pairs.length);
 		if (arr_functions_params_pairs.length > 0) {
 		    while ((c < l)  && (num_currently_executing < num_parallel)) {
 		        process();

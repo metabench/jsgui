@@ -539,33 +539,40 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					//console.log('bei ', bei);
 					if (tof(bei) == 'array') {
 						//console.log('1) raise_event bei.length ' + bei.length);
-						var res = [];
 
-						// They are handlers that get called.
+						if (bei.length > 0) {
+							var res = [];
 
-						each(bei, function(i, v) {
-							// I think it knows what the name of the event
-							// is already.
+							// They are handlers that get called.
 
-							// get the target, the event name and the params
-							// all at once?
-							// That seems OK for an event handler.
-							// Could have a simpler handler? But maybe it
-							// hides necessary complexity.
-							// perhaps don't need to put target in twice,
-							// having it as a parameter?
-							// maybe the this context would be enough.
+							each(bei, function(i, v) {
+								// I think it knows what the name of the event
+								// is already.
 
-							//v.call(target, target, event_name);
-							//console.log('1) additional_args', additional_args);
-							res.push(v.apply(target, additional_args));
-							// Perhaps I have sussed out the problem.
-							//  Or some of it?
+								// get the target, the event name and the params
+								// all at once?
+								// That seems OK for an event handler.
+								// Could have a simpler handler? But maybe it
+								// hides necessary complexity.
+								// perhaps don't need to put target in twice,
+								// having it as a parameter?
+								// maybe the this context would be enough.
+
+								//v.call(target, target, event_name);
+								//console.log('1) additional_args', additional_args);
+								res.push(v.apply(target, additional_args));
+								// Perhaps I have sussed out the problem.
+								//  Or some of it?
 
 
-						});
-						//console.log('Evented_Class raise_event [s] res', res);
-						return res;
+							});
+							//console.log('Evented_Class raise_event [s] res', res);
+							return res;
+						} else {
+							return false;
+						}
+
+						
 						//console.log('2) raised the bound events');
 					}
 					// Or if it's just a function?
@@ -884,13 +891,23 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 		'remove_event_listener': function(event_name, fn_listener) {
 			// needs to go through the whole array?
 			// think so....
+
+			console.log('remove_event_listener');
+			console.log('this._bound_events', this._bound_events);
 			if (this._bound_events) {
+				console.log('event_name', event_name);
 				var bei = this._bound_events[event_name] || [];
 
-				if (tof(bei) == 'array') {
+				var tbei = tof(bei);
+				console.log('tbei', tbei);
+
+				if (tbei == 'array') {
 					// bei.push(fn_listener);
 
 					var c = 0, l = bei.length, found = false;
+
+					console.log('l', l);
+
 					while (!found && c < l) {
 						if (bei[c] === fn_listener) {
 							found = true;
@@ -898,10 +915,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							c++;
 						}
 					}
+					console.log('found', found);
+					console.log('c', c);
 					if (found) {
-					    //bei.slice(c, 1);
-					    bei.splice(c, 1);
-                    }
+						bei.splice(c, 1);
+					}
 				};
 			}
 

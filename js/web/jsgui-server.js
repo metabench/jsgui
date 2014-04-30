@@ -5,13 +5,13 @@ if (typeof define !== 'function') {
 define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resource', './jsgui-je-suis-xml',
 	'cookies', '../resource/local-server-info', '../resource/local-file-system',
 	'../resource/core/server-pool', '../resource/core/application-router', '../resource/file-system-web-admin', '../resource/web-admin',
-	'../resource/core/site-javascript', '../resource/core/site-css', '../resource/core/site-images',
+	'../resource/core/site-javascript', '../resource/core/site-css', '../resource/core/site-images', '../resource/core/site-audio',
 	'../resource/info',
 	'../resource/login', './server-page-context'], 
 
 	function(sockjs, jsgui, os, http, libUrl, Resource, JeSuisXML, Cookies,
 		Local_Server_Information, Local_File_System, Server_Resource_Pool, Application_Router,
-		Resource_File_System_Web_Admin, Resource_Web_Admin, Site_JavaScript, Site_CSS, Site_Images, Info,
+		Resource_File_System_Web_Admin, Resource_Web_Admin, Site_JavaScript, Site_CSS, Site_Images, Site_Audio, Info,
 		Login, Server_Page_Context) {
 	
 	var Server = {};
@@ -163,6 +163,12 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 				}
 			}));
 
+			resource_pool.push(new Site_Audio({
+				'meta': {
+					'name': 'Site Audio'
+				}
+			}));
+
 
 			// Resource_File_System_Web_Admin
 			
@@ -203,7 +209,13 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     var js = rp.get_resource('Site JavaScript');
                     var css = rp.get_resource('Site CSS');
                     var images = rp.get_resource('Site Images');
+                    var audio = rp.get_resource('Site Audio');
+
+
                     var login = rp.get_resource('Login HTML Resource');
+                    // An HTML resource may be changed to a Resource Publisher + Resource Client.
+                    //  The Resource itself should be separate from the transport mechanism used to access it.
+
                     var admin = rp.get_resource('Web Admin');
                     var resource_publisher = rp.get_resource('HTTP Resource Publisher');
 
@@ -285,8 +297,6 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
 
                     rt.set('/resources/*', function(req, res) {
-
-
                     	console.log('resources wildcard routing. will send to the resource pool publisher resource.');
 
                     	//throw 'stop';
@@ -333,6 +343,12 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	console.log('images wildcard routing. will send to the images resource.');
                     	//throw 'stop';
                     	images.process(req, res);
+                    });
+
+                    rt.set('/audio/*', function(req, res) {
+                    	console.log('audio wildcard routing. will send to the audio resource.');
+                    	//throw 'stop';
+                    	audio.process(req, res);
                     });
 
                     rt.set('/admin/*', function(req, res) {

@@ -1031,7 +1031,7 @@ define(['../core/jsgui-lang-essentials', '../image/node-rasters', '../image/node
 						var extract = str_err.substring(pos1, pos2);
 						//console.log('extract ' + extract);
 						
-						var s3 = 'Metadata:';
+						var s3 = 'Metadata:';parse_property_values
 						var pos3 = extract.indexOf(s3) + s3.length;
 						var str_md = extract.substring(pos3);
 						var split = str_md.split('\n');

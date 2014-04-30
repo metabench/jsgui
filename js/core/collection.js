@@ -21,6 +21,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 	var j = jsgui;
 	var Class = j.Class;
 	var each = j.each;
+	var eac = j.eac;
 	var is_array = j.is_array;
 	var is_dom_node = j.is_dom_node;
 	var is_ctrl = j.is_ctrl;
@@ -455,6 +456,32 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				} else {
 					if (a.l == 2) {
 						return each(this._arr, a[0], a[1]);
+					}
+				}
+			}
+		}),
+
+		'eac' : fp(function(a, sig) {
+			// was callback, context
+			// ever given the context?
+			
+			if (sig == '[f]') {
+				return eac(this._arr, a[0]);
+			} else {
+				
+				if (sig == '[X,f]') {
+					// X for index
+					
+					// we use the order of the index.
+					//  possibly we can iterate using the index itself, maybe with that same callback.
+					
+					var index = a[0];
+					var callback = a[1];
+					return index.eac(callback);
+					
+				} else {
+					if (a.l == 2) {
+						return eac(this._arr, a[0], a[1]);
 					}
 				}
 			}
