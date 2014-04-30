@@ -261,6 +261,28 @@ function (jsgui, assert, test_utils) {
         // ================================================================================================================================
 
         // -----------------------------------------------------
+        //	fn
+        // -----------------------------------------------------
+
+        it("should process fn task signature", function (done) {
+
+            var callback = function (err, res) {
+                assert.equal(err, null);
+                assert.deepEqual(res, [222]);
+                done();
+            };
+
+            var task1_fn = function (cb) {
+                setTimeout(function () { cb(null, 222); }, 1);
+            };
+
+            var tasks = [task1_fn];
+
+            jsgui.call_multiple_callback_functions(tasks, callback);
+
+        });
+
+        // -----------------------------------------------------
         //	[context, fn]
         // -----------------------------------------------------
 

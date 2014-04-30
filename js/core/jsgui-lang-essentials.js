@@ -1315,7 +1315,7 @@ define(function() {
 					} else {
 
 
-						console.log('t ' + t);
+						//console.log('t ' + t);
 						throw 'Unexpected object type ' + t;
 					}
 				}
@@ -2540,7 +2540,8 @@ define(function() {
     /**
     * Executes several tasks one by one (default) or simultaneously (up to specified amount of tasks at the same time).
     *
-    * Each task is an array in turn. The following task formats are supported:
+    * Each task can be a function, or an array in. The following task formats are supported:
+    * - fn
     * - [context, fn]
     * - [fn, params]
     * - [fn, params, fn_callback]
@@ -2597,10 +2598,10 @@ define(function() {
 		//console.log('a.l ' + a.l);
 		//console.log('');
 		//console.log('');
-		console.log('call_multi sig ' + sig);
+		//console.log('call_multi sig ' + sig);
 		
 		var num_parallel = 1;
-		console.log('a.l', a.l);
+		//console.log('a.l', a.l);
 		if (a.l == 2) {
 			arr_functions_params_pairs = a[0];
 			//console.log('arr_functions_params_pairs', arr_functions_params_pairs);
@@ -2652,12 +2653,12 @@ define(function() {
 		var process = function() {
 		    num_currently_executing++;
 			// they may not be pairs, they could be a triple with a callback.
-			console.log('num_currently_executing ' + num_currently_executing);
-			console.log('c ' + c);
+			//console.log('num_currently_executing ' + num_currently_executing);
+			//console.log('c ' + c);
 			
 			var pair = arr_functions_params_pairs[c];
 			
-			console.log('pair', pair);
+			//console.log('pair', pair);
 			
 			// object (context / caller), function, params
 			// object (context / caller), function, params, fn_callback
@@ -2670,10 +2671,10 @@ define(function() {
 			var pair_sig = get_item_sig(pair);
 			//console.log('pair_sig ' + pair_sig);
 			//console.log(jsgui.atof(pair));
-			console.log('pair.length ' + pair.length);
+			//console.log('pair.length ' + pair.length);
 
 			var t_pair = tof(pair);
-			console.log('t_pair', t_pair);
+			//console.log('t_pair', t_pair);
 
 			if (t_pair == 'function') {
 				fn = pair;
@@ -2748,10 +2749,10 @@ define(function() {
 			var cb = function(err, res2) {
 			    num_currently_executing--;
 			    count_unfinished--; 
-				console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
+				//console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
 				if (err) {
 					var stack = new Error().stack;
-					console.log(stack);
+					//console.log(stack);
 					throw err;
 				} else {
 				    //console.log('i ' + i + ', res2 ' + res2);
@@ -2777,21 +2778,21 @@ define(function() {
 						fn_callback(null, res2);
 					}
 					*/
-					console.log('c', c);
-					console.log('l', l);
+					//console.log('c', c);
+					//console.log('l', l);
 					
 					if (c < l) {
 
 					    // only process if the num executing is less than the max num to execute.
 					    // otherwise the process will be done when a callabck is produced from the function.
-					    console.log('num_currently_executing', num_currently_executing);
+					    //console.log('num_currently_executing', num_currently_executing);
 					    if (num_currently_executing < num_parallel) {
 					        process();
 					    }
 					    
 						
 					} else {
-						console.log('count_unfinished', count_unfinished);
+						//console.log('count_unfinished', count_unfinished);
 					    if (count_unfinished <= 0) {
 					        callback(null, res);
 					    }
@@ -2800,8 +2801,8 @@ define(function() {
 			}
 			
 			var arr_to_call = clone(params) || [];
-			console.log('params', params);
-			console.log('arr_to_call', arr_to_call);
+			//console.log('params', params);
+			//console.log('arr_to_call', arr_to_call);
 			//console.log('params ' + params);
 			//console.log('fn ' + fn);
 			arr_to_call.push(cb);
@@ -2815,7 +2816,7 @@ define(function() {
 			}
 		}
 		
-		console.log('** arr_functions_params_pairs.length ' + arr_functions_params_pairs.length);
+		//console.log('** arr_functions_params_pairs.length ' + arr_functions_params_pairs.length);
 		if (arr_functions_params_pairs.length > 0) {
 		    while ((c < l)  && (num_currently_executing < num_parallel)) {
 		        process();
