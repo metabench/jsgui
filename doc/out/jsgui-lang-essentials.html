@@ -2373,197 +2373,6 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
         
             
 <dt>
-    <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(collection, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Iterates over a collection calling the collection.each(fn, context) method.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		<th>Argument</th>
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>collection</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Collection</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"><p>collection of elements</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>fn</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"><p>iterator function</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>context</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-            
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-                    
-                
-                    
-                
-                </td>
-            
-            
-            
-            
-            <td class="description last"><p>context object</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>// TODO..............</code></pre>
-
-    
-</dd>
-
-        
-            
-<dt>
     <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(arr, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
     
     
@@ -2754,6 +2563,197 @@ callback(error, result), where &quot;result&quot; is all the tasks result array.
         <h5>Example</h5>
         
     <pre class="prettyprint"><code>jsgui.each([1, 2, 3, 4, 5], function(index, element, stop){   console.log(index + ":" + element);  // 0:1 1:2 2:3 3:4 4:5   if (index > 1000) stop();});</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="each"><span class="type-signature">&lt;static> </span>each<span class="signature">(collection, fn, <span class="optional">context</span>)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Iterates over a collection calling the collection.each(fn, context) method.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>collection</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Collection</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>collection of elements</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>iterator function</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"><p>context object</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>// TODO..............</code></pre>
 
     
 </dd>
@@ -5228,6 +5228,123 @@ If only one parameter is passed, the extends <code>this</code>.</p>
         
             
 <dt>
+    <h4 class="name" id="mapify"><span class="type-signature">&lt;static> </span>mapify<span class="signature">(arr)</span><span class="type-signature"></span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns an object containing keys and values from the [key, value] pairs of the array.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>arr</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>mapifying array</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="mapify"><span class="type-signature">&lt;static> </span>mapify<span class="signature">(arr, by_property_name)</span><span class="type-signature"></span></h4>
     
     
@@ -5487,123 +5604,6 @@ this case it will just call the original function (if the parameters number &gt;
         <h5>Example</h5>
         
     <pre class="prettyprint"><code>var keys = [];var values = [];var addKeyValue = function (key, value) {    keys.push(key);    values.push(value);};var mapified_addKeyValue = jsgui.mapify(addKeyValue);mapified_addKeyValue({ a: 1, b: 2, name: "John" });console.log(keys); // ["a", "b", "name"]console.log(values); // [1, 2, "John"]// ------- mapify an async function: -------var keys = [];var values = [];var asyncAddKeyValue = function (key, value, cb) {    setTimeout(function () {        keys.push(key);        values.push(value);        cb(null, key + "=" + value);    }, 1000);};var callback = function (error, result) {    console.log(result); // ["a=1", "b=2", "name=John"]    //    console.log(keys);   // ["a", "b", "name"]    console.log(values); // [1, 2, "John"]};var mapified_asyncAddKeyValue = jsgui.mapify(asyncAddKeyValue);mapified_asyncAddKeyValue({ a: 1, b: 2, name: "John" }, callback);// ------- call the original function: -------var func = function (a, b, c) {    console.log(a + " " + b + " " + c);  // 1 5 10};var mapified_func = jsgui.mapify(func);mapified_func(1, 5, 10);</code></pre>
-
-    
-</dd>
-
-        
-            
-<dt>
-    <h4 class="name" id="mapify"><span class="type-signature">&lt;static> </span>mapify<span class="signature">(arr)</span><span class="type-signature"></span></h4>
-    
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Returns an object containing keys and values from the [key, value] pairs of the array.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>arr</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last"><p>mapifying array</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-        <h5>Example</h5>
-        
-    <pre class="prettyprint"><code>mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }</code></pre>
 
     
 </dd>
@@ -7304,13 +7304,13 @@ Possible results are:</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Ordered_String_List.html">Ordered_String_List</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">FindInfo</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="collection.html">core/collection</a></li><li><a href="constraint.html">core/constraint</a></li><li><a href="jsgui-data-structures.html">core/jsgui-data-structures</a></li><li><a href="jsgui-data-structures-b-plus-tree.html">core/jsgui-data-structures-b-plus-tree</a></li><li><a href="jsgui-data-structures-doubly-linked-list.html">core/jsgui-data-structures-doubly-linked-list</a></li><li><a href="jsgui-data-structures-stiffarray.html">core/jsgui-data-structures-stiffarray</a></li><li><a href="jsgui-lang-essentials.html">core/jsgui-lang-essentials</a></li></ul><h3>Classes</h3><ul><li><a href="constraint.Collection_Constraint.html">Collection_Constraint</a></li><li><a href="constraint.Collection_Data_Def_Constraint.html">Collection_Data_Def_Constraint</a></li><li><a href="constraint.Collection_Data_Type_Constraint.html">Collection_Data_Type_Constraint</a></li><li><a href="constraint.Constraint.html">Constraint</a></li><li><a href="constraint.Data_Object_Constraint.html">Data_Object_Constraint</a></li><li><a href="constraint.Data_Object_Def_Constraint.html">Data_Object_Def_Constraint</a></li><li><a href="constraint.Field_Constraint.html">Field_Constraint</a></li><li><a href="constraint.Field_Data_Type_Constraint.html">Field_Data_Type_Constraint</a></li><li><a href="constraint.Guid_Constraint.html">Guid_Constraint</a></li><li><a href="constraint.Int_Constraint.html">Int_Constraint</a></li><li><a href="constraint.Not_Null_Constraint.html">Not_Null_Constraint</a></li><li><a href="constraint.Number_Constraint.html">Number_Constraint</a></li><li><a href="constraint.Text_Constraint.html">Text_Constraint</a></li><li><a href="constraint.Unique_Constraint.html">Unique_Constraint</a></li><li><a href="jsgui-data-structures.Ordered_KVS.html">Ordered_KVS</a></li><li><a href="jsgui-data-structures.Ordered_String_List.html">Ordered_String_List</a></li><li><a href="jsgui-data-structures.Sorted_KVS.html">Sorted_KVS</a></li><li><a href="jsgui-data-structures-b-plus-tree.B_Plus_Tree.html">B_Plus_Tree</a></li><li><a href="jsgui-data-structures-b-plus-tree.FindInfo.html">FindInfo</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.html">Doubly_Linked_List</a></li><li><a href="jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html">Doubly_Linked_List.Node</a></li><li><a href="jsgui-data-structures-stiffarray.StiffArray.html">StiffArray</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Fri Apr 11 2014 20:41:55 GMT+0600 (Уральское время (зима))
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha4</a> on Thu Apr 24 2014 17:27:01 GMT+0600 (Уральское время (зима))
 </footer>
 
 <script> prettyPrint(); </script>
