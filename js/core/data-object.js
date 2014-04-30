@@ -738,6 +738,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			}
 
 			*/
+
+			return [];
 		}),
 
 		// also just raise and trigger?
