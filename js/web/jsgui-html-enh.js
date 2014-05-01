@@ -319,7 +319,44 @@ define(["./jsgui-html-core"],
 
 		// Perhaps more client-side capabilities should be here, like activate.
 
-		
+		var mapDomEventNames = {
+            'click': true,
+            'mousedown': true,
+            'mouseup': true,
+            'mousemove': true,
+            'mouseover': true,
+            'mouseout': true,
+            'blur': true,
+            'focus': true,
+            'keydown': true,
+            'keyup': true,
+            'keypress': true,
+            'contextmenu': true,
+
+            'abort': true,
+			'canplay': true,
+			'canplaythrough': true,
+			'durationchange': true,
+			'emptied': true,
+			'ended': true,
+			'error': true,
+			'loadeddata': true,
+			'loadedmetadata': true,
+			'loadstart': true,
+			'pause': true,
+			'play': true,
+			'playing': true,
+			'progress': true,
+			'ratechange': true,
+			'seeked': true,
+			'seeking': true,
+			'stalled': true,
+			'suspend': true,
+			'timeupdate': true,
+			'volumechange': true,
+			'waiting': true
+
+        };
 
 		Control = jsgui.Control = jsgui.Control.extend({
 			'fields': {
@@ -373,6 +410,144 @@ define(["./jsgui-html-core"],
 	                }
 	            })
 	        },
+
+	        'add_event_listener': fp(function(a, sig) {
+
+	            /*
+	            var el = this.get('dom.el');
+	            if (el) {
+	                
+	                // Check if the element has that event listener...
+	                //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
+
+
+
+	                el.addEventListener(event_name, handler, false);
+	            }
+	            */
+
+	            // In enh - with this only working post-activation?
+
+	            // see http://www.w3schools.com/tags/ref_av_dom.asp
+	            /*
+	            abort	Fires when the loading of an audio/video is aborted
+				canplay	Fires when the browser can start playing the audio/video
+				canplaythrough	Fires when the browser can play through the audio/video without stopping for buffering
+				durationchange	Fires when the duration of the audio/video is changed
+				emptied	Fires when the current playlist is empty
+				ended	Fires when the current playlist is ended
+				error	Fires when an error occurred during the loading of an audio/video
+				loadeddata	Fires when the browser has loaded the current frame of the audio/video
+				loadedmetadata	Fires when the browser has loaded meta data for the audio/video
+				loadstart	Fires when the browser starts looking for the audio/video
+				pause	Fires when the audio/video has been paused
+				play	Fires when the audio/video has been started or is no longer paused
+				playing	Fires when the audio/video is ready to play after having been paused or stopped for buffering
+				progress	Fires when the browser is downloading the audio/video
+				ratechange	Fires when the playing speed of the audio/video is changed
+				seeked	Fires when the user is finished moving/skipping to a new position in the audio/video
+				seeking	Fires when the user starts moving/skipping to a new position in the audio/video
+				stalled	Fires when the browser is trying to get media data, but data is not available
+				suspend	Fires when the browser is intentionally not getting media data
+				timeupdate	Fires when the current playback position has changed
+				volumechange	Fires when the volume has been changed
+				waiting	Fires when the video stops because it needs to buffer the next frame
+
+				abort
+				canplay
+				canplaythrough
+				durationchange
+				emptied
+				ended
+				error
+				loadeddata
+				loadedmetadata
+				loadstart
+				pause
+				play
+				playing
+				progress
+				ratechange
+				seeked
+				seeking
+				stalled
+				suspend
+				timeupdate
+				volumechange
+				waiting
+				*/
+
+
+	            
+
+	            // So, it should also bind the event to the control, so a listener will hear that.
+
+	            // But does this apply itself???
+	            this._super.apply(this, a);
+
+	            // then if it appears in the dom events, attach it.
+
+	            if (sig == '[s,f]') {
+	                var event_name = a[0];
+	                if (mapDomEventNames[a[0]]) {
+	                    //console.log('we have a DOM event: ' + event_name);
+
+	                    var listener = this.mapListeners[event_name];
+	                    var that = this;
+	                    var el = this.get('dom.el');
+
+	                    //console.log('el' + el);
+
+	                    if (el) {
+	                        if (!listener) {
+	                            // a single listener called when a bound dom event fires.
+	                            //  this will then split up the event calls to everything that is listening to this.
+	                            // for the DOM event on the object, we raise the event on the control.
+
+	                            listener = this.mapListeners[event_name] = function(e) {
+	                                //console.log('event_name heard ' + event_name);
+
+	                                // Raising an event, there could be multiple listeners.
+	                                //  would be good to get an array of what the listeners returned.
+	                                //  Return false here if any of them return false?
+
+
+
+	                                var res_raise = that.raise(event_name, e);
+	                                //console.log('res_raise', res_raise);
+
+	                                // then if any results are false, we return false.
+
+	                                var any_are_false = false;
+	                                var c = 0, l = res_raise.length;
+
+	                                while (!any_are_false && c < l) {
+	                                    if (res_raise[c] === false) {
+	                                        any_are_false = true;
+	                                    }
+
+	                                    c++;
+	                                }
+
+	                                //console.log('any_are_false', any_are_false);
+
+	                                if (any_are_false) {
+	                                    e.preventDefault();
+	                                    return false;
+	                                }
+	                                // Would like to respond to the event.
+	                                //  Eg if the dom event handler returns false, it would be good to return false in the listener.
+
+
+
+	                            };
+	                            el.addEventListener(event_name, listener, false);
+
+	                        }
+	                    }
+	                }
+	            }
+	        }),
 
 	        // not recursive
 	        'activate': function(el) {
@@ -565,7 +740,14 @@ define(["./jsgui-html-core"],
 				    	if (str_properties) {
 			                //console.log('str_ctrl_fields ' + str_ctrl_fields);
 			                //console.log('str_properties', str_properties);
-			                var props = JSON.parse(str_properties.replace(/'/g, '"'));
+			                //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
+							var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'').replace(/'\'/g, '"');
+
+
+			                // DBL_QT
+			                console.log('s_pre_parse', s_pre_parse);
+
+			                var props = JSON.parse(s_pre_parse);
 			                //console.log('props ' + stringify(props));
 			                //throw 'stop';
 			                this.set(props);
@@ -1008,7 +1190,7 @@ define(["./jsgui-html-core"],
 
 	            // Want ways of restricting or cancelling a drag.
 
-	            
+
 
 	            this.add_event_listener('mousedown', function(e) {
 	                //console.log('hover mouseover');
@@ -2870,7 +3052,7 @@ define(["./jsgui-html-core"],
 
 
 
-	    core_extension('html head title body div span h1 h2 h3 h4 h5 label p a script button form img ul li');
+	    core_extension('html head title body div span h1 h2 h3 h4 h5 label p a script button form img ul li audio video');
 	    core_extension_no_closing_tag('link input');
 	    // link tag needs to have no closing tag.
 	    //  core_extension_no_closing_tag

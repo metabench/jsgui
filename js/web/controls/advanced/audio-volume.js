@@ -24,7 +24,6 @@ define(["../../jsgui-html", "./horizontal-slider"],
 			//],			
 			//  and can have other fields possibly.
 			
-			
 			'init': function(spec, add, make) {
 				this._super(spec);
 				this.__type_name = 'audio_volume';
@@ -38,7 +37,6 @@ define(["../../jsgui-html", "./horizontal-slider"],
 					//  The drag system will integrate with various bands / window positions.
 
 					// Maybe a property to say that it's dockable.
-					
 
 					//var top_bar = new Control({
 					//	'context': this._context
@@ -50,7 +48,8 @@ define(["../../jsgui-html", "./horizontal-slider"],
 
 					var h_slider = add(Horizontal_Slider({
 						'min': 0,
-						'max': 100
+						'max': 100,
+						'value': 100
 					}));
 
 					var ctrl_fields = {

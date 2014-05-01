@@ -58,6 +58,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 	var mime_types = {
 		'acc': 'audio/acc',
 		'mp4': 'audio/mp4',
+		'mp3': 'audio/mp3',
 		'mpeg': 'audio/mpeg',
 		'ogg': 'audio/ogg',
 		'wav': 'audio/wav',
@@ -87,7 +88,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			if (err) {
 				throw err;
 			} else {
-
+				console.log('cb readfile');
 				response.writeHead(200, {'Content-Type': mime_types[extension] });
     			response.end(data, 'binary');
 
@@ -267,7 +268,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 					var media_file_path = album.path + '/mp3/' + s_track + '.mp3';
 					console.log('media_file_path', media_file_path);
-
+					console.log('res (response)', res);
 					serve_audio_file_from_disk(media_file_path, res);
 
 					//console.log('tracks', tracks);

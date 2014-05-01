@@ -4538,8 +4538,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			} else {
 				input_processors = this._get_input_processors();
 			}
-			
-
 
 			//console.log('*** input_processors ' + stringify(Object.keys(input_processors)));
 
@@ -4570,6 +4568,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			if (is_defined(this._data_type_name) && input_processors[this._data_type_name]) {
 				// use the input processor of the data_type.
+
+				throw 'stop';
 				
 				console.log('is_defined _data_type_name and input_processors[this._data_type_name]');
 
@@ -4623,8 +4623,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//console.log('');
 
 
-				if (a.l == 2) {
-					var property_name = a[0], value = a[1];
+				if (a.l == 2 || a.l == 3) {
+					var property_name = a[0], value = a[1], silent = false || a[2];
 
 
 					//console.log('set property_name ' + property_name + ', value ' + value);
@@ -4673,8 +4673,20 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							//console.log('spn_arr_next ' + stringify(spn_arr_next));
 							
 							var data_object_next = this.get(spn_first);
+							//console.log('data_object_next', data_object_next);
 							if (data_object_next) {
-								return data_object_next.set(spn_arr_next.join('.'), value);
+
+								var res = data_object_next.set(spn_arr_next.join('.'), value);
+
+								if (!silent) {
+									this.raise_event('change', {
+										'name': property_name,
+										'value': value
+									});
+								}
+
+								
+								return res;
 								
 							} else {
 
@@ -4834,7 +4846,14 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								
 								//this.raise_event('change', [property_name, dv]);
 
-								this.raise_event('change', property_name, dv);
+								if (!silent) {
+									this.raise_event('change', {
+										'name': property_name, 
+										'value': dv
+									});
+								}
+
+								
 
 
 								//throw 'stop!!!';
@@ -4902,7 +4921,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								//this.trigger('change', [property_name, value]);
 								//console.log('property_name', property_name);
 								//console.log('value', value);
-								this.trigger('change', property_name, value);
+								//console.log('this', this);
+
+								if (!silent) {
+									this.trigger('change', {
+										'name': property_name,
+										'value': value
+									});
+								}
+								
 
 								// want to listen to the set event for some things such as GUI components in particular.
 								

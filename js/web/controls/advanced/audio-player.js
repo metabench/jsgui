@@ -1,7 +1,7 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"], 
-	function(jsgui, Horizontal_Slider, Audio_Volume) {
+define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-scrubber"], 
+	function(jsgui, Horizontal_Slider, Audio_Volume, Media_Scrubber) {
 		
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
@@ -14,6 +14,24 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 			'fields': {
 				'title': String
 			},
+
+			// This audio player could connect back up to the audio resource on the server,
+			//  or it could send itself enough data to proceed.
+
+			// It should know the track durations and the album path.
+			//  Perhaps individual track paths.
+
+			// Perhaps an audio resource publisher makes sense?
+			//  That way a Resource Client and Resource Control would be sent to the client.
+
+			// However, I think a more flexible style of programming where the Audio_Player is not necessarily a resource client,
+			// but can act like one, would be better.
+
+			// I'd prefer to send track data in the original request.
+			//  If it's connecting to a large library then a Resource system would enable it,
+			//  but sending encoded tracks data to the client will be fine.
+
+
 
 
 			// maybe add before make would be better. add will probably be used more.
@@ -29,6 +47,8 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 				//  Making this a Resource Client for the moment.
 
 				var that = this;
+
+				// Should be set to track 1 to start with.
 
 				//console.log('spec.el', spec.el);
 				if (!spec.abstract && !spec.el) {
@@ -56,30 +76,6 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 
 					div_relative.add(div_tracks);
 
-
-					//this.__status = 'waiting';
-
-					/*
-
-					site_audio.meta.get('albums', function(err, albums) {
-						if (err) {
-							throw err;
-						} else {
-							console.log('albums', albums);
-
-							that.__status = 'ready';
-							that.trigger('ready');
-						}
-					})
-
-					*/
-
-					
-
-					// Show the 0th album for the moment. In future will be able to navigate between them.
-
-
-
 					var tracks = albums[0].tracks;
 					console.log('tracks', tracks);
 
@@ -93,7 +89,9 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 
 						var div_number = make(Control({'class': 'number'}));
 						div_track.add(div_number);
-						div_number.add('' + (i + 1));
+
+						var str_number = '' + (i + 1);
+						div_number.add(str_number);
 
 						var div_name = make(Control({'class': 'name'}));
 						div_track.add(div_name);
@@ -115,7 +113,7 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 
 						var str_secs = secs.toString();
 						if (str_secs.length == 1) {
-							str_secs = str_secs + '0';
+							str_secs = '0' + str_secs;
 						}
 
 						var str_time = mins + ':' + str_secs;
@@ -127,6 +125,37 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 
 
 					});
+
+					// And the audio element itself.
+
+					var ctrl_audio = make(jsgui.audio({}));
+					div_relative.add(ctrl_audio);
+
+					var ctrl_source_mp3 = make(Control({'tagName': 'source'}));
+					var ctrl_source_ogg = make(Control({'tagName': 'source'}));
+
+					ctrl_source_mp3.set('dom.attributes.src', '/audio/albums/01/01.mp3');
+					ctrl_source_ogg.set('dom.attributes.src', '/audio/albums/01/01.ogg');
+					ctrl_source_mp3.set('dom.attributes.type', 'audio/mp3');
+					ctrl_source_ogg.set('dom.attributes.type', 'audio/ogg');
+
+					ctrl_audio.add(ctrl_source_mp3);
+					ctrl_audio.add(ctrl_source_ogg);
+
+					// Have two source elements within it.
+					//  Start by rendering the first track in there.
+
+
+
+					// http://192.168.1.13/audio/albums/01/01.mp3
+					/*	
+						<source src="tracks/mp3/11.mp3" type="audio/mp3">
+						<source src="tracks/ogg/11.ogg" type="audio/ogg">
+
+						$mp3_source.attr('src', 'tracks/mp3/' + str_track_num + '.mp3');
+						$ogg_source.attr('src', 'tracks/ogg/' + str_track_num + '.ogg');
+					*/
+
 
 					var controls = make(Control({'class': 'controls'}));
 					div_relative.add(controls);
@@ -172,24 +201,50 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 					//var volume = make(Control({'class': 'volume'}));
 					controls.add(volume);
 
-					var scrubber = make(Horizontal_Slider({}));
-					scrubber.add_class('scrubber');
+
+					// And give the scrubber the duration of the 1st track.
+					var scrubber = make(Media_Scrubber({
+						'ms_duration': tracks[0].ms_duration
+					}));
+					//scrubber.add_class('scrubber');
 					//var scrubber = make(Control({'class': 'scrubber'}));
 					controls.add(scrubber);
 
-					var time_pos = make(Control({'class': 'time_pos'}));
-					controls.add(time_pos);
+					//var time_pos = make(Control({'class': 'time_pos'}));
+					//controls.add(time_pos);
 
-					var info = make(Control({'class': 'info'}));
-					controls.add(info);
+					//var info = make(Control({'class': 'info'}));
+					//controls.add(info);
 
+					//var now_playing = make(Control({'class': 'now-playing'}));
+					//info.add(now_playing);
 
 					var ctrl_fields = {
-						'ctrl_relative': div_relative._id()
+						'ctrl_relative': div_relative._id(),
+						'ctrl_audio': ctrl_audio._id(),
+						'btn_previous': btn_previous._id(),
+						'btn_play_stop': btn_play_stop._id(),
+						'btn_next': btn_next._id(),
+						'scrubber': scrubber._id(),
+						'ctrl_volume': volume._id()
 					}
 
 					this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
 
+					// Escaping fields provides further difficulties
+					//  May want to have a single quote within the text.
+					//  Probably best to use the right unicode &??; syntax for apostrophes and quotes.
+
+					// Could use different replacement characters.
+					//  Replace both " and '
+					//  Use smiley faces?
+					//  UTF8 ☺ ☹ ⍨ ☺ ♥
+
+
+
+					this.set('dom.attributes.data-jsgui-fields', stringify({
+						'albums': albums
+					}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
 
 				}
@@ -207,8 +262,83 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume"],
 				// May need to register Flexiboard in some way on the client.
 				this._super();
 				var ctrl_relative = this.get('ctrl_relative');
+				var ctrl_audio = this.get('ctrl_audio');
+				var btn_previous = this.get('btn_previous');
+				var btn_play_stop = this.get('btn_play_stop');
+				var btn_next = this.get('btn_next');
+				var scrubber = this.get('scrubber');
+				var ctrl_volume = this.get('ctrl_volume');
+
+				var el_audio = ctrl_audio.get('dom.el');
+				console.log('el_audio', el_audio);
+				el_audio.load();
+
+				var initial = true;
+
+				ctrl_audio.on('canplaythrough', function(e_canplaythrough) {
+					console.log('e_canplaythrough', e_canplaythrough);
+
+					if (initial) {
+						el_audio.play();
+						initial = false;
+
+						// Change the play button image to stop.
+						btn_play_stop.remove_class('play');
+						btn_play_stop.add_class('stop');
 
 
+					} else {
+
+					}
+
+				});
+
+				ctrl_audio.on('timeupdate', function(e_timeupdate) {
+					//console.log('e_timeupdate', e_timeupdate);
+
+					// Have it playing track 1 by default.
+
+					var current_time = el_audio.currentTime;
+					//console.log('timeupdate current_time', current_time);
+
+					var ms_time = current_time * 1000;
+					//console.log('timeupdate ms_time', ms_time);
+
+					// set time in seconds, not milliseconds?
+
+					// Want it so that when this gets set, we don't get an event back from the scrubber.
+
+					
+					scrubber.set('ms_time', ms_time);
+					//throw 'stop';
+
+					
+
+
+				});
+
+				
+
+				// timeupdate
+
+				ctrl_audio.on('canplay', function(e_canplay) {
+					console.log('e_canplay', e_canplay);
+
+					// Have it playing track 1 by default.
+
+					
+
+					
+
+
+				});
+
+				btn_play_stop.on('click', function(e_click) {
+					console.log('click btn_play_stop');
+					//el_audio.play();
+
+
+				});
 			}
 		})
 

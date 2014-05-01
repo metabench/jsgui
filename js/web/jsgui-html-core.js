@@ -577,7 +577,10 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 //dom = this.get('dom');
                 //dom.set('tagName', 'div'); // Though may depend on spec...
-                this.set('dom.tagName', 'div');
+
+                var tagName = spec.tagName || spec.tag_name || 'div';
+
+                this.set('dom.tagName', tagName);
 
                 this._icss = {};
                 //this._.dom = {'tagName': 'div'};
@@ -2395,104 +2398,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         },
         */
 
-        'add_event_listener': fp(function(a, sig) {
 
-            /*
-            var el = this.get('dom.el');
-            if (el) {
-                
-                // Check if the element has that event listener...
-                //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
-
-
-
-                el.addEventListener(event_name, handler, false);
-            }
-            */
-
-            var mapDomEventNames = {
-                'click': true,
-                'mousedown': true,
-                'mouseup': true,
-                'mousemove': true,
-                'mouseover': true,
-                'mouseout': true,
-                'blur': true,
-                'focus': true,
-                'keydown': true,
-                'keyup': true,
-                'keypress': true,
-                'contextmenu': true
-            }
-
-            // So, it should also bind the event to the control, so a listener will hear that.
-
-            // But does this apply itself???
-            this._super.apply(this, a);
-
-            // then if it appears in the dom events, attach it.
-
-            if (sig == '[s,f]') {
-                var event_name = a[0];
-                if (mapDomEventNames[a[0]]) {
-                    //console.log('we have a DOM event: ' + event_name);
-
-                    var listener = this.mapListeners[event_name];
-                    var that = this;
-                    var el = this.get('dom.el');
-
-                    //console.log('el' + el);
-
-                    if (el) {
-                        if (!listener) {
-                            // a single listener called when a bound dom event fires.
-                            //  this will then split up the event calls to everything that is listening to this.
-                            // for the DOM event on the object, we raise the event on the control.
-
-                            listener = this.mapListeners[event_name] = function(e) {
-                                //console.log('event_name heard ' + event_name);
-
-                                // Raising an event, there could be multiple listeners.
-                                //  would be good to get an array of what the listeners returned.
-                                //  Return false here if any of them return false?
-
-
-
-                                var res_raise = that.raise(event_name, e);
-                                //console.log('res_raise', res_raise);
-
-                                // then if any results are false, we return false.
-
-                                var any_are_false = false;
-                                var c = 0, l = res_raise.length;
-
-                                while (!any_are_false && c < l) {
-                                    if (res_raise[c] === false) {
-                                        any_are_false = true;
-                                    }
-
-                                    c++;
-                                }
-
-                                //console.log('any_are_false', any_are_false);
-
-                                if (any_are_false) {
-                                    e.preventDefault();
-                                    return false;
-                                }
-                                // Would like to respond to the event.
-                                //  Eg if the dom event handler returns false, it would be good to return false in the listener.
-
-
-
-                            };
-                            el.addEventListener(event_name, listener, false);
-
-                        }
-                    }
-                }
-            }
-        }),
 
         
         '_add_event_listener': fp(function(a, sig) {
@@ -2849,7 +2755,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         // Should probably be in html-enh instead.
 
         'size': fp(function(a, sig) {
-            console.log('sig', sig);
+            //console.log('sig', sig);
             if (sig == '[]') {
                 var el = this.get('dom.el');
 
@@ -2861,7 +2767,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             if (sig == '[a]') {
                 // set the size.
                 //  will be done through CSS height and width.
-                console.log('a[0]', a[0]);
+                //console.log('a[0]', a[0]);
                 this.style({
                     'width': a[0][0] + 'px',
                     'height': a[0][1] + 'px'

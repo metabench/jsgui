@@ -573,24 +573,6 @@ Smaller / compact modes such as when there is an audio player acting as a compon
 */
 
 
-.horizontal.slider .h-bar {
-	position: absolute;
-	height: 3px;
-	width: 100px;
-	top: 34px;
-	left: 5px;
-	background-color: #FFFFFF;
-}
-
-.horizontal.slider .v-bar {
-	position: absolute;
-	height: 22px;
-	width: 6px;
-	top: 25px;
-	left: 3px;
-	background-color: #FFFFFF;
-}
-
 html.dragging {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
