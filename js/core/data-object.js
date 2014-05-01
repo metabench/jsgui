@@ -745,6 +745,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			}
 
 			*/
+
+			return [];
 		}),
 
 		// also just raise and trigger?
@@ -890,21 +892,21 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			// needs to go through the whole array?
 			// think so....
 
-			console.log('remove_event_listener');
-			console.log('this._bound_events', this._bound_events);
+			//console.log('remove_event_listener');
+			//console.log('this._bound_events', this._bound_events);
 			if (this._bound_events) {
-				console.log('event_name', event_name);
+				//console.log('event_name', event_name);
 				var bei = this._bound_events[event_name] || [];
 
 				var tbei = tof(bei);
-				console.log('tbei', tbei);
+				//console.log('tbei', tbei);
 
 				if (tbei == 'array') {
 					// bei.push(fn_listener);
 
 					var c = 0, l = bei.length, found = false;
 
-					console.log('l', l);
+					//console.log('l', l);
 
 					while (!found && c < l) {
 						if (bei[c] === fn_listener) {
@@ -913,8 +915,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 							c++;
 						}
 					}
-					console.log('found', found);
-					console.log('c', c);
+					//console.log('found', found);
+					//console.log('c', c);
 					if (found) {
 						bei.splice(c, 1);
 					}
@@ -1123,16 +1125,26 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//  however, would need to work with the constraint system.
 				//   likely that they would be syncronised through code.
 				
-				var relate_by_id = function() {
-					var obj_id = obj._id();
-					this._relationships[obj_id] = true;
+				//var relate_by_id = function () {
+				//    var obj_id = obj._id();
+				//    this._relationships[obj_id] = true;
+				//}
+
+				//var relate_by_ref = function () {
+				//    this._parent = obj;
+				//}
+				//relate_by_ref();
+
+				var relate_by_id = function (that) {
+				    var obj_id = obj._id();
+				    that._relationships[obj_id] = true;
 				}
-				
-				var relate_by_ref = function() {
-					this._parent = obj;
+
+				var relate_by_ref = function (that) {
+				    that._parent = obj;
 				}
-				relate_by_ref();
-			}
+				relate_by_ref(this);
+            }
 			if (a.l == 2) {
 				obj = a[0];
 				index = a[1];

@@ -111,13 +111,7 @@ function (Data_Object, assert) {
 
         function check_not_raised(raise_event_result) {
             //
-            // if the event was not subscribed before, then raise_event() returns "undefined"
-            // in other case (the event was subscribed, then unsubscribed) it returns "[]"
-            // BTW not consistent !!!
-            //
-            if (raise_event_result !== undefined) {
-                assert.deepEqual(raise_event_result, []);
-            }
+            assert.deepEqual(raise_event_result, []);
             //
             assert.deepEqual(handler_call_args, null);
             assert.deepEqual(handler_call_count, 0);
