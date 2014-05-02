@@ -190,7 +190,7 @@ define(['../core/jsgui-lang-essentials', 'fs', 'path', 'musicmetadata'],
 
                             exec("ffmpeg -analyzeduration 1000000000 -i " + source_path, function(err, stdout){
                                 if (err) {
-                                    console.log('err ' + err);
+                                    //console.log('err ' + err);
 
                                     // Getting metadata from this output may not be so reliable
 
@@ -207,21 +207,21 @@ define(['../core/jsgui-lang-essentials', 'fs', 'path', 'musicmetadata'],
                                     var s3 = 'Metadata:';
                                     var pos3 = extract.indexOf(s3) + s3.length;
                                     var str_md = extract.substring(pos3);
-                                    console.log('str_md', str_md);
+                                    //console.log('str_md', str_md);
 
                                     // different new line character on Windows and Unix.
 
 
                                     var split = str_md.split('\n');
 
-                                    console.log('split ' + stringify(split));
+                                    //console.log('split ' + stringify(split));
                                     
                                     var lines2 = [];
                                     
                                     var res_properties = {};
                                     
                                     each(split, function(v, i) {
-                                        console.log('v ' + v);
+                                        //console.log('v ' + v);
                                         // run them through a regex that strips extra spaces / tabs
                                         var rx_extra_spc_detect = /\t/g;
                                         var v2 = v.replace(rx_extra_spc_detect, '');
@@ -238,7 +238,7 @@ define(['../core/jsgui-lang-essentials', 'fs', 'path', 'musicmetadata'],
                                         var rx5 = /\n|\r$/g;
                                         v2 = v2.replace(rx5, '');
                                         
-                                        console.log('v2 ' + stringify(v2));
+                                        //console.log('v2 ' + stringify(v2));
                                         // file_s_url = file_s_url.replace(/(\/)/g, '\\');
                                         
                                         var pv = parse_property_values(v2);

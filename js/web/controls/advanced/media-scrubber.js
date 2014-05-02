@@ -125,6 +125,7 @@ define(["../../jsgui-html", "./horizontal-slider"],
 
 			'activate': function() {
 				this._super();
+				var that = this;
 				console.log('Media_Scrubber activate');
 
 				var h_slider = this.get('h_slider');
@@ -152,20 +153,19 @@ define(["../../jsgui-html", "./horizontal-slider"],
 
 
 
-				h_slider.on('change', function(name, value) {
-					// Want the changes done automatically to be silent changes.
-
-
-					//console.log('h_slider change name:', name);
-
-
-				})
+				
 
 				//ms_time.on('change', function(e_change) {
 				//	console.log('ms_time change', e_change);
 				//})
 
-				this.on('change', function(field_name, value) {
+				this.on('change', function(e_change) {
+
+					var field_name = e_change.name, value = e_change.value;
+					//console.log('value', value);
+					if (value.value) {
+						value = value.value();
+					}
 
 					// Changing the change events to see if they originated from the user...
 
@@ -234,9 +234,11 @@ define(["../../jsgui-html", "./horizontal-slider"],
 						//    problem and wind up with a less powerful framework.
 
 
+						// Also to do with event origination...
+						//  If we respond to the user chaning the slider, we want it so that the change then does not cause the change in the slider
+						//  again.
 
-
-						h_slider.set('value', value);
+						h_slider.set('value', value, that);
 
 						// Want to tell the difference between user initiated changes and other changes.
 
@@ -259,8 +261,25 @@ define(["../../jsgui-html", "./horizontal-slider"],
 
 
 
-				h_slider.on('change', function(name, value) {
-					//console.log('media scrubber h_slider e_change', name, value);
+				h_slider.on('change', function(e_change) {
+					//console.log('media scrubber h_slider e_change', e_change);
+
+					var name = e_change.name, value = e_change.value, source = e_change.source;
+
+
+					if (source != that) {
+						//throw 'stop';
+
+						// raise an event for the scrubber, keeping the event source.
+						//console.log('pre set name, value, source');
+
+						//console.log('value', value);
+						that.set(name, value, source);
+
+
+
+					}
+					//throw 'stop';
 
 					// Need to recognise when the user has changed the position, and when app events have caused a position change.
 

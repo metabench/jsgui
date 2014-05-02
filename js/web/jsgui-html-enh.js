@@ -367,7 +367,18 @@ define(["./jsgui-html-core"],
 				this._super(spec);
 			},
 
+			'bcr': fp(function(a, sig) {
+	            //console.log('sig', sig);
+	            if (sig == '[]') {
+	                var el = this.get('dom.el');
 
+	                
+	                var bcr = el.getBoundingClientRect();
+	                var res = [[bcr.left, bcr.top], [bcr.right, bcr.bottom], [bcr.width, bcr.height]];
+
+	                return res;
+	            }
+	        }),
 
 	        'activate_recursive': function() {
 	            console.log('activate_recursive');
@@ -593,7 +604,9 @@ define(["./jsgui-html-core"],
 
 				var el = this.get('dom.el');
 
-				dom_attributes.on('change', function(property_name, dval) {
+				dom_attributes.on('change', function(e_change) {
+					var property_name = e_change.name, dval = e_change.value;
+
 					//console.log('dom_attributes change', property_name, dval);
 
 

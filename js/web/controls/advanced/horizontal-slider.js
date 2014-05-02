@@ -95,8 +95,8 @@ define(["../../jsgui-html"],
 
 
 
-					console.log('min', min);
-					console.log('max', max);
+					//console.log('min', min);
+					//console.log('max', max);
 
 					// Is value a specific case?
 
@@ -199,16 +199,21 @@ define(["../../jsgui-html"],
 				var fn_mousemove = function(e_mousemove) {
 					//console.log('e_mousemove', e_mousemove);
 
+					/*
+
 					pos_current = [e_mousemove.pageX, e_mousemove.pageY];
 
 					pos_offset = v_subtract(pos_current, pos_down);
-					//console.log('pos_offset', pos_offset);
+					console.log('orig_v_bar_l', orig_v_bar_l);
+					console.log('pos_offset', pos_offset);
 
 					new_v_bar_l = orig_v_bar_l + pos_offset[0];
 
 
 					if (drag_mode == 'ghost') {
-						new_v_bar_l = new_v_bar_l + v_bar_center_pos_when_pressed;
+						new_v_bar_l = new_v_bar_l;
+						console.log('new_v_bar_l', new_v_bar_l);
+
 					} else {
 
 					}
@@ -220,18 +225,45 @@ define(["../../jsgui-html"],
 					if (new_v_bar_l < h_padding) {
 						new_v_bar_l = h_padding;
 					}
+
+					*/
+
+					var bcr_h_bar = h_bar.bcr();
+					//console.log('bcr_h_bar', bcr_h_bar);
+
+					// Want the pageX - 
+
+					var bcr_h_bar_x = bcr_h_bar[0][0];
+					var bcr_h_bar_w = bcr_h_bar[2][0];
+
+					// then the position of the mouse event from that bcr_x
+
+					var up_offset_from_bcr_h_bar_x = e_mousemove.pageX - bcr_h_bar_x;
+					//console.log('up_offset_from_bcr_h_bar_x', up_offset_from_bcr_h_bar_x);
+
+					if (up_offset_from_bcr_h_bar_x < 0) up_offset_from_bcr_h_bar_x = 0;
+					if (up_offset_from_bcr_h_bar_x > bcr_h_bar_w) up_offset_from_bcr_h_bar_x = bcr_h_bar_w;
+
+					//var prop = up_offset_from_bcr_h_bar_x / bcr_h_bar_w;
+
+					//console.log('prop', prop);
+
+					//var new_val = prop * max;
+
+
+
 					// need to constrain the bar values.
 
 					if (drag_mode == 'ghost') {
 						ensure_ctrl_ghost_v_bar();
 						//ctrl_ghost_v_bar.style('left', (pos_current[0] + new_v_bar_l) + 'px');
 
-						ctrl_ghost_v_bar.style('left', (new_v_bar_l) + 'px');
+						ctrl_ghost_v_bar.style('left', (up_offset_from_bcr_h_bar_x + (h_w_v_bar)) + 'px');
 
 					} else {
 						
 
-						v_bar.style('left', new_v_bar_l + 'px');
+						v_bar.style('left', up_offset_from_bcr_h_bar_x + 'px');
 					}
 
 					// Depending on the drag mode.
@@ -246,25 +278,116 @@ define(["../../jsgui-html"],
 
 				var fn_mouseup = function(e_mouseup) {
 
+					console.log('e_mouseup', e_mouseup);
+
 					ctrl_html_root.off('mousemove', fn_mousemove);
 					ctrl_html_root.off('mouseup', fn_mouseup);
+
+					// Find where it is within the bounding client rect.
+
+					//var bcr = that.bcr();
+					//console.log('bcr', bcr);
+					//var offset_x = e_mouseup.pageX - bcr[0][0];
+					//console.log('offset_x', offset_x);
+
+
+					// Nice, looks like the getBoundingClientRect system works fine.
+
+					// Will also use the width of the hbar to setermine how far along it is.
+					//  And the left pos of the hbar?
+
+					// 
+
+
+
+
+
+					var bcr_h_bar = h_bar.bcr();
+					console.log('bcr_h_bar', bcr_h_bar);
+
+					// Want the pageX - 
+
+					var bcr_h_bar_x = bcr_h_bar[0][0];
+					var bcr_h_bar_w = bcr_h_bar[2][0];
+
+					// then the position of the mouse event from that bcr_x
+
+					var up_offset_from_bcr_h_bar_x = e_mouseup.pageX - bcr_h_bar_x;
+					console.log('up_offset_from_bcr_h_bar_x', up_offset_from_bcr_h_bar_x);
+
+					if (up_offset_from_bcr_h_bar_x < 0) up_offset_from_bcr_h_bar_x = 0;
+					if (up_offset_from_bcr_h_bar_x > bcr_h_bar_w) up_offset_from_bcr_h_bar_x = bcr_h_bar_w;
+
+					var prop = up_offset_from_bcr_h_bar_x / bcr_h_bar_w;
+
+					console.log('prop', prop);
+
+					/*
+
 
 					//pos_current = [e_mousemove.pageX, e_mousemove.pageY];
 
 					ctrl_html_root.remove_class('dragging');
 
+					pos_up = [e_mouseup.pageX, e_mouseup.pageY];
+
+					var pos_offset_up = v_subtract(pos_up, pos_down);
+
+					console.log('pos_offset_up', pos_offset_up);
+
+					var offset_h_bar = h_bar.offset();
+
+					// The page offset of the h_bar?
+
+					var size_h_bar = h_bar.size();
+
+					var x_up_within_h_bar = pos_up[0] - offset_h_bar[0];
+					console.log('x_up_within_h_bar', x_up_within_h_bar);
+
+					*/
+
 					if (drag_mode == 'ghost') {
+
+
 						ctrl_ghost_v_bar.remove();
 
 						var min = that.get('min').value();
 						var max = that.get('max').value();
 
+						console.log('pos_down', pos_down);
+
+
+
+						//var prop = x_up_within_h_bar / h_bar_width;
+
 						var new_val = prop * max;
+
+
 
 						console.log('new_val', new_val);
 
 
-						// Need to calculate the new proportion through
+						// Find the current mouse position within the slider bar.
+
+						// We can use the offset of the relative container.
+						//  I think an offset function in Control will help with this.
+						//   It measures the offset in the DOM.
+						//   While CSS is in use and the values are not integrated we need to do some DOM measurement.
+						//    Not directly getting data from the CSS files at the moment.
+
+
+
+
+						//pos_current = [e_mousemove.pageX, e_mousemove.pageY];
+
+						//pos_offset = v_subtract(pos_current, pos_down);
+
+
+						// Need to calculate the new proportion through.
+						//  Don't rely on a cached answer.
+
+
+
 
 
 						// Want it so that this value change will be treated differently, because it's source is the user
@@ -280,10 +403,8 @@ define(["../../jsgui-html"],
 						// I think having an event object will be better stylistically.
 						//  More along how DOM events work... makes it more consistant.
 
-
-
-
-
+						// And give it the source of the action?
+						//  Could give it the mouse event for it to know that the add action came through a mouse / browser event, not from itself.
 
 						that.set('value', new_val);
 
@@ -325,22 +446,24 @@ define(["../../jsgui-html"],
 
 				
 
-				this.on('change', function(name, value) {
-					//console.log('h slider change', name, value);
+				this.on('change', function(e_change) {
+
+					var name = e_change.name, value = e_change.value;
+					//console.log('h slider change', e_change);
 
 					if (name == 'value') {
 						var min = that.get('min').value();
 						var max = that.get('max').value();
 
 						prop = value / max;
-
-
 						//console.log('prop', prop);
 
 						var size_h_bar = h_bar.size();
 						v_bar_center_pos = Math.round((size_h_bar[0] * prop) + h_padding - h_w_v_bar);
 
 						//console.log('v_bar_center_pos', v_bar_center_pos);
+
+						//console.log('v_bar', v_bar);
 
 						v_bar.style('left', v_bar_center_pos + 'px');
 

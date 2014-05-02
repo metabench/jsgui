@@ -155,23 +155,23 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			var url_parts = url.parse(req.url, true);
 			//console.log('url_parts ' + stringify(url_parts));
 			var splitPath = url_parts.path.substr(1).split('/');
-			console.log('resource site css splitPath ' + stringify(splitPath));
+			//console.log('resource site css splitPath ' + stringify(splitPath));
 
 
 			if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
 			rurl = rurl.replace(/\./g, '☺');
-			console.log('rurl ' + rurl);
+			//console.log('rurl ' + rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			console.log('custom_response_entry ' + stringify(custom_response_entry));
+			//console.log('custom_response_entry ' + stringify(custom_response_entry));
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);
-				console.log('tcr ' + tcr);
+				//console.log('tcr ' + tcr);
 
 				if (tcr == 'data_value') {
 					val = custom_response_entry.value();
-					console.log('val ' + val);
+					//console.log('val ' + val);
 
 					var tval = tof(val);
 
@@ -186,7 +186,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//throw 'stop';
 			} else {
-				console.log('splitPath', splitPath);
+				//console.log('splitPath', splitPath);
 				if (splitPath.length > 0) {
 
 					// Can check for /js folder.
@@ -218,7 +218,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								var filePath = url_parts.path.substr(1);
 								//console.log('module.uri ' + module.uri);
 								var val2 =  path.dirname(module.uri);
-								console.log('val2 ' + val2);
+								//console.log('val2 ' + val2);
 								//throw '9) stop';
 
 								//var diskPath = val2 + '/../../images/' + fileName;
@@ -230,7 +230,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								// First check if such an image is in a specifically served directory.
 
 								var served_directories = this.meta.get('served_directories');
-								console.log('served_directories ' + stringify(served_directories));
+								//console.log('served_directories ' + stringify(served_directories));
 
 								// see if the file exists in any of the served directories
 
@@ -242,19 +242,19 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 								each(served_directories, function(served_directory) {
-									console.log('served_directory', served_directory);
+									//console.log('served_directory', served_directory);
 									var dir_val = served_directory.value();
-									console.log('dir_val', dir_val);
+									//console.log('dir_val', dir_val);
 									var dir_name = dir_val.name;
-									console.log('dir_name', dir_name);
+									//console.log('dir_name', dir_name);
 
 									var search_path = dir_name + '/' + fileName;
-									console.log('search_path', search_path);
+									//console.log('search_path', search_path);
 									fns.push(function(callback) {
 										// check that directory
 
 										fs.exists(search_path, function(exists) {
-											console.log('exists', exists);
+											//console.log('exists', exists);
 
 											if (!found_path && exists) {
 												found_path = search_path;
@@ -270,7 +270,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 									if (err) {
 										throw err;
 									} else {
-										console.log('found_path', found_path);
+										//console.log('found_path', found_path);
 										if (found_path) {
 											diskPath = found_path;
 											serve_image_file_from_disk(diskPath, res);

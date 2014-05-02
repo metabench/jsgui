@@ -340,7 +340,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 					*/
 
                     rt.set('/img/*', function(req, res) {
-                    	console.log('images wildcard routing. will send to the images resource.');
+                    	//console.log('images wildcard routing. will send to the images resource.');
                     	//throw 'stop';
                     	images.process(req, res);
                     });

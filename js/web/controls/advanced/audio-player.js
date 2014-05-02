@@ -270,21 +270,30 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 				var ctrl_volume = this.get('ctrl_volume');
 
 				var el_audio = ctrl_audio.get('dom.el');
+
+				var that = this;
 				console.log('el_audio', el_audio);
+
+
 				el_audio.load();
 
 				var initial = true;
+
+				var state = 'loading';
 
 				ctrl_audio.on('canplaythrough', function(e_canplaythrough) {
 					console.log('e_canplaythrough', e_canplaythrough);
 
 					if (initial) {
 						el_audio.play();
+
+						//state = 'paused';
+						state = 'playing';
 						initial = false;
 
 						// Change the play button image to stop.
-						btn_play_stop.remove_class('play');
-						btn_play_stop.add_class('stop');
+						//btn_play_stop.remove_class('play');
+						//btn_play_stop.add_class('stop');
 
 
 					} else {
@@ -308,8 +317,11 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 					// Want it so that when this gets set, we don't get an event back from the scrubber.
 
-					
-					scrubber.set('ms_time', ms_time);
+
+					scrubber.set('ms_time', ms_time, that);
+
+
+					//scrubber.set('ms_time', ms_time);
 					//throw 'stop';
 
 					
@@ -317,10 +329,60 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 				});
 
+				scrubber.on('change', function(e_change) {
+
+					// Want it so we can tell the difference between changes to the scrubber which this control caused, and
+					//  changes to the scrubber that the user caused.
+
+
+					//console.log('scrubber change', e_change);
+
+
+
+					var name = e_change.name, value = e_change.value, source = e_change.source;
+
+					if (source != that) {
+						// Set the position in the track
+
+						//console.log('ui initiated change', e_change);
+
+
+						var val;
+
+						if (value.value) {
+							val = value.value();
+						} else {
+							val = value;
+						}
+						//console.log('val', val);
+
+						var nct = parseInt(val / 1000, 10);
+						//console.log('nct', nct);
+
+						//console.log('el_audio', el_audio);
+
+						//console.log('el_audio.seekable', el_audio.seekable);
+
+						el_audio.currentTime = nct;
+
+						// set the audio time position.
+
+
+
+
+
+						// We change the position in the track
+
+
+
+						//throw 'stop';
+					}
+				})
+
 				
 
 				// timeupdate
-
+				/*
 				ctrl_audio.on('canplay', function(e_canplay) {
 					console.log('e_canplay', e_canplay);
 
@@ -332,10 +394,27 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 
 				});
+				*/
 
 				btn_play_stop.on('click', function(e_click) {
-					console.log('click btn_play_stop');
-					//el_audio.play();
+					//console.log('click btn_play_stop');
+
+					//console.log('state', state);
+					//console.log('tof(state)', tof(state));
+
+					if (state == 'playing') {
+						//console.log('is playing');
+						el_audio.pause();
+						state = 'paused';
+					} else {
+						if (state == 'paused') {
+							el_audio.play();
+							state = 'playing';
+						}
+					}
+					//console.log('2) state', state);
+					
+					
 
 
 				});

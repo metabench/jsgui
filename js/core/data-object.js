@@ -4636,7 +4636,25 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 
 				if (a.l == 2 || a.l == 3) {
-					var property_name = a[0], value = a[1], silent = false || a[2];
+
+
+					var property_name = a[0], value = a[1];
+
+					var ta2 = tof(a[2]);
+					//console.log('ta2', ta2);
+
+					var silent = false;
+					var source;
+
+					if (ta2 == 'string' || ta2 == 'boolean') {
+						silent = a[2]
+					}
+
+					if (ta2 == 'control') {
+						source = a[2];
+					}
+
+					//silent = false || a[2];
 
 
 					//console.log('set property_name ' + property_name + ', value ' + value);
@@ -4691,10 +4709,17 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								var res = data_object_next.set(spn_arr_next.join('.'), value);
 
 								if (!silent) {
-									this.raise_event('change', {
+
+									var e_change = {
 										'name': property_name,
 										'value': value
-									});
+									};
+
+									if (source) {
+										e_change.source = source;
+									}
+
+									this.raise_event('change', e_change);
 								}
 
 								
@@ -4859,10 +4884,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								//this.raise_event('change', [property_name, dv]);
 
 								if (!silent) {
-									this.raise_event('change', {
+									var e_change = {
 										'name': property_name, 
 										'value': dv
-									});
+									}
+
+									if (source) {
+										e_change.source = source;
+									}
+
+									this.raise_event('change', e_change);
 								}
 
 								
@@ -4936,10 +4967,14 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								//console.log('this', this);
 
 								if (!silent) {
-									this.trigger('change', {
+									var e_change = {
 										'name': property_name,
 										'value': value
-									});
+									};
+									if (source) {
+										e_change.source = source;
+									}
+									this.trigger('change', e_change);
 								}
 								
 
