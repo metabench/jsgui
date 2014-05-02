@@ -609,7 +609,7 @@ define(["./jsgui-html-core"],
 
 					//console.log('dom_attributes change', property_name, dval);
 
-
+					/*
 					if (property_name == 'style') {
 						// need to update it on the element.
 
@@ -627,6 +627,21 @@ define(["./jsgui-html-core"],
 							el.setAttribute('class', dval.value());
 						}
 					}
+					*/
+
+					// I think this works better, 02/05/14
+
+					if (tof(dval) == 'string') {
+						//el.setAttribute('style', dval);
+					} else {
+						//el.setAttribute('style', dval.value());
+
+						dval = dval.value();
+					}
+
+					el.setAttribute(property_name, dval);
+
+
 
 				});
 
@@ -642,7 +657,7 @@ define(["./jsgui-html-core"],
 	        	// var el = that.get('dom.el');
 
 	            content.on('change', function(e_change) {
-	            	//console.log('activate control content change');
+	            	console.log('activated control content change');
 
 	            	var el = that.get('dom.el');
 	            	var type = e_change.type;

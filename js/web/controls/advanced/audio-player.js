@@ -294,6 +294,9 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 				var tracks = albums[0].tracks;
 
+				var album_path = albums[0].path;
+				console.log('album_path', album_path);
+
 
 
 				tracks_content.each(function(i, ctrl_track) {
@@ -309,10 +312,22 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 						console.log('track', i, track);
 
+						var track_num_str = (i + 1) + '';
+						if (track_num_str.length == 1) track_num_str = '0' + track_num_str;
+
+						var mp3_path = album_path + track_num_str + '.mp3';
+						var ogg_path = album_path + track_num_str + '.ogg';
+
+
+
 						// Come up with the track paths in different formats.
 						//  We use those as properties for the audio sources.
+						ctrl_source_mp3.set('dom.attributes.src', mp3_path);
+						ctrl_source_ogg.set('dom.attributes.src', ogg_path);
 
 
+						//ctrl_source_mp3.get('dom.el').setAttribute('src', mp3_path);
+						//ctrl_source_ogg.get('dom.el').setAttribute('src', ogg_path);
 
 
 
