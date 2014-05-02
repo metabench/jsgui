@@ -72,9 +72,9 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 					div_relative.add(titlebar);
 
-					var div_tracks = make(Control({'class': 'tracks'}));
+					var ctrl_tracks = make(Control({'class': 'tracks'}));
 
-					div_relative.add(div_tracks);
+					div_relative.add(ctrl_tracks);
 
 					var tracks = albums[0].tracks;
 					console.log('tracks', tracks);
@@ -83,7 +83,7 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						console.log('track', track);
 
 						var div_track = make(Control({'class': 'track'}));
-						div_tracks.add(div_track);
+						ctrl_tracks.add(div_track);
 
 						// Could have a Track control.
 
@@ -219,6 +219,10 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 					//var now_playing = make(Control({'class': 'now-playing'}));
 					//info.add(now_playing);
 
+					// And send over the control fields for the individual tracks?
+					//  I think they can be obtained on the 
+
+
 					var ctrl_fields = {
 						'ctrl_relative': div_relative._id(),
 						'ctrl_audio': ctrl_audio._id(),
@@ -226,7 +230,10 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						'btn_play_stop': btn_play_stop._id(),
 						'btn_next': btn_next._id(),
 						'scrubber': scrubber._id(),
-						'ctrl_volume': volume._id()
+						'ctrl_volume': volume._id(),
+						'ctrl_tracks': ctrl_tracks._id(),
+						'ctrl_source_mp3': ctrl_source_mp3._id(),
+						'ctrl_source_ogg': ctrl_source_ogg._id(),
 					}
 
 					this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
@@ -240,10 +247,14 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 					//  Use smiley faces?
 					//  UTF8 ☺ ☹ ⍨ ☺ ♥
 
+					// Change the paths of the albums?
 
+					var c_albums = jsgui.clone(albums);
+
+					c_albums[0].path = '/audio/albums/01/';
 
 					this.set('dom.attributes.data-jsgui-fields', stringify({
-						'albums': albums
+						'albums': c_albums
 					}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
 
@@ -263,13 +274,58 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 				this._super();
 				var ctrl_relative = this.get('ctrl_relative');
 				var ctrl_audio = this.get('ctrl_audio');
+				var ctrl_source_mp3 = this.get('ctrl_source_mp3');
+				var ctrl_source_ogg = this.get('ctrl_source_ogg');
 				var btn_previous = this.get('btn_previous');
 				var btn_play_stop = this.get('btn_play_stop');
 				var btn_next = this.get('btn_next');
 				var scrubber = this.get('scrubber');
 				var ctrl_volume = this.get('ctrl_volume');
+				var ctrl_tracks = this.get('ctrl_tracks');
 
 				var el_audio = ctrl_audio.get('dom.el');
+
+				var tracks_content = ctrl_tracks.get('content');
+
+				var albums = this.get('albums');
+
+				console.log('albums', albums);
+				console.log('tof albums', tof(albums));
+
+				var tracks = albums[0].tracks;
+
+
+
+				tracks_content.each(function(i, ctrl_track) {
+					//console.log('v', v);
+					//console.log('i', i);
+
+					var track = tracks[i];
+
+					ctrl_track.set('track', track);
+
+					ctrl_track.on('click', function(e_click) {
+						console.log('track e_click', e_click);
+
+						console.log('track', i, track);
+
+						// Come up with the track paths in different formats.
+						//  We use those as properties for the audio sources.
+
+
+
+
+
+					})
+
+					// Not so sure about using MVC.
+
+
+				})
+
+
+
+				
 
 				var that = this;
 				console.log('el_audio', el_audio);
@@ -280,6 +336,10 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 				var initial = true;
 
 				var state = 'loading';
+
+				// need to activate the track controls.
+
+
 
 				ctrl_audio.on('canplaythrough', function(e_canplaythrough) {
 					console.log('e_canplaythrough', e_canplaythrough);

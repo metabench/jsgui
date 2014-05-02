@@ -1921,11 +1921,15 @@ define(function() {
 				// slice removes undefined items
 				// console.log('clone obj ' + stringify(obj));
 				// console.log('obj.length ' + obj.length);
-				/*
-				 * var res = []; each(obj, function(i, v) { console.log('i ' + i);
-				 * res.push(v); }); return res;
-				 */
-				return obj.slice();
+				
+				var res = []; 
+				each(obj, function(i, v) {
+					//console.log('i ' + i);
+					res.push(clone(v)); 
+				});
+				return res;
+				
+				//return obj.slice();
 				
 				// deep clone...?
 
