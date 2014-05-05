@@ -1884,7 +1884,7 @@ define(function() {
 	
     /**
     * Creates a clone of the given value. The result depends of the input value type:
-    * - array: an array containing reference-copies of the input array elements
+    * - array: an array containing clones of the input array elements
     * - undefined: undefined
     * - string: same string
     * - number: same number
