@@ -1624,7 +1624,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					// Function calls in spec...
 					// Calling things like 'bind' through the spec.
 					
-					//console.log('i ' + i);
+				    //console.log('i ' + i + ' =v= ' + v + ' that[i] ' + that[i]);
 					
 					// Other thing that we may want to do is just copy
 					// things.
@@ -1636,7 +1636,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 						// connected by now!
 						
 						// such as setting the fields...
-						
+					    
 						that[i](v);
 					} else {
 						// _[i] = v;
@@ -2059,15 +2059,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//  however, would need to work with the constraint system.
 				//   likely that they would be syncronised through code.
 				
-				var relate_by_id = function() {
+				var relate_by_id = function(that) {
 					var obj_id = obj._id();
-					this._relationships[obj_id] = true;
+					that._relationships[obj_id] = true;
 				}
 				
-				var relate_by_ref = function() {
-					this._parent = obj;
+				var relate_by_ref = function(that) {
+					that._parent = obj;
 				}
-				relate_by_ref();
+				relate_by_ref(this);
 			}
 			if (a.l == 2) {
 				obj = a[0];
@@ -2401,8 +2401,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 					// What does not have the abstract?
 
-					var stack = new Error().stack;
-					console.log(stack);
+					//var stack = new Error().stack;
+					//console.log(stack);
 
 					// no such function... but there should be something declared in many situations.
 					throw 'stop, currently unsupported.';
