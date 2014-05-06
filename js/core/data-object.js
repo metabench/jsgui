@@ -1904,8 +1904,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			}
 		}),
-
-
 		
 		'stringify': function() {
 			var res = [];
@@ -2413,6 +2411,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			}
 			return this.__id;
 		},
+
 		'fields': fp(function(a, sig) {
 			// an easier interface to the fields than fields and constraints.
 			//  this may be immutable when it is held in a collection - not sure.
@@ -2563,8 +2562,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			}
 			
 		}),
-		
-		
+				
 		'constraints': fp(function(a, sig) {
 			// or constraints... if given multiple ones.
 			//   I think constraints may be the better name here.

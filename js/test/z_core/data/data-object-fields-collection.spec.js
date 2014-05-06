@@ -92,6 +92,17 @@ function (Fields_Collection, assert) {
             assert.deepEqual(fieldsCollection.get(), [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
         });
 
+        it("fieldsCollection.set() can add field with the same name", function () {
+            var fieldsCollection = new Fields_Collection();
+            assert.deepEqual(fieldsCollection.get(), []);
+            //
+            fieldsCollection.set("field1", "int");
+            assert.deepEqual(fieldsCollection.get(), [["field1", "int", { data_type: "int" }]]);
+            //
+            fieldsCollection.set("field1", "string");
+            assert.deepEqual(fieldsCollection.get(), [["field1", "int", { data_type: "int" }], ["field1", "string", { data_type: "string" }]]); // !!!
+        });
+
         // -----------------------------------------------------
         //	fieldsCollection.set() cases
         // -----------------------------------------------------
