@@ -939,12 +939,18 @@ define(["./jsgui-html-core"],
 
 	        	var Context_Menu = Context_Menu || require('./controls/advanced/context-menu');
 
-
-
 	        	var context_menu;
 	        	var that = this;
 
+	        	// Need it so that the context menu gets removed when it should.
+	        	//  Any mouseup event causes it to vanish.
+
+	        	var ctrl_html_root = this._context.ctrl_document;
+
+	        	var body = ctrl_html_root.body(); 
+
 	        	var show_context_menu = fp(function(a, sig) {
+
 
 	        		var pos;
 
@@ -956,10 +962,12 @@ define(["./jsgui-html-core"],
 
 	        		}
 
+	        		console.log('show_context_menu pos:', pos);
+
 	        		//console.log('show_context_menu');
 
 	        		//console.log('Context_Menu', Context_Menu);
-
+	        		console.log('context_menu', context_menu);
 	        		if (!context_menu) {
 	        			//console.log('menu_def', menu_def);
 
@@ -1008,11 +1016,23 @@ define(["./jsgui-html-core"],
 	        			// It should find the body...
 	        			//console.log('context.ctrl_document', context.ctrl_document);
 
-	        			var body = context.ctrl_document.body(); 
+	        			
 	        			//console.log('body', body);
 
 	        			setTimeout(function() {
 	        				body.add(context_menu);
+
+	        				setTimeout(function() {
+
+				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
+				        			console.log('');
+				        			console.log('one mouseup');
+				        			if (context_menu) {
+				        				context_menu.remove();
+				        			}
+				        		});
+	        				}, 20)
+
 	        			}, 0);
 	        			
 
@@ -1023,9 +1043,45 @@ define(["./jsgui-html-core"],
 
 	        			//console.log('post add context menu to body');
 
+	        		} else {
+
+	        			if (pos) {
+	        				context_menu.style({
+		        				'left': (pos[0] - 1) + 'px',
+		        				'top': (pos[1] - 1) + 'px'
+		        			});
+		        			
+	        			} else {
+	        				context_menu.style({
+		        				'left': '100px',
+		        				'top': '100px'
+		        			});
+
+	        			}
+
+	        			setTimeout(function() {
+	        				//console.log('pre add context menu');
+	        				body.add(context_menu);
+
+	        				setTimeout(function() {
+
+				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
+				        			console.log('');
+				        			console.log('one mouseup');
+				        			if (context_menu) {
+				        				context_menu.remove();
+				        			}
+				        		});
+	        				}, 20)
+
+	        			}, 0);
+
+
 	        		}
 
-	        	})
+	        	});
+
+
 
 	        	// Respond to right clicks only.
 

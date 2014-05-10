@@ -932,7 +932,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			return this.remove_event_listener.apply(this, arguments);
 
+		},
+		'one': function(event_name, fn_handler) {
 
+			var inner_handler = function(e) {
+
+				fn_handler.call(this, e);
+				this.off(event_name, inner_handler);
+			};
+
+			this.on(event_name, inner_handler);
 		}
 	});
 
