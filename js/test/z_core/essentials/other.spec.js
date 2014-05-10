@@ -503,7 +503,7 @@ define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-
                 //
     			assert.notEqual(arr, result);
                 arr[0].a = 100;
-    			assert.equal(result[0].a, 100);
+    			assert.equal(result[0].a, 1);
             })();
 
 
