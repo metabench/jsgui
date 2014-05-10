@@ -345,6 +345,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	images.process(req, res);
                     });
 
+                    
                     rt.set('/audio/*', function(req, res) {
                     	console.log('audio wildcard routing. will send to the audio resource.');
                     	//throw 'stop';

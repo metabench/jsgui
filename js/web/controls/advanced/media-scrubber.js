@@ -162,10 +162,11 @@ define(["../../jsgui-html", "./horizontal-slider"],
 				this.on('change', function(e_change) {
 
 					var field_name = e_change.name, value = e_change.value;
-					//console.log('value', value);
+					//console.log('field_name', field_name);
 					if (value.value) {
 						value = value.value();
 					}
+					//console.log('value', value);
 
 					// Changing the change events to see if they originated from the user...
 
@@ -187,17 +188,30 @@ define(["../../jsgui-html", "./horizontal-slider"],
 					//   When the user advances the media file, the event comes from the UI and then the audio element needs to be told to change pos.
 					//    In this situation, we don't want to 
 
+					if (field_name == 'ms_duration') {
+						//el_time_display.innerHTML = value;
 
+						// Need to update the horizontal slider.
+
+						h_slider.set('max', value, that);
+
+					}
 
 
 
 					if (field_name == 'ms_time') {
 						// update the scrubber position (UI)
 
-						var s_duration = Math.round(value / 1000);
+						// Input and output processing of times would be very helpful.
+						//  Being able to get the number of hours, minutes, seconds out of milliseconds.
 
-						var mins = Math.floor(s_duration / 60);
-						var secs = s_duration % 60;
+
+
+
+						var s_time = value / 1000;
+
+						var mins = Math.floor(s_time / 60);
+						var secs = Math.floor(s_time % 60);
 
 						var str_secs = secs.toString();
 						if (str_secs.length == 1) {
@@ -207,9 +221,33 @@ define(["../../jsgui-html", "./horizontal-slider"],
 						var str_time = mins + ':' + str_secs;
 
 						//time_display.set('content', str_time);
-						el_time_display.innerHTML = str_time + ' / ' + str_duration;
+						
 
 						// Update the position of the scrubber handle.
+						dv_ms_duration = that.get('ms_duration');
+						//console.log('dv_ms_duration', dv_ms_duration);
+
+						if (dv_ms_duration.value) {
+							ms_duration = dv_ms_duration.value();
+						} else {
+							ms_duration = dv_ms_duration;
+						}
+
+						var s_duration = ms_duration / 1000;
+
+						var mins_d = Math.floor(s_duration / 60);
+						var secs_d = Math.floor(s_duration % 60);
+
+						var str_secs_d = secs_d.toString();
+						if (str_secs_d.length == 1) {
+							str_secs_d =  '0' + str_secs_d;
+						}
+
+						var str_duration = mins_d + ':' + str_secs_d;
+
+						el_time_display.innerHTML = str_time + ' / ' + str_duration;
+
+						
 
 						var proportion_through_track = value / ms_duration;
 						//console.log('proportion_through_track', proportion_through_track);

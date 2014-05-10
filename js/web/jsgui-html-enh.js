@@ -333,6 +333,10 @@ define(["./jsgui-html-core"],
             'keypress': true,
             'contextmenu': true,
 
+            'touchstart': true,
+            'touchmove': true,
+            'touchend': true,
+
             'abort': true,
 			'canplay': true,
 			'canplaythrough': true,
@@ -1217,7 +1221,7 @@ define(["./jsgui-html-core"],
 	            var screen_down_x, screen_down_y;
 
 	            // Want ways of restricting or cancelling a drag.
-
+	            var ctrl_html_root = this._context.ctrl_document;
 
 
 	            this.add_event_listener('mousedown', function(e) {
@@ -1233,6 +1237,7 @@ define(["./jsgui-html-core"],
 
 	                fn_mousedown(e);
 
+	                var first = true;
 
 	                var handle_move = function(e) {
 
@@ -1243,6 +1248,11 @@ define(["./jsgui-html-core"],
 
 	                    var screen_offset_x = screen_move_x - screen_down_x;
 	                    var screen_offset_y = screen_move_y - screen_down_y;
+
+	                    if (first) {
+	                    	ctrl_html_root.add_class('cursor-default');
+	                    	first = false;
+	                    }
 
 	                    // Screen movement offset.
 
@@ -1255,8 +1265,6 @@ define(["./jsgui-html-core"],
 
 	                    // that may be better.
 	                    //  then we use the client x and client y properties to determine the offset into the item clicked.
-
-
 
 
 
@@ -1294,6 +1302,9 @@ define(["./jsgui-html-core"],
 	                        var drag_initiation_distance = 16;
 	                        if (dbp >= 16) {
 	                            drag_initiated = true;
+	                            ctrl_html_root.add_class('dragging');
+	                            //ctrl_html_root.add_class('cursor-default');
+
 	                            fn_begin(e);
 	                            
 	                        }
@@ -1315,8 +1326,14 @@ define(["./jsgui-html-core"],
 	                }
 
 	                var handle_mouseup = function(e) {
-	                    document.removeEventListener('mousemove', handle_move);
-	                    document.removeEventListener('mouseup', handle_mouseup);
+	                    //document.removeEventListener('mousemove', handle_move);
+	                    //document.removeEventListener('mouseup', handle_mouseup);
+
+	                    ctrl_html_root.off('mousemove', handle_move);
+	                	ctrl_html_root.off('mouseup', handle_mouseup);
+
+	                	ctrl_html_root.remove_class('dragging');
+	                	ctrl_html_root.remove_class('cursor-default');
 
 	                    var screen_mouseup_x = e.screenX;
 	                    var screen_mouseup_y = e.screenY;
@@ -1334,8 +1351,11 @@ define(["./jsgui-html-core"],
 
 	                }
 
-	                document.addEventListener('mousemove', handle_move, false);
-	                document.addEventListener('mouseup', handle_mouseup, false);
+	                ctrl_html_root.on('mousemove', handle_move);
+	                ctrl_html_root.on('mouseup', handle_mouseup);
+
+	                //document.addEventListener('mousemove', handle_move, false);
+	                //document.addEventListener('mouseup', handle_mouseup, false);
 
 
 	                //fn_in();

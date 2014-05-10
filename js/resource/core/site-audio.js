@@ -4,6 +4,21 @@ if (typeof define !== 'function') {
 
 // I would like my own (fast) way of reading MP3 metadata.
 
+// Had a problem seeking later parts of the track in Chrome. It would request a few seconds too little audio from the server.
+//  Seems like Chrome estimated positions for VBR audio are out.
+//  This bay be improved by changing to a constant bitrate (though that is less efficient encoding, generally)
+
+// Other parts of the system are likely to be more important.
+// It may be useful to have an interface to administer the site's audio.
+
+// Browse tracks, and encode them into different bit rates and formats.
+// Maintain copies of the tracks in different bit rates and formats.
+
+
+
+
+
+
 
 
 define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
@@ -67,7 +82,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 	var serve_audio_file_from_disk = fp(function(a, sig) {
 
-		var filePath, start_pos = 0, response;
+		var filePath, start_pos = 0, end_pos, response;
+		var using_byte_range = false;
 
 		if (a.l == 2) {
 			filePath = a[0];
@@ -78,15 +94,23 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			filePath = a[0];
 			start_pos = a[1];
 			response = a[2];
+			using_byte_range = true;
 
+		}
+		if (a.l == 4) {
+			filePath = a[0];
+			start_pos = a[1];
+			end_pos = a[2]
+			response = a[3];
+			using_byte_range = true;
 		}
 		console.log('serve_audio_file_from_disk filePath ', filePath);
 
 		var extname = path.extname(filePath);
-		//console.log('extname ' + extname);
+		console.log('extname ' + extname);
 
 		var extension = extname.substr(1);
-		//console.log('extension ' + extension);
+		console.log('extension ' + extension);
 
 
 		// then return the right MIME type for that extension.
@@ -163,21 +187,67 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		fs.stat(filePath, function (err, stats) {
 			if (err) {
-				throw err;
+
+				// The file probably was not found.
+				//  Return a 404.
+
+				//response.status(404).send('Not found');
+
+				response.writeHead(404, {
+
+		            "Content-Type": "text/plain"
+	
+		        });
+	
+		        response.write("404 Not Found\n");
+	
+		        response.end();
+
+
+				//throw err;
 			} else {
 				console.log('stats.size', stats.size);
 
-				var l = stats.size;
+				//var l = stats.size;
 
-				if (start_pos) {
-					l = l - start_pos;
+				var l;
+
+				var response_code = 200;
+				//if (start_pos > 0) {
+				//	response_code = 206;
+				//}
+
+
+				if (using_byte_range) {
+					response_code = 206;
+					if (start_pos) {
+						l = stats.size - start_pos ;
+
+					}
+
+
+
+					var rs_opts = {
+						'start': start_pos
+					};
+
+					if (end_pos) {
+						rs_opts.end = end_pos + 1;
+						l = end_pos;
+					}
+
+					if (start_pos && end_pos) {
+						l = (end_pos + 1) - start_pos;
+					}
+
+
+				} else {
+					l = stats.size;
 				}
 
-
-
-				var rs = fs.createReadStream(filePath, {
-					'start': start_pos
-				});
+				
+				console.log('rs_opts', rs_opts);
+				var rs = fs.createReadStream(filePath, rs_opts);
 
 				rs.pause();
 
@@ -193,10 +263,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-				var response_code = 206;
-				if (start_pos > 0) {
-					response_code = 206;
-				}
+				
 
 				// Needs to have a new etag for each file.
 				//  Can use a hash of the file path.
@@ -208,21 +275,45 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				// Get last modified time from file.
 
 
+				// Need to handle 0-n ranges
+				//  iOS starts the audio download with a 0-1 range.
+
+				// Seems that with the range request we should return 1 more byte.
 
 
 
-				response.writeHead(response_code, {'Content-Type': mime_types[extension],
-					'Accept-Ranges': 'bytes',
+				// Don't necessarily do content-range.
+
+				var o_head = {'Content-Type': mime_types[extension],
+					//'Accept-Ranges': 'bytes',
 
 					'ETag': hash,
 					//'Last-Modified': 'Fri, 04 Jan 2013 14:06:01 GMT',
 					'Last-Modified': stats.mtime,
 
-					'Content-Length': l,
+					'Content-Length': l//,
 
 					// Not serving the whole content (fill amount - 1) gets the 206 response to work.
-					'Content-Range': 'bytes ' + start_pos + '-' + (stats.size - 1) + '/' + stats.size
-				});
+					//'Content-Range': 'bytes ' + start_pos + '-' + (stats.size - 1) + '/' + stats.size
+				};
+
+				if (using_byte_range) {
+					o_head['Accept-Ranges'] = 'bytes';
+					start_pos = start_pos || 0;
+
+					if (end_pos) {
+						o_head['Content-Range'] = 'bytes ' + start_pos + '-' + (end_pos) + '/' + stats.size
+					} else {
+						o_head['Content-Range'] = 'bytes ' + start_pos + '-' + (stats.size - 1) + '/' + stats.size
+					}
+
+					
+				}
+
+				console.log('o_head', o_head);
+
+
+				response.writeHead(response_code, o_head);
 
 				//response.pipe()
 
@@ -230,11 +321,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				
 
-				rs.on('data', function(chunk) {
-					c = c + chunk.length;
+				//rs.on('data', function(chunk) {
+					//c = c + chunk.length;
 				  	//console.log('got %d bytes of data', chunk.length);
-				  	console.log('bytes read so far', c);
-				});
+				  	//console.log('bytes read so far', c);
+				//});
 				rs.resume();
 
 				
@@ -320,50 +411,56 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			var meta = this.meta;
 			var albums = meta.get('albums');
 
+			if (albums) {
+				each(albums, function(album) {
+					// We load the track length.
+
+					var tracks = album.tracks;
+
+					var l = tracks.length;
+
+					each(tracks, function(track, i_track) {
+						var track_base_name = (i_track + 1).toString();
+						if (track_base_name.length == 1) {
+							track_base_name = '0' + track_base_name;
+						}
+						var track_mp3_path = album.path + '/mp3/' + track_base_name + '.mp3';
+						//console.log('track_mp3_path', track_mp3_path);
+						// perhaps using call_multi
+						// load this up, get the track length
+						audio_metadata.from_file(track_mp3_path, function(err, metadata) {
+							if (err) {
+								throw err;
+							} else {
+								//console.log('metadata', metadata);
+
+								var ms_duration = metadata.ms_duration;
+								track.ms_duration = ms_duration;
+
+								l--;
+
+								if (l == 0) {
+									//console.log('tracks', tracks);
+									callback(null, true);
+								}
+
+							}
+						})
+
+
+					});
+
+					
+				});
+
+			} else {
+				callback(null, true);
+			}
+
 			//console.log('albums', albums);
 			//console.log('tof(albums)', tof(albums));
 
-			each(albums, function(album) {
-				// We load the track length.
-
-				var tracks = album.tracks;
-
-				var l = tracks.length;
-
-				each(tracks, function(track, i_track) {
-					var track_base_name = (i_track + 1).toString();
-					if (track_base_name.length == 1) {
-						track_base_name = '0' + track_base_name;
-					}
-					var track_mp3_path = album.path + '/mp3/' + track_base_name + '.mp3';
-					//console.log('track_mp3_path', track_mp3_path);
-					// perhaps using call_multi
-					// load this up, get the track length
-					audio_metadata.from_file(track_mp3_path, function(err, metadata) {
-						if (err) {
-							throw err;
-						} else {
-							//console.log('metadata', metadata);
-
-							var ms_duration = metadata.ms_duration;
-							track.ms_duration = ms_duration;
-
-							l--;
-
-							if (l == 0) {
-								//console.log('tracks', tracks);
-								callback(null, true);
-							}
-
-						}
-					})
-
-
-				});
-
-				
-			});
-
+			
 			
 		},
 		'serve_directory': function(path) {
@@ -427,6 +524,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					byte_start_pos = parseInt(s_range_2[0], 10);
 				}
 				if (s_range_2[1]) {
+					console.log('s_range_2[1]', s_range_2[1]);
 					byte_end_pos = parseInt(s_range_2[1], 10);
 				}
 			}
@@ -461,7 +559,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					var track_extension = s_track_url_name[1];
 
 					//console.log('track_base_name', track_base_name);
-					//console.log('track_extension', track_extension);
+					console.log('track_extension', track_extension);
 
 					// Need to match it up with the resource's albums
 
@@ -500,8 +598,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 					// Anyway, choose the right file (from mp3 dir for the moment)
 
-					var media_file_path = album.path + '/mp3/' + s_track + '.mp3';
-					//console.log('media_file_path', media_file_path);
+					// Must also be able to serve ogg paths.
+
+
+
+					var media_file_path = album.path + '/' + track_extension + '/' + s_track + '.' + track_extension;
+					console.log('media_file_path', media_file_path);
 					//console.log('res (response)', res);
 
 					// Also, we may not want to serve the whole audio file, but to begin the stream.
@@ -515,9 +617,22 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					//  The serve audio function could be changed so that it can serve a byterange, eg x-
 					//   from x to the end
 
+					if (byte_end_pos) {
+						serve_audio_file_from_disk(media_file_path, byte_start_pos, byte_end_pos, res);
+					} else {
+
+						if (typeof byte_start_pos != 'undefined') {
+							serve_audio_file_from_disk(media_file_path, byte_start_pos, res);
+						} else {
+							serve_audio_file_from_disk(media_file_path, res);
+						}
+
+						
+					}
 
 
-					serve_audio_file_from_disk(media_file_path, byte_start_pos, res);
+
+					
 
 					//console.log('tracks', tracks);
 

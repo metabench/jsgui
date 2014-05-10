@@ -127,6 +127,21 @@ define(["../../jsgui-html"],
 			'activate': function() {
 				this._super();
 				console.log('Horizontal Slider activate');
+
+				// Also need to deal with touch events.
+				//  I think that touch tolerance would do the job.
+				//  Need to find the right trick to use for this, if there is one.
+
+				// Could probably work using a lower level touch API
+				//  Detect if the touch is near the item we want to drag.
+
+				// Perhaps touch tolerance could be done by using a larger touch overlay, or touch handle.
+
+
+
+
+
+
 				var that = this;
 
 				var div_relative = this.get('div_relative');
@@ -197,6 +212,11 @@ define(["../../jsgui-html"],
 				}
 
 				var fn_mousemove = function(e_mousemove) {
+
+					// Could maybe do the same calculation as mouseup?
+
+
+
 					//console.log('e_mousemove', e_mousemove);
 
 					/*
@@ -249,16 +269,14 @@ define(["../../jsgui-html"],
 					//console.log('prop', prop);
 
 					//var new_val = prop * max;
-
-
-
 					// need to constrain the bar values.
 
 					if (drag_mode == 'ghost') {
 						ensure_ctrl_ghost_v_bar();
 						//ctrl_ghost_v_bar.style('left', (pos_current[0] + new_v_bar_l) + 'px');
 
-						ctrl_ghost_v_bar.style('left', (up_offset_from_bcr_h_bar_x + (h_w_v_bar)) + 'px');
+						//ctrl_ghost_v_bar.style('left', (up_offset_from_bcr_h_bar_x + (h_w_v_bar)) + 'px');
+						ctrl_ghost_v_bar.style('left', (up_offset_from_bcr_h_bar_x) + 'px');
 
 					} else {
 						
@@ -351,8 +369,10 @@ define(["../../jsgui-html"],
 
 						ctrl_ghost_v_bar.remove();
 
-						var min = that.get('min').value();
-						var max = that.get('max').value();
+						var min = that.get('min');
+						if (min.value) min = min.value();
+						var max = that.get('max');
+						if (max.value) max = max.value();
 
 						console.log('pos_down', pos_down);
 
@@ -452,8 +472,19 @@ define(["../../jsgui-html"],
 					//console.log('h slider change', e_change);
 
 					if (name == 'value') {
-						var min = that.get('min').value();
-						var max = that.get('max').value();
+						var min = that.get('min');
+						if (min.value) min = min.value();
+
+						// Very annoying this.
+						//  We need tools to make it easier to get the value out of a data_value, or a Data_Object / Control.
+						//  Sometimes they return DV, sometimes POJO.
+
+
+
+
+
+						var max = that.get('max');
+						if (max.value) max = max.value();
 
 						prop = value / max;
 						//console.log('prop', prop);

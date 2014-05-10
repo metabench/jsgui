@@ -43,10 +43,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 	//   different operations done, or the output of operations.
 
 
-
-
-
-
 	// May need to change around a fair few references to make it workable.
 	// May need some more complicated logic to change it to the path for service.
 
@@ -56,7 +52,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		'jpg': 'image/jpeg',
 		'jpeg': 'image/jpeg',
 		'gif': 'image/gif',
-		'png': 'image/png'
+		'png': 'image/png',
+		'svg': 'image/svg+xml'
 	}
 
 
@@ -81,10 +78,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			if (err) {
 				throw err;
 			} else {
-
 				response.writeHead(200, {'Content-Type': mime_types[extension] });
     			response.end(data, 'binary');
-
 			}
 		});
 
@@ -131,8 +126,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 			//throw 'stop';
-
-
 
 		},
 
@@ -317,7 +310,66 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 									var diskPath = '../../ws/img/' + fileName;
 
-									serve_image_file_from_disk(diskPath, res);
+									// Do the search in the various served directories for the file.
+
+
+
+									var served_directories = this.meta.get('served_directories');
+									//console.log('served_directories ' + stringify(served_directories));
+
+									// see if the file exists in any of the served directories
+
+									// search for the file in the served directories.
+									//  will be an asyncronous search, and use an array of function calls with call_multi.
+
+									var fns = [];
+									var found_path;
+
+
+									each(served_directories, function(served_directory) {
+										//console.log('served_directory', served_directory);
+										var dir_val = served_directory.value();
+										//console.log('dir_val', dir_val);
+										var dir_name = dir_val.name;
+										//console.log('dir_name', dir_name);
+
+										var search_path = dir_name + '/' + fileName;
+										//console.log('search_path', search_path);
+										fns.push(function(callback) {
+											// check that directory
+
+											fs.exists(search_path, function(exists) {
+												//console.log('exists', exists);
+
+												if (!found_path && exists) {
+													found_path = search_path;
+												}
+												callback(null, exists);
+											})
+
+
+										})
+									});
+
+									call_multi(fns, function(err, res2) {
+										if (err) {
+											throw err;
+										} else {
+											console.log('found_path', found_path);
+											if (found_path) {
+												diskPath = found_path;
+												//serve_image_file_from_disk(diskPath, res);
+											}
+											serve_image_file_from_disk(diskPath, res);
+										}
+
+									});
+
+
+
+
+
+									
 									// /js/core/jsgui-lang-enh
 									//console.log('!*!*!*! url_parts.path ' + url_parts.path);
 									/*

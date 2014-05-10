@@ -8,6 +8,16 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 		var group = jsgui.group;
 
+		// The ZA audio player may need more elements for presentation.
+		//  Would need to look into a subclass modigying the layout/composition of its parent class.
+
+		// It seems like vector graphics will be needed.
+		//  Likely more can be done in CSS though.
+		//  Could have some activation that relies on CSS3.
+
+
+
+
 		var Audio_Player = Control.extend({
 
 			// could have a title field.
@@ -74,9 +84,14 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 					var ctrl_tracks = make(Control({'class': 'tracks'}));
 
+					this.set('ctrl_tracks', ctrl_tracks);
+
 					div_relative.add(ctrl_tracks);
 
 					var tracks = albums[0].tracks;
+
+
+
 					console.log('tracks', tracks);
 
 					each(tracks, function(track, i) {
@@ -106,10 +121,10 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						var ms_duration = track.ms_duration;
 						console.log('ms_duration', ms_duration);
 
-						var s_duration = Math.round(ms_duration / 1000);
+						var s_duration = ms_duration / 1000;
 
 						var mins = Math.floor(s_duration / 60);
-						var secs = s_duration % 60;
+						var secs = Math.floor(s_duration % 60);
 
 						var str_secs = secs.toString();
 						if (str_secs.length == 1) {
@@ -134,8 +149,8 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 					var ctrl_source_mp3 = make(Control({'tagName': 'source'}));
 					var ctrl_source_ogg = make(Control({'tagName': 'source'}));
 
-					ctrl_source_mp3.set('dom.attributes.src', '/audio/albums/01/01.mp3');
-					ctrl_source_ogg.set('dom.attributes.src', '/audio/albums/01/01.ogg');
+					//ctrl_source_mp3.set('dom.attributes.src', '/audio/albums/01/01.mp3');
+					//ctrl_source_ogg.set('dom.attributes.src', '/audio/albums/01/01.ogg');
 					ctrl_source_mp3.set('dom.attributes.type', 'audio/mp3');
 					ctrl_source_ogg.set('dom.attributes.type', 'audio/ogg');
 
@@ -283,11 +298,42 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 				var ctrl_volume = this.get('ctrl_volume');
 				var ctrl_tracks = this.get('ctrl_tracks');
 
+
+
+
+
 				var el_audio = ctrl_audio.get('dom.el');
 
 				var tracks_content = ctrl_tracks.get('content');
 
+
+				ctrl_tracks.set_i_track = function(i_track) {
+					// 0 indexed interger
+
+					tracks_content.each(function(i, ctrl_track) {
+						//console.log('v', v);
+						//console.log('i', i);
+
+						var track = tracks[i];
+
+						if (i_track == i) {
+							ctrl_track.add_class('current');
+						} else {
+							ctrl_track.remove_class('current');
+						}
+
+						
+
+						
+
+						// Not so sure about using MVC.
+
+
+					})
+				}
+
 				var albums = this.get('albums');
+				var that = this;
 
 				console.log('albums', albums);
 				console.log('tof albums', tof(albums));
@@ -297,7 +343,13 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 				var album_path = albums[0].path;
 				console.log('album_path', album_path);
 
+				ctrl_relative.on('touchstart', function(e_touchstart) {
+					console.log('e_touchstart', e_touchstart);
+				});
 
+				//ctrl_audio.on('ended', )
+
+				var i_track = 0;
 
 				tracks_content.each(function(i, ctrl_track) {
 					//console.log('v', v);
@@ -308,10 +360,13 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 					ctrl_track.set('track', track);
 
 					ctrl_track.on('click', function(e_click) {
-						console.log('track e_click', e_click);
 
-						console.log('track', i, track);
 
+						//console.log('track e_click', e_click);
+
+						//console.log('track', i, track);
+
+						i_track = i;
 						var track_num_str = (i + 1) + '';
 						if (track_num_str.length == 1) track_num_str = '0' + track_num_str;
 
@@ -319,11 +374,22 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						var ogg_path = album_path + track_num_str + '.ogg';
 
 
-
 						// Come up with the track paths in different formats.
 						//  We use those as properties for the audio sources.
 						ctrl_source_mp3.set('dom.attributes.src', mp3_path);
 						ctrl_source_ogg.set('dom.attributes.src', ogg_path);
+
+
+
+
+						//scrubber.set('ms_duration', track.ms_duration, that);
+						scrubber.set('ms_duration', track.ms_duration, that);
+
+						ctrl_tracks.set_i_track(i);
+
+
+
+						el_audio.load();
 
 
 						//ctrl_source_mp3.get('dom.el').setAttribute('src', mp3_path);
@@ -342,9 +408,8 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 				
 
-				var that = this;
+				
 				console.log('el_audio', el_audio);
-
 
 				el_audio.load();
 
@@ -366,12 +431,22 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						state = 'playing';
 						initial = false;
 
+						console.log('el_audio.duration', el_audio.duration);
+
+						console.log('el_audio.duration mins', Math.floor(el_audio.duration / 60));
+						console.log('el_audio.duration seconds', Math.floor(el_audio.duration % 60));
+
 						// Change the play button image to stop.
 						//btn_play_stop.remove_class('play');
 						//btn_play_stop.add_class('stop');
 
 
 					} else {
+						el_audio.play();
+
+						//state = 'paused';
+						state = 'playing';
+
 
 					}
 
@@ -404,6 +479,28 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 				});
 
+				var play_track_by_index = function(i) {
+					var track = tracks[i_track];
+					var track_num_str = (i + 1) + '';
+					if (track_num_str.length == 1) track_num_str = '0' + track_num_str;
+					var mp3_path = album_path + track_num_str + '.mp3';
+					var ogg_path = album_path + track_num_str + '.ogg';
+					ctrl_source_mp3.set('dom.attributes.src', mp3_path);
+					ctrl_source_ogg.set('dom.attributes.src', ogg_path);
+					scrubber.set('ms_duration', track.ms_duration, that);
+					el_audio.load();
+					ctrl_tracks.set_i_track(i);
+				}
+
+				ctrl_audio.on('ended', function(e_ended) {
+					console.log('e_ended', e_ended);
+
+					if (i_track < tracks.length) {
+						i_track++;
+						play_track_by_index(i_track);
+					}
+				});
+
 				scrubber.on('change', function(e_change) {
 
 					// Want it so we can tell the difference between changes to the scrubber which this control caused, and
@@ -415,6 +512,8 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 
 
 					var name = e_change.name, value = e_change.value, source = e_change.source;
+
+					// Could see if the source is a track change?
 
 					if (source != that) {
 						// Set the position in the track
@@ -431,8 +530,9 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						}
 						//console.log('val', val);
 
-						var nct = parseInt(val / 1000, 10);
-						//console.log('nct', nct);
+						//var nct = Math.round(val / 1000);
+						var nct = (val / 1000);
+						console.log('nct', nct);
 
 						//console.log('el_audio', el_audio);
 
@@ -471,6 +571,73 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 				});
 				*/
 
+				btn_previous.on('click', function(e_click) {
+					//console.log('click btn_play_stop');
+
+					//console.log('state', state);
+					//console.log('tof(state)', tof(state));
+
+					// Want to indicate that a track is playing.
+					//  May be better architecture to make the tracklist into a table that can show an active row.
+					//  Could add functionality to the track list control so we can tell it which track is selected.
+
+
+
+
+					i_track--;
+
+					play_track_by_index(i_track);
+
+
+
+					
+
+					if (state == 'playing') {
+						//console.log('is playing');
+						//el_audio.pause();
+						//state = 'paused';
+					} else {
+						//if (state == 'paused') {
+						//	el_audio.play();
+						//	state = 'playing';
+						//}
+					}
+					//console.log('2) state', state);
+
+
+				});
+
+				btn_next.on('click', function(e_click) {
+					//console.log('click btn_play_stop');
+
+					//console.log('state', state);
+					//console.log('tof(state)', tof(state));
+
+					i_track++;
+
+					// set the src for that track.
+
+					play_track_by_index(i_track);
+
+					ctrl_tracks.set_i_track(i_track);
+
+
+
+					if (state == 'playing') {
+						//console.log('is playing');
+						//el_audio.pause();
+						state = 'paused';
+					} else {
+						if (state == 'paused') {
+							//el_audio.play();
+							//state = 'playing';
+						}
+					}
+					//console.log('2) state', state);
+
+
+				});
+
 				btn_play_stop.on('click', function(e_click) {
 					//console.log('click btn_play_stop');
 
@@ -488,8 +655,6 @@ define(["../../jsgui-html", "./horizontal-slider", "./audio-volume", "./media-sc
 						}
 					}
 					//console.log('2) state', state);
-					
-					
 
 
 				});
