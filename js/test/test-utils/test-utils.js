@@ -55,10 +55,23 @@ define(['assert', 'fs'], function(assert, fs) {
 			}
 		}
 
+		function functionsToStrings(obj) {
+		    var result = {};
+		    for (prop in obj) {
+		        if (typeof(obj[prop]) == 'function'){
+		            result[prop] = obj[prop].toString();
+		        }else{
+		            result[prop] = obj[prop];
+		        }
+		    }
+		    return result;
+		}
+
         var test_utils = {
             'assertListedProps': assertListedProps,		
             'assertArraysContentEqual': assertArraysContentEqual,		
             'assertFilesEqual': assertFilesEqual,
+            'functionsToStrings': functionsToStrings,
         }
 		
         return test_utils;
