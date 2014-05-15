@@ -333,7 +333,7 @@ function (Constraint, Data_Object, assert) {
                 fieldString: "string",
                 fieldNull: "null",
                 fieldObject: "object",
-                fieldArray: "array",
+                fieldArray: "array"
             });
             //
             var value_good = { fieldNumber: 1, fieldString: "", fieldNull: null, fieldObject: {}, fieldArray: [] };
