@@ -1,7 +1,9 @@
 
 requirejs.config({
     //By default load any module IDs from js/lib
-    baseUrl: '../test/z_core/data/',
+    //baseUrl: '../test/z_core/essentials/',
+    baseUrl: '../test/z_core/',
+
     //except, if the module ID starts with "app",
     //load it from the js/app directory. paths
     //config is relative to the baseUrl, and
@@ -9,13 +11,15 @@ requirejs.config({
     //the paths config could be for a directory.
     
 	paths: {
-        assert: '../../../test-in-browser/lib/assert/assert',
-        chai: '../../../test-in-browser/lib/chai/chai',
-    }
+	    //assert: '../../../test-in-browser/lib/assert/assert'
+	    assert: '../../test-in-browser/lib/assert/assert'
+}
 	
 });
 
-requirejs(["constraint.spec", "data-object-fields-collection.spec"], function() {
+//requirejs(["test.spec", "constraint.spec", "data-object-fields-collection.spec"], function() {
+//requirejs(["data/test.spec", "essentials/other.spec"], function () {
+requirejs(["essentials/other.spec"], function () {
 
 
     //This function is called when scripts/helper/util.js is loaded.
