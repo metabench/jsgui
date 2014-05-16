@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['assert', 'fs'], function(assert, fs) {
+define(['assert'], function(assert) {
 	
 		function assertListedProps(objActual, objExpected){
 			for (var prop in objExpected){
@@ -45,6 +45,7 @@ define(['assert', 'fs'], function(assert, fs) {
 		}
 		
 
+        /*
 		function assertFilesEqual(src1, src2){
 			var buf1 = fs.readFileSync(src1);
 			var buf2 = fs.readFileSync(src2);
@@ -54,6 +55,7 @@ define(['assert', 'fs'], function(assert, fs) {
 				assert.equal(buf1[i], buf2[i], "files content differ: " + src1 + ", " + src2);
 			}
 		}
+        */
 
 		function functionsToStrings(obj) {
 		    var result = {};
@@ -70,8 +72,8 @@ define(['assert', 'fs'], function(assert, fs) {
         var test_utils = {
             'assertListedProps': assertListedProps,		
             'assertArraysContentEqual': assertArraysContentEqual,		
-            'assertFilesEqual': assertFilesEqual,
-            'functionsToStrings': functionsToStrings,
+            //'assertFilesEqual': assertFilesEqual,
+            'functionsToStrings': functionsToStrings
         }
 		
         return test_utils;
