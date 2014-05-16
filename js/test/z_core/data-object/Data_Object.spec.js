@@ -4,7 +4,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 define(['../../../core/data-object', "../../../core/jsgui-data-structures", 'assert', '../../test-utils/test-utils'],
 function (Data_Object, Data_Structures, assert, test_utils) {
 
-    describe("data-object /Data_Object.spec.js ", function () {
+    describe("z_core/data-object /Data_Object.spec.js ", function () {
 
         function base_check(data_object) {
             if (data_object._abstract) {
@@ -489,6 +489,11 @@ function (Data_Object, Data_Structures, assert, test_utils) {
         //	with the field(s) definition:
         // -----------------------------------------------------
 
+        function get_field_sig(data_object, fieldName) {
+            var jsgui = data_object.mod_link();
+            return jsgui.get_item_sig(data_object.fc.get(fieldName), 20);
+        }
+
         it("should ...", function () {
             var data_object = null;
             //
@@ -510,14 +515,7 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             data_object.set_field("Field_MyBook", MyBook);
             var value_MyBook = new MyBook();
             assert.deepEqual(data_object.get("Field_MyBook"), value_MyBook);
-
-            //var field = data_object.fc.get("Field_MyBook");
-            //console.log(field);
-            //console.log(jsgui.get_item_sig(field, 20));
-
-
-
-
+            //
             //   [s,[s,u]] - I see no way to create such field
             //
             //   [s,s,o]:
@@ -555,7 +553,46 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             data_object.set_field("Field_wrong", "wrong");
             assert.deepEqual(data_object.get("Field_wrong"), undefined);
             //
+            //   [s,s]:
             //
+            data_object.set_field(0, ["F_collection", "collection"]);
+            assert.deepEqual(get_field_sig(data_object, "F_collection"), "[s,s]");
+            assert.throws(function () { data_object.get("F_collection") });
+            //
+            data_object.set_field(0, ["F_data_object", "data_object"]);
+            assert.deepEqual(get_field_sig(data_object, "F_data_object"), "[s,s]");
+            assert.throws(function () { data_object.get("F_data_object") }); // new new jsgui.Data_Object line 4347
+
+            /*
+
+            var old_data_types_info = jsgui.data_types_info;
+
+            jsgui.data_types_info = { MyType: [["Field1", "int", { data_type: "int" }]] };
+
+            data_object.set_field(0, ["F_MyType", "MyType"]);
+            assert.deepEqual(get_field_sig(data_object, "F_MyType"), "[s,s]");
+            //assert.deepEqual(data_object.get("F_MyType"), undefined);
+
+            var v_MyType = new Data_Object();
+            v_MyType._parent = data_object;                                    // !!!
+            v_MyType.set_field("Field1", "int", { data_type: "int" });
+
+            console.log("///////");
+            console.log(data_object.get("F_MyType"));
+            console.log("|||||||");
+            console.log(v_MyType);
+
+
+
+            //assert.deepEqual(data_object.get("F_MyType"), v_MyType);
+
+
+            jsgui.data_types_info = old_data_types_info;
+
+            console.log(jsgui.data_types_info);
+
+            */
+
 
             //data_object.set_field("Field_test", String);
             //console.log(data_object.fc.get("Field_test"));
