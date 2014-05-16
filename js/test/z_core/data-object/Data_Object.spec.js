@@ -484,93 +484,106 @@ function (Data_Object, Data_Structures, assert, test_utils) {
         });
 
 
-
         // -----------------------------------------------------
-        //	with the field(s) definition:
+        //	with the field(s) definition: get() before set():
         // -----------------------------------------------------
 
-        function get_field_sig(data_object, fieldName) {
+        // this function is related to the get() implementation details, and used to check code coverage purposes
+        // this check should be removed from the final (production) tests version
+        function assert_field_sig(data_object, fieldName, fieldSig) {
             var jsgui = data_object.mod_link();
-            return jsgui.get_item_sig(data_object.fc.get(fieldName), 20);
+            var sig = jsgui.get_item_sig(data_object.fc.get(fieldName), 20);
+            assert.deepEqual(sig, fieldSig);
         }
 
-        it("should ...", function () {
-            var data_object = null;
+        // get() before set(): [s,s,f]
+
+        it("get() before set(): [s,s,f]", function () {
+            var data_object = new Data_Object();
             //
-            data_object = new Data_Object();
-            //
-            var jsgui = data_object.mod_link();
-            //
-            //   [s,s,f]
-            //
-            data_object.set_field("Field_String", String);
+            data_object.set_field("Field_String", String); assert_field_sig(data_object, "Field_String", "[s,s,f]");
             var value_String = new Data_Object.Data_Value();
             assert.deepEqual(data_object.get("Field_String"), value_String);
             //
-            data_object.set_field("Field_Number", Number);
+            data_object.set_field("Field_Number", Number); assert_field_sig(data_object, "Field_Number", "[s,s,f]");
             var value_Number = new Data_Object.Data_Value();
             assert.deepEqual(data_object.get("Field_Number"), value_Number);
             //
             var MyBook = function () { this.book = "Secret City"; };
-            data_object.set_field("Field_MyBook", MyBook);
+            //
+            data_object.set_field("Field_MyBook", MyBook); assert_field_sig(data_object, "Field_MyBook", "[s,s,f]");
             var value_MyBook = new MyBook();
             assert.deepEqual(data_object.get("Field_MyBook"), value_MyBook);
+        });
+
+        // get() before set(): [s,[s,u]] - I see no way to create such field
+
+        // get() before set(): [s,s,o]:
+
+        it("get() before set(): [s,s,o]", function () {
+            var data_object = new Data_Object();
             //
-            //   [s,[s,u]] - I see no way to create such field
-            //
-            //   [s,s,o]:
-            //
-            data_object.set_field("Field_collection", "collection");
+            data_object.set_field("Field_collection", "collection"); assert_field_sig(data_object, "Field_collection", "[s,s,o]");
             assert.throws(function () { data_object.get("Field_collection") });  // it's unable to create this field (line 4172 jsgui.Collection undefined) !!!
             //
-            data_object.set_field("Field_data_object", "data_object");
+            data_object.set_field("Field_data_object", "data_object"); assert_field_sig(data_object, "Field_data_object", "[s,s,o]");
             var value_data_object = new Data_Object();
             value_data_object._parent = data_object;                                    // !!!
             assert.deepEqual(data_object.get("Field_data_object"), value_data_object);
             //
-            data_object.set_field("Field_ordered_string_list", "ordered_string_list");
+            data_object.set_field("Field_ordered_string_list", "ordered_string_list"); assert_field_sig(data_object, "Field_ordered_string_list", "[s,s,o]");
             var value_ordered_string_list = new Data_Structures.Ordered_String_List();
             var v1_ordered_string_list = test_utils.functionsToStrings(data_object.get("Field_ordered_string_list"));
             var v2_ordered_string_list = test_utils.functionsToStrings(value_ordered_string_list);
             assert.deepEqual(v1_ordered_string_list, v2_ordered_string_list);
             //
-            data_object.set_field("Field_string", "string");
+            data_object.set_field("Field_string", "string"); assert_field_sig(data_object, "Field_string", "[s,s,o]");
             var value_string = new Data_Object.Data_Value();
             value_string._parent = data_object; // !!!
             assert.deepEqual(data_object.get("Field_string"), value_string);
             //
-            data_object.set_field("Field_text", "text", { data_type: ["text", 10] });
+            data_object.set_field("Field_text", "text", { data_type: ["text", 10] }); assert_field_sig(data_object, "Field_text", "[s,s,o]");
             var value_text = new Data_Object.Data_Value();
             assert.deepEqual(data_object.get("Field_text"), value_text);
             //
-            data_object.set_field("Field_text2", "text");
+            data_object.set_field("Field_text2", "text"); assert_field_sig(data_object, "Field_text2", "[s,s,o]");
             assert.deepEqual(data_object.get("Field_text2"), undefined); // !!!
             //
-            data_object.set_field("Field_int", "int");
+            data_object.set_field("Field_int", "int"); assert_field_sig(data_object, "Field_int", "[s,s,o]");
             var value_int = new Data_Object.Data_Value();
             assert.deepEqual(data_object.get("Field_int"), value_int);
             //
-            data_object.set_field("Field_wrong", "wrong");
+            data_object.set_field("Field_wrong", "wrong"); assert_field_sig(data_object, "Field_wrong", "[s,s,o]");
             assert.deepEqual(data_object.get("Field_wrong"), undefined);
-            //
-            //   [s,s]:
-            //
-            data_object.set_field(0, ["F_collection", "collection"]);
-            assert.deepEqual(get_field_sig(data_object, "F_collection"), "[s,s]");
-            assert.throws(function () { data_object.get("F_collection") });
-            //
-            data_object.set_field(0, ["F_data_object", "data_object"]);
-            assert.deepEqual(get_field_sig(data_object, "F_data_object"), "[s,s]");
-            assert.throws(function () { data_object.get("F_data_object") }); // new new jsgui.Data_Object line 4347
+        });
 
+        // get() before set(): [s,s]:
+
+        it("get() before set(): [s,s]", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.set_field(0, ["Field_collection", "collection"]); assert_field_sig(data_object, "Field_collection", "[s,s]");
+            assert.throws(function () { data_object.get("Field_collection") });
+            //
+            data_object.set_field(0, ["Field_data_object", "data_object"]); assert_field_sig(data_object, "Field_data_object", "[s,s]");
+            assert.throws(function () { data_object.get("Field_data_object") }); // "new jsgui.Data_Object(...)" data-object.js line 4347
+        });
+
+        // get() before set(): [s,s] using jsgui.data_types_info:
+
+        xit("get() before set(): [s,s] using jsgui.data_types_info", function () {
             /*
+            // TODO: complete after Data_Object.extend understanding
 
+            var data_object = new Data_Object();
+            //
+            var jsgui = data_object.mod_link();
+            //
             var old_data_types_info = jsgui.data_types_info;
 
             jsgui.data_types_info = { MyType: [["Field1", "int", { data_type: "int" }]] };
 
-            data_object.set_field(0, ["F_MyType", "MyType"]);
-            assert.deepEqual(get_field_sig(data_object, "F_MyType"), "[s,s]");
+            data_object.set_field(0, ["F_MyType", "MyType"]); assert_field_sig(data_object, "F_MyType", "[s,s]");
             //assert.deepEqual(data_object.get("F_MyType"), undefined);
 
             var v_MyType = new Data_Object();
@@ -582,16 +595,55 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             console.log("|||||||");
             console.log(v_MyType);
 
-
-
             //assert.deepEqual(data_object.get("F_MyType"), v_MyType);
-
 
             jsgui.data_types_info = old_data_types_info;
 
             console.log(jsgui.data_types_info);
-
             */
+        });
+
+        // get() before set(): [s,[s,s]]:
+
+        it("get() before set(): [s,[s,s]]", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.set_field("Field_collection", ["collection", "int"]); assert_field_sig(data_object, "Field_collection", "[s,[s,s]]");
+            assert.deepEqual(data_object.get("Field_collection"), undefined);
+            //
+            data_object.set_field("Field_dictionary", ["dictionary", "int"]); assert_field_sig(data_object, "Field_dictionary", "u"); // !!!
+        });
+
+        // get() before set(): [s,[s,o]]:
+
+        it("get() before set(): [s,[s,o]]", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.set_field("Field_collection", [{}]); assert_field_sig(data_object, "Field_collection", "[s,[s,o]]");            
+            assert.deepEqual(data_object.fc.get("Field_collection"), ["Field_collection", ["collection", {}]]);
+            assert.throws(function () { data_object.get("Field_collection") });
+            //
+            data_object.set_field("Field_data_object", {}); assert_field_sig(data_object, "Field_data_object", "[s,[s,o]]");
+            assert.deepEqual(data_object.fc.get("Field_data_object"), ["Field_data_object", ["data_object", {}]]);
+            assert.deepEqual(data_object.get("Field_data_object"), undefined);
+        });
+
+        // -----------------------------------------------------
+        //	set(), get()
+        // -----------------------------------------------------
+
+        it("should ...", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.set_field("Field_int", "int");
+            data_object.set("Field_int", "abc");
+            assert.deepEqual(data_object.get("Field_int"), "abc"); // !!!
+
+            // how it's probably intended:
+
+            var data_value = new Data_Object.Data_Value({ value: 31 });
+            data_object.set("Field_int", data_value);
+            assert.deepEqual(data_object.get("Field_int"), data_value); // ???
 
 
             //data_object.set_field("Field_test", String);
