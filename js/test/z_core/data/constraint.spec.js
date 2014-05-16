@@ -4,7 +4,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 define(['../../../core/constraint', '../../../core/data-object', 'assert'],
 function (Constraint, Data_Object, assert) {
 
-    describe("core/constraint", function () {
+    describe("z_core/data/constraint", function () {
 
         /*
 

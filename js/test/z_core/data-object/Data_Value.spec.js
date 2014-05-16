@@ -4,7 +4,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 define(['../../../core/data-object', 'assert'],
 function (Data_Object, assert) {
 
-    describe("data-object /Data_Value.spec.js ", function () {
+    describe("z_core/data-object /Data_Value.spec.js ", function () {
 
         // -----------------------------------------------------
         //	Data_Value

@@ -3,7 +3,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../../core/jsgui-data-structures-b-plus-tree", 'assert'], function (B_Plus_Tree, assert) {
 
-    describe("B_Plus_Tree", function () {
+    describe("z_core/data-structures/B_Plus_Tree", function () {
 
 
         function expect(val) {

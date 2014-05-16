@@ -2,10 +2,10 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/jsgui-data-structures', 'assert', '../../test-utils/test-utils'],
-function (Data_Structures, assert, test_utils) {
+define(['../../../core/jsgui-data-structures', 'assert'],
+function (Data_Structures, assert) {
 
-    describe("core/data-structures/Ordered_String_List.spec.js", function () {
+    describe("z_core/data-structures/Ordered_String_List.spec.js", function () {
 
         it("should perform the class operations", function () {
 

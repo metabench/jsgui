@@ -4,7 +4,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 define(['../../../core/data-object-fields-collection', 'assert'],
 function (Fields_Collection, assert) {
 
-    describe("core/data-object-fields-collection", function () {
+    describe("z_core/data/data-object-fields-collection", function () {
 
         // -----------------------------------------------------
         //	parse_field_text()
