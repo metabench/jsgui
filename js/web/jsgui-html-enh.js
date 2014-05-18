@@ -1024,6 +1024,17 @@ define(["./jsgui-html-core"],
 
 	        				setTimeout(function() {
 
+
+	        					// Need to hide the context menu on mousedown outside it.
+
+	        					// one_mousedown_outside
+	        					//  that could be a useful specialised function to have.
+
+	        					// Would only want it to be removed once.
+
+	        					
+
+
 				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
 				        			console.log('');
 				        			console.log('one mouseup');

@@ -3008,6 +3008,7 @@ define(function() {
 		'output_processors': output_processors,
 		'call_multiple_callback_functions': call_multiple_callback_functions,
 		'call_multi': call_multi,
+		'multi': call_multi,
 		'native_constructor_tof': native_constructor_tof,
 		'Fns': Fns,
 		'get': get,

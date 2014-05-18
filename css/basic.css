@@ -376,6 +376,13 @@ div.single-line.selected {
 .window {
 	position: absolute;
 	border: 1px solid #CCCCCC;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .window .title.bar {
@@ -483,10 +490,12 @@ div.single-line.selected {
 	background-color: #FFFFFF;
 	padding: 4px;
 	border: 1px solid #CCCCCC;
+	cursor: default;
 }
 
 .context.menu .menu-node {
 	padding-left: 18px;
+
 }
 
 .relative {

@@ -187,11 +187,23 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 				var that = this;
 
+				var ctrl_html_root = this._context.ctrl_document;
+
+	        	//var body = ctrl_html_root.body(); 
+
 				// raise a select event on the menu.
 				// and if there are other nodes inside, 
 
 				main_control.on('click', function(e_click) {
 					console.log('inner_control', inner_control);
+
+					setTimeout(function() {
+						ctrl_html_root.one('mouseup', function(e_mouseup) {
+							menu.close_all();
+						});
+					}, 20)
+
+					
 
 					var icc = inner_control.get('content');
 					var iccl = icc.length();
@@ -199,7 +211,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 					if (iccl > 0) {
 						// Maybe not, if it's nested.
 						//  Could close other branches.
-						menu.close_all();
+						//menu.close_all();
 
 
 						inner_control.show();
@@ -213,7 +225,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						// or change event? prob not.
 
 						// raise select event.
-						menu.close_all();
+						//menu.close_all();
 						menu.raise('select', that);
 
 					}
