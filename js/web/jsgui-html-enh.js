@@ -384,6 +384,11 @@ define(["./jsgui-html-core"],
 	            }
 	        }),
 
+
+			// This may need to search inside for controls to be activated.
+			//  Need to get this to work with client-rendered content.
+
+
 	        'activate_recursive': function() {
 	            console.log('activate_recursive');
 	            var el = this.get('dom.el');
@@ -403,7 +408,12 @@ define(["./jsgui-html-core"],
 	                    if (jsgui_id) {
 
 
+	                        // Not so sure the control will exist within a map of controls.
+	                        //  If we have activated the whole page, then they will exist.
+	                        //  However, we may just want to do activate on some controls.
+
 	                        
+
 	                        var ctrl = map_controls[jsgui_id];
 	                        //console.log('ctrl ' + ctrl);
 

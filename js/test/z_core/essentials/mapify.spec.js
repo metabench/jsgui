@@ -1,8 +1,8 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-utils'],
-function (jsgui, assert, test_utils) {
+define(['../../../core/jsgui-lang-essentials', 'assert'],
+function (jsgui, assert) {
 
     describe("z_core/essentials /mapify.spec.js ", function () {
 

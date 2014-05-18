@@ -2,10 +2,10 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/jsgui-data-structures-stiffarray', 'assert', '../../test-utils/test-utils'],
-function (StiffArray, assert, test_utils) {
+define(['../../../core/jsgui-data-structures-stiffarray', 'assert'],
+function (StiffArray, assert) {
 
-    describe("core/data-structures/StiffArray.spec.js", function () {
+    describe("z_core/data-structures/StiffArray.spec.js", function () {
 
 
         function expect(val) {

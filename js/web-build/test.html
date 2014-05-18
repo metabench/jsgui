@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<script src="jsgui.js" type="text/javascript" ></script>
+		<link rel="stylesheet" href="css/jsgui.css" type="text/css" />
+
+	</head>
+	<body>
+		
+
+	</body>
+
+	<script type="text/javascript" >
+		var context = new jsgui.Client_Page_Context();
+
+		var ctrl_hs = new jsgui.Horizontal_Slider({
+			'context': context,
+			'min': '0',
+			'max': '100',
+			'value': '50'
+		})
+		// Probably also want to activate the page?
+		//  Maybe not for the moment, change little on the page but have a working component.
+
+		var html = ctrl_hs.all_html_render();
+		console.log('html', html);
+
+		document.body.innerHTML = html;
+
+		var el_hs = document.body.childNodes[0];
+		console.log('el_hs', el_hs);
+		ctrl_hs.activate_recursive(el_hs);
+
+
+
+	</script>
+</html>

@@ -4,7 +4,7 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 define(['../../../core/data-object-fields-collection', 'assert'],
 function (Fields_Collection, assert) {
 
-    describe("core/data-object-fields-collection", function () {
+    describe("z_core/data/data-object-fields-collection", function () {
 
         // -----------------------------------------------------
         //	parse_field_text()
@@ -143,21 +143,21 @@ function (Fields_Collection, assert) {
                 [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]] // estimated result
             );
 
-            // [a], [s,s]
+            // [a], [s,s]  ==>  [s,s,o]
 
             check_set(["field1", "int"], [["field1", "int", { data_type: "int" }]]);
 
-            // [a], [s,f]
+            // [a], [s,f]  ==>  [s,s,f]
 
             check_set(["field1", Number], [["field1", "Class", Number]]);
 
-            // [a], [s,s,o]
+            // [a], [s,s,o]  ==>  [s,s,o]
 
             check_set(["field1", "int", { data_type: "int" }], [["field1", "int", { data_type: "int" }]]);
 
             check_set(["field1", "int", {}], [["field1", "int", {}]]);
 
-            // [a], [n,[s,s]]
+            // [a], [n,[s,s]]  ==>  [s,s]
 
             check_set([0, ["field1", "int"]], [["field1", "int"]]); // ??? !!!
             check_set([1, ["field1", "int"]], [["field1", "int"]]);
@@ -165,13 +165,13 @@ function (Fields_Collection, assert) {
 
             check_set([0, ["field1", "collection"]], [["field1", "collection"]]); // "if (field_item_type_name)" never true
 
-            // [a], [n,[s,s,?]]
+            // [a], [n,[s,s,?]]  ==>  [s,s,?]
 
             check_set([0, ["field1", "int", 100]], [["field1", "int", 100]]);  // ??? !!!
 
             check_set_throws([0, ["field1", "collection", 100]], 'Default values for Collection not supported');
 
-            // [a], [s,[s,s]]
+            // [a], [s,[s,s]]  ==>  [s,[s,s]]
 
             check_set(["field1", ["collection", "int"]], [["field1", ["collection", "int"]]]);
             check_set(["field1", ["dictionary", "int"]], []); // !!! ?
@@ -184,11 +184,11 @@ function (Fields_Collection, assert) {
 
             check_set_throws([{}], 'stop');
             
-            // [a], [s,o]
+            // [a], [s,o]  ==>  [s,[s,o]]
 
             check_set(["field1", {}], [["field1", ["data_object", {}]]]);
 
-            // [a], [s,[o]]
+            // [a], [s,[o]]  ==>  [s,[s,o]]
 
             check_set(["field1", [{}]], [["field1", ["collection", {}]]]);
 

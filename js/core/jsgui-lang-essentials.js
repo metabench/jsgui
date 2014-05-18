@@ -401,9 +401,11 @@ define(function() {
 
 
 	var jq_class2type = {};
-	var jq_type = function(obj) {
-		return obj == null ? String(obj) : jq_class2type[toString.call(obj)]
-				|| "object";
+	var jq_type = function (obj) {
+	    //return obj == null ? String(obj) : jq_class2type[toString.call(obj)] || "object";
+	    if (obj == null) return String(obj);
+	    var s = Object.prototype.toString.call(obj);
+	    return jq_class2type[s] || "object";
 	};
 
 
@@ -414,8 +416,8 @@ define(function() {
     * @param {Object} obj - object to check
     * @memberof module:core/jsgui-lang-essentials
     */
-	var is_array = Array.isArray || function(obj) {
-		return jq_type(obj) === "array";
+	var is_array = Array.isArray || function (obj) {
+	        return jq_type(obj) === "array";
 	};
     
     /**
@@ -428,12 +430,23 @@ define(function() {
 		return (!!obj && typeof obj.nodeType != 'undefined' && typeof obj.childNodes != 'undefined');
 	};
 
-	each("Boolean Number String Function Array Date RegExp Object".split(" "),
+
+    jq_class2type["[object Boolean]"] = "boolean";
+    jq_class2type["[object Number]"] = "number";
+    jq_class2type["[object String]"] = "string";
+    jq_class2type["[object Function]"] = "function";
+    jq_class2type["[object Array]"] = "array";
+    jq_class2type["[object Date]"] = "date";
+    jq_class2type["[object RegExp]"] = "regexp";
+    jq_class2type["[object Object]"] = "object";
+
+    /* each() calls isArray(), isArray() calls jq_type(), jq_type() uses jq_class2type[] in turn
+    each("Boolean Number String Function Array Date RegExp Object".split(" "),
 		function(i, name) {
 			if (typeof(name) == 'string') {
 		        jq_class2type["[object " + name + "]"] = name.toLowerCase();
 		    }
-		});
+		});*/
 
 	/*
 	 * var jq_type = function( obj ) { return obj == null ? String(obj):
@@ -974,15 +987,27 @@ define(function() {
 						if (is_defined(obj.toString) && obj.toString.stringify === true) {
 							res.push('"' + obj.toString() + '"');
 						} else {
+						    var propIsPrintable = function (name, value) {
+						        if (!includeFunctions && tof(value) === 'function') return false;
+						        //
+						        if (excludingProps) {
+						            for (var i = 0; i < excludingProps.length; i++) {
+						                if (name == excludingProps[i]) return false;
+						            }
+						        }
+						        //
+						        return true;
+						    };
+                            //
 							var first = true;
 							// res = res + '{';
 							res.push('{');
 							each(obj, function(i, v) {
 								//console.log(tof(v));
 								//
-								var propIsPrintable = true;
-								if (propIsPrintable && !includeFunctions && tof(v) === 'function') propIsPrintable = false;
-								if (propIsPrintable && excludingProps && excludingProps.indexOf(i)>=0) propIsPrintable = false;
+								//var propIsPrintable = true;
+								//if (propIsPrintable && !includeFunctions && tof(v) === 'function') propIsPrintable = false;
+								//if (propIsPrintable && excludingProps && excludingProps.indexOf(i)>=0) propIsPrintable = false;
 								//
 								/*if (includeFunctions !== false
 										&& tof(v) !== 'function') {
@@ -995,12 +1020,12 @@ define(function() {
 									first = false;
 								}*/
 								//
-								if (propIsPrintable) {
-									if (!first)	res.push(', ');
-									//res.push('"' + i + '": ' + _stringify(v, undefined, { prev: callerObjItem, obj: obj }));
-									res.push('"' + i + '": ' + _stringify(v, includeFunctions, { prev: callerObjItem, obj: obj }));
-									first = false;
-								}
+							    if (propIsPrintable(i, v)) {
+							        if (!first) res.push(', ');
+							        //res.push('"' + i + '": ' + _stringify(v, undefined, { prev: callerObjItem, obj: obj }));
+							        res.push('"' + i + '": ' + _stringify(v, includeFunctions, { prev: callerObjItem, obj: obj }));
+							        first = false;
+							    }
 							});
 							// res = res + '}';
 							res.push('}');
@@ -1350,8 +1375,8 @@ define(function() {
     * trim_sig_brackets("n") ==> "n"
     */
 	var trim_sig_brackets = function(sig) {
-		if (tof(sig) == 'string') {
-			if (sig[0] == '[' && sig[sig.length - 1] == ']') {
+	    if (tof(sig) == 'string') {
+	        if (sig.charAt(0) == '[' && sig.charAt(sig.length - 1) == ']') {
 				return sig.substring(1, sig.length - 1);
 			} else {
 				return sig;

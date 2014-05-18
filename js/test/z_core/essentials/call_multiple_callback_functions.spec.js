@@ -1,8 +1,8 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/jsgui-lang-essentials', 'assert', '../../test-utils/test-utils'],
-function (jsgui, assert, test_utils) {
+define(['../../../core/jsgui-lang-essentials', 'assert'],
+function (jsgui, assert) {
 
     describe("z_core/essentials /call_multiple_callback_functions.spec.js ", function () {
 
@@ -120,6 +120,13 @@ function (jsgui, assert, test_utils) {
         //	test_async_timeouts_multi_8
         // -----------------------------------------------------
 
+        function arrayIndexOf(array, item) {
+            for (var i = 0; i < array.length; i++) {
+                if (array[i] === item) return i;
+            }
+            return -1;
+        }
+
         it("should execute all the functions (allowing up to 8 a the same time), then call the callback when all the functions are finished", function (done) {
 
             var fns = [];
@@ -150,7 +157,7 @@ function (jsgui, assert, test_utils) {
                     // make sure all the functions was executed (in any order):
                     assert.equal(log.length, fns.length);
                     for (var i = 0; i < log.length; i++) {
-                        assert.ok(log.indexOf(i) >= 0);
+                        assert.ok(arrayIndexOf(log, i) >= 0);
                     }
                     //
                     done();
@@ -403,7 +410,7 @@ function (jsgui, assert, test_utils) {
 
             var tasks = [
                 [task1_fn, task1_args, task1_callback],
-                [task2_fn, task2_args, task2_callback],
+                [task2_fn, task2_args, task2_callback]
             ];
 
             jsgui.call_multiple_callback_functions(tasks, 2, callback);

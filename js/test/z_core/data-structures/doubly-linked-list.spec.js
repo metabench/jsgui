@@ -1,10 +1,10 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/jsgui-data-structures-doubly-linked-list', 'assert', '../../test-utils/test-utils'],
-function (Doubly_Linked_List, assert, test_utils) {
+define(['../../../core/jsgui-data-structures-doubly-linked-list', 'assert'],
+function (Doubly_Linked_List, assert) {
 
-    describe("core/data-structures/doubly-linked-list.spec.js", function () {
+    describe("z_core/data-structures/doubly-linked-list.spec.js", function () {
 
         function getValues(list) {
             var result = [];
