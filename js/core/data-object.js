@@ -4769,8 +4769,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 
 
-								var stack = new Error().stack
-								console.log(stack);
+								//var stack = new Error().stack
+								//console.log(stack);
 								throw('No data object at this level.');
 							}
 							throw('10)stop');
