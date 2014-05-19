@@ -349,6 +349,8 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             // it does not works for the following types: 'string', 'number', 'boolean', 'date'
             // so, test it using arrays and object:
             //
+            // BTW ll_set() found to be not used 
+            //
             data_object.set("Field1", [123]);
             assert.deepEqual(data_object.get("Field1"), [123]);
             //
@@ -366,11 +368,23 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             // Data_Object creates an internal Data_Value for native types ('string', 'number', 'boolean', 'date')
             // notice the additional .get() call:
             //
-            data_object.set("Field1", 123);
-            assert.deepEqual(data_object.get("Field1").get(), 123);
+            data_object.set("Field1", "45");
+            assert.deepEqual(data_object.get("Field1").get(), "45");
             //
-            data_object.set("Field2", "45");
-            assert.deepEqual(data_object.get("Field2").get(), "45");
+            data_object.set("Field2", 123);
+            assert.deepEqual(data_object.get("Field2").get(), 123);
+            //
+            data_object.set("Field3", false);
+            assert.deepEqual(data_object.get("Field3").get(), false);
+            //
+            // probably error
+            // "date" is listed in the hard-coded types inside the set() method code, 
+            // but typeof returns "object" instead of "date". So, it does not create 
+            // the internal Data_Value for Date (notice no additional .get() call):
+            //
+            var date_value = new Date(10000);
+            data_object.set("Field4", date_value);
+            assert.deepEqual(data_object.get("Field4"), date_value); // !!!
         });
 
         it("allows to set anything if the field exists", function () {
@@ -487,6 +501,8 @@ function (Data_Object, Data_Structures, assert, test_utils) {
         // -----------------------------------------------------
         //	with the field(s) definition: get() before set():
         // -----------------------------------------------------
+
+        //#region with the field(s) definition: get() before set():
 
         // this function is related to the get() implementation details, and used to check code coverage purposes
         // this check should be removed from the final (production) tests version
@@ -628,24 +644,121 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             assert.deepEqual(data_object.get("Field_data_object"), undefined);
         });
 
+        //#endregion
+
         // -----------------------------------------------------
-        //	set(), get()
+        //	set(), then get()
         // -----------------------------------------------------
 
-        it("should ...", function () {
+        //
+        // There is a get() call inside the set() code. So, probably, "set() then get()" scenario is unreal?
+        //
+
+        it("should set and get values", function () {
             var data_object = new Data_Object();
             //
             data_object.set_field("Field_int", "int");
             data_object.set("Field_int", "abc");
             assert.deepEqual(data_object.get("Field_int"), "abc"); // !!!
-
+            //
             // how it's probably intended:
-
+            //
             var data_value = new Data_Object.Data_Value({ value: 31 });
             data_object.set("Field_int", data_value);
             assert.deepEqual(data_object.get("Field_int"), data_value); // ???
+        });
+
+        it("should not allow an asyncronous access for get()", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.set("Field1", ["abc"]);
+            assert.deepEqual(data_object.get("Field1"), ["abc"]);
+            //
+            var callback = function () { };
+            assert.throws(function () { data_object.get("Field1", callback); });
+        });
+
+        // -----------------------------------------------------
+        //	get, set() for qualified property names
+        // -----------------------------------------------------
+
+        it("should set and get values", function () {
+            var data_object = new Data_Object();
+            //
+            // set() allows to set a field named ".", but get() is unable to get this field:
+            //
+            data_object.set(".", ["dot"]);
+            assert.deepEqual(data_object.get(), { '.': ["dot"] });
+            assert.deepEqual(data_object.get("."), undefined);
+            //
+            // Data_Object allows to set values using qualified names,
+            // if all the nested data objects are created:
+            //
+            var data_object_b = new Data_Object();
+            data_object_b.set("c", ["abc"]);
+            //
+            var data_object_a = new Data_Object();
+            data_object_a.set("b", data_object_b);
+            //
+            data_object.set("a", data_object_a);
+            assert.deepEqual(data_object.get("a.b.c"), ["abc"]);
+            //
+            data_object.set("a.b.c", [123]);
+            assert.deepEqual(data_object.get("a.b.c"), [123]);
+            //
+            // Data_Object is unable to create the nested data objects itself:
+            //
+            assert.throws(function () { data_object.set("x.y", ["xy"]); }); // 'No data object at this level.'
+            //
+            // Data_Object provides the change event for the qualified names as well:
+            //
+            var change_eventArgs = null;
+            data_object.on("change", function (eventArgs) {
+                change_eventArgs = eventArgs;
+            });
+            //
+            data_object.set("a.b.c", [45]);
+            assert.deepEqual(data_object.get("a.b.c"), [45]);
+            assert.deepEqual(change_eventArgs, { name: "a.b.c", value: [45] });
+        });
+
+        xit("should use input_processors and output_processors", function () {
+            //
+            //  TODO !!!
+            //
+        });
+
+        //
+        // the main get() and set() algorithm is the following:
+        //
+        //function get(field_name) {
+        //    if (fc.get(field_name)) {
+        //        if (!_[field_name]) {
+        //            _[field_name] = createValueBasedOnFieldDefinition(); // Data_Object or Data_Value usually
+        //            return _[field_name];
+        //        } else {
+        //            return _[field_name];
+        //        }
+        //    } else {
+        //        return ll_get(_, field_name);
+        //    }
+        //}
+        //
+        //function set(field_name, value) {
+        //    if (!get(field_name)) {
+        //        // nof field defined, and no value was set previously:
+        //        if (typeof (value) in ['string', 'number', 'boolean', 'date']) {
+        //            this._[field_name] = new Data_Value({ 'value': value });
+        //        } else {
+        //            this._[field_name] = value;
+        //        }
+        //    } else {
+        //        this._[field_name] = value;
+        //    }
+        //}
 
 
+        /*
             //data_object.set_field("Field_test", String);
             //console.log(data_object.fc.get("Field_test"));
             //console.log(jsgui.get_item_sig(data_object.fc.get("Field_test"), 20));
@@ -665,9 +778,7 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             ////console.log(jsgui.stringify(f2));
 
             ////assert.deepEqual(data_object._, {});
-
-        });
-
+        */
 
 
     });
