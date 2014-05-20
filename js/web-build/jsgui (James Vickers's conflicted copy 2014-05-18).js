@@ -20204,9 +20204,6 @@
                     this.set('dom.el', spec.el);
                 }
 
-                var context = this._context;
-                context.register_control(this);
-
                 var that = this;
 
                 if (spec.size) {
@@ -23349,23 +23346,6 @@
 	            var map_controls = context.map_controls;
 
 
-	            // Problematic - the controls may already exist.
-	            //  Need to differentiate between use-cases.
-	            //  Activation of what has been provided from the server as HTML.
-	            //  Connecting HTML that has been rendered on the client with the class that has rendered it.
-	            //   Quite a lot of HTML gets rendered at once, then placed into the DOM.
-	            //   Need to keep up-to-date with connecting the elements in the DOM to the ones being used here.
-
-
-	            // How to tell the difference between controls that were made on the client, and could be accessed through the context,
-	            //  or controls that don't yet exist?
-	            //   Check if they are registered with the context.
-
-
-
-
-
-
 	            recursive_dom_iterate(el, function(el) {
 		            //console.log('2) el.tagName ' + el.tagName);
 		            var nt = el.nodeType;
@@ -23383,9 +23363,6 @@
 
 		                //console.log('jsgui_id ' + jsgui_id);
 		                if (jsgui_id) {
-
-
-
 		                    var ib = id_before__(jsgui_id);
 		                    var num =  num_after(jsgui_id);
 		                    if (!max_typed_ids[ib]) {
@@ -23394,11 +23371,7 @@
 		                        if (num > max_typed_ids[ib]) max_typed_ids[ib] = num;
 		                    }
 
-
-		                    // Maybe no need for this, the element could already be mapped.
 		                    map_jsgui_els[jsgui_id] = el;
-
-
 		                    var jsgui_type = el.getAttribute('data-jsgui-type');
 		                    //console.log('jsgui_type ' + jsgui_type);
 		                    map_jsgui_types[jsgui_id] = jsgui_type;
@@ -23452,10 +23425,6 @@
 			                arr_controls.push(ctrl);
 
 			                //console.log('el.tagName', el.tagName);
-
-			                // Possibly the Client_Page_Context should identify the root element, and make an HTML control out of it.
-
-
 
 			                if (l_tag_name === 'html') {
 			                	//console.log('el is document root el');
@@ -26872,22 +26841,6 @@
 	            }
 	        }),
 
-	        register_control: function(control) {
-	        	// Put it into the map of IDs
-
-	        	console.log('register_control');
-
-	        	// Not sure how useful registration of all controls will be.
-	        	//  Probably would not be a problem, just it will take memory and CPU cycles.
-
-
-	        	var id = control._id();
-	        	console.log('id', id);
-
-	        	this.map_controls[id] = control;
-
-	        },
-
 	        //'set_max_ids': function(map_max_ids) {
 
 	        //},
@@ -27301,24 +27254,11 @@
 		var Client_Page_Context = jsgui.Page_Context.extend({
 			'init': function(spec) {
 				spec = spec || {};
+
 	    		
 	    		this._super(spec);
 	    		//this.set('document', spec.document);
 	    		this.document = spec.document || document;
-
-	    		var de = this.document.documentElement;
-
-	    		if (!this.ctrl_document) {
-	    			this.ctrl_document = new jsgui.html({
-	    				'context': this,
-	    				'el': de
-	    			});
-	    		}
-
-	    		// And a body control would be helpful too.
-
-
-
 
 	    		// Not so sure about creating the resource pool or requiring the resources.
 	    		//  Could have problems with dependencies.
@@ -27343,9 +27283,6 @@
 			
 		});
 		jsgui.Client_Page_Context = Client_Page_Context;
-
-
-	// Could make a slider with multiple v_bars.
 
 	var Horizontal_Slider = Control.extend({
 			// fields... text, value, type?
@@ -27459,10 +27396,6 @@
 			},
 			'activate': function(el) {
 				this._super(el);
-
-				// I think that having the various controls mapped within the Page_Context would be needed as a first step.
-				//  Then those locations can be obtained again within the control.
-
 				console.log('Horizontal Slider activate');
 
 				// Also need to deal with touch events.
@@ -27474,6 +27407,11 @@
 
 				// Perhaps touch tolerance could be done by using a larger touch overlay, or touch handle.
 
+
+
+
+
+
 				var that = this;
 
 				var div_relative = this.get('div_relative');
@@ -27482,8 +27420,10 @@
 
 				var ghost_v_bar;
 
-				console.log('h_bar', h_bar);
-				console.log('v_bar', v_bar);
+
+
+				//console.log('h_bar', h_bar);
+				//console.log('v_bar', v_bar);
 
 				var size = this.size();
 				//console.log('size', size);
@@ -27768,9 +27708,6 @@
 				}
 
 				v_bar.on('mousedown', function(e_mousedown) {
-					// Event not being recognised at the moment...
-					console.log('v_var mousedown');
-
 					var dm = that.get('drag_mode');
 					//drag_mode = ;
 					if (dm) {

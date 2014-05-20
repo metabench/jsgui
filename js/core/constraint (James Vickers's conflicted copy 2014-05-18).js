@@ -144,7 +144,6 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
     * @classdesc Base class for the constraints.
     * @memberof module:core/constraint
     */
-    
 	var Constraint = Class.extend({
 		'init': function(spec) {
 			// if the spec is a string, then parse the string.
@@ -383,7 +382,6 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			//if (tof(spec) == 'string') {
 			//	
 			//}
-
 			this._super(spec);
 			if (is_defined(spec.length)) {
 				this.length = spec.length;
@@ -506,7 +504,6 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
         * c.match("{86DCA9A5-31AC-4F20-B552-4D1503D0D11C}")  ==> true
         * c.match("86DCA9A5-31AC-4F20-B552-4D1503D0D11C")  ==> false
         */
-
 	    'match': function (v) {
 			//return tof(v) == 'number';
 			

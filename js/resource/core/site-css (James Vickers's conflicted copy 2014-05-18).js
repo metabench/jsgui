@@ -198,6 +198,43 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						}
 					}
 
+
+
+
+					if (splitPath[0] == 'admin') {
+						// direct it to the admin router?
+						// to the admin resource?
+
+						// perhaps there will be deeper routing in the application router.
+
+						if (splitPath.length > 1) {
+							if (splitPath[1] == 'files') {
+								// We don't have the references exactly?
+								//  Or this has access to the application?
+
+								// And to file admin?
+								//  Quite possibly...
+
+								// So there is the local file system resource,
+								//  we can get that from the resource pool.
+								// There would also need to be a resource to administer that.
+								//  View it / access it.
+								//  Administer may be right because it needs admin access.
+
+								fswa.process(req, res);
+								// The file administrator should also split the paths and do that calculation I think.
+								//  May well send processing metadata through in a little while as a further object.
+
+
+							}
+
+						} else {
+
+						}
+
+
+					}
+
 				}
 			}
 

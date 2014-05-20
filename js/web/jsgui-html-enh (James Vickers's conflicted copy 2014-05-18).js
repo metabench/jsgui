@@ -1034,17 +1034,6 @@ define(["./jsgui-html-core"],
 
 	        				setTimeout(function() {
 
-
-	        					// Need to hide the context menu on mousedown outside it.
-
-	        					// one_mousedown_outside
-	        					//  that could be a useful specialised function to have.
-
-	        					// Would only want it to be removed once.
-
-	        					
-
-
 				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
 				        			console.log('');
 				        			console.log('one mouseup');
@@ -3060,7 +3049,7 @@ define(["./jsgui-html-core"],
 		                
 		            }
 		            // get the constructor from the id?
-		        });
+		        })
 		        //console.log('arr_controls ' + stringify(arr_controls));
 		        // depth-first activation?
 		        //  But connecting up the activated subcontrols with the control getting activated?
@@ -3084,7 +3073,7 @@ define(["./jsgui-html-core"],
 		                    //console.log('jsgui_type ' + jsgui_type);
 		                }
 		            }
-		        });
+		        })
 	        })
 
 	        //  constructors.

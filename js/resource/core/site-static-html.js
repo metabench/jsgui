@@ -22,20 +22,22 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-	var serve_css_file_from_disk = function(filePath, response) {
+	var serve_html_file_from_disk = function(filePath, response) {
 		fs2.load_file_as_string(filePath, function (err, data) {
 			if (err) { 
 				throw err;
 			} else {
 				//var servableJs = updateReferencesForServing(data);
-				response.writeHead(200, {'Content-Type': 'text/css'});
+				response.writeHead(200, {'Content-Type': 'text/html'});
 				response.end(data);
 			}
 		});
 	}
 
+	// File_Server_Resource?
+	//  So the resource has code to route to the file and then serve it.
 
-	var Site_CSS = Resource.extend({
+	var Site_Static_HTML = Resource.extend({
 
 		'init': function(spec) {
 			this._super(spec);
@@ -109,7 +111,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					if (tval == 'string') {
 						// then it should be a local file path, serve it.
 
-						serve_css_file_from_disk(val, res);
+						serve_html_file_from_disk(val, res);
 
 					}
 				}
@@ -131,7 +133,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					//   Could become more advanced at some points, serving particular builds.
 
 
-					if (splitPath[0] == 'css') {
+					if (splitPath[0] == 'html') {
 						//var sjs = pool.get_resource('Site JavaScript');
 						//console.log('sjs ' + sjs);
 
@@ -171,26 +173,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								*/
 							} else {
 								if (splitPath.length == 3) {
-									// /js/core/jsgui-lang-enh
-									//console.log('!*!*!*! url_parts.path ' + url_parts.path);
-									/*
-									if (splitPath[1] == 'core') {
-										var fileName = splitPath[2];
-										var val2 =  path.dirname(module.uri);
-										//console.log('val2 ' + val2);
-										var diskPath = val2 + '/../core/' + fileName;
-										fs2.load_file_as_string(diskPath, function (err, data) {
-											if (err) { 
-												throw err;
-											} else {
-												//var servableJs = updateReferencesForServing(data);
-												res.writeHead(200, {'Content-Type': 'text/css'});
-												res.end(data);
-											}
-										});
-									}
-									*/
-
 
 								}
 
@@ -200,42 +182,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				}
 			}
-
-
-			//console.log('remoteAddress ' + remoteAddress);
-			
-			// Need to be able to get the resource pool from this resource.
-			//  It routes http calls to particular resources, and resources in the same pool make use of each
-			//   other.
-
-
-			// /js/...js
-
-			// the site's static file resources.
-			//  a file server that serves the files with their mime types.
-			//   nice to have encapsulation of this because it can do compression.
-
-
-			//console.log('this.parent() ' + stringify(this.parent()));
-			// then 
-
-			// This could send it to an authenticated service / resource.
-
-			//  /admin
-			//  /admin/files could go to a file manager application (html resource)
-			//   There could be the HTML interface to the File_System resource there.
-
-			//  /admin/resources could go to the resource pool admin, from where it would be possible to administer
-			//   and view various resource.
-
-			// split the path up, then do various initial tests, then maybe send it to the admin resource.
-			//  And the admin resource may not be the resource pool interface, it could be more user friendly,
-			//  a gateway to deeper administration.
 		}
 	});
 	
 	
-	return Site_CSS;
+	return Site_Static_HTML;
 	
 	
 });

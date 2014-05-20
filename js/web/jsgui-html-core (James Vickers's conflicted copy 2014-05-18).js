@@ -637,9 +637,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     this.set('dom.attributes.class', spec['class']);
                 }
 
-                var context = this._context;
-                context.register_control(this);
-
 
                 // When content gets added, need to update the relationships. 
 

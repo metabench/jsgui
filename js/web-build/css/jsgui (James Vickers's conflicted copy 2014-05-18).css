@@ -599,7 +599,7 @@ html.dragging {
 	width: 100px;
 	top: 40px;
 	left: 5px;
-	background-color: #AAAAAA;
+	background-color: #FFFFFF;
 }
 
 .horizontal.slider .v-bar {
@@ -608,7 +608,7 @@ html.dragging {
 	width: 9px;
 	top: 30px;
 	left: 1px;
-	background-color: #AAAAAA;
+	background-color: #FFFFFF;
 }
 
 .horizontal.slider .v-bar.ghost {

@@ -1,11 +1,5 @@
 	// The basic resource connector... not quite sure what it needs to do 27/02/2012.
 	//  Fills in the gap conceptually.
-
-	// Resources are to be very versitile - 18/05/2014
-	//  So, a Resource Connector (something that connects between different types of resources) will itself be a resource.
-	//  Resource publishers are resources. Some resources will have HTTP services built in - those that don't can be published using
-	//  a Resource Publisher.
-
 	
 	// These things will be nice when viewed through a web interface too.
 	//  That is why the abstract resources are a useful system.

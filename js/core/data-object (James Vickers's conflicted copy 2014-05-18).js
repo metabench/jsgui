@@ -125,7 +125,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	// Then have different levels?
 
 	
-	var Mini_Context = Class.extend({
+	var Mini_Context = jsgui.Class.extend({
 
 		// Need quite a simple mechansm to get IDs for objects.
 
@@ -532,6 +532,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 					// The controls that are activated on the clients need to have bound events.
 
+
+
 					//console.log('event_name', event_name);
 					var bei = be[event_name];
 					//console.log('bei ', bei);
@@ -558,7 +560,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 								//v.call(target, target, event_name);
 								//console.log('1) additional_args', additional_args);
-								if (v) res.push(v.apply(target, additional_args));
+								res.push(v.apply(target, additional_args));
 								// Perhaps I have sussed out the problem.
 								//  Or some of it?
 
@@ -1244,13 +1246,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	
 
 
-	// Data_Objects have contexts.
-	//  Not sure about registering every Data_Object within the context.
-	//  It seems worthwhile having Controls registered within a Page_Context.
-	//  Perhaps data, registered within a Data_Context (which I am yet to make) could enable a spreadsheet to have components that get notified about changes to the data.
-
-	// I think that I will have controls register themselves within the context.
-	//  call context.register_control()
 
 
 	var Data_Object = Evented_Class.extend({
@@ -5610,10 +5605,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	
 	input_processors.field_text = parse_field_text;
 	input_processors.data_type = parse_data_type;
-
-	// Maybe do without the following.
-	//  Have different, simpler, flatter namespacing. Put lots of things in jsgui.
-	//  Then when the files get built together they get turned into local variables.
 	
 	Data_Object.Data_Value = Data_Value;
 	Data_Object.Fields_Collection = Fields_Collection;

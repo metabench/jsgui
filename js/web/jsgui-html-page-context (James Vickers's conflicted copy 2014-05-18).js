@@ -226,24 +226,6 @@ define(["./jsgui-html-core"],
 	            }
 	        }),
 
-	        register_control: function(control) {
-	        	// Put it into the map of IDs
-
-	        	console.log('register_control');
-
-	        	// Not sure how useful registration of all controls will be.
-	        	//  Probably would not be a problem, just it will take memory and CPU cycles.
-
-
-	        	var id = control._id();
-	        	console.log('id', id);
-
-	        	this.map_controls[id] = control;
-
-	        },
-
-
-
 	        //'set_max_ids': function(map_max_ids) {
 
 	        //},
@@ -300,8 +282,6 @@ define(["./jsgui-html-core"],
 
 
 	        },
-
-	        // Make this an Evented_Class?
 
 	        'raise': function(event_name) {
 	            // need to access the object's bound events.

@@ -206,7 +206,7 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool) {
 
     resource_pool.start(function() {
         console.log('client-side resource pool started');
-    });
+    })
 
     jsgui.activate(client_page_context);
     console.log('jsgui-html-client post activate');
