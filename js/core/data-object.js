@@ -2997,21 +2997,21 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 		'get_field_data_type_constraint': function(field_name) {
 			var fmc = this._map_field_constraints;
 			// field_constraints - they are constraints that apply to the fields. They are not the list of fields.
-			
+			var result = undefined;
+            //
 			if (fmc) {
 				var fmfc = fmc[field_name];
 				if (fmfc) {
-					each(fmfc, function(i, v) {
-						// if it is a Field_Data_Type_Constraint
-						
-						if (v instanceof Constraint.Field_Data_Type) {
-							return v;
-						}
-						
-					})
+				    each(fmfc, function (i, v) {
+				        // if it is a Field_Data_Type_Constraint
+				        if (v instanceof Constraint.Field_Data_Type) {
+				            result = v;
+				            return v;
+				        }
+				    });
 				}
 			}
-			
+			return result;
 		},
 		
 		
@@ -3191,11 +3191,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 								//console.log('constraint_item ' + stringify(constraint_item));
 								
 								var constraint_info = constraint_item.to_info_obj();
-								console.log('constraint_info ' + stringify(constraint_info));
-								console.log('field_info ' + stringify(field_info));
+								//console.log('constraint_info ' + stringify(constraint_info));
+								//console.log('field_info ' + stringify(field_info));
 								
 								var stack = new Error().stack
-								console.log( stack )
+								//console.log( stack )
 								
 								throw ('6) it is! stop, check to see if it is a Field_Data_Type_Constraint, use instanceOf')
 								
