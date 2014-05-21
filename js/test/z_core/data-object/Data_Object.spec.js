@@ -1,8 +1,8 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/data-object', "../../../core/jsgui-data-structures", 'assert', '../../test-utils/test-utils'],
-function (Data_Object, Data_Structures, assert, test_utils) {
+define(['../../../core/data-object', "../../../core/jsgui-data-structures", "../../../core/constraint", 'assert', '../../test-utils/test-utils'],
+function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
     describe("z_core/data-object /Data_Object.spec.js ", function () {
 
@@ -947,6 +947,50 @@ function (Data_Object, Data_Structures, assert, test_utils) {
         });
 
         // -----------------------------------------------------
+        //	matches_field_constraints()
+        // -----------------------------------------------------
+
+        it("works strangely ", function () {
+            var data_object = new Data_Object();
+            //
+            // it seems that the constraints should be an object with key/value pairs, probably field_name/field_constraint:
+            //
+            var myConstraints = { Field1: "int", Field2: "number" };
+            data_object.constraints(myConstraints);
+            assert.deepEqual(data_object._field_constraints, myConstraints);
+            //
+            // without parameters, and with object parameter - always returns undefined
+            //
+            assert.deepEqual(data_object.matches_field_constraints(), undefined);  // !!!
+            assert.deepEqual(data_object.matches_field_constraints(myConstraints), undefined);  // !!!
+            //
+            // it can check other Data_Object values for its constrains (not other Data_Object constrains):
+            //
+            var obj = new Data_Object();
+            obj.set("Field1", []); obj.set("Field1", 1); // set twice to make it pure value
+            obj.set("Field2", []); obj.set("Field2", 1.5);
+            //
+            assert.deepEqual(data_object.matches_field_constraints(obj), true);
+            //
+            obj.set("Field1", 1.5);
+            assert.deepEqual(data_object.matches_field_constraints(obj), false);
+        });
+
+        // -----------------------------------------------------
+        //	Data_Object.matches_field_constraints() - static 
+        // -----------------------------------------------------
+
+        it("always returns undefined", function () {
+            var data_object = new Data_Object();
+            //
+            // always undefined !!!
+            //
+            assert.deepEqual(Data_Object.matches_field_constraints(null, {}), undefined);
+            assert.deepEqual(Data_Object.matches_field_constraints(data_object, {}), undefined);
+            assert.deepEqual(Data_Object.matches_field_constraints(data_object, { Field1: "int", Field2: "number" }), undefined);
+        });
+
+        // -----------------------------------------------------
         //	obj_matches_field_constraints()
         // -----------------------------------------------------
 
@@ -971,8 +1015,131 @@ function (Data_Object, Data_Structures, assert, test_utils) {
             assert.deepEqual(args, [["Field1", "int"], ["Field2", "number"]]);
         });
 
+        // ----------------------------------------------------------------------------------------------
+        //	ensure_field_constraint(), get_field_data_type_constraint(), set_field_data_type_constraint
+        // ----------------------------------------------------------------------------------------------
+
+        it("works strangely", function () {
+            var data_object = new Data_Object();
+            //
+            var field_info = { data_type: "int" };
+            //
+            data_object.ensure_field_constraint("Field1", field_info);
+            //
+            var fdtc = data_object.get_field_data_type_constraint("Field1");
+            //
+            assert.deepEqual(fdtc, Constraint.from_str("int"));
+            assert.ok(fdtc instanceof Constraint.Field_Data_Type);
+            //
+            // ensure_field_constraint(), get_field_data_type_constraint(), set_field_data_type_constraint() are not related to constraints():
+            //
+            assert.deepEqual(data_object._field_constraints, undefined);
+            //
+            // ensuring the constraint again throws an exception:
+            //
+            assert.throws(function () { data_object.ensure_field_constraint("Field1", field_info); });
+            assert.throws(function () { data_object.ensure_field_constraint("Field1", { data_type: "text" }); });
+            //
+            // set_field_data_type_constraint() just removes the constraint. The second parameter (data_type_constructor, e.g. String) does not matter.
+            //
+            data_object.set_field_data_type_constraint("Field1", String);
+            //
+            assert.deepEqual(data_object.get_field_data_type_constraint("Field1"), undefined);
+        });
 
         //#endregion  Constraints
+
+        //#region requirements
+
+        // ======================================================
+        //
+        //	                 requirements
+        //
+        // ======================================================
+
+        // in general, the requirements feature does nothing
+
+        // -----------------------------------------------------
+        //	____requires()
+        // -----------------------------------------------------
+
+        it("should return requirements", function () {
+            var data_object = new Data_Object();
+            //
+            // ____requires() returns _requirements member variable
+            // there is no way to set this variable using methods
+            //
+            assert.deepEqual(data_object._requirements, undefined);
+            assert.deepEqual(data_object.____requires(), undefined);
+            //
+            var requirements = { abc: 123 };
+            data_object._requirements = requirements;
+            assert.deepEqual(data_object.____requires(), requirements);
+        });
+
+        // -----------------------------------------------------
+        //	_____meets_requirements()
+        // -----------------------------------------------------
+
+        it("works strangely", function () {
+            var data_object = new Data_Object();
+            //
+            // returns true if the requirements are not set
+            //
+            assert.deepEqual(data_object._requirements, undefined);
+            assert.deepEqual(data_object._____meets_requirements(), true);
+            //
+            // returns undefined if the requirements are set to anything
+            //
+            var requirements = { abc: 123 };
+            data_object._requirements = requirements;
+            assert.deepEqual(data_object._____meets_requirements(), undefined);
+            assert.deepEqual(data_object._____meets_requirements("Field1"), undefined);
+        });
+
+        // -----------------------------------------------------
+        //	_____check_requirements()
+        // -----------------------------------------------------
+
+        it("does nothing", function () {
+            var data_object = new Data_Object();
+            //
+            // always returns undefined
+            //
+            assert.deepEqual(data_object._____check_requirements(), undefined);
+            assert.deepEqual(data_object._____check_requirements("Field1"), undefined);
+            assert.deepEqual(data_object._____check_requirements(true), undefined);
+        });
+
+        //#endregion  requirements
+
+        //#region utilites
+
+        // ======================================================
+        //
+        //	                 utilites
+        //
+        // ======================================================
+
+        // -----------------------------------------------------
+        //	each()
+        // -----------------------------------------------------
+
+        it("should iterate over values", function () {
+            var data_object = new Data_Object();
+            //
+            var result = [];
+            var callback = function (name, value) { result.push([name, value]) };
+            //
+            data_object.set("Field1", ["abc"]);
+            data_object.set("Field2", [123]);
+            //
+            data_object.each(callback);
+            //
+            assert.deepEqual(result, [["Field1", ["abc"]], ["Field2", [123]]]);
+        });
+
+        //#endregion  utilites
 
         //#region xxxxxxxxxxx
 
