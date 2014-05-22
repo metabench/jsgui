@@ -169,122 +169,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
         //#endregion
 
-        //#region stringify(), toObject()
-
-        // ======================================================
-        //
-        //	             stringify(), toObject()
-        //
-        // ======================================================
-
-        // -----------------------------------------------------
-        //	stringify()
-        // -----------------------------------------------------
-
-        it("should do stringify", function () {
-            var data_object = new Data_Object();
-            data_object._ = "123";
-            assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
-        });
-
-        // -----------------------------------------------------
-        //	toObject()
-        // -----------------------------------------------------
-
-        it("should do toObject()", function () {
-            var data_object = null;
-            var obj = null;
-            //
-            obj = { a: 1, b: "2" };
-            data_object = new Data_Object();
-            data_object._ = obj
-            assert.deepEqual(data_object.toObject(), obj);
-            //
-            obj = [1, 2, "3"];
-            data_object = new Data_Object();
-            data_object._ = obj
-            assert.deepEqual(data_object.toObject(), obj);
-            //
-            obj = 7;
-            data_object = new Data_Object();
-            data_object._ = obj
-            assert.deepEqual(data_object.toObject(), {});  // !!!
-        });
-
-        //#endregion
-
-        //#region base properties
-
-        // ======================================================
-        //
-        //	                 base properties
-        //
-        // ======================================================
-
-        // -----------------------------------------------------
-        //	parent(): just like Data_Value.parent()
-        // -----------------------------------------------------
-
-        it("should be able to have a parent", function () {
-            var data_object = null;
-            //
-            // no parent:
-            //
-            data_object = new Data_Object();
-            assert.deepEqual(data_object.parent(), undefined);
-            //
-            // set something as parent:
-            //
-            data_object.parent("123");
-            assert.deepEqual(data_object.parent(), "123");
-            assert.throws(function () { data_object._id(); });
-            //
-            // set something as parent (with index):
-            //
-            data_object.parent("777", 0);
-            assert.deepEqual(data_object.parent(), "777");
-            assert.throws(function () { data_object._id(); });
-            //
-            // set a parent with a context:
-            //
-            var nextId = 7;
-            var myContext = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
-            //
-            var myParent = { _context: myContext };
-            data_object.parent(myParent);
-            assert.deepEqual(data_object.parent(), myParent);
-            assert.deepEqual(data_object._id(), "data_object_007");
-            //
-            // set a parent with a context, with index:
-            //
-            data_object = new Data_Object();
-            assert.deepEqual(data_object.parent(), undefined);
-            //
-            data_object.parent(myParent, 0);
-            assert.deepEqual(data_object.parent(), myParent);
-            assert.deepEqual(data_object._id(), "data_object_008");
-        });
-
-        // -----------------------------------------------------
-        //	_id(): just like Data_Value._id()
-        // -----------------------------------------------------
-
-        it("should be able to provide an id", function () {
-            var data_object = null;
-            //
-            data_object = new Data_Object();
-            assert.throws(function () { data_object._id(); });
-            //
-            var nextId = 7;
-            var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
-            //
-            data_object = new Data_Object({ context: context });
-            assert.deepEqual(data_object._id(), "data_object_007");
-            assert.deepEqual(data_object._id(), "data_object_007"); // the same as above, new_id() was not called
-        });
-
-        //#endregion base properties
-
         //#region get(), set(), has(), value(), load_from_spec()
 
         // ======================================================
@@ -1122,6 +1006,40 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // ======================================================
 
         // -----------------------------------------------------
+        //	stringify()
+        // -----------------------------------------------------
+
+        it("should do stringify", function () {
+            var data_object = new Data_Object();
+            data_object._ = "123";
+            assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
+        });
+
+        // -----------------------------------------------------
+        //	toObject()
+        // -----------------------------------------------------
+
+        it("should do toObject()", function () {
+            var data_object = null;
+            var obj = null;
+            //
+            obj = { a: 1, b: "2" };
+            data_object = new Data_Object();
+            data_object._ = obj
+            assert.deepEqual(data_object.toObject(), obj);
+            //
+            obj = [1, 2, "3"];
+            data_object = new Data_Object();
+            data_object._ = obj
+            assert.deepEqual(data_object.toObject(), obj);
+            //
+            obj = 7;
+            data_object = new Data_Object();
+            data_object._ = obj
+            assert.deepEqual(data_object.toObject(), {});  // !!!
+        });
+
+        // -----------------------------------------------------
         //	each()
         // -----------------------------------------------------
 
@@ -1139,7 +1057,255 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
             assert.deepEqual(result, [["Field1", ["abc"]], ["Field2", [123]]]);
         });
 
+        // -----------------------------------------------------
+        //	mod_link()
+        // -----------------------------------------------------
+
+        it("should return jsgui reference", function () {
+            var data_object = new Data_Object();
+            //
+            var jsgui = data_object.mod_link();
+            //
+            assert.deepEqual(typeof (jsgui.Class), "function");
+            assert.deepEqual(typeof (jsgui.arrayify), "function");
+            assert.deepEqual(typeof (jsgui.functional_polymorphism), "function");
+            assert.deepEqual(typeof (jsgui.get_item_sig), "function");
+            assert.deepEqual(typeof (jsgui.get_truth_map_from_arr), "function");
+        });
+
+        // -----------------------------------------------------
+        //	_get_input_processors()
+        // -----------------------------------------------------
+
+        it("_get_input_processors()", function () {
+            var data_object = new Data_Object();
+            var jsgui = data_object.mod_link();
+            //
+            assert.deepEqual(data_object._get_input_processors(), jsgui.input_processors);
+        });
+
         //#endregion  utilites
+
+        //#region _id(), parent
+
+        // ======================================================
+        //
+        //	                 _id(), parent
+        //
+        // ======================================================
+
+        //
+        // parent() and other methods (_fp_parent(), position_within(), and remove_from()) use different implementation private variables
+        //
+
+        // -----------------------------------------------------
+        //	_id(): just like Data_Value._id()
+        // -----------------------------------------------------
+
+        it("should be able to provide an id", function () {
+            var data_object = null;
+            //
+            data_object = new Data_Object();
+            assert.throws(function () { data_object._id(); });
+            //
+            var nextId = 7;
+            var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
+            //
+            data_object = new Data_Object({ context: context });
+            assert.deepEqual(data_object._id(), "data_object_007");
+            assert.deepEqual(data_object._id(), "data_object_007"); // the same as above, new_id() was not called
+        });
+
+        // -----------------------------------------------------
+        //	parent(): just like Data_Value.parent()
+        // -----------------------------------------------------
+
+        it("should be able to have a parent", function () {
+            var data_object = null;
+            //
+            // no parent:
+            //
+            data_object = new Data_Object();
+            assert.deepEqual(data_object.parent(), undefined);
+            //
+            // set something as parent:
+            //
+            data_object.parent("123");
+            assert.deepEqual(data_object.parent(), "123");
+            assert.throws(function () { data_object._id(); });
+            //
+            // set something as parent (with index):
+            //
+            data_object.parent("777", 0);
+            assert.deepEqual(data_object.parent(), "777");
+            assert.throws(function () { data_object._id(); });
+            //
+            // set a parent with a context:
+            //
+            var nextId = 7;
+            var myContext = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
+            //
+            var myParent = { _context: myContext };
+            data_object.parent(myParent);
+            assert.deepEqual(data_object.parent(), myParent);
+            assert.deepEqual(data_object._id(), "data_object_007");
+            //
+            // set a parent with a context, with index:
+            //
+            data_object = new Data_Object();
+            assert.deepEqual(data_object.parent(), undefined);
+            //
+            data_object.parent(myParent, 0);
+            assert.deepEqual(data_object.parent(), myParent);
+            assert.deepEqual(data_object._id(), "data_object_008");
+        });
+
+        // -----------------------------------------------------
+        //	_fp_parent()
+        // -----------------------------------------------------
+
+        it("works strangely", function () {
+            var data_object = new Data_Object();
+            //
+            // _fp_parent() always returns undefined (here and below):  !!!
+            //
+            assert.deepEqual(data_object._fp_parent(), undefined);
+            //
+            // _fp_parent(data_object) does nothing besides the _context setting:  !!!
+            //
+            var parent_data_object = new Data_Object();
+            parent_data_object._context = "context1";  // implementation specific !!!
+            data_object._fp_parent(parent_data_object);
+            //
+            assert.deepEqual(data_object._parents, undefined); // implementation specific !!!
+            assert.deepEqual(data_object._relationships, undefined); // implementation specific !!!
+            assert.deepEqual(data_object._fp_parent(), undefined);
+            assert.deepEqual(data_object.parent(), undefined);
+            //
+            assert.deepEqual(data_object._context, "context1"); // implementation specific !!!
+            //
+            // _fp_parent(data_object, position) changes the _parents variable:
+            //
+            var nextId = 7;
+            var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
+            //
+            parent_data_object._context = context; // implementation specific !!!
+            data_object._fp_parent(parent_data_object, 3);
+            //
+            assert.deepEqual(data_object._parents, { 'data_object_007': [parent_data_object, 3] });  // implementation specific !!!
+            assert.deepEqual(data_object._relationships, undefined); // implementation specific !!!
+            assert.deepEqual(data_object._fp_parent(), undefined);
+            assert.deepEqual(data_object.parent(), undefined);
+        });
+
+        // -----------------------------------------------------
+        //	position_within()
+        // -----------------------------------------------------
+
+        it("should returns the position", function () {
+            var data_object = new Data_Object();
+            //
+            var nextId = 7;
+            var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
+            var parent_data_object = new Data_Object({ context: context });
+            //
+            // parent not set - returns undefined:
+            //
+            assert.deepEqual(data_object.position_within(parent_data_object), undefined);
+            //
+            // _fp_parent(parent_data_object) does nothing anyway (besides the _context setting):  !!!
+            //
+            data_object._fp_parent(parent_data_object);
+            assert.deepEqual(data_object.position_within(parent_data_object), undefined);
+            //
+            //  _fp_parent(data_object, position) sets the parent and position:
+            //
+            data_object._fp_parent(parent_data_object, 3);
+            assert.deepEqual(data_object.position_within(parent_data_object), 3);
+            //
+            // throws exception if the parent candidate is unable to provide _id():
+            //
+            var other_data_object = new Data_Object();
+            assert.throws(function () { data_object.position_within(other_data_object); });
+        });
+
+        // -----------------------------------------------------
+        //	remove_from()
+        // -----------------------------------------------------
+
+        it("should probably remove from parent", function () {
+            var data_object = new Data_Object();
+            //
+            var nextId = 7;
+            var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
+            var parent_data_object = new Data_Object({ context: context });
+            //
+            //  _fp_parent(data_object, position) sets the parent and position:
+            //
+            data_object._fp_parent(parent_data_object, 3);
+            assert.deepEqual(data_object.position_within(parent_data_object), 3);
+            //
+            // remove_from() does not works:
+            //
+            assert.throws(function () { data_object.remove_from(parent_data_object); });
+        });
+
+        //#endregion  _id(), parent
+
+        //#region fields connection
+
+        // ======================================================
+        //
+        //	                 fields connection
+        //
+        // ======================================================
+
+        // -----------------------------------------------------
+        //	connect_fields()
+        // -----------------------------------------------------
+
+        it("connect_fields()", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.connect_fields("Field1");
+            //
+            // connect_fields() allows to create a function to get/set a field value:
+            //
+            data_object.Field1([123]);
+            assert.deepEqual(data_object.Field1(), [123]);
+            //
+            // it can override any other method: !!!
+            //
+            assert.deepEqual(data_object.stringify(), 'Data_Object({"Field1": [123]})');
+            data_object.connect_fields("stringify");
+            //
+            assert.deepEqual(data_object.stringify(), undefined);
+            data_object.stringify([45]);
+            assert.deepEqual(data_object.stringify(), [45]);
+            //
+            // array parameter calls connect_fields() for each array item:
+            //
+            data_object.connect_fields(["Field2", "Field3"]);
+            data_object.Field2([222]);
+            data_object.Field3([333]);
+            assert.deepEqual(data_object.Field2(), [222]);
+            assert.deepEqual(data_object.Field3(), [333]);
+            //
+            // object parameter is not allowed:
+            //
+            assert.throws(function () { data_object.connect_fields({}); });
+        });
+
+        // -----------------------------------------------------
+        //	using_fields_connection()
+        // -----------------------------------------------------
+
+        xit("using_fields_connection()", function () {
+            // TODO
+        });
+
+
+        //#endregion  fields connection
 
         //#region xxxxxxxxxxx
 
