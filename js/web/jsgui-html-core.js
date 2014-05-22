@@ -638,7 +638,17 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 }
 
                 var context = this._context;
-                context.register_control(this);
+                if (context) {
+                    context.register_control(this);
+                } else {
+                    //console.trace('');
+                    //throw 'Control requires context'
+
+                    // I think the very first Control object's prototype or something that inherits from it does not have
+                    //  a context at some stage.
+                }
+
+                
 
 
                 // When content gets added, need to update the relationships. 
