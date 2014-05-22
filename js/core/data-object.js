@@ -2271,9 +2271,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				
 				if (sig == '[D]') {
 					var parent = a[0];
-
-					console.log('[D] parent io Data_Object ' + parent instanceof Data_Object);
-					//console.log('[D] parent io Collection ' + parent instanceof Collection);
+					
+					//console.log('[D] parent io Data_Object ' + (parent instanceof Data_Object));
+					//console.log('[D] parent io Collection ' + (parent instanceof Collection));
 					
 					if (parent._context) this._context = parent._context;
 					
