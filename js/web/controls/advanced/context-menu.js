@@ -144,11 +144,26 @@ define(["../../jsgui-html", "./menu-node"],
 				// May need to register Flexiboard in some way on the client.
 				this._super();
 
-				console.log('activate Horizontal_Menu');
+				console.log('activate Context_Menu');
 
 				// While it is open, clicking outside of the menu should close it.
 
-				
+				// Respond to clicking anywhere.
+				//  If it's not a leaf node of the tree, will open further nested menu.
+
+				var ctrl_html_root = this._context.ctrl_document;
+	        	var body = ctrl_html_root.body();
+
+	        	var that = this;
+
+	        	// this.one_mousedown_anywhere
+
+	        	
+
+
+
+
+
 
 				// 
 

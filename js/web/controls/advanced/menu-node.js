@@ -142,8 +142,6 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 								})
 							}
 
-
-
 						}
 
 						var ctrl_fields = {
@@ -158,19 +156,16 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 						this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
 
-
-
-
 						if (spec_state) {
 
-
-							if (spec_state == 'expanded' || spec_state == 'contracted') {
+							// open and closed
+							if (spec_state == 'open' || spec_state == 'closed') {
 								state = this.set('state', spec_state);
 							} else {
-								throw 'spec.state expects "expanded" or "contracted".';
+								throw 'spec.state expects "open" or "closed".';
 							}
 						} else {
-							state = this.set('state', 'expanded');
+							state = this.set('state', 'open');
 						}
 					}
 				}
@@ -190,10 +185,54 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 				// raise a select event on the menu.
 				// and if there are other nodes inside, 
 
+				// Upon activation, we may not have the body node though.
+				//  Perhaps delay this?
+				// May be good to have the context get the body control earlier, with the body control specifically made & activated earlier on.
+
+				
+				// Can't have each node check for a mousedown anywhere.
+				//  Better to have the context menu itself do the checking.
+
+
+				setTimeout(function() {
+
+					/*
+					that.one_mousedown_anywhere(function(e_mousedown) {
+		        		console.log('omda', e_mousedown);
+
+		        		var within_this = e_mousedown.within_this;
+		        		console.log('within_this', within_this);
+
+		        		if (within_this) {
+		        			// Would be nice to have a target_control as part of the mouse event.
+
+
+		        		} else {
+		        			//that.close_all();
+		        			that.remove();
+		        		}
+
+
+		        	});
+					*/
+				}, 0);
+				
+
+
+	        	
+
+
+
+					
+
+				/*
+
 				main_control.on('click', function(e_click) {
 					console.log('inner_control', inner_control);
 
 					var icc = inner_control.get('content');
+
+
 					var iccl = icc.length();
 
 					if (iccl > 0) {
@@ -219,6 +258,8 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 					}
 					
 				})
+				*/
+				
 				// then when the main part is clicked, show the inner control.
 
 
@@ -254,9 +295,22 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 				});
 
 				inner_control.hide();
+				this.set('state', 'closed');
 
 
+			},
+			'close': function() {
+				var inner_control = this.get('inner_control');
+				inner_control.hide();
+				this.set('state', 'closed');
+			},
+			'open': function() {
+				var inner_control = this.get('inner_control');
+				inner_control.show();
+				this.set('state', 'open');
 			}
+
+
 		});
 		return Menu_Node;
 	

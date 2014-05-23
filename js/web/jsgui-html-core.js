@@ -2671,6 +2671,62 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         },
 
+        'find': function(selector) {
+
+        },
+        'children': fp(function(a, sig) {
+            var selector;
+
+            if (sig == '[s]') {
+                selector = a[0];
+            }
+
+            
+
+
+        }),
+
+        'matches_selector': function(selector) {
+
+        },
+
+        // Want to see if an element (or control) is a descendant of this.
+        //  If this is an ancestor of element or control. is_ancestor_of
+        // will go through DOM parent nodes or control parents.
+
+        'is_ancestor_of': function(target) {
+            var t_target = tof(target);
+            console.log('t_target', t_target);
+
+            var el = this.get('dom.el');
+
+            var inner = function(target2) {
+
+                if (target2 == el) {
+                    return true;
+                }
+                var parent = target2.parentNode;
+                if (!parent) {
+                    return false;
+                }  else {
+                    return inner(parent);
+                }
+
+            }
+
+            if (t_target == 'object') {
+                if (el != target) {
+                    var parent = target.parentNode;
+                    if (parent) {
+                        return inner(parent);
+                    }
+                }
+
+            }
+        },
+
+
+
         'find_selected_ancestor_in_scope': function() {
             // same selection scope
             // is this one already selected?

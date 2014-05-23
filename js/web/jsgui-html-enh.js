@@ -384,6 +384,41 @@ define(["./jsgui-html-core"],
 	            }
 	        }),
 
+	        'one_mousedown_anywhere': function(callback) {
+	        	var ctrl_html_root = this._context.ctrl_document;
+	        	console.log('this._context', this._context);
+	        	var body = ctrl_html_root.body();
+
+	        	var that = this;
+
+	        	body.one('mousedown', function(e_mousedown) {
+	        		// Maybe see if it's internal or external to the control
+
+	        		// Would be good to have that in the event.
+
+	        		var el = that.get('dom.el');
+
+	        		var e_el = e_mousedown.srcElement || e_mousedown.target;
+
+
+
+
+
+	        		console.log('one mousedown', e_mousedown);
+	        		console.log('e_el', e_el);
+
+	        		// Want to see if the element clicked on is a descendant of this's el.
+
+	        		var iao = that.is_ancestor_of(e_el);
+	        		//console.log('iao', iao);
+
+	        		e_mousedown.within_this = iao;
+
+	        		callback(e_mousedown);
+
+	        	});
+	        },
+
 
 			// This may need to search inside for controls to be activated.
 			//  Need to get this to work with client-rendered content.
@@ -1029,9 +1064,24 @@ define(["./jsgui-html-core"],
 	        			
 	        			//console.log('body', body);
 
+
+	        			
 	        			setTimeout(function() {
 	        				body.add(context_menu);
+	        				context_menu.activate();
 
+
+	        				context_menu.one_mousedown_anywhere(function(e_mousedown) {
+								console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+
+								if (!e_mousedown.within_this) {
+									context_menu.remove();
+								}
+							});
+
+
+
+	        				/*
 	        				setTimeout(function() {
 
 
@@ -1053,8 +1103,10 @@ define(["./jsgui-html-core"],
 				        			}
 				        		});
 	        				}, 20)
-
+							*/
 	        			}, 0);
+						
+
 	        			
 
 	        			// I think we need another demo / test of dynamically adding content to a control.
@@ -1083,7 +1135,17 @@ define(["./jsgui-html-core"],
 	        			setTimeout(function() {
 	        				//console.log('pre add context menu');
 	        				body.add(context_menu);
+	        				context_menu.activate();
 
+	        				context_menu.one_mousedown_anywhere(function(e_mousedown) {
+								console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+
+								if (!e_mousedown.within_this) {
+									context_menu.remove();
+								}
+							});
+	        				
+	        				/*
 	        				setTimeout(function() {
 
 				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
@@ -1094,7 +1156,7 @@ define(["./jsgui-html-core"],
 				        			}
 				        		});
 	        				}, 20)
-
+							*/
 	        			}, 0);
 
 
@@ -1115,9 +1177,6 @@ define(["./jsgui-html-core"],
 	        		return false;
 	        		//console.log('e_click', e_click);
 	        	})
-
-
-
 
 	        	this.on('mousedown', function(e_mousedown) {
 	        		//console.log('e_mousedown', e_mousedown);
@@ -3380,12 +3439,14 @@ define(["./jsgui-html-core"],
 	            //console.log('end init Blank_HTML_Document this._ ' + stringify(this._));
 	        },
 	        'body': fp(function(a, sig) {
+	        	console.log('body sig', sig);
 	        	if (sig =='[]') {
 	        		// find the body control.
 
 	        		var content = this.get('content');
+	        		console.log('content', content);
 	        		var body = content.get(1);
-	        		//console.log('body', body);
+	        		console.log('body', body);
 	        		//throw 'stop';
 
 	        		return body;

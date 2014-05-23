@@ -229,14 +229,14 @@ define(["./jsgui-html-core"],
 	        register_control: function(control) {
 	        	// Put it into the map of IDs
 
-	        	console.log('register_control');
+	        	//console.log('register_control');
 
 	        	// Not sure how useful registration of all controls will be.
 	        	//  Probably would not be a problem, just it will take memory and CPU cycles.
 
 
 	        	var id = control._id();
-	        	console.log('id', id);
+	        	//console.log('id', id);
 
 	        	this.map_controls[id] = control;
 
