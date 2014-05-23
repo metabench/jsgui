@@ -1316,6 +1316,142 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // ======================================================
 
 
+        // -----------------------------------------------------
+        //	Data_Object.extend()
+        // -----------------------------------------------------
+
+        it("should ...", function () {
+            var Data_Object_Ex = Data_Object.extend({
+                Prop1: 123,
+                Func1: function () { return "hello"; }
+            });
+            //
+            var data_object = new Data_Object_Ex();
+            data_object._ = "123";
+            assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
+            //
+            assert.deepEqual(data_object.Prop1, 123);
+            assert.deepEqual(data_object.Func1(), "hello");
+        });
+
+        // -----------------------------------------------------
+        //	jsgui.data_types_info[]
+        // -----------------------------------------------------
+
+        it("should use type information from jsgui.data_types_info", function () {
+            var jsgui = Data_Object.prototype.mod_link();
+            var old_data_types_info = jsgui.data_types_info;
+            //
+            var data_type_name = "depth";
+            var data_type_info = "int";
+            jsgui.data_types_info = [];
+            jsgui.data_types_info[data_type_name] = data_type_info;
+            //
+            var Data_Object_Ex = Data_Object.extend(data_type_name);
+            //
+            assert.deepEqual(Data_Object_Ex.depth, "depth"); // !!!
+            assert.deepEqual(Data_Object_Ex.int, "int"); // !!!  imagine "text(10)" instead of "int"...
+            //
+            var data_object = new Data_Object_Ex();
+            //
+            assert.deepEqual(data_object.__type_name, "depth");
+            assert.deepEqual(data_object.__data_type_info, "int");
+            //
+            jsgui.data_types_info = old_data_types_info;
+            //
+            // BTW personally I don't like this approach; probably something like separate class factory engine can be better
+            //
+        });
+
+        // -----------------------------------------------------
+        //	for_class[]
+        // -----------------------------------------------------
+
+        it("should assign some values to the resulting class instead of the class instance", function () {
+            var jsgui = Data_Object.prototype.mod_link();
+            var old_map_classes = jsgui.map_classes;
+            //
+            // the test is implementation specific !!!
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                class_name: { name: "MyClass" },
+                fields: { f1: 1, f2: 2 },
+                connect_fields: false
+            });
+            var data_object = new Data_Object_Ex();
+            //
+            assert.deepEqual(Data_Object_Ex._class_name, { name: "MyClass" });  
+            assert.deepEqual(Data_Object_Ex._fields, { f1: 1, f2: 2 });
+            assert.deepEqual(Data_Object_Ex._connect_fields, false);
+            //
+            assert.notDeepEqual(data_object.class_name, { name: "MyClass" });
+            assert.notDeepEqual(data_object.fields, { f1: 1, f2: 2 });
+            assert.notDeepEqual(data_object.connect_fields, false);
+            //
+            // the 'for_class' feature works for 'object' and 'boolean' types only:
+            //
+            var func_fields = function () { };
+            //
+            Data_Object_Ex = Data_Object.extend({
+                class_name: "MyClass",
+                fields: func_fields,
+                connect_fields: 100
+            });
+            data_object = new Data_Object_Ex();
+            //
+            assert.deepEqual(Data_Object_Ex._class_name, undefined); 
+            assert.deepEqual(Data_Object_Ex._fields, undefined);
+            assert.deepEqual(Data_Object_Ex._connect_fields, undefined);
+            //
+            assert.deepEqual(data_object.class_name, "MyClass");
+            assert.deepEqual(data_object.fields, func_fields);
+            assert.deepEqual(data_object.connect_fields, 100);
+            //
+            jsgui.map_classes = old_map_classes;
+        });
+
+        // -----------------------------------------------------
+        //	jsgui.map_classes[]
+        // -----------------------------------------------------
+
+        it("probably should register Data_Object derived classes in map_classes[]", function () {
+            var jsgui = Data_Object.prototype.mod_link();
+            var old_map_classes = jsgui.map_classes;
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                class_name: { name: "MyClass" }
+            });
+            //
+            // no effect. I see no way to set the 'class_name' property for a derived class. // !!!
+            // on the other hand, I don't like such side effects, maybe it's better without this feature
+            //
+            assert.deepEqual(Data_Object_Ex['class_name'], undefined);
+            assert.deepEqual(jsgui.map_classes, old_map_classes);
+            //
+            jsgui.map_classes = old_map_classes;
+        });
+
+        // -----------------------------------------------------
+        //	_superclass
+        // -----------------------------------------------------
+
+        it("should keep the base class reference", function () {
+            function calcSuperClass(ctor) {
+                var jsgui = Data_Object.prototype.mod_link();
+                var result = [];
+                jsgui.iterate_ancestor_classes(ctor, function (_class) { result.push(_class); });
+                return result[1];
+            }
+            //
+            var Data_Object_Ex = Data_Object.extend({});
+            assert.deepEqual(calcSuperClass(Data_Object_Ex), Data_Object);
+            //
+            var Data_Object_Ex_2 = Data_Object_Ex.extend({});
+            assert.deepEqual(calcSuperClass(Data_Object_Ex_2), Data_Object_Ex);
+        });
+
+
+
         //#endregion
 
         /*
