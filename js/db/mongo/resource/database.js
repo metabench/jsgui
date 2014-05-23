@@ -8,7 +8,7 @@ var Mongo = require('mongodb'), MongoClient = Mongo.MongoClient;
 //var Mongo_Server  
 
 define(["module", "path",
-	"../../../core/jsgui-lang-util", "../../../resource/core/resource", "../../../resource/core/resource-collection", "./collection"], 
+	"../../../core/jsgui-lang-util", "../../../resource/core/resource", "../../../resource/core/collection", "./collection"], 
 
 	// Or server should have the referece to database? Server is the larger one.
 	//  May need to side-load the server at some point.

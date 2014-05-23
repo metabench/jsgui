@@ -1,3 +1,7 @@
+if (typeof define !== 'function') {
+    var define = require('amdefine')(module);
+}
+
 // Possibly will be a core resource.
 
 // Likely to be hooked up with a DB as well.

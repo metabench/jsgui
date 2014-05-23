@@ -972,6 +972,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 			// Fields get created using constraints.
 
+
+			// Constraint from a new Data_Object?
+			//  Not sure of the need of this.
 			var doc = that._data_object_constraint = that._data_object_constraint || Constraint.from_obj(new Data_Object());
 			//var doc = that._data_object_constraint || 
 			//console.log('doc ' + stringify(doc));
@@ -980,15 +983,23 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			
 			//console.log('set_field sig ' + sig);
 			//console.log('set_field a ' + stringify(a));
+
+			// Setting a field on a collection...
+			//  Setting a constrinat?
+
+
+			//if (doc) {
+				if(a.l == 2 && tof(a[0]) == 'string') {
+					doc.data_object.fc = doc.data_object.fc || new Data_Object_Field_Collection();
+
+					// May need to set up indexing on the fields as well.
+					
+
+					return doc.data_object.fc.set(a[0], a[1]);
+				}
+			//}
 		
-			if(a.l == 2 && tof(a[0]) == 'string') {
-				doc.data_object.fc = doc.data_object.fc || new Data_Object_Field_Collection();
-
-				// May need to set up indexing on the fields as well.
-				
-
-				return doc.data_object.fc.set(a[0], a[1]);
-			}
+			
 		}),
 		
 

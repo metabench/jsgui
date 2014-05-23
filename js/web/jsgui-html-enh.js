@@ -1129,7 +1129,6 @@ define(["./jsgui-html-core"],
 		        				'left': '100px',
 		        				'top': '100px'
 		        			});
-
 	        			}
 
 	        			setTimeout(function() {
@@ -1144,7 +1143,7 @@ define(["./jsgui-html-core"],
 									context_menu.remove();
 								}
 							});
-	        				
+
 	        				/*
 	        				setTimeout(function() {
 

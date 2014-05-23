@@ -261,8 +261,6 @@ define(["../../jsgui-html", "./horizontal-menu"],
 				//  Possibly event handlers as well?
 
 
-
-
 				console.log('window menu menu_spec', menu_spec);
 
 				// Need to build up the menu out of menu nodes.

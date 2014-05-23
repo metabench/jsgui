@@ -1423,10 +1423,22 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 		
 		
 		
-		//console.log('constraint.js from_obj sig ' + stringify(sig));
+		console.log('constraint.js from_obj sig ' + stringify(sig));
 		
 		if (sig == '[s]') {
 			return constraint_from_str(a[0]);
+			
+		}
+
+		if (sig == '[D]') {
+			//return constraint_from_str(a[0]);
+
+			console.log('a[0]', a[0]);
+			//throw 'stop';
+
+			var res = new Data_Object_Constraint({});
+			res.data_object = a[0];
+			return res; 
 			
 		}
 		
