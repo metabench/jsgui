@@ -913,7 +913,12 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
             var fdtc = data_object.get_field_data_type_constraint("Field1");
             //
             assert.deepEqual(fdtc, Constraint.from_str("int"));
-            assert.ok(fdtc instanceof Constraint.Field_Data_Type);
+            //
+            if (!test_utils.isInBrowser()) {
+                // it seems that RequireJs loads separate Constraint modules for data-object.js module and this test.
+                // so, the assertion below passes for Node environment, but fails for browser one.
+                assert.ok(fdtc instanceof Constraint.Field_Data_Type);
+            }
             //
             // ensure_field_constraint(), get_field_data_type_constraint(), set_field_data_type_constraint() are not related to constraints():
             //
