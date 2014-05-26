@@ -201,7 +201,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
     /**
     * Creates the data object constraint.
     * @constructor
-    * @classdesc <mark>the class does nothing, not public, not used anywhere.</mark>.
+    * @classdesc <mark>the class does nothing, and not public.</mark>.
     * @memberof module:core/constraint
     */
     // Data_Object_Constraint
@@ -1423,7 +1423,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 		
 		
 		
-		console.log('constraint.js from_obj sig ' + stringify(sig));
+		//console.log('constraint.js from_obj sig ' + stringify(sig));
 		
 		if (sig == '[s]') {
 			return constraint_from_str(a[0]);
@@ -1433,7 +1433,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 		if (sig == '[D]') {
 			//return constraint_from_str(a[0]);
 
-			console.log('a[0]', a[0]);
+			//console.log('a[0]', a[0]);
 			//throw 'stop';
 
 			var res = new Data_Object_Constraint({});
