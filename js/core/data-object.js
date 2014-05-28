@@ -5481,9 +5481,13 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 	var Enhanced_Data_Object = null;
 
-	var set_Enhanced_Data_Object = function(EDO) {
-		Enhanced_Data_Object = EDO;
-	}
+	var set_Enhanced_Data_Object = function (EDO) {
+	    Enhanced_Data_Object = EDO;
+	};
+
+	var get_Enhanced_Data_Object = function () {
+	    return Enhanced_Data_Object;
+	};
 
 
 	// seems like an overlap with the new jsgui.fromObject function.
@@ -5625,7 +5629,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	Data_Object.map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors;
 	Data_Object.Mini_Context = Mini_Context;
 	Data_Object.set_Enhanced_Data_Object = set_Enhanced_Data_Object;
-	
+	Data_Object.get_Enhanced_Data_Object = get_Enhanced_Data_Object;
+
 	return Data_Object;
 	
 })
