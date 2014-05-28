@@ -1,10 +1,69 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/data-object', "../../../core/jsgui-data-structures", "../../../core/constraint", 'assert', '../../test-utils/test-utils'],
-function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
+define(['../../../core/data-object', "../../../core/jsgui-data-structures", "../../../core/constraint", "../../../core/enhanced-data-object", 'assert', '../../test-utils/test-utils'],
+function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert, test_utils) {
 
     describe("z_core/data-object /Data_Object.spec.js ", function () {
+
+
+        // -----------------------------------------------------
+        //	jsgui:
+        // -----------------------------------------------------
+
+        var jsgui = null;
+
+        // -----------------------------------------------------
+        //	avoid side effects:
+        // -----------------------------------------------------
+
+        var save_jsgui_Data_Object = null; // jsgui-lang-utils.js(63): jsgui.Data_Object = Data_Object;
+        var save_jsgui_Collection = null;  // jsgui-lang-utils.js(64): jsgui.Collection = Collection;
+        var save_jsgui_Data_Value = null;  // jsgui-lang-utils.js(66): jsgui.Data_Value = Data_Object.Data_Value;
+        //
+        var save_jsgui__data_id_method = null;  // jsgui-lang-utils.js(1270): '__data_id_method' : 'lazy',
+        //
+        var save_Data_Object_Enhanced_Data_Object = null;  // enhanced-data-object(660): Data_Object.set_Enhanced_Data_Object(Enhanced_Data_Object);
+
+        before(function () {
+            //
+            // jsgui:
+            //
+            jsgui = Data_Object.prototype.mod_link();
+            //
+            //  save values:
+            //
+            save_jsgui_Data_Object = jsgui.Data_Object;
+            save_jsgui_Collection = jsgui.Collection;
+            save_jsgui_Data_Value = jsgui.Data_Value;
+            //
+            save_jsgui__data_id_method = jsgui.__data_id_method;
+            //
+            save_Data_Object_Enhanced_Data_Object = Data_Object.get_Enhanced_Data_Object();
+            //
+            // reset values:
+            //
+            jsgui.Data_Object = null;
+            jsgui.Collection = null;
+            jsgui.Data_Value = null;
+            //
+            jsgui.__data_id_method = "init";
+            //
+            Data_Object.set_Enhanced_Data_Object(null);
+        });
+
+        after(function () {
+            //
+            //  restore values:
+            //
+            jsgui.Data_Object = save_jsgui_Data_Object;
+            jsgui.Collection = save_jsgui_Collection;
+            jsgui.Data_Value = save_jsgui_Data_Value;
+            //
+            jsgui.__data_id_method = save_jsgui__data_id_method;
+            //
+            Data_Object.set_Enhanced_Data_Object(save_Data_Object_Enhanced_Data_Object);
+        });
 
         //#region Initialization
 
@@ -416,7 +475,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // this function is related to the get() implementation details, and used to check code coverage purposes
         // this check should be removed from the final (production) tests version
         function assert_field_sig(data_object, fieldName, fieldSig) {
-            var jsgui = data_object.mod_link();
             var sig = jsgui.get_item_sig(data_object.fc.get(fieldName), 20);
             assert.deepEqual(sig, fieldSig);
         }
@@ -502,7 +560,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
             var data_object = new Data_Object();
             //
-            var jsgui = data_object.mod_link();
             //
             var old_data_types_info = jsgui.data_types_info;
 
@@ -1069,7 +1126,7 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         it("should return jsgui reference", function () {
             var data_object = new Data_Object();
             //
-            var jsgui = data_object.mod_link();
+            var jsgui = Data_Object.prototype.mod_link();
             //
             assert.deepEqual(typeof (jsgui.Class), "function");
             assert.deepEqual(typeof (jsgui.arrayify), "function");
@@ -1084,7 +1141,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
         it("_get_input_processors()", function () {
             var data_object = new Data_Object();
-            var jsgui = data_object.mod_link();
             //
             assert.deepEqual(data_object._get_input_processors(), jsgui.input_processors);
         });
@@ -1257,77 +1313,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
         //#endregion  _id(), parent
 
-        //#region fields connection
-
-        // ======================================================
-        //
-        //	                 fields connection
-        //
-        // ======================================================
-
-        // -----------------------------------------------------
-        //	connect_fields()
-        // -----------------------------------------------------
-
-        it("connect_fields()", function () {
-            var data_object = new Data_Object();
-            //
-            data_object.connect_fields("Field1");
-            //
-            // connect_fields() allows to create a function to get/set a field value:
-            //
-            data_object.Field1([123]);
-            assert.deepEqual(data_object.Field1(), [123]);
-            //
-            // it can override any other method: !!!
-            //
-            assert.deepEqual(data_object.stringify(), 'Data_Object({"Field1": [123]})');
-            data_object.connect_fields("stringify");
-            //
-            assert.deepEqual(data_object.stringify(), undefined);
-            data_object.stringify([45]);
-            assert.deepEqual(data_object.stringify(), [45]);
-            //
-            // array parameter calls connect_fields() for each array item:
-            //
-            data_object.connect_fields(["Field2", "Field3"]);
-            data_object.Field2([222]);
-            data_object.Field3([333]);
-            assert.deepEqual(data_object.Field2(), [222]);
-            assert.deepEqual(data_object.Field3(), [333]);
-            //
-            // object parameter is not allowed:
-            //
-            assert.throws(function () { data_object.connect_fields({}); });
-        });
-
-        // -----------------------------------------------------
-        //	using_fields_connection()
-        // -----------------------------------------------------
-
-        it("using_fields_connection()", function () {
-            //
-            var data_object = new Data_Object();
-            assert.deepEqual(data_object.using_fields_connection(), false);
-            //
-            var Data_Object_Ex = Data_Object.extend({
-                connect_fields: false
-            });
-            //
-            data_object = new Data_Object_Ex();
-            assert.deepEqual(data_object.using_fields_connection(), false);
-            //
-            var Data_Object_Ex_2 = Data_Object_Ex.extend({
-                connect_fields: true
-            });
-            //
-            data_object = new Data_Object_Ex_2();
-            assert.deepEqual(data_object.using_fields_connection(), true);
-        });
-
-
-        //#endregion  fields connection
-
         //#region Data_Object.extend()
 
         // ======================================================
@@ -1341,7 +1326,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // -----------------------------------------------------
 
         it("should use type information from jsgui.data_types_info", function () {
-            var jsgui = Data_Object.prototype.mod_link();
             var old_data_types_info = jsgui.data_types_info;
             //
             var data_type_name = "depth";
@@ -1465,7 +1449,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // -----------------------------------------------------
 
         it("should assign some values to the resulting class instead of the class instance", function () {
-            var jsgui = Data_Object.prototype.mod_link();
             var old_map_classes = jsgui.map_classes;
             //
             // class_name, fields, and connect_fields are involved into "for_class" feature:
@@ -1514,7 +1497,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // -----------------------------------------------------
 
         it("probably should register Data_Object derived classes in map_classes[]", function () {
-            var jsgui = Data_Object.prototype.mod_link();
             var old_map_classes = jsgui.map_classes;
             //
             var Data_Object_Ex = Data_Object.extend({
@@ -1536,7 +1518,6 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
         it("should keep the base class reference", function () {
             function calcSuperClass(ctor) {
-                var jsgui = Data_Object.prototype.mod_link();
                 var result = [];
                 jsgui.iterate_ancestor_classes(ctor, function (_class) { result.push(_class); });
                 return result[1];
@@ -1560,25 +1541,92 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
         // ======================================================
 
         // -----------------------------------------------------
+        //	connect_fields()
+        // -----------------------------------------------------
+
+        it("connect_fields()", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.connect_fields("Field1");
+            //
+            // connect_fields() allows to create a function to get/set a field value:
+            //
+            data_object.Field1([123]);
+            assert.deepEqual(data_object.Field1(), [123]);
+            //
+            // it can override any other method: !!!
+            //
+            assert.deepEqual(data_object.stringify(), 'Data_Object({"Field1": [123]})');
+            data_object.connect_fields("stringify");
+            //
+            assert.deepEqual(data_object.stringify(), undefined);
+            data_object.stringify([45]);
+            assert.deepEqual(data_object.stringify(), [45]);
+            //
+            // array parameter calls connect_fields() for each array item:
+            //
+            data_object.connect_fields(["Field2", "Field3"]);
+            data_object.Field2([222]);
+            data_object.Field3([333]);
+            assert.deepEqual(data_object.Field2(), [222]);
+            assert.deepEqual(data_object.Field3(), [333]);
+            //
+            // object parameter is not allowed:
+            //
+            assert.throws(function () { data_object.connect_fields({}); });
+        });
+
+        // -----------------------------------------------------
+        //	using_fields_connection()
+        // -----------------------------------------------------
+
+        it("using_fields_connection()", function () {
+            //
+            var data_object = new Data_Object();
+            assert.deepEqual(data_object.using_fields_connection(), false);
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                connect_fields: false
+            });
+            //
+            data_object = new Data_Object_Ex();
+            assert.deepEqual(data_object.using_fields_connection(), false);
+            //
+            var Data_Object_Ex_2 = Data_Object_Ex.extend({
+                connect_fields: true
+            });
+            //
+            data_object = new Data_Object_Ex_2();
+            assert.deepEqual(data_object.using_fields_connection(), true);
+            //
+            var Data_Object_Ex_3 = Data_Object_Ex_2.extend({
+                connect_fields: false
+            });
+            //
+            data_object = new Data_Object_Ex_3();
+            assert.deepEqual(data_object.using_fields_connection(), false);
+        });
+
+        // -----------------------------------------------------
         //	get_fields_chain(), chained_fields_to_fields_list() - object
         // -----------------------------------------------------
 
         it("should get objects fields chain", function () {
             var Data_Object_Ex = Data_Object.extend({
-                fields: { f1: "int", f2: "text" }
+                fields: { Field1: "int", Field2: "text" }
             });
             //
             var chained_fields = Data_Object.get_chained_fields(Data_Object_Ex);
-            assert.deepEqual(chained_fields, [[1, ["f1", "int"]], [2, ["f2", "text"]]]);
-            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["f1", "int"], ["f2", "text"]]);
+            assert.deepEqual(chained_fields, [[1, ["Field1", "int"]], [2, ["Field2", "text"]]]);
+            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["Field1", "int"], ["Field2", "text"]]);
             //
             var Data_Object_Ex_2 = Data_Object_Ex.extend({
-                fields: { f3: "number" }
+                fields: { Field3: "number" }
             });
             //
             chained_fields = Data_Object.get_chained_fields(Data_Object_Ex_2);
-            assert.deepEqual(chained_fields, [[1, ["f1", "int"]], [2, ["f2", "text"]], [1, ["f3", "number"]]]); // 1, 2, 1  ???
-            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["f1", "int"], ["f2", "text"], ["f3", "number"]]);
+            assert.deepEqual(chained_fields, [[1, ["Field1", "int"]], [2, ["Field2", "text"]], [1, ["Field3", "number"]]]); // 1, 2, 1  ???
+            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["Field1", "int"], ["Field2", "text"], ["Field3", "number"]]);
         });
 
         // -----------------------------------------------------
@@ -1587,63 +1635,43 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
 
         it("should get arrays fields chain", function () {
             var Data_Object_Ex = Data_Object.extend({
-                fields: ["int", "text"]
+                fields: [["Field1", "text"], ["Field2", "number"]]
             });
             //
             var chained_fields = Data_Object.get_chained_fields(Data_Object_Ex);
-            assert.deepEqual(chained_fields, [[0, "int"], [1, "text"]]);
-            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), ["int", "text"]);
+            assert.deepEqual(chained_fields, [[0, ["Field1", "text"]], [1, ["Field2", "number"]]]);
+            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["Field1", "text"], ["Field2", "number"]]);
             //
             var Data_Object_Ex_2 = Data_Object_Ex.extend({
-                fields: ["number"]
+                fields: [["Field3", "int"]]
             });
             //
             chained_fields = Data_Object.get_chained_fields(Data_Object_Ex_2);
-            assert.deepEqual(chained_fields, [[0, "int"], [1, "text"], [0, "number"]]); // 0, 1, 0  ???
-            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), ["int", "text", "number"]);
-        });
-
-        it("should get arrays fields chain", function () {
-            var Data_Object_Ex = Data_Object.extend({
-                fields: ["Field1", "text"]
-            });
-            //
-            var chained_fields = Data_Object.get_chained_fields(Data_Object_Ex);
-            assert.deepEqual(chained_fields, [[0, "Field1"], [1, "text"]]);
-            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), ["Field1", "text"]);
-            //
-            Data_Object_Ex = Data_Object.extend({
-                fields: [["Field1", "int"], ["Field2", "text"]]
-            });
-            //
-            var chained_fields = Data_Object.get_chained_fields(Data_Object_Ex);
-            assert.deepEqual(chained_fields, [[0, ["Field1", "int"]], [1, ["Field2", "text"]]]);
-            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["Field1", "int"], ["Field2", "text"]]);
-            //
+            assert.deepEqual(chained_fields, [[0, ["Field1", "text"]], [1, ["Field2", "number"]], [0, ["Field3", "int"]]]);  // 0, 1, 0 ???
+            assert.deepEqual(Data_Object.chained_fields_to_fields_list(chained_fields), [["Field1", "text"], ["Field2", "number"], ["Field3", "int"]]);
         });
 
 
-        // -----------------------------------------------------
-        //	init()
-        // -----------------------------------------------------
+        // --------------------------------------------------------------------
+        //	set fields in class constructor, set values in object constructor
+        // -------------------------------------------------------------------
 
         it("object field def", function () {
-            //
             var Data_Object_Ex = Data_Object.extend({
-                fields: { Field1: "int", Field2: "text" },
-                connect_fields: false
+                fields: { Field1: "int", Field2: "text" }
             });
-            var data_object = new Data_Object_Ex();
+            var data_object = new Data_Object_Ex({ Field1: [111], Field5: [555] });
+            //
             assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "text", { data_type: "text" }]]);
+            assert.deepEqual(data_object.get(), { Field1: [111] });
         });
 
         it("array field def", function () {
-            //
             var Data_Object_Ex = Data_Object.extend({
-                fields: [["Field1", "int"], ["Field2", "text"]],
-                connect_fields: false
+                fields: [["Field1", "int"], ["Field2", "text"]]
             });
             var data_object = new Data_Object_Ex({ Field1: [111], Field5: [555] });
+            //
             assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "text", { data_type: "text" }]]);
             assert.deepEqual(data_object.get(), { Field1: [111] });
         });
@@ -1652,20 +1680,144 @@ function (Data_Object, Data_Structures, Constraint, assert, test_utils) {
             //
             // if the "fields" are just field names:
             // it does not create fields,
-            // but it allows to set the values in the spec
+            // but it allows to set the values in the object constructor
             //
             var Data_Object_Ex = Data_Object.extend({
                 fields: ["Field1", "Field2", "Field3"]
             });
             var data_object = new Data_Object_Ex({ Field1: [111], Field5: [555] });
+            //
             assert.deepEqual(data_object.fields(), []);
             assert.deepEqual(data_object.get(), { Field1: [111] });
         });
 
+        it("2-level inheritance", function () {
+            var Data_Object_Ex = Data_Object.extend({
+                fields: { Field1: "int", Field2: "text" }
+            });
+            var data_object = new Data_Object_Ex({ Field1: [111], Field5: [555] });
+            //
+            assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "text", { data_type: "text" }]]);
+            assert.deepEqual(data_object.get(), { Field1: [111] });
+            //
+            var Data_Object_Ex_2 = Data_Object_Ex.extend({
+                fields: { Field3: "number" }
+            });
+            data_object = new Data_Object_Ex_2({ Field1: [111], Field3: [333], Field5: [555] });
+            assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "text", { data_type: "text" }], ["Field3", "number", { data_type: "number" }]]);
+            assert.deepEqual(data_object.get(), { Field1: [111], Field3: [333] });
+        });
 
+
+
+        // -----------------------------------------------------
+        //	connect fields:
+        // -----------------------------------------------------
+
+        it("connect_fields: false", function () {
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                fields: { Field1: "int", Field2: "text" },
+                //connect_fields: false
+            });
+            var data_object = new Data_Object_Ex();
+            assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "text", { data_type: "text" }]]);
+            //
+            assert.deepEqual(data_object.Field1, undefined);
+        });
+
+        it("connect_fields: true", function () {
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                fields: { Field1: "int", Field2: "text" },
+                connect_fields: true
+            });
+            var data_object = new Data_Object_Ex();
+            assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "text", { data_type: "text" }]]);
+            //
+            data_object.Field1([123]);
+            assert.deepEqual(data_object.Field1(), [123]);
+        });
 
         //#endregion  fields chain
 
+        //#region creation...
+
+        // ======================================================
+        //
+        //	                 creation...
+        //
+        // ======================================================
+
+        // -----------------------------------------------------
+        //	dobj()
+        // -----------------------------------------------------
+
+        it("dobj()", function () {
+            var data_object = Data_Object.dobj();
+            assert.ok(!(data_object instanceof Enhanced_Data_Object));
+            assert.deepEqual(data_object.fields(), []);
+            //
+            // data_def does nothing:
+            //
+            data_object = Data_Object.dobj({}, { Field1: "int" });
+            assert.deepEqual(data_object.fields(), []);
+            //
+            // set values:
+            //
+            data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
+            assert.deepEqual(data_object.get("Field1"), [111]);
+            assert.deepEqual(data_object.get("Field2"), [222]);
+        });
+
+        it("dobj() - Enhanced_Data_Object", function () {
+            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
+            Data_Object.set_Enhanced_Data_Object(Enhanced_Data_Object);
+            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), Enhanced_Data_Object);
+            //
+            var data_object = Data_Object.dobj();
+            assert.deepEqual(data_object.fields(), [["flags", ["collection", "string"]]]);
+            assert.ok(data_object instanceof Enhanced_Data_Object);
+            //
+            // data_def does nothing:
+            //
+            data_object = Data_Object.dobj({}, { Field1: "int" });
+            assert.deepEqual(data_object.fields(), [["flags", ["collection", "string"]]]);
+            //
+            // set values:
+            //
+            data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
+            assert.deepEqual(data_object.get("Field1"), [111]);
+            assert.deepEqual(data_object.get("Field2"), [222]);
+            //
+            Data_Object.set_Enhanced_Data_Object(null);
+        });
+
+        // -----------------------------------------------------
+        //	ensure_data_type_data_object_constructor()
+        // -----------------------------------------------------
+
+        xit("ensure_data_type_data_object_constructor()", function () {
+            var save_map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors;
+            var save_data_types_info = jsgui.data_types_info;
+            //
+            assert.deepEqual(jsgui.data_types_info['my_test_type'], undefined);
+            assert.deepEqual(jsgui.map_data_type_data_object_constructors['my_test_type'], undefined);
+            //
+            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
+
+            jsgui.data_types_info['my_test_type'] = { Field1: "int", Field2: "number" };
+            var MyTestTypeConstructor = jsgui.ensure_data_type_data_object_constructor('my_test_type'); // jsgui. !!!
+            //
+            var data_object = new MyTestTypeConstructor();
+            assert.ok(data_object instanceof Data_Object);
+            assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "number", { data_type: "number" }]]);
+            //
+            jsgui.data_types_info = save_data_types_info;
+            jsgui.map_data_type_data_object_constructors = save_map_data_type_data_object_constructors;
+        });
+
+        //#endregion  creation...
 
         //#region xxxxxxxxxxxx
 
