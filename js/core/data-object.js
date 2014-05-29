@@ -5601,7 +5601,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			var dto = jsgui.data_types_info[data_type_name];
 
-			console.log('dto ' + stringify(dto));
+			//console.log('dto ' + stringify(dto));
 			
 			var dtc = Data_Object.extend({
 				'fields': dto
@@ -5630,6 +5630,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	Data_Object.Mini_Context = Mini_Context;
 	Data_Object.set_Enhanced_Data_Object = set_Enhanced_Data_Object;
 	Data_Object.get_Enhanced_Data_Object = get_Enhanced_Data_Object;
+	Data_Object.ensure_data_type_data_object_constructor = ensure_data_type_data_object_constructor;
 
 	return Data_Object;
 	
