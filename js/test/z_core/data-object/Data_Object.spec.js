@@ -554,8 +554,8 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
 
         // get() before set(): [s,s] using jsgui.data_types_info:
 
-        xit("get() before set(): [s,s] using jsgui.data_types_info", function () {
-            /*
+        it("get() before set(): [s,s] using jsgui.data_types_info", function () {
+            
             // TODO: complete after Data_Object.extend understanding
 
             var data_object = new Data_Object();
@@ -582,7 +582,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             jsgui.data_types_info = old_data_types_info;
 
             console.log(jsgui.data_types_info);
-            */
+            
         });
 
         // get() before set(): [s,[s,s]]:
@@ -1797,7 +1797,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
         //	ensure_data_type_data_object_constructor()
         // -----------------------------------------------------
 
-        xit("ensure_data_type_data_object_constructor()", function () {
+        it("ensure_data_type_data_object_constructor()", function () {
             var save_map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors;
             var save_data_types_info = jsgui.data_types_info;
             //
@@ -1807,10 +1807,11 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
 
             jsgui.data_types_info['my_test_type'] = { Field1: "int", Field2: "number" };
-            var MyTestTypeConstructor = jsgui.ensure_data_type_data_object_constructor('my_test_type'); // jsgui. !!!
+            var MyTestTypeConstructor = Data_Object.ensure_data_type_data_object_constructor('my_test_type'); // ???
             //
             var data_object = new MyTestTypeConstructor();
             assert.ok(data_object instanceof Data_Object);
+            assert.ok(!(data_object instanceof Enhanced_Data_Object));
             assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "number", { data_type: "number" }]]);
             //
             jsgui.data_types_info = save_data_types_info;
