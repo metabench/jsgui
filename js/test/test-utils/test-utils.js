@@ -4,6 +4,12 @@ if (typeof define !== 'function') {
 
 define(['assert'], function(assert) {
 	
+        function isInBrowser() {
+            if (typeof (window) === 'undefined') return false;
+            if (window.location) return true;
+            return false;
+        }
+
 		function assertListedProps(objActual, objExpected){
 			for (var prop in objExpected){
 				assert.deepEqual(objActual[prop], objExpected[prop]);
@@ -69,7 +75,8 @@ define(['assert'], function(assert) {
 		    return result;
 		}
 
-        var test_utils = {
+		var test_utils = {
+		    'isInBrowser': isInBrowser,
             'assertListedProps': assertListedProps,		
             'assertArraysContentEqual': assertArraysContentEqual,		
             //'assertFilesEqual': assertFilesEqual,

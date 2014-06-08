@@ -643,7 +643,9 @@ function (jsgui, Data_Structures, assert, test_utils) {
 				//var cp_doc = coll_presidents._data_type_constraint;
 				var cp_dtc = coll_presidents._data_type_constraint;				
 				//console.log('cp_dtc ' + stringify(cp_dtc));
-				assert.equal(stringify(cp_dtc), '{"_constraint_type": "data_type"}');			
+				//assert.equal(stringify(cp_dtc), '{"_constraint_type": "data_type"}');
+				assert.equal(stringify(cp_dtc), '{"_super": undefined, "__data_type": "collection_constraint", "_constraint_type": "data_type"}');
+
 				
 				// ----------------------------------------------------------------
 				

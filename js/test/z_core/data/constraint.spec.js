@@ -127,8 +127,8 @@ function (Constraint, Data_Object, assert) {
             assert.deepEqual(c._constraint_type, "unique");
             assert.deepEqual(c.fields, "SomeID");
 
-            //c = Constraint.from_obj(new Data_Object()); // Collection_Data_Object_Constraint - removed
-            //assert.deepEqual(c._constraint_type, "data_object");
+            c = Constraint.from_obj(new Data_Object()); // Data_Object_Constraint
+            assert.deepEqual(c.__data_type, "data_object_constraint");
 
             assert.deepEqual(Constraint.from_obj({}), undefined);
             assert.deepEqual(Constraint.from_obj([]), undefined);
