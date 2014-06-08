@@ -745,7 +745,17 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
                             
                                 if (err) {
                                     
-                                    throw(err);
+                                	console.log('stats unavailable for ' + file_or_dir_full_path);
+
+                                	var item_res = file_name;
+                                	res_files.push(item_res);
+                                	
+                                	c--;
+                                    if (c == 0) {
+                                        cb();
+                                    }
+
+                                    //throw(err);
                                     
                                 } else {
                                     //console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));

@@ -322,6 +322,62 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 								}));
 								db_tree_schema_node.add(db_tree_schema_tables_node);
 
+								// Could be possible to specify the context menu on the server.
+								//  That way it will get sent to the clients,
+
+								// Making it so that a context menu that gets applied before activation, works on activation?
+								//  Can't have the callbacks done this way like that,
+								//  But could list the menu items here, and in the activate function, it could respond to 
+
+								// Event bubbling could be a bit tricky to do.
+								//  When I tried it before it slowed things down too much.
+
+								// However, with a better implementation it should be fine.
+								//  I think specifying the menu in construction.
+								//  It automatically gets activated
+								//  Responding to events that bubble up from the nodes to the tree.
+								//  Also, I think making the XML-like specification of jsgui controls and documents would make the construction
+								//  take a lot less code.
+
+
+								// The context_menu function could have different outcomes in different situations.
+								//  On the client or the server
+								//  Is the control active yet?
+								//   Does it have an element?
+								// Want it so that context menus can be specified in a variety of sitations, easily.
+								//  Need to transfer data from the server to the context to the client context where appropriate.
+
+								// Some way of getting it to activate behaviours, maybe treating them as fields of some sort.
+								//  The context menu description would be sent as a data attribute.
+								//  Could have a data-jsgui attribute possibly that holds all of the jsgui data. It could be encoded as well for fast transmission.
+
+								// Want to be able to do some specification of activated behaviours during construction.
+								//  Possibly could specify the Context_Menu of various sorts as its own control.
+								//  Separate context menus for each menu node leads to repetition. However, it may not be that great in size.
+								//  Especially when a repeated string gets gzipped.
+
+
+
+
+
+
+
+
+
+								/*
+								db_tree_schema_node.context_menu([
+									['Delete', function(e_click) {
+										console.log('Context menu Delete clicked');
+									}],
+									['Copy', function(e_click) {
+										console.log('Context menu Copy clicked');
+									}],
+									['Paste', function(e_click) {
+										console.log('Context menu Paste clicked');
+									}]
+								]);
+								*/
+
 								// Then for each schema we put in the tables?
 								//  I think we may as well.
 

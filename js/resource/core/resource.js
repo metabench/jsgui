@@ -122,8 +122,13 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 			
 			//  check requirements recursive - checks the requirements of everything required, and if they have the check_requirements function, it uses that.
 			//   I think using the system of names APIs will help here.
-			console.log(new Error().stack);
-			throw 'no start function defined for resource (subclass)'
+
+			// I think the base class should raise the event.
+
+			//this.trigger('start');
+
+			//console.log(new Error().stack);
+			//throw 'no start function defined for resource (subclass)'
 			
 		},
 		

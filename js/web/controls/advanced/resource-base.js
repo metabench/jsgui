@@ -2,6 +2,15 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
+// As well as resource controls, we will have some other web related resources.
+//  The web db resource (adapter) will adapt a DB resource to provide a Web DB interface.
+//  The Web DB interface will be the basics for what is needed to run a website.
+//   Web DB resource will not have DB implementation specific code.
+
+
+
+
+
 define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"], 
 	function(jsgui, Single_Line, Title_Bar, Object_Viewer) {
 		

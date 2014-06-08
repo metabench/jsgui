@@ -95,7 +95,7 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 	
 	
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp, is_defined = jsgui.is_defined;
-	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.each, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
+	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.eac, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
 	var get_item_sig = jsgui.get_item_sig;
 	
 	var Abstract = {
@@ -168,19 +168,7 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 		// Having the Abstract_Resource hold all the info of the abstract object may help.
 		//  Don't think Abstract Objects get identified so much by their location - but perhaps they could be.
 		//   That could be useful when working on configurations of different servers.
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-	
+
 		'Database': Data_Object.extend({
 			'init': function(spec) {
 				this._super(spec);
@@ -1060,7 +1048,18 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			// There will be code to load this abstract table from a database, or a description of how it is in the db.
 			
 			'init': function(spec) {
+
+				// Polymorphism in how this gets specified to the constructor?
+
+				var that = this;
+
 				this._super(spec);
+
+				//throw 'stop';
+				// The spec may be a JSON object that's not so specifically following the Postgres format.
+				//  Needs to respond to Postgres parameters, as well as the jsgui parameters which aims to be uniform accross different DB implementations.
+
+
 				// set the columns from information_schema_column_rows?
 				
 				
@@ -1071,9 +1070,49 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				this.set('columns', new Collection({
 					'index_by': 'name'
 				}));
+
+				this.set('constraints', new Collection({
+					'index_by': 'name'
+				}));
+
+				//var c = this.get('constraints');
+				//console.log('c', c);
 				
+
+				console.log('spec.columns', spec.columns);
 				if (tof(spec.columns) == 'array') {
-					this.get('columns').load_array(spec.columns);
+
+
+					// Don't just load them all without processing them
+					//  Each item should be given to the column constructor.
+
+					var columns = this.get('columns');
+
+					each(spec.columns, function(spec_column) {
+						console.log('spec_column', spec_column);
+
+						// Adding another property to an array?
+						//  Questionable.
+
+						//spec_column.table = that;
+
+						// {table, array_spec};
+						//  It gets more complicated and convoluted, but it will allow columns to be specified more easily.
+
+						// However, need to set up the primary key or other constraints if it applies to the row.
+
+
+
+
+						var column = new Abstract.Column({
+							'arr_spec': spec_column,
+							'table': that
+						});
+						console.log('column', column);
+						columns.push(column);
+					})
+
+					//this.get('columns').load_array(spec.columns);
 				}
 				
 				
@@ -1087,9 +1126,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				
 				
-				this.set('constraints', new Collection({
-					'index_by': 'name'
-				}));
+				
+				//throw 'stop';
+
+				// why no constrints collection though?
 				
 				if (tof(spec.constraints) == 'array') {
 					this.get('constraints').load_array(spec.constraints);
@@ -1112,14 +1152,6 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				//  or read them from the spec...
 				// load_from_spec(spec, items)
 				
-				
-				
-				
-				
-				
-				
-				
-				
 				//this.set('schema_name', spec.schema_name);
 				
 				//this.set('single_name', spec.single_name);
@@ -1130,7 +1162,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				}
 				var that = this;
 				if (is_defined(spec.information_schema_column_rows)) {
-					each(spec.information_schema_column_rows, function(i, information_schema_row) {
+					each(spec.information_schema_column_rows, function(information_schema_row) {
 						
 						var column = new Abstract.Column({
 							// possibly just give the information schema row as the spec.
@@ -1165,8 +1197,18 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				// when we have a foreign key, we need to know where it refers.
 				
 				
-				
-				
+			},
+
+			'ensure_pk_constraint': function(constraint) {
+
+
+
+				// would need to create the constraint object I think.
+
+				var constraints = this.get('constraints');
+				console.log('constraints', constraints);
+				constraints.push(constraint);
+
 			},
 			
 			'update_column_parents': function() {
@@ -1182,7 +1224,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 						// look at the constraints.
 						
 						var has_not_null = false, has_unique = false, has_pk = false;
-						each(column.get('constraints'), function(i, constraint) {
+						each(column.get('constraints'), function(constraint) {
 							console.log('');
 							console.log('constraint ' + stringify(constraint));
 							
@@ -1246,7 +1288,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					
 					
-					each(this.get('columns'), function(i, v) {
+					each(this.get('columns'), function(v) {
 						
 						// could apply the not null to each column here...
 						
@@ -1269,7 +1311,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				if (constraints && constraints.length() > 0) {
 					//var first = true;
-					each(this.get('constraints'), function(i, v) {
+					each(this.get('constraints'), function(v) {
 						if (first) {
 							first = false;
 						} else {
@@ -1316,17 +1358,312 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 		
 		
 		'Column': Data_Object.extend({
+			// And the column has a reference to the table, its parent.
+
 			'init': function(spec) {
 				//this.name = spec.name;
 				this._super(spec);
-				this.set('name', spec.name);
+				var that = this;
+
+				console.log('init Column');
+				console.log('spec.name', spec.name);
+
+				console.log('spec', spec);
+
+				// I think break this down further into
+				//  1) Getting / arranging the data as local variables
+				//  2) Carrying out the initialization based on that local data.
+
+				// Not so sure about setting things up in the tables when we make a PK column.
+				//  Or at least not sure about doing it from this code here.
+
+
+
+				// Depending on the type of the spec.
+				//  The spec could be an array.
+
+				// get the data from the spec as local variables here.
+				//  the data type, and possibly its length
+				//  other flags, such as autoincrement and pk
+
+				// Parse out the values, some could be given as an array.
+				//  not sure that arr_spec is the right way of doing this though.
+
+
+
+
+
 				
+
+				var t_spec = tof(spec);
+				var arr_spec;
+
+				var table;
+
+				var name, data_type, data_type_length;
+
+				var pk_constraint;
+
+				// pk_constraint, data_type, constraints, column_constraints, information_schema, is_unique
+
+				if (t_spec == 'object') {
+					// get properties from the object, look for the array arr_spec
+					if (spec.arr_spec) arr_spec = spec.arr_spec;
+
+					// some or all properties could be defined here.
+
+					// data_type
+
+					// table property
+
+					if (spec.table) table = spec.table;
+
+				}
+				if (t_spec == 'array') {
+					arr_spec = spec;
+				}
+
+				console.log('arr_spec', arr_spec);
+
+				// then process the arr_spec into other variables.
+
+				var process_arr_spec = function() {
+					name = arr_spec[0];
+					data_type = arr_spec[1];
+
+
+
+					if (tof(arr_spec[2]) == 'number') {
+						data_type_length = arr_spec[2];
+					}
+
+					console.log('arr_spec.length ' + arr_spec.length);
+
+					// then treat the rest as words...
+
+					if (arr_spec.length > 2) {
+						// look at the words, though the first [a2] could be a number
+
+						var i;
+
+						if (tof(arr_spec[2]) == 'number') {
+							if (arr_spec.length > 3) {
+								i = 3;
+
+							}
+							
+						} else {
+							i = 2;
+						}
+
+
+					}
+
+					if (i) {
+						var column_words = arr_spec.slice(i);
+						console.log('column_words', column_words);
+
+						// then process these column words.
+						// mapify?
+						var mcw = jsgui.get_truth_map_from_arr(column_words);
+						console.log('mcw', mcw);
+
+						// then if certain words are found in the map, we assign those characteristics to the column.
+
+						//  If there is a PK we set up the Primart_Key constraint.
+
+						if (mcw.pk) {
+							// And reference the column
+
+							pk_constraint = new Abstract.Column_Constraint.Primary_Key({
+								'column': that
+							});
+						}
+
+					}
+				}
+				if (arr_spec) process_arr_spec();
+
+
+				console.log('table', table);
+				console.log('name', name);
+				console.log('data_type', data_type);
+				console.log('data_type_length', data_type_length);
+				console.log('pk_constraint', pk_constraint);
+
+				// process that into words.
+				//  a number just after the data_type indicates the data_type length
+
+				this.set('name', name);
+				this.set('data_type', data_type);
+				this.set('data_type_length', data_type_length);
+
+				// The constraints may not just be given as spec.constraints.
+
+
+				if (pk_constraint) {
+
+					// Would get set on the table.
+
+					//this.set('pk_constraint', pk_constraint);
+					//this.get('column_constraints').push(pk_constraint);
+
+
+
+					//this.set('column_constraints', [pk_constraint]);
+
+					// ensure the constraint is represented in the table
+					//  That's more than just adding it.
+					console.log('pk_constraint', pk_constraint);
+					//throw 'stop';
+
+					table.ensure_pk_constraint(pk_constraint);
+				}
+
+				// Automatic unique constraint on foreign keys?
+
+
+
+				//throw 'stop';
+
+				/*
+
+				// Will put together the parameters, and then use them
+
+				
+				//   data type length
+				//   there could be more info than just about the column in Postgres terms, so it makes sense that the Table object processes this and puts the objects in place.
+
+
+
+
+				// boolean flags, and the various words that can be used to describe a field.
+
+
+				if (t_spec == 'array') {
+					name = spec[0];
+					data_type = spec[1];
+
+
+
+					if (tof(spec[2]) == 'number') {
+						data_type_length = spec[2];
+					}
+
+					console.log('spec.length ' + spec.length);
+
+					// then treat the rest as words...
+
+					if (spec.length > 2) {
+						// look at the words, though the first [a2] could be a number
+
+						var i;
+
+						if (tof(spec[2]) == 'number') {
+							if (spec.length > 3) {
+								i = 3;
+
+							}
+							
+						} else {
+							i = 2;
+						}
+
+
+					}
+
+					if (i) {
+						var column_words = spec.slice(i);
+						console.log('column_words', column_words);
+
+						// then process these column words.
+						// mapify?
+						var mcw = jsgui.get_truth_map_from_arr(column_words);
+						console.log('mcw', mcw);
+
+						// then if certain words are found in the map, we assign those characteristics to the column.
+
+						//  If there is a PK we set up the Primart_Key constraint.
+
+						if (mcw.pk) {
+							pk_constraint = new Abstract.Column_Constraint.Primary_Key();
+						}
+
+					}
+
+
+
+				} else {
+
+					// Can include the spec as an array.
+
+					name = spec.name;
+					//this.load_from_spec(spec, ['pk_constraint', 'data_type']);
+
+					// can get the specification word array
+
+
+
+
+					if (spec.information_schema) {
+						var i_s = spec.information_schema;
+
+
+						//this.set('information_schema', i_s);
+						//this.set('name', i_s.column_name);
+
+
+						var name = i_s.column_name;
+
+						//console.log('this.name' + this.name);
+						//if (!this.has('data_type')) {
+							// create the data type object from information schema.
+							//this.set('data_type', new Abstract.Data_Type({'information_schema': spec.information_schema}));
+						//}
+						
+						
+						
+					}
+				}
+
+				
+				this.set('name', name);
+				this.set('data_type', data_type);
+
+				// The constraints may not just be given as spec.constraints.
+
+
+				if (pk_constraint) {
+
+					// Would get set on the table.
+
+					//this.set('pk_constraint', pk_constraint);
+					//this.get('column_constraints').push(pk_constraint);
+
+
+
+					//this.set('column_constraints', [pk_constraint]);
+
+					// ensure the constraint is represented in the table
+
+					table.ensure_pk_constraint(pk_constraint);
+				}
 				
 				// a reference to the primary key constraint if there is one.
 				//  not sure this is needed with the column constraints array.
 				//this.pk_constraint = spec.pk_constraint;
 				
-				this.load_from_spec(spec, ['pk_constraint', 'data_type']);
+				// Also need to load array items when they are provided
+
+				
+
+				// Need to interpret items in an array to be those values.
+
+
+
+
+
+				
 				
 				//this.set('pk_constraint', spec.pk_constraint);
 				
@@ -1373,21 +1710,9 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				
 				
-				console.log('this._' + stringify(this._));
+				//console.log('this._' + stringify(this._));
 				
-				if (spec.information_schema) {
-					var i_s = spec.information_schema;
-					this.set('information_schema', i_s);
-					this.set('name', i_s.column_name);
-					//console.log('this.name' + this.name);
-					if (!this.has('data_type')) {
-						// create the data type object from information schema.
-						this.set('data_type', new Abstract.Data_Type({'information_schema': spec.information_schema}));
-					}
-					
-					
-					
-				}
+				
 				
 				if (is_defined(spec.is_unique)) {
 					this.set('is_unique', spec.is_unique);
@@ -1448,6 +1773,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					
 				}
+
+				*/
 				
 				
 			},
@@ -1455,29 +1782,49 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				//var name = this.
 				
-				var name;
+				var name, data_type_length;
 				
 				if (this.has('information_schema')) {
 					name = this.get('information_schema').column_name;
 				} else {
 					name = this.get('name');
 				}
+
+
+				var data_type_length = this.get('data_type_length');
 				
 				var res = [];
 				
 				//var res = this.name + '    ' + this.data_type.toString();
 				res.push(name);
 				res.push('     ');
-				res.push(this.get('data_type').toString());
+
+				// It should have a data_type.
+				var data_type = this.get('data_type');
+
+				if (data_type) {
+					res.push(data_type.toString());
+					if (data_type_length) {
+						res.push('(' + data_type_length + ')');
+					}
+
+				} else {
+					throw 'Postgres Column expected to have data_type';
+				}
+
+				
 				
 				// not null?
 				
 				//console.log('this.constraints ' + stringify(this.get('constraints')));
 				
-				if (this.get('constraints').length > 0) {
+				var constraints = this.get('constraints');
+
+
+				if (constraints && constraints.length > 0) {
 					//')
 					
-					each(this.get('constraints'), function(i, v) {
+					each(this.get('constraints'), function(v) {
 						
 						//console.log('column toString ' + name + ', column constraint  ' + stringify(v));
 						
@@ -1764,7 +2111,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					if (tof(sell) == 'array') {
 						var first = true;
-						each(sell, function(i, v) {
+						each(sell, function(v) {
 							
 							console.log('v ' + v);
 							
@@ -1894,7 +2241,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 						if (where.length > 0) {
 							var first = true;
 							res.push(' WHERE ');
-							each(where, function(i, where_item) {
+							each(where, function(where_item) {
 								if (!first) {
 									res.push(' AND ');
 								} else {
@@ -1957,7 +2304,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							} else {
 								// each item in the order by array gets processed.
 								
-								each(ob, function(i, v) {
+								each(ob, function(v) {
 									// check the signature of the item, if so it's an order by item.
 									var ob_sig = get_item_sig(v);
 									if (ob_sig == '[s,s]') {
@@ -2066,7 +2413,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					// no, not every column.
 					var first = true;
-					each(values, function(i, v) {
+					each(values, function(v) {
 						if (!first) {
 							res.push(', ');
 						} else {
@@ -2077,7 +2424,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					res.push(') VALUES (');
 					// string values quoted.
 					first = true, p_num = 1;
-					each(values, function(i, v) {
+					each(values, function(v) {
 						// possibly check if it is string data.
 						if (!first) {
 							res.push(', ');
@@ -2235,8 +2582,6 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			this.set('table', row.table_name);
 			this.set('table_schema', row.table_schema);
 			this.set('constraint_schema', row.constraint_schema);
-			
-			
 			this.set('constraint_type', row.constraint_type);
 			
 			
@@ -2264,9 +2609,29 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 	acc.Primary_Key = Data_Object.extend({
 		'init': function(spec) {
 			this._super(spec);
+
+			// and a referemce to the column too
+			//console.log('spec', spec);
+			//console.trace("Here I am!")
+			//throw 'stop';
+
+
 			//this.set('name', 'primary key');
 			
 			// maybe not capital letters?
+
+			// And the constraint has column as a property?
+
+			// Well, it can have a collection of columns.
+			//  I think it's best implementing that, but also making it so it can work with a single column.
+			//  Still, may be best to store it as an array / collection?
+
+			if (spec.column) {
+				console.log('spec.column', spec.column);
+				this.set('columns', spec.column);
+			}
+
+
 			
 			
 			
@@ -2274,10 +2639,39 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			
 		},
 		'toString': function() {
-			return 'PRIMARY KEY';
+
+			var columns = this.get('columns');
+			console.log('columns', columns);
+
+			if (!columns) {
+				throw 'Primary key constraint needs column(s) assigned';
+			}
+
+			var column_name = columns.get('name').value();
+			console.log('column_name', column_name);
+
+			return 'PRIMARY KEY(' + column_name + ')';
 		}
 	})
 	
+/*
+-- Table: "Users"
+
+-- DROP TABLE "Users";
+
+CREATE TABLE "Users"
+(
+id serial NOT NULL,
+username character(24) NOT NULL,
+CONSTRAINT "Users_pkey" PRIMARY KEY (id)
+)
+WITH (
+OIDS=FALSE
+);
+ALTER TABLE "Users"
+OWNER TO postgres;
+*/
+
 	// foreign key...
 	//  says that it references something.
 	
@@ -2348,7 +2742,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			res.push('UNIQUE (');
 			
 			var first = true;
-			each(this.get('columns'), function(i, column) {
+			each(this.get('columns'), function(column) {
 				if (!first) {
 					res.push(', ');
 				} else {
@@ -2394,7 +2788,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			
 			if (tof(cn) == 'array') {
 				var first = true;
-				each(cn, function(i, v) {
+				each(cn, function(v) {
 					if (!first) {
 						res.push(', ');
 					} else {

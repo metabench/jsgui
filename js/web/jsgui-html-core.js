@@ -452,6 +452,10 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
     }
 
 
+    // Making it so a Control needs to be initialised with a context every time?
+
+
+
     var Control = jsgui.Enhanced_Data_Object.extend({
 
         'fields': [
@@ -468,22 +472,41 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             //   Could check a control to see if it has it.
             //   Add will add to the inner control.
 
+            // May have active fields as well.
+            //  There will be references to other controls - that's handled with data-jsgui-ctrl-fields.
+            //  The non-control fields are transferred with data-jsgui-fields
+            //   However, we don't want to confuse them with the fields that are a standard part of the control in a different part of the lifecycle.
+
+            // May be worth explicitly breaking out the Composition part of the Control lifecycle again.
+            //  When a Control is initialized on the client, being given a DOM element, it does not need to be composed.
+            //   (I think)
+
+
+
+
             ['content', 'collection'],
-            ['dom', 'control_dom'],
+            ['dom', 'control_dom']//,
 
             // What are the CSS flags?
             //  Should this use the flag system?
             //  We will have flags that determine CSS styling.
             //   But do we have flags that directly are CSS properties / configurations, either on or off?
 
-            ['css_flags', Collection(String)]
+            //['css_flags', Collection(String)]
             // context as a field?
             //  or is context handled by Data_Object?
 
         ],
+
+        // Set up a field with type Control.
+        //  Then it will be sent to the client as a control field, and the reference re-obtained.
+
+
+        // Connect all fields? Just some of them?
+        //  Want to make it easy for the necessary fields / control references to be sent to the client.
         'connect_fields': true,
 
-        // Don't want to use this much. Should probably override functions instead.
+        // Don't want to use this much. Should probably override functions instead. ??? Or find a way not to use it.
         'mod_link': function () {
             return jsgui;
         },
@@ -662,8 +685,99 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 var content = this.get('content');
                 content._parent = this;
+
+                // Want to have the list of fields
+                //var cc = 0;
+
+                // Want to listen to changes in fields.
+                //  Change gets triggered so frequently!
+
+                // Why is the event getting bound too many times?
+                //  Have a strange problem, where this event is firing more than expected and more appear bound on the control.
+
+                // Are change events being bubbled?
+
+                // Why is on change setting up so many event handlers?
+
+
+                // A change event here seems to be creating lots of event handlers on one control.
+
+
+
+
+                // Need to work out why event binding here causes problems, with it seeming to bind lots of events to one control.
+
+                // It will probably be best to do smaller test cases to do with event binding and bubbling,
+                //  possibly also browser based cases that will be easier to follow.
+
+
+                // Onchange here makes it go drastically wrong.
+                //  Between page views, event handlers are building up on a control.
+                //  Seems like some Data_Objects or Controls may not have contexts applied.
+                
+
+
+                // The control's onchange event is not working.
+                //  It seems like onchange for the content is working though.
+
+                //  On change any of the control fields...
+                //   Could create onchange events for each of the control fields automatically.
+
+                
+
+
+                /*
+                this.on('change', function(e_change) {
+
+                    // Change takes place in the collection?
+                    //  So when an item gets added, it's added to the collection, and the collection changes.
+                    //  Does the collection have the right context? The collection is initialised as a field.
+
+
+
+                    //console.log('e_change', e_change);
+
+                    // There are very many changes...
+                    //  It seems like too many change events get reported.
+                    //   Need to tell the difference between a change of something, and a change to something.
+                    //   Like an inner control gets replaced with something different, or an inner control has a change happen to it.
+
+
+                    // It looks like changes are bubbling, need to find a way of tracking the initiator of a change event.
+
+
+
+                    if (e_change.name) {
+                        //console.log('e_change.name', e_change.name);
+
+
+                        if (e_change.name == 'inner_control') {
+                            console.log('e_change.bubbled ' + e_change.bubbled);
+
+                            //console.log('that', that);
+                            //var my_ctrl_id = that._id();
+                            // Controls may not have contexts yet?
+
+                            //console.log('my_ctrl_id', my_ctrl_id);
+
+                            //console.log('e_change', e_change);
+                            //console.trace("Here I am!")
+                            //cc++;
+                        }
+                    }
+
+                    //console.log('change sig ' , jsgui.get_item_sig(e_change));
+                })
+                */
+
+                
+                
                 
                 content.on('change', function(e_change) {
+
+                    // Could raise an event for this?
+                    //  Or that change event could do it automatically, with bubbling.
+
                     //console.log('Control content e_change', e_change);
 
                     // This gets called on both the client and the server.
@@ -716,7 +830,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
 
 
-                })
+                });
                 
 
                 /*
@@ -1033,6 +1147,12 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             }
         },
 
+        // Not so sure that css flags will be used.
+        //  We have css classes which get manipulated.
+        //  Other types of properties won't depend on CSS quite yet.
+        //  Will have control fields improved to be more flexible and to carry from the server to the client parameters and behavioural rules.
+
+        /*
         'add_css_flag': function (flag_name) {
             var css_flags = this.get('css_flags');
             //console.log('css_flags ' + stringify(css_flags));
@@ -1057,6 +1177,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             var css_flags = this.get('css_flags');
             return css_flags.has(flag_name);
         },
+
+        */
 
         // Maybe consider these part of rendering, move them.
         '_get_amalgamated_style': function (arr_contexts) {
@@ -1623,7 +1745,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         //  Be quite explicit in which ones get bound for the moment.
 
         // Want it so that the dom attributes style gets changed with the css_flags.
-
+        /*
 
         'bind_dom_event': function (evt_name, evt_handler) {
 
@@ -1682,11 +1804,13 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 };
             };
         },
+        */
 
         'compose': function () {
 
             // I think having this avoids a recursion problem with _super calling itself.
         },
+
         'wait': function (callback) {
             //console.log('wait');
             setTimeout(function () {
@@ -2029,6 +2153,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             return this.get('content').add(new_content);
         },
         'add': function(new_content) {
+
+            // Will also turn XML strings describing jsgui controls/content into controls/content.
 
             var tnc = tof(new_content);
             //console.log('tnc', tnc);
@@ -2413,7 +2539,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
 
 
-        
+        /*
         '_add_event_listener': fp(function(a, sig) {
 
             // depending on what the event is, we also bind it to the DOM.
@@ -2427,28 +2553,28 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 var el = this.get('dom.el');
 
-                /*
-                if (el) {
+                
+                //if (el) {
                     
                     // Check if the element has that event listener...
                     //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
 
-                    if (!listener) {
+                //    if (!listener) {
                         // a single listener called when a bound dom event fires.
                         //  this will then split up the event calls to everything that is listening to this.
                         // for the DOM event on the object, we raise the event on the control.
 
-                        listener = this.mapListeners[event_name] = function(e) {
-                            that.raise(event_name, e);
-                        };
-                        el.addEventListener(event_name, listener, false);
+                //        listener = this.mapListeners[event_name] = function(e) {
+                //            that.raise(event_name, e);
+                //        };
+                //        el.addEventListener(event_name, listener, false);
 
-                    }
+                //    }
 
 
                     //el.addEventListener(event_name, handler, false);
-                }
-                */
+                //}
+                
 
                 // This causes an infinite loop for some reason.
                 //  Maybe when the event takes place....
@@ -2469,7 +2595,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             }
 
         }),
-        
+        */
 
         'click': function(handler) {
             // Adding the click event listener... does that add it to the DOM?
@@ -2681,7 +2807,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 selector = a[0];
             }
 
-            
+
 
 
         }),
@@ -2724,8 +2850,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             }
         },
-
-
 
         'find_selected_ancestor_in_scope': function() {
             // same selection scope
@@ -3090,11 +3214,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
     // This system works quite nicely now.
     //  Allows simple functional access to these properties.
 
-    prototype_access(p, 'index', 'index');
-    prototype_access(p, 'id', 'id');
+   // prototype_access(p, 'index', 'index');
+    //prototype_access(p, 'id', 'id');
     prototype_access(p, 'dom.tagName', 'tagName');
     prototype_access(p, 'dom.attributes', 'domAttributes');
-    prototype_access(p, 'controls', 'controls');
+    //prototype_access(p, 'controls', 'controls');
 
 
     //prototype_access(p, 'style', 'style');

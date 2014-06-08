@@ -976,6 +976,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			// Constraint from a new Data_Object?
 			//  Not sure of the need of this.
 			var doc = that._data_object_constraint = that._data_object_constraint || Constraint.from_obj(new Data_Object());
+
+			
 			//var doc = that._data_object_constraint || 
 			//console.log('doc ' + stringify(doc));
 

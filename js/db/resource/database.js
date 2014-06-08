@@ -404,6 +404,8 @@ define(["module", "path",
 
 				// need to create the reference to the collection.
 
+				// And need to create the collection if it does not already exist.
+
 				var collection = db.collection(collection_name);
 				collection.save(value, function(err, res) {
 					if (err) {
@@ -420,6 +422,11 @@ define(["module", "path",
 		// Want some way of applying a schema to the db...
 
 		// This is also the way of putting?
+
+		// table_name, value
+		//  puts item in table / collection
+
+
 		'set': fp(function(a, sig) {
 			// so check for key, value
 
@@ -452,6 +459,13 @@ define(["module", "path",
 
 					var collection = this._i.collection(collectionName);
 					// Insert a single document
+					//  Actually uses a Collection / Table resource.
+					//  Makes sense, as the actual DB code would best be put within that object.
+
+
+					// So, resource calls will need to have some routing.
+					//  Maybe route to the relevant subresource.
+
 					collection.insert(value);
 
 				} else {
@@ -461,6 +475,27 @@ define(["module", "path",
 				//throw 'stop';
 			}
 		})
+
+		// delete
+
+		// question about if this should delete the database, or the resource.
+		// for deleting actual DB objects
+
+		// delete items within the DB.
+		//  like tables or rows.
+
+		// schemas/schema1/tables/table1 DELETE
+
+		// schemas/schema1/tables/table1/rows/row_id DELETE
+
+
+
+
+
+
+
+
+
 	});
 	
 	return Database;

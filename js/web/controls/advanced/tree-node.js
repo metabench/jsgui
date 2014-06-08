@@ -31,14 +31,15 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 			// Tree Node has an image and some text, and a contrainer control for othe tree nodes.
 			//  Can be collapsed so that the internal items don't show
 
+			// Fields of type control...
 
-
-
-			//'fields': [
+			'fields': [
 				//['text', String]
+				['toggle_button', Control],
+				['inner_control', Control],
+				['expander', Control]
 
-
-			//],			
+			],			
 
 			//'fields': {
 			//	'img_src': 'string',
@@ -120,6 +121,8 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						var plus_minus = make(Plus_Minus_Toggle_Button({}));
 						top_line.add(plus_minus);
 
+						
+
 						// Hide the plus-minus unless there is another node inside this one.
 
 						// Hide sets the display to none.
@@ -176,6 +179,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 						//var expander = add(Control({'class': 'expander'}));
 						var expander = add(Vertical_Expander({}));
+						
 
 						// Then inner control could be 
 						//  Vertically_Elastic_Control?
@@ -190,15 +194,15 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 						// Inner may not just be the title.
 
-						this.set('inner_control', inner_control);
+						
 
 						var inner_control_content = inner_control.get('content');
 						inner_control_content.on('change', function(e_change) {
-							console.log('Tree_Node inner_control_content change', e_change);
+							//console.log('Tree_Node inner_control_content change', e_change);
 							//throw 'stop';
 
 							var l = inner_control_content.length();
-							console.log('l', l);
+							//console.log('l', l);
 
 							if (l > 0) {
 								plus_minus.show();
@@ -208,27 +212,65 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						})
 
 
+						// Instead, will have fields, of type Control.
+
+						// Then when these control fields get set / change the change will be manifested in the dom.attributes.data-jsgui-ctrl-fields
+						//  Will listen for changes, and will respond to the ones which are control fields.
+
+						this.set('toggle_button', plus_minus);
+
+						console.log('pre set inner_control');
+						this.set('inner_control', inner_control);
+						console.log('post set inner_control');
+
+
+						this.set('expander', expander);
+
 						var ctrl_fields = {
 							'toggle_button': plus_minus._id(),
 							'inner_control': inner_control._id(),
 							'expander': expander._id()
 						}
 
+						// Want to have deeper integration of the ctrl_fields in the framework, so they automatically get sent to the client.
+						//  Will make that the case with some other fields that have been specified on the controls.
+						//  Since they are already specified as fields of type control, they could be automatically put in the ctrl-fields.
+						//   That could happen at the pre-render stage rather than upon those control fields changing.
+
+
+
+
+
 
 
 						// use different quotes...
 
+						//console.log('this.fields() ' + this.fields());
+						// we can get the field names, maybe types as well.
+
+						// Would be good to get this.fields_names_and_types
+						//  Perhaps .fields() could be changed to return the much more user-friendly data.
+
+						
+
+
+
 						this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
+
+
 
 						this.active();
 					}
-
 
 				}
 					
 
 				
 			},
+
+			// I think a pre-render function would be useful.
+			//  Something that sets data-jsgui DOM attributes.
+
 			'activate': function() {
 				this._super();
 

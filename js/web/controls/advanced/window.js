@@ -102,6 +102,8 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 
 					var inner_control = div_relative.add(make(Control({'class': 'inner'})));
+					console.log('this._id() ' + this._id());
+					console.log('inner_control._id() ' + inner_control._id());
 					this.set('inner_control', inner_control);
 
 

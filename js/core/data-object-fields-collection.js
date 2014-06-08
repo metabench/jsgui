@@ -258,6 +258,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], f
 			
 			// Fields are definitely kept in order that way.
 			//  Linked_Map seeming like a useful data structure.
+
+			// Not storing a context for the fields?
 			
 			this.okvs = new Data_Structures.Ordered_KVS();
 			//this.containing_object = spec.containing_object;

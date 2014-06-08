@@ -82,6 +82,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 			// Will need to give it the plans for an authentication database, then the resource is going to ensure that database is set up.
 
+			// This will not actually contain the data (though some Resources will), but will provide an interface to the data.
+
+
+
 			if (spec.server) {
 				this.meta.set('server', spec.server);
 			}
@@ -102,6 +106,12 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			// Tables should be meta?
 			//  Or data?
 			//  
+
+
+			// Not so sure about the Resource keeping info about data / resources inside it...
+			//  Will be referring to tables by name, properties using identifying parameters.
+			//  Not so sure how useful exposing programming objects will be in the world of Resources.
+			//  May be good to make use of them though.
 
 
 			var tables = this.data.set('tables', new Resource_Collection({
@@ -161,6 +171,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			
 			// Makes use of dbi-postgres, a utility module.
 			
+			console.log('pre call pg connect');
 			
 			pg.connect(cs, function(err, client) {
 
@@ -173,6 +184,16 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 						
 						// a little test.
 						that.client = client;
+						console.log('.client has been set');
+
+						// and the resource pool triggers the start event?
+						//  or here?
+
+						// would be better to do this automatically.
+						//  once the start function has completed.
+						that.meta.set('status', 'on');
+						that.trigger('start');
+
 						callback.call(null, that);
 						
 					});
@@ -401,10 +422,60 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 			console.log('sql_create', sql_create);
 
-
-
-
 		},
+
+		'ensure_table': fp(function(a, sig) {
+
+			// Could generate the SQL to ensure the table (and its properties.)
+			//  Could also make use of a Table resource if it has the right programming.
+			//   But may not want the bother of making a Table Resource here.
+
+			// Could have a Postgres ensure_table function, and Resource just provides a way to access it.
+			//  dbi-postgres ensure_table
+			//   And can take a JSON table definition, or an abstract definition / a Resource.
+			//   A Table Resource may be a good way to describe it, but also want to make a simpler to use JSON interface that can ensure a table exists in a DB
+			//    ensures columns exist as specified, may make some small changes where possible.
+
+			console.log('postgres resource ensure_table');
+
+			console.log('sig', sig);
+
+			var obj_table;
+			if (sig == '[o]') {
+				obj_table = a[0];
+			}
+
+
+			if (obj_table) {
+				console.log('obj_table', obj_table);
+
+				// See if the table already exists in the DB?
+				// Create an abstract version of that Postgres table.
+
+				var a_table = new Abstract.Table(obj_table);
+				var table_name = a_table.get('name');
+
+				//throw 'stop';
+				console.log('a_table', a_table.toString());
+
+				// then we need to ensure the table is in the DB.
+
+				// Does a table with that name exist?
+
+				this.table_exists(table_name, function(err, exists) {
+					if (err) {
+						throw err;
+					} else {
+						console.log('exists', exists);
+					}
+				})
+
+
+			}
+
+
+
+		}),
 
 		'get_schema_names': function(callback) {
 			/*
@@ -516,7 +587,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			
 		},
 		
-		'table_exists': function(db_name, callback) {
+		'table_exists': function(db_name, table_name, callback) {
 			// SELECT d.datname as "Name", u.usename as "Owner", pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT EXISTS(d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid WHERE... ORDER BY 1);
@@ -531,7 +602,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 				})
 			});
 			var sql = sel.toString();
-			//console.log('sql ' + sql);
+			console.log('sql ' + sql);
 			
 			//this.execute_query({
 			//})
@@ -563,9 +634,16 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			
 			// execut a query specified as an object???
 			var query;
+
+			// There need to be a client object.
+
+
+
 			if (tof(query_spec) == 'object') {
 				// and does it have the sql or the text?
 				if (query_spec.sql) {
+
+
 					query = this.client.query(query_spec.sql);
 				} else if (query_spec.query) {
 					query = this.client.query(query_spec.query);

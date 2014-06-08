@@ -163,6 +163,14 @@ define(["./jsgui-lang-util", './abstract-postgres-parser'], function(jsgui, Abst
 	//  Will also have functions for generating new code based on the existing database.
 	
 	// Likely to keep track of functions it has generated.
+
+
+	// A generator... there could be different generator instances.
+	//  A generator I want to use soon is the web db generator.
+
+	
+
+
 	
 	var Abstract_Postgres_Generator = Data_Object.extend({
 		'init': function(spec) {

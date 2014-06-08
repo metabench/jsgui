@@ -816,13 +816,16 @@ define(["./jsgui-html-core"],
 
 				    	if (str_properties) {
 			                //console.log('str_ctrl_fields ' + str_ctrl_fields);
-			                //console.log('str_properties', str_properties);
+			                console.log('str_properties', str_properties);
 			                //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
-							var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'').replace(/'\'/g, '"');
+							var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
+							s_pre_parse = s_pre_parse.replace(/\'/g, '"');
 
 
 			                // DBL_QT
 			                console.log('s_pre_parse', s_pre_parse);
+
+			                console.log('s_pre_parse', tof(s_pre_parse));
 
 			                var props = JSON.parse(s_pre_parse);
 			                //console.log('props ' + stringify(props));
@@ -975,6 +978,79 @@ define(["./jsgui-html-core"],
 	        },
 
 	        'context_menu': fp(function(a, sig) {
+	        	
+	        	// What to do here depends on the control lifecycle stage.
+	        	//  On the server
+	        	//   Want it to be sent to the client so that it automatically gets activated with that context menu.
+	        	//    Would not be able to call callbacks that get given when the function gets set up.
+	        	//    Would need to have UI responses handled on activation, but at least the menu itself could be set up at an earlier stage.
+	        	//  On the client
+	        	//   Pre-activation
+	        	//    ??Won't do that for the moment. Could maybe raise an error
+	        	//    Set properties so that when it gets activated it knows to activate it with the context menu.
+	        	//   Post/during activation
+
+
+
+	        	// So far, this seems to be for post-activation.
+	        	//  On the server, we want it so that the properties get sent over to the client.
+	        	//   I think that could do with more work.
+	        	//   Making it so that properties in general, and behaviours, can be sent to the client and activated there.
+
+	        	// It seems like some more generalization is needed in how data gets transferred to the client?
+	        	// There are the fields which get sent, and there are ctrl-fields
+	        	//  Fields get set, however they don't influence behaviours.
+
+	        	// Mechanism for function calls upon activation.
+	        	//  Possibly behaviours
+	        	//  or jsgui-activate="context_menu(params)"
+	        	//   So actually having function calls there.
+	        	//    Calling functions on the controls upon activation, as specified by parameters on the server.
+
+	        	// Also, better mechanism for setting fields and ctrl-fields.
+	        	//  Need a bit of behind the scenes processing to make something work between both the server an the clients.
+	 			//  Setting fields and behaviours on the server that determine how it gets activated on the client makes sense.
+
+	 			// jQuery / CSS like selectors for selecting and finding controls within each other will also make sense.
+	 			//  So for activating controls within another control, it will be fast to find the various controls to be activated.
+
+
+	 			// data-jsgui-call-on-activate
+	 			// data-jsgui-activate
+	 			// data-jsgui-call
+	 			//  Functions for it to call on the client.
+	 			//   Interprets the functions, calls them.
+	 			//   So a context menu that's specified on the server could be sent along to the client.
+
+	 			// Control having extra functionality to add and remove the values that will get sent to the client.
+	 			//  Will have various map objects of data sent to the client (maybe list/array instead?)
+
+	 			// Dealing with maps of data to be sent to the client.
+	 			//  Need something for rendering this?
+	 			//  Just use the normal dom attributes?
+
+	 			// Want ways of referring to JSON objects within the DOM attributes.
+	 			//  It sounds like the data type and field systems should handle this where possible.
+
+	 			//.set('active.context_menu', {...})
+	 			//  So changes to the active field, on the server, cause changes to dom.attributes.jsgui-active
+
+	 			//.active({'context_menu': {...}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	        	var menu_def;
 	        	if (sig == '[o]' || sig == '[a]') {
 	        		menu_def = a[0];
@@ -3443,9 +3519,9 @@ define(["./jsgui-html-core"],
 	        		// find the body control.
 
 	        		var content = this.get('content');
-	        		console.log('content', content);
+	        		//console.log('content', content);
 	        		var body = content.get(1);
-	        		console.log('body', body);
+	        		//console.log('body', body);
 	        		//throw 'stop';
 
 	        		return body;

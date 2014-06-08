@@ -149,18 +149,39 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 		//  Will hopefully have a file manager based on a quite generic system that's adaptable for lots of purposes.
 		//  Will be extensible too, will be nice to edit code and image files, and make use of packaging tools.
 
-		
+		// Could make a resource-control for the local file system.
+		// Or the file tree could make use of a file system resource.
 
 
 
-		'get': function(params, callback) {
+
+		'get': fp(function(a, sig) {
+
+			// Also should be able to get files themselves.
+
 			//console.log('* lfs get');
 			//var stack = new Error().stack;
 			//console.log(stack);
 			//throw 'stop';
 			//console.log('callback ' + callback);
 			//console.log('callback ' + tof(callback));
+			var params, callback;
+			if (a.l == 1) {
+				callback = a[0];
+			}
+			if (a.l == 2) {
+				params = a[0];
+				callback = a[1];
+			}
+
 			var tp = tof(params);
+
+			console.log('tp', tp);
+
+			// get may not even have params...
+
+
+
 			if (tp == 'string') {
 				// it's a string path.
 				//console.log('* params ' + params);
@@ -199,8 +220,12 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 				*/
 			}
 
+			if (tp == 'undefined') {
+				this.get('/', callback);
+			}
 
-		}
+
+		})
 	});
 	
 	

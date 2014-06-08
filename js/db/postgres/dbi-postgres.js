@@ -329,7 +329,31 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 	//  will have 'connection_info' object, which is used to connect.
 	
 	
+	// This seems a bit like a Resource...
+	//  Maybe more low-level functionality should be put in the Resource itself?
+	//  This actually seems to mirror Resource functionality, but uses this Abstract system.
+	//   I think it would be worth making this into a Resource, or folding its functionality into the Postgres resources.
+	//   Need to consider if it's worth changing the abstract Posrgres structural items - making them into resources?
+	//    Abstract resources?
+	//   For the moment, no.
+	//   Have made the model of the Postgres DB that's a good basis for it.
+	//   Will have the Resource make use of these programming objects, but be called using JSON. May need to increase JSON capabilities of the core Postgres DB objects,
+	//   or make a factory / factories that make these core objects when provided with JSON.
+	//    I think creating them with 1 JSON parameter should be fine, we'll see.
+
+
+	// The general method will be to read the PG schema as an abstract schema, carry out modifications, and then have those modifications put into the actual DB.
+	//  Want to get this working while making a general web related DB.
+
 	
+
+
+
+
+
+
+
+
 	
 	var DBI_Postgres = Class.extend({
 		'init': function(spec) {
@@ -3036,6 +3060,10 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			
 		},
 		
+
+		// An ensure_table function may be easier to use, but the Abstract Tables are useful in generating the SQL.
+
+
 		
 		'ensure_abstract_table': function(abstract_table, callback) {
 			// some tables could depend on others.

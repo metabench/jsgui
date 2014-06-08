@@ -382,6 +382,13 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	//  Change event being the main one of interest at the moment.
 
 	var Evented_Class = Class.extend({
+
+		// Needs to initialize the bound events to start with.
+
+		'init': function() {
+			this._bound_events = {};
+		},
+
 		'raise_event': fp(function(a, sig) {
 			// The events system is not working right on the server.
 		
@@ -818,6 +825,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					this._bound_general_handler.push(a[0]);
 				};
 			}
+			// Why does a change event listener get bound to the wrong control, or bound multiple times?
+			//  Changes getting pushed up through the tree?
+
 			
 			if (sig == '[s,f]') {
 				// bound to a particular event name
@@ -832,11 +842,15 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//  perhaps... but we won't have so many of these anyway.
 				//  could get id for object and have it within collection.
 				//   But not sure about using collections for events... collections use events...?
+
+				// Different controls binding to the same array of events?
+
 				if (!this._bound_events[event_name]) this._bound_events[event_name] = [];
 				
 				var bei = this._bound_events[event_name];
 				//console.log('this._id() ' + this._id());
 				if (tof(bei) == 'array') {
+					//console.log('this', this);
 					//console.log('add_event_listener bei.length ' + bei.length);
 					bei.push(fn_listener);
 				};
@@ -947,6 +961,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	
 	var Data_Value = Evented_Class.extend({
 		'init': function(spec) {
+
+			this._super();
 			// the spec will be the value.
 			//  could be the value and its type.
 			
@@ -1012,7 +1028,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			
 			this.__type = 'data_value';
 			
-			this._bound_events = {};
+			//this._bound_events = {};
 
 
 			this._relationships = {};
@@ -1518,6 +1534,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 				if (chained_fields_list.length > 0) {
 					this.fc = new Fields_Collection({
+
+						// Fields collection has a context?
+
 						// 
 						//'containing_object': this
 					});
@@ -2417,6 +2436,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 					//console.log(stack);
 
 					// no such function... but there should be something declared in many situations.
+					console.trace("Here I am!")
 					throw 'stop, currently unsupported.';
 					this.__id = new_data_object_id();
 					
@@ -2427,6 +2447,39 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 		},
 
 		'fields': fp(function(a, sig) {
+
+			//.fields() may be better suited to getting info about the fields, rather than all of the fields' info.
+			//  Making the APIs return relatively simple data is a step to take.
+			//  Keeping the functionality but simplifying the APIs.
+			//   Sometimes more complicated API calles will be made, but they will take more parameters that shows the coder expects to get 
+			//   more complicated results back.
+
+
+
+
+			// field names
+			// field names and values
+			// field names and types
+			// field names, types and values
+
+			// I think field names and types is a neat amount of data that will help with debugging.
+			//  Can it return an object which has a .values() function?
+
+			//  Check in the fields collection, for the fields' metadata, or could check the fields definition?
+			//  Want to be able to tell what Control Fields a Control has, for example.
+			// It would be good to have simply named functions return data that's not all that complicated and can be debugged easily, where possible.
+
+			// Can have a different mechanism for getting all fields' values.
+
+			// Also, getting the field objects themselves, they have associated constraints.
+
+
+
+
+
+
+
+
 			// an easier interface to the fields than fields and constraints.
 			//  this may be immutable when it is held in a collection - not sure.
 			//  may not want to keep creating new copies of field sets and constraints for use in individual Data_Objects.
@@ -2504,6 +2557,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				
 				// not just the field values.
 				var res;
+
+
 				if (fields_collection) {
 					res = fields_collection.okvs.values();
 				} else {
@@ -3656,6 +3711,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			
 			
 		},
+
+		// Maybe just 'remove' function.
+		//  This may be needed with multiple parents, which are not being used at the moment.
 		
 		'remove_from': function(parent) {
 			var p_id = parent._id();
@@ -4724,12 +4782,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 									var e_change = {
 										'name': property_name,
-										'value': value
+										'value': value,
+										'bubbled': true
 									};
 
 									if (source) {
 										e_change.source = source;
 									}
+
+									// I think this is bubbling.
+									//  Maybe mark it as bubbled.
 
 									this.raise_event('change', e_change);
 								}
