@@ -53,6 +53,18 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		'start': function(callback) {
 			callback(null, true);
 		},
+		'set_custom_path': function(url, file_path) {
+			// But change the URL to have a smiley face instead of fullstops
+			//console.log('url', url);
+			var escaped_url = url.replace(/\./g, '☺');
+			//console.log('escaped_url', escaped_url);
+
+			//this.meta.set('custom_paths.' + escaped_url, file_path);
+			var custom_paths = this.meta.get('custom_paths');
+			//console.log('custom_paths', custom_paths);
+			custom_paths.set(escaped_url, file_path);
+
+		},
 		'serve_directory': function(path) {
 			// Serves that directory, as any files given in that directory can be served from /js
 			var served_directories = this.meta.get('served_directories');
@@ -71,7 +83,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		},
 		'process': function(req, res) {
-			//console.log('Site_JavaScript processing');
+			console.log('Site_Static_HTML processing');
 			var remoteAddress = req.connection.remoteAddress;
 
 			var custom_paths = this.meta.get('custom_paths');
@@ -88,12 +100,14 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			var url_parts = url.parse(req.url, true);
 			//console.log('url_parts ' + stringify(url_parts));
 			var splitPath = url_parts.path.substr(1).split('/');
-			//console.log('resource site css splitPath ' + stringify(splitPath));
+			console.log('resource site css splitPath ' + stringify(splitPath));
 
 
 			if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
 			rurl = rurl.replace(/\./g, '☺');
-			//console.log('rurl ' + rurl);
+			console.log('rurl ' + rurl);
+
+			if (rurl == '') rurl = '/';
 
 			var custom_response_entry = custom_paths.get(rurl);
 			//console.log('custom_response_entry ' + stringify(custom_response_entry));

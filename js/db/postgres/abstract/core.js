@@ -1101,7 +1101,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 						// However, need to set up the primary key or other constraints if it applies to the row.
 
-
+						//  A column may be created that has FK constraints as well as PK ones.
 
 
 						var column = new Abstract.Column({
@@ -1479,9 +1479,13 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 								'column': that
 							});
 						}
-
 					}
 				}
+
+				// Go through column_words, looking for information about a foreign key
+				//  fk-table_name
+				//  fk-table_name-field_name
+
 				if (arr_spec) process_arr_spec();
 
 
@@ -2194,12 +2198,12 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				var where = this.get('where');
 				//console.log('where ' + stringify(where));
 				var where_get_str = function(where_item) {
-					//console.log('tof(where_item) ' + tof(where_item));
-					//console.log('stringify(where_item) ' + stringify(where_item));
+					console.log('tof(where_item) ' + tof(where_item));
+					console.log('stringify(where_item) ' + stringify(where_item));
 					
 					if (tof(where_item) == 'array') {
 						if (where_item.length == 2) {
-							//console.log('tof(where_item[1]) ' + tof(where_item[1]));
+							console.log('tof(where_item[1]) ' + tof(where_item[1]));
 							if (tof(where_item[1]) == 'string') {
 								var res = where_item[0] + ' = \'' + where_item[1] + '\'';
 								return res;
@@ -2222,6 +2226,19 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 										var res = where_item[0] + ' = \'' + where_item[1].constraint_name + '\'';
 										return res;
 									}
+									
+								}
+
+								if (tof(where_item[1]) == 'data_value') {
+
+									var v = where_item[1].value();
+
+									//throw 'stop';
+									//console.log('where_item[1] ' + stringify(where_item[1]));
+									//if (is_defined(where_item[1].constraint_name)) {
+										var res = where_item[0] + ' = \'' + v + '\'';
+										return res;
+									//}
 									
 								} 
 								

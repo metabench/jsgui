@@ -5,13 +5,14 @@ if (typeof define !== 'function') {
 define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resource', './jsgui-je-suis-xml',
 	'cookies', '../resource/local-server-info', '../resource/local-file-system',
 	'../resource/core/server-pool', '../resource/core/application-router', '../resource/file-system-web-admin', '../resource/web-admin',
+	'../resource/core/site-static-html',
 	'../resource/core/site-javascript', '../resource/core/site-css', '../resource/core/site-images', '../resource/core/site-audio',
 	'../resource/info',
 	'../resource/login', './server-page-context'], 
 
 	function(sockjs, jsgui, os, http, libUrl, Resource, JeSuisXML, Cookies,
 		Local_Server_Information, Local_File_System, Server_Resource_Pool, Application_Router,
-		Resource_File_System_Web_Admin, Resource_Web_Admin, Site_JavaScript, Site_CSS, Site_Images, Site_Audio, Info,
+		Resource_File_System_Web_Admin, Resource_Web_Admin, Site_Static_HTML, Site_JavaScript, Site_CSS, Site_Images, Site_Audio, Info,
 		Login, Server_Page_Context) {
 	
 	var Server = {};
@@ -141,6 +142,12 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			resource_pool.push(new Info({
 				'meta': {
 					'name': 'Info'
+				}
+			}));
+
+			resource_pool.push(new Site_Static_HTML({
+				'meta': {
+					'name': 'Site Static HTML'
 				}
 			}));
 
@@ -339,6 +346,10 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     });
 					*/
 
+					// May want to serve images from different paths.
+					//  That would mean setting things up in the Routing_Tree differently.
+					
+
                     rt.set('/img/*', function(req, res) {
                     	//console.log('images wildcard routing. will send to the images resource.');
                     	//throw 'stop';
@@ -359,6 +370,12 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	admin.process(req, res);
 
                     });
+
+                    // May want the static HTML resource to serve index.html in the root directory.
+                    //  That's a simple configuration that's not using advanced JSGUI functionality on the server,
+                    //  but will be used to quickly host a client-side app.
+
+                    
 
                     //throw 'stop';
                     // Different / better mapping of connections by ip address too?

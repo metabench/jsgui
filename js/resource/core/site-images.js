@@ -113,6 +113,13 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		'start': function(callback) {
 			callback(null, true);
 		},
+
+		// can have both a directory path and a URL path.
+		//  don't want to necessarily serve them under /img/
+
+
+
+
 		'serve_directory': function(path) {
 			// Serves that directory, as any files given in that directory can be served from /js
 			var served_directories = this.meta.get('served_directories');
@@ -124,6 +131,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			console.log('served_directories ' + stringify(served_directories));
 			console.log('path ' + path);
 
+			// We may be serving directories AS something.
 
 			//throw 'stop';
 
@@ -131,7 +139,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		// basically get requests, but can handle more than just get.
 		'process': function(req, res) {
-			//console.log('Site_JavaScript processing');
+			console.log('Site_Images processing');
 			var remoteAddress = req.connection.remoteAddress;
 
 			var custom_paths = this.meta.get('custom_paths');
@@ -153,10 +161,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
 			rurl = rurl.replace(/\./g, '☺');
-			//console.log('rurl ' + rurl);
+			console.log('rurl ' + rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			//console.log('custom_response_entry ' + stringify(custom_response_entry));
+			console.log('custom_response_entry ' + stringify(custom_response_entry));
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);
@@ -179,7 +187,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//throw 'stop';
 			} else {
-				//console.log('splitPath', splitPath);
+				console.log('splitPath', splitPath);
 				if (splitPath.length > 0) {
 
 					// Can check for /js folder.
@@ -211,7 +219,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								var filePath = url_parts.path.substr(1);
 								//console.log('module.uri ' + module.uri);
 								var val2 =  path.dirname(module.uri);
-								//console.log('val2 ' + val2);
+								console.log('val2 ' + val2);
 								//throw '9) stop';
 
 								//var diskPath = val2 + '/../../images/' + fileName;

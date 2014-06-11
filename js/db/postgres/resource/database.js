@@ -167,7 +167,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			var cs = get_connection_string();
 			
 			// When it connects, it could get the information about the tables.
-			//  Perhaps this will be done with dbi-postgres though.
+			//  Perhcps this will be done with dbi-postgres though.
 			
 			// Makes use of dbi-postgres, a utility module.
 			
@@ -404,6 +404,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 			// Want to be able to interpret fairly simple json to make a table
 
+			// That table could be an abstract table object?
+			/*
 			var example_table_def = {
 				'name': 'users',
 				'columns': [
@@ -413,6 +415,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 				]
 			}
 			table_def = example_table_def;
+			*/
+
+			console.log('table_def', table_def);
 
 			// The abstract Postgres DB objects get created from this table def.
 			// Postgres abstract core should be very useful for this.
@@ -421,6 +426,15 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			var sql_create = apg_table.get_create_statement();
 
 			console.log('sql_create', sql_create);
+
+			// Then execute that SQL.
+
+			this.s_query(sql_create, function(err, res) {
+				console.log('res', res);
+				if (callback) callback(err, !!res);
+			});
+
+
 
 		},
 
@@ -439,8 +453,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			console.log('postgres resource ensure_table');
 
 			console.log('sig', sig);
+			var that = this;
 
-			var obj_table;
+			var obj_table, callback;
 			if (sig == '[o]') {
 				obj_table = a[0];
 			}
@@ -462,11 +477,24 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 				// Does a table with that name exist?
 
+				// db name as well?
+
 				this.table_exists(table_name, function(err, exists) {
 					if (err) {
 						throw err;
 					} else {
 						console.log('exists', exists);
+
+						if (!exists) {
+							// create the table / add the table
+
+
+							// I think call a create table function, but that will use the Abstract facilities to make the statement.
+							//if (callback) that.create_table(obj_table, callback);
+							that.create_table(obj_table, callback);
+
+						}
+
 					}
 				})
 
@@ -587,19 +615,39 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			
 		},
 		
-		'table_exists': function(db_name, table_name, callback) {
+		'table_exists': function(table_name, callback) {
+
+			var db_name = this.meta.get('name');
+			console.log('db_name', db_name);
+
 			// SELECT d.datname as "Name", u.usename as "Owner", pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT EXISTS(d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid WHERE... ORDER BY 1);
 			
+			// var sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = "' + schema_name + '"';
+
+			// We need the schema name for this too...
+
+			console.log('table_name', table_name);
+			//throw 'stop';
+
 			var sel = new Abstract.Select({
-				'from_item': new Abstract.Exists({
-					'subquery': new Abstract.Select({
-						'select_list': ['pg_catalog.pg_database.datname'],
-						'from_item': 'pg_catalog.pg_database',
-						'where': [['pg_catalog.pg_database.datname', db_name]]
-					})
-				})
+
+				// Don't think we want a nested abstract select like that.
+				//  Still, it's best to build the queries using the abstract objects.
+
+				// Select with a where clause.
+
+				'select_list': ['table_name'],
+
+
+				//'from_item': 'information_schema.tables',
+				'from_item': 'information_schema.tables',
+
+				// And sheck the table name too.
+
+				// Seems like a way of automatically making the ANDs.
+				'where': [['table_schema', 'public'], ['table_name', table_name]]
 			});
 			var sql = sel.toString();
 			console.log('sql ' + sql);
@@ -618,7 +666,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			// single result value
 			// s_query
 			
-			this.s_query(sql, callback);
+			this.s_query(sql, function(err, res) {
+				callback(err, !!res);
+			});
 		},
 		
 		'execute_query': function(query_spec) {

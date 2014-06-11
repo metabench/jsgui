@@ -56,6 +56,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			var served_directories = this.meta.get('served_directories');
 			//console.log('served_directories ' + stringify(served_directories));
 			//served_directories.push(path);
+
+			// May also want to serve a directory under a different path.
+
+			
+
 			served_directories.push({
 				'name': path
 			});

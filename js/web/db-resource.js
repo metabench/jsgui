@@ -52,11 +52,20 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 				// Why does this change from being a Data_Value to a string?
 				//  No matter how it winds up working, if it's currently a Data_Value, and we call set, giving it a string, it stays a Data_Value
-				
-				
 
 
-				var db_status = db.meta.get('status').value();
+				var dbs = db.meta.get('status');
+				console.log('dbs', dbs);
+
+
+
+				var db_status;
+
+				if (dbs.value) {
+					db_status = dbs.value();
+				} else {
+					db_status = dbs;
+				}
 
 
 				console.log('db_status', db_status);
@@ -77,14 +86,67 @@ define(["./jsgui-html", "../resource/core/resource"],
 						console.log('pre ensure_table');
 						//console.log('db.ensure_table', db.ensure_table);
 						db.ensure_table({
-							'name': 'Users',
+							'name': 'users',
 							'columns': [
 								//['id', 'int', 'autoincrement', 'pk'],
 								['id', 'serial', 'pk'],
 								['username', 'char', 24],
 								['passwordhash', 'char', 128]
 							]
-						})
+						});
+
+						// Roles
+						//  Role name, role ID
+
+						db.ensure_table({
+							'name': 'roles',
+							'columns': [
+								//['id', 'int', 'autoincrement', 'pk'],
+								['id', 'serial', 'pk'],
+								['name', 'char', 24]
+							]
+						});
+
+						// Also link between the role and the users - a many to many link table.
+						//  id, and fk for each table.
+
+						// Want to make it easy to set up foreign keys.
+						//  Creating a Column that acts as a Foreign Key. Perhaps it could set up the FK constraint on the table if necessary.
+						//  Don't want to much variation in the coding, less syntax than SQL.
+						//  Will have easy interoperation between DMBSs.
+
+						/*
+							ALTER TABLE user_roles
+							  ADD CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users (id)
+							   ON UPDATE NO ACTION ON DELETE NO ACTION;
+							CREATE INDEX fki_users
+							  ON user_roles(user_id);
+							*/
+
+
+						db.ensure_table({
+							'name': 'user_roles',
+							'columns': [
+								//['id', 'int', 'autoincrement', 'pk'],
+								['id', 'serial', 'pk'],
+								['user_id', 'int', 'fk-users'],
+								['role_id', 'int', 'fk-roles']
+							]
+						});
+
+
+						//  Could define relationships between tables, including foreign keys
+
+
+
+						// User_Roles
+
+
+
+						// Instead we could specify the DB and ensure that.
+
+
+
 					});
 					console.log('pre go');
 					fns.go(function(err, res) {
