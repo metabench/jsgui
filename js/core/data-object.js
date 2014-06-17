@@ -3937,7 +3937,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			// also will have to deal with particular output formats.
 			//  many controls / data types for the moment will have default output as HTML formatted.
 			//console.log('Data_Object get this.__type_name ' + this.__type_name);
-			console.log('Data_Object get sig ' + sig);
+			//console.log('Data_Object get sig ' + sig);
 			//console.log('* get a ' + stringify(a));
 			// will also be looking at the output processors.
 			if (is_defined(this.__type_name)) {
@@ -4515,7 +4515,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 
 						//console.log('property_name ' + property_name);
-						console.log('res ' + res);
+
+                        // Breaks it with stringify, is hard to track down.
+                        //  Maybe worth keeping as an example gotcha.
+						//console.log('res ' + res);
 						return res;
 					}
 					

@@ -1615,11 +1615,13 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				console.log('constraints_test_res ' + constraints_test_res);
 				if (constraints_test_res) {
 					
-					console.log('pre unsafe_add_object value', stringify(value));
+					//console.log('pre unsafe_add_object value', stringify(value));
 
-
+                    console.log('pre this.index_system.unsafe_add_object');
 
 					this.index_system.unsafe_add_object(value);
+
+                    console.log('post this.index_system.unsafe_add_object');
 					// gets added to the index... but is its position within this collection stored too?
 					//console.log('post unsafe_add_object');
 					// Things do get a bit complicated with needing the positions within the collection to do various things.
@@ -1651,8 +1653,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 					// This bit is taking a while.
 					//  Not sure why!!! Has to do with objects being put in a large collection probably.
 					//  Too many things, in the wrong context, getting notified.
-
+                    console.log('pre raise change event');
 					this.raise_event('change', e);
+                    console.log('post raise change event');
 
 					
 					//console.log('post raise add event');

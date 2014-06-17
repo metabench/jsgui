@@ -270,14 +270,14 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		//var stack = new Error().stack
 		//console.log( stack )
 
-        console.log('get_obj_fields_key obj', obj);
-        console.log('get_obj_fields_key stringify obj', stringify(obj));
-        console.log('tof obj', tof(obj));
+        //console.log('get_obj_fields_key obj', obj);
+        //console.log('get_obj_fields_key stringify obj', stringify(obj));
+        //console.log('tof obj', tof(obj));
 
 		var tFields = tof(fields);
 
-        console.log('fields ' + stringify(fields));
-		console.log('tFields ' + tFields);
+        //console.log('fields ' + stringify(fields));
+		//console.log('tFields ' + tFields);
 
         // An attached field?
         //  So it's one object attached to another.
@@ -301,7 +301,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 
 			var tFieldDef = tof(field_definition);
-            console.log('tFieldDef', tFieldDef);
+            //console.log('tFieldDef', tFieldDef);
 			
 			if (tFieldDef == 'array') {
 				
@@ -323,16 +323,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 
 				//console.log('field_name ' + field_name);
-                console.log('field_definition', field_definition);
+                //console.log('field_definition', field_definition);
 				var field_val = obj.get(field_definition);
 
                 // Need to upgrade the object so it looks at intrinsic nested properties.
 
-                console.log('tof obj', tof(obj));
-                console.log('obj', stringify(obj));
+                //console.log('tof obj', tof(obj));
+                //console.log('obj', stringify(obj));
 
-				console.log('field_val ' + field_val);
-                console.log('tof field_val ' + tof(field_val));
+				//console.log('field_val ' + field_val);
+                //console.log('tof field_val ' + tof(field_val));
 
                // throw 'stop';
 
@@ -391,7 +391,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		})
 
         var res = arr_res.join(index_key_separator);
-        console.log('get_obj_fields_key res', res);
+        //console.log('get_obj_fields_key res', res);
 		return res;
 	}
 
@@ -478,7 +478,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			//  gets the key for the object's values within this index's fields?
 
 			// so that fields key would need to produce a string that allows the fields in the object
-			//  to be indexed 
+			//  to be indexed
+
+
 
 			var fields_key = get_obj_fields_key(obj, this.fields);
 

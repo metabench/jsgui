@@ -144,7 +144,7 @@ define(["./jsgui-html", "../resource/core/resource"],
 							]
 						});
 
-                        console.log('table ensured');
+                        //console.log('table ensured');
                         //throw 'stop';
 
                         /*
@@ -206,9 +206,42 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 						// Instead we could specify the DB and ensure that.
 
-                        callback(null, true);
+                        cb(null, true);
 
 					});
+
+                    fns.push(function(cb) {
+                         db.ensure_table({
+                         'name': 'roles',
+                         'columns': [
+                         //['id', 'int', 'autoincrement', 'pk'],
+                         ['id', 'serial', 'pk'],
+                         ['name', 'char', 24]
+                         ]
+                         });
+
+
+                        cb(null, true);
+
+                    });
+
+                    fns.push(function(cb) {
+
+
+                        db.ensure_table({
+                            'name': 'user_roles',
+                            'columns': [
+                                //['id', 'int', 'autoincrement', 'pk'],
+                                ['id', 'serial', 'pk'],
+                                ['user_id', 'int', 'fk-users'],
+                                ['role_id', 'int', 'fk-roles']
+                            ]
+                        });
+
+
+                        cb(null, true);
+
+                    });
 					console.log('pre go');
 
 

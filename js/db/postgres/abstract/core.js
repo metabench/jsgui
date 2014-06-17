@@ -1062,6 +1062,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			
 			'init': function(spec) {
 
+                console.log('init Table');
+
 				// Polymorphism in how this gets specified to the constructor?
 
 				var that = this;
@@ -1093,7 +1095,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 				//var c = this.get('constraints');
 				//console.log('c', c);
-				
+
 
 				//console.log('spec.columns', spec.columns);
 				if (tof(spec.columns) == 'array') {
@@ -1104,8 +1106,11 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 					var columns = this.get('columns');
 
+                    //throw 'stop';
+                    console.log('');
+
 					each(spec.columns, function(spec_column) {
-						//console.log('spec_column', spec_column);
+						console.log('spec_column', spec_column);
 
 						// Adding another property to an array?
 						//  Questionable.
@@ -1127,7 +1132,14 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							'table': that
 						});
 						//console.log('column', column);
+
+
+                        // Pushing the column is a problem.
+
+                        console.log('tof columns', tof(columns));
+                        //throw 'stop';
 						columns.push(column);
+
 					})
 
 					//this.get('columns').load_array(spec.columns);
@@ -1138,7 +1150,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				
 				// a problem with set not returning what I think it should.
+
 				var columns = this.get('columns');
+
+
 				
 				this.load_from_spec(spec, ['name', 'schema_name', 'single_name']);
 				
@@ -1564,7 +1579,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 								}
 
 								console.trace("Here I am!");
-								throw 'stop';
+								//throw 'stop';
 							}
 						}
 
