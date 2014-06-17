@@ -123,13 +123,13 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		'serve_directory': function(path) {
 			// Serves that directory, as any files given in that directory can be served from /js
 			var served_directories = this.meta.get('served_directories');
-			console.log('served_directories ' + stringify(served_directories));
+			//console.log('served_directories ' + stringify(served_directories));
 			//served_directories.push(path);
 			served_directories.push({
 				'name': path
 			});
-			console.log('served_directories ' + stringify(served_directories));
-			console.log('path ' + path);
+			//console.log('served_directories ' + stringify(served_directories));
+			//console.log('path ' + path);
 
 			// We may be serving directories AS something.
 
@@ -161,10 +161,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
 			rurl = rurl.replace(/\./g, '☺');
-			console.log('rurl ' + rurl);
+			//console.log('rurl ' + rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			console.log('custom_response_entry ' + stringify(custom_response_entry));
+			//console.log('custom_response_entry ' + stringify(custom_response_entry));
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);

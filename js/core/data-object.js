@@ -3926,13 +3926,18 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 		'get': fp(function(a, sig) {
 
+            // 17/06/2014 - Nested intrinsic properties.
+            //  Need to access object[propertyName], not just object._[propertyName]
+            //   However, may want to say some names of properties are never intrinsic.
+
+
 			// Could have more managable (for the compiler) functions.
 
 			// but when nested is in place, is it still working right?
 			// also will have to deal with particular output formats.
 			//  many controls / data types for the moment will have default output as HTML formatted.
 			//console.log('Data_Object get this.__type_name ' + this.__type_name);
-			//console.log('Data_Object get sig ' + sig);
+			console.log('Data_Object get sig ' + sig);
 			//console.log('* get a ' + stringify(a));
 			// will also be looking at the output processors.
 			if (is_defined(this.__type_name)) {
@@ -4497,8 +4502,20 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 						var res = ll_get(this._, a[0]);
 
+
+                        if (!res) {
+                            if (field_name.indexOf('.') > -1) {
+                                throw 'not yet handled';
+                            } else {
+                                res = this[a[0]];
+                            }
+                        }
+                        // Instrinsic get...
+
+
+
 						//console.log('property_name ' + property_name);
-						//console.log('res ' + res);
+						console.log('res ' + res);
 						return res;
 					}
 					

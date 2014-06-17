@@ -2,7 +2,8 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 define(["./server", "./database", "./table"], function(Server, Database, Table) {
-	
+	//console.log('Database', Database);
+	//throw 'stop';
 	return {
 		'Server': Server,
 		'Database': Database,

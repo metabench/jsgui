@@ -187,7 +187,7 @@ define(['../../web/jsgui-html', './resource'],
 			//  There may be resources that get put into groups too.
 			var that = this;
 			
-			console.log('obj ' + stringify(obj));
+			//console.log('obj ' + stringify(obj));
 
 			var obj_name = obj.meta.get('name');
 			

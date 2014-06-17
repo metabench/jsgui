@@ -195,7 +195,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			// The resource_pool is not just a Data_Value. need to fix some get or create new field value code.
 			//console.log('start');
 			var resource_pool = this.get('resource_pool');
-			console.log('resource_pool ' + stringify(resource_pool));
+			//console.log('resource_pool ' + stringify(resource_pool));
 			//throw 'stop';
 
 			var that = this;

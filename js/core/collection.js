@@ -147,7 +147,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		'init': function(spec, arr_values) {
 			//console.log('Collection init');
 			//console.log('spec ' + stringify(spec))
-
+            spec = spec || {};
 			// Probably should act differently for an abstract collection.
 			this.__type = 'collection';
 			if (spec.abstract === true) {
@@ -640,6 +640,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
         * @param ...
         */
 		'get' : fp(function(a, sig, _super) {
+
+
+
+
 			// integer... return the item from the collection.
 			//console.log('collection get sig ' + sig);
 			if (sig == '[n]' || sig == '[i]') {
@@ -650,6 +654,28 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			//  this may again refer to getting a property.
 			
 			if (sig == '[s]') {
+
+                var ix_sys = this.index_system;
+                var res;
+                if (ix_sys) {
+                    console.log('ix_sys', ix_sys);
+                    var pui = ix_sys._primary_unique_index;
+                    res = pui.get(a[0])[0];
+                }
+
+                if (res) {
+                    return res;
+                }
+
+
+
+                // Works differently when getting from an indexed collection.
+                //  Need to look into the index_system
+                //  there may be a primary_unique_index
+
+
+
+
 				return Data_Object.prototype.get.apply(this, a);
 				
 			}
@@ -1257,12 +1283,13 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			var that = this;
 			//console.log('index_by a ' + stringify(a));
 			//console.log('a.l ' + a.l);
-			//console.log('sig ' + sig);
+			console.log('index_by sig ' + sig);
+            console.log('a', a);
 			//throw('stop');
 			//console.log('tof(a[0]) ' + tof(a[0]));
 			//if (a.l == 1 && tof(a[0]) == 'array') {
 			if (sig == '[a]') {
-				//console.log('a[0] ' + stringify(a[0]));
+				console.log('a[0] ' + stringify(a[0]));
 
 				if (is_arr_of_strs(a[0])) {
 					// then it's a single index.
@@ -1289,9 +1316,14 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			}
 			
 			// otherwise, we'll be taking a map of what to index and what type of index to use there.
-			var that = this;
+
 			// get the index, based on that name?
 			if (sig == '[s]') {
+
+                // Tell the index to sort itself based on that value.
+
+
+
 				return that.index({
 					'sorted': [[a[0]]]
 				});
@@ -1301,9 +1333,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				//console.log('object sig');
 				
 				var index_map = a[0];
-				//console.log('index_map ' + stringify(index_map));
+				console.log('index_map ' + stringify(index_map));
 				
 				each(index_map, function(index_type, index_definition) {
+
+                    console.log('index_definition', index_definition);
 					//console.log('index_type ' + index_type);
 					if (index_type == 'sorted') {
 						// set up the individual index of the specified type.
@@ -1316,6 +1350,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 							if (is_arr_of_arrs(index_definition)) {
 								// each index, each field in the index
 								var indexes = [];
+
+
 								
 								each(index_definition, function(i, individual_index_fields) {
 									// then will have a bunch of fields
@@ -1336,7 +1372,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 									//  It has those fields...
 									//   where to they get made within the Sorted_Collection_Index constructor?
 
-
+                                    console.log('individual_index_fields', individual_index_fields);
 
 
 									var index = new Sorted_Collection_Index({
@@ -1349,6 +1385,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 									indexes.push(index);
 									
 								});
+
+                                console.log('indexes', indexes);
 								
 								that.index_system._primary_unique_index = indexes[0];
 								return indexes[0];
@@ -1400,6 +1438,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 			if (this._data_object_constraint) {
 				// not sure why this will have a _data_object_constraint in various cases.
+                console.log('this._data_object_constraint', this._data_object_constraint);
+
 				if (!this._data_object_constraint.match(obj)) return false;
 			}
 			
@@ -1459,7 +1499,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			var tv = tof(value);
 			//console.log('1) collection push value: ' + stringify(value));
 			//console.log('--------------------')
-			//console.log('push tv ' + tv);
+			console.log('push tv ' + tv);
 
 			if (tv == 'object') {
 				
@@ -1572,10 +1612,13 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				//console.log('constraints_test_res ' + constraints_test_res);
 				// would be testing against a unique constraint.
 				//  can test to see if a new object would violate a collection constraint?
-				//console.log('constraints_test_res ' + constraints_test_res);
+				console.log('constraints_test_res ' + constraints_test_res);
 				if (constraints_test_res) {
 					
-					//console.log('pre unsafe_add_object');
+					console.log('pre unsafe_add_object value', stringify(value));
+
+
+
 					this.index_system.unsafe_add_object(value);
 					// gets added to the index... but is its position within this collection stored too?
 					//console.log('post unsafe_add_object');

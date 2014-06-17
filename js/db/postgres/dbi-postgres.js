@@ -122,6 +122,19 @@
 //  Or be clearer about DBI
 //   However, I think that it can be put in the resource, and put within the general framework of it, as it will be asyncronous generally
 
+// May be best to retire this DBI_Postgres, and to put the functionality into Postgres resources.
+//  Or to make the methods static so that they can accept connection info from the resource each time.
+//  It may be useful having general purpose Postgres code outside of a Resource.
+
+// Need to make it so that when using a Resource, it can load up the abstract postgres DB.
+//  Not planning on making it so that it serves that abstract data as a Resource, but the abstract data will be useful to it in serving the
+//  DB functionality.
+
+// The Abstract classes are used to provide the Resource a model to use in making changes to the DB. It helps the DB resource to understand the DB.
+
+
+
+
 
 
 if (typeof define !== 'function') {
@@ -348,6 +361,14 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 	
 
 
+
+
+
+
+    // Could pass in a DBParams object with various requests.
+    //  Could make a DB_Requests module.
+    //  Accomplishing DB functionality, in a static, determininstic, non-stateful way.
+    //  The resource would be stateful. It would help maintainability to have the Resource make use of more general purpose Postgres code outside of the Resource.
 
 
 
@@ -1238,6 +1259,11 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			
 			
 		},
+
+        // Also will be better to have the database interaction code making use of the abstract syntax construction.
+
+
+
 		'create_schema': function(name, callback) {
 			var client = this.client;
 			var sql = 'CREATE SCHEMA ' + name + ';';
@@ -3048,12 +3074,6 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 						}
 					});
 					
-					
-					
-					
-					
-					
-					
 				}
 				
 			});
@@ -3722,7 +3742,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 					
 				}
 			});
-		},
+		}
 		
 		
 		// could be an abstract function

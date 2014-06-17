@@ -205,10 +205,20 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
     * @memberof module:core/constraint
     */
     // Data_Object_Constraint
+
+    var Data_Object = require('./data-object');
+
 	var Data_Object_Constraint = Constraint.extend({
 	    'init': function (spec) {
 	        this.__data_type = 'data_object_constraint';
-	    }
+	    },
+        'match': function(obj) {
+
+            // Don't have Data_Object here??, as Data_Object is used by this
+            var res = obj instanceof Data_Object.constructor;
+            console.log('res', res);
+            return (res);
+        }
 	});
 
 
@@ -1233,13 +1243,13 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 			
 			
 	//		/*
-	//		 * “Each Order is associated with one or more OrderLines.”
+	//		 * ï¿½Each Order is associated with one or more OrderLines.ï¿½
 
-	//			“Each OrderLine is associated with one and only one Order.”
+	//			ï¿½Each OrderLine is associated with one and only one Order.ï¿½
 				
-	//			“Each OrderLine is associated with one and only one Product.”
+	//			ï¿½Each OrderLine is associated with one and only one Product.ï¿½
 				
-	//			“Each Product is associated with zero or more OrderLines.”
+	//			ï¿½Each Product is associated with zero or more OrderLines.ï¿½
 	//		 * 
 	//		 */
 			

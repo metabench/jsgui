@@ -1,3 +1,7 @@
+// This would greatly benefit from being split up, but the circular references could be a bit of a problem?
+//  http://stackoverflow.com/questions/4881059/how-to-handle-circular-dependencies-with-requirejs-amd
+
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -363,6 +367,8 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 				this.set('tables', new Collection({
 					'index_by': 'name'
 				}));
+
+                // Then when a table is added to that collection, it should index it properly.
 				
 				if (tof(spec.tables) == 'array') {
 					this.get('tables').load_array(spec.tables);
@@ -984,10 +990,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				//   Would be able to save created files / sequences to the server.
 				
 				var is_info_schema_row = (is_defined(spec.specific_schema) && is_defined(spec.specific_schema) && is_defined(spec.parameter_mode) && is_defined(spec.as_locator));
-				console.log('');
-				console.log('');
-				console.log('is_info_schema_row ' + is_info_schema_row);
-				console.log('spec ' + stringify(spec));
+				//console.log('');
+				//console.log('');
+				//console.log('is_info_schema_row ' + is_info_schema_row);
+				//console.log('spec ' + stringify(spec));
 				
 				if (spec.specific_schema && spec.specific_schema && spec.parameter_mode && spec.as_locator) {
 					this.load_from_information_schema_row(spec)
@@ -1046,6 +1052,13 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			
 		'Table': Data_Object.extend({
 			// There will be code to load this abstract table from a database, or a description of how it is in the db.
+
+			'fields': {
+				// Though it should be able to work as a string too.
+
+
+				'schema': Object
+			},
 			
 			'init': function(spec) {
 
@@ -1066,7 +1079,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				//  may want these the be indexed, with a string index.
 				//   could use some kind of IndexedCollection for this.
 				
-				
+
+                // Having a problem with the index by name.
+                //  It could be related to the name being a Data_Value, and it not recognising that value and indexing it as such.
+
 				this.set('columns', new Collection({
 					'index_by': 'name'
 				}));
@@ -1079,7 +1095,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				//console.log('c', c);
 				
 
-				console.log('spec.columns', spec.columns);
+				//console.log('spec.columns', spec.columns);
 				if (tof(spec.columns) == 'array') {
 
 
@@ -1089,7 +1105,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					var columns = this.get('columns');
 
 					each(spec.columns, function(spec_column) {
-						console.log('spec_column', spec_column);
+						//console.log('spec_column', spec_column);
 
 						// Adding another property to an array?
 						//  Questionable.
@@ -1104,11 +1120,13 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 						//  A column may be created that has FK constraints as well as PK ones.
 
 
+						//console.log('spec', spec);
+
 						var column = new Abstract.Column({
 							'arr_spec': spec_column,
 							'table': that
 						});
-						console.log('column', column);
+						//console.log('column', column);
 						columns.push(column);
 					})
 
@@ -1206,7 +1224,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				// would need to create the constraint object I think.
 
 				var constraints = this.get('constraints');
-				console.log('constraints', constraints);
+				//console.log('constraints', constraints);
 				constraints.push(constraint);
 
 			},
@@ -1225,8 +1243,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 						
 						var has_not_null = false, has_unique = false, has_pk = false;
 						each(column.get('constraints'), function(constraint) {
-							console.log('');
-							console.log('constraint ' + stringify(constraint));
+							//console.log('');
+							//console.log('constraint ' + stringify(constraint));
 							
 							if (constraint.name == 'primary key') {
 								has_pk = true;
@@ -1251,7 +1269,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							column.get('constraints').push(nn);
 						}
 						
-						console.log('column.constraints ' + stringify(column.get('constraints')));
+						//console.log('column.constraints ' + stringify(column.get('constraints')));
 						
 					});
 					
@@ -1354,21 +1372,42 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 		//  Will look at the DEFAULT value of various rows in the column.
 		//  Will particularly identify the sequence in the primary key column.
 		
-		
+		// Much better if columns can get their reference to the schema.
+		//  They can then get the reference to another table by name
+		//  With that, they can include a link to the table object within themselves, storing and using pointers on the object graph.
+
+
+
 		
 		
 		'Column': Data_Object.extend({
 			// And the column has a reference to the table, its parent.
+			'fields': {
+				'table': Object
+			},
 
 			'init': function(spec) {
 				//this.name = spec.name;
 				this._super(spec);
 				var that = this;
 
-				console.log('init Column');
-				console.log('spec.name', spec.name);
+				// The abstract column would refer to an abstract table which would refer to an abstract schema.
+				//  It may be that it's best to generate an abstract schema / abstract database, and work within that.
+				//  Even when just creating columns, they may be best within a database.
+				//  The various objects will themselves be 'hackers', meaning that they change data elswehere.
+				//   Create a column with a foreign key, add it to a table, and it automatically adds the foreign key constraint to the table
+				//   Want to minimise the number of statements needed to create something.
 
-				console.log('spec', spec);
+				
+
+
+
+
+
+				//console.log('init Column');
+				//console.log('spec.name', spec.name);
+
+				//console.log('spec', spec);
 
 				// I think break this down further into
 				//  1) Getting / arranging the data as local variables
@@ -1423,9 +1462,13 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					arr_spec = spec;
 				}
 
-				console.log('arr_spec', arr_spec);
+				//console.log('arr_spec', arr_spec);
 
 				// then process the arr_spec into other variables.
+
+				var has_fk, fk_referenced_table, fk_referenced_column;
+
+
 
 				var process_arr_spec = function() {
 					name = arr_spec[0];
@@ -1437,7 +1480,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 						data_type_length = arr_spec[2];
 					}
 
-					console.log('arr_spec.length ' + arr_spec.length);
+					//console.log('arr_spec.length ' + arr_spec.length);
 
 					// then treat the rest as words...
 
@@ -1461,12 +1504,12 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 					if (i) {
 						var column_words = arr_spec.slice(i);
-						console.log('column_words', column_words);
+						//console.log('column_words', column_words);
 
 						// then process these column words.
 						// mapify?
 						var mcw = jsgui.get_truth_map_from_arr(column_words);
-						console.log('mcw', mcw);
+						//console.log('mcw', mcw);
 
 						// then if certain words are found in the map, we assign those characteristics to the column.
 
@@ -1480,6 +1523,55 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							});
 						}
 					}
+
+					each(arr_spec, function(spec_word) {
+						//console.log('spec_word', spec_word);
+
+						if (tof(spec_word) == 'string') {
+							if (spec_word.substr(0, 3) == 'fk-') {
+								//console.log('');
+								//console.log('we have a foreign key');
+
+								var s_fk = spec_word.split('-');
+								var referenced_table_name, referenced_table;
+								if (s_fk.length == 2) {
+									referenced_table_name = s_fk[1];
+									//console.log('referenced_table_name', referenced_table_name);
+
+									// need to look up that referenced table, by name, from the abstract database / schema system
+
+									// and the table references the db
+
+									var table2 = that.get('table');
+									//console.log('table2', table2);
+									var schema = table2.get('schema');
+									console.log('schema', schema);
+									console.log('tof schema', tof(schema));
+
+									// then look for the referred to table in the schema.
+									//  (want to build up a model / graph of this if possible)
+									//  the schema may not have been set up though.
+
+									// in that case, not sure we could do references to other tables in the same way, but they still could be done.
+									//  ???
+									//   know the name of the table, but the schema object connects them together.
+									//   perhaps the Postgres database resource could use the public schema as a default.
+									//   however, we may be building up an abstract schema to persist.
+
+
+
+
+								}
+
+								console.trace("Here I am!");
+								throw 'stop';
+							}
+						}
+
+
+						
+					})
+
 				}
 
 				// Go through column_words, looking for information about a foreign key
@@ -1489,11 +1581,12 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				if (arr_spec) process_arr_spec();
 
 
-				console.log('table', table);
-				console.log('name', name);
-				console.log('data_type', data_type);
-				console.log('data_type_length', data_type_length);
-				console.log('pk_constraint', pk_constraint);
+				//console.log('table', table);
+				//throw 'stop';
+				//console.log('name', name);
+				//console.log('data_type', data_type);
+				//console.log('data_type_length', data_type_length);
+				//console.log('pk_constraint', pk_constraint);
 
 				// process that into words.
 				//  a number just after the data_type indicates the data_type length
@@ -1518,7 +1611,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 					// ensure the constraint is represented in the table
 					//  That's more than just adding it.
-					console.log('pk_constraint', pk_constraint);
+					//console.log('pk_constraint', pk_constraint);
 					//throw 'stop';
 
 					table.ensure_pk_constraint(pk_constraint);
@@ -2148,6 +2241,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							}
 						});
 					}
+                    if (tof(sell) == 'data_value') {
+                        res.push(sell.value());
+                    }
+
 					return res.join('');
 					
 				}
@@ -2166,13 +2263,15 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					console.log('from_item ' + from_item);
 					
 					var res = [];
-					
+					console.log('tof(from_item)', tof(from_item));
 					if (from_item.toFQN) {
 						res.push(from_item.toFQN());
 					} else {
-						if (tof(from_item) == 'string') {
-							res.push(from_item);
-						} else {
+                        if (tof(from_item) == 'string') {
+                            res.push(from_item);
+                        } else if (tof(from_item) == 'data_value') {
+                            res.push(from_item.value());
+                        } else {
 							res.push(from_item.toString());
 						}
 						
@@ -2187,16 +2286,28 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				res.push(get_select_list_str());
 				
 				// won't always have 'from'.
-				if (tof(this.get('select_list')) == 'array' && this.get('select_list').length > 0 || 
-					tof(this.get('select_list')) == 'string') {
+
+                var t_select_list = tof(this.get('select_list'));
+                console.log('select_list', this.get('select_list'));
+                console.log('t_select_list', t_select_list);
+                console.log('tof t_select_list', tof(t_select_list));
+
+
+
+				if (t_select_list == 'array' && this.get('select_list').length > 0 ||
+                    t_select_list == 'string' || t_select_list == 'data_value') {
 					res.push(' FROM ');
 				}
-				
-				res.push(get_from_item_str());
+
+                var str_from_item = get_from_item_str();
+				console.log('str_from_item', str_from_item);
+				res.push(str_from_item);
 				
 				// are there where clauses?
 				var where = this.get('where');
-				//console.log('where ' + stringify(where));
+				console.log('* where ' + stringify(where));
+
+
 				var where_get_str = function(where_item) {
 					console.log('tof(where_item) ' + tof(where_item));
 					console.log('stringify(where_item) ' + stringify(where_item));
@@ -2254,7 +2365,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				var get_where_str = function() {
 					var res = [];
 					if (tof(where) == 'array') {
-						
+						console.log('where.length', where.length);
 						if (where.length > 0) {
 							var first = true;
 							res.push(' WHERE ');
@@ -2644,7 +2755,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			//  Still, may be best to store it as an array / collection?
 
 			if (spec.column) {
-				console.log('spec.column', spec.column);
+				//console.log('spec.column', spec.column);
 				this.set('columns', spec.column);
 			}
 
@@ -2658,14 +2769,14 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 		'toString': function() {
 
 			var columns = this.get('columns');
-			console.log('columns', columns);
+			//console.log('columns', columns);
 
 			if (!columns) {
 				throw 'Primary key constraint needs column(s) assigned';
 			}
 
 			var column_name = columns.get('name').value();
-			console.log('column_name', column_name);
+			//console.log('column_name', column_name);
 
 			return 'PRIMARY KEY(' + column_name + ')';
 		}
@@ -2691,10 +2802,27 @@ OWNER TO postgres;
 
 	// foreign key...
 	//  says that it references something.
+
+	// The constraint belongs to the table rather than the column (in Postgres terms)
+	//  Will be able to define a key as being part of a column.
 	
 	acc.Foreign_Key = Data_Object.extend({
 		'init': function(spec) {
 			this._super(spec);
+
+			// Not just the target, the...
+
+			// The table containing the foreign key is called the referencing or child table, and the table containing the candidate key is called the referenced or parent table.[4]
+
+
+			// table
+			// referenced table = target
+
+			// Can reference two columns?
+			//  Column in one table references a column in another table.
+
+			// references a target column in a target table
+
 			this.set('target', spec.target);
 			
 			// and knowing which column its a constraint for?

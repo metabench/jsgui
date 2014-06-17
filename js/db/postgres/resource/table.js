@@ -5,7 +5,7 @@ if (typeof define !== 'function') {
 define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
     
 	
-	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp;
+	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp, Data_Object = jsgui.Data_Object;
 	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.each, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
 	var get_item_sig = jsgui.get_item_sig, trim_sig_brackets = jsgui.trim_sig_brackets;
 	
@@ -18,8 +18,40 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		
 		
 		'init': function(spec) {
+
+            this._super(spec);
+
+            this.data = new Data_Object({});
+
+            this.meta.set('type_levels', ['table', 'rdb', 'postgres']);
+
+            //console.log('spec.resource', spec.resource);
+            //throw 'stop';
+
+            // Meta.get('table_names')
+
+            // At some point it will need to be a flat interface without objects.
+
+            // The database resource will need to be flexible in some ways.
+
+            // Will need to give it the plans for an authentication database, then the resource is going to ensure that database is set up.
+
+            // This will not actually contain the data (though some Resources will), but will provide an interface to the data.
+
+
+            // Could be a field though.
+            if (spec.schema) {
+                // Or data, rather than meta?
+                //  It's a resource itself/
+
+                this.data.set('schema', spec.schema);
+            }
+
+            if (spec.name) {
+                this.meta.set('name', spec.name);
+            }
 			
-			this._super(spec);
+
 			
 			
 		},
@@ -36,9 +68,29 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			this.connect(callback);
 		},
 		*/
-		'connect': function(callback) {
+
+		//'connect': function(callback) {
 			
-		},
+		//},
+
+        'start': function(callback) {
+            // Not so sure about column resources.
+            //  However, this would be a good place to load the metadata.
+            //  It could be also be useful for the Resource to have a reference to the Abstract Class.
+
+            // The Abstract system is connected in a whole network.
+            //  Keeping the networks in sync will be a challenge.
+
+            // At this point, it would be useful to load in the columns.
+            //  Not sure at what point to initiate the loading and linking of the abstract data.
+
+
+
+
+
+
+            callback(null, true);
+        },
 		
 		// disconnect?
 		

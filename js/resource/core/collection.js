@@ -103,8 +103,8 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 		
 		'set': fp(function(a, sig) {
 		
-		    console.log('Resource.set sig ' + sig);
-		    console.log('Resource.set a ' + stringify(a));
+		    //console.log('Resource.set sig ' + sig);
+		    //console.log('Resource.set a ' + stringify(a));
 		    var last_param = a[a.l - 1];
 		    var callback;
 		    

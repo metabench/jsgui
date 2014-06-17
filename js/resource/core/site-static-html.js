@@ -83,7 +83,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		},
 		'process': function(req, res) {
-			console.log('Site_Static_HTML processing');
+			//console.log('Site_Static_HTML processing');
 			var remoteAddress = req.connection.remoteAddress;
 
 			var custom_paths = this.meta.get('custom_paths');
@@ -100,12 +100,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			var url_parts = url.parse(req.url, true);
 			//console.log('url_parts ' + stringify(url_parts));
 			var splitPath = url_parts.path.substr(1).split('/');
-			console.log('resource site css splitPath ' + stringify(splitPath));
+			//console.log('resource site css splitPath ' + stringify(splitPath));
 
 
 			if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
 			rurl = rurl.replace(/\./g, '☺');
-			console.log('rurl ' + rurl);
+			//console.log('rurl ' + rurl);
 
 			if (rurl == '') rurl = '/';
 

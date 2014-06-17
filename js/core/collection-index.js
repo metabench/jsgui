@@ -93,6 +93,12 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				if (tof(spec.fields) == 'array') {
 					// Not sure we can sort object fields by name like this?
 					//  It seems to work?
+
+                    // Fields in alphabetic order...
+                    //  However, there will be the capability for nested fields, and intrinsic property references.
+
+
+
 					this.alphabetic_fields = clone(spec.fields).sort();
 				}
 
@@ -253,21 +259,37 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		}
 	}
 
+    // We maybe need tests to do with adding Data_Objects to Collections, and seeing that they are automatically indexed.
+    //  Currently having a problem accessing an Abstract Postgres Table through the Collection of tables.
+
+    // Some unit tests to cover similar cases would help.
+
 	var get_obj_fields_key = function(obj, fields) {
-		//console.log('get_obj_fields_key');
+		console.log('get_obj_fields_key');
 
 		//var stack = new Error().stack
 		//console.log( stack )
+
+        console.log('get_obj_fields_key obj', obj);
+        console.log('get_obj_fields_key stringify obj', stringify(obj));
+        console.log('tof obj', tof(obj));
+
 		var tFields = tof(fields);
 
-		//console.log('tFields ' + tFields);
+        console.log('fields ' + stringify(fields));
+		console.log('tFields ' + tFields);
+
+        // An attached field?
+        //  So it's one object attached to another.
+
+        //throw 'stop';
 		if (tFields == 'string') {
 			fields = [fields];
 		}
 		
 		// var first = true;
 		var arr_res = [];
-		each(fields, function(i, field_name) {
+		each(fields, function(i, field_definition) {
 
 			// may check if it is a string or can be stringified.
 			// maybe should call functions to get a string result too.
@@ -278,9 +300,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			//console.log('field_name ' + stringify(field_name));
 
 
-			var tFieldName = tof(field_name);
+			var tFieldDef = tof(field_definition);
+            console.log('tFieldDef', tFieldDef);
 			
-			if (tFieldName == 'array') {
+			if (tFieldDef == 'array') {
 				
 
 				// gets more complicated with the array.
@@ -290,9 +313,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				//console.log('res ' + res);
 				//arr_res.push('[' + field_name.join(', ') + ']');
 				//return res;
-				arr_res.push(stringify(field_name));
+				arr_res.push(stringify(field_definition));
 				
-			} else if (tFieldName == 'string') {
+			} else if (tFieldDef == 'string') {
 
 				// But for objects, we are getting potentially attached field values.
 
@@ -300,10 +323,30 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 
 				//console.log('field_name ' + field_name);
-				var field_val = obj.get(field_name);
-				//console.log('field_val ' + field_val);
-				arr_res.push(field_val);
-			} else if (tFieldName == 'object') {
+                console.log('field_definition', field_definition);
+				var field_val = obj.get(field_definition);
+
+                // Need to upgrade the object so it looks at intrinsic nested properties.
+
+                console.log('tof obj', tof(obj));
+                console.log('obj', stringify(obj));
+
+				console.log('field_val ' + field_val);
+                console.log('tof field_val ' + tof(field_val));
+
+               // throw 'stop';
+
+                if (field_val) {
+                    if (field_val.value) field_val = field_val.value();
+                    arr_res.push(field_val);
+                }
+
+
+
+
+                //throw 'stop';
+
+			} else if (tFieldDef == 'object') {
 				//console.log('have an object fieldName, well its not really a simple field name it seems, could be an attached object\'s field.');
 
 				// the key in the index is the value?
@@ -312,12 +355,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				// need a way of iterating through the attached fields?
 				//  or deal with one level of attachment at this time?
 
-				if (field_name.attached) {
+                // 17/06/2014 - I'm needing this, and noticing that it's somewhat already been done.
+
+
+
+				if (field_definition.attached) {
 					// it will only be one attached item.
 					var attachedObjName;
 					var attachedObjFieldName;
 					var c = 0;
-					each(field_name.attached, function(i, v) {
+					each(field_definition.attached, function(i, v) {
 						attachedObjName = i;
 						attachedObjFieldName = v;
 						c++;
@@ -327,7 +374,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 						throw 'unexpected number of items in attached definition';
 					} else {
 						var attachedObj = obj[attachedObjName];
-						//console.log('attachedObj ' + stringify(attachedObj));
+						console.log('attachedObj ' + stringify(attachedObj));
 						var res = attachedObj.get(attachedObjFieldName);
 						arr_res.push(res);
 					}
@@ -342,7 +389,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 			// var field_val = obj[field_name];
 		})
-		return arr_res.join(index_key_separator);
+
+        var res = arr_res.join(index_key_separator);
+        console.log('get_obj_fields_key res', res);
+		return res;
 	}
 
 	// Function to get the first or nth?
@@ -412,7 +462,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			// if the object is just a string?
 			//  object needs to be in a data_object though.
 			//  that Data_Object can have a set type.
-			
+			console.log('Sorted_Collection_Index unsafe_add_object');
 			//console.log('Sorted_Collection_Index uao obj ' + stringify(obj));
 			
 			// but do we have the object's position/numerical index within the collection?
@@ -435,7 +485,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 
 			//console.log('this.fields ' + stringify(this.fields));
-			//console.log('fields_key ' + stringify(fields_key));
+			console.log('fields_key ' + stringify(fields_key));
 
 			// so, we add it to the index.
 
@@ -450,7 +500,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		//  or find? Want flexibility where possible, so may provide arrays.
 		
 		'get': fp(function(a, sig) {
-			//console.log('Sorted_Collection_Index get');
+			console.log('Sorted_Collection_Index get');
 			// will be providing a key, or part of a key
 			//  uses the prefix search.
 			//console.log('sig ' + sig);
@@ -551,6 +601,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		},
 
 		'unsafe_add_object' : (function(obj) {
+
+            console.log('Dict_Collection_Index unsafe_add_object');
 			//console.log('DICT unsafe_add_object');
 			// it's currently unsafe to stringify some objects.
 			//console.log('unsafe_add_object ' + stringify(obj));
@@ -2117,6 +2169,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		//  It's the uniqueness constraints which may have something to say about it. They would consult the indexes.
 		
 		'unsafe_add_object': function(obj) {
+
+            console.log('Collection_Index_System unsafe_add_object');
 			// NOT adds an index.
 			// should add an object to all indexes.
 			// a way to iterate through all indexes?

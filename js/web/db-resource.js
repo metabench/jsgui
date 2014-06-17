@@ -48,6 +48,8 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 
 
+
+
 				var db = this.get('database');
 
 				// Why does this change from being a Data_Value to a string?
@@ -68,7 +70,9 @@ define(["./jsgui-html", "../resource/core/resource"],
 				}
 
 
-				console.log('db_status', db_status);
+                console.log('db_status', db_status);
+                console.log('tof db_status', tof(db_status));
+                //throw 'stop';
 				var that = this;
 				// if it's not started, wait until it starts.
 
@@ -82,9 +86,54 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 				} else {
 					var fns = jsgui.Fns();
+
+                    // Not sure about ensuring all these tables to start with...
+                    //  May be better to ensure a schema or a database.
+
+                    //throw 'stop';
 					fns.push(function(cb) {
-						console.log('pre ensure_table');
+						//console.log('pre ensure_table');
 						//console.log('db.ensure_table', db.ensure_table);
+
+						// There would be a public schema in that Postgres database, used by default.
+						//  Want it so that there is the schema object that gets the tables added to it.
+						//  That schema object could be sent into a persistance mechanism.
+
+
+						//  however, that looks more postgres specific.
+						// db.ensure_schema({'tables': [...]})
+
+						// Would be worth having code that makes use of a default public schema (and later allows other schemas).
+
+						// schema.ensure_table would make more sense here.
+
+						// Creates the abstract table according to that def.
+
+                        // Get the abstract table out of the existing system?
+                        //  Though this part will be about accessing a db that is not postgres specific.
+
+                        // ensure_table will only take place once it has the abstract model to begin with.
+                        //  changes will be made to that abstract model. Those changes will then be made in the DB, making use of the abstract model to express them to the DB.
+
+                        // The implementation specific general db resource will make a note of the abstract DB, getting that when it starts / connects.
+                        //  It will use that info in order to make changes and carry out the commands given.
+
+                        // When the resource itself starts, it will get the abstract data
+                        //  The Postgres database resource will get the abstract data about the schemas in the db.
+
+                        // Ensure table will be different
+                        //  It will check those items against the abstract schema
+                        //  If there are differences, it will modify the abstract schema and carry out the corresponding changes in the DB.
+
+                        // ensure_table will work differently once it has access to the abstract schema, which will have been loaded.
+                        //  it's going to check the definition given against the abstract schema.
+
+
+
+
+
+                        //throw 'stop';
+
 						db.ensure_table({
 							'name': 'users',
 							'columns': [
@@ -95,6 +144,10 @@ define(["./jsgui-html", "../resource/core/resource"],
 							]
 						});
 
+                        console.log('table ensured');
+                        //throw 'stop';
+
+                        /*
 						// Roles
 						//  Role name, role ID
 
@@ -107,6 +160,8 @@ define(["./jsgui-html", "../resource/core/resource"],
 							]
 						});
 
+
+
 						// Also link between the role and the users - a many to many link table.
 						//  id, and fk for each table.
 
@@ -115,13 +170,15 @@ define(["./jsgui-html", "../resource/core/resource"],
 						//  Don't want to much variation in the coding, less syntax than SQL.
 						//  Will have easy interoperation between DMBSs.
 
-						/*
-							ALTER TABLE user_roles
-							  ADD CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users (id)
-							   ON UPDATE NO ACTION ON DELETE NO ACTION;
-							CREATE INDEX fki_users
-							  ON user_roles(user_id);
-							*/
+
+							//ALTER TABLE user_roles
+							//  ADD CONSTRAINT fk_users FOREIGN KEY (user_id) REFERENCES users (id)
+							//   ON UPDATE NO ACTION ON DELETE NO ACTION;
+							//CREATE INDEX fki_users
+							//  ON user_roles(user_id);
+
+
+						// So when a fk column is made, it will update the table constraints so it contains foreign keys.
 
 
 						db.ensure_table({
@@ -134,6 +191,10 @@ define(["./jsgui-html", "../resource/core/resource"],
 							]
 						});
 
+						*/
+
+
+
 
 						//  Could define relationships between tables, including foreign keys
 
@@ -145,10 +206,12 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 						// Instead we could specify the DB and ensure that.
 
-
+                        callback(null, true);
 
 					});
 					console.log('pre go');
+
+
 					fns.go(function(err, res) {
 						if (err) {
 							throw err;
@@ -157,6 +220,7 @@ define(["./jsgui-html", "../resource/core/resource"],
 							callback(null, true);
 						}
 					});
+
 				}
 
 				//throw 'stop';

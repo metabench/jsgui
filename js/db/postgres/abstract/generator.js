@@ -168,7 +168,14 @@ define(["./jsgui-lang-util", './abstract-postgres-parser'], function(jsgui, Abst
 	// A generator... there could be different generator instances.
 	//  A generator I want to use soon is the web db generator.
 
-	
+	// A CRUD generator here.
+
+    // There may be other forms of statement generation that are needed.
+    //  Such as when ensuring a database. Need to ensure the parts of it. Need to see which parts have changed, and then generate SQL to put those changes into place.
+
+
+
+
 
 
 	

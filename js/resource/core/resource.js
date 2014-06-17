@@ -166,8 +166,8 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 		
 		'set': fp(function(a, sig) {
 		
-		    console.log('Resource.set sig ' + sig);
-		    console.log('Resource.set a ' + stringify(a));
+		    //console.log('Resource.set sig ' + sig);
+		    //console.log('Resource.set a ' + stringify(a));
 		    var last_param = a[a.l - 1];
 		    var callback;
 		    
@@ -197,54 +197,66 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 
 		
 		'get': fp(function(a, sig) {
-		    var callback;
-		    var last_param = a[a.l - 1];
-		    if (tof(last_param) == 'function') {
-		        callback = last_param;
-		    }
-		    if (callback) {
-		        var arr_params = a.slice(0, a.l - 1);
-		        console.log('arr_params.length ' + arr_params.length);
-		        // _super with fp?
-		        
-		        // context with fp?
-		        // Need to sort out super with fp!
-		        //  Though super may well use fp anyway.
-		        
-		        
-		        //console.log('this._super ' + this._super);
-		        console.log('resource arr_params ' + stringify(arr_params));
-                //var res = this._super.apply(this, arr_params);
-                
-                // We can apply a collection resource's get asyncronously?
-                //  Possibly upgrade collection and data_object to handle async operations (though it's not async code)
 
-                // if it is a resource?
-                //  have an indicator on a function to see if it is async or not?
-                //  asyncify?
+            console.log('Resource get sig', sig);
 
-                // 
+            // if it does not have a function in the sig, it's syncronous
+
+            var is_async = sig.indexOf('f') > 0;
+
+            if (is_async) {
+                var callback;
+                var last_param = a[a.l - 1];
+                if (tof(last_param) == 'function') {
+                    callback = last_param;
+                }
+                if (callback) {
+                    var arr_params = a.slice(0, a.l - 1);
+                    console.log('arr_params.length ' + arr_params.length);
+                    // _super with fp?
+
+                    // context with fp?
+                    // Need to sort out super with fp!
+                    //  Though super may well use fp anyway.
 
 
+                    //console.log('this._super ' + this._super);
+                    console.log('resource arr_params ' + stringify(arr_params));
+                    //var res = this._super.apply(this, arr_params);
+
+                    // We can apply a collection resource's get asyncronously?
+                    //  Possibly upgrade collection and data_object to handle async operations (though it's not async code)
+
+                    // if it is a resource?
+                    //  have an indicator on a function to see if it is async or not?
+                    //  asyncify?
+
+                    //
+
+
+
+                    var res = this._super.apply(this, a);
+                    return res;
+
+
+
+                    //console.log('res ' + stringify(res));
+                    //callback(null, res);
+                }
+            } else {
+                //var stack = new Error().stack;
+                //var message = 'Resource.get requires a callback (err, result) as its last parameter';
+                //console.log(message);
+                //console.log(stack);
+
+                //throw
 
                 var res = this._super.apply(this, a);
-		        return res;
-                
-                
-                
-                //console.log('res ' + stringify(res));
-                //callback(null, res);
-		    } else {
-		        //var stack = new Error().stack;
-		        //var message = 'Resource.get requires a callback (err, result) as its last parameter';
-		        //console.log(message);
-                //console.log(stack);
-		        
-		        //throw
-		        
-		        var res = this._super.apply(this, a);
-		        return res;
-		    }
+                return res;
+            }
+
+
+
 		    
 		})
 		
