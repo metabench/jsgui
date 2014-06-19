@@ -1,5 +1,11 @@
 define(["./jsgui-lang-util", './abstract-postgres-parser'], function(jsgui, Abstract) {
-	
+
+
+    // May be better to make a CRUD resource?
+    //  Probably not (only) as a Resource as the functionality operates in the Abstract.
+
+
+
 	
 	// OK, this is currently big and chaotic.
 	// Generates an abstract Postgres database.

@@ -92,6 +92,47 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                     //throw 'stop';
 					fns.push(function(cb) {
+
+                        // Don't want to load the schema resources too many times, or have them properly overwrite.
+
+
+                        db.abstract(function(err, res_abstract) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res_abstract', res_abstract);
+
+                                // The abstract DB should have its schemas loaded.
+                                //  (somehow)
+
+                                // May need specific handling for schemas in Postgres (maybe Oracle too)
+
+                                var schemas = res_abstract.get('schemas');
+
+                                console.log('schemas', schemas);
+                                console.log('schemas.length()', schemas.length());
+
+                                // Then we want to see if the abstract tables are represented.
+                                //  We can use a schema object in place of a normal db object (substitute the Postgres Schema Resource for a MSSQL Database Resource etc)
+
+                                var public_schema = schemas.get('public');
+                                console.log('public_schema', public_schema);
+
+                                var public_schema_tables = public_schema.get('tables');
+                                //  It should have loaded up the abstract schema's abstract tables too.
+
+                                console.log('public_schema_tables.length()', public_schema_tables.length());
+
+
+
+
+
+                                throw 'stop';
+                            }
+                        })
+
+
+
 						//console.log('pre ensure_table');
 						//console.log('db.ensure_table', db.ensure_table);
 
@@ -132,8 +173,15 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 
 
+
+
+
                         //throw 'stop';
 
+                        // Ensure table will create the abstract db?
+
+
+                        /*
 						db.ensure_table({
 							'name': 'users',
 							'columns': [
@@ -143,6 +191,7 @@ define(["./jsgui-html", "../resource/core/resource"],
 								['passwordhash', 'char', 128]
 							]
 						});
+						*/
 
                         //console.log('table ensured');
                         //throw 'stop';
@@ -209,7 +258,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                         cb(null, true);
 
 					});
-
+                    /*
                     fns.push(function(cb) {
                          db.ensure_table({
                          'name': 'roles',
@@ -242,6 +291,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                         cb(null, true);
 
                     });
+                    */
 					console.log('pre go');
 
 
@@ -253,6 +303,8 @@ define(["./jsgui-html", "../resource/core/resource"],
 							callback(null, true);
 						}
 					});
+
+                    //callback(null, true);
 
 				}
 

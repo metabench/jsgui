@@ -55,6 +55,16 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			
 			
 		},
+
+        // Not sure about having columns and constraints as resources themselves.
+        //  Resources help solve the problem of addressability. Constraints, columns, indexes and data are addressable within the Table Resource.
+
+
+        // Need this Table Resource to be able to read metadata about the table.
+        //
+
+
+
 		
 		// and reconnect?
 		
@@ -98,6 +108,38 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			pg.end();
 			delete this.client;
 		},
+
+        'abstract': function(callback) {
+            // This may need to be asynchronous as it may need to load data.
+
+            if (this._abstract) {
+                callback(null, this._abstract);
+            } else {
+                // Need to get or make the Abstract class that represents this.
+
+                // We can get the schema.
+                // From that we get the Abstract schema
+                //  We use that as a reference within the Abstract system.
+
+                var schema = this.data.get('schema');
+                console.log('schema', schema);
+                schema.abstract(function(err, abstract_schema) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('abstract_schema', abstract_schema);
+                    }
+                });
+                //var resource_schema = schema.)
+
+
+
+                //
+            }
+
+            //throw 'stop';
+
+        },
 		
 		// dbi-postgres will do this, making use of the more basic connector API.
 		
@@ -152,7 +194,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			
 		},
 		
-		'teble_exists': function(db_name, callback) {
+		'table_exists': function(db_name, callback) {
 			// SELECT d.datname as "Name", u.usename as "Owner", pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT EXISTS(d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid WHERE... ORDER BY 1);

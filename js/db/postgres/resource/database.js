@@ -274,7 +274,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 				// So, we are connected now, basically.
 				
-				
 			});	
 		},
 		
@@ -1838,6 +1837,170 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
         },
 
+        // This should possibly be within the Schema Resource.
+
+        'abstract': function(callback) {
+            // Refresh it?
+
+            var that = this;
+            //throw 'stop';
+
+            // But then it could be called again before it's finished loading.
+            //  In that case, need to defer it.
+
+            console.log();
+            console.log('database.abstract');
+
+            if (this._abstract) {
+                callback(null, this._abstract);
+            } else {
+
+
+                var database_name = this.meta.get('name');
+                var abstract_database = this._abstract = new Abstract.Database({
+                    'name': database_name
+                });
+
+                var abstract_schemas = abstract_database.get('schemas');
+
+                // And loading the schema resources causes it to (try to) load the abstract schema.
+                //  Load the schema resources while it has an abstract database?
+                //  The schema resources would then be able to give the abstract database in the reference.
+
+
+
+                //throw 'stop';
+                console.log('');
+                console.log('pre load_schema_resources');
+                //throw 'stop';
+                // Or ensures the schema resources are loaded?
+                this.load_schema_resources(function(err, schema_resources) {
+                    if (err) {
+                        throw err;
+                    } else {
+
+                        // Then needs to load the abstract schemas into the abstract_database
+
+                        // Call functions in the schema resources to load the abstract schemas, giving them the abstract database
+
+                        console.log('schema_resources', schema_resources);
+
+                        console.log('schema_resources.length()', schema_resources.length());
+                        //throw 'stop';
+
+                        var fns = jsgui.Fns();
+                        schema_resources.each(function(i, schema_resource) {
+                            console.log('');
+                            console.log('schema_resource', schema_resource);
+
+                            // The number of table resources in the schema resource...
+
+                            var schema_tables = schema_resource.data.get('tables');
+                            console.log('schema_tables.length()', schema_tables.length());
+
+                            // And those tables will be able to get their abstract representations too.
+                            //  But we want the abstract representations of the schemas to be in the abstract schemas collection.
+
+                            // Get the abstract schema, and that will get put into the abstract schemas collection.
+                            //  I hope that doing so at this stage makes sense.
+                            //  Getting the abstract schema will make use of the schema resource.
+
+                            // Build up a list of functions to call.
+
+                            // Will be getting the abstract schemas, and then pushing them into the abstract schemas collection.
+                            fns.push(function(callback) {
+
+                                // But when getting the abstract schema, it gets the abstract db, which gets the abstract schema.???
+                                //  So maybe different types of call / action when it has got the abstract db already.
+
+                                // But of a problem... something needs to load the abstract schemas.
+                                //  However, the abstract schemas function calls abstract to get the abstract database.
+                                //   Perhaps deferring providing that would help???
+
+                                // The schemas loading themselves, without calling on the abstract db function from the resource?
+
+
+                                // Abstract, but with other parameter...?
+                                schema_resource.abstract(function(err, abstract_scheama) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('abstract_scheama', abstract_scheama);
+                                        //throw 'stop';
+
+                                        // The abstract schema should have been created with a reference to the abstract database,
+                                        //  and has been added to the (abstract) schemas collection of the (abstract) database.
+
+                                        callback(null, true);
+                                    }
+                                })
+                            });
+
+                        });
+
+                        fns.go(function(err, res) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res', res);
+                                //throw 'stop';
+
+                                that._abstract = abstract_database;
+                                callback(null, abstract_database);
+                            }
+                        })
+                        //throw 'stop';
+
+
+
+
+                        // abstract_database
+
+
+
+                        // And with those loaded schema resources, we can load abstract schemas, and add them to the abstract_database resource.
+
+                        // Possibly do it individually.
+
+                        // Then once they have loaded, we get the abstract for each of them
+                        //  Ensure they all have their Abstract Classes loaded.
+
+                        // However, the Schema may get the DB to load its Abstract Class.
+                        //  Then the DB tells the Schema to do so?
+                        //   With the DB having to wait until the Schema's abstract was made?
+
+                        // then for each of them, load the abstract schemas.
+
+                        // their own loading of abstract schemas (their own abstractions) will mean loading of lower-down abstract data.
+
+
+
+
+
+
+                    }
+                });
+
+                // The database Resource's schemas need to be loaded.
+                // Then we use them to get the Abstract Schemas for the Abstract Database.
+
+                // load_schema_resources
+
+                //  then once they are loaded, use them to load the abstract schemas for the Schema Resources.
+
+
+
+
+
+            }
+
+
+
+
+
+
+        },
+
         'load_abstract_schema': function(schema_name, callback) {
 
             // This will make use of the Schema Resource.
@@ -1911,7 +2074,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-
+            /*
             this.load_abstract_tables(res, function(err, res_abstract_tables) {
                 if (err) {
 
@@ -1954,27 +2117,28 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                     // Function analysis will be very useful for ensuring the necessary functions are there / finding them
                     //  and for calling them easily when asked to do so by the application layer.
-                    /*
-                    console.log('pre load_abstract_functions');
-                    that.load_abstract_functions(res, function(err, res_abstract_functions) {
-                        if(err) {
-                            throw err;
-                        } else {
-                            console.log('res_abstract_functions ' + res_abstract_functions);
 
-                            res.set('functions', res_abstract_functions);
+                    //console.log('pre load_abstract_functions');
+                    //that.load_abstract_functions(res, function(err, res_abstract_functions) {
+                    //    if(err) {
+                    //        throw err;
+                    //    } else {
+                    //        console.log('res_abstract_functions ' + res_abstract_functions);
 
-                            callback(undefined, res);
+                    //        res.set('functions', res_abstract_functions);
 
-                        }
-                    });
-                    */
+                    //        callback(undefined, res);
+
+                    //    }
+                    //});
+
 
                     callback(undefined, res);
 
                 }
 
             });
+            */
 
         },
 
@@ -1996,7 +2160,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     var fns = jsgui.Fns();
                     each(schema_names, function(i, name) {
                         fns.push([that, that.load_schema_resource, [name]]);
-                    })
+                    });
+
+                    // I think they are in a Collection.
 
                     fns.go(function(err, res) {
                         if (err) {
@@ -2015,9 +2181,18 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             });
         },
 
+        // Will take some more work to ensure that schema resources are loaded, and gracefully handle reloading them.
+
+
 
         // make into sing/plur function?
         'load_schema_resources': function(callback) {
+
+            // What if they are already loaded?
+
+            console.log('load_schema_resources');
+
+
             var that = this;
             that.get_schema_names(function(err, schema_names) {
                 if (err) {
@@ -2025,7 +2200,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 } else {
                     console.log('schema_names', schema_names);
 
-
+                    //throw 'stop';
                     // We load the abstract schemas.
                     //  All of them get loaded as a Collection.
 
@@ -2046,27 +2221,24 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     var fns = jsgui.Fns();
                     each(schema_names, function(i, name) {
                         fns.push([that, that.load_schema_resource, [name]]);
-                    })
+                    });
 
                     fns.go(function(err, res) {
                         if (err) {
                             throw err;
                         } else {
-                            //console.log('res', res);
+                            console.log('res', res);
                             //throw 'stop';
-                            callback(null, true);
+                            callback(null, data_schemas);
                         }
                     });
-
-
-
-
                 }
             });
         },
 
         'load_schema_resource': function(schema_name, callback) {
             console.log('load_schema_resource schema_name', schema_name);
+            //throw 'stop';
 
             // Create a new Resource, and add it to the collection of data.schemas
 
@@ -2081,16 +2253,23 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             // Have to see if a Resource matches constraints?
 
-            console.log('schema_name', schema_name);
-            console.log('tof schema_name', tof(schema_name));
+            //console.log('schema_name', schema_name);
+            //console.log('tof schema_name', tof(schema_name));
 
             var sr = new Schema_Resource({
                 'database': this,
                 'name': schema_name
             });
 
-            console.log('');
-            console.log('pre data_schemas.push');
+            //console.log('');
+            //console.log('pre data_schemas.push');
+
+            // but if the schema resource is already loaded?
+            //  can we use .set to set it with a particular value?
+            //  or have it so that it's indexed and will notice and object if an attempt is made to overwrite
+            //  or allow overwrite.
+
+
 
             data_schemas.push(sr);
 
@@ -2107,13 +2286,15 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             // And that schema resource itself needs to start.
 
             console.log('pre sr.start');
-
+            //throw 'stop';
             sr.start(function(err, res) {
                 if (err) {
                     throw err;
                 } else {
-                    console.log('res', res);
+                    //console.log('res', res);
                     //throw 'stop';
+
+                    // And the schema resource should load tables?
 
                     callback(null, true);
                 }
@@ -2178,6 +2359,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     // Does not load (just) the public schema.
                     //  We wil have it load all the schemas to start with.
 
+                    // Probably no need to load abstract classes by default.
+
                     that.load_schema_resources(function(err, abstract_schemas) {
                         if (err) {
                             throw err;
@@ -2185,6 +2368,16 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                             // Once the resources are loaded, the abstract can then be loaded.
                             //  It will make use of the resources to obtain the metadata.
+
+                            // This will not keep a note of the Abstract schemas.
+                            //  The Abstract Classes
+
+                            that.meta.set('status', 'on');
+
+                            that.trigger('start');
+                            callback(null, true);
+
+                            /*
 
                             that.load_abstract_schemas(function(err, abstract_schemas) {
                                 if (err) {
@@ -2197,7 +2390,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                                     that.trigger('start');
                                     callback(null, true);
                                 }
-                            })
+                            });
+
+                            */
 
 
                             //callback(null, true);
@@ -3201,7 +3396,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 				} else {
 					throw 'fn_name type not recognised';
 				}
-				
 			}
 			
 			

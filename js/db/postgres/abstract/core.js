@@ -373,6 +373,35 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 				if (tof(spec.tables) == 'array') {
 					this.get('tables').load_array(spec.tables);
 				}
+
+                if (spec.database) {
+
+                    // Throw an error if the spec abstract database already contains a schema with the same name
+                    //  (and it is not this abstract schema?)
+
+
+                    this.set('database', spec.database);
+
+                    var database_schemas = spec.database.get('schemas');
+                    console.log('database_schemas.length()', database_schemas.length());
+
+                    var existing_schema = database_schemas.get(spec.name);
+                    if (existing_schema) {
+                        //console.log('existing_schema', stringify(existing_schema));
+                        console.trace();
+                        throw 'Not expecting existing schema';
+                    } else {
+                        database_schemas.push(this);
+                    }
+
+
+
+                    // Can also check the database to see if it contains the abstract schema.
+
+                    // if it does not have it, push
+
+                }
+                // So the abstract schema can link back to the database.
 				
 				
 				
