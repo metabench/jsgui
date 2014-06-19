@@ -42,7 +42,11 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             // Could be a field though.
             if (spec.schema) {
                 // Or data, rather than meta?
-                //  It's a resource itself/
+                //  It's a resource itself
+
+                // Push itself into the schema's tables array?
+
+
 
                 this.data.set('schema', spec.schema);
             }
@@ -130,12 +134,21 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
                 var schema = this.data.get('schema');
-                console.log('schema', schema);
+                //console.log('schema', schema);
                 schema.abstract(function(err, abstract_schema) {
                     if (err) {
                         throw err;
                     } else {
-                        console.log('abstract_schema', abstract_schema);
+                        //console.log('abstract_schema', abstract_schema);
+
+                        // Need to think more about how this is done.
+                        //  Had difficulty with loading schema, with it referring backwards and forwards between the database and the schema.
+                        //  Now need this to make use of that the abstract schema function loads, but also to add further to it.
+
+
+
+
+
                         // So, we use the abstract schema as a parameter to the abstract table.
 
                         // However, we check the abstract schema to see if it already has such a table?
@@ -165,9 +178,46 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                             if (err) {
                                 throw err;
                             } else {
-                                console.log('metadata', metadata);
+                                //console.log('metadata', metadata);
 
-                                console.log('metadata', stringify(metadata));
+                                //console.log('metadata', stringify(metadata));
+
+                                // Map out which columns are PKs first...
+                                //  Columns and constraints rely on each other to some extent.
+
+                                // It's now easier to see which columns are PK columns.
+                                //  The columns can set up the constraints.
+                                //   More difficult ('side effect?') programming that exploits network effects?
+
+                                // Should be able to use the column data to construct the columns...
+                                //  with the columns setting up the PKs.
+
+                                var columns = metadata.columns;
+
+                                each(columns, function(i, column) {
+                                    //console.log('column', column);
+
+                                    // However, the abstract column should have a reference to the abstract table.
+                                    column.table = abstract_table;
+
+                                    var abstract_column = new Abstract.Column(column);
+                                    //console.log('abstract_column', abstract_column);
+
+                                    //console.log('abstract_column', stringify(abstract_column));
+
+
+
+                                });
+
+                                callback(null, abstract_table);
+
+                                //throw 'stop';
+
+
+
+
+
+
 
                                 // Need to check the existing table / abstract table to see if various things are already there?
 
@@ -458,7 +508,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             // returns multiple rows from information_schema.
 
             // maybe have something that runs a multi-row query, returns them all to the callback function.
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
 
             database.execute_multirow_to_callback(sql, callback);
 
@@ -555,7 +605,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             var sql = a_select.toString();
 
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
             // OK :) we can execute the generated SQL. The query builder / use of Abstract Select and other queries will be expanded.
             // Would like to select particular fields
             //  Join with other tables.
@@ -721,7 +771,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 if (err) {
                     throw err;
                 } else {
-                    console.log('pk_constraints', pk_constraints);
+                    //console.log('pk_constraints', pk_constraints);
 
                     // And need to get the associated columns (including their (basic) metadata.
                     //  At least need to get column names associated with that PK.
@@ -733,7 +783,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     var fns = jsgui.Fns();
 
                     each(pk_constraints, function(i, pk_constraint) {
-                        console.log('pk_constraint', pk_constraint);
+                        //console.log('pk_constraint', pk_constraint);
 
                         //throw 'stop';
 
@@ -747,10 +797,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                             if (err) {
                                 throw err;
                             } else {
-                                console.log('constraint_columns', constraint_columns);
+                                //console.log('constraint_columns', constraint_columns);
 
                                 each(constraint_columns, function(i, constraint_column) {
-                                    console.log('constraint_column', constraint_column);
+                                    //console.log('constraint_column', constraint_column);
 
                                     //var constraint_name = constraint_column.constraint_name;
                                     var column_name = constraint_column.column_name;
@@ -773,7 +823,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                         if (err) {
                             throw err;
                         } else {
-                            console.log('res_fns', res_fns);
+                            //console.log('res_fns', res_fns);
                             callback(null, res);
                         }
                     })
@@ -836,7 +886,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
             var schema = this.data.get('schema');
-            console.log('schema', schema);
+            //console.log('schema', schema);
 
             var that = this;
 
@@ -851,7 +901,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 if (err) {
                     throw err;
                 } else {
-                    console.log('pk_constraints', pk_constraints);
+                    //console.log('pk_constraints', pk_constraints);
 
                     var map_pk_constraints = {};
 
@@ -860,7 +910,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
                     each(pk_constraints, function(i, pk_constraint) {
-                        console.log('pk_constraint', pk_constraint);
+                        //console.log('pk_constraint', pk_constraint);
 
                         var constraint_name = pk_constraint.constraint_name;
                         map_pk_constraints[constraint_name] = pk_constraint;
@@ -868,8 +918,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                     });
 
-                    console.log('');
-                    console.log('map_pk_constraints', map_pk_constraints);
+                    //console.log('');
+                    //console.log('map_pk_constraints', map_pk_constraints);
 
 
 
@@ -882,14 +932,14 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
                     each(pk_constraints, function(i, pk_constraint) {
-                       console.log('pk_constraint', pk_constraint);
+                        //console.log('pk_constraint', pk_constraint);
                         var constraint_name = pk_constraint.constraint_name;
 
                         fns.push([that, that.get_constraint_columns, [constraint_name], function(err, constraint_columns) {
-                            console.log('constraint_columns', constraint_columns);
+                            //console.log('constraint_columns', constraint_columns);
 
                             each(constraint_columns, function(i, constraint_column) {
-                                console.log('constraint_column', constraint_column);
+                                //console.log('constraint_column', constraint_column);
 
                                 var ordinal_position = constraint_column.ordinal_position;
 
@@ -914,7 +964,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-                                console.log('constraint', constraint);
+                                //console.log('constraint', constraint);
 
 
 
@@ -939,9 +989,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                         if (err) {
                             throw err;
                         } else {
-                            console.log('res', res);
+                            //console.log('res', res);
 
-                            console.log('map_columns_with_pk_constraints', map_columns_with_pk_constraints);
+                            //console.log('map_columns_with_pk_constraints', map_columns_with_pk_constraints);
 
                             //throw 'stop';
 
@@ -954,14 +1004,14 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                                 if (err) {
                                     throw err;
                                 } else {
-                                    console.log('columns_information_schema', columns_information_schema);
+                                    //console.log('columns_information_schema', columns_information_schema);
 
                                     // And then we should be able to create abstract columns out of the information_schema.
                                     var res = [];
 
 
                                     each(columns_information_schema, function(i, column_information_schema) {
-                                        console.log('column_information_schema', column_information_schema);
+                                        //console.log('column_information_schema', column_information_schema);
 
 
                                         //var abstract_column = new Abstract.Column({
@@ -1070,7 +1120,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             var database = schema.data.get('database');
 
 
-            console.log('4) table_name ' + table_name);
+            //console.log('4) table_name ' + table_name);
             sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + schema_name + '\';';
 
 

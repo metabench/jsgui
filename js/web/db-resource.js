@@ -100,7 +100,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                             if (err) {
                                 throw err;
                             } else {
-                                console.log('res_abstract', res_abstract);
+                                //console.log('res_abstract', res_abstract);
 
                                 // The abstract DB should have its schemas loaded.
                                 //  (somehow)
@@ -109,19 +109,39 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                                 var schemas = res_abstract.get('schemas');
 
-                                console.log('schemas', schemas);
-                                console.log('schemas.length()', schemas.length());
+                                //console.log('schemas', schemas);
+                                //console.log('schemas.length()', schemas.length());
 
                                 // Then we want to see if the abstract tables are represented.
                                 //  We can use a schema object in place of a normal db object (substitute the Postgres Schema Resource for a MSSQL Database Resource etc)
 
                                 var public_schema = schemas.get('public');
-                                console.log('public_schema', public_schema);
+                                //console.log('public_schema', public_schema);
 
                                 var public_schema_tables = public_schema.get('tables');
                                 //  It should have loaded up the abstract schema's abstract tables too.
 
                                 console.log('public_schema_tables.length()', public_schema_tables.length());
+
+                                //console.log('public_schema_tables', stringify(public_schema_tables));
+
+                                each(public_schema_tables, function(i, v) {
+                                    //console.log('v', stringify(v));
+
+                                    var name = v.get('name').value();
+                                    console.log('name', name);
+                                })
+
+                                // Should probably get rid of most / all other logging.
+                                //  Then have logging for key initializations / abstract calls.
+                                //  Would be able to see the sequencing in which different abstract objects get created or added to collections.
+                                //  Currently having a problem with abstract tables appearing twice.
+
+
+
+                                // Seems have been putting too many tables into the abstract schema.
+
+
 
 
 

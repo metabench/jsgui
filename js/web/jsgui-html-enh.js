@@ -386,7 +386,7 @@ define(["./jsgui-html-core"],
 
 	        'one_mousedown_anywhere': function(callback) {
 	        	var ctrl_html_root = this._context.ctrl_document;
-	        	console.log('this._context', this._context);
+	        	//console.log('this._context', this._context);
 	        	var body = ctrl_html_root.body();
 
 	        	var that = this;

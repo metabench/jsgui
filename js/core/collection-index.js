@@ -265,7 +265,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
     // Some unit tests to cover similar cases would help.
 
 	var get_obj_fields_key = function(obj, fields) {
-		console.log('get_obj_fields_key');
+		//console.log('get_obj_fields_key');
 
 		//var stack = new Error().stack
 		//console.log( stack )
@@ -374,7 +374,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 						throw 'unexpected number of items in attached definition';
 					} else {
 						var attachedObj = obj[attachedObjName];
-						console.log('attachedObj ' + stringify(attachedObj));
+						//console.log('attachedObj ' + stringify(attachedObj));
 						var res = attachedObj.get(attachedObjFieldName);
 						arr_res.push(res);
 					}
@@ -462,7 +462,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			// if the object is just a string?
 			//  object needs to be in a data_object though.
 			//  that Data_Object can have a set type.
-			console.log('Sorted_Collection_Index unsafe_add_object');
+			//console.log('Sorted_Collection_Index unsafe_add_object');
 			//console.log('Sorted_Collection_Index uao obj ' + stringify(obj));
 			
 			// but do we have the object's position/numerical index within the collection?
@@ -487,7 +487,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 
 			//console.log('this.fields ' + stringify(this.fields));
-			console.log('fields_key ' + stringify(fields_key));
+			//console.log('fields_key ' + stringify(fields_key));
 
 			// so, we add it to the index.
 
@@ -502,7 +502,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		//  or find? Want flexibility where possible, so may provide arrays.
 		
 		'get': fp(function(a, sig) {
-			console.log('Sorted_Collection_Index get');
+			//console.log('Sorted_Collection_Index get');
 			// will be providing a key, or part of a key
 			//  uses the prefix search.
 			//console.log('sig ' + sig);
@@ -604,7 +604,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 		'unsafe_add_object' : (function(obj) {
 
-            console.log('Dict_Collection_Index unsafe_add_object');
+            //console.log('Dict_Collection_Index unsafe_add_object');
 			//console.log('DICT unsafe_add_object');
 			// it's currently unsafe to stringify some objects.
 			//console.log('unsafe_add_object ' + stringify(obj));
@@ -2172,7 +2172,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		
 		'unsafe_add_object': function(obj) {
 
-            console.log('Collection_Index_System unsafe_add_object');
+            //console.log('Collection_Index_System unsafe_add_object');
 			// NOT adds an index.
 			// should add an object to all indexes.
 			// a way to iterate through all indexes?

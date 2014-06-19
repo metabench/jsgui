@@ -287,10 +287,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		'ensure_public_schema': function(callback) {
 
 			var schemas = this.get('schemas');
-			console.log('schemas', schemas);
+			//console.log('schemas', schemas);
 
 			var public_schema = schemas.get('public');
-			console.log('public_schema', public_schema);
+			//console.log('public_schema', public_schema);
 
 
 			throw 'stop';
@@ -388,7 +388,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             //var sql = 'SELECT exists(SELECT column_name FROM information_schema.columns WHERE table_name = \'' + this.get_table_qn(table_name) + '\' AND column_name =  \'' + column_name + '\') AS "exists";';
             var res;
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
             // could use a bolean query system.
 
             this.execute_query({
@@ -418,7 +418,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             //} else {
             //	sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\';';
             //}
-            console.log('4) table_name ' + table_name);
+            //console.log('4) table_name ' + table_name);
             sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + schema_name + '\';';
 
 
@@ -468,7 +468,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-                console.log('sql ' + sql);
+                //console.log('sql ' + sql);
                 // maybe a query that returns a single row.
                 var res;
                 that.execute_query({
@@ -515,7 +515,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 } else {
 
                     //var information_schema_row = information_schema_res[1];
-                    console.log('information_schema_row ' + stringify(information_schema_row));
+                    //console.log('information_schema_row ' + stringify(information_schema_row));
 
                     // need to look into this schema data.
                     // how to identify it is a serial data type?
@@ -610,7 +610,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             // returns multiple rows from information_schema.
 
             // maybe have something that runs a multi-row query, returns them all to the callback function.
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
 
             this.execute_multirow_to_callback(sql, callback);
 
@@ -921,7 +921,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             });
 
             var sql = sel.toString();
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
 
             this.execute_multirow_to_callback(sql, callback);
 
@@ -959,7 +959,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             });
 
             var sql = sel.toString();
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
 
             this.execute_multirow_to_callback(sql, callback);
         },
@@ -1257,7 +1257,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
         'load_table_abstract_pk_constraint': function(schema_name, table_name, callback) {
             console.log('load_table_abstract_pk_constraints');
-            console.log('table_name ' + table_name);
+            //console.log('table_name ' + table_name);
             var that = this;
 
             // will only be one PK constraint for the table.
@@ -1336,11 +1336,11 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             //throw 'stop 2';
 
             var w = sel.get('where');
-            console.log('tof w', tof(w));
-            console.log('w', (w.length));
+            //console.log('tof w', tof(w));
+            //console.log('w', (w.length));
             //throw 'stop';
             var sql = sel.toString();
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
             //throw 'stop';
             this.execute_row_to_callback(sql, callback);
 
@@ -1422,7 +1422,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 } else {
                     var res = [];
 
-                    console.log('table_constraint_names', table_constraint_names);
+                    //console.log('table_constraint_names', table_constraint_names);
 
 
 
@@ -1445,8 +1445,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     var process_table_constraint = function() {
                         //var schema = adb_schemas[c];
                         var table_constraint_name = table_constraint_names[c];
-                        console.log('table_constraint_name ' + table_constraint_name);
-                        console.log('pre load_abstract_table_constraint');
+                        //console.log('table_constraint_name ' + table_constraint_name);
+                        //console.log('pre load_abstract_table_constraint');
                         that.load_abstract_table_constraint(schema_name, table_name, table_constraint_name, function(error, load_abstract_table_constraint_res) {
                             c++;
                             res.push(load_abstract_table_constraint_res);
@@ -1513,7 +1513,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             });
 
             var sql = sel.toString();
-            console.log('sql ' + sql);
+            //console.log('sql ' + sql);
 
             // Single item?
             //  What does that mean here?
@@ -1672,12 +1672,12 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             var schema_name = schema.get('name');
 
             var that = this;
-            console.log('pre get_table_names');
+            //console.log('pre get_table_names');
             this.get_table_names(schema_name, function(err, table_names) {
                 if (err) {
 
                 } else {
-                    console.log('table_names ' + table_names);
+                    //console.log('table_names ' + table_names);
 
                     //this.set('tables', new Collection({
                     //	'index_by': 'name'
@@ -1712,7 +1712,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     var process_table = function() {
                         //var schema = adb_schemas[c];
                         var table_name = table_names[c];
-                        console.log('table_name ' + table_name);
+                        //console.log('table_name ' + table_name);
                         that.load_abstract_table(schema_name, table_name, function(error, load_abstract_table_res) {
                             c++;
                             res.push(load_abstract_table_res);
@@ -1848,7 +1848,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             // But then it could be called again before it's finished loading.
             //  In that case, need to defer it.
 
-            console.log();
+            //console.log();
             console.log('database.abstract');
 
             if (this._abstract) {
@@ -1870,8 +1870,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
                 //throw 'stop';
-                console.log('');
-                console.log('pre load_schema_resources');
+                //console.log('');
+                //console.log('pre load_schema_resources');
                 //throw 'stop';
                 // Or ensures the schema resources are loaded?
                 this.load_schema_resources(function(err, schema_resources) {
@@ -1883,20 +1883,20 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                         // Call functions in the schema resources to load the abstract schemas, giving them the abstract database
 
-                        console.log('schema_resources', schema_resources);
+                        //console.log('schema_resources', schema_resources);
 
-                        console.log('schema_resources.length()', schema_resources.length());
+                        //console.log('schema_resources.length()', schema_resources.length());
                         //throw 'stop';
 
                         var fns = jsgui.Fns();
                         schema_resources.each(function(i, schema_resource) {
-                            console.log('');
-                            console.log('schema_resource', schema_resource);
+                            //console.log('');
+                            //console.log('schema_resource', schema_resource);
 
                             // The number of table resources in the schema resource...
 
                             var schema_tables = schema_resource.data.get('tables');
-                            console.log('schema_tables.length()', schema_tables.length());
+                            //console.log('schema_tables.length()', schema_tables.length());
 
                             // And those tables will be able to get their abstract representations too.
                             //  But we want the abstract representations of the schemas to be in the abstract schemas collection.
@@ -1921,11 +1921,28 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
                                 // Abstract, but with other parameter...?
-                                schema_resource.abstract(function(err, abstract_scheama) {
+                                schema_resource.abstract(function(err, abstract_schema) {
                                     if (err) {
                                         throw err;
                                     } else {
-                                        console.log('abstract_scheama', abstract_scheama);
+                                        //console.log('abstract_schema', abstract_schema);
+
+                                        // And the schema_resource.abstract will need to load up the various pieces of data needed to make the
+                                        //  abstract schema resource.
+                                        //   Referring to its Table Resources, or delegating to them.
+                                        //   Need to give this more thought and coding to make sure that it's being called in the right pattern.
+
+                                        // This seems to be a new style of programming (for me) where a network effect gets initiated, and then should
+                                        //  get resolved in the right sequence. Avoiding having an overall control algorithm here.
+
+                                        // If possible that Abstract Schema object will contain the Abstract tables etc.
+
+
+
+
+
+
+
                                         //throw 'stop';
 
                                         // The abstract schema should have been created with a reference to the abstract database,
@@ -1942,7 +1959,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                             if (err) {
                                 throw err;
                             } else {
-                                console.log('res', res);
+                                //console.log('res', res);
                                 //throw 'stop';
 
                                 that._abstract = abstract_database;
@@ -2211,7 +2228,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                     var data_schemas = that.data.get('schemas');
 
                     // and there is a collection of abstract schemas too
-                    console.log('data_schemas', data_schemas);
+                    //console.log('data_schemas', data_schemas);
                     console.log('data_schemas.length()', data_schemas.length());
 
                     //each(schema_names, function(i, v) {
@@ -2227,7 +2244,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                         if (err) {
                             throw err;
                         } else {
-                            console.log('res', res);
+                            //console.log('res', res);
                             //throw 'stop';
                             callback(null, data_schemas);
                         }
@@ -2285,7 +2302,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             // And that schema resource itself needs to start.
 
-            console.log('pre sr.start');
+            //console.log('pre sr.start');
             //throw 'stop';
             sr.start(function(err, res) {
                 if (err) {
@@ -2524,7 +2541,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-			console.log('database resource get sig', sig);
+			//console.log('database resource get sig', sig);
 
 			var query_component;
 			var callback;
@@ -2735,7 +2752,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			var apg_table = new Abstract.Table(table_def);
 			var sql_create = apg_table.get_create_statement();
 
-			console.log('sql_create', sql_create);
+			//console.log('sql_create', sql_create);
 
 			// Then execute that SQL.
 
@@ -3089,7 +3106,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             //console.log('table_name', table_name);
 
 			var sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'' + schema_name + '\'';
-            console.log('sql', sql);
+            //console.log('sql', sql);
 			var query = client.query(sql);
 
 			var res = [];
@@ -3200,7 +3217,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 				'where': [['table_schema', 'public'], ['table_name', table_name]]
 			});
 			var sql = sel.toString();
-			console.log('sql ' + sql);
+			//console.log('sql ' + sql);
 			
 			//this.execute_query({
 			//})
@@ -3227,9 +3244,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
         'execute_multirow_single_item_to_array_callback': function(sql, callback) {
             // will get the keys from the row?
-            console.log('');
-            console.log('execute_multirow_single_item_to_array_callback');
-            console.log('sql', sql);
+            //console.log('');
+            //console.log('execute_multirow_single_item_to_array_callback');
+            //console.log('sql', sql);
 
             var res = [], that = this;
 
@@ -3257,7 +3274,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                     // [undefined, true]
                     // [error, undefined]
-                    console.log('execute_multirow_single_item_to_array_callback ' + error);
+                    //console.log('execute_multirow_single_item_to_array_callback ' + error);
                     callback.call(that, error);
 
 

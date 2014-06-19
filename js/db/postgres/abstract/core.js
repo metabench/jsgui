@@ -1125,7 +1125,9 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                     this.set('schema', spec.schema);
 
                     var schema_tables = spec.schema.get('tables');
-                    console.log('schema_tables.length()', schema_tables.length());
+                    //console.log('schema_tables.length()', schema_tables.length());
+
+
 
                     var existing_table = schema_tables.get(spec.name);
                     if (existing_table) {
@@ -1163,10 +1165,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					var columns = this.get('columns');
 
                     //throw 'stop';
-                    console.log('');
+                    //console.log('');
 
 					each(spec.columns, function(spec_column) {
-						console.log('spec_column', spec_column);
+						//console.log('spec_column', spec_column);
 
 						// Adding another property to an array?
 						//  Questionable.
@@ -1192,7 +1194,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
                         // Pushing the column is a problem.
 
-                        console.log('tof columns', tof(columns));
+                        //console.log('tof columns', tof(columns));
                         //throw 'stop';
 						columns.push(column);
 
@@ -1250,6 +1252,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					this.set('parent_table', spec.parent_table);
 				}
 				var that = this;
+
+
 				if (is_defined(spec.information_schema_column_rows)) {
 					each(spec.information_schema_column_rows, function(information_schema_row) {
 						
@@ -1454,7 +1458,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 		'Column': Data_Object.extend({
 			// And the column has a reference to the table, its parent.
 			'fields': {
-				'table': Object
+				//'table': Object
 			},
 
 			'init': function(spec) {
@@ -1528,7 +1532,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                     if (spec.information_schema) {
                         var information_schema = spec.information_schema;
 
-                        console.log('information_schema', information_schema);
+                        //console.log('information_schema', information_schema);
                         //
 
                         name = information_schema.name;
@@ -1555,7 +1559,33 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 					// table property
 
-					if (spec.table) table = spec.table;
+					//if (spec.table) table = spec.table;
+
+
+                    if (spec.table) {
+
+                        // Throw an error if the spec abstract database already contains a schema with the same name
+                        //  (and it is not this abstract schema?)
+
+
+                        this.set('table', spec.table);
+
+                        var table_columns = spec.table.get('columns');
+                        console.log('table_columns.length()', table_columns.length());
+
+                        var existing_column = table_columns.get(spec.name);
+                        if (existing_column) {
+                            //console.log('existing_schema', stringify(existing_schema));
+                            console.trace();
+                            throw 'Not expecting existing column';
+                        } else {
+                            table_columns.push(this);
+                        }
+                        // Can also check the database to see if it contains the abstract schema.
+
+                        // if it does not have it, push
+
+                    }
 
 				}
 				if (t_spec == 'array') {
@@ -2303,14 +2333,14 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					//  they could have aliases too, could be alias references.
 					var res = [];
 					
-					console.log('tof(sell) ' + tof(sell));
-					console.log('(sell) ' + stringify(sell));
+					//console.log('tof(sell) ' + tof(sell));
+					//console.log('(sell) ' + stringify(sell));
 					
 					if (tof(sell) == 'array') {
 						var first = true;
 						each(sell, function(v) {
 							
-							console.log('v ' + v);
+							//console.log('v ' + v);
 							
 							if (!first) {
 								res.push(', ');
@@ -2321,8 +2351,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							if (tof(v) == 'array') {
 								if (v.length == 2) {
 									// and both are strings
-									console.log('tof(v[0]) ' + tof(v[0]));
-									console.log('tof(v[1]) ' + tof(v[1]));
+									//console.log('tof(v[0]) ' + tof(v[0]));
+									//console.log('tof(v[1]) ' + tof(v[1]));
 									
 									res.push(v[0]);
 									res.push(' AS ');
@@ -2360,10 +2390,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					// toFQN
 					var from_item = that.get('from_item');
-					console.log('from_item ' + from_item);
+					//console.log('from_item ' + from_item);
 					
 					var res = [];
-					console.log('tof(from_item)', tof(from_item));
+					//console.log('tof(from_item)', tof(from_item));
 					if (from_item.toFQN) {
 						res.push(from_item.toFQN());
 					} else {
@@ -2388,9 +2418,9 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				// won't always have 'from'.
 
                 var t_select_list = tof(this.get('select_list'));
-                console.log('select_list', this.get('select_list'));
-                console.log('t_select_list', t_select_list);
-                console.log('tof t_select_list', tof(t_select_list));
+                //console.log('select_list', this.get('select_list'));
+                //console.log('t_select_list', t_select_list);
+                //console.log('tof t_select_list', tof(t_select_list));
 
 
 
@@ -2400,21 +2430,21 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				}
 
                 var str_from_item = get_from_item_str();
-				console.log('str_from_item', str_from_item);
+				//console.log('str_from_item', str_from_item);
 				res.push(str_from_item);
 				
 				// are there where clauses?
 				var where = this.get('where');
-				console.log('* where ' + stringify(where));
+				//console.log('* where ' + stringify(where));
 
 
 				var where_get_str = function(where_item) {
-					console.log('tof(where_item) ' + tof(where_item));
-					console.log('stringify(where_item) ' + stringify(where_item));
+					//console.log('tof(where_item) ' + tof(where_item));
+					//console.log('stringify(where_item) ' + stringify(where_item));
 					
 					if (tof(where_item) == 'array') {
 						if (where_item.length == 2) {
-							console.log('tof(where_item[1]) ' + tof(where_item[1]));
+							//console.log('tof(where_item[1]) ' + tof(where_item[1]));
 							if (tof(where_item[1]) == 'string') {
 								var res = where_item[0] + ' = \'' + where_item[1] + '\'';
 								return res;
@@ -2465,7 +2495,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				var get_where_str = function() {
 					var res = [];
 					if (tof(where) == 'array') {
-						console.log('where.length', where.length);
+						//console.log('where.length', where.length);
 						if (where.length > 0) {
 							var first = true;
 							res.push(' WHERE ');
@@ -2477,7 +2507,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 								}
 								
 								// need to get the where item as string. It may not be in there as a where clause object, could be given just as two objects in an array, meaning they are equal.
-								console.log('where_item ' + stringify(where_item));
+								//console.log('where_item ' + stringify(where_item));
 								res.push(where_get_str(where_item));
 								
 								//res.push(where_item.to)
@@ -2515,9 +2545,9 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					var ob = that.get('order_by');
 
-                    console.log('');
-                    console.log('ob', ob);
-                    console.log('tof ob', tof(ob));
+                    //console.log('');
+                    //console.log('ob', ob);
+                    //console.log('tof ob', tof(ob));
 					// order_by seems naturally an array.
 					
 					if (tof(ob) == 'array') {
@@ -2527,7 +2557,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							res.push(' ORDER BY ');
 							
 							var ob_sig = get_item_sig(ob, 1);
-							console.log('ob_sig', ob_sig);
+							//console.log('ob_sig', ob_sig);
 							
 							if (ob_sig == '[s,s]') {
 								res.push(ob[0]);

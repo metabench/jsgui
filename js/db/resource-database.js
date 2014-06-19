@@ -37,8 +37,8 @@ define(["../core/jsgui-lang-enh", "../web/resource", "./resource-mongo", "./reso
 		'init': function(spec) {
 			this._super(spec);
 			
-			console.log('3) spec.server._ ' + stringify(spec.server._));
-			console.log('this._ ' + stringify(this._));
+			//console.log('3) spec.server._ ' + stringify(spec.server._));
+			//console.log('this._ ' + stringify(this._));
 
 			// Server info
 			//  (inc what type of DBMS)

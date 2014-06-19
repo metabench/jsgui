@@ -99,9 +99,9 @@ define(['../../web/jsgui-html-enh', './resource'],
 
 
 			this.data.on('change', function(property_name, property_value) {
-				console.log('');
-				console.log('resource data change property_name', property_name);
-				console.log('property_value', property_value);
+				//console.log('');
+				//console.log('resource data change property_name', property_name);
+				//console.log('property_value', property_value);
 
 				that.trigger('change', property_name, property_value);
 
@@ -132,7 +132,7 @@ define(['../../web/jsgui-html-enh', './resource'],
 			//  test if a string ends with something.
 
 			var ends_dot_json = jsgui.ends(url, '.json');
-			console.log('ends_dot_json', ends_dot_json);
+			//console.log('ends_dot_json', ends_dot_json);
 
 			var json_url;
 

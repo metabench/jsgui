@@ -174,7 +174,7 @@ define(["./jsgui-lang-util", "./data-object-fields-collection"], function(jsgui,
 			//  many controls / data types for the moment will have default output as HTML formatted.
 			//console.log('Data_Object get this.__data_type_name ' + this.__data_type_name);
 			//console.log('Enhanced_Data_Object get a ' + stringify(a));
-			console.log('Enhanced_Data_Object get sig ' + sig);
+			//console.log('Enhanced_Data_Object get sig ' + sig);
 			// will also be looking at the output processors.
 			//console.log('this.__data_type_name ' + this.__data_type_name);
 			if (is_defined(this.__data_type_name)) {
@@ -595,7 +595,7 @@ define(["./jsgui-lang-util", "./data-object-fields-collection"], function(jsgui,
 						//}
 
 						//console.log('property_name ' + property_name);
-						console.log('res ' + res);
+						//console.log('res ' + res);
 						return res;
 					}
 				} else if (a.l == 0) {

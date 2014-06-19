@@ -107,7 +107,7 @@ define(['../../../web/jsgui-html', '../../../web/controls/advanced/resource-base
 
 
 
-							console.log('resource_res', resource_res);
+							//console.log('resource_res', resource_res);
 							//throw 'stop';
 
 							// Want to render the various parts of the database into a tree.

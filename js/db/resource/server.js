@@ -132,7 +132,7 @@ define(["../../core/jsgui-lang-enh", "../../web/resource", "../mongo/resource/al
 				if (err) {
 					throw err;
 				} else {
-					console.log('res_start', res_start);
+					//console.log('res_start', res_start);
 					callback(null, res_start);
 				}
 			})

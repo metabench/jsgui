@@ -82,8 +82,8 @@ define(["module", "path",
 
 			this._super(spec);
 			
-			console.log('3) spec.server._ ' + stringify(spec.server._));
-			console.log('this._ ' + stringify(this._));
+			//console.log('3) spec.server._ ' + stringify(spec.server._));
+			//console.log('this._ ' + stringify(this._));
 
 			this.meta.set('type_levels', ['database', 'odb', 'mongo']);
 

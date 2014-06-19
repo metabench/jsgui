@@ -198,7 +198,7 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 		
 		'get': fp(function(a, sig) {
 
-            console.log('Resource get sig', sig);
+            //console.log('Resource get sig', sig);
 
             // if it does not have a function in the sig, it's syncronous
 
@@ -212,7 +212,7 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
                 }
                 if (callback) {
                     var arr_params = a.slice(0, a.l - 1);
-                    console.log('arr_params.length ' + arr_params.length);
+                    //console.log('arr_params.length ' + arr_params.length);
                     // _super with fp?
 
                     // context with fp?
@@ -221,7 +221,7 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 
 
                     //console.log('this._super ' + this._super);
-                    console.log('resource arr_params ' + stringify(arr_params));
+                    //console.log('resource arr_params ' + stringify(arr_params));
                     //var res = this._super.apply(this, arr_params);
 
                     // We can apply a collection resource's get asyncronously?

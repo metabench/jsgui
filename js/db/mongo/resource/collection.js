@@ -156,9 +156,9 @@ define(["../../../core/jsgui-lang-util", "../../../resource/core/resource"], fun
 					if (err) {
 						callback(err);
 					} else {
-						console.log('found!');
-						console.log('err', err);
-						console.log('res', res);
+						//console.log('found!');
+						//console.log('err', err);
+						//console.log('res', res);
 
 						callback(null, res);
 					}

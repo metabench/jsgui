@@ -503,7 +503,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 					//    looking at their names and parameters.
 					
 					
-					console.log('abstract_schema ' + abstract_schema);
+					//console.log('abstract_schema ' + abstract_schema);
 					
 					// maybe want some abstract_schema_annotations?
 					//  these will say what the functions do...
@@ -518,12 +518,12 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 						var single_load = function() {
 							var item = data[c];
 							//console.log('* load_data_to_tables data ' + stringify(data));
-							console.log('item ' + stringify(item));
+							//console.log('item ' + stringify(item));
 							
 							var table_name = item[0];
 							var table_data = item[1];
 							
-							console.log('table_name ' + table_name);
+							//console.log('table_name ' + table_name);
 							
 							that.load_data_to_table(table_name, table_data, function(error, load_res) {
 								if (!error) {
@@ -813,7 +813,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			//  there will be different versions, some overloaded too.
 			
 			//console.log('this.crud_index ' + stringify(this.crud_index));
-			console.log('table ' + stringify(table));
+			//console.log('table ' + stringify(table));
 			
 			// and the signature as well.
 			// can we take the signature of the row?
@@ -910,9 +910,9 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				
 				
 				
-				console.log('2) row_sig ' + row_sig);
-				console.log('row ' + stringify(row));
-				console.log('table_name ' + stringify(table_name));
+				//console.log('2) row_sig ' + row_sig);
+				//console.log('row ' + stringify(row));
+				//console.log('table_name ' + stringify(table_name));
 				// we don't have it..
 				
 				
@@ -920,7 +920,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				ci_item = ci_table[row_sig];
 				
 			}
-			console.log('ci_item ' + stringify(ci_item));
+			//console.log('ci_item ' + stringify(ci_item));
 			// at this stage, can we get thr right item for the row?
 			
 			
@@ -1419,7 +1419,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			
 			var query = this.client.query(sql);
 			var res = false;
-			console.log('sql ' + sql);
+			//console.log('sql ' + sql);
 			query.on('row', function(row) {
 				//console.log('table_exists row ' + row);
 				//console.log("row", row); //Beatle name: John
@@ -1508,7 +1508,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			var res;
 			
 			// could use a bolean query system.
-			console.log('sql ' + sql);
+			//console.log('sql ' + sql);
 			this.execute_query({
 				'sql': sql,
 				'row': function(row) {
@@ -1612,7 +1612,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			
 			//var sql = 'SELECT exists(SELECT column_name FROM information_schema.columns WHERE table_name = \'' + this.get_table_qn(table_name) + '\' AND column_name =  \'' + column_name + '\') AS "exists";';
 			var res;
-			console.log('sql ' + sql);
+			//console.log('sql ' + sql);
 			// could use a bolean query system.
 			
 			this.execute_query({
@@ -1642,7 +1642,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			//} else {
 			//	sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\';';
 			//}
-			console.log('4) table_name ' + table_name);
+			//console.log('4) table_name ' + table_name);
 			sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + schema_name + '\';';
 			
 			
@@ -1692,13 +1692,13 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				
 				
 				
-				console.log('sql ' + sql);
+				//console.log('sql ' + sql);
 				// maybe a query that returns a single row.
 				var res;
 				that.execute_query({
 					'sql': sql,
 					'row': function(row) {
-						console.log('get_column_data_type row ' + stringify(row));
+						//console.log('get_column_data_type row ' + stringify(row));
 						res = row;
 					},
 					'end': function() {
@@ -1739,7 +1739,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				} else {
 				
 					//var information_schema_row = information_schema_res[1];
-					console.log('information_schema_row ' + stringify(information_schema_row));
+					//console.log('information_schema_row ' + stringify(information_schema_row));
 					
 					// need to look into this schema data.
 					// how to identify it is a serial data type?
@@ -1834,7 +1834,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			// returns multiple rows from information_schema.
 			
 			// maybe have something that runs a multi-row query, returns them all to the callback function.
-			console.log('sql ' + sql);
+			//console.log('sql ' + sql);
 			
 			this.execute_multirow_to_callback(sql, callback);
 			
@@ -2339,7 +2339,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				// I think JavaScript parsing will be very good too, but likely to use a Crockford made system.
 				//  Having a good way of querying collections of functions... will have a functions_analysis module / section of code.
 				
-				console.log('res_isr ' + stringify(res_isr));
+				//console.log('res_isr ' + stringify(res_isr));
 				
 				var res = new Abstract.SQL_Function(res_isr);
 				
@@ -2430,7 +2430,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 					// then with these functions, get more information... will be getting the function parameters.
 					//  will have the 'specific names' which will be used to get more info about the functions.
 					
-					console.log('res_schema_function_specific_names ' + stringify(res_schema_function_specific_names));
+					//console.log('res_schema_function_specific_names ' + stringify(res_schema_function_specific_names));
 					
 					// and then with the specific names, we load the abstract function from that specific name.
 					
@@ -2438,8 +2438,8 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 						if (err) {
 							
 						} else {
-							console.log('res_abstract_functions ' + res_abstract_functions);
-							console.log('res_abstract_functions ' + stringify(res_abstract_functions));
+							//console.log('res_abstract_functions ' + res_abstract_functions);
+							//console.log('res_abstract_functions ' + stringify(res_abstract_functions));
 							
 							callback(undefined, res_abstract_functions);
 							
@@ -2480,8 +2480,8 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 		// dbi-load-abstract?
 		
 		'load_table_abstract_pk_constraint': function(schema_name, table_name, callback) {
-			console.log('load_table_abstract_pk_constraints');
-			console.log('table_name ' + table_name);
+			//console.log('load_table_abstract_pk_constraints');
+			//console.log('table_name ' + table_name);
 			var that = this;
 			
 			// will only be one PK constraint for the table.
@@ -2502,7 +2502,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 							if (err) {
 								
 							} else {
-								console.log('res_constraint_columns ' + stringify(res_constraint_columns));
+								//console.log('res_constraint_columns ' + stringify(res_constraint_columns));
 								
 								if (res_constraint_columns.length == 1) {
 									
@@ -2648,7 +2648,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 					var process_table_constraint = function() {
 						//var schema = adb_schemas[c];
 						var table_constraint_name = table_constraint_names[c];
-						console.log('table_constraint_name ' + table_constraint_name);
+						//console.log('table_constraint_name ' + table_constraint_name);
 						that.load_abstract_table_constraint(schema_name, table_name, table_constraint_name, function(error, load_abstract_table_constraint_res) {
 							c++;
 							res.push(load_abstract_table_constraint_res);
@@ -2763,9 +2763,9 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 					if (err) {
 						
 					} else {
-						console.log('');
-						console.log('');
-						console.log('res_abstract_constraints ' + stringify(res_abstract_constraints));
+						//console.log('');
+						//console.log('');
+						//console.log('res_abstract_constraints ' + stringify(res_abstract_constraints));
 						
 						table_res.set('constraints', res_abstract_constraints);
 						
@@ -2835,7 +2835,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				if (err) {
 					
 				} else {
-					console.log('table_names ' + table_names);
+					//console.log('table_names ' + table_names);
 					
 					//this.set('tables', new Collection({
 					//	'index_by': 'name'
@@ -2870,7 +2870,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 					var process_table = function() {
 						//var schema = adb_schemas[c];
 						var table_name = table_names[c];
-						console.log('table_name ' + table_name);
+						//console.log('table_name ' + table_name);
 						that.load_abstract_table(schema_name, table_name, function(error, load_abstract_table_res) {
 							c++;
 							res.push(load_abstract_table_res);
@@ -3031,7 +3031,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				if (err) {
 					
 				} else {
-					console.log('res_abstract_tables ' + res_abstract_tables);
+					//console.log('res_abstract_tables ' + res_abstract_tables);
 					
 					// adding a collection to a collection.
 					//  don't want to push - that puts the collection in as one object.
@@ -3065,7 +3065,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 						if(err) {
 							
 						} else {
-							console.log('res_abstract_functions ' + res_abstract_functions);
+							//console.log('res_abstract_functions ' + res_abstract_functions);
 							
 							res.set('functions', res_abstract_functions);
 							

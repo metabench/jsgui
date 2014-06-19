@@ -216,7 +216,7 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 
             // Don't have Data_Object here??, as Data_Object is used by this
             var res = obj instanceof Data_Object.constructor;
-            console.log('res', res);
+            //console.log('res', res);
             return (res);
         }
 	});

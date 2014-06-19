@@ -658,7 +658,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
                 var ix_sys = this.index_system;
                 var res;
                 if (ix_sys) {
-                    console.log('ix_sys', ix_sys);
+                    //console.log('ix_sys', ix_sys);
                     var pui = ix_sys._primary_unique_index;
                     res = pui.get(a[0])[0];
                 }
@@ -1283,8 +1283,8 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			var that = this;
 			//console.log('index_by a ' + stringify(a));
 			//console.log('a.l ' + a.l);
-			console.log('index_by sig ' + sig);
-            console.log('a', a);
+			//console.log('index_by sig ' + sig);
+            //console.log('a', a);
 			//throw('stop');
 			//console.log('tof(a[0]) ' + tof(a[0]));
 			//if (a.l == 1 && tof(a[0]) == 'array') {
@@ -1333,11 +1333,11 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				//console.log('object sig');
 				
 				var index_map = a[0];
-				console.log('index_map ' + stringify(index_map));
+				//console.log('index_map ' + stringify(index_map));
 				
 				each(index_map, function(index_type, index_definition) {
 
-                    console.log('index_definition', index_definition);
+                    //console.log('index_definition', index_definition);
 					//console.log('index_type ' + index_type);
 					if (index_type == 'sorted') {
 						// set up the individual index of the specified type.
@@ -1372,7 +1372,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 									//  It has those fields...
 									//   where to they get made within the Sorted_Collection_Index constructor?
 
-                                    console.log('individual_index_fields', individual_index_fields);
+                                    //console.log('individual_index_fields', individual_index_fields);
 
 
 									var index = new Sorted_Collection_Index({
@@ -1386,7 +1386,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 									
 								});
 
-                                console.log('indexes', indexes);
+                                //console.log('indexes', indexes);
 								
 								that.index_system._primary_unique_index = indexes[0];
 								return indexes[0];
@@ -1438,7 +1438,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 			if (this._data_object_constraint) {
 				// not sure why this will have a _data_object_constraint in various cases.
-                console.log('this._data_object_constraint', this._data_object_constraint);
+                //console.log('this._data_object_constraint', this._data_object_constraint);
 
 				if (!this._data_object_constraint.match(obj)) return false;
 			}
@@ -1499,7 +1499,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 			var tv = tof(value);
 			//console.log('1) collection push value: ' + stringify(value));
 			//console.log('--------------------')
-			console.log('push tv ' + tv);
+			//console.log('push tv ' + tv);
 
 			if (tv == 'object') {
 				
@@ -1612,16 +1612,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 				//console.log('constraints_test_res ' + constraints_test_res);
 				// would be testing against a unique constraint.
 				//  can test to see if a new object would violate a collection constraint?
-				console.log('constraints_test_res ' + constraints_test_res);
+				//console.log('constraints_test_res ' + constraints_test_res);
 				if (constraints_test_res) {
 					
 					//console.log('pre unsafe_add_object value', stringify(value));
 
-                    console.log('pre this.index_system.unsafe_add_object');
+                    //console.log('pre this.index_system.unsafe_add_object');
 
 					this.index_system.unsafe_add_object(value);
 
-                    console.log('post this.index_system.unsafe_add_object');
+                    //console.log('post this.index_system.unsafe_add_object');
 					// gets added to the index... but is its position within this collection stored too?
 					//console.log('post unsafe_add_object');
 					// Things do get a bit complicated with needing the positions within the collection to do various things.
@@ -1653,9 +1653,9 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 					// This bit is taking a while.
 					//  Not sure why!!! Has to do with objects being put in a large collection probably.
 					//  Too many things, in the wrong context, getting notified.
-                    console.log('pre raise change event');
+                    //console.log('pre raise change event');
 					this.raise_event('change', e);
-                    console.log('post raise change event');
+                    //console.log('post raise change event');
 
 					
 					//console.log('post raise add event');
