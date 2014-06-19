@@ -161,11 +161,204 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-                        that.get_columns_metadata(function(err, columns_metadata) {
+                        that.get_metadata(function(err, metadata) {
                             if (err) {
                                 throw err;
                             } else {
-                                console.log('columns_metadata', columns_metadata);
+                                console.log('metadata', metadata);
+
+                                console.log('metadata', stringify(metadata));
+
+                                // Need to check the existing table / abstract table to see if various things are already there?
+
+
+
+
+                                /*
+                                var js = {
+                                    "columns": [{
+                                        "name": "id",
+                                        "information_schema": {
+                                            "table_catalog": "docs",
+                                            "table_schema": "public",
+                                            "table_name": "user_roles",
+                                            "column_name": "id",
+                                            "ordinal_position": 1,
+                                            "column_default": "nextval('user_roles_id_seq'::regclass)",
+                                            "is_nullable": "NO",
+                                            "data_type": "integer",
+                                            "character_maximum_length": null,
+                                            "character_octet_length": null,
+                                            "numeric_precision": 32,
+                                            "numeric_precision_radix": 2,
+                                            "numeric_scale": 0,
+                                            "datetime_precision": null,
+                                            "interval_type": null,
+                                            "interval_precision": null,
+                                            "character_set_catalog": null,
+                                            "character_set_schema": null,
+                                            "character_set_name": null,
+                                            "collation_catalog": null,
+                                            "collation_schema": null,
+                                            "collation_name": null,
+                                            "domain_catalog": null,
+                                            "domain_schema": null,
+                                            "domain_name": null,
+                                            "udt_catalog": "docs",
+                                            "udt_schema": "pg_catalog",
+                                            "udt_name": "int4",
+                                            "scope_catalog": null,
+                                            "scope_schema": null,
+                                            "scope_name": null,
+                                            "maximum_cardinality": null,
+                                            "dtd_identifier": "1",
+                                            "is_self_referencing": "NO",
+                                            "is_identity": "NO",
+                                            "identity_generation": null,
+                                            "identity_start": null,
+                                            "identity_increment": null,
+                                            "identity_maximum": null,
+                                            "identity_minimum": null,
+                                            "identity_cycle": null,
+                                            "is_generated": "NEVER",
+                                            "generation_expression": null,
+                                            "is_updatable": "YES"
+                                        },
+                                        "primary_key_constraint": {
+                                            "constraint_catalog": "docs",
+                                            "constraint_schema": "public",
+                                            "constraint_name": "user_roles_pkey",
+                                            "table_catalog": "docs",
+                                            "table_schema": "public",
+                                            "table_name": "user_roles",
+                                            "constraint_type": "PRIMARY KEY",
+                                            "is_deferrable": "NO",
+                                            "initially_deferred": "NO"
+                                        }
+                                    }, {
+                                        "name": "user_id",
+                                        "information_schema": {
+                                            "table_catalog": "docs",
+                                            "table_schema": "public",
+                                            "table_name": "user_roles",
+                                            "column_name": "user_id",
+                                            "ordinal_position": 2,
+                                            "column_default": null,
+                                            "is_nullable": "YES",
+                                            "data_type": "integer",
+                                            "character_maximum_length": null,
+                                            "character_octet_length": null,
+                                            "numeric_precision": 32,
+                                            "numeric_precision_radix": 2,
+                                            "numeric_scale": 0,
+                                            "datetime_precision": null,
+                                            "interval_type": null,
+                                            "interval_precision": null,
+                                            "character_set_catalog": null,
+                                            "character_set_schema": null,
+                                            "character_set_name": null,
+                                            "collation_catalog": null,
+                                            "collation_schema": null,
+                                            "collation_name": null,
+                                            "domain_catalog": null,
+                                            "domain_schema": null,
+                                            "domain_name": null,
+                                            "udt_catalog": "docs",
+                                            "udt_schema": "pg_catalog",
+                                            "udt_name": "int4",
+                                            "scope_catalog": null,
+                                            "scope_schema": null,
+                                            "scope_name": null,
+                                            "maximum_cardinality": null,
+                                            "dtd_identifier": "2",
+                                            "is_self_referencing": "NO",
+                                            "is_identity": "NO",
+                                            "identity_generation": null,
+                                            "identity_start": null,
+                                            "identity_increment": null,
+                                            "identity_maximum": null,
+                                            "identity_minimum": null,
+                                            "identity_cycle": null,
+                                            "is_generated": "NEVER",
+                                            "generation_expression": null,
+                                            "is_updatable": "YES"
+                                        }
+                                    }, {
+                                        "name": "role_id",
+                                        "information_schema": {
+                                            "table_catalog": "docs",
+                                            "table_schema": "public",
+                                            "table_name": "user_roles",
+                                            "column_name": "role_id",
+                                            "ordinal_position": 3,
+                                            "column_default": null,
+                                            "is_nullable": "YES",
+                                            "data_type": "integer",
+                                            "character_maximum_length": null,
+                                            "character_octet_length": null,
+                                            "numeric_precision": 32,
+                                            "numeric_precision_radix": 2,
+                                            "numeric_scale": 0,
+                                            "datetime_precision": null,
+                                            "interval_type": null,
+                                            "interval_precision": null,
+                                            "character_set_catalog": null,
+                                            "character_set_schema": null,
+                                            "character_set_name": null,
+                                            "collation_catalog": null,
+                                            "collation_schema": null,
+                                            "collation_name": null,
+                                            "domain_catalog": null,
+                                            "domain_schema": null,
+                                            "domain_name": null,
+                                            "udt_catalog": "docs",
+                                            "udt_schema": "pg_catalog",
+                                            "udt_name": "int4",
+                                            "scope_catalog": null,
+                                            "scope_schema": null,
+                                            "scope_name": null,
+                                            "maximum_cardinality": null,
+                                            "dtd_identifier": "3",
+                                            "is_self_referencing": "NO",
+                                            "is_identity": "NO",
+                                            "identity_generation": null,
+                                            "identity_start": null,
+                                            "identity_increment": null,
+                                            "identity_maximum": null,
+                                            "identity_minimum": null,
+                                            "identity_cycle": null,
+                                            "is_generated": "NEVER",
+                                            "generation_expression": null,
+                                            "is_updatable": "YES"
+                                        }
+                                    }],
+                                    "constraints": {
+                                        "primary_key": [{
+                                            "constraint_catalog": "docs",
+                                            "constraint_schema": "public",
+                                            "constraint_name": "user_roles_pkey",
+                                            "table_catalog": "docs",
+                                            "table_schema": "public",
+                                            "table_name": "user_roles",
+                                            "constraint_type": "PRIMARY KEY",
+                                            "is_deferrable": "NO",
+                                            "initially_deferred": "NO",
+                                            "columns": [{
+                                                "column_name": "id",
+                                                "constraint_name": "user_roles_pkey",
+                                                "ordinal_position": 1
+                                            }]
+                                        }]
+                                    }
+                                }
+
+                                */
+
+                                // The metadata should be enough (as plane JS objects) to make the various Abstract objects.
+                                //  Columns and constraints.
+
+
+
 
                                 // Quite a lot of data in there.
 
@@ -482,7 +675,143 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
         },
 
+        'get_metadata': function(callback) {
+            var res = {};
+
+            var that = this;
+
+            that.get_columns_metadata(function(err, columns_metadata) {
+                if (err) {
+                    throw err;
+                } else {
+                    res.columns = columns_metadata;
+
+
+                    that.get_constraints_metadata(function(err, constraints_metadata) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            res.constraints = constraints_metadata;
+
+
+                            // Indexes? (rules and triggers)
+
+                            callback(null, res);
+
+
+
+                        }
+                    })
+
+                }
+            })
+        },
+
+        'get_primary_key_constraints_metadata': function(callback) {
+
+            // this.get_pk_constraints_with_column_metadata
+            //
+
+            var res = [];
+            var map_pk_constraints = {};
+
+            var that = this;
+
+            that.get_table_pk_constraints_rows(function(err, pk_constraints) {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log('pk_constraints', pk_constraints);
+
+                    // And need to get the associated columns (including their (basic) metadata.
+                    //  At least need to get column names associated with that PK.
+
+                    // Will then need to test this with multiple PK columns.
+
+                    // needs to make array of fns, and use them to get the associated column(s) information.
+
+                    var fns = jsgui.Fns();
+
+                    each(pk_constraints, function(i, pk_constraint) {
+                        console.log('pk_constraint', pk_constraint);
+
+                        //throw 'stop';
+
+                        var constraint_name = pk_constraint.constraint_name;
+
+                        map_pk_constraints[constraint_name] = pk_constraint;
+
+                        res.push(pk_constraint);
+
+                        fns.push([that, that.get_constraint_columns, [constraint_name], function(err, constraint_columns) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('constraint_columns', constraint_columns);
+
+                                each(constraint_columns, function(i, constraint_column) {
+                                    console.log('constraint_column', constraint_column);
+
+                                    //var constraint_name = constraint_column.constraint_name;
+                                    var column_name = constraint_column.column_name;
+
+                                    //map_pk_constraints[constraint_name][column_name] = map_pk_constraints[constraint_name][column_name] || [];
+                                    //map_pk_constraints[constraint_name][column_name].push(constraint_column);
+
+                                });
+
+                                //pk_constraint.columns = jsgui.clone(map_pk_constraints[constraint_name]);
+                                pk_constraint.columns = constraint_columns;
+
+
+                                //throw 'stop';
+                            }
+                        }]);
+                    })
+
+                    fns.go(function(err, res_fns) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('res_fns', res_fns);
+                            callback(null, res);
+                        }
+                    })
+
+
+
+
+
+
+                }
+            });
+        },
+
         'get_constraints_metadata': function(callback) {
+
+            var res = {};
+
+            var that = this;
+
+            that.get_primary_key_constraints_metadata(function(err, primary_key_constraints_metadata) {
+               if (err) {
+                   throw err;
+               } else {
+                   res.primary_key = primary_key_constraints_metadata;
+
+                   callback(null, res);
+
+               }
+            });
+            // Primary key constraints
+
+            // Foreign key constraints
+
+            // Other types of constraints
+
+
+
+
 
         },
 
