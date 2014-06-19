@@ -129,7 +129,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                                     //console.log('v', stringify(v));
 
                                     var name = v.get('name').value();
-                                    console.log('name', name);
+                                    //console.log('name', name);
                                 })
 
                                 // Should probably get rid of most / all other logging.
@@ -140,11 +140,6 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 
                                 // Seems have been putting too many tables into the abstract schema.
-
-
-
-
-
 
 
                                 throw 'stop';

@@ -1256,7 +1256,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
         // dbi-load-abstract?
 
         'load_table_abstract_pk_constraint': function(schema_name, table_name, callback) {
-            console.log('load_table_abstract_pk_constraints');
+            //console.log('load_table_abstract_pk_constraints');
             //console.log('table_name ' + table_name);
             var that = this;
 
@@ -1325,7 +1325,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
         'load_table_constraint_row': function(constraint_schema, table_schema, table_name, constraint_name, callback) {
 
-            console.log('load_table_constraint_row');
+            //console.log('load_table_constraint_row');
 
             //throw 'stop 1';
             var sel = new Abstract.Select({
@@ -1405,12 +1405,12 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
         },
 
         'load_table_abstract_constraints': function(schema_name, table_name, callback) {
-            console.log('load_table_abstract_constraints');
+            //console.log('load_table_abstract_constraints');
             var that = this;
 
             // load the table constraint names instead.
             //console.log('');
-            console.log('pre load_table_constraint_names');
+            //console.log('pre load_table_constraint_names');
 
 
             that.load_table_constraint_names(schema_name, table_name, function(err, table_constraint_names) {
@@ -1505,7 +1505,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
         },
 
         'load_table_constraint_names': function(schema_name, table_name, callback) {
-            console.log('load_table_constraint_names');
+            //console.log('load_table_constraint_names');
             var sel = new Abstract.Select({
                 'select_list': ['constraint_name'],
                 'from_item': 'INFORMATION_SCHEMA.table_constraints',
@@ -1525,13 +1525,13 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 if (err) {
                     throw err;
                 } else {
-                    console.log('res_constraints', res_constraints);
+                    //console.log('res_constraints', res_constraints);
                     var res = [];
                     each(res_constraints, function(i, v) {
                         res.push(v.constraint_name);
 
                     });
-                    console.log('load_table_constraint_names res', res);
+                    //console.log('load_table_constraint_names res', res);
                     callback(null, res);
                 }
             });
@@ -2207,7 +2207,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             // What if they are already loaded?
 
-            console.log('load_schema_resources');
+            //console.log('load_schema_resources');
 
 
             var that = this;
@@ -2215,7 +2215,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 if (err) {
                     throw err;
                 } else {
-                    console.log('schema_names', schema_names);
+                    //console.log('schema_names', schema_names);
 
                     //throw 'stop';
                     // We load the abstract schemas.
@@ -2229,7 +2229,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                     // and there is a collection of abstract schemas too
                     //console.log('data_schemas', data_schemas);
-                    console.log('data_schemas.length()', data_schemas.length());
+                    //console.log('data_schemas.length()', data_schemas.length());
 
                     //each(schema_names, function(i, v) {
                     //    that.load_schema_resource
@@ -2254,7 +2254,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
         },
 
         'load_schema_resource': function(schema_name, callback) {
-            console.log('load_schema_resource schema_name', schema_name);
+            //console.log('load_schema_resource schema_name', schema_name);
             //throw 'stop';
 
             // Create a new Resource, and add it to the collection of data.schemas
@@ -2358,7 +2358,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 					//
-                    console.log('pre load abstract schema');
+                    //console.log('pre load abstract schema');
 
                     // Possibly load the schema resources first.
                     //  The schema resources will be used to load the abstract schemas.

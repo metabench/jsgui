@@ -383,7 +383,7 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
                     this.set('database', spec.database);
 
                     var database_schemas = spec.database.get('schemas');
-                    console.log('database_schemas.length()', database_schemas.length());
+                    //console.log('database_schemas.length()', database_schemas.length());
 
                     var existing_schema = database_schemas.get(spec.name);
                     if (existing_schema) {
@@ -551,8 +551,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					}
 					
 					var params = this.get('parameters');
-					console.log('init params ' + stringify(params));
-					console.log('init spec.parameters ' + stringify(spec.parameters));
+					//console.log('init params ' + stringify(params));
+					//console.log('init spec.parameters ' + stringify(spec.parameters));
 					//this.parameters = spec.parameters || spec.params || [];
 					//this.statements = spec.statements || [];
 					
@@ -1092,7 +1092,11 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			
 			'init': function(spec) {
 
-                console.log('init Table Abstract');
+                //console.log('');
+                //console.log('init Table Abstract');
+                //console.log('spec', spec);
+                //console.trace();
+                //console.log('');
 
 				// Polymorphism in how this gets specified to the constructor?
 
@@ -1116,6 +1120,22 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                 //  It could be related to the name being a Data_Value, and it not recognising that value and indexing it as such.
 
 
+
+
+				this.set('columns', new Collection({
+					'index_by': 'name'
+				}));
+
+				this.set('constraints', new Collection({
+					'index_by': 'name'
+				}));
+
+                var columns = this.get('columns');
+
+
+
+                this.load_from_spec(spec, ['name', 'schema_name', 'single_name']);
+
                 if (spec.schema) {
 
                     // Throw an error if the spec abstract database already contains a schema with the same name
@@ -1125,31 +1145,47 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                     this.set('schema', spec.schema);
 
                     var schema_tables = spec.schema.get('tables');
+
+
                     //console.log('schema_tables.length()', schema_tables.length());
 
-
+                    //console.log('spec.name', spec.name);
+                    //console.log('tof spec.name', tof(spec.name));
 
                     var existing_table = schema_tables.get(spec.name);
+
+                    // It seems that the tables are not being indexed properly in their collection???
+
+                    //console.log('schema_tables.index_system', schema_tables.index_system);
+
+                    // It looks like the schemas' tables are not being indexed properly.
+
+
+
+                    var pui = schema_tables.index_system._primary_unique_index;
+                    var kvs = pui.sorted_kvs;
+
+                    var keys = kvs.keys();
+                    //console.log('keys', keys);
+
+
+
+
                     if (existing_table) {
                         //console.log('existing_schema', stringify(existing_schema));
                         console.trace();
                         throw 'Not expecting existing table';
                     } else {
                         schema_tables.push(this);
+
+
+                        //throw 'stop';
                     }
                     // Can also check the database to see if it contains the abstract schema.
 
                     // if it does not have it, push
 
                 }
-
-				this.set('columns', new Collection({
-					'index_by': 'name'
-				}));
-
-				this.set('constraints', new Collection({
-					'index_by': 'name'
-				}));
 
 				//var c = this.get('constraints');
 				//console.log('c', c);
@@ -1185,11 +1221,16 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 						//console.log('spec', spec);
 
+                        // Need the column name!
+
+
+
 						var column = new Abstract.Column({
 							'arr_spec': spec_column,
 							'table': that
 						});
-						//console.log('column', column);
+						console.log('column', column);
+                        throw 'stop';
 
 
                         // Pushing the column is a problem.
@@ -1209,11 +1250,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				// a problem with set not returning what I think it should.
 
-				var columns = this.get('columns');
 
-
-				
-				this.load_from_spec(spec, ['name', 'schema_name', 'single_name']);
 				
 				
 				
@@ -1494,7 +1531,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 
 				//console.log('init Column');
-				//console.log('spec.name', spec.name);
+				//console.log('Abstract Column init spec.name', spec.name);
 
 				//console.log('spec', spec);
 
@@ -1529,6 +1566,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 				if (t_spec == 'object') {
 
+                    if (spec.name) {
+                        that.set('name', spec.name);
+                    }
+
                     if (spec.information_schema) {
                         var information_schema = spec.information_schema;
 
@@ -1536,6 +1577,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                         //
 
                         name = information_schema.name;
+                        that.set('name', name);
                         data_type = information_schema.data_type;
 
                         // But the information schema does not provide the info about if it is a primary key column.
@@ -1571,14 +1613,32 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                         this.set('table', spec.table);
 
                         var table_columns = spec.table.get('columns');
-                        console.log('table_columns.length()', table_columns.length());
+                        //console.log('table_columns.length()', table_columns.length());
+
+                        var pui = table_columns.index_system._primary_unique_index;
+                        var kvs = pui.sorted_kvs;
+
+                        var keys = kvs.keys();
+                        //console.log('');
+                        //console.log('keys', keys);
+                        //console.log('');
 
                         var existing_column = table_columns.get(spec.name);
+                        // need to look into the indexing of the table columns... it seems like there could be a problem here.
+
+
+
                         if (existing_column) {
                             //console.log('existing_schema', stringify(existing_schema));
                             console.trace();
                             throw 'Not expecting existing column';
                         } else {
+                            var name = this.get('name');
+                            //console.log('name', name);
+                            //console.log('tof name', tof(name));
+                            //throw 'stop';
+
+                            //console.log('this', this);
                             table_columns.push(this);
                         }
                         // Can also check the database to see if it contains the abstract schema.
@@ -1602,6 +1662,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 				var process_arr_spec = function() {
 					name = arr_spec[0];
+                    that.set('name', name);
 					data_type = arr_spec[1];
 
 
@@ -1675,8 +1736,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 									var table2 = that.get('table');
 									//console.log('table2', table2);
 									var schema = table2.get('schema');
-									console.log('schema', schema);
-									console.log('tof schema', tof(schema));
+									//console.log('schema', schema);
+									//console.log('tof schema', tof(schema));
 
 									// then look for the referred to table in the schema.
 									//  (want to build up a model / graph of this if possible)
@@ -1693,7 +1754,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 								}
 
-								console.trace("Here I am!");
+								//console.trace("Here I am!");
 								//throw 'stop';
 							}
 						}
@@ -1721,7 +1782,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				// process that into words.
 				//  a number just after the data_type indicates the data_type length
 
-				this.set('name', name);
+
 				this.set('data_type', data_type);
 				this.set('data_type_length', data_type_length);
 

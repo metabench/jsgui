@@ -3356,10 +3356,10 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				// can have a length property as a number.
 				//  but maybe a function would work better in general.
 				
-				console.log('pre get schemas length');
+				//console.log('pre get schemas length');
 				var c = 0, l = adb_schemas.length();
 				
-				console.log('adb_schemas.length ' + l);
+				//console.log('adb_schemas.length ' + l);
 				// only do process_schema if there is another one.
 				
 				//var schemas = abstract_database.get('schemas');
@@ -3367,7 +3367,7 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 				var process_schema = function() {
 					//var schema = adb_schemas[c];
 					var schema = adb_schemas.get(c);
-					console.log('schema ' + schema);
+					//console.log('schema ' + schema);
 					that.ensure_abstract_schema(schema, function(error, eas_res) {
 						c++;
 						if (c < l) {

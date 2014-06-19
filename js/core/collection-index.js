@@ -265,6 +265,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
     // Some unit tests to cover similar cases would help.
 
 	var get_obj_fields_key = function(obj, fields) {
+        //console.log('');
 		//console.log('get_obj_fields_key');
 
 		//var stack = new Error().stack
@@ -330,6 +331,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
                 //console.log('tof obj', tof(obj));
                 //console.log('obj', stringify(obj));
+                //console.log('obj', obj);
 
 				//console.log('field_val ' + field_val);
                 //console.log('tof field_val ' + tof(field_val));

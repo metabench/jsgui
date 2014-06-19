@@ -25,7 +25,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             this.meta.set('type_levels', ['table', 'rdb', 'postgres']);
 
-            console.log('init Table Resource');
+            //console.log('init Table Resource');
 
             //console.log('spec.resource', spec.resource);
             //throw 'stop';
@@ -116,6 +116,16 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 		},
 
         'abstract': function(callback) {
+
+            // Maybe having a delay system that does not return the second call until it has the answer.
+            //  Will not be creating excess abstract objects.
+
+            // This probably is the place to have that feature / requirement.
+
+
+
+
+
             // This may need to be asynchronous as it may need to load data.
 
             var name = this.meta.get('name'), that = this;
@@ -126,13 +136,19 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
 
-            console.log('Table: ' + name + ', Resource.abstract ');
+            //console.log('Table: ' + name + ', Resource.abstract ');
 
+            // Could use event model to listen for when the abstract has been loaded.
+            if (this._loading_abstract) {
+                throw 'already loading abstract table';
+            }
 
 
             if (this._abstract) {
                 callback(null, this._abstract);
             } else {
+
+                this._loading_abstract = true;
 
 
                 // Need to get or make the Abstract class that represents this.
@@ -167,17 +183,27 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                         var abstract_tables = abstract_schema.get('tables');
                         var existing_table = abstract_tables.get(name);
+                        var abstract_table;
 
-                        //if (existing_table) {
+                        //console.log('!!existing_table', !!existing_table);
 
-                        //}
+                        // And have the abstract table add itself into the schema it's given.
+
+                        if (existing_table) {
+                            abstract_table = that._abstract = existing_table;
+                        } else {
+                            abstract_table = that._abstract = new Abstract.Table({
+                                'name': name,
+                                'schema': abstract_schema
+                            });
+                        }
 
 
 
-                        var abstract_table = that._abstract = existing_table || new Abstract.Table({
-                            'name': name,
-                            'schema': abstract_schema
-                        });
+                        //var abstract_table = that._abstract = existing_table || new Abstract.Table({
+                        //    'name': name,
+                        //    'schema': abstract_schema
+                        //});
 
                         // Could have get_metadata function
                         //  provides structured info about the columns, constraints etc
@@ -206,11 +232,25 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                                 each(columns, function(i, column) {
                                     //console.log('column', column);
+                                    //throw 'stop';
 
                                     // However, the abstract column should have a reference to the abstract table.
                                     column.table = abstract_table;
 
-                                    var abstract_column = new Abstract.Column(column);
+                                    // Need to see if we actually need to make a new Abstract Column.
+                                    //  Perhaps it already exists.
+                                    //   However, would it be getting made with more metadata here?
+
+                                    var existing_column = abstract_table.get('columns').get(column.name);
+                                    var abstract_column;
+                                    if (!existing_column) {
+                                        abstract_column = new Abstract.Column(column);
+                                    } else {
+                                        abstract_column = existing_column;
+                                    }
+
+
+
                                     //console.log('abstract_column', abstract_column);
 
                                     //console.log('abstract_column', stringify(abstract_column));
@@ -877,7 +917,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
         'get_columns_metadata': function(callback) {
-            console.log('Table Resource get_columns_metadata');
+            //console.log('Table Resource get_columns_metadata');
 
             // Should maybe do a query using the Schema or DB Resource.
 
