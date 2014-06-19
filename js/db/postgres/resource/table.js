@@ -112,14 +112,22 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
         'abstract': function(callback) {
             // This may need to be asynchronous as it may need to load data.
 
+            console.log('Table Resource abstract');
+
+            var name = this.meta.get('name'), that = this;
+
             if (this._abstract) {
                 callback(null, this._abstract);
             } else {
+
+
                 // Need to get or make the Abstract class that represents this.
 
                 // We can get the schema.
                 // From that we get the Abstract schema
                 //  We use that as a reference within the Abstract system.
+
+
 
                 var schema = this.data.get('schema');
                 console.log('schema', schema);
@@ -128,6 +136,92 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                         throw err;
                     } else {
                         console.log('abstract_schema', abstract_schema);
+                        // So, we use the abstract schema as a parameter to the abstract table.
+
+                        // However, we check the abstract schema to see if it already has such a table?
+                        //  Could put that in after I've made a check inside the Abstract Table in the part where it automatically adds itself to the schema
+                        //   After that I will continue with the goal of making the web-db Resource wrapper, using Postgres and a general purpose interface.
+
+                        var abstract_tables = abstract_schema.get('tables');
+                        var existing_table = abstract_tables.get(name);
+
+                        //if (existing_table) {
+
+                        //}
+
+
+
+                        var abstract_table = that._abstract = existing_table || new Abstract.Table({
+                            'name': name,
+                            'schema': abstract_schema
+                        });
+
+                        // Could have get_metadata function
+                        //  provides structured info about the columns, constraints etc
+
+
+
+                        that.get_columns_metadata(function(err, columns_metadata) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('columns_metadata', columns_metadata);
+
+                                // Quite a lot of data in there.
+
+                                // Would be good to get the constraints metadata as well.
+                                // Although some constraints metadata gets included in the columns metadata, it would be good to have
+                                //  JSON-like data sets specifically about constraints.
+
+                                //  The constraints metadata will be organised as different sorts of constraints.
+                                //  Follows Sense, Model, Plan, Act type of procedure, where this loads in all the necessary data about the table,
+                                //   and once it has it it puts that data into a more structured / networked / organised format.
+
+
+
+
+
+
+
+                                // could make a map out of the metadata too.
+
+                                // want to get the constraints metadata too.
+
+                                // The information_schema does not contain info on primary keys.
+                                // get_columns_metadata should do.
+
+
+
+
+
+
+                            }
+                        })
+
+                        // We need to load the columns.
+                        //  The Table Resource should already have them loaded. ?????
+
+                        // The Table Resource not having columns loaded, apart from Abstract ones...
+                        //  That makes sense if the columns are not Resources.
+
+                        //  Should probably get the column metadata.
+
+
+
+
+
+
+
+                        // We need to load more (meta)data into that abstract table...
+
+
+
+
+
+                        //callback(null, abstract_table);
+
+
+
                     }
                 });
                 //var resource_schema = schema.)
@@ -139,6 +233,541 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             //throw 'stop';
 
+        },
+
+        'get_table_pk_constraints_rows': function(callback) {
+            var sql;
+            var schema = this.data.get('schema');
+
+            var schema_name = schema.meta.get('name');
+            var database = schema.data.get('database');
+            var table_name = this.meta.get('name');
+
+            // more functions will require a schema_name for the moment.
+            //  may change the ways parameters are given.
+
+
+            /*
+             if (this.current_schema_name) {
+             // Could build this using an abstract SQL Select Statement.
+             //  Easier to add clauses programatically.
+
+             sql = 'SELECT * FROM information_schema.table_constraints WHERE table_schema = \'' + this.current_schema_name + '\' AND table_name = \'' + table_name + '\' AND constraint_type =\'PRIMARY KEY\';';
+
+             //sql = 'SELECT exists(SELECT column_name FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + this.current_schema_name + '\' AND column_name =  \'' + column_name + '\') AS "exists";';
+             } else {
+             sql = 'SELECT * FROM information_schema.table_constraints WHERE table_name = \'' + table_name + '\' AND constraint_type =\'PRIMARY KEY\';';
+
+             }
+             */
+            sql = 'SELECT * FROM information_schema.table_constraints WHERE table_schema = \'' + schema_name + '\' AND table_name = \'' + table_name + '\' AND constraint_type =\'PRIMARY KEY\';';
+
+            // returns multiple rows from information_schema.
+
+            // maybe have something that runs a multi-row query, returns them all to the callback function.
+            console.log('sql ' + sql);
+
+            database.execute_multirow_to_callback(sql, callback);
+
+            // often, when this has completed, further information about the constraints will be obtained.
+
+
+
+        },
+
+        // gets the full info...
+        //  maybe we don't want so many columns.
+        //  could use some aliases too.
+
+        // perhaps could just get column name and ordinal position.
+
+
+        'get_constraint_columns': function(constraint_name, callback) {
+
+            var schema = this.data.get('schema');
+
+            var schema_name = schema.meta.get('name');
+            var database = schema.data.get('database');
+            var table_name = this.meta.get('name');
+
+            // automatically assigning the schema on these functions???
+
+
+
+            // let's build up the SQL select statement.
+
+            //  hmmm.... need to be more particular than this.
+
+            // Can't identify them just by name.
+
+            var ij = new Abstract.Inner_Join({
+                'left_table': 'INFORMATION_SCHEMA.key_column_usage',
+                'right_table': 'INFORMATION_SCHEMA.columns',
+                'left_column': 'column_name',
+                'right_column': 'column_name'
+            })
+
+            // So, the inner join works.
+            //  We still need just a few columns from it though.
+
+            // selecting a few rows with an alias, returning them.
+
+            var select_list = [['INFORMATION_SCHEMA.columns.column_name', 'column_name'],
+                ['INFORMATION_SCHEMA.key_column_usage.constraint_name', 'constraint_name'],
+                //['INFORMATION_SCHEMA.key_column_usage.constraint_type', 'constraint_type'],
+                ['INFORMATION_SCHEMA.key_column_usage.ordinal_position', 'ordinal_position']];
+            //var select_list = [['INFORMATION_SCHEMA.key_column_usage.constraint_name', 'constraint_name']];
+            //var select_list = [['INFORMATION_SCHEMA.key_column_usage.constraint_type', 'constraint_type']];
+            //var select_list = [['INFORMATION_SCHEMA.key_column_usage.ordinal_position', 'ordinal_position']];
+
+
+
+
+            // perhaps join it with the information about the column.
+
+            var a_select = new Abstract.Select({
+                'select_list': select_list,
+                // will be selecting from an inner join.
+                'from_item': ij
+                //'from_item': 'INFORMATION_SCHEMA.key_column_usage'
+            });
+
+
+            // add the where clauses programatically.
+            // could just have pairs for direct matches in where clauses.
+
+            // where is a single condition, but could be joined with AND.
+            //  however could be listed as multiple conditions and they get expressed as a single one joined by AND clauses
+
+            //if (this.current_schema_name) {
+            //	a_select.where.push(['INFORMATION_SCHEMA.key_column_usage.table_schema', this.current_schema_name]);
+            //	a_select.where.push(['INFORMATION_SCHEMA.columns.table_schema', this.current_schema_name]);
+            //	a_select.where.push(['INFORMATION_SCHEMA.key_column_usage.constraint_schema', this.current_schema_name]);
+            //}
+
+            var where = a_select.get('where');
+
+            where.push(['INFORMATION_SCHEMA.key_column_usage.table_schema', schema_name]);
+            where.push(['INFORMATION_SCHEMA.columns.table_schema', schema_name]);
+            where.push(['INFORMATION_SCHEMA.key_column_usage.constraint_schema', schema_name]);
+
+            where.push(['INFORMATION_SCHEMA.key_column_usage.table_name', table_name]);
+            where.push(['INFORMATION_SCHEMA.columns.table_name', table_name]);
+            where.push(['INFORMATION_SCHEMA.key_column_usage.constraint_name', constraint_name]);
+
+            // need to order them by ordinal_position
+
+            a_select.set('order_by', ['INFORMATION_SCHEMA.key_column_usage.ordinal_position', 'DESC']);
+
+
+            var sql = a_select.toString();
+
+            console.log('sql ' + sql);
+            // OK :) we can execute the generated SQL. The query builder / use of Abstract Select and other queries will be expanded.
+            // Would like to select particular fields
+            //  Join with other tables.
+
+
+
+            database.execute_multirow_to_callback(sql, callback);
+
+
+
+
+        },
+
+
+
+
+
+        // get the constraints information out of the database
+
+
+
+
+
+
+        //  This will be relatively similar accross languages, it won't be so hard to port.
+
+        // The differences between SQL implementations may mean that there should be various versions of this dbi-?
+        //  Same API, different DBs.
+
+        // This could expose a Relational DB API.
+        //  Other things could rely on having a Relational DB API.
+        //  Maybe give it less general name... it will do some particular things.
+
+        // This module will also be usable on the server to get code snippets.
+        //  I could make a CRUD generator for postgres on the website.
+        //  Could later be integrated with other MetaBench services, but a nice web app would be to take a description of the DB
+        //    (domain model / implementation details, can be flexible)
+        //  Produces postgres code (probably using code on the server :))
+        //  Will be able to produce quite a lot of postgres that can produce the tables and CRUD routines.
+
+        // Could also put up adverts, maybe charge for premium usage
+        //  $2 for 2 year subscription??? just for one small tool.
+
+        // Login etc would become useful when dealing with these forms of data.
+
+
+
+        //  That subscription for the 'Postgres Scripting Tool'
+        //   Could be a cheap, specific service.
+        //  May also
+
+        // mb-server is going to use bdi-postgres to set things up.
+        // will have various database descriptions that could be plugged in.
+
+        // could have something for a standard web server
+        //  users, content, pages, etc.
+
+
+
+        'get_table_sequences': function(callback) {
+            // could give an abstract table or a table name.
+
+            // will get all the columns, and look at the 'default' value for each.
+            var schema = this.data.get('schema');
+
+            var schema_name = schema.meta.get('name');
+            var database = schema.data.get('database');
+            var table_name = this.meta.get('name');
+            //var res = [];
+
+            this.get_columns_information_schema(function(error, info_sch) {
+                //console.log('info_sch ' + stringify(info_sch));
+
+                // gets lots of info.
+
+                each(info_sch, function(i, v) {
+                    var def = v.column_default;
+                    //console.log('def ' + def);
+
+                    // also the column name.
+
+                    // if it's not null, check for the value.
+
+                    // use a regex to match sequence next val
+
+                    //  don't understand the regclass part.
+                    // nextval('seq_name'::regclass)
+                    //var rx_nv = test = new RegExp('nextval(\'' + , 'g');
+
+                    //var res_item = [];
+
+                    // column name, is pk / pk ordinal, sequence name
+                    //  could possibly get the pk ordinal value using a join in the sql.
+                    //  could possibly run further queries for more info on the column.
+
+                    // though maybe we have that info elswehere and it is not so easy to integrate into this function.
+
+
+                    var rx_nv = /^nextval\('([a-zA-Z0-9_]+)'::regclass\)$/;
+
+                    if (tof(def) == 'string') {
+                        var m = def.match(rx_nv);
+                        //console.log('m ' + stringify(m));
+
+                        if (m) {
+                            var sequence_name = m[1];
+                            console.log('sequence_name ' + sequence_name);
+
+                            res.push([v.column_name, sequence_name]);
+
+                        }
+                    }
+
+                });
+                callback(undefined, res);
+            });
+
+        },
+
+        'get_constraints_metadata': function(callback) {
+
+        },
+
+
+        'get_columns_metadata': function(callback) {
+            console.log('Table Resource get_columns_metadata');
+
+            // Should maybe do a query using the Schema or DB Resource.
+
+            // This should just be about outputting the (useful) metadata as JSON.
+            //  Want to find out more about the constraints that apply to the columns,
+            //   but having the constraints get loaded seems like a useful feature.
+            //   The references can be set up so they point to each other in JavaScript land too.
+
+            // May be good to get more than just the information_schema data here.
+            //  Something more general and usable.
+            //  Would be worth keeping the column metadata similar between different DBIs?
+            //   Or to use the DBI's metadata as available
+            //   But of both?
+
+
+
+
+            var schema = this.data.get('schema');
+            console.log('schema', schema);
+
+            var that = this;
+
+            // Or get the constraints columsn...
+
+            // Need to keep some data in a map.
+            //  Then process that map once we have the data,
+            //   need to work out which columns are PK constraints.
+
+
+            this.get_table_pk_constraints_rows(function(err, pk_constraints) {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log('pk_constraints', pk_constraints);
+
+                    var map_pk_constraints = {};
+
+                    var map_columns_with_pk_constraints = {};
+
+
+
+                    each(pk_constraints, function(i, pk_constraint) {
+                        console.log('pk_constraint', pk_constraint);
+
+                        var constraint_name = pk_constraint.constraint_name;
+                        map_pk_constraints[constraint_name] = pk_constraint;
+
+
+                    });
+
+                    console.log('');
+                    console.log('map_pk_constraints', map_pk_constraints);
+
+
+
+
+
+                    var fns = jsgui.Fns();
+
+                    // and have a map of column constraints.
+
+
+
+                    each(pk_constraints, function(i, pk_constraint) {
+                       console.log('pk_constraint', pk_constraint);
+                        var constraint_name = pk_constraint.constraint_name;
+
+                        fns.push([that, that.get_constraint_columns, [constraint_name], function(err, constraint_columns) {
+                            console.log('constraint_columns', constraint_columns);
+
+                            each(constraint_columns, function(i, constraint_column) {
+                                console.log('constraint_column', constraint_column);
+
+                                var ordinal_position = constraint_column.ordinal_position;
+
+                                var column_name = constraint_column.column_name;
+
+
+
+                                // use ordinal_position in an array of the colummns that apply to a constraint.
+
+
+
+                                // match them up with the constraints.
+                                var constraint_name = constraint_column.constraint_name;
+                                var constraint = map_pk_constraints[constraint_name];
+
+                                // Map that column and having the PK constraint.
+
+                                map_columns_with_pk_constraints[column_name] = map_columns_with_pk_constraints[column_name] || [];
+                                map_columns_with_pk_constraints[column_name].push(constraint);
+
+
+
+
+
+                                console.log('constraint', constraint);
+
+
+
+
+
+
+
+
+                            });
+
+                            // So while we get the constraint columns, we can cross-reference them with the columns
+                            //  Setting some columns as being PKs.
+
+
+
+                        }]);
+                    });
+
+
+
+                    fns.go(function(err, res) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('res', res);
+
+                            console.log('map_columns_with_pk_constraints', map_columns_with_pk_constraints);
+
+                            //throw 'stop';
+
+
+                            // After this, we get the normal columns metadata
+                            //  We can annotate it using the data we have about the PK constraints.
+
+
+                            that.get_columns_information_schema(function(err, columns_information_schema) {
+                                if (err) {
+                                    throw err;
+                                } else {
+                                    console.log('columns_information_schema', columns_information_schema);
+
+                                    // And then we should be able to create abstract columns out of the information_schema.
+                                    var res = [];
+
+
+                                    each(columns_information_schema, function(i, column_information_schema) {
+                                        console.log('column_information_schema', column_information_schema);
+
+
+                                        //var abstract_column = new Abstract.Column({
+                                        //    'information_schema': column_information_schema
+                                        //});
+                                        //column_information_schema
+
+                                        var column_name = column_information_schema.column_name;
+
+                                        var obj_res = {
+                                            'name': column_name,
+                                            'information_schema': column_information_schema
+                                        };
+
+
+
+                                        if (map_columns_with_pk_constraints[column_name]) {
+
+                                            // Could have more than 1 constraints in an array.
+                                            //  Do that later on.
+                                            obj_res.primary_key_constraint = map_columns_with_pk_constraints[column_name][0];
+
+                                        }
+
+
+                                        res.push(obj_res);
+
+
+
+
+                                        // Don't hold onto that data...
+
+
+
+                                    })
+
+                                    callback(null, res);
+
+                                    //
+                                }
+                            });
+
+
+                            //throw 'stop';
+                        }
+                    })
+
+                    //throw 'stop';
+
+
+
+
+                    // Then with that info on the constraints (including names) we get further info on the constraints.
+                    //  need to query to find out what columns they refer to.
+
+                    /*
+                    that.get_constraint_columns(function(err, constraint_columns) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('constraint_columns', constraint_columns);
+
+                            // set up fns to get all of the columns info on those constraints.
+
+
+
+
+                            throw 'stop';
+
+
+
+                        }
+                    })
+                    */
+
+
+
+                }
+            })
+
+
+
+            //throw 'stop';
+
+
+        },
+
+        'get_columns_information_schema': function(callback) {
+            // use a query for this...
+            var schema = this.data.get('schema');
+            var schema_name = schema.meta.get('name');
+
+            var table_name = this.meta.get('name');
+
+
+
+            var sql, that = this;
+            //if (this.current_schema_name) {
+            //	sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + this.current_schema_name + '\';';
+            //
+            //	//sql = 'SELECT exists(SELECT column_name FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + this.current_schema_name + '\' AND column_name =  \'' + column_name + '\') AS "exists";';
+            //} else {
+            //	sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\';';
+            //}
+
+            var database = schema.data.get('database');
+
+
+            console.log('4) table_name ' + table_name);
+            sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND table_schema = \'' + schema_name + '\';';
+
+
+            //var sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\';';
+
+            //console.log('sql ' + sql);
+
+            var res = [];
+            database.execute_query({
+                'sql': sql,
+                'row': function(row) {
+                    //console.log('get_columns_information_schema row ' + (row));
+                    //console.log('get_columns_information_schema row ' + stringify(row));
+                    //res = row;
+                    res.push(row);
+                },
+                'end': function() {
+
+                    callback.call(that, undefined, res);
+
+                },
+                'error': function(error) {
+                    console.log(error);
+                    callback.call(that, error);
+                }
+            });
         },
 		
 		// dbi-postgres will do this, making use of the more basic connector API.

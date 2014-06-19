@@ -1085,8 +1085,9 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			'fields': {
 				// Though it should be able to work as a string too.
 
+                // Won't use automatic assignment right now.
 
-				'schema': Object
+				//'schema': Object
 			},
 			
 			'init': function(spec) {
@@ -1113,6 +1114,32 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
                 // Having a problem with the index by name.
                 //  It could be related to the name being a Data_Value, and it not recognising that value and indexing it as such.
+
+
+                if (spec.schema) {
+
+                    // Throw an error if the spec abstract database already contains a schema with the same name
+                    //  (and it is not this abstract schema?)
+
+
+                    this.set('schema', spec.schema);
+
+                    var schema_tables = spec.schema.get('tables');
+                    console.log('schema_tables.length()', schema_tables.length());
+
+                    var existing_table = schema_tables.get(spec.name);
+                    if (existing_table) {
+                        //console.log('existing_schema', stringify(existing_schema));
+                        console.trace();
+                        throw 'Not expecting existing table';
+                    } else {
+                        schema_tables.push(this);
+                    }
+                    // Can also check the database to see if it contains the abstract schema.
+
+                    // if it does not have it, push
+
+                }
 
 				this.set('columns', new Collection({
 					'index_by': 'name'
@@ -1442,7 +1469,21 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				//   Create a column with a foreign key, add it to a table, and it automatically adds the foreign key constraint to the table
 				//   Want to minimise the number of statements needed to create something.
 
-				
+				// This used to have the ability to create an Abstract Column out of information_schema
+                //  That would be very useful to put back.
+
+
+                var t_spec = tof(spec);
+                var arr_spec;
+
+                var table;
+
+                var name, data_type, data_type_length;
+
+                var pk_constraint;
+
+
+
 
 
 
@@ -1478,18 +1519,33 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 
 				
 
-				var t_spec = tof(spec);
-				var arr_spec;
 
-				var table;
-
-				var name, data_type, data_type_length;
-
-				var pk_constraint;
 
 				// pk_constraint, data_type, constraints, column_constraints, information_schema, is_unique
 
 				if (t_spec == 'object') {
+
+                    if (spec.information_schema) {
+                        var information_schema = spec.information_schema;
+
+                        console.log('information_schema', information_schema);
+                        //
+
+                        name = information_schema.name;
+                        data_type = information_schema.data_type;
+
+                        // But the information schema does not provide the info about if it is a primary key column.
+                        //  There will be a constraint in the table, the reference will be set up
+                        //   (maybe while loading constraints)
+
+
+
+
+
+
+                        //throw 'stop';
+                    }
+
 					// get properties from the object, look for the array arr_spec
 					if (spec.arr_spec) arr_spec = spec.arr_spec;
 
@@ -2458,6 +2514,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 					
 					
 					var ob = that.get('order_by');
+
+                    console.log('');
+                    console.log('ob', ob);
+                    console.log('tof ob', tof(ob));
 					// order_by seems naturally an array.
 					
 					if (tof(ob) == 'array') {
@@ -2466,8 +2526,8 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 						if (ob.length > 0) {
 							res.push(' ORDER BY ');
 							
-							var ob_sig = get_item_sig(ob);
-							
+							var ob_sig = get_item_sig(ob, 1);
+							console.log('ob_sig', ob_sig);
 							
 							if (ob_sig == '[s,s]') {
 								res.push(ob[0]);
@@ -2668,13 +2728,30 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				var str_lt, str_rt;
 				
-				
-				if (tof(this.get('left_table')) == 'string') {
-					str_lt = this.get('left_table');
-				};
-				if (tof(this.get('right_table')) == 'string') {
-					str_rt = this.get('right_table');
-				}
+				//var tlt = tof(this.get('left_table'));
+                //console.log('tlt', tlt);
+
+                var lt = this.get('left_table');
+                var rt = this.get('right_table');
+
+                if (lt.value) {
+                    str_lt = lt.value();
+                } else {
+                    str_lt = lt;
+                }
+
+
+                if (rt.value) {
+                    str_rt = rt.value();
+                } else {
+                    str_rt = rt;
+                }
+				//if (tlt == 'string') {
+				//	str_lt = this.get('left_table');
+				//};
+				//if (tof(this.get('right_table')) == 'string') {
+				//	str_rt = this.get('right_table');
+				//}
 				
 				res.push(str_lt);
 				
