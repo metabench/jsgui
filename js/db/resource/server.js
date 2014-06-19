@@ -95,19 +95,17 @@ define(["../../core/jsgui-lang-enh", "../../web/resource", "../mongo/resource/al
 
 			console.log('starting server resource');
 
-
-
 			var flds = this.fields();
-			console.log('flds ' + stringify(flds));
+			//console.log('flds ' + stringify(flds));
 
 			//throw '2) stop';
 			var host = this.meta.get('host').value();
 			var port = this.meta.get('port').value();
 			var type = this.meta.get('type').value();
 
-			console.log('this._ ' + stringify(this._));
+			//console.log('this._ ' + stringify(this._));
 
-			console.log('tof port ' + tof(port));
+			//console.log('tof port ' + tof(port));
 			console.log('host ' + stringify(host));
 			console.log('host ' + (host));
 			console.log('port ' + stringify(port));
@@ -118,14 +116,13 @@ define(["../../core/jsgui-lang-enh", "../../web/resource", "../mongo/resource/al
 			//   It will have a specific_server property.
 			//    What type of server it is will depend on the server type that was specified.
 			//  The server, and specific_server, will both be resources.
-			console.log('type', type);
+			//console.log('type', type);
 			var specific;
 			if (type == 'mongo') {
 				specific = this._specific = new Mongo.Server({
 					'host': host,
 					'port': port
 				});
-
 			}
 
 			specific.start(function(err, res_start) {

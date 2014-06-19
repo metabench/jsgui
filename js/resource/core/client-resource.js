@@ -142,12 +142,12 @@ define(['../../web/jsgui-html-enh', './resource'],
 				json_url = url;
 			}
 
-			console.log('json_url', json_url);
+			//console.log('json_url', json_url);
 			jsgui.http(json_url, function(err, res) {
 				if (err) {
 					callback(err);
 				} else {
-					console.log('res', res);
+					//console.log('res', res);
 					callback(null, res);
 				}
 			})

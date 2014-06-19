@@ -1092,7 +1092,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 			
 			'init': function(spec) {
 
-                console.log('init Table');
+                console.log('init Table Abstract');
 
 				// Polymorphism in how this gets specified to the constructor?
 

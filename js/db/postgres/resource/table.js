@@ -25,6 +25,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             this.meta.set('type_levels', ['table', 'rdb', 'postgres']);
 
+            console.log('init Table Resource');
+
             //console.log('spec.resource', spec.resource);
             //throw 'stop';
 
@@ -116,9 +118,17 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
         'abstract': function(callback) {
             // This may need to be asynchronous as it may need to load data.
 
-            console.log('Table Resource abstract');
-
             var name = this.meta.get('name'), that = this;
+
+            // So, while this data is in the midst of being obtained, it may be asked for it again.
+            //  Should be handling that possibility.
+
+
+
+
+            console.log('Table: ' + name + ', Resource.abstract ');
+
+
 
             if (this._abstract) {
                 callback(null, this._abstract);
