@@ -2087,10 +2087,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             // Not so sure about loading the tables here.
             //  Could be in the Schema Resource.
 
-
-
-
-
             /*
             this.load_abstract_tables(res, function(err, res_abstract_tables) {
                 if (err) {
@@ -2167,7 +2163,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                 } else {
                     console.log('schema_names', schema_names);
 
-
                     // We load the abstract schemas.
                     //  All of them get loaded as a Collection.
 
@@ -2190,17 +2185,13 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                             callback(null, true);
                         }
-                    })
-
-
+                    });
 
                 }
             });
         },
 
         // Will take some more work to ensure that schema resources are loaded, and gracefully handle reloading them.
-
-
 
         // make into sing/plur function?
         'load_schema_resources': function(callback) {
@@ -2315,11 +2306,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
                     callback(null, true);
                 }
-            })
-
-
-
-
+            });
 
         },
 
@@ -2502,6 +2489,29 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 			});
 			//callback(null, true);
 		},
+
+        'ensure': function(def, callback) {
+            console.log('Database Resource ensure def', def);
+
+            // load up the existing abstract db.
+
+            // create a new (target) abstract db based on the definition given
+
+            // compare the two, generating abstract SQL commands (an Abstract Syntax Tree) that changes the existing db into the target one
+
+            // carry out those SQL commands
+
+            // update / replace the current abstract DB (based on verified changes, or from reloading it).
+
+            // Could try loading a new abstract DB, and checking if that matches the definition given.
+            //  If it does not, throw an exception.
+
+
+
+
+
+            throw 'stop';
+        },
 		
 		// dbi-postgres will do this, making use of the more basic connector API.
 		

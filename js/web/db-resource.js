@@ -96,6 +96,55 @@ define(["./jsgui-html", "../resource/core/resource"],
                         // Don't want to load the schema resources too many times, or have them properly overwrite.
 
 
+                        // db.ensure(def)
+
+                        //  The definition given would not have to be specific to Postgres.
+                        //   Would be a fairly simple declarative definition of a database.
+
+                        var db_def = {
+                            'tables': [
+                                {
+                                    'name': 'users',
+                                    'columns': [
+                                        //['id', 'int', 'autoincrement', 'pk'],
+                                        ['id', 'serial', 'pk'],
+                                        ['username', 'char', 24],
+                                        ['passwordhash', 'char', 128]
+                                    ]
+                                },
+
+                                {
+                                    'name': 'roles',
+                                    'columns': [
+                                        //['id', 'int', 'autoincrement', 'pk'],
+                                        ['id', 'serial', 'pk'],
+                                        ['name', 'char', 24]
+                                    ]
+                                },
+
+                                {
+                                    'name': 'user_roles',
+                                    'columns': [
+                                        //['id', 'int', 'autoincrement', 'pk'],
+                                        ['id', 'serial', 'pk'],
+                                        ['user_id', 'int', 'fk-users'],
+                                        ['role_id', 'int', 'fk-roles']
+                                    ]
+                                }
+                            ]
+                        };
+
+                        db.ensure(db_def, function(err, res) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res', res);
+                            }
+                        })
+
+
+
+                        /*
                         db.abstract(function(err, res_abstract) {
                             if (err) {
                                 throw err;
@@ -129,8 +178,94 @@ define(["./jsgui-html", "../resource/core/resource"],
                                     //console.log('v', stringify(v));
 
                                     var name = v.get('name').value();
-                                    //console.log('name', name);
+                                    console.log('name', name);
+
+                                    // We can also have a look into the tables.
+
+                                });
+
+                                // I think the change command generator would be an advanced piece of abstract functionality.
+                                //
+
+                                var existing_public_schema = public_schema;
+
+                                // Problem here...
+                                //  Not specifically using Postgres.
+                                //  Need to send params to another layer.
+
+                                // We should get the database resource to do this.
+
+                                // the database resource ensure method.
+
+
+
+
+
+                                var target_public_schema = new Abstract.Schema({
+                                    'tables': [
+                                        {
+                                            'name': 'users',
+                                            'columns': [
+                                                //['id', 'int', 'autoincrement', 'pk'],
+                                                ['id', 'serial', 'pk'],
+                                                ['username', 'char', 24],
+                                                ['passwordhash', 'char', 128]
+                                            ]
+                                        },
+
+                                        {
+                                            'name': 'roles',
+                                            'columns': [
+                                                //['id', 'int', 'autoincrement', 'pk'],
+                                                ['id', 'serial', 'pk'],
+                                                ['name', 'char', 24]
+                                            ]
+                                        },
+
+                                        {
+                                            'name': 'user_roles',
+                                            'columns': [
+                                                //['id', 'int', 'autoincrement', 'pk'],
+                                                ['id', 'serial', 'pk'],
+                                                ['user_id', 'int', 'fk-users'],
+                                                ['role_id', 'int', 'fk-roles']
+                                            ]
+                                        }
+                                    ]
+                                });
+
+                                console.log('target_public_schema', target_public_schema);
+                                throw 'stop';
+
+
+
+
+
+
+                                abstract_postgres_comparison_change_command_generator.generate(existing_public_schema, function(err, change_commands) {
+
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('change_commands', change_commands);
+
+                                    }
                                 })
+
+
+
+
+
+                                // 19/06/2014
+                                //  It has been hard work making the Abstract DB and the Resource system load together.
+                                //  I have not opted for a loading algorithm that's in one place, but have exploited network and tree effects.
+                                //
+                                //  Now that the abstract resource has loaded, we can use the compare and change generator to update the active database.
+
+
+
+
+
 
                                 // Should probably get rid of most / all other logging.
                                 //  Then have logging for key initializations / abstract calls.
@@ -142,9 +277,11 @@ define(["./jsgui-html", "../resource/core/resource"],
                                 // Seems have been putting too many tables into the abstract schema.
 
 
-                                throw 'stop';
+                                //throw 'stop';
                             }
                         })
+
+                        */
 
 
 
@@ -307,14 +444,14 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                     });
                     */
-					console.log('pre go');
+					//console.log('pre go');
 
 
 					fns.go(function(err, res) {
 						if (err) {
 							throw err;
 						} else {
-							console.log('cb web resource');
+							//console.log('cb web resource');
 							callback(null, true);
 						}
 					});
