@@ -176,6 +176,12 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 		'Database': Data_Object.extend({
 			'init': function(spec) {
 				this._super(spec);
+
+                // Want to be able to specify the whole DB using JSON / POJO.
+                //  Won't necessarily have schemas in there, it could be a spec that is not specific to Postgres or DBs that
+                //   have that 'schemas' level between database and table.
+
+
 				
 				this.set('name', spec.name);
 				
@@ -251,6 +257,26 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 				this.set('schemas', new Collection({
 					'index_by': 'name'
 				}));
+
+                // Schemas could be given as an array, maybe object too.
+                //  Perhaps Collection.
+
+                // We may be receiving the tables directly in the spec.
+                //  If so, we assume it's within a public schema.
+
+                //console.log('spec.tables', spec.tables);
+                //console.log('spec.schemas', spec.schemas);
+
+                if (spec.tables && !spec.schemas) {
+                    //console.log('!!!!!!!');
+                    spec.schemas = [{
+                        'name': 'public',
+                        'tables': spec.tables
+                    }];
+                }
+
+                //console.log('* spec', spec);
+                //throw 'stop';
 				
 				if (tof(spec.schemas) == 'array') {
 					this.get('schemas').load_array(spec.schemas);
@@ -369,8 +395,18 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 				}));
 
                 // Then when a table is added to that collection, it should index it properly.
-				
+
+                // Using load_array...
+                //  Does that create them as Data_Objects?
+                //  They may not be given in the JSON as
+
+
 				if (tof(spec.tables) == 'array') {
+
+                    // But the tables are of a specific type.
+                    //  We could make a new shorthand, but loading the tables one by one using the Abstract Table constructor is the way to do this.
+
+
 					this.get('tables').load_array(spec.tables);
 				}
 

@@ -1747,7 +1747,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
         */
 		'load_array': function(arr) {
 			var that = this;
-			//console.log('load_array arr ' + stringify(arr));
+			console.log('load_array arr ' + stringify(arr));
 			// there could be a data type that this is expecting... a constraint?
 			//  could have a data type constructor.
 			// so, if the item given is not a Data_Object, we can try making the Data_Object, and putting it in place.

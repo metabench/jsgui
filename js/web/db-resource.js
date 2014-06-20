@@ -102,6 +102,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                         //   Would be a fairly simple declarative definition of a database.
 
                         var db_def = {
+                            'name': 'docs',
                             'tables': [
                                 {
                                     'name': 'users',

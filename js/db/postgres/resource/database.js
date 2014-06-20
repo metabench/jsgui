@@ -9,8 +9,8 @@ if (typeof define !== 'function') {
 };
 
 //define("Postgres_Database", ["exports", "../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../../../resource/core/collection',
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../../../resource/core/collection',
-	'./schema'], function(jsgui, pg, Abstract, Resource, Resource_Collection, Schema_Resource) {
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../abstract/comparison-based-change-generator', '../../../resource/core/resource', '../../../resource/core/collection',
+	'./schema'], function(jsgui, pg, Abstract, abstract_comparison_based_change_generator, Resource, Resource_Collection, Schema_Resource) {
     
 	
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp;
@@ -2495,22 +2495,95 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
             // load up the existing abstract db.
 
-            // create a new (target) abstract db based on the definition given
-
-            // compare the two, generating abstract SQL commands (an Abstract Syntax Tree) that changes the existing db into the target one
-
-            // carry out those SQL commands
-
-            // update / replace the current abstract DB (based on verified changes, or from reloading it).
-
-            // Could try loading a new abstract DB, and checking if that matches the definition given.
-            //  If it does not, throw an exception.
 
 
+            this.abstract(function(err, existing_abstract_database) {
+                if (err) {
+                    throw err;
+                } else {
+
+                    console.log('existing_abstract_database', existing_abstract_database);
+
+                    // create a new (target) abstract db based on the definition given
+
+                    var target_abstract_database = new Abstract.Database(def);
+
+                    console.log('target_abstract_database', target_abstract_database);
+
+                    var target_abstract_schemas = target_abstract_database.get('schemas');
+                    console.log('target_abstract_schemas.length()', target_abstract_schemas.length());
+
+                    // Then put it in the change generator...
+                    //  Comparison_Change_Generator
+                    // Will go into more detail on the rPostgres change generators, such as to do with CRUD.
+                    //  It will be cool to control them using Resources.
+
+
+                    //
+
+                    /*
+
+                    abstract_comparison_based_change_generator.generate(existing_abstract_database, target_abstract_database, function(err, changes) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('changes', changes);
+                        }
+
+                    });
+
+                    */
+
+                    var generated_changes = abstract_comparison_based_change_generator.generate(existing_abstract_database, target_abstract_database);
+
+                    console.log('generated_changes', generated_changes);
+
+                    // For the moment make the comparison based change generator compare abstract databases.
 
 
 
-            throw 'stop';
+
+
+
+
+
+                    // The Abstract Postgres Database system should be able to construct itself from the definition given here.
+                    //  The definition may not have mentioned any 'schema', it will (possibly amend the definition and) assume the public schema.
+
+
+
+                    // That def may not refer to the Postgres system.
+                    //  If not, the def could be made to include a Public schema.
+                    //   Perhaps the system can send back a Correction object.
+
+
+
+
+
+                    // compare the two, generating abstract SQL commands (an Abstract Syntax Tree) that changes the existing db into the target one
+
+                    // carry out those SQL commands
+
+                    // update / replace the current abstract DB (based on verified changes, or from reloading it).
+
+                    // Could try loading a new abstract DB, and checking if that matches the definition given.
+                    //  If it does not, throw an exception.
+
+                    throw 'stop';
+
+
+                }
+            })
+
+
+
+
+
+
+
+
+
+
         },
 		
 		// dbi-postgres will do this, making use of the more basic connector API.
