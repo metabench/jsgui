@@ -896,6 +896,35 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../abstract/c
         // load abstract sequence and load abstract sequences.
         // will select from the INFORMATION_SCHEMA.sequences view, then initialize the abstract sequence objects from them.
 
+        // I think we now have a better query to get DB sequence data:
+        //  (perhaps it apples to a schema though)
+
+        /*
+
+         SELECT t.relname as related_table,
+         a.attname as related_column,
+         s.relname as sequence_name
+         FROM pg_class s
+         JOIN pg_depend d ON d.objid = s.oid
+         JOIN pg_class t ON d.objid = s.oid AND d.refobjid = t.oid
+         JOIN pg_attribute a ON (d.refobjid, d.refobjsubid) = (a.attrelid, a.attnum)
+         JOIN pg_namespace n ON n.oid = s.relnamespace
+         WHERE s.relkind     = 'S'
+         AND n.nspname     = 'public'
+         */
+
+        // Properly modelling the sequences will be necessary for the structure update system dor the DBs.
+        //  Some features will be trickier in particular sql dialects.
+
+        // We can define serial as being an int (not null) with the sequence also being part of the table.
+        //  Sequential id is considered a feature of the column but is implemented using the table.
+        // Will load sequences like above from within the schema.
+
+
+
+
+
+
         'load_sequences_rows': function(schema, callback) {
 
             var schema_name;
@@ -913,6 +942,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../abstract/c
             // put together the SQL query.
 
             // use the abstract select statement.
+
+
 
             var sel = new Abstract.Select({
                 'select_list': '*',
@@ -2539,7 +2570,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../abstract/c
                     console.log('generated_changes', generated_changes);
 
                     // For the moment make the comparison based change generator compare abstract databases.
-
+                    throw 'stop';
 
 
 
@@ -2569,7 +2600,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../abstract/c
                     // Could try loading a new abstract DB, and checking if that matches the definition given.
                     //  If it does not, throw an exception.
 
-                    throw 'stop';
+                    //throw 'stop';
 
 
                 }

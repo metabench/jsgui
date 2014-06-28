@@ -7,6 +7,8 @@ if (typeof define !== 'function') {
 //  The Web DB interface will be the basics for what is needed to run a website.
 //   Web DB resource will not have DB implementation specific code.
 
+// The aim of this is to use some quite general purpose code for making a website's DB, and then exposing it as a Resource.
+
 
 
 
@@ -109,8 +111,8 @@ define(["./jsgui-html", "../resource/core/resource"],
                                     'columns': [
                                         //['id', 'int', 'autoincrement', 'pk'],
                                         ['id', 'serial', 'pk'],
-                                        ['username', 'char', 24],
-                                        ['passwordhash', 'char', 128]
+                                        ['username', 'character', 24],
+                                        ['passwordhash', 'character', 128]
                                     ]
                                 },
 
@@ -119,7 +121,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                                     'columns': [
                                         //['id', 'int', 'autoincrement', 'pk'],
                                         ['id', 'serial', 'pk'],
-                                        ['name', 'char', 24]
+                                        ['name', 'character', 24]
                                     ]
                                 },
 
@@ -132,7 +134,8 @@ define(["./jsgui-html", "../resource/core/resource"],
                                         ['role_id', 'int', 'fk-roles']
                                     ]
                                 }
-                            ]
+                            ],
+                            'crud': true
                         };
 
                         db.ensure(db_def, function(err, res) {

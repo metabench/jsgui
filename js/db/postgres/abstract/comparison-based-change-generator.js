@@ -21,6 +21,21 @@ if (typeof define !== 'function') {
 // Naming of them... they won't exactly be THE classes to do this, but maybe earlier versions.
 //  Name them sensibly and then replace in the future.
 
+// This is part of quite a lot of code that enables easier access to various systems such as databases.
+
+
+// A transformation before the comparison?
+//  Postgres has syntax such as 'serial' which is easy to specify but has got more complex internal representation.
+//  I propose to transform the target abstract db object so that it corresponds with the internal Postgres representation.
+
+// Another way is through the use of improved comparisons.
+//  Both improved comparisons and target transformation would solve the problem.
+//  Better to use imrpved comparisons for the moment.
+
+
+
+
+
 
 
 define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
@@ -67,6 +82,18 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
 
 
     var gc_database = function(existing, target) {
+
+        // Clone the existing?
+        // Do that at which levels?
+
+        // Will want to do a transformation on the existing (and target) db to make it deal with things in a way that's more internal to Postgres.
+
+
+        // Want to make sure we have loaded the existing abstract db.
+
+
+
+
         var map_existing_schemas = {};
         var map_target_schemas = {};
 
@@ -136,8 +163,13 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
             var item_gc_res = gc_schema(existing_schema, target_schema);
 
             console.log('schema item_gc_res', item_gc_res);
+            throw 'stop';
 
         });
+
+        console.log('map_common', map_common);
+
+        throw 'stop';
 
 
 
@@ -181,8 +213,8 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
 
 
 
-            console.log('target v', v);
-            console.log('tof(v)', tof(v));
+            console.log('* target v', v);
+            console.log('* tof(v)', tof(v));
 
             // Should be .get with an Abstract Table (it's a Data_Object)
 
@@ -232,6 +264,7 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
             var item_gc_res = gc_table(existing_table, target_table);
 
             console.log('table item_gc_res', item_gc_res);
+            throw 'stop';
 
         });
 
@@ -293,17 +326,17 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
         console.log('map_target_columns', map_target_columns);
 
 
-        var map_missing = {};
-        var map_removed = {};
-        var map_common = {};
+        var map_missing_columns = {};
+        var map_removed_columns = {};
+        var map_common_columns = {};
 
         each(map_existing_columns, function(v, i) {
             console.log('1) i', i);
 
             if (map_target_columns[i]) {
-                map_common[i] = true;
+                map_common_columns[i] = true;
             } else {
-                map_removed[i] = v;
+                map_removed_columns[i] = v;
             }
         });
 
@@ -313,15 +346,15 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
             if (map_existing_columns[i]) {
                 //map_common[i] = v;
             } else {
-                map_missing[i] = v;
+                map_missing_columns[i] = v;
             }
         });
 
-        console.log('map_missing', map_missing);
-        console.log('map_removed', map_removed);
-        console.log('map_common', map_common);
+        console.log('map_missing_columns', map_missing_columns);
+        console.log('map_removed_columns', map_removed_columns);
+        console.log('map_common_columns', map_common_columns);
 
-        each(map_common, function(v, column_name_in_common) {
+        each(map_common_columns, function(v, column_name_in_common) {
             console.log('column_name_in_common', column_name_in_common);
 
             var existing_column = map_existing_columns[column_name_in_common];
@@ -330,8 +363,38 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
             var item_gc_res = gc_column(existing_column, target_column);
 
             console.log('column item_gc_res', item_gc_res);
-
+            throw 'stop';
         });
+
+        // Also need to deal with the table's constraints.
+        //  Compare them
+
+
+        var existing_constraints = existing.get('constraints');
+        var target_constraints = target.get('constraints');
+
+        console.log('existing_constraints', existing_constraints);
+        console.log('target_constraints', (target_constraints));
+
+        console.log('existing_constraints.length()', existing_constraints.length());
+        console.log('target_constraints.length()', target_constraints.length());
+
+        // Returns the differences and the changes?
+        //  Perhaps we need to modularise out the comparisons of the abstract objects.
+        //  Have more of the processing capability within abstract objects themselves, so the comparisons get done elsewhere.
+
+        // Once the comparisons are done, we generate the changes.
+
+
+
+
+
+
+        throw 'stop';
+
+        // Then once we have the columns in common, run the generating comparerer (gc) for the columns
+
+
 
 
 
@@ -341,7 +404,122 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
 
     }
 
+    // Will need to deal with constraints as well.
+    //  I think they will get applied after columns?
+
     var gc_column = function(existing, target) {
+        // Then when comparing the columns, need to compare a few things...
+        //  When an item has changed, need to not the 'change' rather than it being 'missing [from target]' or 'removed'
+
+        // Data types
+
+        console.log('gc_column');
+        console.log('existing', existing);
+        console.log('target', target);
+
+        // data type
+        // data type lengths
+
+        // PK? FK?
+        //  Those could actually be listed under constraints, but it may be best to do the constraint changes in a coordinated way with the column changes.
+        //  For the moment, this will be outputting described differences.
+        //   A different part of the system will be generating the change instructions from the described differences.
+
+        var existing_data_type = existing.get('data_type').value();
+        var target_data_type = target.get('data_type').value();
+
+        console.log('existing_data_type', existing_data_type);
+        console.log('target_data_type', target_data_type);
+
+        // skipped comparison status...
+        //  can skip the comparison when the data type is tricky or the specific comparison has not been implemented.
+        // partial test success status? for when we know there is more that could be tested but it passes some rudimentary tests?
+
+
+        var data_type_res;
+        if (existing_data_type == target_data_type) {
+            data_type_res = 'same'
+        } else {
+            console.log('');
+            console.log('target_data_type', target_data_type);
+
+            if (target_data_type == 'serial') {
+                if (existing_data_type == 'integer') {
+                    data_type_res = 'same';
+                } else {
+                    data_type_res = 'change';
+                }
+            } else {
+                data_type_res = 'change';
+            }
+        }
+
+
+        var data_type_length_res;
+
+        var d_existing_data_type_length = existing.get('data_type_length');
+        var d_target_data_type_length = target.get('data_type_length');
+
+        var existing_data_type_length, target_data_type_length;
+
+        if (d_existing_data_type_length) existing_data_type_length = d_existing_data_type_length.value();
+        if (d_target_data_type_length) target_data_type_length = d_target_data_type_length.value();
+
+        if (existing_data_type_length && target_data_type_length) {
+
+
+            if (existing_data_type_length == target_data_type_length) {
+                data_type_length_res = 'same'
+            } else {
+
+                // There will be some exceptions.
+                //  We may have a serial field. Need to deal with that.
+                //  Perhaps there can be some preprocessing where the serial field changes into an integer and
+                //   makes the nessary sequence / constraint.
+
+
+
+
+
+                data_type_length_res = 'change'
+            }
+        }
+
+        /*
+        if (existing_data_type_length && )
+
+        console.log('existing_data_type_length', existing_data_type_length);
+        console.log('target_data_type_length', target_data_type_length);
+
+        var data_type_length_res;
+        if (existing_data_type_length == target_data_type) {
+            data_type_length_res = 'same'
+        } else {
+            data_type_length_res = 'change'
+        }
+        */
+
+        var res = {
+            'data_type': data_type_res//,
+            //'data_type_length': data_type_length_res
+        }
+
+        if (data_type_length_res) {
+            res.data_type_length = data_type_length_res;
+        }
+
+        return res;
+
+
+        // Data_Value comparison / equals?
+
+
+
+
+
+
+
+
 
     }
 

@@ -279,7 +279,20 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
                 //throw 'stop';
 				
 				if (tof(spec.schemas) == 'array') {
-					this.get('schemas').load_array(spec.schemas);
+                    var schemas = this.get('schemas');
+					//this.get('schemas').load_array(spec.schemas);
+                    each(spec.schemas, function(spec_schema, i) {
+                        var tss = tof(spec_schema);
+                        if (tss == 'object') {
+                            //schemas
+                            var abstract_schema = new Abstract.Schema(spec_schema);
+                            schemas.push(abstract_schema);
+                        } else {
+                            console.log('tss', tss);
+                            throw 'NYI';
+                        }
+                    });
+
 				}
 				
 				//this.set('schemas', spec.schemas || []);
@@ -394,20 +407,39 @@ define(["../../../core/jsgui-lang-enh"], function(jsgui) {
 					'index_by': 'name'
 				}));
 
+                this.set('sequences', new Collection({
+                    'index_by': 'name'
+                }));
+
+
+
                 // Then when a table is added to that collection, it should index it properly.
 
                 // Using load_array...
                 //  Does that create them as Data_Objects?
                 //  They may not be given in the JSON as
 
+                // Need to load up the sequences from the spec too.
+
+
 
 				if (tof(spec.tables) == 'array') {
-
+                    var tables = this.get('tables');
                     // But the tables are of a specific type.
                     //  We could make a new shorthand, but loading the tables one by one using the Abstract Table constructor is the way to do this.
+                    each(spec.tables, function(spec_table, i) {
+                        var tst = tof(spec_table);
 
+                        if (tst == 'object') {
+                            var abstract_table = new Abstract.Table(spec_table);
+                            tables.push(abstract_table);
+                        } else {
+                            console.log('tst', tst);
+                            throw 'Not yet implemented'
+                        }
+                    });
 
-					this.get('tables').load_array(spec.tables);
+					//this.get('tables').load_array(spec.tables);
 				}
 
                 if (spec.database) {
@@ -1266,7 +1298,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 							'table': that
 						});
 						console.log('column', column);
-                        throw 'stop';
+                        //throw 'stop';
 
 
                         // Pushing the column is a problem.
@@ -1646,7 +1678,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
                         //  (and it is not this abstract schema?)
 
 
-                        this.set('table', spec.table);
+                        table = this.set('table', spec.table);
 
                         var table_columns = spec.table.get('columns');
                         //console.log('table_columns.length()', table_columns.length());
@@ -2244,6 +2276,59 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				// Loading abstract functions will get more complicated.
 				//  Being able to parse statements would be very interesting!!!
+
+                // (Table)
+                // Column that it refers to
+
+                // Related table, related column, sequence name
+                //  perhaps mor edata such as what it starts at, how much it increments, max value.
+
+                console.log('Abstract Sequence init spec', spec);
+
+                var schema = spec.schema;
+
+                // Will need to get the abstract items out of the schema for this sequence,
+                //  get given names as text but we use references to objects here.
+
+                var sequence_name = spec.sequence_name;
+
+                this.set('name', sequence_name);
+
+                var related_table_name = spec.related_table;
+                console.log('related_table_name', related_table_name);
+
+                var related_column_name = spec.related_column;
+                console.log('related_column_name', related_column_name);
+
+
+                var schema_tables = schema.get('tables');
+
+                console.log('schema_tables', schema_tables);
+
+                // Tables have not been loaded yet?
+                var related_table = schema_tables.get(related_table_name);
+
+                var related_column = related_table.get('columns').get(related_column_name);
+
+                console.log('related_table', related_table);
+
+                console.log('related_column', related_column);
+
+                // Only really need to store the column as the column has the reference to the table.
+                //  Store as related_table or related_column?
+                //  To show that these are not actually part of the sequence or held by the sequence?
+
+                this.set('table', related_table);
+                this.set('column', related_column);
+
+
+
+
+
+
+
+                //throw 'stop';
+
 				
 				
 				
@@ -2253,7 +2338,11 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 				
 				
-			}
+			},
+
+            toString: function() {
+                return 'SEQUENCE';
+            }
 		}),
 		
 		
@@ -2338,6 +2427,12 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				
 			}
 		}),
+
+        // Difference between Column Constraint and Table Constraint sometimes not worth considering?
+        //  The constraints get loaded in for the tables, they are parts of the tables, so in that way they are table constraints.
+
+
+
 		
 		/*
 		'Table_Constraint': Class.extend({
@@ -2974,11 +3069,7 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 	//  A nice database capability should be good for administering and displaying art and music.
 	//  The middleware will be very useful for supporting a fair few things.
 	//  The versitility at this stage will allow various things to be set up very quickly, with the repetitive writing of database functions done automatically.
-	
-	
-	
-	
-	
+
 	
 	
 	var acc = Abstract.Column_Constraint;
@@ -3006,6 +3097,10 @@ Read more: http://www.eioba.com/a/1ign/a-basic-introduction-to-postgres-stored-p
 				//console.log('spec.column', spec.column);
 				this.set('columns', spec.column);
 			}
+
+            // Not sure how primary key can both be a table constraint or colum constraint
+
+            
 
 
 			
@@ -3165,6 +3260,11 @@ OWNER TO postgres;
 			
 			// better to make this have a collection of columns, but able to hold a column name.
 			//  will be a modification before long.
+
+            // has a name as well...
+
+            console.log('spec', spec);
+            throw 'stop';
 			
 			this.load_from_spec(spec, ['column_name']);
 			
@@ -3199,6 +3299,23 @@ OWNER TO postgres;
 			return res.join('');
 		}
 	});
+
+    // Just make a constrinant?
+    //  Give it the definition and it creates the right constraint.
+
+
+
+
+    Abstract.make_constraint = function(spec) {
+        console.log('make_constraint spec', spec);
+
+        if (spec.constraint_type == 'PRIMARY KEY') {
+            return new acc.Primary_Key(spec);
+
+        }
+
+        //throw 'stop';
+    }
 		
 	
 	return Abstract;

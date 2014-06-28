@@ -214,7 +214,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
                             if (err) {
                                 throw err;
                             } else {
-                                //console.log('metadata', metadata);
+                                console.log('metadata', metadata);
+                                //throw 'stop';
 
                                 //console.log('metadata', stringify(metadata));
 
@@ -258,6 +259,58 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 
 
                                 });
+
+                                // Also needs to load up the Abstract Constraint objects.
+                                //  Could use a Constraint Factory if there are different types of constraints to be built here.
+
+                                var constraints = metadata.constraints;
+
+                                each(constraints, function(i, constraint) {
+                                    //console.log('column', column);
+                                    //throw 'stop';
+
+                                    // However, the abstract column should have a reference to the abstract table.
+                                    constraint.table = abstract_table;
+
+                                    // Need to see if we actually need to make a new Abstract Column.
+                                    //  Perhaps it already exists.
+                                    //   However, would it be getting made with more metadata here?
+
+
+
+                                    var abstract_constraint = Abstract.make_constraint(constraint);
+
+                                    // But it's a column constraint?
+
+                                    console.log('abstract_constraint', abstract_constraint);
+
+                                    var abstract_table_constraints = abstract_table.get('constraints');
+
+
+                                    abstract_table_constraints.push(abstract_constraint);
+
+                                    console.log('abstract_table_constraints.length()', abstract_table_constraints.length());
+
+                                    //throw 'stop;'
+
+
+
+
+                                    //var existing_column = abstract_table.get('columns').get(column.name);
+                                    //var abstract_column;
+                                    //if (!existing_column) {
+                                    //    abstract_column = new Abstract.Column(column);
+                                    //} else {
+                                    //    abstract_column = existing_column;
+                                    //}
+                                });
+                                // and the constraints could be named.
+
+
+
+
+
+
 
                                 callback(null, abstract_table);
 
@@ -932,6 +985,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
             //   Or to use the DBI's metadata as available
             //   But of both?
 
+            // The columns metadata could also include data about sequences.
+
+
+
 
 
 
@@ -1491,7 +1548,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../reso
 					
 				}
 			});
-		},
+		}
 		
 		// could be an abstract function
 		//  or abstract generation. abstract-postgres-gen?
