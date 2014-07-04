@@ -1,5 +1,7 @@
 /**
  * Created by James on 28/06/2014.
+ *
+ * // Both as a column constraint as and as a table constraint?
  */
 
 
@@ -20,23 +22,18 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     //var Schema = require('./schema');
 
-    var Exists = Data_Object.extend({
+    var Schema = Data_Object.extend({
         'init': function(spec) {
-            this._super(spec);
-            this.set('subquery', spec.subquery);
-        },
-        'toString': function() {
-            var res = [];
-            res.push('EXISTS (');
-            res.push(this.get('subquery').toString());
-            res.push(')');
-            return res.join('');
+            // schemas have collections of other things.
+
+
         }
 
-    });
+
+    })
 
 
-    return Exists;
+    return Schema;
 });
 
 

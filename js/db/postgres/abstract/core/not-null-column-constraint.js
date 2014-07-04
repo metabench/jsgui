@@ -1,5 +1,7 @@
 /**
  * Created by James on 28/06/2014.
+ *
+ * // Both as a column constraint as and as a table constraint?
  */
 
 
