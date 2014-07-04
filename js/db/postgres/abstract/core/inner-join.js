@@ -45,7 +45,6 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
         },
         'toString': function() {
             var res = [];
-
             var str_lt, str_rt;
 
             //var tlt = tof(this.get('left_table'));
