@@ -9,6 +9,21 @@ if (typeof define !== 'function') {
 
 // The aim of this is to use some quite general purpose code for making a website's DB, and then exposing it as a Resource.
 
+// The abstractions for this are taking ages to program.
+//  I would possibly prefer a simpler web db system???
+//  However the abstractions are fundamental to getting some systems running.
+
+// Web DB Postgres could just create a blank DB from a backup / dump.
+//  It could be made in a few hours / days.
+
+//  It would allow storage of the website's information.
+//
+
+
+
+
+
+
 
 
 
@@ -93,6 +108,13 @@ define(["./jsgui-html", "../resource/core/resource"],
                     //  May be better to ensure a schema or a database.
 
                     //throw 'stop';
+
+                    // Perhaps I should make a Postgres-DB-Resource for the moment that sets things up in that DB?
+                    //  This system has got too much abstraction and complexity to get it done quickly.
+
+
+
+
 					fns.push(function(cb) {
 
                         // Don't want to load the schema resources too many times, or have them properly overwrite.

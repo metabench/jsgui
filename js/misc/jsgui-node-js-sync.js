@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
 
 // Maybe I don't want it to do all the syncing at once.
 
-define(['./jsgui-lang-essentials.js', 'fs', './jsgui-node-fs2-core.js', 'async'],
+define(['./jsgui-lang-essentials.js', 'fs', './jsgui-node-fs2-all.js', 'async'],
     function(jsgui, fs, fs2, async) {
 
         var stringify = jsgui.stringify, each = jsgui.each, is_defined = jsgui.is_defined;

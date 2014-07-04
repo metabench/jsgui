@@ -38,7 +38,7 @@ if (typeof define !== 'function') {
 
 
 
-define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
+define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract) {
     var Data_Object = jsgui.Data_Object;
     var Collection = jsgui.Collection;
     // The Data_Object may have a few more features added to it.
@@ -553,6 +553,16 @@ define(["../../../core/jsgui-lang-enh", "./core"], function(jsgui, Abstract) {
             // To add
             // To remove
             // To modify
+
+            // The comparisons of abstract objects should take place within the abstract objects themselves, using a 'compare' function.
+            //  May need special logic for comparing some things like a serial column with an int column and a sequence.
+            //  I think having that logic within the Abstract system makes sense.
+            //  Best to move them to separate files though.
+
+
+
+
+
 
             var res_db = gc_database(existing_abstract_database, target_abstract_database);
             console.log('res_db', res_db);

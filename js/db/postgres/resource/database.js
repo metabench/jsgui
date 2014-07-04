@@ -9,7 +9,7 @@ if (typeof define !== 'function') {
 };
 
 //define("Postgres_Database", ["exports", "../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../../../resource/core/collection',
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../abstract/comparison-based-change-generator', '../../../resource/core/resource', '../../../resource/core/collection',
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstract/comparison-based-change-generator', '../../../resource/core/resource', '../../../resource/core/collection',
 	'./schema'], function(jsgui, pg, Abstract, abstract_comparison_based_change_generator, Resource, Resource_Collection, Schema_Resource) {
     
 	

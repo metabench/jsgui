@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
 }
 
 
-define(["../../../core/jsgui-lang-enh", './core'], function(jsgui, Abstract) {
+define(["../../../core/jsgui-lang-enh", './core/all'], function(jsgui, Abstract) {
 	
 	var Data_Object = jsgui.DataObject;
 	var Collection = jsgui.Collection;

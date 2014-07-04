@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../../../resource/core/resource', '../dbi-postgres'], function(jsgui, pg, Abstract, Resource, DBI_Postgres) {
     
 	
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp, Data_Object = jsgui.Data_Object;

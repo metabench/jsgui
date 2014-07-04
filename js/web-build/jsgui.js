@@ -19646,7 +19646,7 @@
 	Enhanced_Data_Object.register_data_type = register_data_type;
 
 
-	// jsgui-html-core.js
+	// jsgui-html-all.js
 
 	extend(jsgui.data_types_info, {
         'border_style': ['any', ['solid', 'dotted', 'dashed']],
