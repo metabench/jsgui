@@ -61,6 +61,13 @@ define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract)
 
     var cbcg = {};
 
+    // Probably won't use most of the current code.
+    //  Will make it use comparison functions that are within the Abstract DB classes.
+    //  From those comparisons, will then
+
+
+
+
     //var process_databases = function()
 
     // I think this can/will be syncronous anyway.
@@ -560,12 +567,13 @@ define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract)
             //  Best to move them to separate files though.
 
 
+            var comparison_result = existing_abstract_database.compare(target_abstract_database);
+            console.log('comparison_result', comparison_result);
 
+            throw 'stop';
 
-
-
-            var res_db = gc_database(existing_abstract_database, target_abstract_database);
-            console.log('res_db', res_db);
+            //var res_db = gc_database(existing_abstract_database, target_abstract_database);
+            //console.log('res_db', res_db);
 
             return res_db;
 

@@ -41,7 +41,6 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                 this.set('right_column', spec.right_column);
             }
 
-
         },
         'toString': function() {
             var res = [];

@@ -20,6 +20,8 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     //var Schema = require('./schema');
 
+    var Primary_Key_Column_Constraint = require('./primary-key-column-constraint');
+
     var Column = Data_Object.extend({
         // And the column has a reference to the table, its parent.
         'fields': {
@@ -211,7 +213,10 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                     if (mcw.pk) {
                         // And reference the column
 
-                        pk_constraint = new Abstract.Column_Constraint.Primary_Key({
+                        // Better to make it a table constraint?
+                        //  Keep it CC for moment.
+
+                        pk_constraint = new Primary_Key_Column_Constraint({
                             'column': that
                         });
                     }
@@ -263,6 +268,12 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
 
             if (pk_constraint) {
+
+                //console.log('pk_constraint', pk_constraint);
+                //throw 'stop';
+
+                // Is it a table constraint?
+
 
                 // Would get set on the table.
 
@@ -364,6 +375,117 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                     return this.get('data_type').get('text');
                 }
             }
+        },
+        'compare': function(target) {
+            var existing = this;
+
+            var existing_data_type = existing.get('data_type').value();
+            var target_data_type = target.get('data_type').value();
+
+            console.log('existing_data_type', existing_data_type);
+            console.log('target_data_type', target_data_type);
+
+            // skipped comparison status...
+            //  can skip the comparison when the data type is tricky or the specific comparison has not been implemented.
+            // partial test success status? for when we know there is more that could be tested but it passes some rudimentary tests?
+
+
+            var data_type_res;
+            if (existing_data_type == target_data_type) {
+                data_type_res = 'same'
+            } else {
+                console.log('');
+                console.log('target_data_type', target_data_type);
+
+                if (target_data_type == 'serial') {
+                    if (existing_data_type == 'integer') {
+                        data_type_res = 'same';
+                    } else {
+                        data_type_res = 'change';
+                    }
+                } else {
+                    data_type_res = 'change';
+                }
+            }
+
+
+            var data_type_length_res;
+
+            var d_existing_data_type_length = existing.get('data_type_length');
+            var d_target_data_type_length = target.get('data_type_length');
+
+            var existing_data_type_length, target_data_type_length;
+
+            if (d_existing_data_type_length) existing_data_type_length = d_existing_data_type_length.value();
+            if (d_target_data_type_length) target_data_type_length = d_target_data_type_length.value();
+
+            if (existing_data_type_length && target_data_type_length) {
+
+
+                if (existing_data_type_length == target_data_type_length) {
+                    data_type_length_res = 'same'
+                } else {
+
+                    // There will be some exceptions.
+                    //  We may have a serial field. Need to deal with that.
+                    //  Perhaps there can be some preprocessing where the serial field changes into an integer and
+                    //   makes the nessary sequence / constraint.
+
+
+
+
+
+                    data_type_length_res = 'change'
+                }
+            }
+
+            /*
+             if (existing_data_type_length && )
+
+             console.log('existing_data_type_length', existing_data_type_length);
+             console.log('target_data_type_length', target_data_type_length);
+
+             var data_type_length_res;
+             if (existing_data_type_length == target_data_type) {
+             data_type_length_res = 'same'
+             } else {
+             data_type_length_res = 'change'
+             }
+             */
+
+            var res = {
+                'data_type': data_type_res//,
+                //'data_type_length': data_type_length_res
+            }
+
+            if (data_type_length_res) {
+                res.data_type_length = data_type_length_res;
+            }
+
+
+
+            var all_are_true = true;
+
+            for (i in res) {
+                if (!res[i]) all_are_true = false;
+            }
+
+            if (all_are_true) return 'same';
+
+
+
+            // Could just return true if they are the same?
+            //  Or really 0 if they are the same?
+            //  Or the string 'same'?
+            //  And an object describing the differences.
+
+
+
+
+
+
+
+            return res;
         }
     });
 

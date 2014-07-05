@@ -20,6 +20,8 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     //var Schema = require('./schema');
 
+    var Column = require('./column');
+
     var Table = Data_Object.extend({
         // There will be code to load this abstract table from a database, or a description of how it is in the db.
 
@@ -166,7 +168,7 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
 
 
-                    var column = new Abstract.Column({
+                    var column = new Column({
                         'arr_spec': spec_column,
                         'table': that
                     });
@@ -418,6 +420,199 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
                 return this.get('name');
             }
+        },
+        'compare': function(target) {
+
+            var existing = this;
+
+            var map_existing_columns = {};
+            var map_target_columns = {};
+
+            var existing_columns = existing.get('columns');
+
+            // Why are the existing ones Data_Objects and the target ones plain objects?
+
+            //console.log('target', target);
+            var target_columns = target.get('columns');
+
+            console.log('existing_columns.length()', existing_columns.length());
+
+            each(existing_columns, function(v, i) {
+                console.log('v', v);
+                console.log('tof(v)', tof(v));
+
+                var name = v.get('name');
+                map_existing_columns[name] = v;
+            });
+
+            each(target_columns, function(v, i) {
+
+                // An object nested within a Data_Object I think.
+                //  That probably needs to be improved / made consistantly Data_Object.
+                //  Main goal is flexibility and stability, rather than speed.
+
+
+
+
+                //console.log('v', v);
+                //console.log('tof(v)', tof(v));
+
+                var name = v.get('name');
+                // var name = v.name;
+                map_target_columns[name] = v;
+            });
+
+            console.log('map_existing_columns', map_existing_columns);
+            console.log('map_target_columns', map_target_columns);
+
+
+            var map_missing_columns = {};
+            var map_removed_columns = {};
+            var map_common_columns = {};
+
+            each(map_existing_columns, function(v, i) {
+                console.log('1) i', i);
+
+                if (map_target_columns[i]) {
+                    map_common_columns[i] = true;
+                } else {
+                    map_removed_columns[i] = v;
+                }
+            });
+
+            each(map_target_columns, function(v, i) {
+                console.log('2) i', i);
+
+                if (map_existing_columns[i]) {
+                    //map_common[i] = v;
+                } else {
+                    map_missing_columns[i] = v;
+                }
+            });
+
+            console.log('map_missing_columns', map_missing_columns);
+            console.log('map_removed_columns', map_removed_columns);
+            console.log('map_common_columns', map_common_columns);
+
+            var map_res_column_comparison = {};
+
+            each(map_common_columns, function(v, column_name_in_common) {
+                console.log('column_name_in_common', column_name_in_common);
+
+                var existing_column = map_existing_columns[column_name_in_common];
+                var target_column = map_target_columns[column_name_in_common];
+
+                var column_comparison_res = existing_column.compare(target_column);
+
+                console.log('column_comparison_res', column_comparison_res);
+
+                map_res_column_comparison[column_name_in_common] = column_comparison_res;
+
+                // make a map of comparison results
+
+                //var item_gc_res = gc_column(existing_column, target_column);
+
+                //console.log('column item_gc_res', item_gc_res);
+                //throw 'stop';
+            });
+
+            console.log('map_res_column_comparison', map_res_column_comparison);
+
+            // And possibly condense results?
+
+
+            // Do a comparison on the constraints.
+            //  Are they necessarily table constraints here?
+            //   Column constraints would be compared from within the columns.
+
+            var existing_constraints = existing.get('constraints');
+            var target_constraints = target.get('constraints');
+
+            console.log('existing_constraints', existing_constraints);
+            console.log('target_constraints', (target_constraints));
+
+            console.log('existing_constraints.length()', existing_constraints.length());
+            console.log('target_constraints.length()', target_constraints.length());
+
+            var map_existing_constraints = {};
+            var map_target_constraints = {};
+
+            var existing_constraints = existing.get('constraints');
+
+            // Why are the existing ones Data_Objects and the target ones plain objects?
+
+            //console.log('target', target);
+            var target_constraints = target.get('constraints');
+
+            console.log('existing_constraints.length()', existing_constraints.length());
+
+            each(existing_constraints, function(v, i) {
+                console.log('v', v);
+                console.log('tof(v)', tof(v));
+
+                var name = v.get('name');
+                map_existing_constraints[name] = v;
+            });
+
+            each(target_constraints, function(v, i) {
+
+                // An object nested within a Data_Object I think.
+                //  That probably needs to be improved / made consistantly Data_Object.
+                //  Main goal is flexibility and stability, rather than speed.
+
+
+
+
+                //console.log('v', v);
+                //console.log('tof(v)', tof(v));
+
+                var name = v.get('name');
+                console.log('name', name);
+                // var name = v.name;
+                map_target_constraints[name] = v;
+            });
+
+            console.log('map_existing_constraints', map_existing_constraints);
+            console.log('map_target_constraints', map_target_constraints);
+
+
+
+            var map_missing_constraints = {};
+            var map_removed_constraints = {};
+            var map_common_constraints = {};
+
+            each(map_existing_constraints, function(v, i) {
+                console.log('1) i', i);
+
+                if (map_target_constraints[i]) {
+                    map_common_constraints[i] = true;
+                } else {
+                    map_removed_constraints[i] = v;
+                }
+            });
+
+            each(map_target_constraints, function(v, i) {
+                console.log('2) i', i);
+
+                if (map_existing_constraints[i]) {
+                    //map_common[i] = v;
+                } else {
+                    map_missing_constraints[i] = v;
+                }
+            });
+
+            console.log('map_missing_constraints', map_missing_constraints);
+            console.log('map_removed_constraints', map_removed_constraints);
+            console.log('map_common_constraints', map_common_constraints);
+
+
+
+
+            throw 'stop';
+
+
+
+
         }
     });
 

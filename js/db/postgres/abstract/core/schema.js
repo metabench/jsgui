@@ -20,6 +20,8 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     //var Schema = require('./schema');
 
+    var Table = require('./table');
+
     var Schema = Data_Object.extend({
         'init': function(spec) {
             // schemas have collections of other things.
@@ -124,7 +126,7 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                     var tst = tof(spec_table);
 
                     if (tst == 'object') {
-                        var abstract_table = new Abstract.Table(spec_table);
+                        var abstract_table = new Table(spec_table);
                         tables.push(abstract_table);
                     } else {
                         console.log('tst', tst);
@@ -192,6 +194,109 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
 
 
+        },
+
+        'compare': function(target) {
+            var existing = this;
+
+            var map_existing_tables = {};
+            var map_target_tables = {};
+
+            var existing_tables = existing.get('tables');
+            var target_tables = target.get('tables');
+
+            // And each of those tables should be an Abstract Table, a Data_Object.
+
+
+
+            console.log('existing_tables.length()', existing_tables.length());
+
+            each(existing_tables, function(v, i) {
+                console.log('existing v', v);
+                console.log('tof(v)', tof(v));
+
+                var name = v.get('name');
+                map_existing_tables[name] = v;
+            });
+
+            each(target_tables, function(v, i) {
+
+                // An object nested within a Data_Object I think.
+                //  That probably needs to be improved / made consistantly Data_Object.
+                //  Main goal is flexibility and stability, rather than speed.
+
+
+
+
+                console.log('* target v', v);
+                console.log('* tof(v)', tof(v));
+
+                // Should be .get with an Abstract Table (it's a Data_Object)
+
+                var name = v.get('name');
+                //var name = v.name;
+                map_target_tables[name] = v;
+            });
+
+            console.log('map_existing_tables', map_existing_tables);
+            console.log('map_target_tables', map_target_tables);
+
+
+            var map_missing = {};
+            var map_removed = {};
+            var map_common = {};
+
+            var arr_missing = [], arr_removed = [], arr_common = [];
+
+            each(map_existing_tables, function(v, i) {
+                console.log('1) i', i);
+
+                if (map_target_tables[i]) {
+                    map_common[i] = true;
+                    arr_common.push(i);
+                } else {
+                    map_removed[i] = v;
+                    arr_removed.push(i);
+                }
+            });
+
+            each(map_target_tables, function(v, i) {
+                console.log('2) i', i);
+
+                if (map_existing_tables[i]) {
+                    //map_common[i] = v;
+                } else {
+                    map_missing[i] = v;
+                    arr_missing.push(i);
+                }
+            });
+
+            console.log('map_missing', map_missing);
+            console.log('map_removed', map_removed);
+            console.log('map_common', map_common);
+
+            console.log('arr_missing', arr_missing);
+            console.log('arr_removed', arr_removed);
+            console.log('arr_common', arr_common);
+
+            // Then do the comparisons on the tables in common.
+
+            each(arr_common, function(name, i) {
+                var existing_table = map_existing_tables[name];
+                var target_table = map_target_tables[name];
+
+
+
+                var table_comparison_result = existing_table.compare(target_table);
+                console.log('table_comparison_result', table_comparison_result);
+
+            });
+
+
+
+
+
+            throw 'stop';
         }
 
 
