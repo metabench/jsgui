@@ -217,7 +217,8 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                         //  Keep it CC for moment.
 
                         pk_constraint = new Primary_Key_Column_Constraint({
-                            'column': that
+                            'column': that,
+                            'name': that.get('name') + '_pkey'
                         });
                     }
                 }
@@ -287,6 +288,12 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                 //  That's more than just adding it.
                 //console.log('pk_constraint', pk_constraint);
                 //throw 'stop';
+
+                // Perhaps we do this as a column constraint instead?
+                //  Or we find out more?
+
+
+
 
                 table.ensure_pk_constraint(pk_constraint);
             }

@@ -14,7 +14,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
     
 	
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp;
-	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.each, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
+	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.eac, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
 	var get_item_sig = jsgui.get_item_sig, trim_sig_brackets = jsgui.trim_sig_brackets;
 	
 	var Data_Object = jsgui.Data_Object;
@@ -779,7 +779,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
                 // gets lots of info.
 
-                each(info_sch, function(i, v) {
+                each(info_sch, function(v, i) {
                     var def = v.column_default;
                     //console.log('def ' + def);
 
@@ -1103,7 +1103,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
                 // maybe will use collection when more tested and developed.
 
-                each(param_rows, function(i, param_row) {
+                each(param_rows, function(param_row) {
                     var param = new Abstract.Parameter(param_row);
                     res.push(param);
                 });
@@ -1270,7 +1270,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
                     // for each sequence row, load an abstract sequence.
                     var res = [];
-                    each(sequence_rows, function(i, sequence_row) {
+                    each(sequence_rows, function(sequence_row) {
                         var a_seq = new Abstract.Sequence(sequence_row);
                         res.push(a_seq);
 
@@ -1300,7 +1300,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
                 } else {
                     var res = [];
-                    each(table_pk_constraint_rows, function(i, v) {
+                    each(table_pk_constraint_rows, function(v, i) {
 
                         var constraint_name = v.constraint_name;
 
@@ -1416,7 +1416,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                         } else {
                             //cu.push()
 
-                            each(res_ccu_rows, function(i, v) {
+                            each(res_ccu_rows, function(v) {
                                 console.log('v.column_name ' + v.column_name);
                                 cu.push(v.column_name);
                             })
@@ -1558,7 +1558,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                 } else {
                     //console.log('res_constraints', res_constraints);
                     var res = [];
-                    each(res_constraints, function(i, v) {
+                    each(res_constraints, function(v) {
                         res.push(v.constraint_name);
 
                     });
@@ -2068,6 +2068,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
             var res = new Abstract.Schema({
                 'name': schema_name
             });
+
             var that = this;
             // will then need to initialize them as abstract objects.
 
@@ -2201,7 +2202,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                     // load_abstract_schema
 
                     var fns = jsgui.Fns();
-                    each(schema_names, function(i, name) {
+                    each(schema_names, function(name, i) {
                         fns.push([that, that.load_schema_resource, [name]]);
                     });
 
@@ -2237,7 +2238,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                 if (err) {
                     throw err;
                 } else {
-                    //console.log('schema_names', schema_names);
+                    console.log('schema_names', schema_names);
 
                     //throw 'stop';
                     // We load the abstract schemas.
@@ -2258,7 +2259,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                     //})
 
                     var fns = jsgui.Fns();
-                    each(schema_names, function(i, name) {
+                    each(schema_names, function(name, i) {
+                        console.log('name', name);
+                        //throw 'stop';
                         fns.push([that, that.load_schema_resource, [name]]);
                     });
 
@@ -2276,7 +2279,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
         },
 
         'load_schema_resource': function(schema_name, callback) {
-            //console.log('load_schema_resource schema_name', schema_name);
+            console.log('load_schema_resource schema_name', schema_name);
+            console.trace();
             //throw 'stop';
 
             // Create a new Resource, and add it to the collection of data.schemas
@@ -2526,8 +2530,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
             // load up the existing abstract db.
 
-
-
             this.abstract(function(err, existing_abstract_database) {
                 if (err) {
                     throw err;
@@ -2536,6 +2538,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                     console.log('existing_abstract_database', existing_abstract_database);
 
                     // create a new (target) abstract db based on the definition given
+                    console.log('');
+                    console.log('def', stringify(def));
+                    //throw 'stop';
 
                     var target_abstract_database = new Abstract.Database(def);
 

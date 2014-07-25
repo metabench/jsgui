@@ -25,18 +25,65 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     //var Schema = require('./schema');
 
-    var Schema = Data_Object.extend({
+    var Primary_Key_Column_Constraint = Data_Object.extend({
         'init': function(spec) {
-            // schemas have collections of other things.
+            this._super(spec);
+
+            // and a referemce to the column too
+            //console.log('spec', spec);
+            //console.trace("Here I am!")
+            //throw 'stop';
 
 
+            //this.set('name', 'primary key');
+
+            // maybe not capital letters?
+
+            // And the constraint has column as a property?
+
+            // Well, it can have a collection of columns.
+            //  I think it's best implementing that, but also making it so it can work with a single column.
+            //  Still, may be best to store it as an array / collection?
+
+            if (spec.column) {
+                //console.log('spec.column', spec.column);
+                this.set('columns', spec.column);
+            }
+
+            if (spec.name) {
+                //console.log('spec.column', spec.column);
+                this.set('name', spec.name);
+            }
+
+            // Not sure how primary key can both be a table constraint or colum constraint
+
+
+
+
+
+
+
+            this.set('constraint_type', 'PRIMARY KEY');
+
+        },
+        'toString': function() {
+
+            var columns = this.get('columns');
+            //console.log('columns', columns);
+
+            if (!columns) {
+                throw 'Primary key constraint needs column(s) assigned';
+            }
+
+            var column_name = columns.get('name').value();
+            //console.log('column_name', column_name);
+
+            return 'PRIMARY KEY(' + column_name + ')';
         }
-
-
     })
 
 
-    return Schema;
+    return Primary_Key_Column_Constraint;
 });
 
 

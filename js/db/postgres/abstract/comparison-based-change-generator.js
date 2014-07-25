@@ -32,6 +32,8 @@ if (typeof define !== 'function') {
 //  Both improved comparisons and target transformation would solve the problem.
 //  Better to use imrpved comparisons for the moment.
 
+// More testing for this side of things may be the best way.
+
 
 
 
@@ -107,6 +109,9 @@ define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract)
         var existing_schemas = existing.get('schemas');
         var target_schemas = target.get('schemas');
 
+        console.log('target_schemas.length() ' + target_schemas.length());
+        throw 'stop';
+
         existing_schemas.each(function(i, v) {
             var name = v.get('name');
             map_existing_schemas[name] = v;
@@ -147,6 +152,8 @@ define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract)
 
         each(map_target_schemas, function(v, i) {
             console.log('2) i', i);
+            console.log('2) v', v);
+            //throw 'stop';
 
             if (map_existing_schemas[i]) {
                 //map_common[i] = v;

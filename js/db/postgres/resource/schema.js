@@ -515,6 +515,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../../../
                         var existing_abstract_schemas = abstract_database.get('schemas');
                         var existing_abstract_schema = existing_abstract_schemas.get(schema_name);
 
+                        if (schema_name.value) schema_name = schema_name.value();
+
+                        console.log('schema_name', schema_name);
+                        //throw 'stop';
 
 
                         var abstract_schema = that._abstract = existing_abstract_schema || new Abstract.Schema({

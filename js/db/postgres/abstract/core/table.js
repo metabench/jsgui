@@ -36,7 +36,9 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
         'init': function(spec) {
 
             //console.log('');
-            //console.log('init Table Abstract');
+            console.log('init Table Abstract spec: ', (spec));
+
+            //throw 'stop';
             //console.log('spec', spec);
             //console.trace();
             //console.log('');
@@ -437,6 +439,12 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
             console.log('existing_columns.length()', existing_columns.length());
 
+            // There needs to be more intelligence if seeing if table structures are the same.
+            //  Sometimes a table will use a sequence.
+            //  Sometimes a serial field.
+
+
+
             each(existing_columns, function(v, i) {
                 console.log('v', v);
                 console.log('tof(v)', tof(v));
@@ -604,6 +612,14 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
             console.log('map_missing_constraints', map_missing_constraints);
             console.log('map_removed_constraints', map_removed_constraints);
             console.log('map_common_constraints', map_common_constraints);
+
+            // For comparing one table to another...
+            //  Need to take account of ways a table can be the same in terms of what it does, but expressed differently.
+            //  Serial fields.
+
+
+
+
 
 
 

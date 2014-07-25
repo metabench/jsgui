@@ -1947,11 +1947,17 @@ define(function() {
 				// console.log('clone obj ' + stringify(obj));
 				// console.log('obj.length ' + obj.length);
 				
-				var res = []; 
-				each(obj, function(i, v) {
+				var res = [];
+
+
+				eac(obj, function(v) {
 					//console.log('i ' + i);
 					res.push(clone(v)); 
 				});
+
+
+
+
 				return res;
 				
 				//return obj.slice();
@@ -2827,9 +2833,15 @@ define(function() {
 					    }
 					}
 				}
-			}
+			};
+
+            // Clone the params?
+            //  Really not sure about that.
+
 			
-			var arr_to_call = clone(params) || [];
+			//var arr_to_call = clone(params) || [];
+
+            var arr_to_call = (params) || [];
 			//console.log('params', params);
 			//console.log('arr_to_call', arr_to_call);
 			//console.log('params ' + params);

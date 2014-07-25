@@ -2997,7 +2997,9 @@ define(["../../core/jsgui-lang-enh", 'pg', './abstract/parser'], function(jsgui,
 			
 			// tables, functions, some more things too I'm sure like views.
 			//  tables and functions will be very useful to begin with.
-			
+			console.log('load abstract schema schema_name ' + schema_name);
+
+            throw 'stop';
 			
 			var res = new Abstract.Schema({
 				'name': schema_name

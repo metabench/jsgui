@@ -20,6 +20,11 @@ if (typeof define !== 'function') {
 //
 
 
+// May be worth making Web_DB_Resource_Postgres.
+//  A more specific adapter that will not rely so much on the abstract DB and generation system.
+//  Really need to maintain a table of users, permissions, roles, and objects associated with users, as well as the site's content.
+
+//
 
 
 

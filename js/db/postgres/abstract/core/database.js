@@ -37,6 +37,8 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
                 }];
             }
 
+
+
             if (tof(spec.schemas) == 'array') {
                 var schemas = this.get('schemas');
                 //this.get('schemas').load_array(spec.schemas);
@@ -75,15 +77,37 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
             var existing_schemas = existing.get('schemas');
             var target_schemas = target.get('schemas');
 
+            // Think it did not load the existing schema's name.
+
             existing_schemas.each(function(i, v) {
                 var name = v.get('name');
+                console.log('name', name);
+                //throw 'stop';
+                // deoptimization here I think because it changes types.
+                if (name && name.value) name = name.value();
+
+                //.value();
+
+                console.log('1) name', name);
+                //throw 'stop';
+
                 map_existing_schemas[name] = v;
             });
 
             target_schemas.each(function(i, v) {
-                var name = v.get('name');
+
+                // v.val ...
+                // unwrap(v.get('name'))
+
+
+                var name = v.get('name').value();
+                console.log('2) name', name);
+                //throw 'stop';
                 map_target_schemas[name] = v;
             });
+
+            console.log('target_schemas.length() ' + target_schemas.length());
+            //throw 'stop';
 
             console.log('map_existing_schemas', map_existing_schemas);
             console.log('map_target_schemas', map_target_schemas);
