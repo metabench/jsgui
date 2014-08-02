@@ -292,11 +292,23 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
             });
 
+            // Build up the arrays of what is missing, removed, changed, same.
+            //  Want to bring through information about what the table comparison says about the similarities and differences between them.
+
+
+
+
 
 
 
 
             throw 'stop';
+
+            var res = {
+                'tables': {
+                    //'missing':
+                }
+            }
         }
 
 

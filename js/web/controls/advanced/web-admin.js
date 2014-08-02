@@ -7,7 +7,9 @@ if (typeof define !== 'function') {
 
 define(["../../jsgui-html", "./text-field", "./viewer/object",
 	"./editor/object", "./flexiboard", "../page/layout/columns-2",
-	"../../../resource/core/pool", "../../../resource/core/resource"], 
+
+        "../../../resource/core/pool", "../../../resource/core/resource"],
+
 	function(jsgui, Text_Field, Object_Viewer, Object_Editor, Flexiboard, Columns_2, Ctrl_Resource_Pool, Ctrl_Resource) {
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
@@ -157,11 +159,14 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 					// Put the web admin navigation in the left panel.
 					//  This will be a published version / adaptation of the resource pool
 
+                    /*
 
 					var ctrl_resource_pool = new Ctrl_Resource_Pool({
 						'context': this._context
 					});
 					left.add(ctrl_resource_pool);
+
+					*/
 
 
 

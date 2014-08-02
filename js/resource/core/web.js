@@ -40,6 +40,18 @@ define(["../../core/jsgui-lang-util", "./resource"], function(jsgui, Resource) {
 	var call_multiple_callback_functions = jsgui.call_multiple_callback_functions, call_multi = jsgui.call_multi;
 	var each = jsgui.each;
 
+    // Could maybe make a website resource as well?
+
+    // It would publish a web db, I think.
+    //  A website resource would contain a variety of requests.
+
+
+
+
+
+
+
+
 	var Web_Resource = Resource.extend({
 
 		'init': function(spec) {

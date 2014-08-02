@@ -74,7 +74,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		},
 		'process': function(req, res) {
-			//console.log('Site_JavaScript processing');
+			console.log('Site_CSS processing HTTP request');
 			var remoteAddress = req.connection.remoteAddress;
 
 			var custom_paths = this.meta.get('custom_paths');

@@ -31,16 +31,35 @@ define(["./jsgui-html-core"],
 		var str_arr_mapify = jsgui.str_arr_mapify;
 		var map_Controls = jsgui.map_Controls;
 
-		var Context_Menu;
+		//var Context_Menu;
 
-		var ensure_Context_Menu_loaded = function(callback) {
+        // Don't include context-menu in enh...
+        //  Or find a different way to include it
+        //  Have different enh-levels, eg most of it is enh-1
+        //  then context-menu is in enh-2.
+        //  html-enh contains both 1 and 2, and future levels if they are made.
+
+
+        // Don't like what follows - it's tricky. May make it hard to recompile / build the code.
+        //  And would be unnecessary when the context menu has been localised.
+
+
+        /*
+
+		var ensure_Context_Menu_loadedensure_Context_Menu_loaded = function(callback) {
 			//console.log('ensure_Context_Menu_loaded');
+
+            // Does not include web/ here
+            //  Not sure if how this behaviour is different on the client.
+
 			require(['./controls/advanced/context-menu'], function(_Context_Menu) {
 				//console.log('_Context_Menu', _Context_Menu);
 				Context_Menu = _Context_Menu;
     			callback(Context_Menu);
     		});
 		}
+
+		*/
 
 
 		//require(['./controls/advanced/context-menu'], function(Context_Menu) {		
@@ -3028,8 +3047,8 @@ define(["./jsgui-html-core"],
 
 	        // Not so sure we can have the client page context here - does it use resources?
 
-	        ensure_Context_Menu_loaded(function(_Context_Menu) {
-	        	Context_Menu = _Context_Menu;
+	        //ensure_Context_Menu_loaded(function(_Context_Menu) {
+	        	//Context_Menu = _Context_Menu;
 
 	        	if (!context) {
 		        	throw 'jsgui-html-enh activate(context) - need to supply context parameter.';
@@ -3219,7 +3238,7 @@ define(["./jsgui-html-core"],
 		                }
 		            }
 		        });
-	        })
+	        //})
 
 	        //  constructors.
 

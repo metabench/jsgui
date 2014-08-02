@@ -56,7 +56,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
     //
 
-
+    var Server = require('./server');
 
 
 
@@ -102,11 +102,25 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 			// This will not actually contain the data (though some Resources will), but will provide an interface to the data.
 
-
+            // We may not have the server resource.
 
 			if (spec.server) {
 				this.meta.set('server', spec.server);
-			}
+			} else {
+                //throw 'no spec.server';
+
+                var host = spec.host, port = spec.port;
+
+                if (host && port) {
+                    var server = new Server({
+                        'host': host,
+                        'port': port
+                    })
+
+                    this.set('server', server);
+                }
+
+            }
 			if (spec.name) {
 				this.meta.set('name', spec.name);
 			}
@@ -373,9 +387,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
         //  (may rely on escaping input).
 
 
-
-
-
         'column_exists': function(table_name, column_name, callback) {
             //console.log('table_name ' + table_name);
 
@@ -465,9 +476,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                 } else {
                     sql = 'SELECT * FROM information_schema.columns WHERE table_name = \'' + table_name + '\' AND column_name = \'' + column_name + '\';';
                 }
-
-
-
                 //console.log('sql ' + sql);
                 // maybe a query that returns a single row.
                 var res;
@@ -495,17 +503,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                         // [error, undefined]
                         console.log(error);
                         callback.call(that, error);
-
-
-
                         // however, this means an error in the SQL.
                         //  May not want SQL errors going outside of here so much.
-
-
                     }
                 });
-
-
             }
 
 
@@ -706,25 +707,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
             // Would like to select particular fields
             //  Join with other tables.
 
-
-
             this.execute_multirow_to_callback(sql, callback);
 
-
-
-
         },
-
-
-
-
-
         // get the constraints information out of the database
-
-
-
-
-
 
         //  This will be relatively similar accross languages, it won't be so hard to port.
 
@@ -3486,6 +3472,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 			// There need to be a client object.
 
+            console.log('query_spec', query_spec);
+
 
 
 			if (tof(query_spec) == 'object') {
@@ -3569,7 +3557,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				//'from_item': 
 				// the from item is a function call.
 				
-				'from_item': new Abstract.Function_Call({
+				'from_item': new Abstract.SQL_Function_Call({
 					'function_name': fn_name,
 					'parameters': params.length
 				})
@@ -3577,7 +3565,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			});
 			
 			var sql = sel.toString();
-			//console.log('sql ' + sql);
+			console.log('sql ' + sql);
 			
 			//client.query({
 			//	  name: 'insert beatle',
@@ -3586,11 +3574,13 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			//	});
 			
 			
-			//console.log('b) params ' + stringify(params));
+			console.log('b) params ' + stringify(params));
 			//each(params, function(i, param) {
 				//console.log('param ' + stringify(param));
 				//values.push();
 			//});
+
+            var res = [];
 			
 			var query = {
 				'query': {
@@ -3598,13 +3588,27 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					'values': params
 				},
 				'row': function(row) {
+
+                    // So all the JSON from a result comes in 1 row.
+
+
+
+
 					console.log('row ' + stringify(row));
+
+                    var res_row = row[fn_name];
+                    console.log('res_row', res_row);
+
+                    res.push(res_row);
+
+                    // need to build up the results rows...
+
 				},
 				'error': function(error) {
 					console.log('error ' + stringify(error));
 				},
 				'end': function(end) {
-					callback();
+					callback(null, res);
 				}
 				
 			};
@@ -3613,6 +3617,23 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			this.execute_query(query);
 			
 		},
+
+        'execute_function_single_row': function(fn_name, params, callback) {
+            this.execute_function(fn_name, params, function(err, res_execute) {
+                if (err) {
+                    callback(err);
+                } else {
+                    //console.log('res_execute[0]', res_execute[0]);
+                    var res = res_execute[0];
+                    //console.log('res', res);
+
+                    callback(null, res);
+                }
+
+
+
+            })
+        },
 		
 		// Perhaps the query should be limited.
 		's_query': function(sql, callback) {
@@ -3647,6 +3668,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 		'execute_multirow_to_callback': function(sql, callback) {
 			var res = [];
 			var that = this;
+            console.log('sql', sql);
 			this.execute_query({
 				'sql': sql,
 				'row': function(row) {

@@ -429,6 +429,14 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		'start': function(callback) {
 			callback(null, true);
 		},
+
+        // Will could serve all jsgui code?
+        //  May be better not to allow server-side code to be read on the client.
+        //  Could have specific directories within jsgui that get served to the client.
+
+
+
+
 		'serve_directory': function(path) {
 			// Serves that directory, as any files given in that directory can be served from /js
 			var served_directories = this.meta.get('served_directories');
@@ -466,7 +474,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		},
 
 		'process': function(req, res) {
-			//console.log('Site_JavaScript processing');
+			console.log('Site_JavaScript processing req.url', req.url);
 			var remoteAddress = req.connection.remoteAddress;
 			//console.log('remoteAddress ' + remoteAddress);
 			
@@ -476,6 +484,15 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 			// /js/...js
+
+            // //site_js.meta.set('custom_paths.js/app☺js', './client/js/app.js');
+
+            // http://192.168.2.3/js/app.js
+
+            // need to serve /js/app.js.
+            //  however the Website Resource should set this up.
+
+
 
 			// the site's static file resources.
 			//  a file server that serves the files with their mime types.
@@ -487,14 +504,23 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			var custom_paths = this.meta.get('custom_paths');
 
-			//console.log('custom_paths', custom_paths);
+			console.log('custom_paths', custom_paths);
+            console.log('tof custom_paths', tof(custom_paths));
 
 			var rurl = req.url.replace(/\./g, '☺');
 
-			//console.log('rurl', rurl);
+            if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
+
+
+			console.log('rurl', rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			//console.log('custom_response_entry', custom_response_entry);
+
+            // hmmmm get not working right?
+
+
+
+			console.log('custom_response_entry', custom_response_entry);
 
 			var pool = this.meta.get('pool');
 			if (custom_response_entry) {
@@ -543,6 +569,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				//var pool_resources = pool.resources();
 				//console.log('pool_resources ' + stringify(pool_resources));
 				var served_directories = this.meta.get('served_directories');
+
+
 
 
 				

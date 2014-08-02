@@ -20,194 +20,302 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     //var Schema = require('./schema');
 
-    var Schema = Data_Object.extend({
+    var SQL_Function = Data_Object.extend({
         'init': function(spec) {
-            // schemas have collections of other things.
+            // Function Parameters
+            // Function body
+
             this._super(spec);
-            // right now will just use arrays.
-
-            // Likely to have some other MVC database representation for the client.
-            //  Responding to updates, actually handling data updates with the client
-            //  with authentication and authorization done.
-
-            // just an array of tables...
-            //  may want them indexed as well
-            //  and then may find that an indexed_collection is actually simpler.
-
-            // could just have a dict of databases.
-
-            //this.name = spec.name;
-            this.set('name', spec.name);
-            // could possibly handle the tables collection differently.
-            //  not completely sure how data_item would solve that.
-
-            //  even when not doing nested properties, could there be collection properties available?
-
-            // or maybe just create the collection for the moment.
-            //  tables could be uniquely named.
-            //  functions are not. they are unique with the name and the signature.
 
 
+            if (spec.specific_schema && spec.specific_name) {
+                this.load_from_information_schema_row(spec);
+            } else {
 
 
+                this.set('name', spec.name);
+                // will have a specific_name too, maybe won't be set by the user.
 
 
-            // table could be represented as a map without too much difficulty.
-            //  could have an index of tables.
-
-            // the nested data system could prove useful here... but it is a large system to use.
-
-
-            // what about getting something so that properties can have types?
-            //  perhaps nested could use that type system too?
-
-            // nested could be used for setting things in greater depth, however.
-            //  it would get more complicated.
-
-            // DataObjects I think.
-
-            // I think non-nested, or not very nested...
-            //  But I also think being able to set something, giving it an array, but it buts it into a more advanced collection.
+                //this.arguments = spec.arguments;
+                //  sql function could have a collection of parameters.
+                //  That could make indexing them easier, perhaps could have index of functions available by params.
+                //  will do that before so long.
 
 
+                //this.set('parameters', spec.parameters || spec.params || []);
 
+                this.set('parameters', new Collection({
+                    //'index_by': 'name'
+                }));
 
+                if (tof(spec.parameters) == 'array') {
+                    this.get('parameters').load_array(spec.parameters);
+                }
 
+                var params = this.get('parameters');
+                //console.log('init params ' + stringify(params));
+                //console.log('init spec.parameters ' + stringify(spec.parameters));
+                //this.parameters = spec.parameters || spec.params || [];
+                //this.statements = spec.statements || [];
 
-            // tables should also be a collection.
-            //  tables will be unique by name.
+                //this.set('statements', spec.statements || []);
 
-            // Moving over to the Collections methodology should make it easier to use this module.
-            //  The code may become more bulky, but will be more flexible to use.
-            //  Will be able to do tables.get[name], and they still get held in the order in the array.
-            //  The order of the tables is relevant when persisting things.
+                this.set('statements', new Collection({
+                    //'index_by': 'name'
+                }));
 
+                if (tof(spec.statements) == 'array') {
+                    this.get('statements').load_array(spec.statements);
+                }
 
+                // the normal SQL language runs faster though.
+                //  Should be fine for insert statements.
 
+                //this.return_type = spec.return_type;
 
-            // create a new collection for the tables.
-            //  have them indexed by name.
+                this.set('return_type', spec.return_type);
 
+                //this.language = spec.language || 'SQL';
+                //this.language = 'SQL';
 
-
-
-            //this.tables = spec.tables || [];
-            //this.set('tables', spec.tables || []);
-
-            // may be best to have the tables be a collection so that it can be get or set when a new one is put in.
-
-            this.set('tables', new Collection({
-                'index_by': 'name'
-            }));
-
-            this.set('sequences', new Collection({
-                'index_by': 'name'
-            }));
-
-
-
-            // Then when a table is added to that collection, it should index it properly.
-
-            // Using load_array...
-            //  Does that create them as Data_Objects?
-            //  They may not be given in the JSON as
-
-            // Need to load up the sequences from the spec too.
-
-
-
-            if (tof(spec.tables) == 'array') {
-                var tables = this.get('tables');
-                // But the tables are of a specific type.
-                //  We could make a new shorthand, but loading the tables one by one using the Abstract Table constructor is the way to do this.
-                each(spec.tables, function(spec_table, i) {
-                    var tst = tof(spec_table);
-
-                    if (tst == 'object') {
-                        var abstract_table = new Abstract.Table(spec_table);
-                        tables.push(abstract_table);
-                    } else {
-                        console.log('tst', tst);
-                        throw 'Not yet implemented'
-                    }
-                });
-
-                //this.get('tables').load_array(spec.tables);
+                this.set('language', 'SQL');
             }
 
-            if (spec.database) {
-
-                // Throw an error if the spec abstract database already contains a schema with the same name
-                //  (and it is not this abstract schema?)
+            // Could be composed of statements that get put together, or just text.
+            //this.name = spec.name;
 
 
-                this.set('database', spec.database);
+            // think SQL does not do named parameters.
+            //  just does them in an order I think.
 
-                var database_schemas = spec.database.get('schemas');
-                //console.log('database_schemas.length()', database_schemas.length());
 
-                var existing_schema = database_schemas.get(spec.name);
-                if (existing_schema) {
-                    //console.log('existing_schema', stringify(existing_schema));
-                    console.trace();
-                    throw 'Not expecting existing schema';
+            //this.ret = spec.ret || null;
+
+            // could have a function body
+            // maybe the function body could be a collection of statements.
+
+            // We'll want functions for CRUD.
+
+
+            // statement : could be pieces of Postgres SQL language, pieced together.
+            //  won't be so hard to model these objects, but there may be quite a few of them for this interface.
+
+            //this.body = spec.body;
+
+        },
+
+        'load_from_information_schema_row': function(information_schema_row) {
+            //console.log('load_from_information_schema_row ' + stringify(information_schema_row));
+
+            // set the values from spec.
+
+            // perhaps only set the properties we need, and with the right names.
+
+            //this.set(information_schema_row);
+            this.set('schema', information_schema_row.specific_schema);
+            this.set('specific_name', information_schema_row.specific_name);
+            this.set('name', information_schema_row.routine_name);
+            // can be updated with the actual schema, possibly could respond to event to do that.
+
+            // quite a bit of metadata here from the INFORMATION_SCHEMA, will leave much of this for the moment.
+            //  some of it covers the language that the procedure is written in.
+            //  http://www.postgresql.org/docs/9.1/static/infoschema-routines.html
+
+            var routine_definition = information_schema_row.routine_definition;
+
+
+            //console.log('');
+            console.log('');
+            console.log('');
+            console.log('routine_definition ' + routine_definition);
+
+            // the definition could get parsed, and references to tables / other functions noted with their names.
+            //  then the references could be updated to refer to the actual objects.
+
+            if (Abstract.parsers && Abstract.parsers.sql) {
+                // parsing the code into its various statements... would be nice.
+                // Will first have it getting the parameters from the DB.
+
+
+            }
+
+
+        },
+
+
+        // not sure about this function here???
+        'get_signature': function() {
+            var res = [];
+            //var res = ['['];
+            var first = true;
+            var params = this.get('parameters');
+            console.log('params ' + stringify(params));
+            console.log('params.length() ' + params.length());
+            each(params, function(i, param) {
+                // look at the parameter data type.
+                if (!first) {
+                    res.push(',');
                 } else {
-                    database_schemas.push(this);
+                    first = false;
+                }
+
+                //console.log('param ' + stringify(param));
+
+                // the param may not be a proper / full abstract sql parameter.
+                console.log('tof(param) ' + tof(param));
+                // each individual parameter may now
+
+                var tp = tof(param);
+
+                if (tp == 'collection') {
+
+                    console.log('param ' + stringify(param));
+                    //console.log('param._ ' + stringify(param._));
+
+                    var dts = param.get(1).get();
+                    console.log('dts ' + dts);
+                    console.log('dts ' + stringify(dts));
+
+                    if (dts.indexOf('char') > -1) {
+                        res.push('s');
+                    } else if (dts.indexOf('int') > -1) {
+                        res.push('i');
+                    }
+
+                } else {
+                    if (tp == 'array') {
+                        var dts = param[1];
+                        if (dts.indexOf('char') > -1) {
+                            res.push('s');
+                        } else if (dts.indexOf('int') > -1) {
+                            res.push('i');
+                        }
+
+                    } else {
+                        res.push(param.get_signature());
+                    }
                 }
 
 
 
-                // Can also check the database to see if it contains the abstract schema.
+            });
 
-                // if it does not have it, push
+            //res.push(']');
 
-            }
-            // So the abstract schema can link back to the database.
+            return res.join('');
 
+        },
+        //'toString': function() {
+        // Puts the arguments together and the body.
 
-
-            // function collection - need to be able to keep track of functions of the same name but with different signatures.
-            //  when there are functions of the same name but different sigs, a map could be put in place.
-
-
-
-            // May want to index functions by their signatures.
+        // fn name?
 
 
-            //this.functions = spec.functions || [];
-            //this.set('functions', spec.functions || []);
-            this.set('functions', new Collection({
-                //'index_by': 'specific_name'
-            }));
+        //},
+        'to_create_or_replace_str': function() {
+            // could compose the create or replace function statement as an OO statement.
 
-            if (tof(spec.functions) == 'array') {
-                this.get('functions').load_array(spec.functions);
-            }
+            var res = [];
+            res.push('CREATE OR REPLACE FUNCTION ' + this.get('name'));
+
+            res.push('(');
+
+            var first = true;
+
+            var params = this.get('parameters');
+            console.log('params ' + stringify(params));
+            //throw('stop');
+
+            each(params, function(i, param) {
+                if (!first) {
+                    res.push(', ');
+                } else {
+                    first = false;
+                }
+                // the param will have both a name and a data type.
+
+                // should be OK with varchar(n) as function parameters...
+                //  we'll see if it works.
+
+                // just the types given, not the parameter names.
+
+                //console.log('tof(param) ' + tof(param));
+
+                var tp = tof(param)
+
+                if (tp == 'array' && param.length == 2) {
+                    //res.push(param[0]);
+                    //res.push(' ');
+                    res.push(param[1]);
+                }
+                if (tp == 'collection' && param.length() == 2) {
+                    //res.push(param[0]);
+                    //res.push(' ');
+                    console.log('param ' + stringify(param));
+                    // Need to sort out where the parameters get their names from.
+
+                    var p1 = param.get(1);
+                    //console.log('p0 ' + p0);
+                    //console.log('p0 ' + stringify(p0));
+                    //console.log('tof p0 ' + tof(p0));
+
+                    res.push(p1.get());
+                }
+
+            });
+
+            res.push(') RETURNS ');
+
+            var str_return_type = this.get('return_type') || 'VOID';
+
+            res.push(str_return_type);
+            res.push(' AS $$\n');
+            //res.push('BEGIN\n');
+            res.push('');
+            // the main statement itself
+            // or statements
+
+            each(this.get('statements'), function(i, statement) {
+                res.push('\t');
+                res.push(statement.toString());
+                res.push('\n');
+            });
+            //res.push('END;\n');
+            res.push('$$ LANGUAGE SQL');
+
+            return res.join('');
 
 
-            // The functions could be in a collection that indexes them by name and signature.
-            //  Probably not right now though.
+        },
+        'arguments_str': function() {
+            var res = [];
+            // uncluse brackets?
 
-            // the function index could be more difficult.
 
+            var first = true;
+            each(this.get('parameters'), function(i, v) {
+                //
+                if (!first) {
+                    res.push(', ');
+                } else {
+                    first = false;
+                }
+                res.push(v.toString());
+            });
+
+
+            return res.join('');
 
 
         }
 
+        // to create function string.
+
+    });
 
 
-
-
-        // Functions within schema?
-
-        // Other functions will ensure that abstract things have been represented.
-
-
-
-    })
-
-
-    return Schema;
+    return SQL_Function;
 });
 
 

@@ -617,6 +617,60 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
             //  Need to take account of ways a table can be the same in terms of what it does, but expressed differently.
             //  Serial fields.
 
+            // Then for the missing constraints, we can see if it corresponds to a difference in the table.
+
+            // A complication here is that the table may contain 'serial' data types, which correspond with a sequence, but are not defined that way.
+
+
+            // but also the comparisons of the columns.
+
+
+            var arr_missing_columns = [], arr_removed_columns = [], arr_common_columns = [], arr_same_columns = [], arr_changed_columns = [];
+            var arr_missing_constraints = [], arr_removed_constraints = [], arr_common_constraints = [], arr_same_constraints = [], arr_changed_constraints = [];
+
+            each(map_missing_columns, function(v, i) {
+                arr_missing_columns.push(i);
+            });
+            each(map_removed_columns, function(v, i) {
+                arr_removed_columns.push(i);
+            });
+            each(map_common_columns, function(v, i) {
+                arr_common_columns.push(i);
+            });
+
+            // Same and changed... we need to see what the reported column changes are, if any.
+
+            /*
+
+            each(map_missing_columns, function(v, i) {
+                arr_missing_columns.push(v);
+            });
+            each(map_missing_columns, function(v, i) {
+                arr_missing_columns.push(v);
+            });
+            each(map_missing_columns, function(v, i) {
+                arr_missing_columns.push(v);
+            });
+            each(map_missing_columns, function(v, i) {
+                arr_missing_columns.push(v);
+            });
+            */
+
+
+
+
+            var res = {
+                'columns': {
+                    'missing': arr_missing_columns,
+                    'removed': arr_removed_columns,
+                    'common': arr_common_columns
+                }
+            }
+
+            return res;
+
+
+            // Results as an array rather than a map I think.
 
 
 
@@ -624,7 +678,8 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
 
 
-            throw 'stop';
+
+            //throw 'stop';
 
 
 

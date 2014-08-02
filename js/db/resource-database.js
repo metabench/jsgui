@@ -31,7 +31,11 @@ define(["../core/jsgui-lang-enh", "../web/resource", "./resource-mongo", "./reso
 	// The Database-Server would also refer to the database I assume.
 
 	// I think getting this working to a reasonable standard with both Mongo and Postgres would be good.
-	
+
+    // The base class. Will have a factory object as well.
+
+
+
 	var Database = Rsce.extend({
 
 		'init': function(spec) {

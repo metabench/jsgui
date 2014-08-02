@@ -9,7 +9,9 @@ if (typeof define !== 'function') {
 
 
 
-define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/server-page-context', '../web/jsgui-je-suis-xml', 'cookies', '../web/controls/advanced/web-admin'], 
+define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/server-page-context',
+        '../web/jsgui-je-suis-xml', 'cookies',
+        '../web/controls/advanced/web-admin'],
 
 	// May make a Site-Info or just Info resource.
 	//  That would be in the resource pool and deal with the various pieces or Info that will get displayed in the website.
@@ -25,7 +27,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
 
-	function(jsgui, os, http, libUrl, Resource, Server_Page_Context, JeSuisXML, Cookies, Web_Admin) {
+	function(jsgui, os, http, libUrl, Resource, Server_Page_Context, JeSuisXML, Cookies, Web_Admin_Control) {
 
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
@@ -56,17 +58,26 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 			callback(null, true);
 		},
 
+        // And the web admin resource needs to be processed in the right context.
+
 		// Currently this is all about processing requests - I think it should be about having a Resource that represents the website's admin functionality, but to actually
 		//  administer the application would use both general purpose resource clients as well as a customised one for administering a website.
 
+        // process with context
+
 		'process': function(req, res) {
+
+            console.log('arguments.length ' + arguments.length);
 			
 			console.log('Resource_Web_Admin process');
 
 
 
 			var rurl = req.url;
-			if (rurl.substr(rurl.length - 1) == '/') rurl = rurl.substr(0, rurl.length - 1);
+
+
+
+			//if (rurl.substr(rurl.length - 1) == '/') rurl = rurl.substr(0, rurl.length - 1);
 
 			console.log('rurl', rurl);
 
@@ -80,14 +91,14 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 			var pool = this.meta.get('pool');
 			// should have a bunch of resources from the pool.
-			console.log('pool ' + pool);
+			//console.log('pool ' + pool);
 
 			// At the root, this should show an admin page.
 
 			// Then this control gives access to the info resource, from the pool.
 
 			var info = pool.get_resource('Info');
-			console.log('info ' + info);
+			//console.log('info ' + info);
 
 			// Thinking that the admin resource could publish / enable access to the Info resource.
 			//  Resources don't always have web admin.
@@ -238,20 +249,39 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 			// The resource pool would need its administration to be externally published though.
 
+            console.log('rurl', rurl);
 
 
+			if (rurl == '/admin/') {
+                // Want to use the web admin control here.
 
-			if (rurl == '/admin') {
-				var ctrlAdmin = new Web_Admin({
+                console.log('pre create web admin control');
+
+				var ctrlAdmin = new Web_Admin_Control({
 					'context': spc
 				});
+
+                // I think it will need to use asyncronous rendering.
+
+                //console.log('post create web admin control');
 				// oh... when the body is created, it does not have a context.
 				//  need to be able to assign it, and sub-controls a context
 				
 				// Could use activate?
 				ctrlAdmin.active();
 				body.add(ctrlAdmin);
+
+                console.log('post add wa control to body');
 			}
+
+            // Want the wen admin control to allow creation of pages
+            // Uploading of images
+            // Viewing and editing of website data.
+            //
+
+
+
+
 
 
 			// Content admin
@@ -336,14 +366,29 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 			
 			
 			// and serve that blank HTML document.
-			
-			var html = hd.all_html_render();
-			
-			var mime_type = 'text/html';
-			//console.log('mime_type ' + mime_type);
-				
-			res.writeHead(200, { 'Content-Type': mime_type });
-			res.end(html, 'utf-8');
+			console.log('pre all render');
+
+            // Would asyncronous rendering work better?
+			//var html = hd.all_html_render();
+
+            hd.all_html_render(function(err, html) {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log('cb all render');
+
+                    var mime_type = 'text/html';
+                    //console.log('mime_type ' + mime_type);
+
+                    res.writeHead(200, { 'Content-Type': mime_type });
+                    console.log('pre res end');
+                    res.end(html, 'utf-8');
+                    console.log('post res end');
+                }
+            })
+
+
+
 
 
 

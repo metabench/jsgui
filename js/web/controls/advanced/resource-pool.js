@@ -1,8 +1,8 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./single-line", "./title-bar", "./resource"], 
-	function(jsgui, Single_Line, Title_Bar, Ctrl_Resource) {
+define(["../../jsgui-html", "./single-line", "./title-bar"],
+	function(jsgui, Single_Line, Title_Bar) {
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;

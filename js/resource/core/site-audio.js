@@ -15,12 +15,6 @@ if (typeof define !== 'function') {
 // Maintain copies of the tracks in different bit rates and formats.
 
 
-
-
-
-
-
-
 define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
 	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core', '../../audio/jsgui-node-audio-metadata', 'crypto'], 
 

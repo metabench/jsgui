@@ -129,14 +129,20 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			// and has a map of it's normal path nodes
 			//  one possible variable route as a child
 			//  one possible wildcard route as a child
-
 			this.root = new Routing_Tree_Node();
 
 		},
 		'setRoot404': function(handler) {
 			this.root404Handler = handler;
 		},
-		'set': function(strRoute, handler) {
+		'set': function(strRoute, context, handler) {
+
+            if (!handler) handler = context;
+
+
+
+
+
 			// set the handler of the found route.
 			//  need to ensure there is such a route
 			//   need to parse the string route.
@@ -155,6 +161,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			if (strRoute == '/') {
 				//console.log('setting root handler');
 				//throw 'stop';
+                if(context) this.root.context = context;
 				this.root.handler = handler;
 			} else {
 				if (strRoute.substr(0, 1) == '/') strRoute = strRoute.substr(1);
@@ -203,6 +210,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 							if (c == splitRoute.length - 1) {
 								currentNode.variableChild.handler = handler;
+                                if (context) currentNode.variableChild.context = context;
 							}
 
 							currentNode = currentNode.variableChild;
@@ -228,6 +236,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 							currentNode.wildcardChild = new Wildcard_Routing_Tree_Node();
 							currentNode.wildcardChild.handler = handler;
+                            if (context) currentNode.wildcardChild.context = context;
 						} else {
 							// ensure there is a child of that name.
 							//console.log('c ' + c);
@@ -241,6 +250,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 							if (c == splitRoute.length - 1) {
 								currentNode.mapNormalPathChildren[strLevel].handler = handler;
+                                if (context) currentNode.mapNormalPathChildren[strLevel].context = context;
 							}
 							currentNode = next_level_node;
 							//console.log('new currentNode ' + currentNode);
@@ -262,16 +272,33 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 		},
 		// this returning undefined is much like a 404.
 		//  this could maybe have a 404 route attached to it.
+        //  don't create a new function to call the function within a context.
 
 
 
 		'get': function(url) {
 			// routes the URL through the tree
+            //  should maybe get the context and the function.
+            //console.log('router get, context: ', this.root.context);
 
 			var params;
 
 			if (url == '/') {
-				return this.root.handler;
+                var root = this.root;
+                if (root.context) {
+
+                    // and empty params?
+
+
+
+                    return [root.context, this.root.handler, {}];
+                } else {
+                    return this.root.handler;
+                }
+
+
+
+
 			} else {
 				// remove any beginning or trailing '/' from the route
 
@@ -355,8 +382,16 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 									var str_wildcard_value = arr_the_rest.join('/');
 									//console.log('str_wildcard_value', str_wildcard_value);
 
+                                    console.log('will return wildcard handler');
 
-									return [currentNode.wildcardChild.handler, {'wildcard_value': str_wildcard_value}];
+                                    if (currentNode.wildcardChild.context) {
+                                        return [currentNode.wildcardChild.context, currentNode.wildcardChild.handler, {'wildcard_value': str_wildcard_value}];
+                                    } else {
+                                        return [currentNode.wildcardChild.handler, {'wildcard_value': str_wildcard_value}];
+                                    }
+
+
+
 
 								}
 							}
@@ -378,9 +413,20 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 							if (next_level_node.handler) {
 								if (params) {
-									return [next_level_node.handler, params];
+
+                                    if (next_level_node.context) {
+                                        return [next_level_node.context, next_level_node.handler, params];
+                                    }
+
+
 								} else {
-									return next_level_node.handler;
+                                    if (next_level_node.context) {
+                                        return [next_level_node.context, next_level_node.handler];
+                                    } else {
+                                        return next_level_node.handler;
+                                    }
+
+
 								}
 							} else {
 								if (next_level_node.wildcardChild) {
@@ -402,9 +448,23 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 									if (params) {
 										params.wildcard_value = str_wildcard_value;
-										return [next_level_node.wildcardChild.handler, params];
+
+                                        if (next_level_node.wildcardChild.context) {
+                                            return [next_level_node.wildcardChild.context, next_level_node.wildcardChild.handler, params];
+                                        } else {
+                                            return [next_level_node.wildcardChild.handler, params];
+                                        }
+
+
 									} else {
-										return [currentNode.wildcardChild.handler, {'wildcard_value': str_wildcard_value}];
+                                        if (next_level_node.wildcardChild.context) {
+
+                                            return [next_level_node.wildcardChild.context, next_level_node.wildcardChild.handler, params];
+                                        } else {
+                                            return [next_level_node.wildcardChild.handler, {'wildcard_value': str_wildcard_value}];
+                                        }
+
+
 									}
 								}
 
@@ -465,7 +525,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//  so type_levels as an array.
 			// Maybe they will get indexed on the client.
 
-			this.set('type_levels', ['router', 'application router']);
+			this.set('type_levels', ['router']);
 
 
 			// And would carry out its process according to the routing tree
@@ -483,11 +543,15 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 		'start': function(callback) {
 			callback(null, true);
 		},
+        'set_route': function(str_route, context, fn_handler) {
+            var rt = this.get('routing_tree');
+            return rt.set(str_route, context, fn_handler);
+        },
 		'process': function(req, res) {
 
 			// Perhaps it could detect /admin and send to an Application-Admin resource.
 
-			//console.log('app router processing');
+			console.log('router processing');
 			var remoteAddress = req.connection.remoteAddress;
 
 			// better just to have .get
@@ -548,27 +612,51 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//  I think encorporating express routing, or something very similar would be nice.
 
 			//console.log('this.parent() ' + stringify(this.parent()));
-			// then 
+			// then
 
-			var pool = this.meta.get('pool');
+            // Default routing to various things in the pool.
+
+            // The resource for each site in a different pool makes sense.
+            // I think it would also make sense for there to be a resource pool for the entire server?
+            //  Maybe separate resource pools by app makes the most sense.
+            //  It could depend on the apps themselves, whether they are separate and need their own environments (different customers etc).
+            //  So being able to access shared resources from different apps would be useful at times.
+
+
+
+
+
+
+
+
+			//var pool = this.meta.get('pool');
 			// should have a bunch of resources from the pool.
 			//console.log('post get pool');
-			var pool_resources = pool.resources();
+			//var pool_resources = pool.resources();
 			//console.log('pool_resources ' + stringify(pool_resources));
 
-			var pool_resource_names = [];
-			each(pool_resources, function(i, item) {pool_resource_names.push(item.meta.get('name'));});
+			//var pool_resource_names = [];
+
+
+			//each(pool_resources, function(i, item) {pool_resource_names.push(item.meta.get('name'));});
+
 			//console.log('pool_resource_names ' + stringify(pool_resource_names));
 
 
-			var fswa = pool.get_resource('File System Web Admin');
-			var lfs = pool.get_resource('Local File System');
+            // Perhaps the router should not have so much in its default configuration.
+
+
+
+
+
+			//var fswa = pool.get_resource('File System Web Admin');
+			//var lfs = pool.get_resource('Local File System');
 
 			// Get the login resource from the pool...
 
 			// 'Login HTML Resource'
 
-			var login = pool.get_resource('Login HTML Resource');
+			//var login = pool.get_resource('Login HTML Resource');
 
 			// and the resource pool itself... can we use that to serve the resources over HTTP?
 
@@ -611,7 +699,9 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 			//var url = require('url');
 			var url_parts = url.parse(req.url, true);
-			//console.log('url_parts ' + stringify(url_parts));
+			console.log('url_parts ' + stringify(url_parts));
+
+            console.log('req.url', req.url);
 
 			// This can do a lot of determination about where in the app the logic needs to go.
 
@@ -619,7 +709,6 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			// It could be object.json
 
 			var splitPath = url_parts.path.substr(1).split('/');
-
 			// May also want to see what response type is wanted.
 			//console.log('splitPath ' + stringify(splitPath));
 			//console.log('splitPath.length ' + splitPath.length);
@@ -627,13 +716,15 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			// There could be a default application router that sets these paths up in the routing tree.
 			//  With the route_res...
 			//  Want to find out variuous parameters, such as the wildcard/
-
-
-
-
 			var route_res = rt.get(req.url);
 
-			//console.log('route_res', route_res);
+
+            // it's a function.???
+			//console.log('2) route_res', route_res);
+
+            // And if we don't have a route res, we return false.
+
+
 
 			//Want the route_res to tell us the path within the resource and the name of the resource.
 			//  Some resources will be routed with wildcards.
@@ -644,18 +735,86 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			var processor_values_pair;
 
 			if (tof(route_res) == 'array') {
-				processor_values_pair = route_res;
-				var handler = processor_values_pair[0];
-				var params = processor_values_pair[1];
-				req.params = params;
-				handler(req, res);
+                processor_values_pair = route_res;
+                //console.log('route_res', route_res);
+                var context, handler, params;
+                // the handler function context.
+
+                console.log('route_res.length', route_res.length);
+
+                if (route_res.length == 2) {
+                    // or could be context and handler.
+
+                    var rr_sig = get_item_sig(route_res, 1);
+                    console.log('rr_sig', rr_sig);
+
+                    console.log('route_res', route_res);
+
+                    // context is a Data_Object.
+
+                    // f,o = handler, params.
+
+                    if (rr_sig == '[D,f]') {
+                        context = processor_values_pair[0];
+                        handler = processor_values_pair[1];
+                    }
+                    if (rr_sig == '[f,o]') {
+                        handler = processor_values_pair[0];
+                        params = processor_values_pair[1];
+                    }
+
+                    // D,f
+                    //
+
+
+
+                }
+
+                if (route_res.length == 3) {
+                    context = processor_values_pair[0];
+                    handler = processor_values_pair[1];
+
+                    params = processor_values_pair[2];
+                }
+
+                // length 4?
+
+
+
+
+
+
+                // perhaps 3 objects...
+                // context, handler, params.
+
+				if (params) req.params = params;
+
+                if (context) {
+                    handler.call(context, req, res);
+                } else {
+                    handler(req, res);
+                }
+
+
 
 			} else if (tof(route_res) == 'function') {
 				// 
 
-				route_res(req, res);
+				//route_res.call(this, req, res);
 
-			}
+                // but it's become anonymous now :(
+
+                if (context) {
+                    route_res.call(context, req, res);
+                } else {
+                    route_res(req, res);
+                }
+
+
+
+			} else if (tof(route_res) == 'undefined') {
+                return false;
+            }
 
 
 			//console.log('processor_values_pair ' + stringify(processor_values_pair));

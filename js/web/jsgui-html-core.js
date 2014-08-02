@@ -32,7 +32,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         is_defined = jsgui.is_defined,
         str_arr_mapify = jsgui.str_arr_mapify;
     var clone = jsgui.clone,
-        each = jsgui.each,
+        each = jsgui.eac,
         data_type_instance = jsgui.data_type_instance;
 
     var str_hex_to_int = jsgui.str_hex_to_int,
@@ -1548,6 +1548,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'all_html_render': function(callback) {
 
+            console.log('all render callback', tof(callback));
             if (callback) {
 
                 //console.log('deferred rendering');
@@ -1655,6 +1656,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
 
         'render_content': function () {
+
+            console.log('render_content');
             
             // it's controls() now, gets the collection of controls.
             //each(this._.controls, function(i, n) {
@@ -1699,7 +1702,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             var tn, output;
             content.each(function (i, n) {
                 //console.log('-------------------------');
-                //console.log('tof(n) ' + tof(n));
+                console.log('tof(n) ' + tof(n));
                 //console.log('(n) ' + stringify(n));
                 //throw 'stop';
                 tn = tof(n);
@@ -1724,10 +1727,22 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     //var output = jsgui.output_processors['string'](n.get());
                     res.push(jsgui.output_processors['string'](n.get()));
                 } else {
+                    if (tn == 'data_object') {
+                        console.log('n', n);
+                        //
+                        throw 'stop';
+                    } else {
+                        res.push(n.all_html_render());
+                    }
+
                     //htm = n.all_html_render();
-                    res.push(n.all_html_render());
+
                 }
+
+
             });
+
+            //console.log('res', res);
             return res.join('');
         },
 
@@ -2120,7 +2135,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 // how frequently does it need to be called?
                 //  is it being called too much?
-                //console.log('£ this._.page_context ' + this._.page_context);
+                //console.log('ï¿½ this._.page_context ' + this._.page_context);
                 if (is_defined(this._.page_context)) {
                     return this._.page_context;
                 } else {

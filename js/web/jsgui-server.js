@@ -4,14 +4,15 @@ if (typeof define !== 'function') {
 
 define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resource', './jsgui-je-suis-xml',
 	'cookies', '../resource/local-server-info', '../resource/local-file-system',
-	'../resource/core/server-pool', '../resource/core/application-router', '../resource/file-system-web-admin', '../resource/web-admin',
+	'../resource/core/server-pool', '../resource/core/router', '../resource/core/website',
+        '../resource/file-system-web-admin', '../resource/web-admin',
 	'../resource/core/site-static-html',
 	'../resource/core/site-javascript', '../resource/core/site-css', '../resource/core/site-images', '../resource/core/site-audio',
 	'../resource/info',
 	'../resource/login', './server-page-context'], 
 
 	function(sockjs, jsgui, os, http, libUrl, Resource, JeSuisXML, Cookies,
-		Local_Server_Information, Local_File_System, Server_Resource_Pool, Application_Router,
+		Local_Server_Information, Local_File_System, Server_Resource_Pool, Router, Website_Resource,
 		Resource_File_System_Web_Admin, Resource_Web_Admin, Site_Static_HTML, Site_JavaScript, Site_CSS, Site_Images, Site_Audio, Info,
 		Login, Server_Page_Context) {
 	
@@ -22,7 +23,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 	
 	// This should be running in node.js
 	
-	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
+	var stringify = jsgui.stringify, each = jsgui.eac, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
@@ -31,19 +32,95 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 	//each(Basic_Controls, function(ctrl_name, ctrl_constructor) {
 	//	jsgui[ctrl_name] = ctrl_constructor;
 	//})
-	
+
+    // This server module is being expanded to do more out-of-the-box.
+    //  Server will be able to host multiple applications.
+
+
+
+
+
 	var exec = require('child_process').exec;
 
 	var JSGUI_Server = Enhanced_Data_Object.extend({
 
 		'init': function(spec) {
-			this._super(spec);
-			var resource_pool = new Server_Resource_Pool({
-				// Other things can be made available through the server resource pool.
-				'access': {
-					'full': ['server_admin']
-				}
-			});
+
+
+            // The spec may be quite different.
+            //  It may be an object containing routes and applications.
+
+            // object containing application routes...
+
+            var resource_pool = new Server_Resource_Pool({
+                // Other things can be made available through the server resource pool.
+                'access': {
+                    'full': ['server_admin']
+                }
+            });
+
+            var server_router = new Router({
+                'meta': {
+                    'name': 'Server Router'
+                }
+            });
+
+            resource_pool.push(server_router);
+
+            console.log('spec', spec);
+
+            var t_spec = tof(spec);
+            if (t_spec == 'object') {
+                each(spec, function(app_spec, route) {
+                    // Create a new Application Resource.
+
+                    var app = new Website_Resource(app_spec);
+                    console.log('made Website_Resource');
+
+                    // But the right context?
+                    //
+
+
+                    server_router.set_route(route, app, app.process);
+                    // And set it to that route in the routing table.
+
+
+
+
+                })
+            }
+
+            /*
+             '/': {
+                 'name': 'docs',
+                 'database': {
+                 'type': 'postgres',
+                 'host', 'port', 'username', 'password', 'database_name'
+                 }
+             }
+
+             */
+
+
+
+
+			this._super({});
+
+            // Applications should have their own resource pools too.
+            //  The applications would be able to use the server resource pool
+            //   There may be some security restrictions though, but not to begin with.
+
+
+
+
+
+
+
+            // Want this to start with a single application by default.
+            //  Or make it easy to define a single application.
+
+
+
 
 			// Having a Login_Html_Resource?
 			//  Could be fairly useful as standard.
@@ -64,7 +141,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			// Would be possible to swap it for a 2 facter authentication login for example.
 
 
-
+            /*
 			resource_pool.push(new Login_Html_Resource({
 				'meta': {
 					'name': 'Login HTML Resource'
@@ -72,11 +149,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			}));
 
 
-			resource_pool.push(new Application_Router({
-				'meta': {
-					'name': 'Application Router'
-				}
-			}));
+
 
 			resource_pool.push(new Local_File_System({
 				'meta': {
@@ -89,6 +162,8 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 					'name': 'Web Admin'
 				}
 			}));
+
+			*/
 
 
 
@@ -137,8 +212,18 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
 
 
+            // The various resources like this will go within the website.
+            //  However, I'm not so sure about differentiating based on paths.
+            //  Also, some of those resources will need to be modified to plug into a web db resource
+            //   so that they can server files which are located there.
+            //  Need to get some resources processing things that are not HTTP requests, but getting the data that's required.
 
 
+
+
+
+
+            /*
 			resource_pool.push(new Info({
 				'meta': {
 					'name': 'Info'
@@ -175,6 +260,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 					'name': 'Site Audio'
 				}
 			}));
+			*/
 
 
 			// Resource_File_System_Web_Admin
@@ -273,14 +359,18 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
                     var ipAddresses = [];
 
-                    each(matching, function(i, v) {
+                    each(matching, function(v, i) {
                     	var ipAddress = v.get('address');
                     	ipAddresses.push(ipAddress);
                     });
 
 
                     // get_resource - get should do the job!
-                    var application_router = resource_pool.get_resource('Application Router');
+
+
+                    // Will be ther server router.
+
+                    var application_router = resource_pool.get_resource('Server Router');
 
                     console.log('ipAddresses ' + stringify(ipAddresses));
                     //console.log('application_router ' + stringify(application_router));
@@ -301,7 +391,12 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     //console.log('rt ' + rt);
                     //throw 'stop';
 
+                    // The server won't be routing like that...
+                    //  it will send the requests to the relevant applications.
 
+
+
+                    /*
 
                     rt.set('/resources/*', function(req, res) {
                     	console.log('resources wildcard routing. will send to the resource pool publisher resource.');
@@ -336,6 +431,8 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	js.process(req, res);
                     });
 
+                    */
+
                     /*
                     rt.set('/images/*', function(req, res) {
                     	console.log('images wildcard routing. will send to the images resource.');
@@ -349,7 +446,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 					// May want to serve images from different paths.
 					//  That would mean setting things up in the Routing_Tree differently.
 					
-
+                    /*
                     rt.set('/img/*', function(req, res) {
                     	//console.log('images wildcard routing. will send to the images resource.');
                     	//throw 'stop';
@@ -375,7 +472,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     //  That's a simple configuration that's not using advanced JSGUI functionality on the server,
                     //  but will be used to quickly host a client-side app.
 
-                    
+                    */
 
                     //throw 'stop';
                     // Different / better mapping of connections by ip address too?
@@ -383,7 +480,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
 					var i_connections = 0;
 
-                    each(ipAddresses, function(i, ipAddress) {
+                    each(ipAddresses, function(ipAddress, i) {
 
                     	// Different HTTP servers for the different network addresses.
 
@@ -439,6 +536,9 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 							
 						});
 
+
+                        // Single sock server for each server
+                        //  The applications will make use of the server's sock facility.
 						var sock_server = sockjs.createServer();
 
 						// However, may want this for particular resource?
@@ -584,7 +684,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			
 			var url = req.url;
 
-			console.log('process_request url ' + url);
+			console.log('server process_request url ' + url);
 			
 			var s_url = url.split('/');
 			console.log('s_url ' + stringify(s_url));
@@ -601,12 +701,19 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 				'req': req,
 				'res': res
 			});
+
+            var router = this.get('router');
+
+
 			
 			// then that should be able to understand things about the browser from the user agent string.
 			
 			//console.log('a_path ' + stringify(a_path));
 			
 			if (a_path.length > 0) {
+
+                router.process(req, res);
+
 				// However, this could be hosting different websites at different URLs.
 				//  But there could easily be a root website.
 				//  Will want just one website for the moment... but will want that to be configurable too.
@@ -614,7 +721,11 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 				
 				// A server login provider... will have the same authentication for all websites and services for the moment.
 				//  A website can specify its own authentication or authorization provider.
-				
+
+                // Don't check for this here. Will use the routing tree.
+
+
+				/*
 				if (a_path[0] == 'admin') {
 					// Then make sure logged in / has admin rights?
 					
@@ -673,6 +784,8 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 				} else {
 					
 				}
+
+				*/
 				
 				// However, will authenticate and check authorization early if possible.
 				//  The website will have its access permissions defined.

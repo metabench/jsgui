@@ -206,7 +206,12 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
     */
     // Data_Object_Constraint
 
-    var Data_Object = require('./data-object');
+    // Or include this in Data_Object?
+    // May be best to make its own module as we should not require Data_Object here?
+
+
+
+    //var Data_Object = require('./data-object');
 
 	var Data_Object_Constraint = Constraint.extend({
 	    'init': function (spec) {
@@ -215,11 +220,15 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
         'match': function(obj) {
 
             // Don't have Data_Object here??, as Data_Object is used by this
-            var res = obj instanceof Data_Object.constructor;
+            //var res = obj instanceof Data_Object.constructor;
+
+            var res = tof(obj) == 'data_object';
             //console.log('res', res);
             return (res);
         }
 	});
+
+
 
 
 	var Data_Object_Def_Constraint = Constraint.extend({
