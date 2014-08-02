@@ -436,11 +436,17 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 
 
+    // Maybe just call this Router.
+    //  There will be application-level and server-lever routers.
+    //  The simplest config, though, either does not have a server-level router, or it passes all requests over to the application-level router.
 
 
 
 
-	var Application_Router = Resource.extend({
+
+
+
+	var Router = Resource.extend({
 		'fields': {
 			'routing_tree': Routing_Tree
 		},
@@ -525,7 +531,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//   nice to have encapsulation of this because it can do compression.
 
 
-			//console.log('Application_Router process req.url ' + req.url);
+			//console.log('Router process req.url ' + req.url);
 
 			// But just the general routing for the application...
 			//  Should be able to access an Application Routes object to change it in some ways.
@@ -867,7 +873,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 	});
 	
 	
-	return Application_Router;
+	return Router;
 	
 	
 });
