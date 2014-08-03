@@ -562,7 +562,9 @@ define(["./jsgui-html", "../resource/core/resource"],
                 }
             }),
 
-            'set_document': fp(function(a, sig) {
+            '_set_document': fp(function(a, sig) {
+                console.log('set_document sig', sig);
+                throw 'stop';
                 var key, mime_type, value, callback;
                 if (sig == '[s,s,s,f]') {
                     key = a[0];
@@ -585,7 +587,13 @@ define(["./jsgui-html", "../resource/core/resource"],
                             callback(null, res_set_document);
                         }
                     });
+                } else {
+                    console.log('sig', sig);
+                    throw 'unexpected signature';
+
                 }
+
+
             }),
 
             // have lower level functions too, they will deal with the db objects.
@@ -624,6 +632,18 @@ define(["./jsgui-html", "../resource/core/resource"],
 
             },
 
+            'get_document_metadata_record_type_id_by_name': function(name, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_document_metadata_record_type_id_by_name', [name], function(err, res_get_document_metadata_record_type_id_by_name) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_get_document_metadata_record_type_id_by_name', res_get_document_metadata_record_type_id_by_name);
+                        callback(null, res_get_document_metadata_record_type_id_by_name);
+                    }
+                });
+            },
+
             'create_document_type': function(name, mime_type, callback) {
                 var db = this.get('database');
                 db.execute_function_single_row('create_document_type', [name, mime_type], function(err, res_create_document_type) {
@@ -632,6 +652,18 @@ define(["./jsgui-html", "../resource/core/resource"],
                     } else {
                         console.log('res_create_document_type', res_create_document_type);
                         callback(null, res_create_document_type);
+                    }
+                });
+            },
+
+            'create_document_metadata_record_type': function(name, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('create_document_metadata_record_type', [name], function(err, res_create_document_metadata_record_type) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create_document_metadata_record_type', res_create_document_metadata_record_type);
+                        callback(null, res_create_document_metadata_record_type);
                     }
                 });
             },
@@ -674,6 +706,35 @@ define(["./jsgui-html", "../resource/core/resource"],
                         }
                     }
                 })
+            },
+
+            'ensure_document_metadata_record_type': function(name, callback) {
+                // Can we call such an 'ensure' function in the DB?
+                // I think it would have to use the Postgres SQL to get it to do multiple things and use variables.
+
+                console.log('ensure_document_metadata_record_type');
+                var that = this;
+                this.get_document_metadata_record_type_id_by_name(name, function(err, document_metadata_record_type_id) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        console.log('document_metadata_record_type_id', document_metadata_record_type_id);
+                        var t_document_metadata_record_type_id = tof(document_metadata_record_type_id);
+
+                        if (t_document_metadata_record_type_id == 'number') {
+                            console.log('already exists id', document_metadata_record_type_id);
+
+                            // do an update on it to make sure it has the right information.
+
+                            that.update_document_metadata_record_type(document_type_id, name, callback);
+
+                            //throw 'stop';
+
+                        } else {
+                            that.create_document_metadata_record_type(name, callback);
+                        }
+                    }
+                })
 
             },
 
@@ -688,7 +749,6 @@ define(["./jsgui-html", "../resource/core/resource"],
                         throw err;
                     } else {
 
-
                         //res_get_user_by_id = trim(res_get_user_by_id);
 
                         console.log('res_get_document_id_by_key', res_get_document_id_by_key);
@@ -701,6 +761,20 @@ define(["./jsgui-html", "../resource/core/resource"],
                     }
                 });
 
+            },
+
+            // The value will be a buffer. Hopefully node pg handles that fine.
+
+            '_create_binary_document_value': function(document_id, value, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('create_binary_document_value', [document_id, value], function(err, res_create_binary_document_value) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create_binary_document_value', res_create_binary_document_value);
+                        callback(null, res_create_binary_document_value);
+                    }
+                });
             },
 
             '_create_string_document_value': function(document_id, value, callback) {
@@ -751,6 +825,30 @@ define(["./jsgui-html", "../resource/core/resource"],
                 });
             },
 
+            'get_binary_document_value_id_by_document_id': function(document_id, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_binary_document_value_id_by_document_id', [document_id], function(err, res_get_binary_document_value_id_by_document_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_get_binary_document_value_id_by_document_id', res_get_binary_document_value_id_by_document_id);
+                        callback(null, res_get_binary_document_value_id_by_document_id);
+                    }
+                });
+            },
+
+            'get_binary_document_value_value_by_document_id': function(document_id, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_binary_document_value_value_by_document_id', [document_id], function(err, res_get_binary_document_value_value_by_document_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_get_binary_document_value_value_by_document_id', res_get_binary_document_value_value_by_document_id);
+                        callback(null, res_get_binary_document_value_value_by_document_id);
+                    }
+                });
+            },
+
             'get_string_document_value_id_by_document_id': function(document_id, callback) {
                 var db = this.get('database');
                 db.execute_function_single_row('get_string_document_value_id_by_document_id', [document_id], function(err, res_get_string_document_value_id_by_document_id) {
@@ -791,6 +889,88 @@ define(["./jsgui-html", "../resource/core/resource"],
 
             // Could make this polymorphic, and call itself?
 
+            // type name or mume type?
+
+            'set_document_metadata': fp(function(a, sig) {
+
+                // Could possibly call this function with the document key.
+                //  It would look up the document id, by key, and call the function again.
+
+                var document_id, document_key, metadata_record_key, metadata_record_value, callback;
+                var that = this;
+
+                if (sig == '[s,s,s,f]' || sig == '[s,s,n,f]') {
+                    document_key = a[0];
+                    metadata_record_key = a[1];
+                    metadata_record_value = a[2];
+                    callback = a[3];
+
+                    // Then need to look up the document id, and call the function again.
+
+                    that.get_document_id_by_key(document_key, function(err, document_id) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            that.set_document_metadata(document_id, metadata_record_key, metadata_record_value, callback);
+                        }
+                    })
+
+                }
+
+
+                if (sig == '[n,s,s,f]' || sig == '[n,s,n,f]') {
+                    document_id = a[0];
+                    metadata_record_key = a[1];
+                    metadata_record_value = a[2];
+                    callback = a[3];
+                }
+
+                if (tof(document_id) == 'number') {
+                    var t_metadata_record_value = tof(metadata_record_value);
+
+                    this.ensure_document_metadata_record(document_id, metadata_record_key, metadata_record_value, function(err, document_metadata_record_id) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            console.log('document_metadata_record_id', document_metadata_record_id);
+
+                            // then need to ensure the document metadata record value (of the appropriate type).
+
+                            if (t_metadata_record_value == 'string') {
+
+                            }
+                            if (t_metadata_record_value == 'number') {
+                                // Could assume it's an integer type?
+                                //  Will do that for the moment.
+
+                                that.ensure_metadata_integer_record_value(document_metadata_record_id, metadata_record_value, function(err, res_ensure_metadata_integer_record_value) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('res_ensure_metadata_integer_record_value', res_ensure_metadata_integer_record_value);
+
+
+                                    }
+                                });
+
+
+
+
+                            }
+
+
+
+                        }
+                    })
+                };
+
+                // then we see if there is such a metadata record already.
+                //  could maybe use an ensure function.
+
+
+
+            }),
+
 
 
             'set_document': function(key, value, type_name, callback) {
@@ -801,6 +981,20 @@ define(["./jsgui-html", "../resource/core/resource"],
                 //  will be easier that way, less typing too.
 
                 // need to ensure there is that document type, get the dt id.
+                console.log('key', key);
+                console.log('value', value);
+
+
+                // This may automatically obtain the metadata...?
+
+                //  Or better to make another function that does that too.
+                //   Probably best to keep it simpler that way.
+                //   Create the document object in the db, then make the metadata.
+                //   However, want the set_document function to ensure the metadata is correctly there too.
+                //   It will be very useful for images etc having the metadata as fields in the database.
+
+
+
 
 
                 var that = this;
@@ -814,9 +1008,7 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                         if (t_document_type_id == 'number') {
                             // proceed...
-
                             //that.document_type_id
-
                             // look for the existing document.
 
                             that.get_document_id_by_key(key, function(err, document_id) {
@@ -904,6 +1096,65 @@ define(["./jsgui-html", "../resource/core/resource"],
                                                                             throw err;
                                                                         } else {
                                                                             console.log('res_create_json_document_value', res_create_json_document_value);
+
+                                                                            callback(null, document_id);
+                                                                        }
+                                                                    });
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+
+                                                    // There will be fewer document types in terms of the lower level db implementation.
+                                                    //  Could even be integer document types... though it's not much of a document.
+                                                    //   Maybe have some dynamic table / value system so that a variety of indexed data could be stored.
+
+                                                    // _create_binary_document_value
+
+
+                                                    // And binary document types.
+
+                                                    if (type_name == 'jpeg') {
+                                                        that.get_binary_document_value_id_by_document_id(document_id, function(err, binary_document_value_id) {
+                                                            if (err) {
+                                                                throw err;
+                                                            } else {
+                                                                console.log('binary_document_value_id', binary_document_value_id);
+
+                                                                var t_binary_document_value_id = tof(binary_document_value_id);
+
+                                                                if (t_binary_document_value_id == 'number') {
+                                                                    // update existing
+
+                                                                } else {
+
+                                                                    // Will also need to deal with the metadata.
+
+                                                                    that._create_binary_document_value(document_id, value, function(err, res_create_binary_document_value) {
+                                                                        if (err) {
+                                                                            throw err;
+                                                                        } else {
+                                                                            console.log('res_create_binary_document_value', res_create_binary_document_value);
+
+                                                                            // Also want to create the metadata records.
+
+                                                                            // Will have this metadata fairly normalised within the Postgres system.
+                                                                            //  eg integer metadata records
+                                                                            //     string metadata records.
+
+                                                                            // Document metadata records...
+                                                                            //  basically a key-value store for the document metadata.
+                                                                            //   so each documents has its own simple KVS to keep track of metadata
+
+
+
+
+
+
+
+
+
+
 
                                                                             callback(null, document_id);
                                                                         }

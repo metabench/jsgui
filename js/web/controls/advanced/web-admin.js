@@ -34,6 +34,43 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 		// I think making the resource pool viewer control could make sense.
 		//  There will also be the resource publisher / resource pool publisher that exposes the rp through a json interface
 
+
+        // Would probably want this control to be able to change its layout substantially.
+        //  With the 2 columns, the left one can be for navigation, and the right for content. That can be standard, and works for many things.
+        //  May want the flexibility to change this about a bit.
+        //   So the Web_Admin Control would have various internal components, maybe 2 or 3 of them
+        //    Navigation Panel
+        //    Content Panel
+        //    Metadata Panel
+        //    Command Panel
+        //    Misc (metadata and command)
+        //   Then a layout system could hide, show, shrink etc these various panels, while the panels have their functionality encapsulated.
+
+
+        // Will make the Web_Admin_Images flexibly constructed like this.
+        //  Multi_Mode_Layout
+        //   [L/R Split - navigation on left, right split with content in most of the space, thin metadata band at the bottom.
+
+        // The Multi_Mode_Layout control would be a bit like a small app.
+        //  It would have various pieces of functionality for editing a category of data.
+        //  Eg could administer the images on a website.
+        // The division of navigation, content, and (metadata + command) will be a useful pattern.
+        //  Will be useful for interacting with a lot of content.
+
+        // The multi-mode-layout won't be a page layout.
+        //  It would be possible to have it as a control within the page.
+        //  May also be possible to represent it as an icon / list item. That makes the possibility that the items can be expanded and then do
+        //   a lot of things.
+
+
+
+
+
+
+
+
+
+
 		var Web_Admin = Columns_2.extend({
 
 			// Maybe should put this into a form, so that it does a form post.

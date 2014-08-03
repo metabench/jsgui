@@ -44,8 +44,11 @@ if (typeof define !== 'function') {
 
 define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
     "../web-admin", "./site-javascript", "./site-css",
+    "../../web/db-resource-postgres",
+
     "../../db/resource/factory"], function(jsgui, Web_Resource, Router, Resource_Pool,
                                            Resource_Web_Admin, Site_JavaScript, Site_CSS,
+                                           DB_Web_Resource,
 
                                            database_resource_factory) {
 
@@ -79,8 +82,26 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
 
             var database_spec = spec.database;
+            database_spec.name = database_spec.name || database_spec.database_name;
 
             var database_resource = database_resource_factory(database_spec);
+
+            database_resource.start();
+
+            // should start automatically when in the pool?
+            //  does the pool need to be told to start?
+
+            // Though probably don't want to start the resource on initialization.
+
+
+            resource_pool.add(database_resource);
+
+            var web_database_resource = new DB_Web_Resource({
+                'database': database_resource
+            })
+
+            resource_pool.add(web_database_resource);
+
 
             console.log('database_resource', database_resource);
 
@@ -118,6 +139,7 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             this.set('router', router);
 
             var admin_web_resource = new Resource_Web_Admin({
+                'web_database': web_database_resource,
                 'meta': {
                     'name': 'Web Admin'
                 }
@@ -180,7 +202,16 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             // Need to wait until the database has started.
 
             console.log('pre call Website Resource start callback');
-            callback(null, true);
+
+            // start the db / web db resources?
+
+            // start the resource pool?
+
+            var resource_pool = this.get('resource_pool');
+            resource_pool.start(callback);
+
+
+            //callback(null, true);
 
 
 

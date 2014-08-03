@@ -89,7 +89,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 			this.meta.set('type_levels', ['database', 'rdb', 'postgres']);
 
-			//console.log('spec.resource', spec.resource);
+			console.log('spec', spec);
 			//throw 'stop';
 
 			// Meta.get('table_names')
@@ -117,7 +117,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                         'port': port
                     })
 
-                    this.set('server', server);
+                    this.meta.set('server', server);
                 }
 
             }
@@ -242,6 +242,11 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			var host = server.meta.get('host');
 
 			var db_name = meta.get('name');
+
+
+            if (db_name.value) db_name = db_name.value();
+
+            console.log('db_name', db_name);
 
 			var get_connection_string = function() {
 
@@ -2400,7 +2405,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                             that.meta.set('status', 'on');
 
                             that.trigger('start');
-                            callback(null, true);
+                            if (callback) callback(null, true);
 
                             /*
 
@@ -3474,6 +3479,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
             console.log('query_spec', query_spec);
 
+            // should have the client.
+
+
+
 
 
 			if (tof(query_spec) == 'object') {
@@ -3565,7 +3574,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			});
 			
 			var sql = sel.toString();
-			console.log('sql ' + sql);
+			//console.log('sql ' + sql);
 			
 			//client.query({
 			//	  name: 'insert beatle',
@@ -3574,7 +3583,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			//	});
 			
 			
-			console.log('b) params ' + stringify(params));
+			//console.log('b) params ' + stringify(params));
 			//each(params, function(i, param) {
 				//console.log('param ' + stringify(param));
 				//values.push();

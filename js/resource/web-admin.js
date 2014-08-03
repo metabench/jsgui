@@ -10,8 +10,11 @@ if (typeof define !== 'function') {
 
 
 define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/server-page-context',
+        'multiparty', 'util',
+        'fs', '../fs/jsgui-node-fs2-core',
         '../web/jsgui-je-suis-xml', 'cookies',
-        '../web/controls/advanced/web-admin'],
+        '../web/controls/advanced/web-admin',
+        '../web/controls/advanced/file-upload'],
 
 	// May make a Site-Info or just Info resource.
 	//  That would be in the resource pool and deal with the various pieces or Info that will get displayed in the website.
@@ -27,7 +30,11 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
 
-	function(jsgui, os, http, libUrl, Resource, Server_Page_Context, JeSuisXML, Cookies, Web_Admin_Control) {
+	function(jsgui, os, http, libUrl, Resource, Server_Page_Context,
+             multiparty, util,
+             fs, fs2,
+             JeSuisXML, Cookies,
+             Web_Admin_Control, File_Upload) {
 
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
@@ -50,10 +57,20 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 	// This could use a more general Resource protection system, so it authenticates automatically?
 
 	var Resource_Web_Admin = Resource.extend({
+
+        'fields': {
+            'web_database': Object
+        },
+
 		
 		'init': function(spec) {
 			this._super(spec);
 		},
+
+        // Hmmmm... may be better to do some of these things through the website resource itself?
+        //
+
+
 		'start': function(callback) {
 			callback(null, true);
 		},
@@ -70,6 +87,10 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
             console.log('arguments.length ' + arguments.length);
 			
 			console.log('Resource_Web_Admin process');
+
+            var rmethod = req.method;
+
+
 
 
 
@@ -90,6 +111,18 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
 			var pool = this.meta.get('pool');
+
+
+            var web_db = this.get('web_database');
+            // could get the database from the pool
+            // rather than direct linking.
+            //  could then make more intelligent use of the pool, such as using a file system.
+
+            //
+
+
+
+
 			// should have a bunch of resources from the pool.
 			//console.log('pool ' + pool);
 
@@ -178,13 +211,25 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
 			// Should show an admin page.
-			var spc = new Server_Page_Context({
-				'req': req,
-				'res': res,
-				'pool': pool
-			});
-			
-			
+
+            // May not need to make a page.
+
+            var spc, hd, body;
+
+            if (rmethod == 'GET') {
+                spc = new Server_Page_Context({
+                    'req': req,
+                    'res': res,
+                    'pool': pool
+                });
+                hd = new jsgui.Client_HTML_Document({
+                    'context': spc
+                });
+                hd.include_client_css();
+                hd.include_jsgui_client('/js/app.js');
+                body = hd.body();
+            }
+
 			//this.respond(spc);
 
 			// Not so sure about this responding exclusively with an HTML document.
@@ -192,14 +237,8 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 			// Maybe something else will make the server's resource pool available?
 
+            // Not necessarily....
 
-
-			var hd = new jsgui.Client_HTML_Document({
-				'context': spc
-			});
-
-			hd.include_client_css();
-			hd.include_jsgui_client('/js/app.js');
 			
 			// need to have the login control.
 			//  Should be fairly simple... but need to be collecting the login information.
@@ -231,7 +270,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 			// The content editor could allow editing of both pages and structure.
 			//  Will be possible to view either the structure or a page by itself.
-			var body = hd.body();
+
 
 			// Having some kind of a control panel would be useful here.
 			//  Panel on the left, likely for navigation.
@@ -273,6 +312,372 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
                 console.log('post add wa control to body');
 			}
+
+            if (rurl == '/admin/images/') {
+                // Want to use the web admin control here.
+
+                console.log('pre create web admin images control');
+
+                // Could show a particular control or page control for administering
+
+                // Web_Admin_Images Control.
+                //  It will:
+                //    show a list of all images
+                //    allow selecting an image (possibly multiple) from the list
+                //    possibly have a thumbnail view (both navigation section and full)
+                //    show the image in a main section
+                //    allow viewing and editing of metadata
+
+                // Use a Web Admin Images control
+
+
+                var ctrlAdmin = new Web_Admin_Control({
+                    'context': spc
+                });
+
+                // I think it will need to use asyncronous rendering.
+
+                //console.log('post create web admin control');
+                // oh... when the body is created, it does not have a context.
+                //  need to be able to assign it, and sub-controls a context
+
+                // Could use activate?
+                ctrlAdmin.active();
+                body.add(ctrlAdmin);
+
+                console.log('post add wa control to body');
+            }
+
+            if (rurl == '/admin/upload-image/') {
+
+                // Different depending if a GET or POST.
+
+                if (req.method == 'POST') {
+                    console.log('posted upload image');
+
+                    // May be better not to use formidable, and to parse the data myself.
+
+                    var buf;
+                    var buf_pos = 0;
+
+                    var count = 0;
+
+                    var l = 0;
+
+                    var form = new multiparty.Form();
+
+                    form.on('part', function(part) {
+                        // You *must* act on the part by reading it
+                        // NOTE: if you want to ignore it, just call "part.resume()"
+
+                        console.log('part', part);
+
+                        buf = new Buffer(part.byteCount);
+                        buf_pos = 0;
+
+                        console.log('part.byteCount', part.byteCount);
+
+
+                        if (part.filename === null) {
+                            // filename is "null" when this is a field and not a file
+                            console.log('got field named ' + part.name);
+                            // ignore field's content
+                            part.resume();
+                        }
+
+                        if (part.filename !== null) {
+                            // filename is not "null" when this is a file
+                            count++;
+                            console.log('got file named ' + part.name);
+                            // ignore file's content here
+                            part.resume();
+                        }
+
+
+
+                        part.addListener('data', function(data) {
+                            // ...
+                            console.log('data', data);
+
+                            l += data.length;
+
+                            var len_data = data.length;
+                            console.log('len_data', len_data);
+
+                            data.copy(buf, buf_pos);
+                            buf_pos += len_data;
+
+                        });
+                    });
+
+// Close emitted after form parsed
+                    form.on('close', function() {
+                        console.log('Upload completed!');
+                        console.log('l', l);
+
+
+                        // And let's ave buf...
+
+                        // Don't have to just write it like that.
+
+                        // key, mime_type, value, callback
+
+                        //throw 'stop';
+
+                        // the web db resource, and the db resource, need to have started.
+
+
+                        // 'image/jpeg'
+                        web_db.set_document('out.jpg', buf, 'jpeg', function(err, res_set_document) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                //throw 'stop';
+
+                                console.log('res_set_document', res_set_document);
+
+                                // Not sure any more needs to be done here.
+
+
+
+                            }
+                        });
+
+
+                        /*
+                        fs.writeFile("out.jpg", buf, function(err) {
+
+                            if (err) {
+                                //console.log(err);
+                                throw err;
+                            } else {
+                                console.log('file saved to out.jpg');
+                            }
+                        });
+                        */
+
+
+
+
+
+                        res.setHeader('content-type', 'text/plain');
+                        res.end('Received ' + count + ' files');
+                    });
+
+                    form.parse(req);
+
+                    /*
+
+                    form.parse(req, function(err, fields, files) {
+                        res.writeHead(200, {'content-type': 'text/plain'});
+                        res.write('received upload:\n\n');
+                        res.end(util.inspect({fields: fields, files: files}));
+
+                        // then look at the file object.
+
+                        var file = files.file[0];
+
+                        console.log('file.length ' , file.length);
+                        console.log('file', file);
+
+                    });
+                    */
+
+
+
+                    // Do it without saving files?
+
+                    // going to use multiparty instead.
+
+
+                    /*
+                    var form = new formidable.IncomingForm();
+
+                    form.on('progress', function(bytesReceived, bytesExpected) {
+                        console.log('progress ' + bytesReceived + ' / ' + bytesExpected);
+                    });
+                    */
+
+                    /*
+
+                    form.on('end', function() {
+                        console.log('form upload end');
+
+                        // and then we should have the image in a buffer.
+
+                        require("fs").writeFile("out.jpg", buf, function(err) {
+
+                            if (err) {
+                                //console.log(err);
+                                throw err;
+                            } else {
+                                console.log('file saved to out.jpg');
+                            }
+                        });
+
+
+                    });
+
+                    form.onPart = function(part) {
+
+                        console.log('on part');
+                        console.log('1) this.multiples', this.multiples);
+
+                        console.log('this.bytesExpected', this.bytesExpected);
+
+                        buf = new Buffer(this.bytesExpected);
+
+
+
+
+
+
+
+                        // Should not have to read the whole thing to get the file size.
+
+                        console.log('part', part);
+
+                        // Maybe hack into formidable to change what it's doing.
+
+                        // We will know the part length.
+
+
+
+                        part.addListener('data', function(e_data_part) {
+
+                            console.log('2) this.multiples', this.multiples);
+                            // ...
+
+                            console.log('e_data_part', e_data_part);
+
+                            var len_data = e_data_part.length;
+
+                            e_data_part.copy(buf, buf_pos, len_data);
+                            buf_pos += len_data;
+
+
+
+
+
+                            // And it probably does not write that to disk?
+
+                            // write this to a file stream?
+                            //  or db stream?
+
+                            // Variable size buffer???
+                            //  Can we get the size first?
+
+
+
+
+
+                        });
+
+
+                    }
+
+                    */
+
+
+                    /*
+                    form.on('file', function(name, file) {
+                        console.log('has form file. name:', name);
+                        console.log('this.multiples', this.multiples);
+
+                        // Want to disable saving to the disk automatically.
+                        //  Want the stream / data.
+
+
+
+                        if (this.multiples) {
+                            //if (files[name]) {
+                            //    if (!Array.isArray(files[name])) {
+                            //        files[name] = [files[name]];
+                            //    }
+                            //    files[name].push(file);
+                            //} else {
+                            //    files[name] = file;
+                            //}
+                        } else {
+                            //files[name] = file;
+                        }
+                    })
+                    */
+
+
+
+
+
+                    // But does not parse it into files if we are doing the direct reading.
+                    /*
+                    form.parse(req, function(err, fields, files) {
+                        // We really want to be saving this file / image to the database.
+
+                        // This will have a reference to the web-database resource.
+                        //  It will be possible to put files as values.
+                        //  They will be stored with the right metadata and mime type.
+
+                        //var ws_file = files.file._writeStream;
+
+
+
+
+
+
+
+                        res.writeHead(200, {'content-type': 'text/plain'});
+                        res.write('received upload:\n\n');
+                        res.end(util.inspect({fields: fields, files: files}));
+
+
+
+                    });
+
+                    */
+
+
+
+
+                }
+                if (req.method == 'GET') {
+                    var ctrl_file_upload = new File_Upload({
+                        'context': spc,
+                        'action': '/admin/upload-image/'
+                    });
+
+                    body.add(ctrl_file_upload);
+                }
+
+                // Want to use the web admin control here.
+
+                console.log('pre create web admin upload image');
+
+                // File_Upload
+
+
+
+                // Will use a file upload control.
+                // <input type="file" name="datafile" size="40">
+                // <input type="submit" value="Send">
+
+
+
+            }
+
+            // Want to be administering content.
+            //  A list of pages would be good.
+            //  I think a Page-List control?
+            //   Though, a general list control / system and advanced data binding will work.
+            //  Maybe the Page-List can be fairly minimial and make use of data binding.
+
+            // I think managing images may be a better thing to start on.
+
+            // Have something in the admin interface to upload an image.
+
+            // admin/upload-image
+
+
+
 
             // Want the wen admin control to allow creation of pages
             // Uploading of images
@@ -371,21 +776,28 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
             // Would asyncronous rendering work better?
 			//var html = hd.all_html_render();
 
-            hd.all_html_render(function(err, html) {
-                if (err) {
-                    throw err;
-                } else {
-                    console.log('cb all render');
+            // Only on (HTML) GET.
 
-                    var mime_type = 'text/html';
-                    //console.log('mime_type ' + mime_type);
+            if (rmethod == 'GET') {
+                hd.all_html_render(function(err, html) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('cb all render');
 
-                    res.writeHead(200, { 'Content-Type': mime_type });
-                    console.log('pre res end');
-                    res.end(html, 'utf-8');
-                    console.log('post res end');
-                }
-            })
+                        var mime_type = 'text/html';
+                        //console.log('mime_type ' + mime_type);
+
+                        res.writeHead(200, { 'Content-Type': mime_type });
+                        console.log('pre res end');
+                        res.end(html, 'utf-8');
+                        console.log('post res end');
+                    }
+                })
+            }
+
+
+
 
 
 

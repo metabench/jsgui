@@ -194,6 +194,11 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 
 		},
 
+
+        // want to save a binary file as well.
+
+
+
 		// could put in filter objects...
 		//  so the text begins with something, has an extension, file size
 		

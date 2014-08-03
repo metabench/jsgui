@@ -497,15 +497,10 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	//  For the moment will focus on HTTP.
 
                     	// Running a websocket server could be optional.
-
                     	// It may be worth having some socket abstraction here, so it handles all websocket servers at once.
 
-
 						var http_server = http.createServer(function(req, res) {
-
-
 							var authentication_resource = resource_pool.get_resource('Authentication');
-
 							// Why is the request being identified as a Readable Stream?
 
 							if (!authentication_resource) {
@@ -532,8 +527,6 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 									}
 								});
 							}
-
-							
 						});
 
 
