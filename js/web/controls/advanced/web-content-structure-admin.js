@@ -3,6 +3,16 @@
 
 // Likely to be done with some more general purpose administration of resources.
 
+// Will probably replace this with something using the flexible layout system.
+//  Different internal controls / systems for navigation and viewing, all within a fairly standard and powerful control that
+//   handles things this control will have in common with other browse + view/edit controls.
+//   navigation area, content area, data and command area
+//   left panel       right panel   ribbon on bottom of right panel
+//   hidden on left   full          hidden on bottom
+// That system will allow controls to work neatly on different screen sizes, allowing for any one of them to be like a simple mobile app.
+
+
+
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 

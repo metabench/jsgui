@@ -41,9 +41,9 @@ if (typeof define !== 'function') {
 
 
 
-define(["./jsgui-html", "../resource/core/resource"],
+define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
 
-    function(jsgui, Resource) {
+    function(jsgui, Resource, exif, jpeg_js) {
 
         var trim = function(obj) {
             var res = {};
@@ -644,6 +644,42 @@ define(["./jsgui-html", "../resource/core/resource"],
                 });
             },
 
+            //get_doc_meta_int_record_id_by_doc_meta_record_id
+
+            'get_doc_meta_int_record_id_by_doc_meta_record_id': function(document_metadata_record_id, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_doc_meta_int_record_id_by_doc_meta_record_id', [document_metadata_record_id], function(err, res_get_doc_meta_int_record_id_by_doc_meta_record_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_get_doc_meta_int_record_id_by_doc_meta_record_id', res_get_doc_meta_int_record_id_by_doc_meta_record_id);
+                        callback(null, res_get_doc_meta_int_record_id_by_doc_meta_record_id);
+                    }
+                });
+            },
+
+            'get_document_metadata_record_type_id_by_name': function(document_metadata_record_id, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_document_metadata_record_type_id_by_name', [document_metadata_record_id], callback);
+            },
+
+
+
+            'get_document_metadata_record_id_by_document_id_key': function(document_id, metadata_key, callback) {
+                var db = this.get('database');
+
+                // get_doc_meta_record_id_by_doc_id_key
+
+                db.execute_function_single_row('get_doc_meta_record_id_by_doc_id_key', [document_id, metadata_key], function(err, res_get_document_metadata_record_id_by_document_id_key) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_get_document_metadata_record_id_by_document_id_key', res_get_document_metadata_record_id_by_document_id_key);
+                        callback(null, res_get_document_metadata_record_id_by_document_id_key);
+                    }
+                });
+            },
+
             'create_document_type': function(name, mime_type, callback) {
                 var db = this.get('database');
                 db.execute_function_single_row('create_document_type', [name, mime_type], function(err, res_create_document_type) {
@@ -667,6 +703,32 @@ define(["./jsgui-html", "../resource/core/resource"],
                     }
                 });
             },
+
+            'create_document_metadata_record': function(document_id, key, record_type_id, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('create_document_metadata_record', [document_id, key, record_type_id], function(err, res_create_document_metadata_record) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create_document_metadata_record', res_create_document_metadata_record);
+                        callback(null, res_create_document_metadata_record);
+                    }
+                });
+            },
+
+            // create_document_metadata_integer_record
+            'create_document_metadata_integer_record': function(document_meatadat_record_id, value, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('create_document_metadata_integer_record', [document_meatadat_record_id, value], function(err, res_create_document_metadata_integer_record) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create_document_metadata_integer_record', res_create_document_metadata_integer_record);
+                        callback(null, res_create_document_metadata_integer_record);
+                    }
+                });
+            },
+
 
             'update_document_type': function(id, name, mime_type, callback) {
                 var db = this.get('database');
@@ -738,6 +800,70 @@ define(["./jsgui-html", "../resource/core/resource"],
 
             },
 
+            'ensure_document_metadata_record': function(document_id, key, record_type_id, callback) {
+                // Try getting the record.
+
+                // get_document_metadata_record_id_by_key_record_type_id
+                var that = this;
+
+                this.get_document_metadata_record_id_by_document_id_key(document_id, key, function(err, document_metadata_record_id) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        console.log('document_metadata_record_id', document_metadata_record_id);
+
+                        var t_document_metadata_record_id = tof(document_metadata_record_id);
+                        if (t_document_metadata_record_id == 'number') {
+                            // it exists
+                        } else {
+                            // create it.
+
+                            that.create_document_metadata_record(document_id, key, record_type_id, callback);
+
+
+                        }
+
+
+
+                    }
+                });
+
+            },
+
+            // update_document_metadata_integer_record
+
+            // ensure_metadata_integer_record_value
+            'ensure_document_metadata_integer_record': function(document_metadata_record_id, value, callback) {
+                // try to get the integer record value by its document_metadata_record_id
+
+                // get_doc_meta_int_record_id_by_doc_meta_record_id
+
+                console.log('ensure_document_metadata_integer_record document_metadata_record_id', document_metadata_record_id);
+
+                var that = this;
+
+                // first off, we need the 'integer' record type id.
+
+
+
+
+                that.get_doc_meta_int_record_id_by_doc_meta_record_id(document_metadata_record_id, function(err, document_metadata_integer_record_id) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        var t_document_metadata_integer_record_id = tof(document_metadata_integer_record_id);
+
+                        if (t_document_metadata_integer_record_id == 'number') {
+                            // update the integer record.
+                            that.update_document_metadata_integer_record(document_metadata_integer_record_id, value, callback);
+
+                        } else {
+                            that.create_document_metadata_integer_record(document_metadata_record_id, value, callback);
+                        }
+                    }
+                });
+            },
+
 
 
 
@@ -762,6 +888,30 @@ define(["./jsgui-html", "../resource/core/resource"],
                 });
 
             },
+            // update_document_metadata_integer_record
+            //  much simpler / neater like this.
+            'update_document_metadata_integer_record': function(id, document_metadata_record_id, value, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('update_document_metadata_integer_record', [id, document_metadata_record_id, value], callback);
+            },
+
+
+
+            // update_binary_document_value
+
+            '_update_binary_document_value': function(binary_document_value_id, document_id, value, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('update_binary_document_value', [binary_document_value_id, document_id, value], function(err, res_update_binary_document_value) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_update_binary_document_value', res_update_binary_document_value);
+                        callback(null, res_update_binary_document_value);
+                    }
+                });
+            },
+
+
 
             // The value will be a buffer. Hopefully node pg handles that fine.
 
@@ -885,6 +1035,69 @@ define(["./jsgui-html", "../resource/core/resource"],
                 });
             },
 
+            'get_document_metadata_record_ids_by_document_id': function(document_id, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_document_metadata_record_ids_by_document_id', [document_id], function(err, callback);
+            },
+
+            'get_document_metadata': fp(function(a, sig) {
+                var document_id, document_key, callback;
+                var that = this;
+                if (sig == '[n,f]') {
+                    document_id = a[0];
+                    callback = a[1];
+
+                    // get all the ids of the document metadata records.
+                    //  (and types?)
+
+                    that.get_document_metadata_record_ids_by_document_id(document_id, function(err, document_metadata_record_ids) {
+                        if (err) {
+                            callback(err)
+                        } else {
+                            console.log('document_metadata_record_ids');
+                            throw 'stop';
+                        }
+                    });
+
+
+                    // then get the
+
+                    // want to get all of the document metadata records.
+                    //  it may be possible to do joins with the values.
+
+                    // possibly we could get the associated integer values later on.
+
+                    // or get all integer values, all of the various linked values, relevant to that document metadata record.
+
+
+
+                }
+                if (sig == '[s,f]') {
+                    document_key = a[0];
+                    callback = a[1];
+
+                    that.get_document_id_by_key(document_key, function(err, document_id) {
+                        if (err) {
+                            callback(err)
+                        } else {
+                            that.get_document_metadata(document_id, callback);
+                        }
+                    })
+
+
+
+                    // want to get all of the document metadata records.
+                    //  it may be possible to do joins with the values.
+
+                    // possibly we could get the associated integer values later on.
+
+                    // or get all integer values, all of the various linked values, relevant to that document metadata record.
+
+
+
+                }
+            }),
+
             // get_string_document_value_value_by_document_id
 
             // Could make this polymorphic, and call itself?
@@ -893,10 +1106,12 @@ define(["./jsgui-html", "../resource/core/resource"],
 
             'set_document_metadata': fp(function(a, sig) {
 
+                console.log('set_document_metadata sig', sig);
+
                 // Could possibly call this function with the document key.
                 //  It would look up the document id, by key, and call the function again.
 
-                var document_id, document_key, metadata_record_key, metadata_record_value, callback;
+                var document_id, document_key, metadata_record_key, metadata_record_value, obj_values, callback;
                 var that = this;
 
                 if (sig == '[s,s,s,f]' || sig == '[s,s,n,f]') {
@@ -925,43 +1140,120 @@ define(["./jsgui-html", "../resource/core/resource"],
                     callback = a[3];
                 }
 
+                if (sig == '[n,o,f]') {
+                    // Putting things like this here in an immediate function could be a good optimization.
+                    //  Some parts could wind up, as their own functions, running faster.
+
+
+
+                    document_id = a[0];
+                    obj_values = a[1];
+
+                    // we call it with these values.
+                    //  could this be done using mapify instead?
+
+                    var fns = jsgui.Fns();
+                    each(obj_values, function(v, i) {
+                        fns.push([that, that.set_document_metadata, [document_id, i, v]]);
+                    });
+
+                    fns.go(function(err, res_fns) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('res_fns', res_fns);
+                        }
+                    });
+
+                }
+
                 if (tof(document_id) == 'number') {
                     var t_metadata_record_value = tof(metadata_record_value);
 
-                    this.ensure_document_metadata_record(document_id, metadata_record_key, metadata_record_value, function(err, document_metadata_record_id) {
-                        if (err) {
-                            callback(err);
-                        } else {
-                            console.log('document_metadata_record_id', document_metadata_record_id);
+                    // create_document_metadata_record
 
-                            // then need to ensure the document metadata record value (of the appropriate type).
+                    // also need to know the record type.
+                    //  we can look up the record type at an earlier stage.
 
-                            if (t_metadata_record_value == 'string') {
+                    // we need to judge what type we are making the field.
+                    //  perhaps we should represent JSON numbers as high precision decimals?
 
-                            }
-                            if (t_metadata_record_value == 'number') {
-                                // Could assume it's an integer type?
-                                //  Will do that for the moment.
+                    if (t_metadata_record_value == 'string') {
 
-                                that.ensure_metadata_integer_record_value(document_metadata_record_id, metadata_record_value, function(err, res_ensure_metadata_integer_record_value) {
+                    }
+                    if (t_metadata_record_value == 'number') {
+
+
+
+                        // Could assume it's an integer type?
+                        //  Will do that for the moment.
+
+                        // save it as an integer record for the moment.
+                        //  need to get the integer metadata record type.
+
+                        // get_document_metadata_record_type_id_by_name
+
+                        that.get_document_metadata_record_type_id_by_name('integer', function(err, document_metadata_record_type_id) {
+                            if (err) {
+                                callback(err);
+                            } else {
+
+                                // now we have the record type id, we can
+
+                                that.ensure_document_metadata_record(document_id, metadata_record_key, document_metadata_record_type_id, function(err, document_metadata_record_id) {
                                     if (err) {
-                                        throw err;
+                                        callback(err);
                                     } else {
-                                        console.log('res_ensure_metadata_integer_record_value', res_ensure_metadata_integer_record_value);
+                                        console.log('document_metadata_record_id', document_metadata_record_id);
+
+                                        //throw 'stop';
+
+                                        // then need to ensure the document metadata record value (of the appropriate type).
+
+                                        that.ensure_document_metadata_integer_record(document_metadata_record_id, metadata_record_value, function(err, res_ensure_metadata_integer_record_value) {
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                console.log('res_ensure_metadata_integer_record_value', res_ensure_metadata_integer_record_value);
+
+                                                // Then I think the function's done.
+                                                // return the document metadata record id
+
+                                                callback(null, document_metadata_record_id);
+
+
+                                            }
+                                        });
+
+
+
 
 
                                     }
-                                });
-
-
-
+                                })
 
                             }
+                        })
 
 
 
-                        }
-                    })
+
+
+
+
+
+
+
+
+
+
+                    }
+
+
+
+
+                    // don't include the record value?
+
                 };
 
                 // then we see if there is such a metadata record already.
@@ -972,8 +1264,99 @@ define(["./jsgui-html", "../resource/core/resource"],
             }),
 
 
+            // We should probably be calling _set_document_no_metadata, and then updating the metadata.
 
+
+
+
+            // _set_document_no_metadata
+            //  the new set_document function will set the document with _set_document_no_metadata and then ensure the metadata is correct.
             'set_document': function(key, value, type_name, callback) {
+                var that = this;
+
+                this._set_document_no_metadata(key, value, type_name, function(err, document_id) {
+                    if (err) {
+                        callback(err)
+                    } else {
+
+                        console.log('cb _set_document_no_metadata');
+
+                        console.log('type_name', type_name);
+
+                        // Need to find out what metadata to use.
+                        //  would depend on the type_name first.
+
+                        if (type_name == 'jpeg') {
+
+
+                            // put the value, the jpeg image, into a fund metadata function.
+                            //  jsgui-node-jpeg-metadata
+
+                            // could just include the file size for the moment?
+
+                            // use jpeg decode instead.
+                            //  it may not be in the exif.
+
+
+
+                            /*
+
+                            var ExifImage = require('exif').ExifImage;
+
+                            // Would really be best to use libjpeg (turbo) code.
+
+
+
+                            var exi = new ExifImage({'image': value}, function(err, exifData) {
+                                if (err) {
+                                    throw err;
+                                } else {
+                                    console.log('exifData ' , exifData);
+                                    console.log('exifData.image ' , exifData.image);
+                                }
+                            })
+                            */
+
+                            var decoded = jpeg_js.decode(value);
+
+                            var width = decoded.width;
+                            var height = decoded.height;
+
+                            console.log('decoded', decoded);
+
+                            that.set_document_metadata(document_id, {
+                                'width': width,
+                                'height': height
+                            }, function(err, res_set_document_metadata) {
+                                if (err) {
+                                    callback(err);
+                                } else {
+                                    console.log('res_set_document_metadata', res_set_document_metadata);
+                                }
+                            })
+
+                            // then we have two metadata items.
+
+
+
+
+
+
+
+
+
+
+
+                        }
+
+
+
+                    }
+                })
+            },
+
+
+            '_set_document_no_metadata': function(key, value, type_name, callback) {
                 // text/plain
 
                 // the type of the document as a string.
@@ -1126,6 +1509,14 @@ define(["./jsgui-html", "../resource/core/resource"],
                                                                 if (t_binary_document_value_id == 'number') {
                                                                     // update existing
 
+                                                                    that._update_binary_document_value(binary_document_value_id, document_id, value, function(err, res_update_binary_document_value) {
+                                                                        if (err) {
+                                                                            throw err;
+                                                                        } else {
+                                                                            callback(null, document_id);
+                                                                        }
+                                                                    })
+
                                                                 } else {
 
                                                                     // Will also need to deal with the metadata.
@@ -1183,6 +1574,8 @@ define(["./jsgui-html", "../resource/core/resource"],
                                             } else {
                                                 console.log('created document, document_id', document_id);
 
+                                                console.log('type_name', type_name);
+
                                                 // then we need to create the document value object.
 
                                                 // Could set it to have the string document value type.
@@ -1219,6 +1612,21 @@ define(["./jsgui-html", "../resource/core/resource"],
                                                     })
 
                                                 }
+
+                                                // Need to create the binary document...
+
+                                                if (type_name == 'jpeg') {
+                                                    that._create_binary_document_value(document_id, value, function() {
+                                                        if (err) {
+                                                            callback(err);
+                                                        } else {
+                                                            callback(null, document_id);
+                                                        }
+                                                    })
+
+                                                }
+
+
 
                                             }
                                         })

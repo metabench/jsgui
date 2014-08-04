@@ -66,17 +66,55 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 
 
-
-
-
-
-
-
-
-
-
-
                 if (!spec.abstract && !spec.el) {
+                    // Set this up so that there are different components / controls that can be positioned in different ways.
+
+                    // Changing the positioning layout will be done through the Multi_Layout_Control.
+
+                    // In general, there are 3 types of areas:
+                    //  navigation, content, misc
+                    // Some will get hidden / shown / shrunk / expanded at different times.
+
+                    // Basically want this Control to have three subcontrols.
+                    //  They will either get put within frames, or will have extensive functionality in this control to rearrange them
+
+                    // These 3 controls could be a normal control or a Panel control.
+                    //  Panel could have more docking functionality
+                    //  Code to help with layout, splitting a panel and assigning some of it to another panel.
+
+                    // Panels could also have resize capabilities
+                    //  I think the Panel abstraction would be a useful one to make.
+                    // Control is only really supposed to have HTML stuff and the foundation for more functionality.
+                    // Panel would be implementing something more particular, so I think it's best to keep this functionality out of Control.
+
+                    // Panel could wind up being quite useful and versitile.
+                    //  Keeping Panel code in a Panel module would help to prevent the Control file becoming more complicated.
+
+
+                    // Want to be able to use panels to specify layouts using numbers, outside of CSS.
+                    //  Will do some maths.
+
+                    
+
+
+
+
+
+
+
+
+
+                    // Perhaps should make 3 different control classes.
+                    //  Panel controls would be a bit limited in what they do / are for, and what UI components they include.
+                    //  Navigation_Panel
+                    //   Shows list of items, search, filter
+                    //  Content_Panel
+                    //   The content, should be nothing else
+                    //  Misc_Panel
+                    //   Metadata about the
+
+
+
 
 
                 }

@@ -14,6 +14,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
         'fs', '../fs/jsgui-node-fs2-core',
         '../web/jsgui-je-suis-xml', 'cookies',
         '../web/controls/advanced/web-admin',
+        '../web/controls/advanced/web-images',
         '../web/controls/advanced/file-upload'],
 
 	// May make a Site-Info or just Info resource.
@@ -34,7 +35,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
              multiparty, util,
              fs, fs2,
              JeSuisXML, Cookies,
-             Web_Admin_Control, File_Upload) {
+             Web_Admin_Control, Web_Admin_Images_Control, File_Upload) {
 
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
@@ -330,8 +331,14 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
                 // Use a Web Admin Images control
 
+                //  Would have a list of images in the navigation panel.
+                //   Then have image itself in content panel.
 
-                var ctrlAdmin = new Web_Admin_Control({
+
+
+
+
+                var ctrlAdmin = new Web_Admin_Images_Control({
                     'context': spc
                 });
 
