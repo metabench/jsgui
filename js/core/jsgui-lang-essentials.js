@@ -1879,6 +1879,15 @@ define(function() {
 			});
 			return res;
 		} else if (tt == 'array') {
+
+            // If it's an array of strings, want to make a truth map from it.
+
+            // I think check to see if it's an array of strings would help.
+
+
+
+
+
 			// a bunch of items, items could have name
 			
 			// could just be given an array to mapify.
@@ -1886,10 +1895,20 @@ define(function() {
 			var res = {};
 			
 			if (arguments.length == 1) {
+
+                if (is_arr_of_strs(target)) {
+                    each(target, function(i, v) {
+                        res[v] = true;
+                    });
+                } else {
+                    each(target, function(i, v) {
+                        res[v[0]] = v[1];
+                    });
+                }
+
+
 				// dealing with [name, value] pairs
-				each(target, function(i, v) {
-					res[v[0]] = v[1];
-				});
+
 			} else {
 				var by_property_name = arguments[1];
 				each(target, function(i, v) {
