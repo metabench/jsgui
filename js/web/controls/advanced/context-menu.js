@@ -1,14 +1,17 @@
 // object viewer
 
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 // html-enh depending on Context_Menu?
 	
 
 
-define(["../../jsgui-html", "./menu-node"], 
-	function(jsgui, Menu_Node) {
+//define(["../../jsgui-html", "./menu-node"],
+	//function(jsgui, Menu_Node) {
+
+        var jsgui = require('../../jsgui-html');
+        var Menu_Node = require('./menu-node');
 		
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
@@ -187,6 +190,10 @@ define(["../../jsgui-html", "./menu-node"],
 
 
 
-		return Context_Menu;
-	}
-);
+		//return Context_Menu;
+
+        // but then it would need to be browserified in the client?
+
+        module.exports = Context_Menu;
+	//}
+//);

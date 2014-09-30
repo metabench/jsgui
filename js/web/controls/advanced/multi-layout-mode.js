@@ -1,15 +1,19 @@
 /**
  * Created by James on 03/08/2014.
  */
-
+/*
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 
 // Also want to make an MDI window system (Multiple Document Interface)
 
-define(["../../jsgui-html", "./horizontal-menu"],
-    function(jsgui) {
+define(["../../jsgui-html", "./panel"],
+    function(jsgui, Panel) {
+*/
+
+var jsgui = require('../../jsgui-html');
+var Panel = require('./panel');
 
         var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
         var Control = jsgui.Control;
@@ -41,8 +45,16 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 
             // maybe add before make would be better. add will probably be used more.
-            'init': function(spec, add, make) {
+            'init': function(spec) {
                 this._super(spec);
+
+                // Don't register controls on the server?
+
+
+                // May be having probs with make
+                var make = this._context.make;
+
+                var context = this._context;
 
                 this.__type_name = 'multi_layout_mode';
 
@@ -73,6 +85,12 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
                     // In general, there are 3 types of areas:
                     //  navigation, content, misc
+                    //  can't call it content for the moment though.
+                    //   content is the collection.
+                    //   call it view? but then it's not edit
+                    //   main?
+                    //    main seems best.
+
                     // Some will get hidden / shown / shrunk / expanded at different times.
 
                     // Basically want this Control to have three subcontrols.
@@ -94,7 +112,33 @@ define(["../../jsgui-html", "./horizontal-menu"],
                     // Want to be able to use panels to specify layouts using numbers, outside of CSS.
                     //  Will do some maths.
 
-                    
+                    // For the moment, just want 3 simple panels.
+
+                    var panel_navigation = new Panel({
+                        'context': context,
+                        'name': 'navigation'
+                    })
+                    var panel_main = new Panel({
+                        'context': context,
+                        'name': 'main'
+                    })
+                    var panel_misc = new Panel({
+                        'context': context,
+                        'name': 'misc'
+                    })
+
+                    this.add(panel_navigation);
+                    this.add(panel_main);
+                    this.add(panel_misc);
+
+                    this.set('navigation', panel_navigation);
+                    this.set('main', panel_main);
+                    this.set('misc', panel_misc);
+
+
+
+
+
 
 
 
@@ -140,7 +184,11 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
             //}
         })
+module.exports = Multi_Layout_Mode;
 
+
+/*
         return Multi_Layout_Mode;
     }
 );
+    */

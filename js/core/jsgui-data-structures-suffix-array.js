@@ -10,9 +10,10 @@
 // Will also work on getting data structures working as resources, but this will be a basis for doing so.
 
 
-
+/*
 define(["./jsgui-lang-essentials"], function(jsgui) {
-	
+	*/
+    var jsgui = require('./jsgui-lang-essentials');
 	// This will wind up getting quite deep into computer science.
 	//  Suffix arrays themselves are fairly simple, but getting deep into them in order to acheive the entropy level compression, with rapid search and
 	//  update will prove difficult.
@@ -94,4 +95,4 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	
 	
 	
-});
+//});

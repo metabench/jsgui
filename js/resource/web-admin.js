@@ -14,7 +14,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
         'fs', '../fs/jsgui-node-fs2-core',
         '../web/jsgui-je-suis-xml', 'cookies',
         '../web/controls/advanced/web-admin',
-        '../web/controls/advanced/web-images',
+        '../web/controls/advanced/web-admin-images',
         '../web/controls/advanced/file-upload'],
 
 	// May make a Site-Info or just Info resource.
@@ -76,6 +76,29 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 			callback(null, true);
 		},
 
+        // Also needs functionality that gets website data, likely calling / interfacing the web data db module.
+        //  Don't want various controls talking to the web data db, communication needs to go through the web data resource.
+        //  Will later work on serving functionality from this resource. Much of the functionality will be app-internal for the moment.
+
+
+        'get_images_list': function(callback) {
+            var web_db = this.get('web_database');
+            web_db.get_images(function(err, res_images) {
+                if (err) {
+                    callback(err);
+                } else {
+                    console.log('res_images', res_images);
+                    callback(null, res_images);
+                }
+            })
+
+        },
+
+
+
+
+
+
         // And the web admin resource needs to be processed in the right context.
 
 		// Currently this is all about processing requests - I think it should be about having a Resource that represents the website's admin functionality, but to actually
@@ -115,6 +138,9 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
             var web_db = this.get('web_database');
+
+
+            var images_resource = pool.get_resource('Site Images');
             // could get the database from the pool
             // rather than direct linking.
             //  could then make more intelligent use of the pool, such as using a file system.
@@ -227,8 +253,13 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
                     'context': spc
                 });
                 hd.include_client_css();
-                hd.include_jsgui_client('/js/app.js');
+                //hd.include_jsgui_client('/js/app.js');
+
+                hd.include_jsgui_client('/js/app_bundle.js');
+
                 body = hd.body();
+
+                do_jsgui_render = true;
             }
 
 			//this.respond(spc);
@@ -338,8 +369,17 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
 
+                // But then for other URLs, admin images then with any file name after...
+                //  Need to serve the particular image.
+
+
+
+
+
+
                 var ctrlAdmin = new Web_Admin_Images_Control({
-                    'context': spc
+                    'context': spc,
+                    'web_admin': this
                 });
 
                 // I think it will need to use asyncronous rendering.
@@ -349,11 +389,75 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
                 //  need to be able to assign it, and sub-controls a context
 
                 // Could use activate?
-                ctrlAdmin.active();
+                //  Can't generate a new ID for some things?
+                //   I will make the core html code more flexible, but we should not be having some problems to begin with.
+                //   Seems some contexts are not set right....
+
+
+
+                //ctrlAdmin.active();
+
+
                 body.add(ctrlAdmin);
 
                 console.log('post add wa control to body');
+            } else {
+                if (rurl.indexOf('/admin/images/') > -1) {
+                    // if it's GET, return the image
+
+                    // Need to handle HTTP delete as well.
+
+
+
+
+                    // return the image
+
+                    do_jsgui_render = false;
+
+                    var img_url = rurl.substr('/admin/images/'.length);
+                    console.log('img_url', img_url);
+
+                    // then get the image data from the image resource.
+
+                    images_resource.get_document(img_url, function(err, res_got_image) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('res_got_image', res_got_image);
+
+                            // then serve the image...
+
+                            // perhaps that could be done within the image resource, have it respond to an HTTP request.
+
+                            var mime_type;
+
+                            if (res_got_image.type == 'jpeg') {
+                                mime_type = 'image/jpeg;'
+
+
+
+                            }
+
+                            if (mime_type) {
+                                res.writeHead(200, { 'Content-Type': mime_type });
+                                //console.log('pre res end');
+                                res.end(res_got_image.value);
+                                //console.log('post res end');
+                            }
+
+
+
+                            //throw 'stop';
+                        }
+                    })
+
+
+
+                }
+
             }
+
+            //throw 'stop';
 
             if (rurl == '/admin/upload-image/') {
 
@@ -366,25 +470,18 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
                     var buf;
                     var buf_pos = 0;
-
                     var count = 0;
-
                     var l = 0;
-
                     var form = new multiparty.Form();
+                    var filename;
 
                     form.on('part', function(part) {
                         // You *must* act on the part by reading it
                         // NOTE: if you want to ignore it, just call "part.resume()"
-
                         console.log('part', part);
-
                         buf = new Buffer(part.byteCount);
                         buf_pos = 0;
-
                         console.log('part.byteCount', part.byteCount);
-
-
                         if (part.filename === null) {
                             // filename is "null" when this is a field and not a file
                             console.log('got field named ' + part.name);
@@ -395,12 +492,12 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
                         if (part.filename !== null) {
                             // filename is not "null" when this is a file
                             count++;
-                            console.log('got file named ' + part.name);
+                            //console.log('got file named ' + part.name);
+
+                            filename = part.filename;
                             // ignore file's content here
                             part.resume();
                         }
-
-
 
                         part.addListener('data', function(data) {
                             // ...
@@ -435,7 +532,29 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
                         // 'image/jpeg'
-                        web_db.set_document('out.jpg', buf, 'jpeg', function(err, res_set_document) {
+
+                        // It really needs the file name
+                        //  should be able to get that from multyparty.
+
+                        //var filename = part.filename;
+                        console.log('filename', filename);
+                        //throw 'stop';
+
+
+                        // Should have some logic to check if the filename is available, otherwise could keep trying adding a _number to it.
+
+
+                        // Now we have the image in a buffer, we can use the Site_Images resource to set the document.
+                        //  When we give that Resource an Image document, it acts accordingly.
+                        //  This way the image particular stuff is encapsulated away from the database, thus making it easier to swap the db component
+                        //   for a different one.
+
+                        // web_db.set_document
+                        // images_resource
+
+
+                        // It could probably tell it's a jpeg, but tell it that anyway.
+                        images_resource.set_document(filename, buf, 'jpeg', function(err, res_set_document) {
                             if (err) {
                                 throw err;
                             } else {
@@ -785,22 +904,29 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
             // Only on (HTML) GET.
 
+
+
             if (rmethod == 'GET') {
-                hd.all_html_render(function(err, html) {
-                    if (err) {
-                        throw err;
-                    } else {
-                        console.log('cb all render');
 
-                        var mime_type = 'text/html';
-                        //console.log('mime_type ' + mime_type);
+                if (do_jsgui_render) {
+                    hd.all_html_render(function(err, html) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('cb all render');
 
-                        res.writeHead(200, { 'Content-Type': mime_type });
-                        console.log('pre res end');
-                        res.end(html, 'utf-8');
-                        console.log('post res end');
-                    }
-                })
+                            var mime_type = 'text/html';
+                            //console.log('mime_type ' + mime_type);
+
+                            res.writeHead(200, { 'Content-Type': mime_type });
+                            console.log('pre res end');
+                            res.end(html, 'utf-8');
+                            console.log('post res end');
+                        }
+                    })
+                }
+
+
             }
 
 

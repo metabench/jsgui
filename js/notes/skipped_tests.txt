@@ -36,7 +36,7 @@ jsgui-node-images/test-jsgui-node-images.spec.js
 Contains 2 tests, the first one is skipped because it prints "Error decoding the input file" message to the console.
 Delayed for the second pass.
 
-jsgui-node-png/jsgui-node-png test-jsgui-node-pixel-buffer.js:
+jsgui-node-png/jsgui-node-png test-pixel-buffer.js:
 jsgui_png.save_rgba_pixel_buffer_to_disk() method does not exists, jsgui_png.save_pixel_buffer_to_disk used instead.
 
 

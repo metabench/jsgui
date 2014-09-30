@@ -1,4 +1,6 @@
 
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -7,6 +9,10 @@ if (typeof define !== 'function') {
 // May sway implementations of the particular items more easily when they are in their own files.
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], function (jsgui, StiffArray) {
+*/
+
+var jsgui = require('./jsgui-lang-essentials');
+var StiffArray = require('./jsgui-data-structures-stiffarray');
 
     /** 
     * B+ Tree module.
@@ -1757,9 +1763,10 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
 
     B_Plus_Tree.FindInfo = FindInfo;
 
-    return B_Plus_Tree;
+    //return B_Plus_Tree;
+    module.exports = B_Plus_Tree;
 
 
-});
+//});
 
 

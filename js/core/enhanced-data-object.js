@@ -1,8 +1,15 @@
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 define(["./jsgui-lang-util", "./data-object-fields-collection"], function(jsgui, Fields_Collection) {
+    */
+
+var jsgui = require('./jsgui-lang-util');
+var Fields_Collection = require('./data-object-fields-collection');
+
 	var Data_Object = jsgui.Data_Object;
 	var Data_Value = Data_Object.Data_Value;
 	var Collection = jsgui.Collection;
@@ -670,7 +677,9 @@ define(["./jsgui-lang-util", "./data-object-fields-collection"], function(jsgui,
 
 	Enhanced_Data_Object.register_data_type = register_data_type;
 
-	return Enhanced_Data_Object;
-});
+module.exports = Enhanced_Data_Object;
+
+	//return Enhanced_Data_Object;
+//});
 	
 	

@@ -41,9 +41,9 @@ if (typeof define !== 'function') {
 
 
 
-define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
+define(["./jsgui-html", "../resource/core/resource"],
 
-    function(jsgui, Resource, exif, jpeg_js) {
+    function(jsgui, Resource) {
 
         var trim = function(obj) {
             var res = {};
@@ -59,7 +59,7 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
             return res;
         };
 
-        var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, fp = jsgui.fp;
+        var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, fp = jsgui.fp, sig_match = jsgui.sig_match;
         var Control = jsgui.Control;
 
         var Web_DB_Resource_Postgres = Resource.extend({
@@ -993,7 +993,7 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                     if (err) {
                         throw err;
                     } else {
-                        console.log('res_get_binary_document_value_value_by_document_id', res_get_binary_document_value_value_by_document_id);
+                        //console.log('res_get_binary_document_value_value_by_document_id', res_get_binary_document_value_value_by_document_id);
                         callback(null, res_get_binary_document_value_value_by_document_id);
                     }
                 });
@@ -1035,14 +1035,33 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                 });
             },
 
+            // get_document_metadata_integer_records_by_document_id
+
+            'get_document_metadata_integer_records_by_document_id': function(document_id, callback) {
+                var db = this.get('database');
+
+                // Want this to return the data in a friendlier format.
+
+                // Not a single row function.
+                //  Returning data from Postgres functions seems a bit tricky.
+
+                db.execute_function('get_document_metadata_integer_records_by_document_id', [document_id], callback);
+            },
+
             'get_document_metadata_record_ids_by_document_id': function(document_id, callback) {
                 var db = this.get('database');
-                db.execute_function_single_row('get_document_metadata_record_ids_by_document_id', [document_id], function(err, callback);
+
+                // Not a single row dunction
+
+                db.execute_function('get_document_metadata_record_ids_by_document_id', [document_id], callback);
             },
 
             'get_document_metadata': fp(function(a, sig) {
                 var document_id, document_key, callback;
                 var that = this;
+
+                console.log('get_document_metadata sig', sig);
+
                 if (sig == '[n,f]') {
                     document_id = a[0];
                     callback = a[1];
@@ -1050,14 +1069,57 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                     // get all the ids of the document metadata records.
                     //  (and types?)
 
+                    // Getting a bunch of different metadata record IDs?
+
+
+                    // get_doc_meta_int_recs_by_doc_id
+                    //  would get the key and value of each item.
+
+
+
+                    that.get_document_metadata_integer_records_by_document_id(document_id, function(err, integer_records) {
+                        if (err) {
+                            callback(err);
+                        } else {
+                            console.log('integer_records', integer_records);
+
+                            var res = {};
+
+                            each(integer_records, function(record) {
+                                res[record.key] = record.value;
+                            });
+
+                            //throw 'stop';
+                            callback(null, res);
+                        }
+                    });
+
+
+
+                    /*
                     that.get_document_metadata_record_ids_by_document_id(document_id, function(err, document_metadata_record_ids) {
                         if (err) {
                             callback(err)
                         } else {
-                            console.log('document_metadata_record_ids');
+                            //  Possibly want a view of the document and metadata.
+                            console.log('document_metadata_record_ids', document_metadata_record_ids);
+
+
+
                             throw 'stop';
+
+
+                            // However, we can get the various metadata value records by type
+
+                            // could get all of the document's integer metadata
+                            // then the string metadata
+
+
+
+
                         }
                     });
+                    */
 
 
                     // then get the
@@ -1193,6 +1255,26 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
 
                         // get_document_metadata_record_type_id_by_name
 
+                        /*
+                         DROP FUNCTION get_document_metadata_integer_records_by_document_id(integer);
+
+                         CREATE OR REPLACE FUNCTION get_document_metadata_integer_records_by_document_id(document_id integer)
+                         RETURNS table(key character varying, value integer) AS
+                         $BODY$
+
+                         SELECT document_metadata_records.key, document_metadata_integer_records.value FROM document_metadata_integer_records
+                         LEFT OUTER JOIN document_metadata_records
+                         ON document_metadata_integer_records.document_metadata_record_id = document_metadata_records.id
+                         WHERE document_metadata_records.document_id = $1
+
+                         $BODY$
+                         LANGUAGE sql VOLATILE
+                         COST 100;
+                         ALTER FUNCTION get_document_metadata_integer_records_by_document_id(integer)
+                         OWNER TO postgres;
+
+                         */
+
                         that.get_document_metadata_record_type_id_by_name('integer', function(err, document_metadata_record_type_id) {
                             if (err) {
                                 callback(err);
@@ -1268,10 +1350,59 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
 
 
 
+            // Will give the document, with all its metadata, they will be set in the database.
+            //  The module that calls this, Image in the case of images, will
+
+
 
             // _set_document_no_metadata
             //  the new set_document function will set the document with _set_document_no_metadata and then ensure the metadata is correct.
-            'set_document': function(key, value, type_name, callback) {
+            'set_document': fp(function(a, sig) {
+
+                // [s,?,s,f]
+                // [s,?,s,o,f]
+
+                // Want to be able to have question mark in the signatures.
+                //  Could possibly do sig.matches.
+                //  With the sig being given another function, .matches, that checks for a match.
+                //   Would mean it would not be a simple string, could be quite a deoptimization.
+                //    I'm not sure.
+
+                // could maybe do a sig_match function.
+
+                // That would be a reasonable way of doing this polymorphic checking, and useful in cases where a 'value' or other parameter can be
+                //  of any type.
+                var key, value, type_name, metadata, callback;
+
+                // sBsf?
+
+
+                if (sig_match(sig, '[s,?,s,f]')) {
+                    key = a[0]; value = a[1]; type_name = a[2]; callback = a[3];
+                }
+
+                if (sig_match(sig, '[s,?,s,o,f]')) {
+                    key = a[0]; value = a[1]; type_name = a[2]; metadata = a[3]; callback = a[4];
+                }
+
+
+
+
+
+
+
+                // We don't discover the metadata here.
+                //  We may have been given the metadata when we are setting the document.
+                //  Possibly give the set_document or set_image, or set_image_document commend to Site_Images or Website.
+                //  Want to keep the DB layer simple to allow for more interchangability.
+                //  The graphics and file processing will be outside of this module.
+
+
+
+
+
+
+
                 var that = this;
 
                 this._set_document_no_metadata(key, value, type_name, function(err, document_id) {
@@ -1286,6 +1417,40 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                         // Need to find out what metadata to use.
                         //  would depend on the type_name first.
 
+                        // Probably don't want to be getting the image metadata here.
+                        //  Probably best not to decode the image either.
+
+                        // May be best just to provide the web-db interface, and then another component will do the actual adding / saving of the image.
+                        //  Can call the seit image resource, that will get the web db resource (from the pool?), and then it will
+                        //  make the lower level calls to the web db system.
+
+                        // Possibly a set_document or set_image document in the image resource.
+                        //
+
+                        if (metadata) {
+                            that.set_document_metadata(document_id, metadata, function(err, res_set_document_metadata) {
+                                if (err) {
+                                    callback(err);
+                                } else {
+                                    console.log('res_set_document_metadata', res_set_document_metadata);
+                                    callback(null, document_id);
+                                }
+                            })
+                        } else {
+                            // Perhaps we ensure the document has no metadata.
+                            //  Maybe an empty metadata object will indicate that.
+
+                            //  Also, will need to remove unwanted metadata items.
+                            callback(null, document_id);
+                        }
+
+
+
+
+
+
+                        /*
+
                         if (type_name == 'jpeg') {
 
 
@@ -1299,23 +1464,23 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
 
 
 
-                            /*
 
-                            var ExifImage = require('exif').ExifImage;
+
+                            //var ExifImage = require('exif').ExifImage;
 
                             // Would really be best to use libjpeg (turbo) code.
 
 
 
-                            var exi = new ExifImage({'image': value}, function(err, exifData) {
-                                if (err) {
-                                    throw err;
-                                } else {
-                                    console.log('exifData ' , exifData);
-                                    console.log('exifData.image ' , exifData.image);
-                                }
-                            })
-                            */
+                            //var exi = new ExifImage({'image': value}, function(err, exifData) {
+                            //    if (err) {
+                            //        throw err;
+                            //    } else {
+                            //        console.log('exifData ' , exifData);
+                            //        console.log('exifData.image ' , exifData.image);
+                            //    }
+                            //})
+
 
                             var decoded = jpeg_js.decode(value);
 
@@ -1338,22 +1503,15 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                             // then we have two metadata items.
 
 
-
-
-
-
-
-
-
-
-
                         }
+                         */
+
 
 
 
                     }
                 })
-            },
+            }),
 
 
             '_set_document_no_metadata': function(key, value, type_name, callback) {
@@ -1382,12 +1540,31 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
 
                 var that = this;
 
+
+                // Except maybe the image part won't even tell the DB it's an image.
+                //  It would just give it a binary type.
+
+
+
+                console.log('type_name', type_name);
+
+                // I think the image system should just use a binary API on the DB.
+                //  That keeps the DB's requirements simpler, and this DB module is something which may get repeated for different DBMSs.
+
+
+
+
+                //throw 'stop';
+
                 that.get_document_type_id_by_name(type_name, function(err, document_type_id) {
                     if (err) {
                         callback(err);
                     } else {
                         var t_document_type_id = tof(document_type_id);
                         console.log('document_type_id', document_type_id);
+
+
+
 
                         if (t_document_type_id == 'number') {
                             // proceed...
@@ -1638,6 +1815,61 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                 })
             },
 
+            'get_document_full': function(key, callback) {
+                // get the document id.
+
+                var that = this;
+
+                console.log('get_document_full key', key);
+
+                that.get_document_id_by_key(key, function(err, document_id) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        // get the document type.
+                        console.log('document_id', document_id);
+
+                        that.get_document_document_type_name_by_id(document_id, function(err, document_type_name) {
+                            if (err) {
+                                callback(err);
+                            } else {
+                                // get the document value
+
+                                console.log('document_type_name', document_type_name);
+
+                                that.get_document(key, function(err, document_value) {
+                                    if (err) {
+                                        callback(err);
+                                    } else {
+
+                                        //throw 'stop';
+
+                                        // Also want to get the mime type.
+                                        //  Could perhaps have a function that gets a type, rather than just the type id.
+                                        //  Not sure exactly how it would return the data.
+
+                                        that.get_document_metadata(document_id, function(err, document_metadata) {
+                                            if (err) {
+                                                callback(err);
+                                            } else {
+                                                var res = {
+                                                    'key': key,
+                                                    'value': document_value,
+                                                    'type': document_type_name,
+                                                    'metadata': document_metadata
+                                                };
+
+                                                callback(null, res);
+                                            }
+                                        })
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            },
+
             'get_document': function(key, callback) {
                 // Get the document id.
                 // Get the document type
@@ -1656,8 +1888,6 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                         if (t_document_id == 'number') {
 
                             // get_document_document_type_name_by_id - would require a join I think.
-
-
                             that.get_document_document_type_name_by_id(document_id, function(err, document_type_name) {
                                 if (err) {
                                     callback(err);
@@ -1678,6 +1908,11 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                                         that.get_json_document_value_value_by_document_id(document_id, callback);
                                     }
 
+                                    if (document_type_name == 'jpeg') {
+                                        // But maybe the metadata too???
+                                        that.get_binary_document_value_value_by_document_id(document_id, callback);
+                                    }
+
                                 }
                             })
                         } else {
@@ -1685,7 +1920,12 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
                         }
                     }
                 })
-            }
+            },
+
+            'get_documents_by_type_name': function(type_name, callback) {
+                var db = this.get('database');
+                db.execute_function_single_row('get_documents_by_type_name', [type_name], callback);
+            },
 
             // Could have various things with this system...
             //  Want the structure of pages to join with each other.
@@ -1734,6 +1974,45 @@ define(["./jsgui-html", "../resource/core/resource", "exif", "jpeg-js"],
 
             // Want to create the right API for client-side access to the storage.
             //  Need to get the authentication to work automatically there.
+
+
+            // Want some higher level functionality here too.
+            //  Get all website images.
+            //  Documents of the image type
+            //   All metadata associated with them?
+
+            'get_images': function(callback) {
+                // Get documents by a particular document type
+                //  get_documents_by_type_name
+
+                /* SELECT * FROM documents LEFT OUTER JOIN document_types ON documents.document_type_id = document_types.id */
+
+                // SELECT documents.id as id, key, document_types.name as type_name, document_types.id as type_id, mime_type FROM documents LEFT OUTER JOIN document_types ON documents.document_type_id = document_types.id
+
+                // Will only get the JPEG images for the moment.
+
+                this.get_documents_by_type_name('jpeg', function(err, res_jpeg_images) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        console.log('res_jpeg_images', res_jpeg_images);
+                        callback(null, res_jpeg_images);
+
+                        // Maybe there should be multiple images.
+
+
+                    }
+                })
+
+
+
+
+
+            }
+
+
+
+
 
 
 

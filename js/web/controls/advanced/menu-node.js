@@ -1,8 +1,13 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"], 
-	function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander) {
+//define(["../../jsgui-html"],
+	//function(jsgui) {
+
+        var jsgui = require('../../jsgui-html');
+
+        console.log('jsgui', jsgui);
+        //throw 'stop';
 		
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 		var Control = jsgui.Control;
@@ -312,6 +317,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 
 		});
-		return Menu_Node;
+		//return Menu_Node;
+        module.exports = Menu_Node;
 	
-});
+//});

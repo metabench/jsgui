@@ -1,9 +1,19 @@
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./constraint"], function(jsgui, Data_Structures, Data_Object, Constraint) {
+
+*/
+
+var jsgui = require('./jsgui-lang-essentials');
+var Data_Structures = require('./jsgui-data-structures');
+var Data_Object = require('./data-object');
+var Constraint = require('./constraint');
+
 	// Collection... use sligntly more than essentials?
 	// Likely to use the Data_Object class here.
 	
@@ -2258,5 +2268,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 		'Sorted': Sorted_Collection_Index
 	}
 
-	return Collection_Index;
-});
+	//return Collection_Index;
+module.exports = Collection_Index;
+
+//});

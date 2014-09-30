@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../core/jsgui-lang-essentials', 'fs', 'path', '../image/jsgui-node-png-metadata'], 
+define(['../core/jsgui-lang-essentials', 'fs', 'path', '../image/node/jsgui-node-png-metadata'],
     function(jsgui, fs, path, png_metadata) {
         var tof = jsgui.tof, each = jsgui.each;
         // Just reads the metadata.

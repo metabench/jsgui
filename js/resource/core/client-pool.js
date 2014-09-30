@@ -1,6 +1,14 @@
-define(['../../web/jsgui-html', './client-resource', './pool'], 
+
+/*
+define(['../../web/jsgui-html', './client-resource', './pool'],
 
 	function(jsgui, Resource, Resource_Pool) {
+*/
+
+var jsgui = require('../../web/jsgui-html');
+var Resource = require('./client-resource');
+var Resource_Pool = require('./pool');
+
 
 	// Client_Resource?
 	//  I think that makes sense, so that we have something specific which has the URL attached.
@@ -249,10 +257,11 @@ define(['../../web/jsgui-html', './client-resource', './pool'],
 
 		}
 		
-	}) 
+	})
+module.exports = Client_Resource_Pool;
 	
 	
-	return Client_Resource_Pool;
+	//return Client_Resource_Pool;
 	
 	
-});
+//});

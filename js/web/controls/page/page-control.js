@@ -1,10 +1,12 @@
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 // object viewer
 
 define(["../../jsgui-html-enh"], 
 	function(jsgui) {
+	    */
+        var jsgui = require('../../jsgui-html-enh');
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
@@ -122,6 +124,7 @@ define(["../../jsgui-html-enh"],
 		});
 
 
-		return Page_Control;
-	}
-);
+		//return Page_Control;
+        module.exports = Page_Control;
+	//}
+//);

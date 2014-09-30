@@ -1,16 +1,26 @@
 
 /* * @module core/collection */
 
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./data-object-fields-collection", "./constraint",
-	"./collection-index"], 
+	"./collection-index"],
+	*/
+
+var jsgui = require('./jsgui-lang-essentials');
+var Data_Structures = require('./jsgui-data-structures');
+var Data_Object = require('./data-object');
+var Data_Object_Field_Collection = require('./data-object-fields-collection');
+var Constraint = require('./constraint');
+var Collection_Index = require('./collection-index');
+
 	// 
 
-	function(jsgui, Data_Structures, Data_Object, Data_Object_Field_Collection, Constraint, Collection_Index) {
+	//function(jsgui, Data_Structures, Data_Object, Data_Object_Field_Collection, Constraint, Collection_Index) {
 	
 
 	// Collection... use sligntly more than essentials?
@@ -1886,5 +1896,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 
 	}
 
-	return Collection;
-});
+    module.exports = Collection;
+
+	//return Collection;
+//});

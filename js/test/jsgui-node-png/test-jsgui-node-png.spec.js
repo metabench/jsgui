@@ -2,8 +2,8 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../../core/jsgui-lang-essentials', 'fs', '../../image/jsgui-node-png', '../../image/jsgui-node-pixel-buffer',
-    '../../image/jsgui-node-pixel-buffer-process', 'assert', '../test-utils/test-utils'], 
+define(['../../core/jsgui-lang-essentials', 'fs', '../../image/node/jsgui-node-png', '../../image/node/pixel-buffer',
+    '../../image/node/jsgui-node-pixel-buffer-process', 'assert', '../test-utils/test-utils'],
 
 
     function(jsgui, fs, jsgui_png, Pixel_Buffer, pixel_buffer_processing, assert, test_utils) {

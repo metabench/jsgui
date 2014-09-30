@@ -43,11 +43,13 @@ if (typeof define !== 'function') {
 
 
 define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
-    "../web-admin", "./site-javascript", "./site-css",
+    "../web-admin",
+    "./site-images", "./site-javascript", "./site-css",
     "../../web/db-resource-postgres",
 
     "../../db/resource/factory"], function(jsgui, Web_Resource, Router, Resource_Pool,
-                                           Resource_Web_Admin, Site_JavaScript, Site_CSS,
+                                           Resource_Web_Admin,
+                                           Site_Images, Site_JavaScript, Site_CSS,
                                            DB_Web_Resource,
 
                                            database_resource_factory) {
@@ -97,13 +99,33 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             resource_pool.add(database_resource);
 
             var web_database_resource = new DB_Web_Resource({
-                'database': database_resource
+                'database': database_resource,
+                'meta': {
+                    'name': 'Web DB'
+                }
+
             })
 
+            // should set the name of meta when we set this up.
+            //  That should be part of the general resource code.
+
+
+
+
+
+
+
+            console.log('web_database_resource', web_database_resource);
+            console.log('web_database_resource.meta._.name', web_database_resource.meta._.name);
+            //console.log('web_database_resource.meta._.name.value()', web_database_resource.meta._.name);
+
+            // So why is the resource pool not indexing it by name
+
+
+
+            //throw 'stop';
+
             resource_pool.add(web_database_resource);
-
-
-            console.log('database_resource', database_resource);
 
             // use the Database Resource Factory.
 
@@ -145,6 +167,17 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
                 }
             })
 
+            // Site images resource as well.
+            //  The site images will interact with the web db resource, providing an API that deals with image metadata, possibly serving them too.
+            //   This is a way of keeping non-db functionality out of the web db module.
+
+            var img_resource = new Site_Images({
+                'meta': {
+                    'name': 'Site Images'
+                }
+            });
+
+
             var js_resource = new Site_JavaScript({
                 'meta': {
                     'name': 'Site JavaScript'
@@ -154,6 +187,8 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             // has it set this?
 
             js_resource.meta.set('custom_paths.js/app☺js', './client/js/app.js');
+
+            js_resource.meta.set('custom_paths.js/app_bundle☺js', './client/js/app_bundle.js');
 
             var css_resource = new Site_CSS({
                 'meta': {
@@ -166,6 +201,7 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
 
             // javascript and css resources.
+            resource_pool.push(img_resource);
             resource_pool.push(js_resource);
 
             resource_pool.push(css_resource);
@@ -173,6 +209,15 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             router.set_route('css/*', css_resource, css_resource.process);
 
             router.set_route('js/*', js_resource, js_resource.process);
+
+            router.set_route('img/*', img_resource, img_resource.process);
+
+
+            // The website (admin) resource will make use of the images resource where necessary.
+
+            // The website (admin) resource will be able to get the images resource from the resource pool.
+
+
             router.set_route('admin/*', admin_web_resource, admin_web_resource.process);
 
             /*

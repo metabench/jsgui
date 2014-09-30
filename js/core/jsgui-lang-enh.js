@@ -17,12 +17,18 @@
 // This is going to be using data_types as well.
 // Will also have a system of requirements.
 //  That could mean they need to be both the right data type, as well as having some other specified properties.
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 
 define(["./jsgui-lang-util", "./enhanced-data-object"], function(jsgui, Enhanced_Data_Object) {
+
+    */
+var jsgui = require('./jsgui-lang-util');
+var Enhanced_Data_Object = require('./enhanced-data-object');
 	
 	// Will use data structures.
 	//  Not sure about using all of them here.
@@ -79,7 +85,7 @@ define(["./jsgui-lang-util", "./enhanced-data-object"], function(jsgui, Enhanced
     //Enhanced_Data_Object.prototype._get_input_processors = function() {
     //	return jsgui.input_processors;
     //}
+    module.exports = jsgui;
+	//return jsgui;
 
-	return jsgui;
-
-});
+//});

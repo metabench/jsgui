@@ -3603,10 +3603,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 
 
-					console.log('row ' + stringify(row));
+					//console.log('row ' + stringify(row));
 
                     var res_row = row[fn_name];
-                    console.log('res_row', res_row);
+                    //console.log('res_row', res_row);
 
                     res.push(res_row);
 

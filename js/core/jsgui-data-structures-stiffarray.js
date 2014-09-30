@@ -15,7 +15,7 @@
 //  I think that web site would be lightening fast, and impress people with its speed compared to other web platforms that they are used to
 //   (though Facebook is OK)
 
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -24,7 +24,8 @@ if (typeof define !== 'function') {
 // May sway implementations of the particular items more easily when they are in their own files.
 
 define(["./jsgui-lang-essentials"], function (jsgui) {
-
+    */
+var jsgui = require('./jsgui-lang-essentials');
 
     // StiffArray: an array with pre-allocated items
     // it seems that this array is usually faster (excluding IE javascript engine)
@@ -320,11 +321,12 @@ define(["./jsgui-lang-essentials"], function (jsgui) {
 
         return m_public;
     };
+module.exports = StiffArray;
 
 
-    return StiffArray;
+    //return StiffArray;
 
 
-});
+//});
 
 

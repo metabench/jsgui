@@ -19,9 +19,15 @@ if (typeof define !== 'function') {
 
 
 
-//define(["./jsgui-html-core"], 
-define(["./jsgui-html-core"], 
-	function(jsgui) {
+//define(["./jsgui-html-core"],
+
+//define(["./jsgui-html-core", "./controls/advanced/context-menu"],
+	//function(jsgui, Context_Menu) {
+
+        var jsgui = require('./jsgui-html-core');
+
+        // don't think this can have context menu so easily here.
+        //var Context_Menu = require('./controls/advanced/context-menu');
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
@@ -3738,6 +3744,9 @@ define(["./jsgui-html-core"],
 		jsgui.hover_class = hover_class;
 		jsgui.group_hover_class = group_hover_class;
 
-		return jsgui;
-	}
-);
+		//return jsgui;
+
+        module.exports = jsgui;
+
+	//}
+//);

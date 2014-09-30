@@ -1,7 +1,10 @@
 // object viewer
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
+*/
 
 
 // Need to sort out how the dependencies link.
@@ -20,8 +23,16 @@ if (typeof define !== 'function') {
 
 // not so sure this needs to incluse the page context.
 
-define(["./jsgui-html-enh", "./jsgui-html-page-context", "./controls/page/page-control"], 
-	function(jsgui, Page_Context, Page_Control) {
+var jsgui = require('./jsgui-html-enh');
+
+//console.log('jsgui', jsgui);
+//throw 'stop2';
+var Page_Context = require('./jsgui-html-page-context');
+var Page_Control = require('./controls/page/page-control');
+
+
+//define(["./jsgui-html-enh", "./jsgui-html-page-context", "./controls/page/page-control"],
+	//function(jsgui, Page_Context, Page_Control) {
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
@@ -49,6 +60,8 @@ define(["./jsgui-html-enh", "./jsgui-html-page-context", "./controls/page/page-c
 		// this is the enhanced HTML module.
 
 
-		return jsgui;
-	}
-);
+		//return jsgui;
+
+        module.exports = jsgui;
+	//}
+//);

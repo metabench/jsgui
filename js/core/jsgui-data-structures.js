@@ -43,13 +43,17 @@
 // Going from the operation, doing something, to all the steps needed to change the array.
 //  Can do some experiments with the suffix arrays, compressing them to another type of suffix array, and decompressing them as well.
 //   Performing search operations on the compressed suffix array.
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list", "./jsgui-data-structures-b-plus-tree"], function(jsgui, Doubly_Linked_List, B_Plus_Tree) {
-	
+    */
+    var jsgui = require('./jsgui-lang-essentials');
+var Doubly_Linked_List = require('./jsgui-data-structures-doubly-linked-list');
+var B_Plus_Tree = require('./jsgui-data-structures-b-plus-tree');
+
     /** 
     * Data structures module.
     * @module core/jsgui-data-structures
@@ -1023,6 +1027,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-doubly-linked-list",
 	
 	
 	
-	return Data_Structures;
-
-});
+	//return Data_Structures;
+    module.exports = Data_Structures;
+//});

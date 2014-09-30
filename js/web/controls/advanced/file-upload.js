@@ -85,6 +85,8 @@ function(jsgui, Text_Field) {
             btn.set('dom.attributes.class', 'upload');
             btn.add('Upload');
             frm.add(btn);
+
+            //throw 'stop';
         }
     });
     return File_Upload;

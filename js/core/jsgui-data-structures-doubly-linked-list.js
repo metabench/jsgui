@@ -2,6 +2,8 @@
 // could rename this ds_doubly_linked_list.js
 
 // maybe not really a part of jsgui?
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -9,6 +11,10 @@ if (typeof define !== 'function') {
 
 
 define(["./jsgui-lang-essentials"], function(jsgui) {
+
+*/
+
+var jsgui = require('./jsgui-lang-essentials');
 
     /** 
     * Doubly linked list module.
@@ -463,8 +469,9 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	// var jsgui = {};
 	// alert('returning jsgui from jsgui-lang');
 	//return jsgui;
+module.exports = Doubly_Linked_List;
 
-	return Doubly_Linked_List;
+	//return Doubly_Linked_List;
 	
 	
-});
+//});

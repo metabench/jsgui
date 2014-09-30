@@ -1,3 +1,5 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -5,6 +7,9 @@ if (typeof define !== 'function') {
 
 define(["./jsgui-html-core"], 
 	function(jsgui) {
+	    */
+
+        var jsgui = require('./jsgui-html-core');
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control, Class = jsgui.Class;
@@ -652,10 +657,10 @@ define(["./jsgui-html-core"],
 
 	    });
 
-
-		return Page_Context;
-	}
-);
+        module.exports = Page_Context;
+		//return Page_Context;
+	//}
+//);
 
 
 

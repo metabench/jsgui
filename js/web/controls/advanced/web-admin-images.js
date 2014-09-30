@@ -15,12 +15,18 @@
 // That system will allow controls to work neatly on different screen sizes, allowing for any one of them to be like a simple mobile app.
 
 
-
+/*
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./multi-layout-mode"],
-    function(jsgui, Multi_Layout_Mode) {
+define(["../../jsgui-html", "./multi-layout-mode", "./list"],
+    function(jsgui, Multi_Layout_Mode, List) {
+*/
+
+var jsgui = require('../../jsgui-html');
+var Multi_Layout_Mode = require('./multi-layout-mode');
+var List = require('./list');
+
 
         var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
         var Control = jsgui.Control, Page_Control = jsgui.Page_Control;
@@ -43,17 +49,32 @@ define(["../../jsgui-html", "./multi-layout-mode"],
         // Center and right main area for content, with ribbon at the bottom for the misc area.
 
 
-
+        //
 
         var Web_Admin_Images = Multi_Layout_Mode.extend({
+
+
+
+            'fields': {
+                'web_admin': Object
+            },
+
             // Maybe should put this into a form, so that it does a form post.
             //  That could possibly be disabled.
             'init': function(spec) {
-                var make = this.make;
+
                 this._super(spec);
 
+                // The make function has been having problems there.
+                //  Looks like I need further testing on the make function.
+
+                //var make = this._context.make;
+
+
+                var that = this;
+
                 this.set('dom.attributes.class', 'web-admin-images');
-                this.__type_name = 'web_admin';
+                this.__type_name = 'web_admin_images';
 
 
                 if (!spec.el) {
@@ -75,6 +96,144 @@ define(["../../jsgui-html", "./multi-layout-mode"],
                     // navigation.set('data', arr_images);
                     // content.set(arr_images[0]);
 
+                    var navigation = this.get('navigation');
+                    var main = this.get('main');
+                    var misc = this.get('misc');
+
+
+                    // We put a list of images in the navigation panel.
+
+                    // I think a List control would be useful for this.
+                    //  Nice to have something that represents a list. Probably not going to use LI's?
+                    //  Control_List?
+                    // Just call it List?
+                    //  And it could possibly render UL, OL, LI
+                    // But it's a List rather than a Tree, it could be relatively easy to use common comonents,
+                    //  could possibly use tree nodes in a list.
+
+                    // list.set(json_data), and it displays that JSON properly and has the right UI events and responses.
+
+                    // This should probably hook into the website admin resource.
+                    //  When on the client, it will either have to use a REST interface, or a data binding abstraction that
+                    //   allows it to communicate with the resource.
+
+                    //throw 'stop';
+
+                    var web_admin = this.get('web_admin');
+                    console.log('web_admin', web_admin);
+
+                    this.__status = 'waiting';
+
+                    web_admin.get_images_list(function(err, res_images) {
+                        if (err) {
+                            throw err;
+                        } else {
+
+                            // This is asyncronous...
+                            //  need to delay the rendering.
+
+
+
+                            console.log('res_images', res_images);
+
+
+                            // Only active when it's loaded?
+
+                            // Really do want this to be active....
+                            // navigation
+                            //  show the list in the navigation section.
+
+                            // I think we create a new List component, set its data, add it to the navigation.
+
+                            // List will be expecting a bunch of items.
+                            //  .items in the spec.
+                            // Perhaps could receive an array as the spec, except it still needs the context.
+
+                            // Want to add an actual thumbnail image here.
+                            //  Want to refer to an image, get its thumbnail.
+                            //   Could be a thumbnail already.
+
+
+
+
+                            // Quite simple, a list of images.
+                            //  Displays the info within a List.
+
+                            // Each item is rendered as a list, as it contains multiple properties.
+
+                            var ctrl_list = new List({
+                                'context': that._context,
+                                'items': res_images
+                            });
+
+                            navigation.add(ctrl_list);
+
+                            // want the images to be deletable.
+                            //  could have the list joined to a data model, and listen for changes in that.
+                            //  the item would get deleted in the list (or deleteAttempt event occurs)
+                            //   and then outside of the list UI there can be confirmation that the delete can be done, or is pending
+                            //   then when the delete is done outside of the list, we get confirmation to delete it in the list.
+
+                            // have a context menu with delete, for a list, by default.
+
+
+
+
+
+
+
+
+
+
+
+
+                            //throw 'stop';
+
+
+
+
+
+
+
+                            that.active();
+
+                            that.__status = 'ready';
+                            that.trigger('ready');
+
+                            //throw 'stop';
+                        }
+                    })
+
+                    /*
+                    resource.get(function(err, data) {
+                        if (err) {
+                            throw err;
+                        } else {
+
+                            if (tof(data) == 'object') {
+
+                            }
+
+                            console.log('name', name);
+
+                            that.set('dom.attributes.data-jsgui-resource-name', name);
+                            that.active();
+
+                            that.__status = 'ready';
+                            that.trigger('ready');
+
+                        }
+                    });
+                    */
+
+
+
+
+
+
+                    //var images_list =
+
+
 
 
 
@@ -93,8 +252,9 @@ define(["../../jsgui-html", "./multi-layout-mode"],
                 this._context.full_window = this;
             }
         });
+        module.exports = Web_Admin_Images;
 
 
-        return Web_Admin_Images;
+        //return Web_Admin_Images;
 
-    });
+    //});

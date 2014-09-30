@@ -17,7 +17,7 @@
 // This is going to be using data_types as well.
 // Will also have a system of requirements.
 //  That could mean they need to be both the right data type, as well as having some other specified properties.
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -25,6 +25,11 @@ if (typeof define !== 'function') {
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./collection"],
 	function(jsgui, Data_Structures, Data_Object, Collection) {
+	*/
+    var jsgui = require('./jsgui-lang-essentials');
+var Data_Structures = require('./jsgui-data-structures');
+var Data_Object = require('.//data-object');
+var Collection = require('./collection');
 	
 	// Will use data structures.
 	//  Not sure about using all of them here.
@@ -1294,6 +1299,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 	//console.log('jsgui.input_processors ' + stringify(jsgui.input_processors));
 	// var jsgui = {};
 	// alert('returning jsgui from jsgui-lang');
-	return jsgui;
-
-});
+	//return jsgui;
+    module.exports = jsgui;
+//});

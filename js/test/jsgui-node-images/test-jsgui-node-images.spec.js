@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../../core/jsgui-lang-essentials', 'fs', '../../image/jsgui-node-png', '../../image/jsgui-node-pixel-buffer', '../../image/jsgui-node-jpeg', 'assert'], 
+define(['../../core/jsgui-lang-essentials', 'fs', '../../image/node/jsgui-node-png', '../../image/node/pixel-buffer', '../../image/node/jsgui-node-jpeg', 'assert'],
     function(jsgui, fs, jsgui_png, Pixel_Bufferm, jsgui_jpeg, assert) {
         var stringify = jsgui.stringify, call_multi = jsgui.call_multi;
         //var source_file = './source/pliers2.png';

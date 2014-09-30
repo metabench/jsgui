@@ -6,7 +6,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../../core/jsgui-lang-essentials', 'fs', '../../image/jsgui-node-png',
+define(['../../core/jsgui-lang-essentials', 'fs', '../../image/node/jsgui-node-png',
     '../../image/build/Release/binding.node', 'assert', '../test-utils/test-utils'], 
     function(jsgui, fs, jsgui_png, buffer_cpp, assert, test_utils) {
         var stringify = jsgui.stringify, call_multi = jsgui.call_multi;

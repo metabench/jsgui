@@ -6,12 +6,13 @@
 
 
 
-
+/*
 
 
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
+*/
 
 // Resources could also have events which objects can listen to.
 //  Programmatic objects can listen.
@@ -31,8 +32,11 @@ if (typeof define !== 'function') {
 
 
 //define(["./jsgui-lang-util", './abstract-resource'], function(jsgui, AR) {
-define(["../../core/jsgui-lang-util"], function(jsgui) {
-	
+//define(["../../core/jsgui-lang-util"], function(jsgui) {
+
+
+var jsgui = require('../../core/jsgui-lang-util');
+
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
 	var is_defined = jsgui.is_defined, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsgui.tof;
 	var call_multiple_callback_functions = jsgui.call_multiple_callback_functions, call_multi = jsgui.call_multi;
@@ -103,6 +107,10 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 					name: 'string'
 				}
 			});
+
+            // But give the resource name in the spec?
+            //  That may be the best way of doing it, but it's not the API for now.
+
 
 			if (spec.meta) {
 				var meta = spec.meta;
@@ -301,8 +309,9 @@ define(["../../core/jsgui-lang-util"], function(jsgui) {
 	return res;
 	*/
 
-	return Resource;
-});
+module.exports = Resource;
+	//return Resource;
+//});
 
 
 

@@ -25,10 +25,11 @@
 
 */
 
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
+*/
 
 if (typeof window === 'undefined') {
     //exports.foo = {};
@@ -45,7 +46,7 @@ if (typeof window === 'undefined') {
 //function (Stream) {
 
 
-define(function() {
+//define(function() {
 
     // ========================================================
     //                      Class
@@ -3014,6 +3015,62 @@ define(function() {
 	}
 
 
+    var sig_match = function(sig1, sig2) {
+        // Does sig2 match sig1
+
+        // We go through sig1, checking item by item.
+
+        // Sigs have to be the same length I think?
+
+        // I think just check flat sigs?
+        //  Or we could do this recursively anyway.
+
+        var sig1_inner = sig1.substr(1, sig1.length - 2);
+        console.log('sig1_inner', sig1_inner);
+
+        var sig2_inner = sig2.substr(1, sig2.length - 2);
+        console.log('sig2_inner', sig2_inner);
+
+        if (sig1_inner.indexOf('[') > -1 || sig1_inner.indexOf(']') > -1 || sig2_inner.indexOf('[') > -1 || sig2_inner.indexOf(']') > -1) {
+            throw 'sig_match only supports flat signatures.';
+        }
+
+        var sig1_parts = sig1_inner.split(',');
+        var sig2_parts = sig1_inner.split(',');
+
+        var res = true;
+
+        if (sig1_parts.length == sig2_parts.length) {
+            var c = 0, l = sig1_parts.length, i1, i2;
+            while (res && c < l) {
+                i1 = sig1_parts[c];
+                i2 = sig2_parts[c];
+
+                if (i1 === i2) {
+
+                } else {
+                    if (i1 !== '?') {
+                        res = false;
+                    }
+                }
+
+                c++;
+            }
+            return res;
+        } else {
+            return false;
+        }
+
+        //throw 'stop';
+
+
+
+
+
+
+    }
+
+
 	/*
 
 	(function() {
@@ -3068,7 +3125,8 @@ define(function() {
 		'native_constructor_tof': native_constructor_tof,
 		'Fns': Fns,
 		'get': get,
-		'set': set
+		'set': set,
+        'sig_match': sig_match
 	};
 
 	
@@ -3122,6 +3180,6 @@ define(function() {
 	
 	// var jsgui = {};
 	// alert('returning jsgui from jsgui-lang');
-	return jsgui;
-
-});
+	//return jsgui;
+    module.exports = jsgui;
+//});

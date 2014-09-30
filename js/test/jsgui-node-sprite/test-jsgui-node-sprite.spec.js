@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../../core/jsgui-lang-essentials', 'fs', 'path', '../../image/jsgui-node-sprite', '../../image/jsgui-node-png', 'assert', '../test-utils/test-utils'], 
+define(['../../core/jsgui-lang-essentials', 'fs', 'path', '../../image/node/jsgui-node-sprite', '../../image/node/jsgui-node-png', 'assert', '../test-utils/test-utils'],
     function(jsgui, fs, path, jsgui_node_sprite, jsgui_node_png, assert, test_utils) {
         var tof = jsgui.tof, each = jsgui.each;
         var stringify = jsgui.stringify;

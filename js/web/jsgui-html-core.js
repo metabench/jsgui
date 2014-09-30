@@ -1,3 +1,5 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -10,6 +12,9 @@ if (typeof define !== 'function') {
 //  return them.
 
 define(["../core/jsgui-lang-enh"], function (jsgui) {
+
+    */
+    var jsgui = require('../core/jsgui-lang-enh');
     //This function is called when scripts/helper/util.js is loaded.
 
     // HTML will benefit from a big tidy-up.
@@ -662,7 +667,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 var context = this._context;
                 if (context) {
-                    context.register_control(this);
+                    if (context.register_control) context.register_control(this);
                 } else {
                     //console.trace('');
                     //throw 'Control requires context'
@@ -1534,7 +1539,14 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 } else {
                     //htm = n.all_html_render();
                     //res.push(n.all_html_render());
-                    v.iterate_this_and_subcontrols.call(v, ctrl_callback);
+
+                    // it should not be null, but can ignore it for the moment / forever
+
+                    if (v && v.iterate_this_and_subcontrols) {
+                        v.iterate_this_and_subcontrols.call(v, ctrl_callback);
+                    }
+
+
                 }
 
                 
@@ -1569,7 +1581,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
                 // then if we are waiting on any of them we listen for them to complete.
 
-                //console.log('arr_waiting_controls.length', arr_waiting_controls.length);
+                console.log('arr_waiting_controls.length', arr_waiting_controls.length);
 
                 if (arr_waiting_controls.length == 0) {
                     var html = this.all_html_render();
@@ -1606,7 +1618,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                         }
                     }
 
-                    each(arr_waiting_controls, function(i, control) {
+                    each(arr_waiting_controls, function(control, i) {
+
+
                         control.on('ready', function(e_ready) {
                             //console.log('control ready');
                             c--;
@@ -1682,6 +1696,28 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             // When adding a string to the collection...
 
             var content = this.get('content');
+
+            // Does not have content?
+            //  That's very strange.
+
+            if (!content.length) {
+                console.log('!!!no content length!!!');
+                console.log('');
+                console.log(this);
+                console.log('');
+                console.trace();
+                console.log('content', content);
+                console.log('tof(content) ' + tof(content));
+                throw 'stop';
+            }
+
+            console.log('content', content);
+            console.log('tof(content) ' + tof(content));
+
+            // The content should not be a control.
+            //  Can't call a part of a control its 'content', as that already exists.
+            //  Should be considered a protected word.
+
             var contentLength = content.length();
 
             // var res = [];
@@ -3588,7 +3624,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         //'map_controls_by_type': map_controls_by_type
     });
     //alert('2 ' + jsgui);
-    return jsgui;
+    //return jsgui;
+    module.exports = jsgui;
 
-});
+
+//});
 

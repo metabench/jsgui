@@ -1,10 +1,16 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], function(jsgui, Data_Structures, Constraint) {
-	
+	*/
+var jsgui = require('./jsgui-lang-essentials');
+var Data_Structures = require('./jsgui-data-structures');
+var Constraint = require('./constraint');
+
 	// May need to test controls and data objects separately before running a document server with them.
 	
 	// Constraints as well as a modular bolt-on?
@@ -897,6 +903,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint"], f
 	Fields_Collection.parse_field_text = parse_field_text;
 	Fields_Collection.parse_data_type = parse_data_type;
 
-	return Fields_Collection;
+	//return Fields_Collection;
+    module.exports = Fields_Collection;
 	
-})
+//})

@@ -6,12 +6,12 @@
 // So, client-resource will need html-enh I think, but not the client system.
 
 
-
-
-define(['../../web/jsgui-html-enh', './resource'], 
-
+/*
+define(['../../web/jsgui-html-enh', './resource'],
 	function(jsgui, Resource) {
-
+*/
+var jsgui = require('../../web/jsgui-html-enh');
+var Resource = require('./resource');
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
@@ -253,8 +253,9 @@ define(['../../web/jsgui-html-enh', './resource'],
 		//	callback(null, true);
 		//}
 	});
+
+module.exports = Client_Resource;
+	//return Client_Resource;
 	
-	return Client_Resource;
 	
-	
-});
+//});

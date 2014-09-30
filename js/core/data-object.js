@@ -1,3 +1,4 @@
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -5,6 +6,12 @@ if (typeof define !== 'function') {
 
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"], 
 	function(jsgui, Data_Structures, Constraint, Fields_Collection) {
+
+	*/
+    var jsgui = require('./jsgui-lang-essentials');
+var Data_Structures = require('./jsgui-data-structures');
+var Constraint = require('./constraint');
+var Fields_Collection = require('./data-object-fields-collection');
 	
 	// Creates the Constraints data type... so a constraint specified with a string can be tested against
 	//  also a cache of the constraints that have been made through the string - quick to get them again for reuse when testing.
@@ -1339,16 +1346,61 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 			} else {
 				var that = this;
 				this._initializing = true;
-				
-				if (spec.context) {
-					//console.log('spec has context');
-				
-					this._context = spec.context;
-				}
 
-				if (spec._id) {
-					this.__id = spec._id;
-				}
+                var t_spec = tof(spec);
+                //console.log('t_spec', t_spec);
+
+                if (!this.__type) {
+                    this.__type = 'data_object';
+
+                }
+
+                if (!this.hasOwnProperty('_')) {
+                    this._ = {};
+                }
+
+                if (t_spec == 'object') {
+                    // Normal initialization
+
+                    if (spec.context) {
+                        //console.log('spec has context');
+
+                        this._context = spec.context;
+                    }
+
+                    if (spec._id) {
+                        this.__id = spec._id;
+                    }
+
+                }
+                if (t_spec == 'data_object') {
+                    // Initialization by Data_Object value (for the moment)
+
+                    // Not so sure about copying the id of another object.
+
+                    if (spec._context) this._context = spec._context;
+
+                    // then copy the values over from spec.
+
+                    var spec_keys = spec.keys();
+                    console.log('spec_keys', spec_keys);
+
+                    each(spec_keys, function(i, key) {
+                        that.set(key, spec.get(key));
+                    });
+
+
+                }
+
+
+                // Why would the spec be a function?
+
+
+
+
+
+				
+
 				
 				//this._relationships = {};
 				
@@ -1377,10 +1429,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				
 				// always the case with constructors when given a data_type?
 				//console.log('do this.__type ' + this.__type);
-				if (!this.__type) {
-					this.__type = 'data_object';
-					
-				}
+
 				//console.log('jsgui.__data_id_method ' + jsgui.__data_id_method);
 				//throw 'stop';
 				
@@ -1436,12 +1485,12 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				//   
 				
 				// so, not getting it through the prototype chain.
-				if (!this.hasOwnProperty('_')) {
-					this._ = {};
-				}
+
 				
 				// is also going to have a _fields object.
 				//  the _fields will have different things in them.
+
+                // Not sure about this.
 				
 				if (is_defined(this.__type_name)) {
 					spec = {
@@ -1639,225 +1688,232 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 				
 				//console.log('tof(spec) ' + spec);
 				var chained_field_name;
-				each(spec, function(i, v) {
-					
-					// Just copy the functions for the moment?
-					// what about copying everything else?
-					// need to may more attention to adding things?
-					// push the other, non-function items one by one?
-	
-					// Or copy the other things to '_'.
-	
-					// var my_i = that[i];
-					// will save a bit in the Core rewrite. Will eventually
-					// put these techniques in the main lib.
-					// calling the functions???
-	
-					// May be used for controls???
-					// Function calls in spec...
-					// Calling things like 'bind' through the spec.
-					
-				    //console.log('i ' + i + ' =v= ' + v + ' that[i] ' + that[i]);
-					
-					// Other thing that we may want to do is just copy
-					// things.
-					// Really not sure about that in general though, with
-					// DataObject being so generally used as a basis for
-					// things like controls.
-	
-					if (typeof that[i] == 'function') {
-						// connected by now!
-						
-						// such as setting the fields...
-					    
-						that[i](v);
-					} else {
-						// _[i] = v;
-						
-						// they could be values...
-						//  should set the values
-						
-						// possibly only set them if they correspond to fields?
-						
-						// set values from fields seems like a good idea here.
-						//  that seems like a good level of connectedness.
-						//  want a map of the fields to quickly test them.
-						
-						// setting values from chained fields?
-						//  probably better to set them from the normal fields.
-						
-						//console.log('2* chained_fields ' + stringify(chained_fields));
-						//console.log('2* chained_fields_list ' + stringify(chained_fields_list));
-						
-						// it will be dom.nodeType.
-						
-						
-						
-						// then it should be able to set some values.
-						//console.log('spec ' + stringify(spec));
-						
-						// maybe a map of chained fields would work better.
-						
-						// Could be done a lot more efficiently with a map.
 
-						if (chained_fields_list.length > 0) {
-							var tcf, chained_field;
-							for (var c = 0, l = chained_fields_list.length; c < l; c++) {
-								chained_field = chained_fields_list[c];
-								tcf = tof(chained_field);
+                // If the spec is an object.
 
-								if (tcf == 'string') {
-									chained_field_name = chained_field;
-								} else if (tcf == 'array') {
-									chained_field_name = chained_field[0];
-								}
-								
-								//console.log('chained_field_name ' + chained_field_name);
-								// coming out as undefined.
+                if (t_spec == 'object') {
+                    each(spec, function(i, v) {
 
-								// I think I need to redo the field chaining system somewhat.
-								//  It's algorithms can be made faster and neater.
-								// Basically, at any level we define fields.
-								// Need to be able to get the fields for this level.
-								//  Would help to get the names of the parents.
-								//   Field definitions of the subclasses overwrite those of the superclasses.
+                        // Just copy the functions for the moment?
+                        // what about copying everything else?
+                        // need to may more attention to adding things?
+                        // push the other, non-function items one by one?
 
-								// Want to be able to get the field chain...
-								//  That is going backwards getting all of the fields.
-								//   Not overwriting them as older ones are found.
+                        // Or copy the other things to '_'.
+
+                        // var my_i = that[i];
+                        // will save a bit in the Core rewrite. Will eventually
+                        // put these techniques in the main lib.
+                        // calling the functions???
+
+                        // May be used for controls???
+                        // Function calls in spec...
+                        // Calling things like 'bind' through the spec.
+
+                        //console.log('i ' + i + ' =v= ' + v + ' that[i] ' + that[i]);
+
+                        // Other thing that we may want to do is just copy
+                        // things.
+                        // Really not sure about that in general though, with
+                        // DataObject being so generally used as a basis for
+                        // things like controls.
+
+                        if (typeof that[i] == 'function') {
+                            // connected by now!
+
+                            // such as setting the fields...
+
+                            that[i](v);
+                        } else {
+                            // _[i] = v;
+
+                            // they could be values...
+                            //  should set the values
+
+                            // possibly only set them if they correspond to fields?
+
+                            // set values from fields seems like a good idea here.
+                            //  that seems like a good level of connectedness.
+                            //  want a map of the fields to quickly test them.
+
+                            // setting values from chained fields?
+                            //  probably better to set them from the normal fields.
+
+                            //console.log('2* chained_fields ' + stringify(chained_fields));
+                            //console.log('2* chained_fields_list ' + stringify(chained_fields_list));
+
+                            // it will be dom.nodeType.
 
 
 
+                            // then it should be able to set some values.
+                            //console.log('spec ' + stringify(spec));
 
-								// Redoing the field chaining is probably one of the largest
-								//  changes to make in order to get a nicely working system.
+                            // maybe a map of chained fields would work better.
+
+                            // Could be done a lot more efficiently with a map.
+
+                            if (chained_fields_list.length > 0) {
+                                var tcf, chained_field;
+                                for (var c = 0, l = chained_fields_list.length; c < l; c++) {
+                                    chained_field = chained_fields_list[c];
+                                    tcf = tof(chained_field);
+
+                                    if (tcf == 'string') {
+                                        chained_field_name = chained_field;
+                                    } else if (tcf == 'array') {
+                                        chained_field_name = chained_field[0];
+                                    }
+
+                                    //console.log('chained_field_name ' + chained_field_name);
+                                    // coming out as undefined.
+
+                                    // I think I need to redo the field chaining system somewhat.
+                                    //  It's algorithms can be made faster and neater.
+                                    // Basically, at any level we define fields.
+                                    // Need to be able to get the fields for this level.
+                                    //  Would help to get the names of the parents.
+                                    //   Field definitions of the subclasses overwrite those of the superclasses.
+
+                                    // Want to be able to get the field chain...
+                                    //  That is going backwards getting all of the fields.
+                                    //   Not overwriting them as older ones are found.
 
 
 
 
+                                    // Redoing the field chaining is probably one of the largest
+                                    //  changes to make in order to get a nicely working system.
 
-								//console.log('i ' + i);
 
-								// Need to make sure we a are properly holding the field types.
-								
-								if (chained_field_name == i) {
-									//console.log('*** chained_field_name ' + chained_field_name);
-									//console.log('setting');
-									//that.set([i, v]);
 
-									// Need to check setting a collection with an array.
-									that.set(i, v);
-									
-									//console.log('that._[i] ' + stringify(that._[i]));
-								}
-							}
 
-							/*
-							each(chained_fields_list, function(i2, chained_field) {
-								//console.log('chained_field ' + stringify(tof(chained_field)));
-								
-								
-								
-								if (tof(chained_field) == 'string') {
-									chained_field_name = chained_field;
-								}
-								if (tof(chained_field) == 'array') {
-									chained_field_name = chained_field[0];
-								}
-								
-								//console.log('chained_field_name ' + chained_field_name);
-								//console.log('i ' + i);
-								
-								if (chained_field_name == i) {
-									//console.log('chained_field_name ' + chained_field_name);
-									//console.log('setting');
-									//that.set([i, v]);
 
-									// Need to check setting a collection with an array.
-									that.set(i, v);
-									
-									//console.log('that._[i] ' + stringify(that._[i]));
-								}
-							});
-							*/
-						}
+                                    //console.log('i ' + i);
 
-						
-						//throw('stop');
-						/*
-						//chained_fields_list
-						if(chained_fields_map && is_defined(chained_fields_map[i])) {
-							console.log('chained_fields i ' + i);
-							console.log('chained_fields v ' + v);
-							
-							
-							
-							that.set(i, v);
-						}
-						*/
-					}
-				});
-	
-				// events as a list?
-				// or named anyway?
-	
-				// then there is a list for the events of each name.
-				// also, will create the _bound_events object when needed.
-				//this._bound_events = {};
-				
-				if (is_defined(spec.event_bindings)) {
-					throw '16) stop';
-					each(spec.event_bindings, function(event_name, v) {
-						if (tof(v) == 'array') {
-							each(v, function(event_name, fn_event) {
-								if (tof(fn_event) == 'function') {
-									this.add_event_listener(event_name, fn_event);
-								}
-							});
-						} else if (tof(v) == 'function') {
-							this.add_event_listener(event_name, v);
-						}
-					});
-				}
-				
-				var spec_reserved = ['parent', 'event_bindings', 'load_array'];
-				var map_spec_reserved = get_truth_map_from_arr(spec_reserved);
-				
-				// Don't give the constraint as just the spec!
-				//  It's not a good idea. Specify it separately.
-				//  Spec can just be the data, it looks like?
-				
-				//var o_constraint = {};
-				/*
-				each(spec, function(i, v) {
-					if (!map_spec_reserved[i]) {
-						//
-						o_constraint[i] = v;
-					}
-				})
-				*/
-				if (spec.constraint) that.constraint(spec.constraint);
-				// then go through the spec, ignoring the reserved ones, and treat those items as field constraits / field constraint definitions.
-				// and _parent?
-				// but get(parent) could be really useful.
-				// Could be very useful with controls, having this parent
-				// structure.
-				// Could be useful in bubbling events in controls too.
-	
-				// But not just one potential parent.
-				// The data object can appear in more than one collection.
-				//  Will use 'relationships', where there can be more than one 'parent'
-				//  Will have things indexed for faster access.
-				// what if the spec is a collection of string keys (representing fields) and string values representing the constraints?
-				
-				// parent could be reserved / ignored as a field.
-				//  could check an object to see if it's a field definition type.
-				//  could be a string. could be an array of the right form.
-				//  Field definitions could be a bit tricky - it may actually create such a field definition object if it needs to do so.
-				
-				if (is_defined(spec.parent)) {
-					this.set('parent', spec.parent);
-				}
+                                    // Need to make sure we a are properly holding the field types.
+
+                                    if (chained_field_name == i) {
+                                        //console.log('*** chained_field_name ' + chained_field_name);
+                                        //console.log('setting');
+                                        //that.set([i, v]);
+
+                                        // Need to check setting a collection with an array.
+                                        that.set(i, v);
+
+                                        //console.log('that._[i] ' + stringify(that._[i]));
+                                    }
+                                }
+
+                                /*
+                                 each(chained_fields_list, function(i2, chained_field) {
+                                 //console.log('chained_field ' + stringify(tof(chained_field)));
+
+
+
+                                 if (tof(chained_field) == 'string') {
+                                 chained_field_name = chained_field;
+                                 }
+                                 if (tof(chained_field) == 'array') {
+                                 chained_field_name = chained_field[0];
+                                 }
+
+                                 //console.log('chained_field_name ' + chained_field_name);
+                                 //console.log('i ' + i);
+
+                                 if (chained_field_name == i) {
+                                 //console.log('chained_field_name ' + chained_field_name);
+                                 //console.log('setting');
+                                 //that.set([i, v]);
+
+                                 // Need to check setting a collection with an array.
+                                 that.set(i, v);
+
+                                 //console.log('that._[i] ' + stringify(that._[i]));
+                                 }
+                                 });
+                                 */
+                            }
+
+
+                            //throw('stop');
+                            /*
+                             //chained_fields_list
+                             if(chained_fields_map && is_defined(chained_fields_map[i])) {
+                             console.log('chained_fields i ' + i);
+                             console.log('chained_fields v ' + v);
+
+
+
+                             that.set(i, v);
+                             }
+                             */
+                        }
+                    });
+
+                    // events as a list?
+                    // or named anyway?
+
+                    // then there is a list for the events of each name.
+                    // also, will create the _bound_events object when needed.
+                    //this._bound_events = {};
+
+                    if (is_defined(spec.event_bindings)) {
+                        throw '16) stop';
+                        each(spec.event_bindings, function(event_name, v) {
+                            if (tof(v) == 'array') {
+                                each(v, function(event_name, fn_event) {
+                                    if (tof(fn_event) == 'function') {
+                                        this.add_event_listener(event_name, fn_event);
+                                    }
+                                });
+                            } else if (tof(v) == 'function') {
+                                this.add_event_listener(event_name, v);
+                            }
+                        });
+                    }
+
+                    var spec_reserved = ['parent', 'event_bindings', 'load_array'];
+                    var map_spec_reserved = get_truth_map_from_arr(spec_reserved);
+
+                    // Don't give the constraint as just the spec!
+                    //  It's not a good idea. Specify it separately.
+                    //  Spec can just be the data, it looks like?
+
+                    //var o_constraint = {};
+                    /*
+                     each(spec, function(i, v) {
+                     if (!map_spec_reserved[i]) {
+                     //
+                     o_constraint[i] = v;
+                     }
+                     })
+                     */
+                    if (spec.constraint) that.constraint(spec.constraint);
+                    // then go through the spec, ignoring the reserved ones, and treat those items as field constraits / field constraint definitions.
+                    // and _parent?
+                    // but get(parent) could be really useful.
+                    // Could be very useful with controls, having this parent
+                    // structure.
+                    // Could be useful in bubbling events in controls too.
+
+                    // But not just one potential parent.
+                    // The data object can appear in more than one collection.
+                    //  Will use 'relationships', where there can be more than one 'parent'
+                    //  Will have things indexed for faster access.
+                    // what if the spec is a collection of string keys (representing fields) and string values representing the constraints?
+
+                    // parent could be reserved / ignored as a field.
+                    //  could check an object to see if it's a field definition type.
+                    //  could be a string. could be an array of the right form.
+                    //  Field definitions could be a bit tricky - it may actually create such a field definition object if it needs to do so.
+
+                    if (is_defined(spec.parent)) {
+                        this.set('parent', spec.parent);
+                    }
+                }
+
+
 				
 				//var that = this;
 				
@@ -1937,6 +1993,18 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 
 			}
 		}),
+
+        'keys': function() {
+            if (Object.keys) {
+                return Object.keys(this._);
+            } else {
+                var res = [];
+                each(this._, function(i, v) {
+                    res.push(i);
+                });
+                return res;
+            }
+        },
 		
 		'stringify': function() {
 			var res = [];
@@ -5714,6 +5782,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", ".
 	Data_Object.get_Enhanced_Data_Object = get_Enhanced_Data_Object;
 	Data_Object.ensure_data_type_data_object_constructor = ensure_data_type_data_object_constructor;
 
-	return Data_Object;
-	
-})
+	//return Data_Object;
+	module.exports = Data_Object;
+//})

@@ -9,9 +9,14 @@
 // And this is going to include a client-side resource pool.
 
 // Another problem with circular references here.
+
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
+
+*/
 
 // Probably best if this has the resource pool, but this brings up the question of how small could all of that be, and it may not be needed in some
 //  uses of the app.
@@ -19,12 +24,17 @@ if (typeof define !== 'function') {
 // Could make a version with the resource pool?
 //  Or assume it's optional.
 
-//define(["./jsgui-html", "../resource/core/client-pool"], 
+//define(["./jsgui-html", "../resource/core/client-pool"],
+
+/*
 define(["./jsgui-html"], 
 
 	function(jsgui) {
+
+	*/
 	
 	// This should be running in node.js
+        var jsgui = require('./jsgui-html');
 	
 		var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 		var filter_map_by_regex = jsgui.filter_map_by_regex;
@@ -68,9 +78,11 @@ define(["./jsgui-html"],
 	// Also want a File_Server.
 	//  Want files to be served from a particular path, as a resource in the URL system.
 	//  Will be able to post files there with the right permission.
-	
-	
+	module.exports = Client_Page_Context;
+	/*
 	return Client_Page_Context;
 	
 	
 });
+
+*/

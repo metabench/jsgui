@@ -88,12 +88,13 @@
 
 
 
-
+/*
 
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
+*/
 
 // Rather than just jsgui-html-enh, it would be good to load a jsgui module that has got a lot of controls
 //  and possibly resources built in.
@@ -118,10 +119,16 @@ if (typeof define !== 'function') {
 
 
 
+/*
 
 define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-pool"],
 //define(["./jsgui-html"],
 function (jsgui, Client_Page_Context, Client_Resource_Pool) {
+
+    */
+    var jsgui = require('./jsgui-html-enh');
+    var Client_Page_Context = require('./client-page-context');
+    var Client_Resource_Pool = require('../resource/core/client-pool');
 
     var fp = jsgui.fp;
     //jQuery, canvas and the app/sub module are all
@@ -208,7 +215,8 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool) {
         console.log('client-side resource pool started');
     });
 
-    jsgui.activate(client_page_context);
+    // No automatic activation here, the client app.js may want to load im references.
+    //jsgui.activate(client_page_context);
     console.log('jsgui-html-client post activate');
 
 
@@ -227,11 +235,13 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool) {
 
     //jsgui.Client_Page_Context = Client_Page_Context;
 
-    return jsgui;
+    //return jsgui;
+
+    module.exports = jsgui;
 
 
 
 
-});
+//});
 
 

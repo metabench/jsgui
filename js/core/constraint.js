@@ -1,3 +1,5 @@
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -5,6 +7,8 @@ if (typeof define !== 'function') {
 
 define(["./jsgui-lang-essentials"], function(jsgui) {
 	
+    */
+    var jsgui = require('./jsgui-lang-essentials');
 
     /**
     * Constraints module.
@@ -1699,7 +1703,9 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 	Constraint.Field_Data_Type = Field_Data_Type_Constraint;
 	Constraint.Guid = Guid_Constraint;
 
-	return Constraint;
-});
+    module.exports = Constraint;
+
+	//return Constraint;
+//});
 
                                                    

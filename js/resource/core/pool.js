@@ -10,6 +10,7 @@
 
 // This could possibly get published by a resource publisher.
 
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -18,7 +19,9 @@ if (typeof define !== 'function') {
 define(['../../web/jsgui-html', './resource'], 
 
 	function(jsgui, Resource) {
-
+*/
+var jsgui = require('../../web/jsgui-html');
+var Resource = require('./resource');
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
@@ -458,8 +461,8 @@ define(['../../web/jsgui-html', './resource'],
 		}
 	});
 	
+module.exports = Resource_Pool;
+	//return Resource_Pool;
 	
-	return Resource_Pool;
 	
-	
-});
+//});
