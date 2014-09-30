@@ -45,6 +45,8 @@ var Item = require('./item');
                 //  That's all I'll have in the tree node for now.
                 this.__type_name = 'list';
 
+                this.set('dom.attributes.class', 'list');
+
                 // a Collection of items.
 
                 // Collection not needing a Context?
@@ -117,13 +119,13 @@ var Item = require('./item');
 
                 //throw 'stop';
 
-                /*
+
                 this.context_menu({
                     'Delete': function() {
                         console.log('context_menu Delete');
                     }
                 })
-                */
+
 
             }
         });

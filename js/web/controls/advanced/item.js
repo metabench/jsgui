@@ -55,7 +55,8 @@ var jsgui = require('../../jsgui-html');
 
         'init': function(spec, add, make) {
             this._super(spec);
-            this.__type_name = 'list';
+            this.__type_name = 'item';
+            this.set('dom.attributes.class', 'item');
 
             // Would have a Value.
             //  I think that should be a Data_Object.
@@ -201,9 +202,11 @@ var jsgui = require('../../jsgui-html');
                 var ctrl_id = new Control({
                     'context': this._context
                 });
+                ctrl_id.set('dom.attributes.class', 'id');
                 var ctrl_key = new Control({
                     'context': this._context
                 });
+                ctrl_key.set('dom.attributes.class', 'key');
 
                 // Will possibly have more code to do with rendering Data_Values as HTML, as Control content.
 

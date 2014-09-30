@@ -410,9 +410,9 @@ if (typeof define !== 'function') {
 	        }),
 
 	        'one_mousedown_anywhere': function(callback) {
-	        	var ctrl_html_root = this._context.ctrl_document;
+	        	//var ctrl_html_root = this._context.ctrl_document;
 	        	//console.log('this._context', this._context);
-	        	var body = ctrl_html_root.body();
+	        	var body = this._context.body();
 
 	        	var that = this;
 
@@ -1069,19 +1069,10 @@ if (typeof define !== 'function') {
 
 
 
-
-
-
-
-
-
-
 	        	var menu_def;
 	        	if (sig == '[o]' || sig == '[a]') {
 	        		menu_def = a[0];
 	        	}
-
-
 
 	        	var Context_Menu = Context_Menu || require('./controls/advanced/context-menu');
 
@@ -1091,9 +1082,13 @@ if (typeof define !== 'function') {
 	        	// Need it so that the context menu gets removed when it should.
 	        	//  Any mouseup event causes it to vanish.
 
-	        	var ctrl_html_root = this._context.ctrl_document;
+                var body = this._context.body();
 
-	        	var body = ctrl_html_root.body(); 
+	        	//var ctrl_html_root = this._context.ctrl_document;
+
+                //console.log('ctrl_html_root', ctrl_html_root);
+
+	        	//var body = ctrl_html_root.body();
 
 	        	var show_context_menu = fp(function(a, sig) {
 
@@ -3553,6 +3548,10 @@ if (typeof define !== 'function') {
 	        	}
 	        })
 	    });
+
+        // Want a body function in other nodes, available throughout the document?
+
+
 
 	    var Client_HTML_Document = Blank_HTML_Document.extend({
 	        'init': function (spec) {

@@ -154,8 +154,8 @@
 				// Respond to clicking anywhere.
 				//  If it's not a leaf node of the tree, will open further nested menu.
 
-				var ctrl_html_root = this._context.ctrl_document;
-	        	var body = ctrl_html_root.body();
+				//var ctrl_html_root = this._context.ctrl_document;
+	        	var body = this._context.body();
 
 	        	var that = this;
 

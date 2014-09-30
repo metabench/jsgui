@@ -591,3 +591,21 @@ html.dragging {
 .cursor-default {
 	cursor: default;
 }
+
+
+
+
+
+.web-admin-images .list .item {
+    width: 500px;
+    background-color: #EEEEEE;
+}
+
+.web-admin-images .list .item .id {
+    width: 70px;
+    float: left;
+}
+.web-admin-images .list .item .value {
+    width: 400px;
+    float: left;
+}
