@@ -26,6 +26,7 @@ define(["../../jsgui-html", "./multi-layout-mode", "./list"],
 var jsgui = require('../../jsgui-html');
 var Multi_Layout_Mode = require('./multi-layout-mode');
 var List = require('./list');
+var File_Upload = require('./file-upload');
 
 
         var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
@@ -119,7 +120,18 @@ var List = require('./list');
 
                     //throw 'stop';
 
-                    var web_admin = this.get('web_admin');
+                    //var web_admin = this.get('web_admin');
+                    // Needs the web admin resource?
+                    //  Can it be got from the pool?
+                    //  Can this access the pool itself to get the web_admin Resource?
+
+                    console.log('this._context', this._context);
+                    //throw 'stop';
+                    var pool = this._context.pool;
+                    var web_admin = pool.get_resource('Web Admin');
+
+
+
                     console.log('web_admin', web_admin);
 
                     this.__status = 'waiting';
@@ -175,6 +187,29 @@ var List = require('./list');
                             //   then when the delete is done outside of the list, we get confirmation to delete it in the list.
 
                             // have a context menu with delete, for a list, by default.
+
+                            // compact mode will mean it's just showing a single button.
+
+                            // The file upload control can autosubmit.
+                            //  in compact mode it will autosubmit.
+
+
+
+
+                            // Need to make this upload to the right path.
+                            // Want to add something to the path... upload it to admin/images/...
+
+                            // http://192.168.56.1/admin/upload-image/
+
+                            var file_upload = new File_Upload({
+                                'context': that._context,
+                                'mode': 'compact',
+                                'action': '/admin/upload-image/'
+                            });
+
+                            misc.add(file_upload);
+
+
 
 
 
@@ -250,6 +285,11 @@ var List = require('./list');
                 this.grid_9();
                 this.make_full_height();
                 this._context.full_window = this;
+
+                // make it so it can automatically upload / submit form once the file has been chosen
+
+
+
             }
         });
         module.exports = Web_Admin_Images;

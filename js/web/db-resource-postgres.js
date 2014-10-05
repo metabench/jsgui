@@ -815,6 +815,11 @@ define(["./jsgui-html", "../resource/core/resource"],
                         var t_document_metadata_record_id = tof(document_metadata_record_id);
                         if (t_document_metadata_record_id == 'number') {
                             // it exists
+
+                            // just ensuring the record exists, so nothing more to do
+
+                            callback(null, document_metadata_record_id);
+
                         } else {
                             // create it.
 
@@ -852,10 +857,15 @@ define(["./jsgui-html", "../resource/core/resource"],
                         callback(err);
                     } else {
                         var t_document_metadata_integer_record_id = tof(document_metadata_integer_record_id);
+                        console.log('t_document_metadata_integer_record_id', t_document_metadata_integer_record_id);
+                        //throw 'stop 10';
 
                         if (t_document_metadata_integer_record_id == 'number') {
                             // update the integer record.
-                            that.update_document_metadata_integer_record(document_metadata_integer_record_id, value, callback);
+
+                            // id of the integer record, id of the metadata record, value, callback
+
+                            that.update_document_metadata_integer_record(document_metadata_integer_record_id, document_metadata_record_id, value, callback);
 
                         } else {
                             that.create_document_metadata_integer_record(document_metadata_record_id, value, callback);
@@ -892,6 +902,9 @@ define(["./jsgui-html", "../resource/core/resource"],
             //  much simpler / neater like this.
             'update_document_metadata_integer_record': function(id, document_metadata_record_id, value, callback) {
                 var db = this.get('database');
+                console.log('[id, document_metadata_record_id, value]', [id, document_metadata_record_id, value]);
+                //throw 'stop 11';
+
                 db.execute_function_single_row('update_document_metadata_integer_record', [id, document_metadata_record_id, value], callback);
             },
 
@@ -1169,6 +1182,7 @@ define(["./jsgui-html", "../resource/core/resource"],
             'set_document_metadata': fp(function(a, sig) {
 
                 console.log('set_document_metadata sig', sig);
+                //throw 'stop 4';
 
                 // Could possibly call this function with the document key.
                 //  It would look up the document id, by key, and call the function again.
@@ -1188,6 +1202,9 @@ define(["./jsgui-html", "../resource/core/resource"],
                         if (err) {
                             callback(err);
                         } else {
+
+                            console.log('cb get_document_id_by_key document_id', document_id);
+
                             that.set_document_metadata(document_id, metadata_record_key, metadata_record_value, callback);
                         }
                     })
@@ -1210,12 +1227,15 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                     document_id = a[0];
                     obj_values = a[1];
+                    callback = a[2];
 
                     // we call it with these values.
                     //  could this be done using mapify instead?
 
                     var fns = jsgui.Fns();
                     each(obj_values, function(v, i) {
+                        // And a callback...
+
                         fns.push([that, that.set_document_metadata, [document_id, i, v]]);
                     });
 
@@ -1224,6 +1244,10 @@ define(["./jsgui-html", "../resource/core/resource"],
                             throw err;
                         } else {
                             console.log('res_fns', res_fns);
+
+                            //throw 'stop 5';
+                            callback(null, res_fns);
+
                         }
                     });
 
@@ -1231,6 +1255,10 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                 if (tof(document_id) == 'number') {
                     var t_metadata_record_value = tof(metadata_record_value);
+                    console.log('metadata_record_key', metadata_record_key);
+                    console.log('metadata_record_value', metadata_record_value);
+                    //console.log('metadata_record_key', metadata_record_key);
+                    //throw 'stop 6';
 
                     // create_document_metadata_record
 
@@ -1281,14 +1309,17 @@ define(["./jsgui-html", "../resource/core/resource"],
                             } else {
 
                                 // now we have the record type id, we can
+                                //throw 'stop 7';
 
                                 that.ensure_document_metadata_record(document_id, metadata_record_key, document_metadata_record_type_id, function(err, document_metadata_record_id) {
                                     if (err) {
+                                        //throw err;
                                         callback(err);
                                     } else {
                                         console.log('document_metadata_record_id', document_metadata_record_id);
 
                                         //throw 'stop';
+                                        //throw 'stop 8';
 
                                         // then need to ensure the document metadata record value (of the appropriate type).
 
@@ -1297,7 +1328,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                                                 throw err;
                                             } else {
                                                 console.log('res_ensure_metadata_integer_record_value', res_ensure_metadata_integer_record_value);
-
+                                                //throw 'stop 9';
                                                 // Then I think the function's done.
                                                 // return the document metadata record id
 
@@ -1359,6 +1390,9 @@ define(["./jsgui-html", "../resource/core/resource"],
             //  the new set_document function will set the document with _set_document_no_metadata and then ensure the metadata is correct.
             'set_document': fp(function(a, sig) {
 
+
+                console.log('web db postgres set_document sig', sig);
+
                 // [s,?,s,f]
                 // [s,?,s,o,f]
 
@@ -1414,6 +1448,8 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                         console.log('type_name', type_name);
 
+                        //throw 'stop';
+
                         // Need to find out what metadata to use.
                         //  would depend on the type_name first.
 
@@ -1426,6 +1462,9 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                         // Possibly a set_document or set_image document in the image resource.
                         //
+                        //
+                        console.log('metadata', metadata);
+                        //throw 'stop 1';
 
                         if (metadata) {
                             that.set_document_metadata(document_id, metadata, function(err, res_set_document_metadata) {
@@ -1433,6 +1472,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                                     callback(err);
                                 } else {
                                     console.log('res_set_document_metadata', res_set_document_metadata);
+                                    //throw 'stop 2';
                                     callback(null, document_id);
                                 }
                             })
@@ -1441,6 +1481,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                             //  Maybe an empty metadata object will indicate that.
 
                             //  Also, will need to remove unwanted metadata items.
+                            //throw 'stop 3';
                             callback(null, document_id);
                         }
 
@@ -1927,6 +1968,31 @@ define(["./jsgui-html", "../resource/core/resource"],
                 db.execute_function_single_row('get_documents_by_type_name', [type_name], callback);
             },
 
+            /*
+
+            'get_json_documents_by_tag': function(tag, callback) {
+                // Will allow documents to be given tags, such as 'flexidoc'.
+                //  Or could allow subtypes as well?
+
+                // Make flexidoc a proper type, or subtype.
+                // define flexidoc as a subtype in the database.
+                //  could give it a parent type of json so it knows to treat it as a JSON object.
+
+
+
+
+            },
+            */
+
+            'get_all_flexidocs': function(callback) {
+                var db = this.get('database');
+                // could be multiple rows? or it's all as JSON?
+
+                //db.execute_function_single_row('get_all_flexidocs', callback);
+
+                this.get_documents_by_type_name('flexidoc', callback);
+            },
+
             // Could have various things with this system...
             //  Want the structure of pages to join with each other.
 
@@ -1997,17 +2063,44 @@ define(["./jsgui-html", "../resource/core/resource"],
                     } else {
                         console.log('res_jpeg_images', res_jpeg_images);
                         callback(null, res_jpeg_images);
-
                         // Maybe there should be multiple images.
-
-
                     }
                 })
+            },
+            'get_flexidocs': function(callback) {
+                // Get documents by a particular document type
+                //  get_documents_by_type_name
+
+                /* SELECT * FROM documents LEFT OUTER JOIN document_types ON documents.document_type_id = document_types.id */
+
+                // SELECT documents.id as id, key, document_types.name as type_name, document_types.id as type_id, mime_type FROM documents LEFT OUTER JOIN document_types ON documents.document_type_id = document_types.id
+
+                // Will only get the JPEG images for the moment.
 
 
 
+                //this.get_json_documents_by_tag('flexidoc', function(err, res_flexidocs) {
+                this.get_all_flexidocs(function(err, res_flexidocs) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        console.log('res_flexidocs', res_flexidocs);
+                        callback(null, res_flexidocs);
+                        // Maybe there should be multiple images.
+                    }
+                });
 
-
+                /*
+                this.get_documents_by_type_name('jpeg', function(err, res_jpeg_images) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        console.log('res_jpeg_images', res_jpeg_images);
+                        callback(null, res_jpeg_images);
+                        // Maybe there should be multiple images.
+                    }
+                })
+                */
             }
 
 

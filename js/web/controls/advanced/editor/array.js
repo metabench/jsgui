@@ -1,11 +1,16 @@
 // object editor
 
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../../jsgui-html-enh", "../viewer/array", "./factory"], 
 	function(jsgui, Array_Viewer, factory) {
-		
+*/
+
+var jsgui = require('../../../jsgui-html-enh');
+var Array_Viewer = require('../viewer/array');
+var factory = require('./factory');
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -32,7 +37,8 @@ define(["../../../jsgui-html-enh", "../viewer/array", "./factory"],
 
 			}
 		});
+module.exports = Array_Editor;
 
-		return Array_Editor;
-	}
-);
+		//return Array_Editor;
+	//}
+//);

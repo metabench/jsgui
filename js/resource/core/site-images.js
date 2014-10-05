@@ -530,7 +530,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                 if (sig == '[s,B,s,f]') {
                     // we work out the metadata and then use the web db resource's set_document.
 
-                    key = a[0]; value = a[1]; type_name = a[2]; callback = a[4];
+                    key = a[0]; value = a[1]; type_name = a[2]; callback = a[3];
+
+                    //console.log('callback', callback);
+                    //throw 'stop';
 
                     // Best to get the image metadata.
                     // get_metadata
@@ -557,6 +560,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                                 //pb = jpeg.get_rgb_enhanced_pixel_buffer();
 
                                 pb = jpeg.get_rgba_enhanced_pixel_buffer();
+
+                                // then save a variety of smaller jpeg versions
+
+
+
 
                                 // Want to save a few resized / thumbnail versions.
                                 //  Want the various sizes to be configurable - part of the DB?
@@ -623,45 +631,83 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                                 // Want to make and save a max 64x64 version.
                                 //  It needs to be saved in the database as a different size.
 
+                                // put this in a function, so we can set a bunch of them quickly
 
-                                var resized_128x128 = pb.get_resized([128, 128]);
+                                var save_square_sized_version = function(square_size, callback2) {
+                                    console.log('save_square_sized_version');
+                                    //throw 'stop';
 
+                                    var resized_128x128 = pb.get_resized([square_size, square_size]);
+                                    var jpeg_128x128 = new jsgui_jpeg.JPEG({});
+                                    jpeg_128x128.load_from_rgb_pixel_buffer(resized_128x128);
+                                    var buffer_jpeg_128x128 = jpeg_128x128.save_to_buffer();
+                                    var md = {
+                                        'width': resized_128x128.size[0],
+                                        'height': resized_128x128.size[1]
+                                    }
+                                    // Need to change the key, so insert the _128x128 before the extension.
 
-                                var jpeg_128x128 = new jsgui_jpeg.JPEG({});
+                                    //var s_key = key.split('.');
+                                    // need to replace the last full stop?
+                                    var i = key.lastIndexOf('.');
+                                    var key2 = key;
+                                    if (i > -1) {
+                                        key2 = key.substr(0, i) + '_' + square_size + 'x' + square_size + '.' + key.substr(i + 1);
+                                    }
 
-                                jpeg_128x128.load_from_rgb_pixel_buffer(resized_128x128);
-
-                                var buffer_jpeg_128x128 = jpeg_128x128.save_to_buffer();
-
-                                var md = {
-                                    'width': resized_128x128.size[0],
-                                    'height': resized_128x128.size[1]
-                                }
-
-                                // Need to change the key, so insert the _128x128 before the extension.
-
-                                //var s_key = key.split('.');
-                                // need to replace the last full stop?
-
-                                var i = key.lastIndexOf('.');
-                                var key2 = key;
-                                if (i > -1) {
-                                    key2 = key.substr(0, i) + '_128x128.' + key.substr(i + 1);
-                                }
-
-                                console.log('key2', key2);
+                                    console.log('key2', key2);
 
 
 
 
-                                web_db.set_document(key2, buffer_jpeg_128x128, type_name, md, function(err, res_saved_128x128) {
+                                    web_db.set_document(key2, buffer_jpeg_128x128, type_name, md, function(err, res_saved_128x128) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            console.log('cb save_square_sized_version set_document size: ' + square_size);
+                                            //throw 'stop';
+                                            callback2(null, res_saved_128x128);
+
+
+                                        }
+                                    });
+                                };
+
+                                save_square_sized_version(128, function(err, res) {
+                                    console.log('saved 128');
+                                    //throw 'stop';
+
                                     if (err) {
                                         throw err;
                                     } else {
-                                        console.log('cb set document 128x128');
+                                        save_square_sized_version(64, function(err, res) {
+                                            console.log('saved 64');
 
+                                            //console.log('callback', callback);
+
+                                            callback(null, true);
+
+
+                                        });
                                     }
+
+
+
                                 });
+
+
+
+
+
+
+                                // Set a few resized versions....
+                                // 128x128
+                                // 258x256
+                                // 512x512
+
+
+
+
 
 
 

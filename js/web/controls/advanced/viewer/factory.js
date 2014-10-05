@@ -1,12 +1,19 @@
 // object viewer
 
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
-};
+}; */
 
-define(["require", "../../../jsgui-html-enh"/*, "./object", "./array", "./basic/string", "./basic/number" */], 
-	function(require, jsgui /*, Object_Viewer, Array_Viewer, String_Viewer, Number_Viewer */) {
-		
+//define(["require", "../../../jsgui-html-enh"/*, "./object", "./array", "./basic/string", "./basic/number" */],
+	//function(require, jsgui /*, Object_Viewer, Array_Viewer, String_Viewer, Number_Viewer */) {
+
+var jsgui = require('../../../jsgui-html-enh');
+var Object_Viewer = require('./object');
+var Array_Viewer = require('./array');
+var String_Viewer = require('./basic/string');
+var Number_Viewer = require('./basic/number');
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -147,10 +154,11 @@ define(["require", "../../../jsgui-html-enh"/*, "./object", "./array", "./basic/
 				
 				return res;
 			}
-		}
+		};
+module.exports = create;
 		
 		
 
-		return create;
-	}
-);
+		//return create;
+	//}
+//);

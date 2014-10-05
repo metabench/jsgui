@@ -1,6 +1,6 @@
 // Maybe make this into a page control.
 //  That means it will always take up the whole page or be full screen in a window if suitable.
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -11,6 +11,20 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
         "../../../resource/core/pool", "../../../resource/core/resource"],
 
 	function(jsgui, Text_Field, Object_Viewer, Object_Editor, Flexiboard, Columns_2, Ctrl_Resource_Pool, Ctrl_Resource) {
+	*/
+
+var jsgui = require('../../jsgui-html');
+var Text_Field = require('./text-field');
+var Object_Viewer = require('./viewer/object');
+var Object_Editor = require('./editor/object');
+var Flexiboard = require('./flexiboard');
+var Columns_2 = require('../page/layout/columns-2');
+var Ctrl_Resource_Pool = require('../../../resource/core/pool');
+var Ctrl_Resource = require('../../../resource/core/resource');
+var Web_Admin_Images = require('./web-admin-images');
+var Web_Admin_Flexidocs = require('./web-admin-flexidocs');
+
+
 		
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control, Page_Control = jsgui.Page_Control;
@@ -193,6 +207,33 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 				var right = this.get('right');
 
 				if (left) {
+
+                    //
+                    var web_admin_images = new Web_Admin_Images({
+                        'context': this._context
+                    })
+
+                    left.add(web_admin_images);
+
+
+                    // Administer the Flexidocs.
+
+                    var web_admin_flexidocs = new Web_Admin_Flexidocs({
+                        'context': this._context
+                    })
+
+                    left.add(web_admin_flexidocs);
+
+
+
+
+                    // show the images admin control here
+                    //  it can be shown in a moderately sized mode, rather than full view.
+                    //  the full view would also use the same Control though.
+
+
+
+
 					// Put the web admin navigation in the left panel.
 					//  This will be a published version / adaptation of the resource pool
 
@@ -283,7 +324,7 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 				//  But could probably get it from the content relatively easily.
 				var left = this.get('content').get(0);
 				var right = this.get('content').get(1);
-				var ctrl_resource_pool = left.get('content').get(0);
+				//var ctrl_resource_pool = left.get('content').get(0);
 
 				/*
 
@@ -316,6 +357,7 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 				// So, at this time it does not have the right ID?
 				//  It should have the context and not need to make any new ID.
 
+                /*
 
 				console.log('web-admin ctrl_resource_pool', ctrl_resource_pool);
 
@@ -347,11 +389,13 @@ define(["../../jsgui-html", "./text-field", "./viewer/object",
 
 				});
 				console.log('ctrl_resource_pool', ctrl_resource_pool);
+				*/
 				//throw 'stop';
 			}
 		});
+module.exports = Web_Admin;
 		
 		
-		return Web_Admin;
+		//return Web_Admin;
 	
-});
+//});

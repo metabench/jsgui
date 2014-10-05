@@ -1,13 +1,15 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//}
 
 // This Resouce should maybe be changed so it does not have an HTML or HTTP interface (to start with?)
 //  The main focus of this resource should be to administer website data, and the resource could be connected to in the standard way that resources get connected to.
 //  At least use a generalised resource admin HTTp interface, then extend that for this resource where necessary.
 //   Much of the website would be nested information anyway.
 
+// Flexidoc_Editor
 
+/*
 
 define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/server-page-context',
         'multiparty', 'util',
@@ -36,6 +38,24 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
              fs, fs2,
              JeSuisXML, Cookies,
              Web_Admin_Control, Web_Admin_Images_Control, File_Upload) {
+*/
+
+var jsgui = require('../web/jsgui-html');
+var os = require('os');
+var http = require('http');
+var url = require('url');
+var Resource = require('./core/resource');
+var Server_Page_Context = require('../web/server-page-context');
+var multiparty = require('multiparty');
+var util = require('util');
+var fs = require('fs');
+var fs2 = require('../fs/jsgui-node-fs2-core');
+var JeSuisXML = require('../web/jsgui-je-suis-xml');
+var Cookies = require('cookies');
+var Web_Admin_Control = require('../web/controls/advanced/web-admin');
+var Web_Admin_Images_Control = require('../web/controls/advanced/web-admin-images');
+var File_Upload = require('../web/controls/advanced/file-upload');
+var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
 
 	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
@@ -84,6 +104,18 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
         'get_images_list': function(callback) {
             var web_db = this.get('web_database');
             web_db.get_images(function(err, res_images) {
+                if (err) {
+                    callback(err);
+                } else {
+                    console.log('res_images', res_images);
+                    callback(null, res_images);
+                }
+            })
+
+        },
+        'get_flexidocs_list': function(callback) {
+            var web_db = this.get('web_database');
+            web_db.get_flexidocs(function(err, res_images) {
                 if (err) {
                     callback(err);
                 } else {
@@ -571,16 +603,16 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
                         /*
-                        fs.writeFile("out.jpg", buf, function(err) {
+                         fs.writeFile("out.jpg", buf, function(err) {
 
-                            if (err) {
-                                //console.log(err);
-                                throw err;
-                            } else {
-                                console.log('file saved to out.jpg');
-                            }
-                        });
-                        */
+                         if (err) {
+                         //console.log(err);
+                         throw err;
+                         } else {
+                         console.log('file saved to out.jpg');
+                         }
+                         });
+                         */
 
 
 
@@ -594,20 +626,20 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
                     /*
 
-                    form.parse(req, function(err, fields, files) {
-                        res.writeHead(200, {'content-type': 'text/plain'});
-                        res.write('received upload:\n\n');
-                        res.end(util.inspect({fields: fields, files: files}));
+                     form.parse(req, function(err, fields, files) {
+                     res.writeHead(200, {'content-type': 'text/plain'});
+                     res.write('received upload:\n\n');
+                     res.end(util.inspect({fields: fields, files: files}));
 
-                        // then look at the file object.
+                     // then look at the file object.
 
-                        var file = files.file[0];
+                     var file = files.file[0];
 
-                        console.log('file.length ' , file.length);
-                        console.log('file', file);
+                     console.log('file.length ' , file.length);
+                     console.log('file', file);
 
-                    });
-                    */
+                     });
+                     */
 
 
 
@@ -617,118 +649,118 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
                     /*
-                    var form = new formidable.IncomingForm();
+                     var form = new formidable.IncomingForm();
 
-                    form.on('progress', function(bytesReceived, bytesExpected) {
-                        console.log('progress ' + bytesReceived + ' / ' + bytesExpected);
-                    });
-                    */
-
-                    /*
-
-                    form.on('end', function() {
-                        console.log('form upload end');
-
-                        // and then we should have the image in a buffer.
-
-                        require("fs").writeFile("out.jpg", buf, function(err) {
-
-                            if (err) {
-                                //console.log(err);
-                                throw err;
-                            } else {
-                                console.log('file saved to out.jpg');
-                            }
-                        });
-
-
-                    });
-
-                    form.onPart = function(part) {
-
-                        console.log('on part');
-                        console.log('1) this.multiples', this.multiples);
-
-                        console.log('this.bytesExpected', this.bytesExpected);
-
-                        buf = new Buffer(this.bytesExpected);
-
-
-
-
-
-
-
-                        // Should not have to read the whole thing to get the file size.
-
-                        console.log('part', part);
-
-                        // Maybe hack into formidable to change what it's doing.
-
-                        // We will know the part length.
-
-
-
-                        part.addListener('data', function(e_data_part) {
-
-                            console.log('2) this.multiples', this.multiples);
-                            // ...
-
-                            console.log('e_data_part', e_data_part);
-
-                            var len_data = e_data_part.length;
-
-                            e_data_part.copy(buf, buf_pos, len_data);
-                            buf_pos += len_data;
-
-
-
-
-
-                            // And it probably does not write that to disk?
-
-                            // write this to a file stream?
-                            //  or db stream?
-
-                            // Variable size buffer???
-                            //  Can we get the size first?
-
-
-
-
-
-                        });
-
-
-                    }
-
-                    */
-
+                     form.on('progress', function(bytesReceived, bytesExpected) {
+                     console.log('progress ' + bytesReceived + ' / ' + bytesExpected);
+                     });
+                     */
 
                     /*
-                    form.on('file', function(name, file) {
-                        console.log('has form file. name:', name);
-                        console.log('this.multiples', this.multiples);
 
-                        // Want to disable saving to the disk automatically.
-                        //  Want the stream / data.
+                     form.on('end', function() {
+                     console.log('form upload end');
+
+                     // and then we should have the image in a buffer.
+
+                     require("fs").writeFile("out.jpg", buf, function(err) {
+
+                     if (err) {
+                     //console.log(err);
+                     throw err;
+                     } else {
+                     console.log('file saved to out.jpg');
+                     }
+                     });
+
+
+                     });
+
+                     form.onPart = function(part) {
+
+                     console.log('on part');
+                     console.log('1) this.multiples', this.multiples);
+
+                     console.log('this.bytesExpected', this.bytesExpected);
+
+                     buf = new Buffer(this.bytesExpected);
 
 
 
-                        if (this.multiples) {
-                            //if (files[name]) {
-                            //    if (!Array.isArray(files[name])) {
-                            //        files[name] = [files[name]];
-                            //    }
-                            //    files[name].push(file);
-                            //} else {
-                            //    files[name] = file;
-                            //}
-                        } else {
-                            //files[name] = file;
-                        }
-                    })
-                    */
+
+
+
+
+                     // Should not have to read the whole thing to get the file size.
+
+                     console.log('part', part);
+
+                     // Maybe hack into formidable to change what it's doing.
+
+                     // We will know the part length.
+
+
+
+                     part.addListener('data', function(e_data_part) {
+
+                     console.log('2) this.multiples', this.multiples);
+                     // ...
+
+                     console.log('e_data_part', e_data_part);
+
+                     var len_data = e_data_part.length;
+
+                     e_data_part.copy(buf, buf_pos, len_data);
+                     buf_pos += len_data;
+
+
+
+
+
+                     // And it probably does not write that to disk?
+
+                     // write this to a file stream?
+                     //  or db stream?
+
+                     // Variable size buffer???
+                     //  Can we get the size first?
+
+
+
+
+
+                     });
+
+
+                     }
+
+                     */
+
+
+                    /*
+                     form.on('file', function(name, file) {
+                     console.log('has form file. name:', name);
+                     console.log('this.multiples', this.multiples);
+
+                     // Want to disable saving to the disk automatically.
+                     //  Want the stream / data.
+
+
+
+                     if (this.multiples) {
+                     //if (files[name]) {
+                     //    if (!Array.isArray(files[name])) {
+                     //        files[name] = [files[name]];
+                     //    }
+                     //    files[name].push(file);
+                     //} else {
+                     //    files[name] = file;
+                     //}
+                     } else {
+                     //files[name] = file;
+                     }
+                     })
+                     */
 
 
 
@@ -736,30 +768,30 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
                     // But does not parse it into files if we are doing the direct reading.
                     /*
-                    form.parse(req, function(err, fields, files) {
-                        // We really want to be saving this file / image to the database.
+                     form.parse(req, function(err, fields, files) {
+                     // We really want to be saving this file / image to the database.
 
-                        // This will have a reference to the web-database resource.
-                        //  It will be possible to put files as values.
-                        //  They will be stored with the right metadata and mime type.
+                     // This will have a reference to the web-database resource.
+                     //  It will be possible to put files as values.
+                     //  They will be stored with the right metadata and mime type.
 
-                        //var ws_file = files.file._writeStream;
-
-
+                     //var ws_file = files.file._writeStream;
 
 
 
 
 
-                        res.writeHead(200, {'content-type': 'text/plain'});
-                        res.write('received upload:\n\n');
-                        res.end(util.inspect({fields: fields, files: files}));
+
+
+                     res.writeHead(200, {'content-type': 'text/plain'});
+                     res.write('received upload:\n\n');
+                     res.end(util.inspect({fields: fields, files: files}));
 
 
 
-                    });
+                     });
 
-                    */
+                     */
 
 
 
@@ -788,6 +820,29 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 
 
 
+            }
+
+            if (rurl == '/admin/new-flexidoc/') {
+
+                // Different depending if a GET or POST.
+
+                if (req.method == 'POST') {
+
+                }
+                if (req.method == 'GET') {
+                    // Show a Flexidoc editor control
+                    //  Is it a Page Control?
+                    //   I think it will be a Flexidoc Editor in its maximum view mode.
+
+                    var flexidoc_editor = new Flexidoc_Editor({
+                        'context': spc
+                    });
+
+                    body.add(flexidoc_editor);
+
+
+
+                }
             }
 
             // Want to be administering content.
@@ -941,5 +996,6 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/ser
 			
 		}
 	});
-	return Resource_Web_Admin;
-});
+module.exports = Resource_Web_Admin;
+	//return Resource_Web_Admin;
+//});

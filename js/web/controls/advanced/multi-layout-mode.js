@@ -112,25 +112,34 @@ var Panel = require('./panel');
                     // Want to be able to use panels to specify layouts using numbers, outside of CSS.
                     //  Will do some maths.
 
-                    // For the moment, just want 3 simple panels.
-
+                    // For the moment, just want 4 simple panels. (01/10/2014 adding a 'title' panel)
+                    var panel_title = new Panel({
+                        'context': context,
+                        'name': 'title'
+                    })
+                    panel_title.add_class('title');
                     var panel_navigation = new Panel({
                         'context': context,
                         'name': 'navigation'
                     })
+                    panel_navigation.add_class('navigation');
                     var panel_main = new Panel({
                         'context': context,
                         'name': 'main'
                     })
+                    panel_main.add_class('main');
                     var panel_misc = new Panel({
                         'context': context,
                         'name': 'misc'
                     })
+                    panel_misc.add_class('misc');
 
+                    this.add(panel_title);
                     this.add(panel_navigation);
                     this.add(panel_main);
                     this.add(panel_misc);
 
+                    this.set('title', panel_title);
                     this.set('navigation', panel_navigation);
                     this.set('main', panel_main);
                     this.set('misc', panel_misc);

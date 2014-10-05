@@ -345,6 +345,8 @@ if (typeof define !== 'function') {
 		// Perhaps more client-side capabilities should be here, like activate.
 
 		var mapDomEventNames = {
+            'change': true,
+
             'click': true,
             'mousedown': true,
             'mouseup': true,
@@ -408,6 +410,65 @@ if (typeof define !== 'function') {
 	                return res;
 	            }
 	        }),
+
+            // absolute_ghost_clone
+            absolute_ghost_clone: function() {
+                // find out what type the control is...
+
+                var type_name = this.__type_name;
+                var id = this._id();
+                var context = this._context;
+
+                // spin up a new control, using they type of controls.
+
+
+
+
+
+            },
+
+            /*
+
+            'create_ghost_copy': function() {
+                // Needs to clone the control, and put it into the body.
+
+                // May need to do some in-depth work on cloning a control.
+                //  Don't want to complicate the code too much though.
+                //  Could just add the HTML from inside the other one.
+
+                var ghost_copy = new Control({
+                    'context': this._context
+                });
+
+                var el = this.get('dom.el');
+
+                // Can't reuse IDs
+                //  I think we need a means of cloning controls (properly).
+                //  Need to run a clone procedure on the Control and its subcontrols.
+                //  Would make a clone within the same context but it would get a new ID.
+
+
+
+
+
+
+                if (el) {
+                    //ghost_copy.add(el.innerHTML)
+
+                    var my_clone = this.clone();
+
+                    // then put the clone in the body.
+
+                    var body = this._context.body();
+                    body.add(my_clone);
+                }
+
+
+            },
+            */
+
+
+
 
 	        'one_mousedown_anywhere': function(callback) {
 	        	//var ctrl_html_root = this._context.ctrl_document;
@@ -574,6 +635,14 @@ if (typeof define !== 'function') {
 
 	            if (sig == '[s,f]') {
 	                var event_name = a[0];
+
+                    // change is also a DOM event
+                    //  that's a tricky one.
+                    //  should make it easy to listen out for DOM changes.
+                    // let's include it for the moment.
+
+
+
 	                if (mapDomEventNames[a[0]]) {
 	                    //console.log('we have a DOM event: ' + event_name);
 
@@ -1063,12 +1132,6 @@ if (typeof define !== 'function') {
 	 			//.active({'context_menu': {...}})
 
 
-
-
-
-
-
-
 	        	var menu_def;
 	        	if (sig == '[o]' || sig == '[a]') {
 	        		menu_def = a[0];
@@ -1162,45 +1225,7 @@ if (typeof define !== 'function') {
 
 
 	        			
-	        			setTimeout(function() {
-	        				body.add(context_menu);
-	        				context_menu.activate();
 
-
-	        				context_menu.one_mousedown_anywhere(function(e_mousedown) {
-								console.log('e_mousedown.within_this ' + e_mousedown.within_this);
-
-								if (!e_mousedown.within_this) {
-									context_menu.remove();
-								}
-							});
-
-
-
-	        				/*
-	        				setTimeout(function() {
-
-
-	        					// Need to hide the context menu on mousedown outside it.
-
-	        					// one_mousedown_outside
-	        					//  that could be a useful specialised function to have.
-
-	        					// Would only want it to be removed once.
-
-	        					
-
-
-				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
-				        			console.log('');
-				        			console.log('one mouseup');
-				        			if (context_menu) {
-				        				context_menu.remove();
-				        			}
-				        		});
-	        				}, 20)
-							*/
-	        			}, 0);
 						
 
 	        			
@@ -1226,7 +1251,7 @@ if (typeof define !== 'function') {
 		        				'top': '100px'
 		        			});
 	        			}
-
+                        /*
 	        			setTimeout(function() {
 	        				//console.log('pre add context menu');
 	        				body.add(context_menu);
@@ -1237,35 +1262,72 @@ if (typeof define !== 'function') {
 
 								if (!e_mousedown.within_this) {
 									context_menu.remove();
-								}
+								} else {
+                                    // maybe open a new level
+                                    context_menu.remove();
+                                }
 							});
 
-	        				/*
-	        				setTimeout(function() {
 
-				        		ctrl_html_root.one('mouseup', function(e_mouseup) {
-				        			console.log('');
-				        			console.log('one mouseup');
-				        			if (context_menu) {
-				        				context_menu.remove();
-				        			}
-				        		});
-	        				}, 20)
-							*/
 	        			}, 0);
+                        */
 
 
 	        		}
+
+                    setTimeout(function() {
+                        body.add(context_menu);
+                        context_menu.activate();
+
+
+                        context_menu.one_mousedown_anywhere(function(e_mousedown) {
+                            console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+
+                            if (!e_mousedown.within_this) {
+                                context_menu.remove();
+                            } else {
+                                // maybe open a new level.
+                                context_menu.remove();
+                            }
+                        });
+
+
+
+                        /*
+                         setTimeout(function() {
+
+
+                         // Need to hide the context menu on mousedown outside it.
+
+                         // one_mousedown_outside
+                         //  that could be a useful specialised function to have.
+
+                         // Would only want it to be removed once.
+
+
+
+
+                         ctrl_html_root.one('mouseup', function(e_mouseup) {
+                         console.log('');
+                         console.log('one mouseup');
+                         if (context_menu) {
+                         context_menu.remove();
+                         }
+                         });
+                         }, 20)
+                         */
+                    }, 0);
 
 	        	});
 
 
 
 	        	// Respond to right clicks only.
-
+                /*
 	        	this.on('click', function(e_click) {
 	        		console.log('e_click', e_click);
 	        	})
+	        	*/
 
 	        	this.on('contextmenu', function(e_contextmenu) {
 	        		//console.log('e_contextmenu', e_contextmenu);
@@ -1283,7 +1345,7 @@ if (typeof define !== 'function') {
 	        			window.event.returnValue = false;
 	        			return false;
 	        		}
-	        	})
+	        	});
 
 	        	this.on('mouseup', function(e_mouseup) {
 	        		//console.log('e_mouseup', e_mouseup);
@@ -1447,6 +1509,193 @@ if (typeof define !== 'function') {
 			// make full height.
 			//  makes the control take the rest of the height of the window.
 
+            // Drag function as well...
+            //  Could make this accept the same params as the drag function,
+            //   but this version will be more flexible with more modes.
+            // Drag and drop could also be set up with simpler parameters and acts in the default way that .drag would do.
+
+            'draggable': fp(function(a, sig) {
+                var that = this;
+                console.log('draggable sig', sig);
+                var options = {}, mode, drag_start_distance = 4;
+
+                // options could contain event handlers.
+                //  Not sure about the publish / subscribe model.
+                //   Maybe it would work well.
+
+                // But allowing event handlers as specified in the options would be good as well.
+
+                var fn_mousedown, fn_dragstart, fn_dragmove, fn_dragend;
+                var handle_mousedown, handle_dragstart, handle_dragmove , handle_dragend;
+
+
+                if (sig == '[o]') {
+                    options = a[0];
+                }
+
+                // fn_mousedown, fn_begin, fn_move, fn_end
+                if (sig == '[f,f,f,f]') {
+                    handle_mousedown = a[0];
+                    handle_dragstart = a[1];
+                    handle_dragmove = a[2];
+                    handle_dragend = a[3];
+                }
+
+
+                if (options.mode) mode = options.mode;
+                if (options.fn_dragmove) fn_dragmove = options.fn_dragmove;
+                if (options.move) fn_dragmove = options.move;
+                if (options.fn_dragstart) fn_dragstart = options.fn_dragstart;
+                if (options.start) fn_dragstart = options.start;
+
+                // could have a 'none' mode that does not implement drag behaviour itself, but just shows the events?
+                //  or I think 'events' mode would be a better name because it's saying what it is.
+                //  would be useful for moving objects around according to more specific rules.
+
+
+
+
+
+
+                if (mode == 'ghost-copy') {
+                    // Drag a ghost copy of the original element.
+
+                    // call a create_ghost_copy function? It would make the ghost copy absolutely positioned and a child of the body.
+                    //  could automatically create it with a small offset.
+
+                    //  Need to be dragging the ghost copy around throughout the drag operation in this case.
+
+                    console.log('ghost-copy drag');
+
+
+
+
+
+
+
+
+                }
+
+                var body = that._context.body();
+
+                // raise the events externally.
+
+                var is_dragging;
+                var pos_mousedown;
+
+
+
+
+
+                var fn_mousemove = function(e_mousemove) {
+                    console.log('e_mousemove', e_mousemove);
+
+                    var pos = [e_mousemove.pageX, e_mousemove.pageY];
+
+                    var pos_offset = [pos[0] - pos_mousedown[0], pos[1] - pos_mousedown[1]];
+
+
+
+                    //console.log('dist', dist);
+
+                    if (!is_dragging) {
+                        var dist = Math.round(Math.sqrt(pos_offset[0] * pos_offset[0] + pos_offset[1] * pos_offset[1]));
+                        if (dist >= drag_start_distance) {
+                            console.log('starting drag');
+                            is_dragging = true;
+
+                            if (handle_dragstart) {
+                                e_mousemove.control = that;
+
+                                handle_dragstart(e_mousemove);
+                            }
+                        }
+                    }
+
+                    if (is_dragging) {
+                        // raise the drag event.
+
+                        // could do some of the drag-drop activity depending on the drag mode.
+                        //  also want to provide other hooks for functionality.
+
+                        if (fn_dragmove) {
+                            e_mousemove.control = that;
+                            fn_dragmove(e_mousemove);
+                        }
+
+                    }
+
+
+
+                    // Want the offset from the mousedown position.
+
+                }
+                var fn_mouseup = function(e_mouseup) {
+                    console.log('e_mouseup', e_mouseup);
+
+                    body.off('mousemove', fn_mousemove);
+                    body.off('mouseup', fn_mouseup);
+
+                    body.remove_class('no-text-select');
+                }
+
+                this.on('mousedown', function(e_mousedown) {
+                    console.log('e_mousedown', e_mousedown);
+
+                    pos_mousedown = [e_mousedown.pageX, e_mousedown.pageY];
+
+                    // position within Control
+                    // position within window
+
+
+                    body.on('mousemove', fn_mousemove);
+                    body.on('mouseup', fn_mouseup);
+
+                    body.add_class('no-text-select');
+                    is_dragging = false;
+
+                    if (handle_mousedown) {
+                        handle_mousedown(e_mousedown);
+                    }
+
+                })
+
+
+
+
+                // think we want the various drag and drop signifier events.
+
+
+
+
+
+                // There will be different drag options.
+                //  Drag a ghost copy
+                //  Drag the original
+                //   Automatically snap/transition back into place (depending on conditions)
+
+                // I think dragging a ghost copy of the original is best for dragging items from a toolbox
+
+
+
+
+                // with no sig...
+
+
+                // basically make the control draggable.
+
+
+
+
+            }),
+
+
+            // As well as the 'draggable' function?
+            //  Could keep this, and have it call draggable?
+            //  Draggable makes more sense, perhaps drag could be an alias for draggable.
+
+
+            /*
 			'drag': function(fn_mousedown, fn_begin, fn_move, fn_end) {
 
 	            var screen_down_x, screen_down_y;
@@ -1592,6 +1841,7 @@ if (typeof define !== 'function') {
 	                //fn_in();
 	            })
 	        },
+	        */
 
 	        'drag_handle_to': function(ctrl) {
 	            // Also involved with drag and drop actions.
@@ -3425,7 +3675,7 @@ if (typeof define !== 'function') {
 
 	        'render_dtd': function () {
 	            return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">\n';
-	        },
+	        }
 
 
 	        /*

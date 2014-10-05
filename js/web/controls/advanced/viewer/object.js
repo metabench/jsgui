@@ -1,12 +1,19 @@
 // object viewer
 
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
 define(["../../../jsgui-html-enh", "./object-kvp", "./factory"], 
 	function(jsgui, Object_KVP_Viewer, factory) {
-		
+*/
+
+var jsgui = require('../../../jsgui-html-enh');
+var Object_KVP_Viewer = require('./object-kvp');
+var factory = require('./factory');
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -302,7 +309,8 @@ define(["../../../jsgui-html-enh", "./object-kvp", "./factory"],
 
 			}
 		});
+module.exports = Object_Viewer;
 
-		return Object_Viewer;
-	}
-);
+		//return Object_Viewer;
+	//}
+//);

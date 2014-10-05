@@ -1,11 +1,16 @@
 // object editor
 
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../../jsgui-html-enh", "../viewer/object-kvp", "./factory", "./basic/string"], 
 	function(jsgui, Object_KVP_Viewer, factory, String_Editor) {
-		
+*/
+
+var jsgui = require('../../../jsgui-html-enh');
+var Object_KVP_Viewer = require('../viewer/object-kvp');
+var factory = require('./factory');
+var String_Editor = require('./basic/string');
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -39,7 +44,8 @@ define(["../../../jsgui-html-enh", "../viewer/object-kvp", "./factory", "./basic
 
 			}
 		})
+module.exports = Object_KVP_Editor;
 
-		return Object_KVP_Editor;
-	}
-);
+		//return Object_KVP_Editor;
+	//}
+//);

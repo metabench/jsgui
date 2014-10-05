@@ -1,12 +1,17 @@
 // object viewer
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
 define(["../../../jsgui-html-enh", "./factory", "./basic/string"], 
 	function(jsgui, factory, String_Viewer) {
-		
+		*/
+var jsgui = require('../../../jsgui-html-enh');
+var factory = require('./factory');
+var String_Viewer = require('./basic/string');
+
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -328,7 +333,8 @@ define(["../../../jsgui-html-enh", "./factory", "./basic/string"],
 				}
 			}
 		});
+module.exports = Object_KVP_Viewer;
 
-		return Object_KVP_Viewer;
-	}
-);
+		//return Object_KVP_Viewer;
+//	}
+//);

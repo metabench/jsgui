@@ -3,14 +3,18 @@
 // Will be better to use exports from require.
 
 
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
 define(["../../../../jsgui-html-enh"], 
 	function(jsgui) {
-		
+*/
+
+var jsgui = require('../../../../jsgui-html-enh');
+
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -243,7 +247,8 @@ define(["../../../../jsgui-html-enh"],
 
 		// Can use an exports object?
 		
+module.exports = String_Viewer;
 
-		return String_Viewer;
-	}
-);
+		//return String_Viewer;
+	//}
+//);

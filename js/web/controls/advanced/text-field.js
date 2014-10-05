@@ -1,9 +1,14 @@
 
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../jsgui-html", "../basic/text-input"], 
 	function(jsgui, Text_Input) {
-		
+*/
+var jsgui = require('../../jsgui-html');
+var Text_Input = require('../basic/text-input');
+
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
 		
@@ -108,9 +113,10 @@ define(["../../jsgui-html", "../basic/text-input"],
 				
 			}
 		});
-		return Text_Field;
+		//return Text_Field;
+module.exports = Text_Field;
 		
 		//return jsgui;
 		
 	
-});
+//});

@@ -1,11 +1,14 @@
 // object editor
 
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../../../jsgui-html-enh", "../../viewer/basic/string"], 
 	function(jsgui, String_Viewer) {
-		
+		*/
+var jsgui = require('../../../../jsgui-html-enh');
+var String_Viewer = require('../../viewer/basic/string');
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -429,7 +432,8 @@ define(["../../../../jsgui-html-enh", "../../viewer/basic/string"],
 
 			}
 		});
+module.exports = String_Editor;
 
-		return String_Editor;
-	}
-);
+		//return String_Editor;
+	//}
+//);

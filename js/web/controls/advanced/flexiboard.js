@@ -1,11 +1,12 @@
 // object viewer
 
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../jsgui-html"], 
 	function(jsgui) {
-		
+		*/
+var jsgui = require('../../jsgui-html');
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -84,9 +85,10 @@ define(["../../jsgui-html"],
 
 			}
 		})
+module.exports = Flexiboard;
 
 
 
-		return Flexiboard;
-	}
-);
+		//return Flexiboard;
+	//}
+//);

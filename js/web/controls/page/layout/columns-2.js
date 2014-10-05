@@ -1,10 +1,11 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
-
-
-
 define(["../../../jsgui-html"], function(jsgui) {
+*/
+var jsgui = require('../../../jsgui-html');
 	var Control = jsgui.Control;
 	var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 	//var Client_HTML_Document = jsgui.Client_HTML_Document;
@@ -101,8 +102,8 @@ define(["../../../jsgui-html"], function(jsgui) {
 	// First, want to test composition of the Calendar control on the server
 	//  Then want to try serving a Calendar control.
 	//  It may use the same code - no harm in having unused client-side code on the server.
+module.exports = Columns_2;
 
+//	return Columns_2;
 
-	return Columns_2;
-
-});
+//});

@@ -1,9 +1,11 @@
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../jsgui-html"], 
 	function(jsgui) {
-		
+*/
+
+var jsgui = require('../../jsgui-html');
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
 		
@@ -42,6 +44,7 @@ define(["../../jsgui-html"],
 				
 			}
 		})
+module.exports = Text_Input;
 
-		return Text_Input;
-});
+		//return Text_Input;
+//});

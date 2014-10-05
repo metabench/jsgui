@@ -1,11 +1,14 @@
 // object editor
 
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 define(["../../../../jsgui-html-enh", "../../viewer/basic/number"], 
 	function(jsgui, Number_Viewer) {
-		
+		*/
+
+var jsgui = require('../../../../jsgui-html-enh');
+var Number_Viewer = require('../../viewer/basic/number');
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -56,7 +59,8 @@ define(["../../../../jsgui-html-enh", "../../viewer/basic/number"],
 
 			}
 		});
+module.exports = Number_Editor;
 
-		return Number_Editor;
-	}
-);
+		//return Number_Editor;
+	//}
+//);

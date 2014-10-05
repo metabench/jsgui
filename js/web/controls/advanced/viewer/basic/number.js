@@ -1,12 +1,14 @@
 // object viewer
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
 define(["../../../../jsgui-html-enh"], 
 	function(jsgui) {
-		
+*/
+
+var jsgui = require('../../../../jsgui-html-enh');
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -201,13 +203,10 @@ define(["../../../../jsgui-html-enh"],
 					//console.log('drag end', e_end);
 					that._context.end_drag_selection_scope(e_end);
 				});
-
-
-
-
 			}
 		});
+module.exports = Number_Viewer;
+		//return Number_Viewer;
+	//}
+//);
 
-		return Number_Viewer;
-	}
-);

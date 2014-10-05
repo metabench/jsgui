@@ -3628,6 +3628,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 		},
 
         'execute_function_single_row': function(fn_name, params, callback) {
+            console.log('execute_function_single_row');
+            console.log('arguments.length ' + arguments.length);
+
             this.execute_function(fn_name, params, function(err, res_execute) {
                 if (err) {
                     callback(err);
@@ -3638,9 +3641,6 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
                     callback(null, res);
                 }
-
-
-
             })
         },
 		

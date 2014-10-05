@@ -28,6 +28,23 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
+
+    // Need contect documents (of some sort) as well.
+    // .jsg could be the format name.
+    //  Call the Jsgui Documents?
+    //   Will be a fairly flexible document type.
+    //   A subset of JSON.
+    //   Describes what's on a page.
+    // Maybe could do with a better name?
+    //  FlexiDocs
+    //   Will help to distinguish it from other documents which JSGUI stores and refers to.
+    // Will use the flexidocs system as a general file format for information.
+    //  It's JSON, it announces what it is with a simple word, like 'page' or 'spreadsheet' and then it has the data.
+
+
+    // {'title': 'example', 'type': 'page', 'containers': [{'num_columns': 40, items: [['James Says Hi', 0, 10]]}]}
+    //  Will have UI for making these pages.
+
 	
 	//each(Basic_Controls, function(ctrl_name, ctrl_constructor) {
 	//	jsgui[ctrl_name] = ctrl_constructor;

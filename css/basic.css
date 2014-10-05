@@ -483,6 +483,7 @@ div.single-line.selected {
 	background-color: #FFFFFF;
 	padding: 4px;
 	border: 1px solid #CCCCCC;
+    cursor: default;
 }
 
 .context.menu .menu-node {
@@ -593,7 +594,9 @@ html.dragging {
 }
 
 
-
+.web-admin-images .list {
+    width: 500px;
+}
 
 
 .web-admin-images .list .item {
@@ -608,4 +611,26 @@ html.dragging {
 .web-admin-images .list .item .value {
     width: 400px;
     float: left;
+}
+
+.no-text-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Stuff for flexidoc */
+
+.flexidoc-editor .blank-components .flexidoc-component.icon {
+    width: 180px;
+    height: 28px;
+    background-color: #FDFDFD;
+    border: 1px solid #DDDDDD;
+    text-align: center;
+    padding-top: 12px;
+    margin-bottom: 1px;
 }

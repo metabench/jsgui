@@ -25,6 +25,10 @@
 			//	'title': String
 			//},
 
+            // Need to call the right events when the item gets chosen / clicked on.
+
+
+
 
 			// maybe add before make would be better. add will probably be used more.
 			'init': function(spec, add, make) {
