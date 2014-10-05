@@ -4,35 +4,8 @@ jsgui library
 
 License: MIT License
 
-Version: 0.3
+Version: 0.4.0
 
-Many changes have been made before this has been released as an open source project. 0.3 is the first open source release. Significantly, the system is being split up into components that are packaged using the require.js syntax. Recent changes have meant that the number of style properties that can be used - it's currently restricted to margin and border. This will change as the definitions for the properties are added to jsgui-html.
+This has had a lot of functionality added since 0.3.
 
--~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
-
-The library has different components for different situations and platforms.
-
-It operates on both the client and the server. Some code is specialised for one environment while other code will run in both locations.
-
-jsgui-lang:
-
-Important features that are used to implement other parts of the library. Functions here avoid code repetition elsewhere in the library. One of the main goals of this module is to enable compact JavaScript code to be written.
-
-Nested data system:
-
-The most complicated code in jsgui-lang implements the nested data system. This allows properties to be set as follows:
-
-obj.set(nested_property_name, value);
-obj.set('style.border', '1px solid #000000');
-obj.set('style.border.width', '15px');
-obj.set('style.border.width', '15'); // The string is parsed, units are assumed to be px
-obj.set('style.border.width', 15); // Units are assumed to be px
-
-jsgui-html:
-
-The core HTML processing system. It's most notable class is jsgui.Control. This is used as the basis for other controls in the jsgui system. Controls encapsulate functionality that is part of the Graphical User Interface of a web page - similar to the idea of (but not implementation of) Controls in the Microsoft ASP.NET and Windows Forms platforms.
-
-jsgui-touch:
-
-Used for touchscreen devices. Code to recognise swipe gestures. Code to recognise other gestures will go here. Possibility of further compression of code here.
-
+Some documentation and testing of the more core functionality exists in the doc directory.
