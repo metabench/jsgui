@@ -599,7 +599,27 @@ var Fields_Collection = require('./data-object-fields-collection');
 			//  DO)M events are a bit different to the standard events but work within the same system.
 
 
+            if (sig == '[s,o]') {
+                var be = this._bound_events;
+                //console.log('this._bound_events', this._bound_events);
+                if (be) {
+                    var bei = be[event_name];
 
+                    //console.log('bei.length', bei.length);
+                    //console.log('tof bei', tof(bei));
+                    if (tof(bei) == 'array') {
+                        //console.log('1) raise_event bei.length ' + bei.length);
+                        var res = [];
+
+                        each(bei, function(i, v) {
+                            res.push(v.call(target, a[1]));
+                        });
+
+                        //console.log('Evented_Class raise_event [s] res', res);
+                        return res;
+                    }
+                }
+            }
 
 
 			// Raise event with multiple arguments?
@@ -1094,9 +1114,20 @@ var Fields_Collection = require('./data-object-fields-collection');
 			} else {
 				return val;
 			}
-			
-			 
 		},
+
+        'clone': function() {
+            var val = this.value();
+
+            var res = new Data_Value({
+                'value': val
+            });
+
+            console.log('res', res);
+            //throw 'stop';
+
+            return res;
+        },
 
 
 		'_id': function() {

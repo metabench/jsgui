@@ -100,6 +100,16 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
         //  Don't want various controls talking to the web data db, communication needs to go through the web data resource.
         //  Will later work on serving functionality from this resource. Much of the functionality will be app-internal for the moment.
 
+        // get images_original_size_tree
+
+        // want the tree that has the original size images at the top, but information on the resized versions.
+        //  we may be using the resized versions for various purposes to represent the original version in the GUI.
+
+
+
+
+
+
 
         'get_images_list': function(callback) {
             var web_db = this.get('web_database');
@@ -111,8 +121,21 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
                     callback(null, res_images);
                 }
             })
-
         },
+
+        'get_images_tree': function(callback) {
+            var web_db = this.get('web_database');
+            web_db.get_images_tree(function(err, res_images) {
+                if (err) {
+                    callback(err);
+                } else {
+                    console.log('res_images', res_images);
+                    callback(null, res_images);
+                }
+            })
+        },
+
+
         'get_flexidocs_list': function(callback) {
             var web_db = this.get('web_database');
             web_db.get_flexidocs(function(err, res_images) {
@@ -586,6 +609,11 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
 
 
                         // It could probably tell it's a jpeg, but tell it that anyway.
+
+                        // This will also deal with the resized versions.
+                        //  Possibly set_source_document, to show that it's supposed to make the other documents from it...?
+                        //   Or just have that automaticlly apply to images (and other media)
+
                         images_resource.set_document(filename, buf, 'jpeg', function(err, res_set_document) {
                             if (err) {
                                 throw err;
@@ -686,11 +714,6 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
                      buf = new Buffer(this.bytesExpected);
 
 
-
-
-
-
-
                      // Should not have to read the whole thing to get the file size.
 
                      console.log('part', part);
@@ -726,12 +749,7 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
                      //  Can we get the size first?
 
 
-
-
-
                      });
-
-
                      }
 
                      */
@@ -744,8 +762,6 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
 
                      // Want to disable saving to the disk automatically.
                      //  Want the stream / data.
-
-
 
                      if (this.multiples) {
                      //if (files[name]) {
@@ -762,10 +778,6 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
                      })
                      */
 
-
-
-
-
                     // But does not parse it into files if we are doing the direct reading.
                     /*
                      form.parse(req, function(err, fields, files) {
@@ -777,31 +789,23 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
 
                      //var ws_file = files.file._writeStream;
 
-
-
-
-
-
-
                      res.writeHead(200, {'content-type': 'text/plain'});
                      res.write('received upload:\n\n');
                      res.end(util.inspect({fields: fields, files: files}));
-
-
 
                      });
 
                      */
 
-
-
-
                 }
                 if (req.method == 'GET') {
                     var ctrl_file_upload = new File_Upload({
                         'context': spc,
-                        'action': '/admin/upload-image/'
+                        'action': '/admin/upload-image/',
+                        'autosubmit': true
                     });
+
+                    ctrl_file_upload.active();
 
                     body.add(ctrl_file_upload);
                 }
@@ -840,8 +844,6 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
 
                     body.add(flexidoc_editor);
 
-
-
                 }
             }
 
@@ -864,11 +866,6 @@ var Flexidoc_Editor = require('../web/controls/advanced/flexidoc-editor');
             // Uploading of images
             // Viewing and editing of website data.
             //
-
-
-
-
-
 
 			// Content admin
 

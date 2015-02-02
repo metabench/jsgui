@@ -73,15 +73,15 @@ define(["./jsgui-html"],
 			},
             'body': function() {
                 var doc = this.document;
-                console.log('doc', doc);
+                //console.log('doc', doc);
                 var bod = doc.childNodes[0].childNodes[1];
                 //var bod = doc.body;
-                console.log('bod', bod);
+                //console.log('bod', bod);
 
                 var bod_id = bod.getAttribute('data-jsgui-id');
-                console.log('bod_id', bod_id);
+                //console.log('bod_id', bod_id);
                 var res = this.map_controls[bod_id];
-                console.log('res', res);
+                //console.log('res', res);
                 return res;
             }
 			

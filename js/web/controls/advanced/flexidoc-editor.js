@@ -247,11 +247,20 @@ var Flexidoc_Editor = Multi_Layout_Mode.extend({
                 measured_client_offsets = editor_main.measure_client_offsets();
                 console.log('measured_client_offsets', measured_client_offsets);
 
+                //throw 'stop';
+
                 // The create ghost clone functionality will be a little complex, but simple to call from here.
 
                 // .absolute_ghost_clone
 
-                ghost_clone = move_start_control.absolute_ghost_clone();
+                //ghost_clone = move_start_control.absolute_ghost_clone();
+
+                // does the ghost cloning already as part of the move
+
+
+
+                // it's already in the body?
+
 
 
 
@@ -275,71 +284,83 @@ var Flexidoc_Editor = Multi_Layout_Mode.extend({
 
                 found = false;
 
-                console.log('measured_client_offsets[0]', measured_client_offsets[0]);
+                //console.log('measured_client_offsets[0]', measured_client_offsets[0]);
 
-                if (e_move.clientY < measured_client_offsets[0].bounding_client_rect.top) {
-                    y_is_above_first = true;
-                    y_is_below_last = false;
-                    y_is_between_containers = false;
-                    y_between_containers = null;
-                    y_is_within_container = false;
-                    y_within_container = null;
+                console.log('measured_client_offsets', measured_client_offsets);
+
+                if (measured_client_offsets) {
+                    if (e_move.clientY < measured_client_offsets[0].bounding_client_rect.top) {
+                        y_is_above_first = true;
+                        y_is_below_last = false;
+                        y_is_between_containers = false;
+                        y_between_containers = null;
+                        y_is_within_container = false;
+                        y_within_container = null;
 
 
-                    found = true;
+                        found = true;
 
+                    } else {
+                        y_is_above_first = false;
+
+                        // go through the measured positions, seeing which container it's within.
+
+                        var prev_offset_info;
+
+                        each(measured_client_offsets, function(i_container, container_offset_info) {
+                            console.log('container_offset_info', container_offset_info);
+
+                            // is it above the start of this, but not above the start of the previous?
+
+                            //if (prev_offset_info) {
+
+                            //}
+
+                            // is it within?
+
+                            if (e_move.clientY >= container_offset_info.top && e_move.clientY <= container_offset_info.bottom) {
+                                // it's within.
+                                y_is_below_last = false;
+                                y_is_between_containers = false;
+                                y_between_containers = null;
+                                y_is_within_container = true;
+                                y_within_container = i_container;
+
+                                found = true;
+                            }
+
+
+                            prev_offset_info = container_offset_info;
+
+
+
+                        });
+
+
+
+                        // see if it's vertically within any of them
+
+                        // or between any of them.
+
+                        // will also want to know if it's within certain margins of the top or bottom.
+
+                        // (also need to get the clone control / ghost working)
+                        //   then show empty controls within the area they will be placed
+                        //
+
+
+                    }
+
+                    console.log('found', found);
                 } else {
-                    y_is_above_first = false;
-
-                    // go through the measured positions, seeing which container it's within.
-
-                    var prev_offset_info;
-
-                    each(measured_client_offsets, function(i_container, container_offset_info) {
-                        console.log('container_offset_info', container_offset_info);
-
-                        // is it above the start of this, but not above the start of the previous?
-
-                        //if (prev_offset_info) {
-
-                        //}
-
-                        // is it within?
-
-                        if (e_move.clientY >= container_offset_info.top && e_move.clientY <= container_offset_info.bottom) {
-                            // it's within.
-                            y_is_below_last = false;
-                            y_is_between_containers = false;
-                            y_between_containers = null;
-                            y_is_within_container = true;
-                            y_within_container = i_container;
-
-                            found = true;
-                        }
-
-
-                        prev_offset_info = container_offset_info;
-
-
-
-                    });
-
-
-
-                    // see if it's vertically within any of them
-
-                    // or between any of them.
-
-                    // will also want to know if it's within certain margins of the top or bottom.
-
-                    // (also need to get the clone control / ghost working)
-                    //   then show empty controls within the area they will be placed
-                    //
-
-                    
+                    console.log('no measured client offsets');
                 }
 
-                console.log('found', found);
+
+
+                //throw 'stop';
+
+
 
 
                 if (found) {

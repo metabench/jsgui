@@ -1560,7 +1560,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'all_html_render': function(callback) {
 
-            console.log('all render callback', tof(callback));
+            //console.log('all render callback', tof(callback));
             if (callback) {
 
                 //console.log('deferred rendering');
@@ -1671,7 +1671,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'render_content': function () {
 
-            console.log('render_content');
+            //console.log('render_content');
             
             // it's controls() now, gets the collection of controls.
             //each(this._.controls, function(i, n) {
@@ -1711,8 +1711,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 throw 'stop';
             }
 
-            console.log('content', content);
-            console.log('tof(content) ' + tof(content));
+            //console.log('content', content);
+            //console.log('tof(content) ' + tof(content));
 
             // The content should not be a control.
             //  Can't call a part of a control its 'content', as that already exists.
@@ -1738,7 +1738,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             var tn, output;
             content.each(function (i, n) {
                 //console.log('-------------------------');
-                console.log('tof(n) ' + tof(n));
+                //console.log('tof(n) ' + tof(n));
                 //console.log('(n) ' + stringify(n));
                 //throw 'stop';
                 tn = tof(n);
@@ -1762,6 +1762,9 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                 if (tn == 'data_value') {
                     //var output = jsgui.output_processors['string'](n.get());
                     res.push(jsgui.output_processors['string'](n.get()));
+
+
+
                 } else {
                     if (tn == 'data_object') {
                         console.log('n', n);
@@ -2208,7 +2211,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             // Will also turn XML strings describing jsgui controls/content into controls/content.
 
             var tnc = tof(new_content);
-            //console.log('tnc', tnc);
+            //console.log('control add content tnc', tnc);
 
             if (tnc == 'array') {
                 var res = [], that = this;
@@ -2261,6 +2264,10 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
 
                 var inner_control = this.get('inner_control');
+
+                // Does it add a Data_Object successfully?
+
+                // Could adding this cause content inside the content that's being added to duplicate?
 
                 if (inner_control) {
                     return inner_control.get('content').add(new_content);
@@ -2331,10 +2338,6 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             // This 'parent' and relationship info could be integral to Data_Objects and Collections, not just Controls.
 
-
-
-
-
             //throw 'stop';
         },
 
@@ -2395,9 +2398,21 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             };
 
-            if (sig == '[s,s]') {
+            if (sig == '[s,s]' || sig == '[s,n]') {
                 var styleName = a[0];
                 var styleValue = a[1];
+
+                // rebuild the css style???
+                //  May just be in the dom attributes as well.
+
+                //var das = this._.dom_attributes._.style;
+                //console.log('das', das);
+
+                //var da = this._.dom._.attributes;
+                //console.log('da', da);
+
+
+
 
                 // Modify dom by default if there is a DOM.
                 //var modifyDom = a[2];
@@ -2524,6 +2539,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
         }),
         'active': function() {
             // only on the server.
+            //  Not necessarily!
+            //  Perhaps client-side rendering should render the jsgui id. That is really necessary.
+            //  However, perhaps should not use active to do this.
+
+
             //console.log('');
             //console.log('active');
             var id = this._id();
@@ -2533,9 +2553,13 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             domAttributes.set('data-jsgui-id', id);
             domAttributes.set('data-jsgui-type', this.__type_name);
 
+            // Calls active on the inner controls.
 
 
             this.get('content').each(function(i, ctrl) {
+
+                //console.log('active i', i);
+
                 var tCtrl = tof(ctrl);
                 if (tCtrl == 'control') {
                     ctrl.active();

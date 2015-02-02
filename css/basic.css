@@ -625,7 +625,11 @@ html.dragging {
 
 /* Stuff for flexidoc */
 
-.flexidoc-editor .blank-components .flexidoc-component.icon {
+/*
+.flexidoc-editor .blank-components
+*/
+
+.flexidoc-component.icon {
     width: 180px;
     height: 28px;
     background-color: #FDFDFD;

@@ -709,10 +709,7 @@ if (typeof window === 'undefined') {
 		return res;
 	};
 
-	/*
-	 * var is_ctrl = function(obj) { return (typeof obj != 'undefined' && obj !=
-	 * null && typeof obj.$render != 'undefined'); };
-	 */
+
 
 	// Could do better... could check actual instanceof
 	//  But a more advanced jsgui level could do this check, and have its own tof function.
@@ -1249,13 +1246,11 @@ if (typeof window === 'undefined') {
 			    
 			    // look into it with one nested level...
 			    if (arr_depth) {
-			        //res = String.fromCharCode(91);
 			        res = '['
 	                for (var c = 0, l = i.length; c < l; c++) {
 	                    if (c > 0) res = res + ',';
 	                    res = res + get_item_sig(i[c], arr_depth - 1);
 	                }
-	                //res = res + String.fromCharCode(93);;
 	                res = res + ']';
 			    } else {
 			        res = 'a';
@@ -1360,7 +1355,6 @@ if (typeof window === 'undefined') {
 				
 			}
 		}
-		//console.log('get_item_sig res ' + res);
 		return res;
 		
 	};
@@ -2654,6 +2648,11 @@ if (typeof window === 'undefined') {
 		//console.log('');
 		//console.log('');
 		//console.log('call_multi sig ' + sig);
+
+        // what about num_parallel being zero to do them all in parallel?
+        //  maybe try just a very high number at the moment.
+
+
 		
 		var num_parallel = 1;
 		//console.log('a.l', a.l);
@@ -2680,6 +2679,11 @@ if (typeof window === 'undefined') {
 		        num_parallel = a[1];
 		        callback = a[2];
 		    }
+            if (sig == '[n,a,f]') {
+                arr_functions_params_pairs = a[1];
+                num_parallel = a[0];
+                callback = a[2];
+            }
 		    if (sig == '[a,f,b]') {
 		        arr_functions_params_pairs = a[0];
                 callback = a[1];
@@ -2709,6 +2713,7 @@ if (typeof window === 'undefined') {
 		    num_currently_executing++;
 			// they may not be pairs, they could be a triple with a callback.
 			//console.log('num_currently_executing ' + num_currently_executing);
+            //console.log('num_parallel', num_parallel);
 			//console.log('c ' + c);
 			
 			var pair = arr_functions_params_pairs[c];
@@ -2925,8 +2930,16 @@ if (typeof window === 'undefined') {
     */
 	var Fns = function() {
 	    var fns = [];
-	    fns.go = function(callback) {
-	        call_multi(fns, callback);
+	    fns.go = function(parallel, callback) {
+            if (!callback) {
+                call_multi(fns, parallel);
+            } else {
+                call_multi(parallel, fns, callback);
+            }
+
+
+
+
 	    }
 	    return fns;
 	}

@@ -84,6 +84,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		},
 		'process': function(req, res) {
 			//console.log('Site_Static_HTML processing');
+
+
+
+
 			var remoteAddress = req.connection.remoteAddress;
 
 			var custom_paths = this.meta.get('custom_paths');
@@ -110,7 +114,13 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			if (rurl == '') rurl = '/';
 
 			var custom_response_entry = custom_paths.get(rurl);
-			//console.log('custom_response_entry ' + stringify(custom_response_entry));
+
+            console.log('Static HTML Resource process url', req.url);
+
+
+
+
+			console.log('custom_response_entry ' + stringify(custom_response_entry));
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);
@@ -132,6 +142,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//throw 'stop';
 			} else {
+                console.log('splitPath', splitPath);
+
+                console.log('splitPath.length', splitPath.length);
+
 				if (splitPath.length > 0) {
 
 					// Can check for /js folder.
@@ -146,53 +160,70 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					//  Will serve JavaScript files needed for the site.
 					//   Could become more advanced at some points, serving particular builds.
 
+                    if (splitPath.length == 1) {
+                        if (splitPath[0] == '') {
+                            // Serve the default page.
 
-					if (splitPath[0] == 'html') {
-						//var sjs = pool.get_resource('Site JavaScript');
-						//console.log('sjs ' + sjs);
+                            // serve index.html
 
-						//throw 'stop';
+                            //serve_html_file_from_disk('./index.html', res);
+                            serve_html_file_from_disk('index.html', res);
 
-						// determine the name of the file to serve, serve that file
-						//  Could use some more general kind of file server.
 
-						if (splitPath.length > 1) {
-							if (splitPath.length == 2) {
-								var fileName = splitPath[1];
-								//console.log('url_parts.path ' + url_parts.path);
-								var filePath = url_parts.path.substr(1);
-								//console.log('module.uri ' + module.uri);
 
-								// No, need the current module's relative path....
 
-								//var val2 =  path.dirname(module.uri);
-								//console.log('val2 ' + val2);
-								//throw '9) stop';
+                        }
+                    } else {
+                        if (splitPath[0] == 'html') {
+                            //var sjs = pool.get_resource('Site JavaScript');
+                            //console.log('sjs ' + sjs);
 
-								//var diskPath = val2 + '/../css/' + fileName;
-								var diskPath = '../../ws/css/' + fileName;
+                            //throw 'stop';
 
-								serve_css_file_from_disk(diskPath, res);
+                            // determine the name of the file to serve, serve that file
+                            //  Could use some more general kind of file server.
 
-								/*
-								fs2.load_file_as_string(diskPath, function (err, data) {
-									if (err) { 
-										throw err;
-									} else {
-										//var servableJs = updateReferencesForServing(data);
-										res.writeHead(200, {'Content-Type': 'text/css'});
-										res.end(data);
-									}
-								});
-								*/
-							} else {
-								if (splitPath.length == 3) {
+                            if (splitPath.length > 1) {
+                                if (splitPath.length == 2) {
+                                    var fileName = splitPath[1];
+                                    //console.log('url_parts.path ' + url_parts.path);
+                                    var filePath = url_parts.path.substr(1);
+                                    //console.log('module.uri ' + module.uri);
 
-								}
+                                    // No, need the current module's relative path....
 
-							}
-						}
-					}
+                                    //var val2 =  path.dirname(module.uri);
+                                    //console.log('val2 ' + val2);
+                                    //throw '9) stop';
+
+                                    //var diskPath = val2 + '/../css/' + fileName;
+                                    var diskPath = '../../ws/css/' + fileName;
+
+                                    serve_css_file_from_disk(diskPath, res);
+
+                                    /*
+                                     fs2.load_file_as_string(diskPath, function (err, data) {
+                                     if (err) {
+                                     throw err;
+                                     } else {
+                                     //var servableJs = updateReferencesForServing(data);
+                                     res.writeHead(200, {'Content-Type': 'text/css'});
+                                     res.end(data);
+                                     }
+                                     });
+                                     */
+                                } else {
+                                    if (splitPath.length == 3) {
+
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+
+
+
 
 				}
 			}

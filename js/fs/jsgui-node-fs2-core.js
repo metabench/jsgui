@@ -194,6 +194,12 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 
 		},
 
+        'exists': function(path, callback) {
+            fs.exists(path, function(res) {
+                callback(null, res);
+            })
+        },
+
 
         // want to save a binary file as well.
 
@@ -206,11 +212,14 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 		//  may need to modify mapify to support callback functions like arrayify.
 		//  Can save a whole bunch of files as strings.
 		'save_file_as_string': mapify(fp(function(a, sig) {
-		    //console.log('save_file_as_string sig ' + sig);
+		    console.log('save_file_as_string sig ' + sig);
 		    if (sig == '[s,s,f]') {
 		        var file_path = a[0];
 		        var file_content = a[1];
 		        var callback = a[2];
+
+                console.log('pre write file');
+
 		        
 		        fs.writeFile(file_path, file_content, function(err) {
                     if(err) {
@@ -238,6 +247,87 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 				}
 			});
 		},
+
+        // Also want to be able to load a file as a buffer.
+
+        'load_file_as_buffer': fp(function(a, sig) {
+            //source_path, callback
+
+            // should work as an array...
+            // so when you give it an array of source paths, it loads them all, and returns the result as an array by default.
+            //  can return a map if asked to... would be easier to access in many cases, but problems when there are repeated params.
+            // I think return map by default.
+            //  Arrayify input, mapify output.
+
+            // could use arrayify here possibly...
+
+            // could have a concurrency_limit argument.
+            //  would be useful to incorporate that into a lot of code as an option.
+
+            var source_path, concurrency_limit = 4, callback;
+
+            //console.log('load_file_as_string sig ' + sig);
+
+            if (sig == '[a,n,f]') {
+                source_path = a[0];
+                concurrency_limit = a[1];
+                callback = a[2];
+            }
+            if (sig == '[s,n,f]') {
+                source_path = a[0];
+                concurrency_limit = a[1];
+                callback = a[2];
+            }
+            if (sig == '[a,f]') {
+                source_path = a[0];
+                callback = a[1];
+            }
+            if (sig == '[s,f]') {
+                source_path = a[0];
+                callback = a[1];
+            }
+
+            if (tof(source_path) == 'string') {
+                fs.readFile(source_path, function(err, data_buffer) {
+                    if (err) {
+                        //console.log('error reading file at ' + source_path);
+                        //var stack = new Error().stack;
+
+                        // callback with the error.
+
+
+                        //console.log(stack);
+
+                        //throw err;
+
+                        callback(err);
+                    } else {
+                        callback(null, data_buffer);
+                    }
+                    //console.log('OK: ' + filename);
+                    //console.log(data)
+                });
+
+            } else if (tof(source_path) == 'array') {
+                var res = {};
+                var fns = [];
+                each(source_path, function(i, source_path_item) {
+                    fns.push([fs2.load_file_as_buffer, [source_path_item], function(err, res_loaded) {
+                        if (err) throw err;
+
+                        res[source_path_item] = res_loaded;
+
+                    }]);
+                });
+                call_multi(fns, function(err, res_multi) {
+                    if (err) throw err;
+                    callback(null, res);
+                });
+            }
+
+            //fs.readFile(filename, 'utf8', function(err, data_buffer) {
+
+        }),
 		
 		'load_file_as_string': fp(function(a, sig) {
 		    //source_path, callback
@@ -280,10 +370,16 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 		        fs.readFile(source_path, function(err, data_buffer) {
                     if (err) {
                     	//console.log('error reading file at ' + source_path);
-                    	var stack = new Error().stack;
+                    	//var stack = new Error().stack;
+
+                        // callback with the error.
+
+
 						//console.log(stack);
 
-                        throw err;
+                        //throw err;
+
+                        callback(err);
                     } else {
                         callback(null, data_buffer.toString());   
                     }

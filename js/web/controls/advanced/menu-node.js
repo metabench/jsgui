@@ -6,7 +6,7 @@
 
         var jsgui = require('../../jsgui-html');
 
-        console.log('jsgui', jsgui);
+        //console.log('jsgui', jsgui);
         //throw 'stop';
 		
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;

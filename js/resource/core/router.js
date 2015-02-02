@@ -137,7 +137,10 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 		},
 		'set': function(strRoute, context, handler) {
 
-            if (!handler) handler = context;
+            if (!handler) {
+                handler = context;
+                context = undefined;
+            }
 
 
 
@@ -161,7 +164,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			if (strRoute == '/') {
 				//console.log('setting root handler');
 				//throw 'stop';
-                if(context) this.root.context = context;
+                if( context) this.root.context = context;
 				this.root.handler = handler;
 			} else {
 				if (strRoute.substr(0, 1) == '/') strRoute = strRoute.substr(1);
@@ -280,12 +283,16 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			// routes the URL through the tree
             //  should maybe get the context and the function.
             //console.log('router get, context: ', this.root.context);
+            //console.log('url', url);
 
 			var params;
 
 			if (url == '/') {
                 var root = this.root;
+                //console.log('root.context', root.context);
                 if (root.context) {
+
+
 
                     // and empty params?
 
@@ -293,7 +300,39 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
                     return [root.context, this.root.handler, {}];
                 } else {
-                    return this.root.handler;
+
+                    //console.log('this.root', this.root);
+
+                    // but perhaps it's routed using wildcard routing.
+
+                    var res;
+
+                    if (this.root.handler) {
+                        res = this.root.handler;
+                    } else {
+                        if (this.root.wildcardChild) {
+                            if (this.root.wildcardChild.handler) {
+
+                                //console.log('this.root.wildcardChild', this.root.wildcardChild);
+
+                                if (this.root.wildcardChild.context) {
+                                    return [this.root.wildcardChild.context, this.root.wildcardChild.handler, {}];
+                                } else {
+                                    return this.root.wildcardChild.handler;
+                                }
+
+                                throw 'stop';
+
+
+
+                            }
+                        }
+                    }
+
+
+
+
+                    return res;
                 }
 
 
@@ -382,7 +421,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 									var str_wildcard_value = arr_the_rest.join('/');
 									//console.log('str_wildcard_value', str_wildcard_value);
 
-                                    console.log('will return wildcard handler');
+                                    //console.log('will return wildcard handler');
 
                                     if (currentNode.wildcardChild.context) {
                                         return [currentNode.wildcardChild.context, currentNode.wildcardChild.handler, {'wildcard_value': str_wildcard_value}];
@@ -551,7 +590,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 			// Perhaps it could detect /admin and send to an Application-Admin resource.
 
-			console.log('router processing');
+			//console.log('router processing');
 			var remoteAddress = req.connection.remoteAddress;
 
 			// better just to have .get
@@ -623,12 +662,6 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
             //  So being able to access shared resources from different apps would be useful at times.
 
 
-
-
-
-
-
-
 			//var pool = this.meta.get('pool');
 			// should have a bunch of resources from the pool.
 			//console.log('post get pool');
@@ -644,9 +677,6 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 
             // Perhaps the router should not have so much in its default configuration.
-
-
-
 
 
 			//var fswa = pool.get_resource('File System Web Admin');
@@ -676,12 +706,6 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//  Assuming you can do a lot with root access, and will be developing like that for a while.
 			//   Will have the A&A layer to ensure it is only for root.
 
-			
-
-
-
-
-
 
 			//console.log('lfs ' + lfs);
 
@@ -699,9 +723,9 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 			//var url = require('url');
 			var url_parts = url.parse(req.url, true);
-			console.log('url_parts ' + stringify(url_parts));
+			//console.log('url_parts ' + stringify(url_parts));
 
-            console.log('req.url', req.url);
+            //console.log('req.url', req.url);
 
 			// This can do a lot of determination about where in the app the logic needs to go.
 
@@ -709,6 +733,10 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			// It could be object.json
 
 			var splitPath = url_parts.path.substr(1).split('/');
+            //console.log('splitPath', splitPath);
+            //console.log('splitPath.length', splitPath.length);
+
+
 			// May also want to see what response type is wanted.
 			//console.log('splitPath ' + stringify(splitPath));
 			//console.log('splitPath.length ' + splitPath.length);
@@ -716,7 +744,13 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			// There could be a default application router that sets these paths up in the routing tree.
 			//  With the route_res...
 			//  Want to find out variuous parameters, such as the wildcard/
+
+
+
 			var route_res = rt.get(req.url);
+            //console.log('route_res', route_res);
+
+
 
 
             // it's a function.???
@@ -740,17 +774,20 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
                 var context, handler, params;
                 // the handler function context.
 
-                console.log('route_res.length', route_res.length);
+                //console.log('route_res.length', route_res.length);
 
                 if (route_res.length == 2) {
                     // or could be context and handler.
 
                     var rr_sig = get_item_sig(route_res, 1);
-                    console.log('rr_sig', rr_sig);
+                    //console.log('rr_sig', rr_sig);
 
-                    console.log('route_res', route_res);
+                    //console.log('route_res', route_res);
 
                     // context is a Data_Object.
+
+                    // two functions???
+
 
                     // f,o = handler, params.
 
@@ -762,26 +799,17 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
                         handler = processor_values_pair[0];
                         params = processor_values_pair[1];
                     }
-
                     // D,f
                     //
-
-
 
                 }
 
                 if (route_res.length == 3) {
                     context = processor_values_pair[0];
                     handler = processor_values_pair[1];
-
                     params = processor_values_pair[2];
                 }
-
                 // length 4?
-
-
-
-
 
 
                 // perhaps 3 objects...
@@ -796,7 +824,6 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
                 }
 
 
-
 			} else if (tof(route_res) == 'function') {
 				// 
 
@@ -804,15 +831,26 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
                 // but it's become anonymous now :(
 
+                //console.log('context', context);
+
                 if (context) {
                     route_res.call(context, req, res);
                 } else {
+                    // call the function... but maybe it's best / necessary to include the context.
+                    //  call using the context when it exists, within the wildcard handler.
+
                     route_res(req, res);
                 }
 
 
 
 			} else if (tof(route_res) == 'undefined') {
+                console.log('no defined route result');
+
+                // Or callback with an error, saying it was not routed?
+                //  Maybe no need for async, can check result.
+
+
                 return false;
             }
 
@@ -824,6 +862,8 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			if (processor_values_pair) {
 				
 			}
+
+            return true;
 
 			/*
 

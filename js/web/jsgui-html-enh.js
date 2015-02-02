@@ -409,17 +409,479 @@ if (typeof define !== 'function') {
 
 	                return res;
 	            }
+
+                // However, need to take account of the padding and the class.
+
+                // instead of getting the bcr, we could ge the style('width')?
+                //  which would actually get the width style value?
+
+                // Or we could get the bcr, and then subtract the padding as well.
+
+                // ctrl.padding
+                //  seems like a useful enhancement syntax to have
+                //  would be useful in keeping things in proportion and accounting for the padding.
+
+                // Probably want to be getting the computed style from the browser.
+                //  Some info is within CSS and effects things through that.
+                //  Sometimes in the JS we need to read from the screen because values have been calculated by the css system.
+                //  Want this to be somewhat responsive to the CSS that is written.
+
+
+
+
+
+
+
+
+
+                if (sig == '[a]') {
+                    console.log('bcr sig arr');
+
+                    var bcr_def = a[0];
+                    var pos = bcr_def[0];
+                    var br_pos = bcr_def[1];
+                    var size = bcr_def[2];
+
+                    // then we actually want to set the css.
+
+                    this.style({
+                        'position': 'absolute',
+                        'left': pos[0] + 'px',
+                        'top': pos[1] + 'px',
+                        'width': size[0] + 'px',
+                        'height': size[1] + 'px'
+                    })
+
+
+
+                    //throw 'stop';
+                }
+
 	        }),
 
+            'computed_style': fp(function(a, sig) {
+                if (sig == '[s]') {
+                    // Should only work on the client.
+
+                    var property_name = a[0];
+
+                    var x = this.get('dom.el');
+
+                    if (x.currentStyle)
+                        var y = x.currentStyle[styleProp];
+                    else if (window.getComputedStyle)
+                        var y = document.defaultView.getComputedStyle(x,null).getPropertyValue(property_name);
+                    return y;
+
+
+                }
+            }),
+
+            'padding': fp(function(a, sig) {
+                if (sig == '[]') {
+                    // read the padding.
+                    //  the computed style is probably what we are after.
+
+                    // Perhaps a computed_style function would help too, making the code clearer that this padding function uses that.
+
+                    // Perhaps just calling 'style' should get the computed style while it's in the browser.
+                    //  There would be both the computed properties and the set properties.
+
+                    // Perhaps we should always refer to computed style or cstyle
+                    //  Avoid confusion with the padding property that can be set
+                    //
+
+                    var left, top, right, bottom;
+
+                    var c_padding = this.computed_style('padding');
+                    console.log('c_padding', c_padding);
+
+                    var s_c_padding = c_padding.split(' ');
+                    console.log('s_c_padding.length', s_c_padding.length);
+
+                    if (s_c_padding.length == 3) {
+                        // top, right, bottom
+                        top = parseInt(s_c_padding[0], 10);
+                        right = parseInt(s_c_padding[1], 10);
+                        bottom = parseInt(s_c_padding[2], 10);
+
+                        // returns as l, t, r, b
+
+                        //return [0, top, right, bottom];
+
+                        return [0, top, right, bottom];
+
+                    }
+
+
+
+
+
+                }
+            }),
+
+            'border': fp(function(a, sig) {
+                if (sig == '[]') {
+                    // read the padding.
+                    //  the computed style is probably what we are after.
+
+                    // Perhaps a computed_style function would help too, making the code clearer that this padding function uses that.
+
+                    // Perhaps just calling 'style' should get the computed style while it's in the browser.
+                    //  There would be both the computed properties and the set properties.
+
+                    // Perhaps we should always refer to computed style or cstyle
+                    //  Avoid confusion with the padding property that can be set
+                    //
+
+                    var left, top, right, bottom;
+
+                    var c_border = this.computed_style('border');
+                    console.log('c_border', c_border);
+
+                    throw 'stop';
+
+                    /*
+
+                    var s_c_padding = c_padding.split(' ');
+                    console.log('s_c_padding.length', s_c_padding.length);
+
+                    if (s_c_padding.length == 3) {
+                        // top, right, bottom
+                        top = parseInt(s_c_padding[0], 10);
+                        right = parseInt(s_c_padding[1], 10);
+                        bottom = parseInt(s_c_padding[2], 10);
+
+                        // returns as l, t, r, b
+
+                        //return [0, top, right, bottom];
+
+                        return [0, top, right, bottom];
+
+                    }
+                    */
+
+
+
+
+
+                }
+            }),
+            'border_thickness': fp(function(a, sig) {
+                if (sig == '[]') {
+                    // read the padding.
+                    //  the computed style is probably what we are after.
+
+                    // Perhaps a computed_style function would help too, making the code clearer that this padding function uses that.
+
+                    // Perhaps just calling 'style' should get the computed style while it's in the browser.
+                    //  There would be both the computed properties and the set properties.
+
+                    // Perhaps we should always refer to computed style or cstyle
+                    //  Avoid confusion with the padding property that can be set
+                    //
+
+                    var left, top, right, bottom;
+
+                    var c_border = this.computed_style('border');
+                    console.log('c_border', c_border);
+
+                    //var s_c_border = c_border.split(' ');
+                    //console.log('s_c_border', s_c_border);
+
+                    // Can't really split it by space.
+                    //  some of the terms in the bracket include a space.
+                    //  could first do a regex to change ', ' to ','
+
+                    var b2 = c_border.split(', ').join('');
+                    var s_c_border = b2.split(' ');
+                    console.log('s_c_border', s_c_border);
+
+                    // then can get the thickness from the first one.
+
+                    var thickness = parseInt(s_c_border[0], 10);
+
+                    // the 4 different thicknesses?
+
+                    return thickness;
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    //throw 'stop';
+
+                    /*
+
+                     var s_c_padding = c_padding.split(' ');
+                     console.log('s_c_padding.length', s_c_padding.length);
+
+                     if (s_c_padding.length == 3) {
+                     // top, right, bottom
+                     top = parseInt(s_c_padding[0], 10);
+                     right = parseInt(s_c_padding[1], 10);
+                     bottom = parseInt(s_c_padding[2], 10);
+
+                     // returns as l, t, r, b
+
+                     //return [0, top, right, bottom];
+
+                     return [0, top, right, bottom];
+
+                     }
+                     */
+
+
+
+
+
+                }
+            }),
+
+            'cover': fp(function(a, sig) {
+                // Makes a cover to this control.
+                //  Relatively positioned div as first child (if it is not there already)
+                //  Absolutely positioned within that relative div.
+
+                // insert a new relative div?
+                //  relative for layout?
+
+
+
+
+
+            }),
+
+            'ghost': fp(function(a, sig) {
+
+            }),
+
             // absolute_ghost_clone
-            absolute_ghost_clone: function() {
+            'absolute_ghost_clone': function() {
                 // find out what type the control is...
+
+                // And would either have lower opacity - or be 'ghosted' out with a cover.
+                //  Could have an internal cover that takes up the space.
+                //  Absolute positioning, measured to take up the internal space.
+                //  Would require a relative div inside?
+                //  Could create a relative div as the first child.
+                //   relative size 0, in the top left, then used for absolute positioning of the cover layer.
+
+
+                // this.cover
+                //  and would get access to the cover control as well.
+                //  should be absolutely positioned, and above the other items in the control.
+
+                // this.cover(false);
+
+                // this.ghost()
+                //  makes a ghost cover.
+
+
+
+
+
+
+
+
+
+
 
                 var type_name = this.__type_name;
                 var id = this._id();
                 var context = this._context;
 
                 // spin up a new control, using they type of controls.
+
+                console.log('context', context);
+
+                var ctrl_document = context.ctrl_document;
+
+                console.log('ctrl_document', ctrl_document);
+                console.log('type_name', type_name);
+
+                var Cstr = context.map_Controls[type_name];
+                console.log('Cstr', Cstr);
+
+                // We can create a new one, with a new ID.
+
+                var new_id = id + '_clone';
+                var map_controls = context.map_controls;
+
+                // Want the body control as well.
+
+
+
+                if (!map_controls[new_id]) {
+                    // create it.
+
+                    var new_ctrl = new Cstr({
+                        'context': context,
+                        'id': new_id
+                    })
+
+                    console.log('new_ctrl', new_ctrl);
+
+                    //var body = ctrl_document.body();
+
+                    var body = ctrl_document.content().get(1);
+
+                    var css_class = this.get('dom.attributes.class');
+                    new_ctrl.set('dom.attributes.class', css_class);
+
+                    // Should copy the controls inside the one being cloned.
+                    var my_contents = this.get('content');
+
+                    // should be able to clone a Data_Value too.
+
+
+
+                    each(my_contents, function(i, v) {
+                        console.log('i', i);
+                        console.log('v', v);
+
+                        // Adding a Data_Value not working?
+
+                        var v_clone = v.clone();
+                        console.log('v_clone', v_clone);
+
+                        // could get the value if it's a Data_Value for the moment...
+                        //  Adding a Data_Value to a
+
+                        //if (v_clone.value) {
+                        if (v_clone instanceof jsgui.Data_Value) {
+                            new_ctrl.add(v_clone.value());
+                        } else {
+                            new_ctrl.add(v_clone);
+                        }
+
+
+
+                    })
+
+                    console.log('this', this);
+
+                    // could get the computed width?
+
+                    // computed padding too?
+
+
+
+                    var my_bcr = this.bcr();
+
+
+                    console.log('my_bcr', my_bcr);
+
+                    // and get the border thickness too.
+                    //  may be a bit more complex getting them all
+                    //  and making sure it works in all browsers.
+
+
+
+
+
+
+
+                    var my_padding = this.padding();
+                    console.log('my_padding', my_padding);
+
+                    my_bcr[2][0] = my_bcr[2][0] - my_padding[0];
+                    my_bcr[2][1] = my_bcr[2][1] - my_padding[1];
+                    my_bcr[2][0] = my_bcr[2][0] - my_padding[2];
+                    my_bcr[2][1] = my_bcr[2][1] - my_padding[3];
+
+
+
+                    //var my_border = this.border();
+                    //console.log('my_border', my_border);
+
+                    var my_border_thickness = this.border_thickness();
+
+                    console.log('my_border_thickness', my_border_thickness);
+
+
+                    var t_my_border_thickness = tof(my_border_thickness);
+
+                    if (t_my_border_thickness == 'number') {
+                        my_bcr[2][0] = my_bcr[2][0] - 2 * my_border_thickness;
+                        my_bcr[2][1] = my_bcr[2][1] - 2 * my_border_thickness;
+
+                    }
+
+                    // Not sure how the border would be reported in a bunch of different browsers or border values
+
+                    // could be '1px solid rgb(221, 221, 221)'
+                    // could have regexes testing for various borders and getting the values back from them.
+
+                    //  so we know the thickness of the individual left, top, right, bottom because we get them all at once.
+
+
+
+
+
+
+
+                    // and subtract the padding.
+
+
+
+                    // and use the bcr values to set the position and size of the new control.
+
+                    // .bounds?
+                    //   sets the position (screen location) and the size?
+                    //   gets the bounding client rect?
+
+
+
+                    new_ctrl.bcr(my_bcr);
+
+
+
+
+                    console.log('new_ctrl', new_ctrl);
+
+
+
+
+
+                    //throw 'stop';
+
+                    // need to make the new control absolute
+
+
+
+
+
+
+
+                    //ctrl_document.body().add(new_ctrl);
+                    body.add(new_ctrl);
+
+                    var new_el = new_ctrl.get('dom.el');
+                    console.log('new_el', new_el);
+
+
+                    //throw 'stop';
+
+                }
+
+
+
+
+
+
+
+
+
+                //throw 'stop';
 
 
 
@@ -707,27 +1169,37 @@ if (typeof define !== 'function') {
 	        'activate': function(el) {
 	        	//console.log('enh ctrl activate');
 
-	            this.__active = true;
-	            if (el) {
-	                this.set('dom.el', el);
-	            }
+                if (!this.__active) {
+                    this.__active = true;
+                    if (el) {
+                        this.set('dom.el', el);
+                    }
 
-	            //console.log('activate ' + this._id());
-	            // activate content controls.
-	            this.activate_dom_attributes();
-	            this.activate_content_controls();
+                    //console.log('activate ' + this._id());
+                    // activate content controls.
+                    //console.log('1) ' + this._.content._arr.length);
+                    this.activate_dom_attributes();
+                    //console.log('2) ' + this._.content._arr.length);
 
-	            // then is there is a selection_scope as true, create a new Selection_Scope object, then set it so that subcontrols point
-	            //  to it with their selection_scope property.
+                    this.activate_content_controls();
+                    //console.log('3) ' + this._.content._arr.length);
 
-	            // so after the fields have been set up.
+                    // then is there is a selection_scope as true, create a new Selection_Scope object, then set it so that subcontrols point
+                    //  to it with their selection_scope property.
 
-	            this.activate_content_listen();
+                    // so after the fields have been set up.
 
-	            // Activate style change listen?
-	            //  Or generally dom attributes change listen?
+                    this.activate_content_listen();
+                    //console.log('4) ' + this._.content._arr.length);
 
-	            this.activate_other_changes_listen();
+                    // Activate style change listen?
+                    //  Or generally dom attributes change listen?
+
+                    this.activate_other_changes_listen();
+                    //console.log('5) ' + this._.content._arr.length);
+                }
+
+
 
 
 	        },
@@ -774,7 +1246,11 @@ if (typeof define !== 'function') {
 
 					// I think this works better, 02/05/14
 
-					if (tof(dval) == 'string') {
+                    console.log('tof(dval)', tof(dval));
+
+                    var t_dval = tof(dval);
+
+					if (t_dval == 'string' || t_dval == 'number') {
 						//el.setAttribute('style', dval);
 					} else {
 						//el.setAttribute('style', dval.value());
@@ -794,13 +1270,19 @@ if (typeof define !== 'function') {
 	        	//console.log('activate_content_listen');
 
 	        	var content = this.get('content');
+
+                //console.log('1) content.length()', content.length());
+
 	        	var that = this;
 	        	
 
 	        	// var el = that.get('dom.el');
 
+                // Important piece of code here.
+
+
 	            content.on('change', function(e_change) {
-	            	console.log('activated control content change');
+	            	//console.log('activated control content change');
 
 	            	var el = that.get('dom.el');
 	            	var type = e_change.type;
@@ -820,17 +1302,73 @@ if (typeof define !== 'function') {
 	                    
 	                    //var p = el.parentNode;
 	                    var item = e_change.item;
+
+
+
 	                    var itemDomEl = item.get('dom.el');
+
+                        // need to render the item ID in there too.
+                        //var id = item._id();
+
+
+
+
 	                    //console.log('e_change.item._context', item._context);
 	                    if (!itemDomEl) {
+
+
+                            // Making it get added twice?
+                            // does this cause problems?
+                            //  this seems to be the culprit.
+
+                            // Or is the problem in conjunction with activate?
+                            item.active();
+                            // Making it active meaning it duplicates the content?
+
+
+                            // This seems to do the trick for making a newly inserted item have the right document properties.
+                            //  Will it also be in the context properly?
+
+
 	                        //itemDomEl = e_change.item._context.document.createElement(e_change.item.get('dom.tagName'));
 	                        // render the 
 
 	                        // Are items not activated with contexts?
 
-	                        var temp_div = e_change.item._context.document.createElement('div');
-	                        temp_div.innerHTML = e_change.item.all_html_render();
-	                        itemDomEl = temp_div.childNodes[0];
+                            // Perhaps we should not always use a DIV?
+
+                            var item_tag_name = item.get('tag_name').value();
+                            //console.log('item_tag_name', item_tag_name);
+                            //console.log('item', item);
+
+                            // check for SVG tag names.
+
+                            var temp_el;
+
+
+                            if (item_tag_name == 'circle' || item_tag_name == 'line' || item_tag_name == 'polyline') {
+                                // Can make SVG inside an element, with the right namespace.
+
+                                var temp_svg_container = e_change.item._context.document.createElement('div');
+                                temp_svg_container.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">' + e_change.item.all_html_render() + '</svg>';
+                                itemDomEl = temp_svg_container.childNodes[0].childNodes[0];
+                                //
+
+
+                            } else {
+                                temp_el = e_change.item._context.document.createElement('div');
+                                temp_el.innerHTML = e_change.item.all_html_render();
+                                itemDomEl = temp_el.childNodes[0];
+                            }
+
+
+	                        //var temp_div =
+
+                            // It may need to be inside an SVG element.
+
+
+
+	                        //itemDomEl = temp_div.childNodes[0];
 
 	                        e_change.item.set('dom.el', itemDomEl);
 	                    };
@@ -838,6 +1376,19 @@ if (typeof define !== 'function') {
 
 	                    //el.insertBefore(itemDomEl, el.childNodes[0]);
 	                    el.appendChild(itemDomEl);
+
+                        // And then activate it?
+                        //  Perhaps making it so that it's impossible to add the same content again?
+
+
+
+                        //item.activate();
+                        // Will switch this off for the moment.
+
+                        //  Seems to have a problem with both .active and .activate
+                        //  Will turn .activate back on, and look at the activate code.
+
+
 	            	}
 
 	            	if (type == 'clear') {
@@ -846,6 +1397,8 @@ if (typeof define !== 'function') {
 
 
 	            });
+
+                //console.log('2) content.length()', content.length());
 	        },
 	        'activate_dom_attributes': function() {
 	            var el = this.get('dom.el');
@@ -910,16 +1463,16 @@ if (typeof define !== 'function') {
 
 				    	if (str_properties) {
 			                //console.log('str_ctrl_fields ' + str_ctrl_fields);
-			                console.log('str_properties', str_properties);
+			                //console.log('str_properties', str_properties);
 			                //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
 							var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
 							s_pre_parse = s_pre_parse.replace(/\'/g, '"');
 
 
 			                // DBL_QT
-			                console.log('s_pre_parse', s_pre_parse);
+			                //console.log('s_pre_parse', s_pre_parse);
 
-			                console.log('s_pre_parse', tof(s_pre_parse));
+			                //console.log('s_pre_parse', tof(s_pre_parse));
 
 			                var props = JSON.parse(s_pre_parse);
 			                //console.log('props ' + stringify(props));
@@ -1071,6 +1624,110 @@ if (typeof define !== 'function') {
 
 	        },
 
+            'descendants': function(search) {
+                // assembles a list of the descendents that match the search
+                //  (search by .__type_name)
+
+                // eg get a list of menu_node objects.
+
+                // basically need to recursively go through the descendents, with a callback in here, and see if they match the search.
+
+                // recursive iteration of the control(s)
+
+                var recursive_iterate = function(ctrl, item_callback) {
+                    // callback on all of the child controls, and then iterate those.
+                    //console.log('recursive_iterate');
+                    var content = ctrl.get('content');
+                    //console.log('content', content);
+
+                    var t_content = tof(content);
+
+                    //console.log('t_content', t_content);
+
+                    if (t_content == 'collection') {
+                        if (content.length() > 0) {
+
+                            //console.log('content.length()', content.length());
+                            // iterate through those child nodes as well.
+                            content.each(function(i, item) {
+                                //console.log('item', item);
+                                item_callback(item);
+                                recursive_iterate(item, item_callback);
+
+                            })
+                        }
+                    }
+
+                }
+
+                var arr_matching = [];
+
+                recursive_iterate(this, function(item) {
+                    // see if the item matches the search
+
+                    //console.log('cb item', item);
+                    var item_type = item.__type_name;
+                    //console.log('item_type', item_type);
+
+                    if (item_type == search) {
+                        arr_matching.push(item);
+                    } else {
+                        //return ctrl_parent.ancestor(search);
+                    }
+
+                });
+
+                //console.log('arr_matching', arr_matching);
+
+                return arr_matching;
+
+
+
+
+
+            },
+
+            'ancestor': function(search) {
+                // could maybe work when not activated too...
+                // need to get the ancestor control matching the search (in type).
+
+                if (this._parent) {
+                    var ctrl_parent = this._parent._parent;
+                    // the _parent is a Collection within the parent Control
+
+                    if (!ctrl_parent) {
+                        return false;
+                    } else {
+
+                        console.log('ctrl_parent', ctrl_parent);
+                        // does the parent match the type?
+
+                        var parent_type = ctrl_parent.__type_name;
+                        console.log('parent_type', parent_type);
+
+                        if (parent_type == search) {
+                            return ctrl_parent;
+                        } else {
+                            return ctrl_parent.ancestor(search);
+                        }
+
+
+
+                    }
+                } else {
+                    return false;
+                }
+
+
+
+
+
+
+
+
+
+            },
+
 	        'context_menu': fp(function(a, sig) {
 	        	
 	        	// What to do here depends on the control lifecycle stage.
@@ -1166,13 +1823,16 @@ if (typeof define !== 'function') {
 
 	        		}
 
-	        		console.log('show_context_menu pos:', pos);
+	        		//console.log('show_context_menu pos:', pos);
 
 	        		//console.log('show_context_menu');
 
 	        		//console.log('Context_Menu', Context_Menu);
-	        		console.log('context_menu', context_menu);
+	        		//console.log('context_menu', context_menu);
+
 	        		if (!context_menu) {
+                        console.log('creating new context menu');
+
 	        			//console.log('menu_def', menu_def);
 
 	        			context_menu = new Context_Menu({
@@ -1276,8 +1936,34 @@ if (typeof define !== 'function') {
 	        		}
 
                     setTimeout(function() {
+
+                        //console.log('pre add context_menu', context_menu);
+
+                        console.log('pre add context_menu._.content._arr.length ' + context_menu._.content._arr.length);
+                        // Looks like we need to examine the add procedure more.
+
                         body.add(context_menu);
+
+                        console.log('pre activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
+
                         context_menu.activate();
+
+                        // Why is the context menu's node getting added twice?
+
+                        //console.log('added context_menu', context_menu);
+                        console.log('post activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
+
+
+                        // Seems not to be rendering it with its ID.
+                        //  Would prefer its id to be rendered as data-jsgui-id
+
+
+                        // Why is it adding more to the context menu when it's appearing a 2nd time?
+
+                        // do we need to activate it here?
+                        //  will that be done automatically?
+                        //  I think that adding the control should activate it if necessary.
+                        //context_menu.activate();
 
 
                         context_menu.one_mousedown_anywhere(function(e_mousedown) {
@@ -1285,10 +1971,64 @@ if (typeof define !== 'function') {
 
                             if (!e_mousedown.within_this) {
                                 context_menu.remove();
+
+
+
                             } else {
                                 // maybe open a new level.
+
+                                // And need to call the relevant context menu function.
+
+                                console.log('e_mousedown', e_mousedown);
+
+                                var el_target = e_mousedown.target;
+
+                                // the target control will have a jsgui id now.
+                                //  we should be able to then go to its parent and get its menu node.
+
+                                var context = that._context;
+                                console.log('context', context);
+
+                                var target_id = el_target.getAttribute('data-jsgui-id');
+                                console.log('target_id', target_id);
+
+                                var ctrl_target = context.map_controls[target_id];
+
+                                console.log('ctrl_target', ctrl_target);
+
+                                // want to be able to get an ancestor of type menu-node
+
+                                var menu_node = ctrl_target.ancestor('menu_node');
+                                console.log('menu_node', menu_node);
+
+                                // and raise the menu_node select event.
+
+                                menu_node.raise('select');
+
+
+
+
+
+
+
+
+
+
+                                // But the inner control, the menu node which was dynamically created, has not been rendered with its
+                                //  necessary jsgui properties, like data-jsgui-id
+
+                                // then from that, we find the menu node it corresponds with.
+
+                                //var el_menu_node = el_target.parentNode.parentNode;
+                                // and need to get the Control itself from the context.
+
+                                //var menu_node_id =
+
+
                                 context_menu.remove();
                             }
+
+
                         });
 
 
@@ -1390,6 +2130,8 @@ if (typeof define !== 'function') {
 	        }),
 	        'activate_content_controls': function() {
 
+
+
 	        	//console.log('activate_content_controls');
 	            // needs to have an el.
 
@@ -1417,6 +2159,10 @@ if (typeof define !== 'function') {
 
 	            //var fields_ctrl = {};
 	            //var selection_scope;
+
+                // PROBLEM!...?
+
+                // Setting the same thing twice?
 
 	            each(ctrl_fields, function(i, v) {
 	            	//fields_ctrl.set(i, v);
@@ -1452,10 +2198,16 @@ if (typeof define !== 'function') {
 
 	            var cns = el.childNodes;
 
+                // For every child node...
+
+                //  Do not want to add it's control each time.
+                //  Should probably only do that if the control is not already there.
 	            
 	            
 
 	            var content = this.get('content');
+
+                // Adding the content again?
 
 	            for (var c = 0, l = cns.length; c < l; c++) {
 	                var cn = cns[c];
@@ -1472,7 +2224,64 @@ if (typeof define !== 'function') {
 	                    // OK, but when adding content it will be good to know what index the content goes to.
 	                    //  maybe this.add would be better.
 
-	                    content.push(cctrl);
+
+                        // Need to be careful about this.
+                        //  Don't want to add controls twice.
+                        //  Only want them to be pushed to the content if they are not already there.
+
+
+                        // Need to add them to the content when activating from the DOM at the beginning.
+                        //  However, we may have the control already associated with its parent control, if it was rendered.
+
+                        // Need a fast way of looking up if a control, by name, is within the content collection.
+                        //  Could make the collection automatically index the id... but that would be a new requirement for controls to
+                        //  always have IDs. Perhaps it would be useful / necessary though.
+                        // Or, when a control does have an ID, that id gets recorded.
+
+                        // This definitely looks like the problem where it's adding the content that already exists.
+
+                        // a .content_contains_control_id function could help in the short term.
+                        //  may be a performance bottleneck if it checks all controls.
+                        //  a control having a map of its subcontrols may make sense, though that functionality really belongs within Collection.
+
+                        // When adding a control, it would index that control's id.
+                        //  Make it so that the collection automatically indexes a control's id.
+
+
+
+
+
+                        // quick check to see if the control is not already there.
+
+                        var found = false;
+
+                        // Seems inefficient here. Could check faster, or make check unnecessary (maybe throw error if found, then debug elsewhere).
+
+                        if (cctrl) {
+                            var ctrl_id = cctrl.__id;
+                            //console.log('ctrl_id', ctrl_id);
+
+
+                            if (ctrl_id) {
+                                content.each(function(i, v) {
+                                    if (v.__id) {
+                                        if (v.__id == ctrl_id) found = true;
+                                    }
+                                });
+                            }
+
+                            if (!found) {
+                                content.push(cctrl);
+                            }
+                        }
+
+
+
+
+
+
+
+
 
 	                    // need to be able to get from a control:
 	                    // _parent()
@@ -1543,10 +2352,10 @@ if (typeof define !== 'function') {
 
 
                 if (options.mode) mode = options.mode;
-                if (options.fn_dragmove) fn_dragmove = options.fn_dragmove;
-                if (options.move) fn_dragmove = options.move;
-                if (options.fn_dragstart) fn_dragstart = options.fn_dragstart;
-                if (options.start) fn_dragstart = options.start;
+                //if (options.fn_dragmove) fn_dragmove = options.fn_dragmove;
+                if (options.move) handle_dragmove = options.move;
+                //if (options.fn_dragstart) fn_dragstart = options.fn_dragstart;
+                if (options.start) handle_dragstart = options.start;
 
                 // could have a 'none' mode that does not implement drag behaviour itself, but just shows the events?
                 //  or I think 'events' mode would be a better name because it's saying what it is.
@@ -1570,10 +2379,6 @@ if (typeof define !== 'function') {
 
 
 
-
-
-
-
                 }
 
                 var body = that._context.body();
@@ -1582,6 +2387,8 @@ if (typeof define !== 'function') {
 
                 var is_dragging;
                 var pos_mousedown;
+
+                var ghost_clone;
 
 
 
@@ -1603,6 +2410,14 @@ if (typeof define !== 'function') {
                         if (dist >= drag_start_distance) {
                             console.log('starting drag');
                             is_dragging = true;
+
+                            // in ghost copy mode create the ghost copy
+
+                            if (mode == 'ghost-copy') {
+                                ghost_clone = that.absolute_ghost_clone();
+
+                            }
+
 
                             if (handle_dragstart) {
                                 e_mousemove.control = that;
@@ -1855,7 +2670,7 @@ if (typeof define !== 'function') {
 	            // and can drag another control.
 
 	            // maybe want to make a few lower level drag functions?
-	            console.log('drag_handle_to');
+	            //console.log('drag_handle_to');
 	            var mousedown_offset_from_ctrl_lt;
 
 	            var ctrl_el = ctrl.get('dom.el');
@@ -1874,7 +2689,7 @@ if (typeof define !== 'function') {
 	                // will need to do a bit of position calculation to get it to work.
 
 	                var targetPos = findPos(target);
-	                console.log('targetPos ' + stringify(targetPos));
+	                //console.log('targetPos ' + stringify(targetPos));
 
 	                var ctrl_el_pos = findPos(ctrl.get('dom.el'));
 
@@ -1936,7 +2751,7 @@ if (typeof define !== 'function') {
 	                }
 
 
-	                console.log('drag handle to drag begin');
+	                //console.log('drag handle to drag begin');
 
 
 	                //throw 'stop';
@@ -1947,7 +2762,7 @@ if (typeof define !== 'function') {
 
 	            }, function(e_move) {
 
-	                console.log('move event');
+	                //console.log('move event');
 	                // need to reposition the control.
 	                //  will mean adjusting some inline style.
 
@@ -2009,7 +2824,7 @@ if (typeof define !== 'function') {
 	                //  or offset_adjustment
 
 	                var offset_adjustment = ctrl.get('offset_adjustment');
-	                console.log('offset_adjustment', offset_adjustment);
+	                //console.log('offset_adjustment', offset_adjustment);
 
 	                if (offset_adjustment) {
 	                    // want to find out what zone it is anchored in.
@@ -2168,12 +2983,12 @@ if (typeof define !== 'function') {
 	            }, function(e_end) {
 	                // tell the context that the drag has ended.
 	                var uo1 = ctrl.get('unanchored_offset');
-	                console.log('uo1', uo1);
+	                //console.log('uo1', uo1);
 
 	                ctrl._context.end_drag_ctrl(e_end, ctrl);
 
 	                var uo2 = ctrl.get('unanchored_offset');
-	                console.log('uo2', uo2);
+	                //console.log('uo2', uo2);
 
 	                if (uo1 && uo2) {
 	                    ctrl.set('unanchored_offset', null);
@@ -3262,6 +4077,8 @@ if (typeof define !== 'function') {
 
 	        //console.log('el.childNodes.length ' + el.childNodes.length);
 	        var cns = el.childNodes;
+            console.log('el', el);
+            console.log('cns.length', cns.length);
 	        for (var c = 0, l = cns.length; c < l; c++) {
 	            recursive_dom_iterate(cns[c], callback);
 	        }
@@ -3337,7 +4154,7 @@ if (typeof define !== 'function') {
 		        }
 
 		        recursive_dom_iterate(document, function(el) {
-		            //console.log('2) el.tagName ' + el.tagName);
+		            console.log('2) el.tagName ' + el.tagName);
 		            var nt = el.nodeType;
 		            //console.log('nt ' + nt);
 
@@ -3470,7 +4287,7 @@ if (typeof define !== 'function') {
 		        //  But connecting up the activated subcontrols with the control getting activated?
 		        //   They could be the content.
 
-
+                console.log('pre recursive_dom_iterate_depth');
 		        recursive_dom_iterate_depth(document, function(el) {
 		            //console.log('el ' + el);
 		            var nt = el.nodeType;
@@ -3489,6 +4306,9 @@ if (typeof define !== 'function') {
 		                }
 		            }
 		        });
+
+                // Image uploader seems not to be activating properly...
+
 	        //})
 
 	        //  constructors.

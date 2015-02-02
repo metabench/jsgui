@@ -104,6 +104,17 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
             'svg': 'image/svg+xml'
         }
 
+        var serve_image_file_from_buffer = function(buffer, filename, response) {
+            var extname = path.extname(filename);
+            console.log('extname ' + extname);
+
+            var extension = extname.substr(1);
+            console.log('extension ' + extension);
+
+            response.writeHead(200, {'Content-Type': mime_types[extension] });
+            response.end(buffer, 'binary');
+        }
+
 
         var serve_image_file_from_disk = function(filePath, response) {
             var extname = path.extname(filePath);
@@ -513,7 +524,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-
+                // Also needs to set the non-resized as well.
 
                 var key, value, type_name, metadata, callback, that = this;
 
@@ -543,7 +554,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                     //  maybe have type_name as fairly simple format info.
                     //  .format could be more complicated.
                     //  type_name should be fine.
-
 
                     if (type_name === 'jpeg') {
                         var jpeg = new jsgui_jpeg.JPEG({});
@@ -592,6 +602,248 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                                 console.log('jpeg.size', jpeg.size);
 
+                                var md = {
+                                    'width': jpeg.size[0],
+                                    'height': jpeg.size[1]
+                                }
+
+
+
+                                // In some situations may want to load, encode before saving, maybe strip out dodgy metadata.
+                                web_db.set_document(key, value, type_name, md, function(err, uploaded_image_document_id) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('cb save_square_sized_version set_document uploaded_image_document_id: ' + uploaded_image_document_id);
+
+                                        // When describing transformed documents, we can reference them by key rather than integer id.
+                                        //  The different versions will still have different names, most likely given suffixes.
+
+
+                                        // Then transform and save various versions of it.
+
+
+
+
+
+
+
+
+                                        //throw 'stop';
+                                        //callback2(null, res_saved);
+
+
+                                        // need to look at the id of the item that was saved.
+                                        //  could possibly use its key to save the resized versions.
+                                        //  The resized versions will differ by name as well, but the transformations will be saved within the
+                                        //  database as well. That way it will be possible to logically view the original images, being served the
+                                        //  appropriate one for the device and required image size.
+
+                                        var save_square_sized_version = function(square_size, callback2) {
+                                            console.log('save_square_sized_version');
+                                            //throw 'stop';
+
+                                            var resized_128x128 = pb.get_resized([square_size, square_size]);
+                                            var jpeg_128x128 = new jsgui_jpeg.JPEG({});
+                                            jpeg_128x128.load_from_rgb_pixel_buffer(resized_128x128);
+                                            var buffer_jpeg_128x128 = jpeg_128x128.save_to_buffer();
+                                            var md = {
+                                                'width': resized_128x128.size[0],
+                                                'height': resized_128x128.size[1]
+                                            }
+                                            // Need to change the key, so insert the _128x128 before the extension.
+
+                                            //var s_key = key.split('.');
+                                            // need to replace the last full stop?
+                                            var i = key.lastIndexOf('.');
+                                            var key2 = key;
+                                            if (i > -1) {
+                                                key2 = key.substr(0, i) + '_' + square_size + 'x' + square_size + '.' + key.substr(i + 1);
+                                            }
+
+                                            console.log('key2', key2);
+
+                                            web_db.set_document(key2, buffer_jpeg_128x128, type_name, md, function(err, res_saved) {
+                                                if (err) {
+                                                    throw err;
+                                                } else {
+                                                    console.log('cb save_square_sized_version set_document size: ' + square_size);
+                                                    //throw 'stop';
+                                                    callback2(null, res_saved);
+
+
+
+
+
+
+
+                                                }
+                                            });
+
+                                            // Needs to set a document with a transformation reference.
+
+                                            // Needs original document id.
+
+                                            // set transformed document
+                                            //  orig id uploaded_image_document_id
+                                            //  transformation info
+                                            //   (include the transformation type)
+                                            //   possibly include the transformation parameters.
+                                            //   we know it's resize from the type, but the transformation params can include the size it
+                                            //    was transformed to. Could possibly use a normalized transformation parameters system.
+
+                                            // .set_transformed_document(key2, transformed_buffer, type_name, metadata, transformation_type_name, transformation_params,
+                                            //  Need to create the document, while also creating the transformation record.
+
+                                            // Or a document itself could have a transformation source?
+                                            //  Separate records would be more normalized.
+                                            //  I think just a bit more sensible.
+
+                                            // A bit like the metadata record system.
+                                            //  Each transformation can have parameters which are similar in implementation to the metadata system.
+
+
+                                            // Document transformations will be generally about reencoding a document.
+
+                                            // Document_Transformations
+                                            //  id
+                                            //  source_document_id
+                                            //  target_document_id
+                                            //  transformation_verb_id
+
+                                            // Document_Transformation_Parameters
+                                            //  could have different types, like integer parameters, string parameters
+                                            //   this system would help a lot with searching for documents of particular sizes.
+                                            //   Would be a bit time consuming to make, but would be useful for the end system where transformed
+                                            //   documents can better be searched for and retrieved very quickly.
+
+                                            // dtrans_params
+                                            //  id, transformation id, key
+
+
+                                            // Document Transformation Parameter (Record)s
+                                            //  id, transformation id, key
+                                            // Document Transformation Integer Parameter (Record)s
+                                            //  These will be some of the most useful searchable and sortable parameters
+
+                                            // Possible transformation: encode so that it's 50KB or less. Parameter could be an integer size.
+
+                                            // Document Transformation Integer Parameters
+                                            //  id, transformation_param_id, value
+
+                                            // Make the document transformation record + param records after the target document
+                                            //  has been put into the database.
+
+
+                                            // Then save the resized one, as before,
+
+
+
+                                            // Then save the transformation that connects the two saved images.
+
+
+
+
+
+                                        };
+
+                                        // Looks like it needs to save the original version and get the id first.
+
+                                        /*
+
+                                        */
+
+                                        save_square_sized_version(128, function(err, transformed_doc_id) {
+                                            console.log('saved 128');
+                                            //throw 'stop';
+
+                                            if (err) {
+                                                throw err;
+                                            } else {
+
+                                                console.log('transformed_doc_id', transformed_doc_id);
+
+                                                web_db.ensure_transformation('resize', {'size': 128}, uploaded_image_document_id, transformed_doc_id, function(err, res_ensure_transformation) {
+                                                    if (err) {
+                                                        throw err;
+                                                    } else {
+                                                        console.log('res_ensure_transformation', res_ensure_transformation);
+
+                                                        callback2(null, res_saved);
+
+
+                                                    }
+                                                })
+
+
+
+
+                                                // need to save the resize transformation that connects them.
+
+
+
+                                                //throw 'stop';
+
+                                                //
+
+                                                /*
+                                                save_square_sized_version(64, function(err, res) {
+                                                    console.log('saved 64');
+
+                                                    //console.log('callback', callback);
+
+                                                    callback(null, true);
+
+
+                                                });
+                                                */
+
+
+
+                                            }
+
+                                        });
+
+
+                                        /*
+                                        save_square_sized_version(128, function(err, res) {
+                                            console.log('saved 128');
+                                            //throw 'stop';
+
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                save_square_sized_version(64, function(err, res) {
+                                                    console.log('saved 64');
+
+                                                    //console.log('callback', callback);
+
+                                                    callback(null, true);
+
+
+                                                });
+                                            }
+
+                                        });
+                                        */
+
+
+
+
+
+
+
+                                    }
+                                });
+
+
+
+                                // Should save the original file first, and then save the transformations based on it.
+
+
+
+
+
 
                                 //  Could give an array of different sizes and filenames.
 
@@ -633,67 +885,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                                 // put this in a function, so we can set a bunch of them quickly
 
-                                var save_square_sized_version = function(square_size, callback2) {
-                                    console.log('save_square_sized_version');
-                                    //throw 'stop';
-
-                                    var resized_128x128 = pb.get_resized([square_size, square_size]);
-                                    var jpeg_128x128 = new jsgui_jpeg.JPEG({});
-                                    jpeg_128x128.load_from_rgb_pixel_buffer(resized_128x128);
-                                    var buffer_jpeg_128x128 = jpeg_128x128.save_to_buffer();
-                                    var md = {
-                                        'width': resized_128x128.size[0],
-                                        'height': resized_128x128.size[1]
-                                    }
-                                    // Need to change the key, so insert the _128x128 before the extension.
-
-                                    //var s_key = key.split('.');
-                                    // need to replace the last full stop?
-                                    var i = key.lastIndexOf('.');
-                                    var key2 = key;
-                                    if (i > -1) {
-                                        key2 = key.substr(0, i) + '_' + square_size + 'x' + square_size + '.' + key.substr(i + 1);
-                                    }
-
-                                    console.log('key2', key2);
+                                // And the save square sized version will deal with the db document transformation system.
+                                //  Needs to mark the result images as being resized transformations based on an original.
 
 
-
-
-                                    web_db.set_document(key2, buffer_jpeg_128x128, type_name, md, function(err, res_saved_128x128) {
-                                        if (err) {
-                                            throw err;
-                                        } else {
-                                            console.log('cb save_square_sized_version set_document size: ' + square_size);
-                                            //throw 'stop';
-                                            callback2(null, res_saved_128x128);
-
-
-                                        }
-                                    });
-                                };
-
-                                save_square_sized_version(128, function(err, res) {
-                                    console.log('saved 128');
-                                    //throw 'stop';
-
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        save_square_sized_version(64, function(err, res) {
-                                            console.log('saved 64');
-
-                                            //console.log('callback', callback);
-
-                                            callback(null, true);
-
-
-                                        });
-                                    }
-
-
-
-                                });
 
 
 
@@ -918,7 +1113,9 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                         //   Could become more advanced at some points, serving particular builds.
 
 
-                        if (splitPath[0] == 'img') {
+                        // img or images
+
+                        if (splitPath[0] == 'img' || splitPath[0] == 'images') {
                             // Possibly could be something different?
                             //  May be best to look at the path within the image resource.
 
@@ -932,234 +1129,319 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                             // determine the name of the file to serve, serve that file
                             //  Could use some more general kind of file server.
 
+                            // We may want to serve from disk.
+                            //  I think this could work differently to an interface to the disk resource.
+                            //  The image resource, like some others, could directly access the disk.
+                            //   They may have their own bit of caching.
+
+
+                            console.log('splitPath', splitPath);
+
+
+
+
+
+
                             if (splitPath.length > 1) {
-                                if (splitPath.length == 2) {
 
-                                    // Could check options to see if to look in the database, or the file system.
-                                    //  Perhaps could have a website document storage abstraction that will store in the file system or the
-                                    //   database.
+                                // At this point, can look for the file on disk within the app directory.
 
-
+                                console.log('rurl', rurl);
+                                console.log('req.url', req.url);
 
 
-                                    var fileName = splitPath[1];
-
-                                    // See if we can get the document with the key of the filename of the image.
-                                    //  Perhaps it will be stored as a site image.
-
-                                    that.get_document(fileName, function(err, res_get_document) {
-                                        if (err) {
-                                            throw err;
-                                        } else {
+                                // replace /images/ with /img/
 
 
-                                            //console.log('res_get_document', res_get_document);
 
-                                            console.log('cb get document');
+                                var project_disk_path = req.url.replace('images/', 'img/');
+                                if (project_disk_path.substr(0, 1) == '/') project_disk_path = project_disk_path.substr(1);
 
-                                            // Now we have it,
+                                // try to load it from disk.
+                                //  try to load it as a buffer
 
-                                            var doc_keys = Object.keys(res_get_document);
-                                            console.log('doc_keys', doc_keys);
+                                fs2.load_file_as_buffer(project_disk_path, function(err, buffer) {
+                                    if (err) {
+                                        console.log('error loading ' + project_disk_path + ': ' + err);
 
-                                            // Need to know more information, such as the type_name
-                                            //  that extra info should probably get returned from the database.
+
+                                        // Then try serving the file using the other methods, but will need to take care not to expect some resources to be there,
+                                        //  such as the web_data resource.
+                                        // Want top have a very versitile web_data resource that uses a DB, but also to have the means to interact with the files on disk
+                                        //  in the project directory.
 
 
 
 
+                                        throw 'stop';
 
-                                        }
-
-                                    });
-
-
-                                    /*
-
-                                    //console.log('url_parts.path ' + url_parts.path);
-                                    var filePath = url_parts.path.substr(1);
-                                    //console.log('module.uri ' + module.uri);
-                                    var val2 =  path.dirname(module.uri);
-                                    console.log('val2 ' + val2);
-                                    //throw '9) stop';
-
-                                    //var diskPath = val2 + '/../../images/' + fileName;
-
-                                    var diskPath = '../../ws/img/' + fileName;
-
-                                    // Also making use of custom paths...
-
-                                    // First check if such an image is in a specifically served directory.
-
-                                    var served_directories = this.meta.get('served_directories');
-                                    //console.log('served_directories ' + stringify(served_directories));
-
-                                    // see if the file exists in any of the served directories
-
-                                    // search for the file in the served directories.
-                                    //  will be an asyncronous search, and use an array of function calls with call_multi.
-
-                                    var fns = [];
-                                    var found_path;
+                                        if (splitPath.length == 2) {
 
 
-                                    each(served_directories, function(served_directory) {
-                                        //console.log('served_directory', served_directory);
-                                        var dir_val = served_directory.value();
-                                        //console.log('dir_val', dir_val);
-                                        var dir_name = dir_val.name;
-                                        //console.log('dir_name', dir_name);
 
-                                        var search_path = dir_name + '/' + fileName;
-                                        //console.log('search_path', search_path);
-                                        fns.push(function(callback) {
-                                            // check that directory
 
-                                            fs.exists(search_path, function(exists) {
-                                                //console.log('exists', exists);
+                                            // Could check options to see if to look in the database, or the file system.
+                                            //  Perhaps could have a website document storage abstraction that will store in the file system or the
+                                            //   database.
 
-                                                if (!found_path && exists) {
-                                                    found_path = search_path;
+
+
+
+                                            var fileName = splitPath[1];
+
+                                            // See if we can get the document with the key of the filename of the image.
+                                            //  Perhaps it will be stored as a site image.
+
+                                            that.get_document(fileName, function(err, res_get_document) {
+                                                if (err) {
+                                                    throw err;
+                                                } else {
+
+
+                                                    //console.log('res_get_document', res_get_document);
+
+                                                    console.log('cb get document');
+
+                                                    // Now we have it,
+
+                                                    var doc_keys = Object.keys(res_get_document);
+                                                    console.log('doc_keys', doc_keys);
+
+                                                    // Need to know more information, such as the type_name
+                                                    //  that extra info should probably get returned from the database.
+
+
+
+
+
                                                 }
-                                                callback(null, exists);
-                                            })
+
+                                            });
 
 
-                                        })
-                                    });
+                                            /*
 
-                                    call_multi(fns, function(err, res2) {
-                                        if (err) {
-                                            throw err;
+                                             //console.log('url_parts.path ' + url_parts.path);
+                                             var filePath = url_parts.path.substr(1);
+                                             //console.log('module.uri ' + module.uri);
+                                             var val2 =  path.dirname(module.uri);
+                                             console.log('val2 ' + val2);
+                                             //throw '9) stop';
+
+                                             //var diskPath = val2 + '/../../images/' + fileName;
+
+                                             var diskPath = '../../ws/img/' + fileName;
+
+                                             // Also making use of custom paths...
+
+                                             // First check if such an image is in a specifically served directory.
+
+                                             var served_directories = this.meta.get('served_directories');
+                                             //console.log('served_directories ' + stringify(served_directories));
+
+                                             // see if the file exists in any of the served directories
+
+                                             // search for the file in the served directories.
+                                             //  will be an asyncronous search, and use an array of function calls with call_multi.
+
+                                             var fns = [];
+                                             var found_path;
+
+
+                                             each(served_directories, function(served_directory) {
+                                             //console.log('served_directory', served_directory);
+                                             var dir_val = served_directory.value();
+                                             //console.log('dir_val', dir_val);
+                                             var dir_name = dir_val.name;
+                                             //console.log('dir_name', dir_name);
+
+                                             var search_path = dir_name + '/' + fileName;
+                                             //console.log('search_path', search_path);
+                                             fns.push(function(callback) {
+                                             // check that directory
+
+                                             fs.exists(search_path, function(exists) {
+                                             //console.log('exists', exists);
+
+                                             if (!found_path && exists) {
+                                             found_path = search_path;
+                                             }
+                                             callback(null, exists);
+                                             })
+
+
+                                             })
+                                             });
+
+                                             call_multi(fns, function(err, res2) {
+                                             if (err) {
+                                             throw err;
+                                             } else {
+                                             //console.log('found_path', found_path);
+                                             if (found_path) {
+                                             diskPath = found_path;
+                                             serve_image_file_from_disk(diskPath, res);
+                                             }
+                                             }
+
+                                             });
+
+                                             //throw 'stop';
+
+                                             */
+
+
+                                            /*
+                                             fs2.load_file_as_string(diskPath, function (err, data) {
+                                             if (err) {
+                                             throw err;
+                                             } else {
+                                             //var servableJs = updateReferencesForServing(data);
+                                             res.writeHead(200, {'Content-Type': 'text/css'});
+                                             res.end(data);
+                                             }
+                                             });
+                                             */
                                         } else {
-                                            //console.log('found_path', found_path);
-                                            if (found_path) {
-                                                diskPath = found_path;
-                                                serve_image_file_from_disk(diskPath, res);
-                                            }
-                                        }
+                                            if (splitPath.length > 2) {
 
-                                    });
+                                                // need to put the rest of it together...
 
-                                    //throw 'stop';
-
-                                    */
+                                                var fileName = splitPath.slice(1, splitPath.length).join('/');
+                                                console.log('fileName', fileName);
 
 
-                                    /*
-                                     fs2.load_file_as_string(diskPath, function (err, data) {
-                                     if (err) {
-                                     throw err;
-                                     } else {
-                                     //var servableJs = updateReferencesForServing(data);
-                                     res.writeHead(200, {'Content-Type': 'text/css'});
-                                     res.end(data);
-                                     }
-                                     });
-                                     */
-                                } else {
-                                    if (splitPath.length > 2) {
+                                                var filePath = url_parts.path.substr(1);
+                                                //console.log('module.uri ' + module.uri);
+                                                var val2 =  path.dirname(module.uri);
+                                                console.log('val2 ' + val2);
+                                                //throw '9) stop';
 
-                                        // need to put the rest of it together...
+                                                //var diskPath = val2 + '/../../images/' + fileName;
 
-                                        var fileName = splitPath.slice(1, splitPath.length).join('/');
-                                        console.log('fileName', fileName);
+                                                var diskPath = '../../ws/img/' + fileName;
 
-
-                                        var filePath = url_parts.path.substr(1);
-                                        //console.log('module.uri ' + module.uri);
-                                        var val2 =  path.dirname(module.uri);
-                                        console.log('val2 ' + val2);
-                                        //throw '9) stop';
-
-                                        //var diskPath = val2 + '/../../images/' + fileName;
-
-                                        var diskPath = '../../ws/img/' + fileName;
-
-                                        // Do the search in the various served directories for the file.
+                                                // Do the search in the various served directories for the file.
 
 
 
-                                        var served_directories = this.meta.get('served_directories');
-                                        //console.log('served_directories ' + stringify(served_directories));
+                                                var served_directories = this.meta.get('served_directories');
+                                                //console.log('served_directories ' + stringify(served_directories));
 
-                                        // see if the file exists in any of the served directories
+                                                // see if the file exists in any of the served directories
 
-                                        // search for the file in the served directories.
-                                        //  will be an asyncronous search, and use an array of function calls with call_multi.
+                                                // search for the file in the served directories.
+                                                //  will be an asyncronous search, and use an array of function calls with call_multi.
 
-                                        var fns = [];
-                                        var found_path;
+                                                var fns = [];
+                                                var found_path;
 
 
-                                        each(served_directories, function(served_directory) {
-                                            //console.log('served_directory', served_directory);
-                                            var dir_val = served_directory.value();
-                                            //console.log('dir_val', dir_val);
-                                            var dir_name = dir_val.name;
-                                            //console.log('dir_name', dir_name);
+                                                each(served_directories, function(served_directory) {
+                                                    //console.log('served_directory', served_directory);
+                                                    var dir_val = served_directory.value();
+                                                    //console.log('dir_val', dir_val);
+                                                    var dir_name = dir_val.name;
+                                                    //console.log('dir_name', dir_name);
 
-                                            var search_path = dir_name + '/' + fileName;
-                                            //console.log('search_path', search_path);
-                                            fns.push(function(callback) {
-                                                // check that directory
+                                                    var search_path = dir_name + '/' + fileName;
+                                                    //console.log('search_path', search_path);
+                                                    fns.push(function(callback) {
+                                                        // check that directory
 
-                                                fs.exists(search_path, function(exists) {
-                                                    //console.log('exists', exists);
+                                                        fs.exists(search_path, function(exists) {
+                                                            //console.log('exists', exists);
 
-                                                    if (!found_path && exists) {
-                                                        found_path = search_path;
+                                                            if (!found_path && exists) {
+                                                                found_path = search_path;
+                                                            }
+                                                            callback(null, exists);
+                                                        })
+
+
+                                                    })
+                                                });
+
+                                                call_multi(fns, function(err, res2) {
+                                                    if (err) {
+                                                        throw err;
+                                                    } else {
+                                                        console.log('found_path', found_path);
+                                                        if (found_path) {
+                                                            diskPath = found_path;
+                                                            //serve_image_file_from_disk(diskPath, res);
+                                                        }
+                                                        serve_image_file_from_disk(diskPath, res);
                                                     }
-                                                    callback(null, exists);
-                                                })
+
+                                                });
 
 
-                                            })
-                                        });
 
-                                        call_multi(fns, function(err, res2) {
-                                            if (err) {
-                                                throw err;
-                                            } else {
-                                                console.log('found_path', found_path);
-                                                if (found_path) {
-                                                    diskPath = found_path;
-                                                    //serve_image_file_from_disk(diskPath, res);
-                                                }
-                                                serve_image_file_from_disk(diskPath, res);
+
+
+
+                                                // /js/core/jsgui-lang-enh
+                                                //console.log('!*!*!*! url_parts.path ' + url_parts.path);
+                                                /*
+                                                 if (splitPath[1] == 'core') {
+                                                 var fileName = splitPath[2];
+                                                 var val2 =  path.dirname(module.uri);
+                                                 //console.log('val2 ' + val2);
+                                                 var diskPath = val2 + '/../core/' + fileName;
+                                                 fs2.load_file_as_string(diskPath, function (err, data) {
+                                                 if (err) {
+                                                 throw err;
+                                                 } else {
+                                                 //var servableJs = updateReferencesForServing(data);
+                                                 res.writeHead(200, {'Content-Type': 'text/css'});
+                                                 res.end(data);
+                                                 }
+                                                 });
+                                                 }
+                                                 */
+
+
                                             }
 
-                                        });
+                                        }
 
 
 
 
 
 
-                                        // /js/core/jsgui-lang-enh
-                                        //console.log('!*!*!*! url_parts.path ' + url_parts.path);
-                                        /*
-                                         if (splitPath[1] == 'core') {
-                                         var fileName = splitPath[2];
-                                         var val2 =  path.dirname(module.uri);
-                                         //console.log('val2 ' + val2);
-                                         var diskPath = val2 + '/../core/' + fileName;
-                                         fs2.load_file_as_string(diskPath, function (err, data) {
-                                         if (err) {
-                                         throw err;
-                                         } else {
-                                         //var servableJs = updateReferencesForServing(data);
-                                         res.writeHead(200, {'Content-Type': 'text/css'});
-                                         res.end(data);
-                                         }
-                                         });
-                                         }
-                                         */
+                                    } else {
+                                        console.log('loaded file, need to serve it');
+
+                                        // need to set the mime type correctly.
+                                        //  We can get this from the file name for the moment.
+
+                                        // serve_image_file_from_buffer
+
+                                        //serve_image_file_from_disk(diskPath, res);
+
+                                        serve_image_file_from_buffer(buffer, diskPath, res);
 
 
+
+
+
+
+
+                                        //throw 'stop';
                                     }
+                                })
 
-                                }
+
+
+                                //fs2.load_file_as_string
+
+
+
+
+
+
                             }
                         }
 

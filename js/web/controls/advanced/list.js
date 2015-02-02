@@ -36,6 +36,9 @@ var Item = require('./item');
             'init': function(spec, add, make) {
                 // Wont fields have been set?
 
+
+                console.log('init list');
+
                 this._super(spec);
 
                 var that = this;
@@ -123,6 +126,16 @@ var Item = require('./item');
                 this.context_menu({
                     'Delete': function() {
                         console.log('context_menu Delete');
+
+                        // need to actually delete it if possible?
+
+                    },
+                    'Edit': function() {
+                        console.log('context_menu Edit');
+
+                        // need to actually delete it if possible?
+
+
                     }
                 })
 

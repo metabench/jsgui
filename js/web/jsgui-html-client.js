@@ -167,8 +167,11 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool) {
 
 
     jsgui.http = fp(function(a, sig) {
+
+        // we may want to do an HTTP post instead, perhaps posting a document.
+
         var method = 'GET';
-        var url, callback;
+        var url, callback, body = null;
         if (sig == '[s,f]') {
             url = a[0];
             callback = a[1];
@@ -178,10 +181,35 @@ function (jsgui, Client_Page_Context, Client_Resource_Pool) {
             method = a[1].toUpperCase();
             callback = a[2];
         }
+        if (sig == '[s,s,s,f]') {
+            url = a[0];
+            method = a[1].toUpperCase();
+            body = a[2];
+            callback = a[3];
+        }
+        if (sig == '[s,s,a,f]') {
+            url = a[0];
+            method = a[1].toUpperCase();
+            body = JSON.stringify(a[2]);
+            callback = a[3];
+        }
+        if (sig == '[s,s,o,f]') {
+            url = a[0];
+            method = a[1].toUpperCase();
+            body = JSON.stringify(a[2]);
+            callback = a[3];
+        }
         var request = makeHttpObject();
 
         request.open(method, url, true);
-        request.send(null);
+
+        if (method.toUpperCase() == 'POST' && body) {
+            console.log('body', body);
+            request.send(body);
+        } else {
+            request.send(null);
+        }
+
         request.onreadystatechange = function() {
             if (request.readyState == 4) {
                 // Perhaps parse that...

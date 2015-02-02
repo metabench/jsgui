@@ -45,13 +45,6 @@ define(["../../core/jsgui-lang-util", "./resource"], function(jsgui, Resource) {
     // It would publish a web db, I think.
     //  A website resource would contain a variety of requests.
 
-
-
-
-
-
-
-
 	var Web_Resource = Resource.extend({
 
 		'init': function(spec) {

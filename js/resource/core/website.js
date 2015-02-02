@@ -44,12 +44,12 @@ if (typeof define !== 'function') {
 
 define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
     "../web-admin",
-    "./site-images", "./site-javascript", "./site-css",
+    "./site-images", "./site-javascript", "./site-css", "./site-static-html",
     "../../web/db-resource-postgres",
 
     "../../db/resource/factory"], function(jsgui, Web_Resource, Router, Resource_Pool,
                                            Resource_Web_Admin,
-                                           Site_Images, Site_JavaScript, Site_CSS,
+                                           Site_Images, Site_JavaScript, Site_CSS, Site_Static_HTML,
                                            DB_Web_Resource,
 
                                            database_resource_factory) {
@@ -69,6 +69,8 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
 
 
+    // Want to be able to run a website resource serving static files.
+    //  Don't want too complicated configuration here.
 
 
     var Website_Resource = Web_Resource.extend({
@@ -77,34 +79,52 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
             console.log('Website_Resource spec', spec);
 
+            // speck could be a string, such as 'static'
+
+            var t_spec = tof(spec);
+            console.log('t_spec', t_spec);
+
+
             // A website have a resource pool as well.
 
             var resource_pool = new Resource_Pool({});
             this.set('resource_pool', resource_pool);
 
 
+
+            // maybe there is not a database.
             var database_spec = spec.database;
-            database_spec.name = database_spec.name || database_spec.database_name;
 
-            var database_resource = database_resource_factory(database_spec);
+            var web_database_resource;
 
-            database_resource.start();
+            if (database_spec) {
+                database_spec.name = database_spec.name || database_spec.database_name;
 
-            // should start automatically when in the pool?
-            //  does the pool need to be told to start?
+                var database_resource = database_resource_factory(database_spec);
 
-            // Though probably don't want to start the resource on initialization.
+                database_resource.start();
+
+                // should start automatically when in the pool?
+                //  does the pool need to be told to start?
+
+                // Though probably don't want to start the resource on initialization.
 
 
-            resource_pool.add(database_resource);
+                resource_pool.add(database_resource);
 
-            var web_database_resource = new DB_Web_Resource({
-                'database': database_resource,
-                'meta': {
-                    'name': 'Web DB'
-                }
+                web_database_resource = new DB_Web_Resource({
+                    'database': database_resource,
+                    'meta': {
+                        'name': 'Web DB'
+                    }
 
-            })
+                })
+            }
+
+
+
+
+
 
             // should set the name of meta when we set this up.
             //  That should be part of the general resource code.
@@ -116,7 +136,7 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
 
             console.log('web_database_resource', web_database_resource);
-            console.log('web_database_resource.meta._.name', web_database_resource.meta._.name);
+            //console.log('web_database_resource.meta._.name', web_database_resource.meta._.name);
             //console.log('web_database_resource.meta._.name.value()', web_database_resource.meta._.name);
 
             // So why is the resource pool not indexing it by name
@@ -124,8 +144,10 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
 
             //throw 'stop';
+            if (web_database_resource) {
+                resource_pool.add(web_database_resource);
+            }
 
-            resource_pool.add(web_database_resource);
 
             // use the Database Resource Factory.
 
@@ -160,16 +182,38 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             var router = new Router();
             this.set('router', router);
 
-            var admin_web_resource = new Resource_Web_Admin({
-                'web_database': web_database_resource,
+
+            // May start an admin web resource without a database connection.
+
+
+            // Maybe there is no web database resource?
+
+            var spec_web_admin = {
+                //'web_database': web_database_resource,
                 'meta': {
                     'name': 'Web Admin'
                 }
-            })
+            };
+
+            if (web_database_resource) {
+                spec_web_admin.web_database = web_database_resource;
+            }
+
+
+
+            var admin_web_resource = new Resource_Web_Admin(spec_web_admin);
 
             // Site images resource as well.
             //  The site images will interact with the web db resource, providing an API that deals with image metadata, possibly serving them too.
             //   This is a way of keeping non-db functionality out of the web db module.
+
+
+            // Images, JavaScript, CSS.
+            // Need a Static_HTML resource.
+
+
+
+
 
             var img_resource = new Site_Images({
                 'meta': {
@@ -184,10 +228,59 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
                 }
             });
 
+            // Also want a static HTML server.
+            //  Would serve index.html by default I think???
+            //   Probably with the static or simplest settings.
+
+            var static_html_resource;
+
+
+
+
+            if (spec == 'static') {
+                // Will need to serve the JavaScript and CSS directories anyway.
+                //  They will generally have static content on a dynamic-html website.
+
+                // The static setting means we set up serving HTML from the app's directory.
+                //  Only using JSGUI to serve what is there (for the moment)
+                //  Potentially jsgui could be used to edit a static site.
+
+                // Set up and use the static HTML resource.
+
+                // Maybe should be set up anyway?
+                //  Not always needed!
+
+                static_html_resource = new Site_Static_HTML({
+                    'meta': {
+                        'name': 'Static HTML'
+                    }
+                });
+
+                resource_pool.push(static_html_resource);
+
+                // Perhaps set it up with the specific files (automatically)?
+                //  Probably with the index.html
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+            // Want to maybe set up the js_resource so that it serves static files from a directory.
+
             // has it set this?
 
             js_resource.meta.set('custom_paths.js/app☺js', './client/js/app.js');
-
             js_resource.meta.set('custom_paths.js/app_bundle☺js', './client/js/app_bundle.js');
 
             var css_resource = new Site_CSS({
@@ -209,8 +302,13 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             router.set_route('css/*', css_resource, css_resource.process);
 
             router.set_route('js/*', js_resource, js_resource.process);
+            // As well as this, it could get the JavaScript resource to serve the JavaScript from the app's js directory.
+
+            js_resource.serve_directory('js');
+
 
             router.set_route('img/*', img_resource, img_resource.process);
+            router.set_route('images/*', img_resource, img_resource.process);
 
 
             // The website (admin) resource will make use of the images resource where necessary.
@@ -287,7 +385,8 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
         // Needs to be able to process HTTP requests. A bit like the Router in that way.
         'process': function(req, res) {
-            console.log('website process request req.url', req.url);
+            //console.log('website process request req.url', req.url);
+            //throw 'stop';
 
             var remoteAddress = req.connection.remoteAddress;
 
@@ -296,6 +395,9 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
             // use the router resource.
 
             //console.log('this', this);
+
+            //console.log(new Error().stack);
+            //throw 'stop';
 
             var router = this.get('router');
 
@@ -317,12 +419,47 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
 
             // or do router.get?
 
+            //console.log('pre router process');
 
             var res_process = router.process(req, res);
 
-            //console.log('res_process', res_process);
+            // But then does anythin get returned?
+
+            //console.log('website router res_process', res_process);
 
             if (res_process === false) {
+                // Perhaps it's one of the static HTML files?
+                //  Could try to process it using static HTML?
+                //  Or an internal change / proxy from / to /index.html
+
+                // These will possibly be base level page requests, just looking for the file on disk and serving it.
+
+                // At this point we hand it off to the static HTML processor.
+                //  Need some more root directory level handling, but the main processing system is about setting up paths and dealing with parameters.
+
+                //
+                // Special case of '/'
+
+                if (req.url == '/') {
+                    // Send this to the static HTML processing system.
+
+                    var static_html_resource = this.get('resource_pool').get_resource('Static HTML');
+                    //console.log('static_html_resource', static_html_resource);
+
+                    // And lets get the static resource to process it
+
+                    if (static_html_resource) {
+                        static_html_resource.process(req, res);
+                    }
+
+
+                }
+
+
+
+
+
+
                 // it's a 404, not found.
 
                 // Perhaps call a 404 resource.
@@ -331,8 +468,6 @@ define(["../../core/jsgui-lang-util", "./web", "./router", "./pool",
                 //  we can check the database file system to see if it's there.
 
                 // Could get a JSON object from the DB, which will get published as a page.
-
-
 
             }
 

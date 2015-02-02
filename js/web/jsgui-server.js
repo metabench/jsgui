@@ -59,6 +59,33 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
 	var exec = require('child_process').exec;
 
+    // And automatically starts an Application within a Server process?
+
+    // Now we have the server process as code (making it distinct from the server abstraction), we have got to make the application code.
+    //  An application in it's default configuration, and then tell the app to do some things with certain pages.
+
+    // Could give the app a defailt path of '/'
+    //  Then perhaps the server can route some other things as instructed.
+    //  The Site_JavaScript resource will exist on a per-site basis.
+
+    // Need to make a Jsgui Application object, and there will be a Collection of them inside the Server.
+
+
+
+
+
+
+
+
+
+
+
+
+    // This needs to have more in the init section to support it serving (mostly) static sites.
+
+
+
+
 	var JSGUI_Server = Enhanced_Data_Object.extend({
 
 		'init': function(spec) {
@@ -87,6 +114,11 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
             console.log('spec', spec);
 
             var t_spec = tof(spec);
+
+            // Normally have an object in the spec?
+            //  And then set some things up on the website resource...
+            //   using the app spec.
+
             if (t_spec == 'object') {
                 each(spec, function(app_spec, route) {
                     // Create a new Application Resource.
@@ -96,9 +128,14 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
                     // But the right context?
                     //
-
-
+                    console.log('');
+                    console.log('route', route);
+                    console.log('app', app);
+                    //console.log('app.process', app.process);
+                    console.log('');
                     server_router.set_route(route, app, app.process);
+
+
                     // And set it to that route in the routing table.
 
 
@@ -389,7 +426,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
                     var application_router = resource_pool.get_resource('Server Router');
 
-                    console.log('ipAddresses ' + stringify(ipAddresses));
+                    //console.log('ipAddresses ' + stringify(ipAddresses));
                     //console.log('application_router ' + stringify(application_router));
                     //console.log('resource_pool ' + stringify(resource_pool));
 
@@ -517,11 +554,25 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     	// It may be worth having some socket abstraction here, so it handles all websocket servers at once.
 
 						var http_server = http.createServer(function(req, res) {
+
+                            //console.log('process server request');
+
 							var authentication_resource = resource_pool.get_resource('Authentication');
 							// Why is the request being identified as a Readable Stream?
 
+                            //console.log('authentication_resource', authentication_resource);
+
 							if (!authentication_resource) {
-								application_router.process(req, res);
+
+                                // However, a static app set to * should be routed here?
+
+
+
+
+
+
+								var server_routing_res = application_router.process(req, res);
+                                //console.log('server_routing_res', server_routing_res);
 
 							} else {
 								authentication_resource.authenticate(req, function(err, auth_res) {
@@ -627,8 +678,9 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 							}
 							//console.log('broadcast');
 							//console.log('map_connections', map_connections);
-							each(map_connections, function(i, conn) {
-								
+							each(map_connections, function(conn, i) {
+
+
 								if (conn) {
 									//console.log('conn i', i);
 									//conn.write(message);
@@ -694,7 +746,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			
 			var url = req.url;
 
-			console.log('server process_request url ' + url);
+			console.log('*** server process_request url ' + url);
 			
 			var s_url = url.split('/');
 			console.log('s_url ' + stringify(s_url));
@@ -718,11 +770,12 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			
 			// then that should be able to understand things about the browser from the user agent string.
 			
-			//console.log('a_path ' + stringify(a_path));
+			console.log('a_path ' + stringify(a_path));
 			
 			if (a_path.length > 0) {
 
-                router.process(req, res);
+                var routing_res = router.process(req, res);
+                console.log('routing_res', routing_res);
 
 				// However, this could be hosting different websites at different URLs.
 				//  But there could easily be a root website.
@@ -808,7 +861,10 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 				//  (if there is a website resource).
 				
 				
-			}
+			} else {
+                console.log('need to process short path');
+
+            }
 			
 			console.log('jsgui.process_request url ' + url);
 			

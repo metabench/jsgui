@@ -126,6 +126,36 @@
 
 					}
 
+                    console.log('end init Context_Menu', this);
+
+                    console.log('this._.content._arr.length ' + this._.content._arr.length);
+
+
+                    //throw 'stop';
+
+                    // If we stop here, the menu seems to have the right number of nodes.
+                    // However, when it gets added into the active document, it seems as though content of the context_menu gets duplicated
+                    //  There is a sequence of events when it gets added to the document.
+                    //   It correctly seems to add it to the DOM and render the initial content.
+                    //   However, it then seems to duplicate the internal content.
+                    //    It has got the same items listed more than once.
+                    //    May be able to help track this down by making an error if you try to add an item that's already there.
+                    //     Possibly would require maintaining a map of what the child elements are called.
+                    //      That would be possible with the Collection system, where it gets their IDs as they are added.
+
+                    // Maybe track the adding of content better with console logging?
+
+
+
+
+
+
+
+
+
+
+
+
 					// then with the menu obj we construct the menu
 
 					// Menu dealt with as objects or arrays?
@@ -148,8 +178,17 @@
 
 			},
 			'activate': function() {
-				// May need to register Flexiboard in some way on the client.
+
+                console.log('pre super this._.content._arr.length ' + this._.content._arr.length);
+
+                // So it seems the problem lies within the activate function.
+
 				this._super();
+
+                console.log('post super this._.content._arr.length ' + this._.content._arr.length);
+
+                // If possible, this should be automatically activated when it's put into the document.
+                //  But does that break something else?
 
 				console.log('activate Context_Menu');
 
@@ -162,6 +201,30 @@
 	        	var body = this._context.body();
 
 	        	var that = this;
+
+                // Listen for select events on the nodes.
+                //  The menu has a publish/subscribe system for the menu nodes' events.
+
+                // create event listeners on the nodes.
+                //  need a way of getting all of the nodes.
+
+                // heirichical iteration, like .ancestor
+                // .find (like jquery)
+                // .descendants
+                // .desc
+
+                var nodes = this.descendants('menu_node');
+
+                console.log('nodes', nodes);
+
+
+
+
+
+
+
+
+
 
 	        	// this.one_mousedown_anywhere
 

@@ -2,18 +2,424 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="32f8060c-0f14-46b3-bf80-e6f9682bc2cc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/web/db-resource-postgres.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/resource/core/website.js" />
-      <change type="MOVED" beforePath="C:\Users\James\Dropbox\metabench\metabench\ws\js\resource\core\application-router.js" afterPath="$PROJECT_DIR$/js/resource/core/router.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeadsw.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeadsw.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeadsw.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeadsw.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeddep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeddep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeddep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeddep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeddsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeddsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeddsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeddsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makedmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makedmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makedmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makedmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejdsw.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejdsw.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejdsw.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejdsw.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makerdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makerdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makerdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makerdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makerdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makerdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makerdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makerdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makermak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makermak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makermak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makermak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewdep.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewdep.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewdsp.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewdsp.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewmak.vc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewmak.vc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-structures/B_Plus_Tree.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-structures/B_Plus_Tree.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/essentials/Class.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/essentials/Class.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-object/Data_Object-with-EDO.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-object/Data_Object-with-EDO.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-object/Data_Object.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-object/Data_Object.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-object/Data_Value.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-object/Data_Value.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-object/Evented_Class.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-object/Evented_Class.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/Makefile.am" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/Makefile.am" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/Makefile.am" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/Makefile.am" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/Makefile.in" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/Makefile.in" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/Makefile.in" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/Makefile.in" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-structures/Ordered_KVS.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-structures/Ordered_KVS.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-structures/Ordered_String_List.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-structures/Ordered_String_List.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/README" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/README" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/README" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/README" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-structures/Sorted_KVS.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-structures/Sorted_KVS.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-structures/StiffArray.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-structures/StiffArray.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/aclocal.m4" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/aclocal.m4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/aclocal.m4" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/aclocal.m4" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/all.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/all.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/ar-lib" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/ar-lib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/ar-lib" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/ar-lib" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/essentials/arrayify.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/essentials/arrayify.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test-in-browser/lib/assert/assert.js" afterPath="$PROJECT_DIR$/js/test-in-browser/lib/assert/assert.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/basic.css" afterPath="$PROJECT_DIR$/css/basic.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/build/binding.sln" afterPath="$PROJECT_DIR$/js/build/binding.sln" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/build/binding_png.vcxproj.filters" afterPath="$PROJECT_DIR$/js/build/binding_png.vcxproj.filters" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/build/binding_png.vcxproj" afterPath="$PROJECT_DIR$/js/build/binding_png.vcxproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/button.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/button.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/essentials/call_multiple_callback_functions.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/essentials/call_multiple_callback_functions.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/cjpeg.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/cjpeg.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/cjpeg.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/cjpeg.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/client-page-context.js" afterPath="$PROJECT_DIR$/js/web/client-page-context.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/coderules.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/coderules.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/coderules.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/coderules.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/collection.html" afterPath="$PROJECT_DIR$/doc/out/collection.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/core/collection.js" afterPath="$PROJECT_DIR$/js/core/collection.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/column-constraint.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/column-constraint.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/column.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/column.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/comparison-based-change-generator.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/comparison-based-change-generator.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/compile" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/compile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/compile" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/compile" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/config.guess" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/config.guess" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/config.guess" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/config.guess" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/build/config.gypi" afterPath="$PROJECT_DIR$/js/build/config.gypi" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/config.sub" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/config.sub" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/config.sub" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/config.sub" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/configure.ac" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/configure.ac" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/configure.ac" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/configure.ac" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/configure" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/configure" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/configure" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/configure" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/constraint.Collection_Constraint.html" afterPath="$PROJECT_DIR$/doc/out/constraint.Collection_Constraint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/constraint.Constraint.html" afterPath="$PROJECT_DIR$/doc/out/constraint.Constraint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/constraint.Data_Object_Constraint.html" afterPath="$PROJECT_DIR$/doc/out/constraint.Data_Object_Constraint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/constraint.Field_Constraint.html" afterPath="$PROJECT_DIR$/doc/out/constraint.Field_Constraint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/constraint.Field_Data_Type_Constraint.html" afterPath="$PROJECT_DIR$/doc/out/constraint.Field_Data_Type_Constraint.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/core/constraint.js" afterPath="$PROJECT_DIR$/js/core/constraint.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data/constraint.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data/constraint.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/context-menu.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/context-menu.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data/data-object-fields-collection.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data/data-object-fields-collection.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/core/data-object.js" afterPath="$PROJECT_DIR$/js/core/data-object.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/data-type.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/data-type.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/database.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/database.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/resource/database.js" afterPath="$PROJECT_DIR$/js/db/postgres/resource/database.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/db-resource-postgres.js" afterPath="$PROJECT_DIR$/js/web/db-resource-postgres.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/db-resource.js" afterPath="$PROJECT_DIR$/js/web/db-resource.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/depcomp" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/depcomp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/depcomp" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/depcomp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/djpeg.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/djpeg.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/djpeg.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/djpeg.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/data-structures/doubly-linked-list.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/data-structures/doubly-linked-list.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/essentials/each.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/essentials/each.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/enhanced-pixel-buffer.js" afterPath="$PROJECT_DIR$/js/image/node/enhanced-pixel-buffer.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/example.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/example.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/example.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/example.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/exists.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/exists.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/resource/factory.js" afterPath="$PROJECT_DIR$/js/db/resource/factory.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/file-tree.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/file-tree.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/file-upload.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/file-upload.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/filelist.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/filelist.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/filelist.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/filelist.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-component-image.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-component-image.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-component-text.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-component-text.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-component.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-component.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-container.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-container.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-editor-main.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-editor-main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-editor.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/flexidoc-editor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/foreign-key.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/foreign-key.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/index.html" afterPath="$PROJECT_DIR$/doc/out/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/inner-join.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/inner-join.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/insert.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/insert.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/install-sh" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/install-sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/install-sh" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/install-sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/install.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/install.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/install.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/install.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/item-view.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/item-view.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/item.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/item.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jaricom.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jaricom.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jaricom.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jaricom.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcapimin.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcapimin.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcapimin.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcapimin.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcapistd.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcapistd.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcapistd.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcapistd.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcarith.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcarith.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcarith.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcarith.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jccoefct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jccoefct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jccoefct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jccoefct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jccolor.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jccolor.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jccolor.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jccolor.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcdctmgr.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcdctmgr.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcdctmgr.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcdctmgr.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jchuff.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jchuff.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jchuff.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jchuff.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcinit.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcinit.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcinit.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcinit.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcmainct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcmainct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcmainct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcmainct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcmarker.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcmarker.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcmarker.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcmarker.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcmaster.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcmaster.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcmaster.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcmaster.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcomapi.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcomapi.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcomapi.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcomapi.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.bcc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.bcc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.bcc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.bcc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.cfg" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.cfg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.cfg" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.cfg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.dj" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.dj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.dj" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.dj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.mac" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.mac" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.mac" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.mac" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.manx" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.manx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.manx" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.manx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.mc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.mc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.mc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.mc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.sas" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.sas" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.sas" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.sas" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.vc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.vc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.vc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.vc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.vms" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.vms" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.vms" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.vms" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.wat" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jconfig.wat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.wat" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jconfig.wat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcparam.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcparam.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcparam.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcparam.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcprepct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcprepct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcprepct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcprepct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcsample.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jcsample.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcsample.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jcsample.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jctrans.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jctrans.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jctrans.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jctrans.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdapimin.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdapimin.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdapimin.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdapimin.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdapistd.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdapistd.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdapistd.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdapistd.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdarith.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdarith.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdarith.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdarith.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdatadst.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdatadst.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdatadst.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdatadst.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdatasrc.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdatasrc.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdatasrc.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdatasrc.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdcoefct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdcoefct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdcoefct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdcoefct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdcolor.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdcolor.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdcolor.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdcolor.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdct.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdct.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdct.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdct.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jddctmgr.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jddctmgr.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jddctmgr.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jddctmgr.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdhuff.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdhuff.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdhuff.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdhuff.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdinput.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdinput.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdinput.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdinput.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmainct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmainct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmainct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmainct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmarker.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmarker.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmarker.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmarker.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmaster.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmaster.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmaster.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmaster.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmerge.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdmerge.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmerge.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdmerge.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdosaobj.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdosaobj.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdosaobj.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdosaobj.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdpostct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdpostct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdpostct.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdpostct.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdsample.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdsample.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdsample.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdsample.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdtrans.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jdtrans.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdtrans.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jdtrans.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jerror.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jerror.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jerror.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jerror.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jerror.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jerror.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jerror.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jerror.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jfdctflt.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jfdctflt.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jfdctflt.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jfdctflt.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jfdctfst.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jfdctfst.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jfdctfst.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jfdctfst.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jfdctint.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jfdctint.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jfdctint.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jfdctint.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jidctflt.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jidctflt.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jidctflt.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jidctflt.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jidctfst.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jidctfst.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jidctfst.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jidctfst.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jidctint.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jidctint.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jidctint.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jidctint.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jinclude.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jinclude.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jinclude.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jinclude.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemdosa.asm" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemdosa.asm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemdosa.asm" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemdosa.asm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemmgr.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemmgr.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemmgr.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemmgr.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemnobs.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemnobs.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemnobs.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemnobs.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemsys.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmemsys.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemsys.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmemsys.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmorecfg.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jmorecfg.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmorecfg.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jmorecfg.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jpegint.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jpegint.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jpegint.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jpegint.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jpeglib.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jpeglib.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jpeglib.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jpeglib.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jpegtran.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jpegtran.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jpegtran.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jpegtran.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jquant1.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jquant1.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jquant1.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jquant1.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jquant2.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jquant2.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jquant2.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jquant2.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/jsgui-data-structures-b-plus-tree.html" afterPath="$PROJECT_DIR$/doc/out/jsgui-data-structures-b-plus-tree.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html" afterPath="$PROJECT_DIR$/doc/out/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/jsgui-data-structures-doubly-linked-list.html" afterPath="$PROJECT_DIR$/doc/out/jsgui-data-structures-doubly-linked-list.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/jsgui-data-structures-stiffarray.html" afterPath="$PROJECT_DIR$/doc/out/jsgui-data-structures-stiffarray.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/jsgui-data-structures.Ordered_KVS.html" afterPath="$PROJECT_DIR$/doc/out/jsgui-data-structures.Ordered_KVS.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/doc/out/jsgui-data-structures.html" afterPath="$PROJECT_DIR$/doc/out/jsgui-data-structures.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/jsgui-html-client.js" afterPath="$PROJECT_DIR$/js/web/jsgui-html-client.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/jsgui-html-core.js" afterPath="$PROJECT_DIR$/js/web/jsgui-html-core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/jsgui-html-enh.js" afterPath="$PROJECT_DIR$/js/web/jsgui-html-enh.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/jsgui-html-page-context.js" afterPath="$PROJECT_DIR$/js/web/jsgui-html-page-context.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/core/jsgui-lang-essentials.js" afterPath="$PROJECT_DIR$/js/core/jsgui-lang-essentials.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/jsgui-server.js" afterPath="$PROJECT_DIR$/js/web/jsgui-server.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jutils.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jutils.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jutils.c" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jutils.c" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jversion.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/jversion.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jversion.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/jversion.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/libjpeg.map" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/libjpeg.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/libjpeg.map" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/libjpeg.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/libjpeg.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/libjpeg.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/libjpeg.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/libjpeg.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/list.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/list.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/ltmain.sh" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/ltmain.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/ltmain.sh" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/ltmain.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makcjpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makcjpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makcjpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makcjpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makdjpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makdjpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makdjpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makdjpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeasln.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeasln.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeasln.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeasln.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makecvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makecvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makedfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makedfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makedfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makedfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makedvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makedvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makedvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makedvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.ansi" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.ansi" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.ansi" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.ansi" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.bcc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.bcc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.bcc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.bcc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.dj" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.dj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.dj" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.dj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.manx" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.manx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.manx" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.manx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.mc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.mc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.mc6" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.mc6" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.mms" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.mms" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.mms" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.mms" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.sas" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.sas" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.sas" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.sas" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.unix" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.unix" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.unix" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.unix" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.vc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.vc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.vc" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.vc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.vms" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.vms" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.vms" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.vms" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.wat" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makefile.wat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.wat" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makefile.wat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejsln.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejsln.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejsln.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejsln.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makejvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makejvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeproj.mac" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makeproj.mac" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeproj.mac" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makeproj.mac" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makerfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makerfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makerfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makerfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makervcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makervcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makervcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makervcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maketvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maketvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewfil.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewfil.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makewvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewvcx.v10" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makewvcx.v10" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makljpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makljpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makljpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makljpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maktjpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/maktjpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maktjpeg.st" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/maktjpeg.st" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makvms.opt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/makvms.opt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makvms.opt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/makvms.opt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/essentials/mapify.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/essentials/mapify.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/menu-node.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/menu-node.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/missing" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/missing" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/missing" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/missing" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/multi-document-interface.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/multi-document-interface.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/multi-layout-mode.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/multi-layout-mode.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/not-null-column-constraint.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/not-null-column-constraint.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/not-null-table-constraint.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/not-null-table-constraint.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/notes.txt" afterPath="$PROJECT_DIR$/js/resource/notes.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/essentials/other.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/essentials/other.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/panel.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/panel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/parameter.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/parameter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/interpolation/philou_ch_pixel_interpolation.js" afterPath="$PROJECT_DIR$/js/image/node/interpolation/philou_ch_pixel_interpolation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/interpolation/pixel-interpolation.js" afterPath="$PROJECT_DIR$/js/image/node/interpolation/pixel-interpolation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/primary-key-column-constraint.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/primary-key-column-constraint.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/primary-key-table-constraint.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/primary-key-table-constraint.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/rdjpgcom.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/rdjpgcom.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/rdjpgcom.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/rdjpgcom.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/readme.dos" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/readme.dos" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/readme.dos" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/readme.dos" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test-in-browser/readme.txt" afterPath="$PROJECT_DIR$/js/test-in-browser/readme.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/schema.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/schema.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/resource/schema.js" afterPath="$PROJECT_DIR$/js/db/postgres/resource/schema.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/select.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/select.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/sequence.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/sequence.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/core/site-css.js" afterPath="$PROJECT_DIR$/js/resource/core/site-css.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/core/site-images.js" afterPath="$PROJECT_DIR$/js/resource/core/site-images.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/core/site-static-html.js" afterPath="$PROJECT_DIR$/js/resource/core/site-static-html.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/sql-function-call.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/sql-function-call.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/sql-function.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/sql-function.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/structure.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/structure.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/structure.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/structure.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/table-constraint.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/table-constraint.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/table.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/table.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test-in-browser/test-core.html" afterPath="$PROJECT_DIR$/js/test-in-browser/test-core.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test-in-browser/test-core.js" afterPath="$PROJECT_DIR$/js/test-in-browser/test-core.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/test-utils/test-utils-fs.js" afterPath="$PROJECT_DIR$/js/test/test-utils/test-utils-fs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/test-utils/test-utils.js" afterPath="$PROJECT_DIR$/js/test/test-utils/test-utils.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/test/z_core/test_data_object_collections.spec.js" afterPath="$PROJECT_DIR$/js/test/z_core/test_data_object_collections.spec.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test_lang_features.htm" afterPath="$PROJECT_DIR$/test_lang_features.htm" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/transupp.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/transupp.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/transupp.h" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/transupp.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/db/postgres/abstract/core/unique.js" afterPath="$PROJECT_DIR$/js/db/postgres/abstract/core/unique.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/usage.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/usage.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/usage.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/usage.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/web-admin-flexidocs.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/web-admin-flexidocs.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/web/controls/advanced/web-admin-images.js" afterPath="$PROJECT_DIR$/js/web/controls/advanced/web-admin-images.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/web-admin.js" afterPath="$PROJECT_DIR$/js/resource/web-admin.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/core/web.js" afterPath="$PROJECT_DIR$/js/resource/core/web.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/resource/core/website.js" afterPath="$PROJECT_DIR$/js/resource/core/website.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/wizard.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/wizard.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/wizard.txt" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/wizard.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/wrjpgcom.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master - Copy/wrjpgcom.1" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/wrjpgcom.1" afterPath="$PROJECT_DIR$/js/image/node/c/libjpeg-master/wrjpgcom.1" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ws.iml" afterPath="$PROJECT_DIR$/.idea/ws.iml" />
     </list>
     <ignored path="ws.iws" />
@@ -40,8 +446,8 @@
       <file leaf-file-name="database.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/db/postgres/resource/database.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="61302" max-vertical-offset="63954">
-              <caret line="3606" column="36" selection-start-line="3606" selection-start-column="9" selection-end-line="3606" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="54090" max-vertical-offset="56775">
+              <caret line="3606" column="0" selection-start-line="3606" selection-start-column="0" selection-end-line="3606" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -50,11 +456,9 @@
       <file leaf-file-name="db-resource-postgres.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/web/db-resource-postgres.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="17769" max-vertical-offset="19006">
+            <state vertical-scroll-proportion="0.0" vertical-offset="16170" max-vertical-offset="57870">
               <caret line="1078" column="0" selection-start-line="1078" selection-start-column="0" selection-end-line="1078" selection-end-column="0" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,54 +466,42 @@
       <file leaf-file-name="web.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/resource/core/web.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1615">
-              <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="website.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/resource/core/website.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="3077">
-              <caret line="67" column="55" selection-start-line="67" selection-start-column="55" selection-end-line="67" selection-end-column="55" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="resource.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/resource/core/resource.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5338">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="router.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/resource/core/router.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="14573" max-vertical-offset="15470">
-              <caret line="897" column="9" selection-start-line="489" selection-start-column="8" selection-end-line="897" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="615" max-vertical-offset="1320">
+              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="jsgui-server.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/web/jsgui-server.js">
+      <file leaf-file-name="website.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/resource/core/website.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4966518" vertical-offset="4519" max-vertical-offset="13753">
-              <caret line="292" column="40" selection-start-line="292" selection-start-column="40" selection-end-line="292" selection-end-column="40" />
+            <state vertical-scroll-proportion="0.39426523" vertical-offset="3735" max-vertical-offset="7815">
+              <caret line="273" column="0" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
+              <folding>
+                <marker date="1420568206000" expanded="true" signature="9154:9156" placeholder="{...}" />
+                <marker date="1420568206000" expanded="true" signature="8488:8670" placeholder="{...}" />
+                <marker date="1420568206000" expanded="true" signature="8545:8614" placeholder="{&quot;name&quot;: 'Site CSS'...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="enhanced-data-object.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/core/enhanced-data-object.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3513" max-vertical-offset="10245">
+              <caret line="439" column="0" selection-start-line="439" selection-start-column="0" selection-end-line="439" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="menu-node.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/web/controls/advanced/menu-node.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4920">
+              <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -118,7 +510,7 @@
       <file leaf-file-name="site-static-html.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/resource/core/site-static-html.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3587">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3165">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -128,18 +520,18 @@
       <file leaf-file-name="site-javascript.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/resource/core/site-javascript.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="16082">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="14610">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="site-css.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/resource/core/site-css.js">
+      <file leaf-file-name="jsgui-server.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/web/jsgui-server.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4267">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1290" max-vertical-offset="13470">
+              <caret line="119" column="36" selection-start-line="119" selection-start-column="36" selection-end-line="119" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -163,7 +555,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/js/db/resource-database.js" />
         <option value="$PROJECT_DIR$/js/db/mongo/resource/database.js" />
         <option value="$PROJECT_DIR$/js/web/jsgui-html-enh.js" />
         <option value="$PROJECT_DIR$/js/resource/core/resource.js" />
@@ -209,18 +600,18 @@
         <option value="$PROJECT_DIR$/js/db/postgres/abstract/core/sql-function.js" />
         <option value="$PROJECT_DIR$/js/db/postgres/resource/database.js" />
         <option value="$PROJECT_DIR$/js/web/db-resource-postgres.js" />
-        <option value="$PROJECT_DIR$/js/resource/core/web.js" />
         <option value="$PROJECT_DIR$/js/resource/core/application-router.js" />
         <option value="$PROJECT_DIR$/js/resource/core/router.js" />
-        <option value="$PROJECT_DIR$/js/resource/core/website.js" />
+        <option value="$PROJECT_DIR$/js/resource/core/web.js" />
         <option value="$PROJECT_DIR$/js/web/jsgui-server.js" />
+        <option value="$PROJECT_DIR$/js/web/controls/advanced/menu-node.js" />
+        <option value="$PROJECT_DIR$/js/resource/core/website.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
+    <option name="y" value="22" />
+    <option name="width" value="1920" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -313,112 +704,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controls" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="web" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controls" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="advanced" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test-in-browser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="z_core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="resource" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -482,136 +767,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="resource" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="relational" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="abstract" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="postgres" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="postgres" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resource" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="postgres" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="abstract" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ws" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="db" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="postgres" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="abstract" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -690,7 +845,7 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../apps" />
     <property name="FullScreen" value="false" />
     <property name="recentsLimit" value="5" />
   </component>
@@ -705,6 +860,14 @@
       <ConfigurationWrapper RunnerId="NodeJS.run" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
       <option name="VMOptions" />
       <option name="arguments" />
@@ -715,12 +878,14 @@
       <option name="showConsoleOnStdOut" value="false" />
       <method />
     </configuration>
-    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
-      <option name="VMOptions" />
-      <option name="arguments" />
+    <configuration default="true" type="CucumberJavaScriptRunConfigurationType" factoryName="Cucumber.js">
+      <option name="cucumberJsArguments" />
+      <option name="executablePath" />
       <option name="filePath" />
-      <option name="scope" value="ALL" />
-      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
@@ -728,16 +893,6 @@
       <setting name="settingsFile" value="" />
       <setting name="serverType" value="INTERNAL" />
       <setting name="preferredDebugBrowser" value="Chrome" />
-      <method />
-    </configuration>
-    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" config-file="">
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="CucumberJavaScriptRunConfigurationType" factoryName="Cucumber.js">
-      <option name="cucumberJsArguments" />
-      <option name="executablePath" />
-      <option name="filePath" />
       <method />
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
@@ -853,14 +1008,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <frame x="0" y="22" width="1920" height="1056" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21621622" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.110435665" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24973656" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19652265" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24270834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -869,7 +1025,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.09199134" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -911,20 +1066,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/db/mongo/resource/database.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4633" max-vertical-offset="20944">
-          <caret line="284" column="34" selection-start-line="284" selection-start-column="34" selection-end-line="284" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/db/postgres/resource/server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="9010">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/core/jsgui-data-structures.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.928572" vertical-offset="7621" max-vertical-offset="17561">
@@ -1146,7 +1287,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4579" max-vertical-offset="5695">
           <caret line="297" column="0" selection-start-line="297" selection-start-column="0" selection-end-line="297" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1154,7 +1294,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2266" max-vertical-offset="3281">
           <caret line="157" column="36" selection-start-line="157" selection-start-column="36" selection-end-line="157" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1162,7 +1301,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1240" max-vertical-offset="2516">
           <caret line="96" column="34" selection-start-line="96" selection-start-column="34" selection-end-line="96" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1170,7 +1308,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="47443" max-vertical-offset="53720">
           <caret line="2813" column="42" selection-start-line="2813" selection-start-column="30" selection-end-line="2813" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1178,7 +1315,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1734" max-vertical-offset="8075">
           <caret line="125" column="42" selection-start-line="125" selection-start-column="42" selection-end-line="125" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1186,7 +1322,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="15368" max-vertical-offset="57103">
           <caret line="904" column="10" selection-start-line="612" selection-start-column="24" selection-end-line="904" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1194,7 +1329,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4714" max-vertical-offset="5576">
           <caret line="309" column="0" selection-start-line="309" selection-start-column="0" selection-end-line="309" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1208,19 +1342,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/db/postgres/resource/database.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="61302" max-vertical-offset="63954">
-          <caret line="3606" column="36" selection-start-line="3606" selection-start-column="9" selection-end-line="3606" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="54090" max-vertical-offset="56775">
+          <caret line="3606" column="0" selection-start-line="3606" selection-start-column="0" selection-end-line="3606" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/web/db-resource-postgres.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="17769" max-vertical-offset="19006">
-          <caret line="1078" column="0" selection-start-line="1078" selection-start-column="0" selection-end-line="1078" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1228,6 +1352,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3587">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/resource/core/site-css.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4267">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/resource/core/resource.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5338">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/resource/core/router.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="13455" max-vertical-offset="15645">
+          <caret line="897" column="9" selection-start-line="489" selection-start-column="8" selection-end-line="897" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/web/db-resource-postgres.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="17769" max-vertical-offset="19006">
+          <caret line="1078" column="0" selection-start-line="1078" selection-start-column="0" selection-end-line="1078" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1240,57 +1393,47 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/resource/core/site-css.js">
+    <entry file="file://$PROJECT_DIR$/js/web/jsgui-server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4267">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1290" max-vertical-offset="13470">
+          <caret line="119" column="36" selection-start-line="119" selection-start-column="36" selection-end-line="119" selection-end-column="36" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/resource/core/web.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="430" max-vertical-offset="1615">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="301" max-vertical-offset="1260">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/resource/core/resource.js">
+    <entry file="file://$PROJECT_DIR$/js/core/enhanced-data-object.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5338">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="3513" max-vertical-offset="10245">
+          <caret line="439" column="0" selection-start-line="439" selection-start-column="0" selection-end-line="439" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/resource/core/router.js">
+    <entry file="file://$PROJECT_DIR$/js/web/controls/advanced/menu-node.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="14573" max-vertical-offset="15470">
-          <caret line="897" column="9" selection-start-line="489" selection-start-column="8" selection-end-line="897" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4920">
+          <caret line="8" column="10" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/resource/core/website.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="3077">
-          <caret line="67" column="55" selection-start-line="67" selection-start-column="55" selection-end-line="67" selection-end-column="55" />
+        <state vertical-scroll-proportion="0.39426523" vertical-offset="3735" max-vertical-offset="7815">
+          <caret line="273" column="0" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
+            <marker date="1420568206000" expanded="true" signature="9154:9156" placeholder="{...}" />
+            <marker date="1420568206000" expanded="true" signature="8488:8670" placeholder="{...}" />
+            <marker date="1420568206000" expanded="true" signature="8545:8614" placeholder="{&quot;name&quot;: 'Site CSS'...}" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/web/jsgui-server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4966518" vertical-offset="4519" max-vertical-offset="13753">
-          <caret line="292" column="40" selection-start-line="292" selection-start-column="40" selection-end-line="292" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>

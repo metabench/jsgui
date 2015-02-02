@@ -23,9 +23,57 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 	var serve_css_file_from_disk = function(filePath, response) {
+
+        // look for the file in two places.
+        // look within the project
+        // look within jsgui
+
+        // Checking if a file exists is not recommended.
+        //  Possible race condition where exists checks and sees it's there, something else deletes it, then try to open the file thinking that it exists.
+        //  Now recommended to open the file and handle error if it does not exist.
+
+        //
+
+
+        var file_path_in_project = filePath;
+
+        // And also need to work outs path within the ws system.
+
+
+
+
+
 		fs2.load_file_as_string(filePath, function (err, data) {
-			if (err) { 
-				throw err;
+			if (err) {
+                console.log('could not open file filePath', filePath);
+
+                // Try to open it from within the app's path.
+                // ../../../ + filePath
+
+                var jsgui_css_file_path = '../../ws/' + filePath;
+
+                fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {
+                    if (err) {
+                        console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+
+                        // Try to open it from within the app's path.
+                        // ../../../ + filePath
+
+                        //var jsgui_css_file_path = '../../../' + filePath;
+
+
+
+
+                        throw err;
+                    } else {
+                        //var servableJs = updateReferencesForServing(data);
+                        response.writeHead(200, {'Content-Type': 'text/css'});
+                        response.end(data);
+                    }
+                });
+
+
+				//throw err;
 			} else {
 				//var servableJs = updateReferencesForServing(data);
 				response.writeHead(200, {'Content-Type': 'text/css'});
@@ -99,7 +147,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//console.log('rurl ' + rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			//console.log('custom_response_entry ' + stringify(custom_response_entry));
+			console.log('custom_response_entry ' + stringify(custom_response_entry));
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);
@@ -121,6 +169,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//throw 'stop';
 			} else {
+                console.log('splitPath.length', splitPath.length);
+                console.log('splitPath', splitPath);
 				if (splitPath.length > 0) {
 
 					// Can check for /js folder.
@@ -149,7 +199,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 							if (splitPath.length == 2) {
 								var fileName = splitPath[1];
 								//console.log('url_parts.path ' + url_parts.path);
-								var filePath = url_parts.path.substr(1);
+
+
+								//var filePath = url_parts.path.substr(1);
+
+
+
 								//console.log('module.uri ' + module.uri);
 
 								// No, need the current module's relative path....
@@ -159,9 +214,27 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								//throw '9) stop';
 
 								//var diskPath = val2 + '/../css/' + fileName;
-								var diskPath = '../../ws/css/' + fileName;
 
-								serve_css_file_from_disk(diskPath, res);
+                                // May want to be serving it from the project path location.
+                                //  Serve file from disk could try both locations to serve css from.
+
+                                // could just serve the filename.
+
+                                //var ws_file_disk_path = '../../ws/css/' + fileName;;
+
+								//var diskPath = '../../ws/css/' + fileName;
+
+                                var filePath = 'css/' + fileName;
+
+                                console.log('pre serve css file ', filePath);
+
+
+
+
+
+
+
+								serve_css_file_from_disk(filePath, res);
 
 								/*
 								fs2.load_file_as_string(diskPath, function (err, data) {

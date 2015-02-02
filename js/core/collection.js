@@ -1663,8 +1663,11 @@ var Collection_Index = require('./collection-index');
 					// This bit is taking a while.
 					//  Not sure why!!! Has to do with objects being put in a large collection probably.
 					//  Too many things, in the wrong context, getting notified.
-                    //console.log('pre raise change event');
+                    //console.log('pre collection raise change event');
+
 					this.raise_event('change', e);
+                    // raise event being called, but not fired as expected???
+
                     //console.log('post raise change event');
 
 					
@@ -1846,7 +1849,7 @@ var Collection_Index = require('./collection-index');
 				
 			});
 			return res;
-		},
+		}
 
 		// insert_at seems very important.
 

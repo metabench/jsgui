@@ -37,7 +37,7 @@ var Text_Field = require('./text-field');
             // 2 normal mode
             // 3 large mode
 
-            var autosubmit = false;
+            var autosubmit = spec.autosubmit || false;
 
 
 

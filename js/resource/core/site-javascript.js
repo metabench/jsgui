@@ -13,7 +13,7 @@ if (typeof define !== 'function') {
 //  Some JS files from the platform will be available to the client.
 //  For the moment generally allow access. Many jsgui files will work client-side. Only need to prevent download of files that include security information really, for the open-source server.
 
-
+// As well as being able to serve the jsgui framework in various forms, this will need to serve JavaScript from the project directory.
 
 
 
@@ -568,6 +568,15 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//var pool_resources = pool.resources();
 				//console.log('pool_resources ' + stringify(pool_resources));
+
+                // Could serve the app's /js directory by default.
+                //  Some kind of caching could be useful?
+                //   Less useful for development.
+
+
+
+
+
 				var served_directories = this.meta.get('served_directories');
 
 
@@ -622,6 +631,17 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				} else {
 					// Can get the path on disk...
 
+                    console.log('wildcard_value', wildcard_value);
+
+                    // Best to check the app's directory.
+                    //  We probably won't need to be serving the whole jsgui framework from here.
+                    //  It can be built and put in the app's js directory.
+                    //  Could also make it buildable on the server?
+
+
+
+
+
 					var disk_path = '../../ws/js/' + wildcard_value;
 
 					// Would be good to uglify and gzip what gets served.
@@ -672,6 +692,39 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						});
 					} else {
 
+
+                        // try to load it from the project's js path.
+
+                        console.log('disk_path', disk_path);
+
+                        var project_js_path = 'js/' + wildcard_value;
+                        console.log('project_js_path', project_js_path);
+
+                        fs2.load_file_as_string(project_js_path, function(err, str_js) {
+                            if (err) {
+                                console.log('error loading from project_js_path: ', project_js_path);
+                                console.log(err);
+                                throw err;
+                            } else {
+                                // Have loaded the js from the project path, we can serve it.
+
+                                console.log('have loaded js');
+
+                                // serve the js.
+                                res.writeHead(200, {'Content-Type': 'text/javascript'});
+                                //response.end(servableJs);
+                                res.end(str_js);
+
+
+
+                                //throw 'stop';
+
+
+                            }
+                        })
+
+
+                        /*
 						fs2.load_file_as_string(disk_path, function (err, data) {
 							if (err) { 
 								throw err;
@@ -688,6 +741,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 							}
 						});
+						*/
 
 						
 					}

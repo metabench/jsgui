@@ -60,7 +60,8 @@ define(["./jsgui-html", "../resource/core/resource"],
         };
 
         var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, fp = jsgui.fp, sig_match = jsgui.sig_match;
-        var Control = jsgui.Control;
+        var extend = jsgui.extend;
+        var Control = jsgui.Control, Fns = jsgui.Fns;
 
         var Web_DB_Resource_Postgres = Resource.extend({
             fields: {
@@ -1303,13 +1304,27 @@ define(["./jsgui-html", "../resource/core/resource"],
 
                          */
 
+                        // But not using these record type ids could work best?
+                        //  As in get all of the different metadata record types?
+                        //  Or there could be more depth where the record type indicates some interpretation.
+
+                        // Anyway, leave as is for the moment.
+
+
+
+
                         that.get_document_metadata_record_type_id_by_name('integer', function(err, document_metadata_record_type_id) {
                             if (err) {
                                 callback(err);
                             } else {
 
+                                console.log('document_metadata_record_type_id', document_metadata_record_type_id);
+                                //throw 'stop';
+
                                 // now we have the record type id, we can
                                 //throw 'stop 7';
+
+
 
                                 that.ensure_document_metadata_record(document_id, metadata_record_key, document_metadata_record_type_id, function(err, document_metadata_record_id) {
                                     if (err) {
@@ -1349,17 +1364,6 @@ define(["./jsgui-html", "../resource/core/resource"],
                         })
 
 
-
-
-
-
-
-
-
-
-
-
-
                     }
 
 
@@ -1376,6 +1380,1391 @@ define(["./jsgui-html", "../resource/core/resource"],
 
             }),
 
+            //'create_documentation_transformation': function()
+
+            'get_transformation_verb_id_by_name': function(str_verb, callback) {
+
+                var db = this.get('database');
+                db.execute_function('get_transformation_verb_id_by_name', [str_verb], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, res[0]);
+                    }
+                });
+
+            },
+
+            '_create_document_transformation': function(source_document_id, target_document_id, transformation_verb_id, callback) {
+                var db = this.get('database');
+                db.execute_function('create_document_transformation', [source_document_id, target_document_id, transformation_verb_id], function(err, res_create) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create', res_create);
+                        callback(null, res_create[0]);
+                    }
+                });
+            },
+
+            // This could get the whole param object.
+            //  DB function returns a set of JSON records, this should be OK...
+
+            'get_document_transformation_parameter_by_transformation_id_key': function(transformation_id, key, callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_parameter_by_transformation_id_key', [transformation_id, key], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+            // Can try to get the document transformation paramter.
+            //  could use this to ensure.
+
+
+            'ensure_document_transformation_parameter': function(transformation_id, key, type_id, callback) {
+                // try to get it first.
+
+                this.get_document_transformation_parameter_by_transformation_id_key(transformation_id, key, function(err, res_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+
+                        console.log('res_id', res_id);
+
+                        // it may be undefined.
+
+                        var t_res_id = tof(res_id);
+                        console.log('t_res_id', t_res_id);
+
+
+                    }
+
+                })
+            },
+
+
+
+            // create_document_transformation_parameter
+
+            '_create_document_transformation_parameter': function(transformation_id, key, type_id, callback) {
+                var db = this.get('database');
+                db.execute_function('create_document_transformation_parameter', [transformation_id, key, type_id], function(err, res_create) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create', res_create);
+                        callback(null, res_create[0]);
+                    }
+                });
+            },
+
+            //
+
+            'create_document_transformation_integer_parameter': function(parameter_id, value, callback) {
+                var db = this.get('database');
+                db.execute_function('create_document_transformation_integer_parameter', [parameter_id, value], function(err, res_create) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_create', res_create);
+                        callback(null, res_create[0]);
+                    }
+                });
+            },
+
+            // get_document_transformation_id_by_source_id_target_id
+
+            'get_document_transformation_id_by_source_id_target_id': function(source_id, target_id, callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_id_by_source_id_target_id', [source_id, target_id], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+            'get_document_transformation_by_source_id_target_id': function(source_id, target_id, callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_by_source_id_target_id', [source_id, target_id], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, res[0][0]);
+                    }
+                });
+            },
+
+            // simple function, gets the transformation if if it's already there.
+            //  Then I think if it is, while ensuring, deleting may be easier.
+            //  Because of the parameters.
+            //   However, could get the parameters and compare them.
+            // Delete with cascade seems the easiest for the moment.
+            //  Could possible delete all the parameter records with one function, or update all the parameter records.
+
+            'get_document_transformation_parameter_type_id_by_name': function(name, callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_parameter_type_id_by_name', [name], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+            'ensure_document_transformation_integer_parameter': function(transformation_id, key, value, callback) {
+                // needs to find out the type id of the integer type.
+                //  perhaps this could have been given / cached and known.
+                //get_document_transformation_parameter_type_id_by_name
+                var that = this;
+
+                this.get_document_transformation_parameter_type_id_by_name('integer', function(err, integer_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('integer_id', integer_id);
+
+                        //callback(null, integer_id)
+
+                        // then we can ensure the parameter (key) record.
+                        //that._create_document_transformation()
+
+                        // ensure the parameter record
+
+                        // ensure_document_transformation_parameter
+                        // create_document_transformation_parameter
+
+                        that.ensure_document_transformation_parameter(transformation_id, key, integer_id, function(err, res_ensure_parameter) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res_ensure_parameter', res_ensure_parameter);
+                            }
+                        })
+
+
+
+
+                    }
+                })
+
+            },
+
+            'get_document_transformation_parameters_by_transformation_id': function(transformation_id, callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_parameters_by_transformation_id', [transformation_id], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        console.log('res', res);
+                        //throw 'stop';
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+            'get_doc_trans_int_params_by_trans_id': function(transformation_id, callback) {
+                var db = this.get('database');
+                db.execute_function('get_doc_trans_int_params_by_trans_id', [transformation_id], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        console.log('get_doc_trans_int_params_by_trans_id res', res);
+                        //throw 'stop';
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+
+            // Get the params object.
+            //  Would need to look up the specific values of the parameters.
+
+            'get_document_transformation_obj_parameters': function(transformation_id, callback) {
+                var that = this;
+                that.get_document_transformation_parameters(transformation_id, function(err, res_params) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        // Need to then look up the parameters with the specific object types.
+
+                        console.log('res_params', res_params);
+
+                        // need the map of parameter types.
+
+                        that.get_map_transformation_parameter_types(function(err, map_transformation_parameter_types) {
+                            if (err) {
+                                throw err;
+                            } else {
+
+                                console.log('map_transformation_parameter_types', map_transformation_parameter_types);
+
+                                var inv_map_tpts = {};
+
+                                each(map_transformation_parameter_types, function(v, i) {
+                                    inv_map_tpts[v] = i;
+                                });
+
+                                console.log('inv_map_tpts', inv_map_tpts);
+
+                                // Make a list / map? of the various types of parameter that were used.
+
+                                var arr_used_param_type_ids = [];
+                                var map_used_param_type_ids = {};
+
+                                var arr_used_param_data_types = [];
+                                var map_used_param_data_types = [];
+
+                                each(res_params, function(res_param) {
+                                    var param_name = res_param.key;
+                                    var type_id = res_param.type_id;
+
+                                    if (!map_used_param_type_ids[type_id]) {
+                                        map_used_param_type_ids[type_id] = true;
+                                        map_used_param_data_types[inv_map_tpts[type_id]] = true;
+
+                                        arr_used_param_type_ids.push(type_id);
+                                        arr_used_param_data_types.push(inv_map_tpts[type_id]);
+
+                                    }
+
+
+                                })
+
+                                console.log('arr_used_param_type_ids', arr_used_param_type_ids);
+                                console.log('arr_used_param_data_types', arr_used_param_data_types);
+                                console.log('map_used_param_data_types', map_used_param_data_types);
+
+                                // then, checking which have been used, run the functions to get the specific applicable value results.
+
+                                // will build up fns to execute.
+
+                                var fns = jsgui.Fns();
+
+                                if (map_used_param_data_types['integer']) {
+                                    // get the integer value records.
+
+                                    // want to get the integer values alongside the keys.
+                                    //  though we do have the parameter objects anyway.
+                                    //  would be nicer to get them with keys though.
+
+                                    // get_doc_trans_int_params_by_trans_id
+                                    //  could have another version that links to get the keys as well.
+
+                                    // that function would get the int param keys and values
+
+                                    fns.push([that, that.get_doc_trans_int_params_by_trans_id, [transformation_id]]);
+
+
+
+
+
+
+
+
+
+
+                                }
+                                var res = {};
+
+                                fns.go(function(err, res_all) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('2) res_all', res_all);
+
+                                        each(res_all, function(type_res) {
+                                            each(type_res, function(item_res) {
+                                                res[item_res.key] = item_res.value
+                                            })
+                                        });
+
+                                        console.log('res', res);
+
+                                        callback(null, res);
+
+                                    }
+                                })
+
+
+
+
+                                // so for every used type id, we call the procedure that gets all of the param values of that type.
+                                //  then we build it up into the result object.
+
+                                // then look up the data types that they correspond with.
+
+
+
+
+
+
+                                //throw 'stop';
+                            }
+                        })
+
+
+
+
+
+                    }
+
+                })
+
+            },
+
+
+            // needs to get all to the trans params
+            'get_document_transformation_parameters': function(transformation_id, callback) {
+                // Needs to get the transformation param records.
+                // SELECT * FROM document_transformation_parameters WHERE transformation_id = $1
+
+                // Get the bunch of them without the values, then run the necessary procedures to get the values of the specific types.
+
+
+
+                // get_document_transformation_parameters_by_transformation_id
+                //  will get the params as JSON objects
+
+                var that = this;
+
+                that.get_document_transformation_parameters_by_transformation_id(transformation_id, function(err, res_param_records) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_param_records', res_param_records);
+
+                        // should return them as a map (I think?)
+
+                        var res = {};
+
+                        each(res_param_records, function(v) {
+                            res[v.key] = v;
+                        });
+
+
+
+
+                        //throw 'stop';
+
+                        //return {};
+
+                        callback(null, res);
+                        // just for the moment.
+
+
+                        //throw 'stop';
+                    }
+                })
+
+
+
+
+
+            },
+
+            // Leter on, may have this subdivided by users / permissions, assigned ownership.
+            //  That would mean that a whole load of new functions would need to be written to do things in a secure way.
+
+
+
+            'get_document_transformation_source_target_keys_by_verb_id': function(transformation_verb_id, callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_source_target_keys_by_verb_id', [transformation_verb_id], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        console.log('res', res);
+                        //throw 'stop';
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+            'get_joined_int_trans_params_by_trans_verb_id': function(transformation_verb_id, callback) {
+                var db = this.get('database');
+                db.execute_function('get_joined_int_trans_params_by_trans_verb_id', [transformation_verb_id], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        console.log('res', res);
+                        //throw 'stop';
+
+                        // This provides extensive data about the parameters in the transformations.
+                        //  Potentially some transformations won't have parameters.
+
+
+
+
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+
+
+            // get_document_resize_transformations
+
+            // Including parameters?
+
+            // the basic function which gets the transformation records may be of use.
+
+
+
+            'get_document_resize_transformations': function(callback) {
+                // needs to run the basic function that gets the transformations (and between which documents' keys and values)
+                //  and then we run the function that gets the records with parameters.
+                // we include the parameter information within the resize transformation result object.
+                var that = this;
+
+                that.get_transformation_verb_id_by_name('resize', function(err, resize_verb_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        that.get_document_transformation_source_target_keys_by_verb_id(resize_verb_id, function (err, res_transformations) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res_transformations', res_transformations);
+                                //throw 'stop';
+
+                                callback(null, res_transformations);
+
+
+                                // get the
+
+                                /*
+                                that.get_document_resize_transformations_with_keys_parameters(function (err, res_param_info) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('res_param_info', res_param_info);
+
+                                        throw 'stop';
+
+                                    }
+
+
+                                });
+                                */
+
+
+                            }
+                        })
+                    }
+                });
+            },
+
+
+
+            // probably less useful than get_joined_int_trans_params_by_trans_verb_id???
+
+            // We use this to get the tree?
+            //  All resize transformations, doc keys, trans params
+            //  That should be all that gets returned here
+
+
+
+            'get_document_resize_transformations_with_keys_parameters': function(callback) {
+                var that = this;
+                var inline = false;
+
+                that.get_transformation_verb_id_by_name('resize', function(err, resize_verb_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+
+
+                        that.get_joined_int_trans_params_by_trans_verb_id(resize_verb_id, function(err, res_transformations) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res_transformations', res_transformations);
+
+                                // Just return the transformations?
+                                //  Need to return the documents, linked by transformations.
+
+
+
+
+                                // This would be getting multiple resords for each transformation (or no records).
+                                //  It only gets the integer parameters.
+                                //  We need to assemble the transformations.
+                                //  Perhaps we also need to get all resize transformations from the db.
+
+
+                                // Need to go through the transformation parameter records.
+
+                                // However, we want to have the actual transformations that are not determined by parameters.
+
+                                that.get_document_resize_transformations(function(err, res_resize_transformations) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('res_resize_transformations', res_resize_transformations);
+
+                                        // need to mix in the parameters.
+                                        // Need to get the parameter records.
+
+                                        that.get_joined_int_trans_params_by_trans_verb_id(resize_verb_id, function(err, res_joined_trans_params) {
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                console.log('res_joined_trans_params', res_joined_trans_params);
+
+                                                // We need to return the transformations, with their parameters.
+                                                //  Need the map of transformations by id.
+
+
+                                                var map_transformations = {};
+
+
+                                                // Create a map of which of the documents are used as a source.
+
+                                                var map_used_as_source = {}, map_used_as_target = {};
+                                                // array of documents used as a source
+
+                                                var arr_used_as_source = [], arr_used_as_target = [];
+
+                                                // find the ones that are used as source, not as target.
+
+
+                                                var map_document_keys = {};
+
+
+
+
+                                                // This fn just returns the trnasformations with their parameters.
+
+
+
+                                                each(res_resize_transformations, function(transformation) {
+                                                    map_transformations[transformation.id] = transformation;
+
+                                                    if (!map_used_as_source[transformation.source_document_id]) {
+                                                        arr_used_as_source.push(transformation.source_document_id);
+                                                    }
+                                                    if (!map_used_as_target[transformation.target_document_id]) {
+                                                        arr_used_as_target.push(transformation.target_document_id);
+                                                    }
+
+                                                    map_used_as_source[transformation.source_document_id] = true;
+                                                    map_used_as_target[transformation.target_document_id] = true;
+
+                                                    map_document_keys[transformation.source_document_id] = transformation.source_document_key;
+                                                    map_document_keys[transformation.target_document_id] = transformation.target_document_key;
+
+                                                });
+
+                                                console.log('arr_used_as_source', arr_used_as_source);
+                                                console.log('arr_used_as_target', arr_used_as_target);
+
+
+                                                // Go through the parameter objects, adding them to the relevant transformations.
+
+                                                // Either inline or not...
+
+                                                if (inline) {
+                                                    each(res_joined_trans_params, function(int_trans_param) {
+                                                        console.log('int_trans_param', int_trans_param);
+                                                        var t_id = int_trans_param.transformation_id;
+
+                                                        map_transformations[t_id][int_trans_param.key] = int_trans_param.value;
+                                                    })
+                                                } else {
+                                                    // need to create child params object.
+                                                   // var params = {};
+                                                    // need to bundle the params in a single object
+
+                                                    // a map by the transformation id.
+                                                    //
+
+                                                    var map_params_for_transformations = {};
+                                                    //  for every transformation, have the params.
+
+
+
+
+                                                    each(res_joined_trans_params, function(int_trans_param) {
+                                                        console.log('int_trans_param', int_trans_param);
+                                                        var t_id = int_trans_param.transformation_id;
+
+                                                        //map_params_for_transformations[t_id] = map_params_for_transformations[t_id] || [];
+                                                        //map_params_for_transformations[t_id].push(int_trans_param);
+                                                        //map_params_for_transformations[t_id].push(int_trans_param);
+
+
+                                                        map_params_for_transformations[t_id] = map_params_for_transformations[t_id] || {};
+                                                        map_params_for_transformations[t_id][int_trans_param.key] = int_trans_param.value;
+                                                        //params[int_trans_param.key] = int_trans_param.value;
+                                                    });
+
+                                                    console.log('map_params_for_transformations', map_params_for_transformations);
+
+                                                    // then we add those from the map to the results.
+
+                                                    each(res_resize_transformations, function(trans) {
+                                                        var id = trans.id;
+                                                        if (map_params_for_transformations[id]) {
+                                                            trans.params = map_params_for_transformations[id]
+                                                        }
+                                                    })
+
+
+                                                    //throw 'stop';
+
+                                                    // then we go through the results, adding the param objects.
+
+
+                                                    //map_transformations[t_id].params = params;
+
+
+
+
+                                                    //throw 'nyi';
+                                                }
+
+                                                //console.log('res_joined_trans_params', res_joined_trans_params);
+
+                                                // Need to apply the parameters to the transformations.
+
+
+
+
+
+                                                // Don't need o get more info from the documents, we have that info.
+                                                //  Need to identify the root document ids.
+
+                                                // Root documents are documents that don't have a source, as used in a transformation.
+
+                                                // Want all that are used as a source, but not as a target, these are the root documents.
+
+                                                /*
+                                                var arr_root_doc_ids = [];
+
+                                                each(arr_used_as_source, function(doc_id) {
+                                                    if (!map_used_as_target[doc_id]) {
+                                                        arr_root_doc_ids.push(doc_id);
+                                                    }
+                                                });
+
+                                                // Just needs to get the transformations with the parameters.
+
+
+
+
+                                                console.log('arr_root_doc_ids', arr_root_doc_ids);
+                                                */
+                                                // Don't need the root doc ids here.
+
+
+
+
+                                                // For each of the root nodes, we get the transformations as well.
+
+                                                // Need each transformation that uses the source, this will be a tree of transformations.
+                                                //  Could only work when a transformation has a single source.
+                                                //   Maybe should plan on sticking to that rule for transformations, maybe compositions could use more.
+
+                                                // need to go through the root nodes, including the key and value info
+                                                //var res = [];
+
+                                                //each(arr_root_doc_ids, function(root_id) {
+                                                //    var obj_
+
+                                                //});
+
+
+
+
+
+
+                                                console.log('res_resize_transformations', res_resize_transformations);
+
+                                                // We have the transformations, and the transformation params.
+
+                                                //throw 'stop';
+
+
+
+
+
+
+
+
+
+
+
+                                                /*
+
+
+                                                // Make a map of the resize transformations by their source (a mapped array).
+
+                                                var ma_param_sources = {};
+
+                                                each(res_resize_transformations, function(transformation) {
+                                                    var id_source = transformation.source_document_id;
+                                                    if (!ma_param_sources[id_source]) ma_param_sources[id_source] = [];
+                                                    ma_param_sources[id_source].push(transformation);
+
+                                                });
+
+                                                console.log('ma_param_sources', ma_param_sources);
+                                                */
+
+                                                // Then we need to look at / process the list of all images.
+                                                //  Actually not with this... this is just to get the transformations.
+
+                                                //throw 'stop';
+
+                                                callback(null, res_resize_transformations);
+                                            }
+                                        })
+
+                                    }
+                                })
+
+                                // then for every transformation, we need to get the metadata.
+                                //  could maybe make postgres functions to get the parameter items for all resize transformations, would be
+                                //  quicker putting it back together here (by a long way)
+
+                                // Get all the integer transformation records by transformation verb
+                                //  May need different typed of joins.
+
+                                // get_joined_integer_transformation_params_by_transformation_verb_id
+                                // get_joined_int_trans_params_by_trans_verb_id
+
+                                // get_joined_int_trans_params_by_trans_verb_id - exists now
+                                //  Will get all of the relevant joined records.
+
+
+
+
+
+
+
+                                // doc_trans_int_params JOIN doc_trans_params JOIN doc_trans
+                                //  returning JSON, of course.
+
+                                // should not be so hard, through joins, to connect parameters to the document transformations, and therefore
+                                //  be able to search by the transformation verb as well.
+
+
+
+
+
+
+
+
+
+
+
+                            }
+                        })
+
+                    }
+                });
+
+            },
+
+            'get_document_transformation_parameter_types': function(callback) {
+                var db = this.get('database');
+                db.execute_function('get_document_transformation_parameter_types', [], function(err, res) {
+                    if (err) {
+                        callback(err)
+                    } else {
+                        console.log('res', res);
+                        //throw 'stop';
+                        callback(null, res[0]);
+                    }
+                });
+            },
+
+            'get_map_transformation_parameter_types': function(callback) {
+                // call the db function that gets the parameter types.
+                //  however, we want to then make a map out of them.
+
+                // get_document_transformation_parameter_types
+
+                this.get_document_transformation_parameter_types(function(err, res_parameter_types) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('res_parameter_types', res_parameter_types);
+
+                        var res = {};
+
+                        each(res_parameter_types, function(record) {
+                            res[record.name] = record.id;
+                        })
+
+                        //throw 'stop';
+
+                        callback(null, res);
+
+                    }
+                });
+
+
+
+            },
+
+            'create_document_transformation_parameter_full': function(transformation_id, key, value, callback) {
+
+                var that = this;
+
+                that.get_map_transformation_parameter_types(function(err, map_transformation_parameter_types) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('map_transformation_parameter_types', map_transformation_parameter_types);
+
+                        var t_value = tof(value);
+
+                        var data_type;
+
+
+
+                        if (t_value == 'number') data_type = 'integer';
+
+                        var type_id = map_transformation_parameter_types[data_type];
+
+
+                        // create the param obj itself, then create the value record.
+
+                        that._create_document_transformation_parameter(transformation_id, key, type_id, function(err, transformation_parameter_id) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('transformation_parameter_id', transformation_parameter_id);
+
+                                // then we create the specific record.
+
+                                if (data_type == 'integer') {
+                                    // create the integer value record.
+
+                                    that.create_document_transformation_integer_parameter(transformation_parameter_id, value, function(err, int_param_id) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            console.log('int_param_id', int_param_id);
+
+                                            callback(null, [transformation_parameter_id, int_param_id]);
+                                        }
+                                    })
+
+
+
+
+
+
+
+
+                                } else {
+                                    throw 'unsupported data type ' + data_type;
+                                }
+                            }
+                        });
+
+
+
+
+
+                    }
+                });
+
+
+            },
+
+
+            'ensure_document_transformation_parameters': function(transformation_id, params, callback) {
+                // Needs to go through each of the parameters, assembling the right instruction in fns to carry out.
+
+                // Seems like a 'plan' pattern.
+                var that = this;
+
+
+
+                var fns = jsgui.Fns();
+
+                // I think it's best to get the params back from the database.
+
+                that.get_document_transformation_parameters(transformation_id, function(err, existing_params) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('existing_params', existing_params);
+
+                        //throw 'stop';
+
+                        // need to see which are the same, which have changed, which are new, which have been removed
+
+                        // Perhaps some structure / pattern for this 4-part plan would make sense.
+                        //  Maybe doing 4 part db update plans makes a lot of sense.
+
+                        // What is the same
+                        // What has changed
+                        // What is new
+                        // What has been removed
+
+                        // This algorithm is a bit of a chore, but it seems to be useful in database updates.
+                        //  May be a way to encapsulate it in some ways.
+                        //  Quickly making the maps, doing the iterations, doing comparisons.
+
+                        // The algorithm is really for the planning stage, it's making an update plan.
+
+                        // could look at the map itself to see what's changed.
+
+
+
+                        //fns.push([that, that.set_document_metadata, [document_id, i, v]]);
+
+                        // go through the new params, making the create param instruction.
+                        //  once we have any params we should change the code to deal with the param result properly.
+
+                        // for every arr_new_params, we see what it's value and value type is, then we create the function call.
+
+                        // Lets first get all parameter types as a map.
+
+                        that.get_map_transformation_parameter_types(function(err, map_transformation_parameter_types) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('map_transformation_parameter_types', map_transformation_parameter_types);
+
+
+
+                                var map_existing = {}, map_specified = {};
+
+                                each(existing_params, function(v, i) {
+                                    map_existing[i] = true;
+                                });
+
+                                each(params, function(v, i) {
+                                    map_specified[i] = true;
+                                });
+
+                                console.log('map_existing', map_existing);
+                                console.log('map_specified', map_specified);
+
+                                // then identify the new params.
+
+                                var arr_new_params = [];
+                                var arr_deleted_params = [];
+                                var arr_kept_params = [];
+                                // kept may be same or changed
+
+                                // maps of new, deleted and kept params.
+                                //  they will be useful below.
+
+                                var map_new_params = {};
+                                var map_deleted_params = {};
+                                var map_kept_params = {};
+
+
+
+                                each(existing_params, function(v, i) {
+                                    //map_existing[i] = true;
+                                    if (map_specified[i]) {
+                                        arr_kept_params.push(i);
+                                        map_kept_params[i] = true;
+                                    } else {
+                                        arr_deleted_params.push(i);
+                                        map_deleted_params[i] = true;
+                                    }
+
+                                });
+
+                                each(params, function(v, i) {
+                                    if (map_existing[i]) {
+                                        //arr_kept_params.push(i);
+                                    } else {
+                                        arr_new_params.push(i);
+                                        map_new_params[i] = true;
+                                    };
+                                });
+
+                                console.log('arr_new_params', arr_new_params);
+                                console.log('arr_deleted_params', arr_deleted_params);
+                                console.log('arr_kept_params', arr_kept_params);
+
+                                // will need to compare the values of the kept params.
+
+                                // need to set up the sequence of tasks.
+
+                                // will need to add transformation parameters as necessary.
+
+                                var fns = jsgui.Fns();
+
+                                // now we have the param types array.
+                                //  however, maybe we don't need that here.
+                                //  can go through, and individually add the parameters.
+
+                                //then each key in the parameters.
+
+                                each(params, function(value, key) {
+
+                                    var t_value = tof(value);
+                                    var data_type;
+
+                                    if (t_value == 'number') data_type = 'integer';
+
+                                    if (map_new_params[key]) {
+                                        fns.push([that, that.create_document_transformation_parameter_full, [transformation_id, key, value]])
+
+                                    }
+
+
+
+
+                                    // then look it up...
+
+
+
+                                    //var type_id = map_transformation_parameter_types[data_type];
+                                    //console.log('type_id', type_id);
+
+                                    // create_document_transformation_parameter_full
+                                    //  That would make the parameter record as well as its value record.
+
+
+
+                                    // could assign the result here?
+                                    //  easiest to use a create_doc_trans_param_full fn
+                                    //fns.push([that, that._create_document_transformation_parameter, [transformation_id, key, type_id]]);
+                                    //  and will need to know the result.. create_document_transformation_parameter_full
+
+
+
+                                    // Perhaps an ensure parameter function will be easier.
+                                    //  or create parameter.
+
+
+
+                                })
+
+                                //throw 'stop';
+
+                                fns.go(function(err, res_all) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        console.log('res_all', res_all);
+
+                                        callback(null, res_all);
+                                    }
+                                })
+
+
+                                //
+
+
+
+                                //throw 'stop';
+                            }
+                        });
+
+                        /*
+
+
+                        each(arr_new_params, function(new_param) {
+                            var v = params[new_param];
+                            var tv = tof(v);
+
+                            //if (tv == 'number') {
+                                // use the create integer (for the moment) param field.
+
+                                // create the integer parameter.
+                                //  needs both the parameter record as well as the integer record.
+
+                                //fns.push([that, that.create_, [document_id, i, v]]);
+
+                            //}
+
+                            fns.push([that, that._create_document_transformation_parameter), [transformation_id, ]])
+                        });
+                        */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        // make a map of the params in the existing ones
+                        // map of params in provided params obj
+                        // iterate existing params, see which are there and
+                        //  not in provided param map    (deleted)
+                        //  in provided param map        (kept - the same or updated)
+                        // iterate through provided params
+                        //  not in existing params       (new param)
+                        //  (in existing)                (kept - the same or updated)
+
+                        // Then with the kept params, we compare the old and the new values.
+                        //  Make list of changed params, make list of unchanged params.
+
+
+
+
+
+
+
+
+
+
+
+                    }
+                })
+
+                // Need to make a list of params to update, delete, or create.
+
+
+
+
+                /*
+                each(params, function(v, key) {
+                    console.log('key', key);
+
+                    var tv = tof(v);
+                    console.log('tv', tv);
+                    console.log('v', v);
+
+                    if (tv == 'number') {
+                        // treat it as an integer for the moment.
+                        //  could be more explicit in specifying integers in some cases.
+
+                        // push ensure a parameter with that name.
+
+
+
+                        // ensure the parameter itself.
+                        // ensure_document_transformation_integer_parameter
+                        that.ensure_document_transformation_integer_parameter(transformation_id, key, v, function(err, res_ensure_trensformation_integer_parameter) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res_ensure_trensformation_integer_parameter', res_ensure_trensformation_integer_parameter);
+                            }
+                        })
+
+
+                    }
+
+                })
+                */
+
+            },
+
+
+
+
+
+            // Maybe make it work with source and tarket keys as well, using fp?
+            'ensure_transformation': function(transformation_verb, params, source_id, target_id, callback) {
+
+                var that = this;
+
+                this.get_transformation_verb_id_by_name('resize', function(err, resize_verb_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('resize_verb_id', resize_verb_id);
+
+                        // May need to check to see if there already is a transformation.
+                        //  If it exists, I think we should delete it if it does not match.
+                        //   Or if it's there, we could update it.
+
+                        // So we try to get the transformation by source and target ids.
+
+
+
+
+                        // Do ensure transformation instead.
+                        //  It handles the case of the transformation already existing.
+                        //  Though, this function is ensure transformation.
+                        // Would be good to get the transformation by source and target.
+
+                        //get_document_transformation_by_source_id_target_id
+                        //  could check to see if it's a different type this way.
+
+                        // want to get the transformation by the source id and target id.
+
+
+
+
+
+
+
+                        //that.get_document_transformation_
+
+                        // How about getting the document transformation itself?
+                        // Would be a JSON function.
+
+                        // get_document_transformation_by_source_id_target_id
+                        //  that will get the transformation record itself (if it exists)
+
+
+                        that.get_document_transformation_by_source_id_target_id(source_id, target_id, function(err, existing_transformation) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                var t_existing = tof(existing_transformation);
+
+                                console.log('existing_transformation_id', existing_transformation);
+                                console.log('t_existing', t_existing);
+
+                                // if the transformation already exists between those items, we can update it's value if necessary
+
+                                if (t_existing == 'object') {
+                                    // check to see if the verb needs to be changed.
+
+                                    if (existing_transformation.transformation_verb_id == resize_verb_id) {
+
+                                        // Need to ensure the parameters are correct.
+                                        //  Maybe that is best done in one function...
+                                        //   It gets the parameter values back, does the comparisons, and then decides which parameters need to be updated,
+                                        //   deleted, or created.
+
+                                        that.ensure_document_transformation_parameters(existing_transformation.id, params, function(err, res_ensure_parameters) {
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                console.log('res_ensure_parameters', res_ensure_parameters);
+
+
+                                            }
+                                        })
+
+
+
+
+
+
+                                    } else {
+                                        // we need to change the verb
+
+                                        // probably delete all of the parameters.
+                                        throw 'stop';
+
+                                    }
+
+
+                                } else {
+
+                                    that._create_document_transformation(source_id, target_id, resize_verb_id, function(err, transformation_id) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            //
+
+                                            console.log('created document transformation transformation_id', transformation_id);
+
+                                            // And then we set the transformation parameters.
+                                            //  This will be a bit like the metadata records.
+                                            //  Should also include a record type with each parameter record.
+                                            //  And need a parameter record type id as well
+
+                                            // Makes use of parameter types in the db as well
+
+                                            // then set the parameters using one function.
+
+                                            that.ensure_document_transformation_parameters(transformation_id, params, function(err, res_ensure_params) {
+                                                if (err) {
+                                                    throw err;
+                                                } else {
+                                                    console.log('res_ensure_params', res_ensure_params);
+
+                                                }
+                                            })
+
+
+
+
+
+
+                                            //throw 'stop';
+                                        }
+                                    })
+                                }
+
+
+
+
+
+                                //throw 'stop';
+
+
+
+
+                            }
+
+                        })
+
+
+
+
+
+
+
+                        // Then we use that verb id to create the transformation record
+
+
+
+                        // We then go through the params and create the transformation param records.
+
+
+
+
+
+                    }
+                })
+
+                // Frist need to get the verb ID
+
+
+
+
+                // Multiple stages here.
+                //  Needs to ensure the transformation record that connects the two of them.
+                //  Only one transformation can connect the two
+                //   (Could make make a transformation chain some day)
+                //   Source and target are unique constraints in the transformation definition.
+
+                // I think we will do the create?
+                //  May make more advanced 'Ensure' postgres functions.
+
+
+                // First create the transformation record itself
+
+                // will call create_documentation_transformation_parameter
+
+
+
+
+
+
+
+
+
+
+            },
 
             // We should probably be calling _set_document_no_metadata, and then updating the metadata.
 
@@ -1388,6 +2777,9 @@ define(["./jsgui-html", "../resource/core/resource"],
 
             // _set_document_no_metadata
             //  the new set_document function will set the document with _set_document_no_metadata and then ensure the metadata is correct.
+
+            // Could this be made simpler, more basic?
+
             'set_document': fp(function(a, sig) {
 
 
@@ -2047,6 +3439,600 @@ define(["./jsgui-html", "../resource/core/resource"],
             //  Documents of the image type
             //   All metadata associated with them?
 
+
+            // Could maybe put the metadata inline...
+
+            'get_images_with_metadata': function(callback) {
+
+                var inline = true;
+
+                // get the images, then for each of them, get the metadata using fns.
+                var that = this;
+
+
+                that.get_images(function(err, res_images) {
+                    if (err) {
+                        throw err;
+                    } else {
+
+
+                        // get the meatdata for each image...
+
+
+                        //var res = [];
+                        var fns = Fns();
+
+                        each(res_images, function(image) {
+                            // and a function that adds it to the res here.
+                            fns.push([that, that.get_document_metadata, [image.id], function(err, res_metadata) {
+                                if (err) {
+                                    throw err;
+                                } else {
+                                    console.log('res_metadata', res_metadata);
+
+                                    if (inline) {
+                                        extend(image, res_metadata);
+                                    } else {
+                                        image.metadata = res_metadata;
+                                    }
+
+
+
+                                }
+                            }]);
+
+                        });
+
+                        fns.go(function(err, res_all) {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log('res_all', res_all);
+
+                                console.log('res_images', res_images);
+                                callback(null, res_images);
+                            }
+                        })
+
+
+
+
+
+
+                    }
+                });
+
+
+
+
+
+
+            },
+
+            'get_images_tree': function(callback) {
+                // Want to get the original / non resized ones.
+
+                // The source image in the resize transformations.
+
+                // Use a Document Transformation system in the database.
+                //  Transformations are like verbs.
+
+
+                // Document Transformation Types?
+                //  1. Image Resize
+                //   Image | Resize
+                //   Object | Verb
+                //   Verb | Object
+
+                // Transformations will have a transformation verb, eg resize
+                //  They will also have an object, such as 'image'
+                //   Possibly 'gif', 'jpeg'?
+                //   Nice to have it understand both, but generally deal with images as a class to be resized, so could resize a JPEG into a
+                //    compressed PNG.
+
+                // Transformation_Verb
+                //  No need for object such as image... we know the object types already
+
+                // Transformation
+                //  Object id
+                //  Result id
+                //  Transformation_Verb
+
+                // Need to be able to get a transformation verb easily, eg get the 'resize' verb
+
+                // Need to store the images as 'B is resized A'
+
+                console.log('get_images_tree');
+
+                // Need to get all root / source level images
+                //  Then get the data about any transformations that reference them
+                //  Then get the data about any that are referred to in those transformations.
+                // It seems like that could all be done in a single linked SQL query.
+
+                // Could get into some complex DB queries without needing to though.
+
+                // get transformations referring to original image (using it as a source)
+
+
+                // look at all resize transformations
+                //  perhaps just image rezise transformations when the time comes
+
+                // join those transformations with data about the source document (eg key)
+                //  join them with key data on the target
+
+                // Use code like this to get all the transformation data for the first pass.
+                //  Could make it get by a specified transformation type.
+
+                // get the resize transformation type id.
+
+
+                var that = this;
+
+                // It would be easier to divide this up into different functions.
+
+
+
+
+
+                that.get_transformation_verb_id_by_name('resize', function(err, resize_verb_id) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log('resize_verb_id', resize_verb_id);
+
+                        // get_document_transformation_info_by_verb_id
+                        //  would also get the parameters for any transformation.
+
+                        // could get the keys info, then get the parameter objects.
+
+
+
+                        // Really want to get all image document metadata
+                        //  then cross reference that with the transformations data.
+
+                        // get_documents_by_type (image)
+
+                        that.get_images_with_metadata(function(err, res_images) {
+                            if (err) {
+                                throw err;
+                            } else {
+
+                                // get_document_transformations_by_verb_id
+                                // get_document_resize_transformations
+
+                                // Having all of the resize transformations will be useful.
+                                //  The transformations will include the source and target ids, so we still have that info and more
+                                //  Will also want to include the transformation parameters with the transformations.
+
+
+
+
+                                // get_document_transformation_source_target_keys_by_verb_id
+                                // get_document_resize_transformations_with_keys_parameters
+
+
+
+
+                                that.get_document_resize_transformations_with_keys_parameters(function(err, res_transformations_info) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        // Probably needs more processing between the db and here.
+                                        //
+
+                                        console.log('res_transformations_info', res_transformations_info);
+
+                                        // We need to find out which are at the root.
+
+                                        // we meed to map from the targets to the sources?
+                                        //                         sources to the targets?
+
+                                        // map from source to target in transformations?
+                                        //  array of the transformations that use any doc as a source.
+
+                                        var map_arr_transformations_with_source = {};
+                                        var map_transformations = {};
+                                        //  this will be used in constructing the result tree.
+
+
+
+
+
+
+
+                                        var map_used_as_source = {}, map_used_as_target = {};
+
+                                        each(res_transformations_info, function(trans) {
+                                            map_transformations[trans.id] = trans;
+                                            var s_id = trans.source_document_id;
+                                            var t_id = trans.target_document_id;
+
+                                            if (!map_arr_transformations_with_source[s_id]) {
+                                                map_arr_transformations_with_source[s_id] = [];
+                                            }
+                                            map_arr_transformations_with_source[s_id].push(trans.id);
+
+                                            map_used_as_source[s_id] = true;
+                                            map_used_as_target[t_id] = true;
+                                        });
+
+                                        // find all which were used as a source, but not as a target.
+                                        var root_ids = [];
+
+                                        each(map_used_as_source, function(v, i) {
+                                            console.log('i', i);
+                                            if(!map_used_as_target[i]) {
+                                                root_ids.push(i);
+                                            }
+                                        })
+
+
+
+
+
+
+
+
+                                        // would be nice to get the images with the metadata as well.
+
+                                        var map_images = {};
+
+                                        each(res_images, function(image) {
+                                            map_images[image.id] = image;
+                                        });
+
+
+
+                                        console.log('res_images', res_images);
+
+                                        console.log('root_ids', root_ids);
+
+
+
+                                        // then we use the root ids to put together the table of results.
+
+                                        var res = [];
+
+                                        each(root_ids, function(root_id) {
+                                            // include the image, then the transformations that lead to other images
+                                            //  call the next ones down 'children'
+
+
+                                            var image = map_images[root_id];
+                                            res.push(image);
+
+                                            // then any children...
+                                            //  create the child array.
+                                            //   [trans, target]
+
+                                            var children = [];
+                                            // every transformation that uses the source.
+
+                                            var used_as_source = map_arr_transformations_with_source[root_id];
+                                            console.log('used_as_source', used_as_source);
+
+                                            // then we look at each of the transformations that use that one as the source.
+
+                                            // Likely to want to recursively do this too.
+
+                                            each(used_as_source, function(trans_id) {
+                                                //var child = []
+                                                var trans = map_transformations[trans_id];
+
+                                                // And we also need the target item.
+
+                                                var target = map_images[trans.target_document_id];
+                                                console.log('target', target);
+                                                //throw 'stop';
+
+                                                console.log('trans', trans);
+
+                                                // maybe would be good if the params were not inline.
+
+                                                //throw 'stop';
+
+                                                // have some info about the transformation.
+                                                //  do want to have the trans params as a separate object.
+
+                                                var child = {
+                                                    //'transformation': trans,
+                                                    'params': trans.params,
+                                                    'target': target
+                                                }
+                                                children.push(child);
+                                            })
+
+                                            if (children.length > 0) {
+                                                image.trans = children;
+
+
+                                            }
+
+                                        });
+
+                                        console.log('res', res);
+
+                                        // Could have more work on the images tree result?
+                                        //  Maybe there is just a problem with printing the results at the moment.
+
+
+
+
+
+                                        callback(null, res);
+                                        // The result can't be printed right because it contains a circular reference.
+                                        //  The result does link to the children, will try using it in the UI now.
+
+                                        //
+                                        // Then go through the transformations, make a truth map of the documents which were used as targets
+                                        //  (we are looking for NOT target documents, rather than source documents, because some may not have been used as a source)
+                                        //  make a mapped array of the sources of transformations... so when we find a source, we add to its list of transformations
+                                        // Go through the images document.
+                                        //  (make a map of the images by id)
+                                        //  Identify the images which are not used as targets in transformations
+                                        //   They are the source images
+                                        //    (make an array of their IDs / them)
+                                        //   Make array of source images
+                                        //    For each source image, consult the array of transformations that use them as a source
+                                        //     Add the transformation info to the source result record
+
+                                        //throw 'stop';
+
+                                        // go through the transformation results building both source and destination link maps.
+                                        // go through the images, finding any images that don't have a source link
+                                        //  they are source images
+
+                                        // go through the source (level 0 in tree images), creating the root items in the tree.
+                                        //  for each of them, add children
+                                        //   repeat for all children at progressing levels in tree until done
+                                        // or depth-dirst adding of children, could complete the tree from the information we have.
+
+                                        /*
+
+                                        var res_tree = {};
+
+                                        //var map_source_to_target_ids = {};
+                                        // can't map source to target, because a transformed image will have just one source.
+
+                                        // a source image can have multiple targetsw.
+
+                                        var map_target_to_source_ids = {};
+
+                                        each(res_info, function(transformation) {
+                                            //map_source_to_tagert_ids[transformation]
+                                            var source_id = transformation.source_document_id;
+                                            var target_id = transformation.target_document_id;
+
+                                            //map_source_to_target_ids[source_id] = target_id;
+                                            map_target_to_source_ids[target_id] = source_id;
+                                        });
+
+                                        console.log('map_source_to_target_ids', map_source_to_target_ids);
+
+                                        // though document could be used as a source more than once.
+                                        //  maybe need an array here.
+
+                                        // Want to see any that don't have a source.
+                                        //
+
+                                        console.log('map_target_to_source_ids', map_target_to_source_ids);
+                                        */
+
+
+                                        //var arr_root_
+
+                                        // go through the original images
+                                        //  mark the source documents - documents that have no source.
+
+                                        /*
+
+                                        each(res_images, function(image) {
+                                            var source_id = image.source_document_id;
+                                            // see where it's not used as a target.
+
+
+                                            if (typeof map_target_to_source_ids[source_id])
+                                        });
+                                        */
+
+
+
+
+
+
+                                        // Need to find the source documents
+                                        //  documents which have no source transformation of their own
+
+                                        // Create a map out of the records, so we know which links to which other.
+                                        // map_docs_by_source_id
+                                        // map_docs_by_target_id
+
+                                        // and any documents without any transformations at all?
+
+                                        // May be better to get the data from the db in a different form.
+                                        //  First get all documents, and see if they are transformation root documents.
+                                        /// Then consult a map to see which others use the root nodes as a source, and continue to do this for the
+                                        //  branches from the root.
+
+
+
+
+
+                                        //  Then we start with all of the identified roots, and
+
+
+                                        //throw 'stop';
+
+
+                                        // could go through them here to get the parameter objects.
+
+                                        //var fns = jsgui.Fns();
+
+                                        // Need to get call the function that gets the full parameters, not
+                                        //  get_document_transformation_parameters_by_transformation_id
+
+                                        // get_document_transformation_full_parameters
+                                        // get_document_transformation_obj_parameters
+
+
+
+                                        //
+
+                                        // can build up some kind of result object here.
+
+                                        // connections between one object and another, but it's not really a tree so far.
+                                        // just a source document, and a target document.
+
+                                        /*
+
+                                         {
+                                         'fuji.jpg': {
+                                         'resize': {
+                                         '128': 'fuji_128.jpg'
+                                         }
+                                         }
+                                         }
+
+                                         // Don't like that format so much.
+                                         //  A list would look nicer
+                                         //  Also harder to do the tree with multiple params.
+
+                                         /*
+                                         Probably looks neatest.
+                                         Will have a list of the various different resized versions based on a source.
+
+
+                                         'fuji.jpg': {
+                                         'versions': {
+                                         'source': 'fuji.jpg'
+                                         'targets':
+                                         [
+                                         ['fuji_128.jpg', 'resize', {size: 128}]
+                                         ]
+
+                                         }
+                                         }
+
+                                         'fuji.jpg': [
+                                         ['fuji_128.jpg', {'width': 128, 'height': 128}, 'resize', {size: 128}]
+                                         ]
+
+                                         */
+
+
+
+
+
+
+
+
+
+                                        /*
+                                        each(res_info, function(obj_resize) {
+                                            fns.push([that, that.get_document_transformation_obj_parameters, [obj_resize.id], function(err, res) {
+                                                if (err) {
+                                                    throw err;
+                                                } else {
+
+                                                    // I think this is where we process / puth together the results from the individual items.
+
+                                                    // the obj_resize has got the necessary information.
+                                                    //  we need to put together a list of the target documents and the source documents.
+
+
+
+
+
+                                                    console.log('* res', res);
+                                                    console.log('obj_resize', obj_resize);
+                                                }
+                                            }]);
+                                        });
+                                        */
+                                        /*
+
+
+
+                                        fns.go(function(err, res_all) {
+                                            console.log('res_all', res_all);
+
+
+
+                                        });
+                                        */
+
+
+
+
+
+                                        //throw 'stop';
+
+                                        //
+
+                                    }
+                                })
+
+
+
+                            }
+                        })
+
+
+
+
+
+
+
+                    }
+                })
+
+
+                // get_document_transformation_keys_by_verb_id
+                // get_document_transformation_source_target_keys_by_verb_id
+                //
+
+                // eg get all resize transformations.
+
+
+
+
+                /*
+                 SELECT document_transformations.*, docs1.key as source_key, docs2.key as target_key FROM document_transformations
+                 LEFT OUTER JOIN documents as docs1 on document_transformations.source_document_id = docs1.id
+                 LEFT OUTER JOIN documents as docs2 on document_transformations.target_document_id = docs2.id
+
+                 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            },
+
+            // Also want a get images with metadata function.
+            //  May need to do a bunch of calls to the db to get the various metadata items.
+
+            // Could possibly use a linked function in the db.
+
+            // Get images with metadata.
+            //  Would get the images, and then get the metadata for rach of them
+
+
+
             'get_images': function(callback) {
                 // Get documents by a particular document type
                 //  get_documents_by_type_name
@@ -2056,6 +4042,35 @@ define(["./jsgui-html", "../resource/core/resource"],
                 // SELECT documents.id as id, key, document_types.name as type_name, document_types.id as type_id, mime_type FROM documents LEFT OUTER JOIN document_types ON documents.document_type_id = document_types.id
 
                 // Will only get the JPEG images for the moment.
+
+                // Maybe want to get the images tree.
+                //  The images are arranged as a tree, with some of them being resized / changed versions of others.
+
+                // May be good to have image_relationships in the DB, so that we know that one is a resized version of another.
+                //  That could also help if the original were to be changed.
+
+                // document_relationships would indicate a relationship between two documents.
+                //  maybe need a way to identify the root / original document in a relationship / relationship chain?
+
+                // relationship - transformation
+                //  A is the parent, B is the modified / resized version.
+
+                // Express a document relationship in the database.
+                //  Relationship type...
+                //   resized version (b is resized version of a)
+
+                // Relationships in the document system could also help when modifying a document will need to change another automatically.
+
+                // So could do a search for all documents that are a in that relationship rather than b
+                // Could search for all original size documents, and their descendants in a tree.
+
+                // Could have an image overtype, and jpeg, png, svg, bmp etc subtypes.
+
+
+                // Type subclasses would be useful in the db system, so it can query images, jpegs or whatever.
+
+
+
 
                 this.get_documents_by_type_name('jpeg', function(err, res_jpeg_images) {
                     if (err) {
@@ -2102,37 +4117,6 @@ define(["./jsgui-html", "../resource/core/resource"],
                 })
                 */
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

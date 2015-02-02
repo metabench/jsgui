@@ -1,3 +1,7 @@
+// Maybe will not be node specific?
+
+
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -159,6 +163,18 @@ PNG compression method 0
         // Buffers read asyncronously... or some other things do here.
 
         // extend Binary_File_Wrapper?
+
+
+        // Could maybe make these extend core-image objects.
+        //  Would be nice conceptually, but effort would be needed to ensure compatibility.
+
+        // Image - would be nice to have a means to get the metadata if it's available.
+        //  Maybe some async methods that work in the browser to load the image itself into a typed array.
+
+
+
+
+
         
         var PNG = jsgui.Class.extend({
             'init': function(spec) {

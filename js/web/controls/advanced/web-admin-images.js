@@ -29,7 +29,7 @@ var List = require('./list');
 var File_Upload = require('./file-upload');
 
 
-        var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
+        var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
         var Control = jsgui.Control, Page_Control = jsgui.Page_Control;
 
         // Another type of control? - composite or basic-composite?
@@ -136,7 +136,30 @@ var File_Upload = require('./file-upload');
 
                     this.__status = 'waiting';
 
-                    web_admin.get_images_list(function(err, res_images) {
+
+                    // don't want every image.
+                    //  want to get the original images
+                    //   (or non-resized images)
+                    //  There may be other modified images that should get shown, we want to get the main / root images, rather than the
+                    //  scaled (down) versions.
+                    //   However, having the images in a heirachy so we know which are versions of others would be really good.
+
+                    // get_images_tree
+                    //  that would be a tree that has root level images that have not been modified.
+                    // This is not treating images as if they are in a directory heirachy for the moment.
+                    //  Just a list of images.
+                    //  Possibly tags will be useful to categorise them.
+
+
+
+
+
+
+
+
+
+                    //web_admin.get_images_list(function(err, res_images) {
+                    web_admin.get_images_tree(function(err, res_images_tree) {
                         if (err) {
                             throw err;
                         } else {
@@ -146,7 +169,41 @@ var File_Upload = require('./file-upload');
 
 
 
-                            console.log('res_images', res_images);
+                            console.log('res_images_tree', res_images_tree);
+
+                            // With the tree, we would be able to get the resized versions.
+
+                            // The list may need access to an image of some particular type.
+                            //  We may need a jsgui Image abstraction that's able to deal with the different versions.
+
+                            // A single image.
+                            //  The items in a list, they may need images as well.
+                            //  May be worth making the abstraction to deal with these images.
+                            //   Perhaps integrated with other image processing in some ways.
+                            //    Though, passing around JSON data works well as an interface.
+
+
+
+
+
+
+
+
+
+
+                            // Make a list of the root nodes.
+
+                            // We want images for the root nodes, but want specific resized versions done.
+
+
+
+
+                            // We have the images tree, but it has a circular reference at the moment.
+
+                            // We would like nicer results from the get tree function.
+
+
+                            //throw 'stop';
 
 
                             // Only active when it's loaded?
@@ -173,9 +230,62 @@ var File_Upload = require('./file-upload');
 
                             // Each item is rendered as a list, as it contains multiple properties.
 
+                            // Definitely want the Image abstraction.
+                            //  A Class.
+                            //  Want to be able to have images in a list.
+
+                            //  Also a get_images may work better.
+                            //  It gets Image objects from the website.
+
+                            // The list could be a list of Image objects.
+                            //  Nice to display them as images in a list.
+
+                            // The Image objects may have info about other transformed versions.
+
+                            // Img = jsgui.Image
+                            //  So it can be used in the browser.
+
+                            // Want it to represent an image, and have information about other versions that are a
+                            //  Will be able to get the src for a size.
+
+                            // A core-image module may help.
+                            //  It would basically be JavaScript to handle a concept of an image that can have multiple versions.
+                            //  It will be possible to have pixel data in the image object, but often that will be represented as a URL.
+                            //   Maybe will have a field saying it's known to be available within the browser.
+
+                            // The client side system could make use of core-image code.
+                            //  There will be other image processing code that's specific to contexts.
+                            //   Though some systems may enable them to work in the browser anyway.
+
+                            // Put the right items in the list, from the tree.
+
+                            // Maybe a different format for the list,
+                            //  with the list not having details of the resized versions, but using the resized version's url
+                            //  to show the thumbnail image.
+
+                            var list_items = [];
+
+                            each(res_images_tree, function(root_image) {
+                                console.log('root_image', root_image);
+
+                                var trans = root_image.trans;
+
+                                var list_obj = {
+                                    'id': root_image.id,
+                                    'key': root_image.key,
+                                    'type_name': root_image.type_name
+                                }
+
+                                list_items.push(list_obj);
+
+                                console.log('trans', trans);
+                            })
+                            //throw 'stop';
+
+
                             var ctrl_list = new List({
                                 'context': that._context,
-                                'items': res_images
+                                'items': list_items
                             });
 
                             navigation.add(ctrl_list);
@@ -200,6 +310,10 @@ var File_Upload = require('./file-upload');
                             // Want to add something to the path... upload it to admin/images/...
 
                             // http://192.168.56.1/admin/upload-image/
+
+                            // Can say it's autosubmit true here?
+
+
 
                             var file_upload = new File_Upload({
                                 'context': that._context,

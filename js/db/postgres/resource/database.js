@@ -2270,8 +2270,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
         },
 
         'load_schema_resource': function(schema_name, callback) {
-            console.log('load_schema_resource schema_name', schema_name);
-            console.trace();
+            //console.log('load_schema_resource schema_name', schema_name);
+            //console.trace();
             //throw 'stop';
 
             // Create a new Resource, and add it to the collection of data.schemas
@@ -2354,7 +2354,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
             var that = this;
 
-            console.log('pre connect');
+            //console.log('pre connect');
 			this.connect(function(err, res) {
 				if (err) {
                     console.log(err);
@@ -2517,7 +2517,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 		},
 
         'ensure': function(def, callback) {
-            console.log('Database Resource ensure def', def);
+            //console.log('Database Resource ensure def', def);
 
             // load up the existing abstract db.
 
@@ -2526,19 +2526,19 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                     throw err;
                 } else {
 
-                    console.log('existing_abstract_database', existing_abstract_database);
+                    //console.log('existing_abstract_database', existing_abstract_database);
 
                     // create a new (target) abstract db based on the definition given
-                    console.log('');
-                    console.log('def', stringify(def));
+                    //console.log('');
+                    //console.log('def', stringify(def));
                     //throw 'stop';
 
                     var target_abstract_database = new Abstract.Database(def);
 
-                    console.log('target_abstract_database', target_abstract_database);
+                    //console.log('target_abstract_database', target_abstract_database);
 
                     var target_abstract_schemas = target_abstract_database.get('schemas');
-                    console.log('target_abstract_schemas.length()', target_abstract_schemas.length());
+                    //console.log('target_abstract_schemas.length()', target_abstract_schemas.length());
 
                     // Then put it in the change generator...
                     //  Comparison_Change_Generator

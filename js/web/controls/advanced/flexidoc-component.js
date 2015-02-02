@@ -45,7 +45,10 @@ var Flexidoc_Component = Control.extend({
 
             // If running on the server?
 
-            var mode = this.get('mode').value();
+            var mode = this.get('mode');
+
+            if (mode && mode.value) mode = mode.value();
+
             console.log('mode', mode);
             //throw 'stop';
             if (mode) {
