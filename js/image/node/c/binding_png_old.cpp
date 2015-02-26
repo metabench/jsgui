@@ -18,8 +18,6 @@
 
 // It may be easier to use a JPEG library that does not have SIMD extensions.
 
-
-
 //#include "jpeg_decoder.h"
 //#include <jpeglib.h>
  

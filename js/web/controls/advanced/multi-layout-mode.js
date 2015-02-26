@@ -58,7 +58,7 @@ var Multi_Layout_Mode = Control.extend({
         this.__type_name = 'multi_layout_mode';
 
         this.set('dom.attributes.class', 'multi-layout-mode');
-        console.log('spec.el', spec.el);
+        //console.log('spec.el', spec.el);
 
         // Basically, needs the:
         //  Navigation
@@ -74,12 +74,163 @@ var Multi_Layout_Mode = Control.extend({
         //  Will view the image itself on the right
         //  The metadata and commands will appear in a fairly small ribbon at the bottom.
 
-
-
-
         if (!spec.abstract && !spec.el) {
-            // Set this up so that there are different components / controls that can be positioned in different ways.
 
+            // Will have different ways of putting this together.
+            //  Will be nice to have a title, but inside a header.
+            var layout_mode = this.get('layout_mode').value();
+
+            if (layout_mode) {
+                this.add_class(layout_mode);
+            }
+
+            //console.log('layout_mode', layout_mode);
+            //console.log('tof layout_mode', tof(layout_mode));
+            //  And the main content in the fluid area...
+            //   That could be a useful default of fluid-fixed.
+
+            var panel_title = new Panel({
+                'context': context,
+                'name': 'title'
+            })
+            panel_title.add_class('title');
+
+            var panel_navigation = new Panel({
+                'context': context,
+                'name': 'navigation'
+            })
+            panel_navigation.add_class('navigation');
+
+            var panel_main = new Panel({
+                'context': context,
+                'name': 'main'
+            })
+            panel_main.add_class('main');
+
+            var panel_misc = new Panel({
+                'context': context,
+                'name': 'misc'
+            })
+            panel_misc.add_class('misc');
+
+            if (layout_mode == 'fluid-fixed') {
+                // make the html like in
+                //  http://www.dynamicdrive.com/style/layouts/item/css-liquid-layout-22-fluid-fixed/
+
+                // top
+                // left_wrapper
+                //  left
+                // right
+                // bottom
+                /*
+                var panel_top = new Panel({
+                    'context': context,
+                    'name': 'top'
+                })
+                panel_top.add_class('top');
+                */
+
+                var panel_top = new Panel({
+                    'context': context,
+                    'name': 'top'
+                })
+                panel_top.add_class('top');
+
+                var panel_left_wrapper = new Panel({
+                    'context': context,
+                    'name': 'left-wrapper'
+                })
+                panel_left_wrapper.add_class('left-wrapper');
+
+                var panel_left = new Panel({
+                    'context': context,
+                    'name': 'left'
+                })
+                panel_left.add_class('left');
+
+                var panel_right = new Panel({
+                    'context': context,
+                    'name': 'right'
+                })
+                panel_right.add_class('right');
+
+                var panel_bottom = new Panel({
+                    'context': context,
+                    'name': 'bottom'
+                })
+                panel_bottom.add_class('bottom');
+                // will expose, top, left, right, bottom
+
+
+                this.add(panel_top);
+                this.add(panel_left_wrapper);
+                panel_left_wrapper.add(panel_left);
+                this.add(panel_right);
+                this.add(panel_bottom);
+
+                panel_top.add(panel_title);
+                panel_bottom.add(panel_navigation);
+                panel_left.add(panel_main);
+                panel_right.add(panel_misc);
+
+
+
+            } else {
+
+
+                this.add(panel_title);
+                this.add(panel_navigation);
+                this.add(panel_main);
+                this.add(panel_misc);
+
+
+            }
+
+            this.set('title', panel_title);
+            this.set('navigation', panel_navigation);
+            this.set('main', panel_main);
+            this.set('misc', panel_misc);
+
+
+            // 2-col-left-main-right-misc
+            //
+            // 2-col-left-main
+            //  misc on right
+            //  (navigation)
+            // fluid-fixed
+            //  could have fixed-fluid as well
+            // top, bottom, left, right
+            //  and will position the various logic parts within those layout parts.
+
+            // top     title
+            // left    main
+            // right   misc/tools
+            // bottom  (nav) - don't think we will have nav in this view
+
+            // So choose the layout view, then assign items in the logical view to the areas of the layout
+            //  Automatic assignment of both the layout view and the logical view
+            //  layout_mode fluid-fixed, {}
+            /*
+            // I think a string layout mode makes sense.
+            not like: layout_mode: {
+                'left': fluid
+            }
+            // The string layout mode will specify which construction code to use.
+            //  May be nice with je suis xml.
+            // After the string layout mode, the logical items get placed into the layout areas.
+
+            // layout_mode: 'fluid-fixed'
+            // layout_locations: {
+                'left': 'main',
+                'right':
+            }
+             */
+            // layout_mode:
+            //
+            //   I think navigation may be built into the main part as well as the part on the right.
+            // 2-col-right-main
+
+            // Set this up so that there are different components / controls that can be positioned in different ways.
             // Changing the positioning layout will be done through the Multi_Layout_Control.
 
             // In general, there are 3 types of areas:
@@ -107,54 +258,24 @@ var Multi_Layout_Mode = Control.extend({
             // Panel could wind up being quite useful and versitile.
             //  Keeping Panel code in a Panel module would help to prevent the Control file becoming more complicated.
 
-
             // Want to be able to use panels to specify layouts using numbers, outside of CSS.
             //  Will do some maths.
 
+            // Would like a way of disabling some of these?
+            //  Or would navigation panel be useful in many cases, and just disable / hide the panel when it's not needed.
+
+
             // For the moment, just want 4 simple panels. (01/10/2014 adding a 'title' panel)
-            var panel_title = new Panel({
-                'context': context,
-                'name': 'title'
-            })
-            panel_title.add_class('title');
-            var panel_navigation = new Panel({
-                'context': context,
-                'name': 'navigation'
-            })
-            panel_navigation.add_class('navigation');
-            var panel_main = new Panel({
-                'context': context,
-                'name': 'main'
-            })
-            panel_main.add_class('main');
-            var panel_misc = new Panel({
-                'context': context,
-                'name': 'misc'
-            })
-            panel_misc.add_class('misc');
-
-            this.add(panel_title);
-            this.add(panel_navigation);
-            this.add(panel_main);
-            this.add(panel_misc);
-
-            this.set('title', panel_title);
-            this.set('navigation', panel_navigation);
-            this.set('main', panel_main);
-            this.set('misc', panel_misc);
 
 
+            // Having control fields here could be useful.
 
-
-
-
-
-
-
-
-
-
-
+            var ctrl_fields = {
+                'title': panel_title._id(),
+                'navigation': panel_navigation._id(),
+                'main': panel_main._id(),
+                'misc': panel_misc._id()
+            };
 
             // Perhaps should make 3 different control classes.
             //  Panel controls would be a bit limited in what they do / are for, and what UI components they include.
@@ -164,10 +285,6 @@ var Multi_Layout_Mode = Control.extend({
             //   The content, should be nothing else
             //  Misc_Panel
             //   Metadata about the
-
-
-
-
 
         }
 

@@ -37,6 +37,8 @@ define(["./jsgui-html"],
     			this.response = spec.response;
     		};
 
+            this.selection_scope_count = 0;
+
             // Perhaps things could be more sandboxed, so that controls don't get access to the resource pool by default.
             //  Maybe only a small number of controls should have access to this.
             
@@ -79,7 +81,31 @@ define(["./jsgui-html"],
 			if (this.rendering_mode == 'html5') {
 				return '<!DOCTYPE html>';
 			}
-		}
+		},
+        'new_selection_scope': function(ctrl) {
+
+            // Will a selection scope be able to apply to more than 1 control?
+            //  Perhaps it could be useful, but not right now.
+
+
+            // Set the control's jsgui-data field of selection_scope to be the number
+
+            var num = this.selection_scope_count++;
+            ctrl.set('selection_scope', num);
+
+
+
+
+            return num;
+        }
+        // selection scopes...
+        //  I think selection scopes will just be numbers on the server
+        //   It will render the selection scopes as jsgui fields that get transferred to the client.
+        //    On the client, the selection scope will be obtained by id from the client_page_context.
+
+
+
+
 		
 		//get id's of particular types of items...
 		

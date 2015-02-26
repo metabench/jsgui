@@ -1,0 +1,23 @@
+.multi-layout-mode.fluid-fixed .top.panel {
+    height: 6px;
+}
+
+.multi-layout-mode.fluid-fixed .left-wrapper {
+    float: left;
+    width: 100%;
+}
+
+.multi-layout-mode.fluid-fixed .left-wrapper .left.panel {
+    margin-right: 200px;
+}
+
+.multi-layout-mode.fluid-fixed .right.panel {
+    float: left;
+    width: 200px;
+    margin-left: -200px;
+}
+
+.multi-layout-mode.fluid-fixed .bottom.panel {
+    clear: left;
+}
+

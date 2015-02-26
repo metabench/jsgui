@@ -339,12 +339,13 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 			//throw 'stop';
 
 			var that = this;
+            console.log('pre start resource pool');
 
 			resource_pool.start(function(err) {
 			    if (err) {
 			        throw err;
 			    } else {
-                    //console.log('jsgui-server started');
+                    console.log('jsgui-server resource pool started');
                     
                     var rp = that.get('resource_pool');
                     //console.log('rp ' + rp);
@@ -723,6 +724,13 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 						*/
 
 						sock_server.installHandlers(http_server, {prefix:'/ws'});
+
+                        console.log('port', port);
+
+                        if (ipAddress.value) ipAddress = ipAddress.value();
+
+                        console.log('ipAddress', ipAddress);
+
 
 						http_server.listen(port, ipAddress);
                     	console.log('* Server running at http://' + ipAddress + ':' + port + '/');

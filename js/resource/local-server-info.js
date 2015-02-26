@@ -385,6 +385,10 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 			//console.log('o_status ' + o_status);
 			var that = this;
 			// collections responding to events in their objects?
+
+            console.log('lsi start');
+            console.log('o_status', o_status);
+
 			if (o_status == 'off') {
 				that.meta.set('status', 'starting');
 				// The resource pool will be listening for changes in status.
@@ -400,6 +404,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 				//  Having it within the resource system will avoid confusion about if things get called with callbacks - they do use callbacks.
 				
 				// get the network info.
+                console.log('pre get_network_info');
 				get_network_info(function(err, netInfo) {
 					if (err) {
 						throw 'error getting network info ' + err;
@@ -407,6 +412,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 						that.meta.set('status', 'on');
 						that.raise_event('started');
 						////that.set('netInfo', netInfo);
+                        console.log('netInfo', netInfo);
 						
 
 						//that.set('network.interfaces', netInfo);
@@ -465,6 +471,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 
 
 						if (callback) {
+                            console.log('pre cb lsi');
 							callback(null, true);
 						}
 					}
@@ -494,7 +501,9 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 				});
 				(/)
 				*/
-			}
+			} else if (o_status == 'on') {
+                callback(null, true);
+            }
 			// does not have any dependencies which would also have to start.
 			
 			// not sure about having it start on initialization.

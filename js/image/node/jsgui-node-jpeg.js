@@ -342,8 +342,6 @@ define(['../../core/jsgui-lang-essentials', 'fs', 'zlib',
                 var optimize = {} || options.optimize;
 
                 // Write a stream to a buffer instead?
-
-
                 
                 var that = this;
                 
@@ -543,10 +541,6 @@ define(['../../core/jsgui-lang-essentials', 'fs', 'zlib',
             
             // count_rgb_colors
             //  possibly iterate pixels, possibly go through the unfiltered scanline buffer.
-            
-            
-            
-            
             
         })
         

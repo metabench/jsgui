@@ -382,8 +382,8 @@ var Resource = require('./resource');
 			//console.log('this._resources.length() ' + this._resources.length());
 			
 			this._resources.each(function(i, v) {
-				//console.log('i ' + i);
-				//console.log('v ' + stringify(v));
+				console.log('i ' + i);
+				console.log('v ' + stringify(v));
 				
 				// if it has all its requirements met, start it.
 				
@@ -400,18 +400,20 @@ var Resource = require('./resource');
 				//  I think doing the requirements network planning before starting will be the best way.
 				//   That could get things to start very efficiently.
 				
-				//console.log('meets_requirements ' + mr);
+				console.log('meets_requirements ' + mr);
 				if (mr) {
 					//v.start();
 					arr_resources_meeting_requirements.push(v);
 				}
 			});
 			
-			//console.log('arr_resources_meeting_requirements.length ' + arr_resources_meeting_requirements.length);
+			console.log('arr_resources_meeting_requirements.length ' + arr_resources_meeting_requirements.length);
 			var l_resources = this._resources.length();
-			//console.log('l_resources ' + l_resources);
+			console.log('l_resources ' + l_resources);
+
+
 			
-			if (arr_resources_meeting_requirements.length == this._resources.length()) {
+			if (arr_resources_meeting_requirements.length == l_resources) {
 				
 				var fns = [];
 				
@@ -426,8 +428,8 @@ var Resource = require('./resource');
 				var cb = function(err, start_res) {
 				    num_starting--;
 				    num_started++;
-				    //console.log('cb');
-				    //console.log('num_started ' + num_started);
+				    console.log('cb');
+				    console.log('num_started ' + num_started);
 				    
 				    if (num_started == num_to_start) {
 				        callback(null, true);
@@ -437,7 +439,7 @@ var Resource = require('./resource');
 				each(arr_resources_meeting_requirements, function(i, resource_ready_to_start) {
 				    //console.log('');
 				    //console.log('');
-				    //console.log('resource_ready_to_start ' + resource_ready_to_start);
+				    console.log('resource_ready_to_start ', resource_ready_to_start);
 				    //throw 'stop';
 				    // should give the context OK.
 					//fns.push([resource_ready_to_start, resource_ready_to_start.start, []]);

@@ -3,7 +3,7 @@
 // Adding process_copy function
 
 
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -13,6 +13,15 @@ if (typeof define !== 'function') {
 
 define(['../core/jsgui-lang-essentials', 'child_process', 'ncp', './jsgui-node-file-checksum', 'rimraf'], 
 function (jsgui, child_process, ncp_module, checksum, rimraf) {
+*/
+
+var jsgui = require('../core/jsgui-lang-essentials', 'child_process', 'ncp', './jsgui-node-file-checksum', 'rimraf');
+var child_process = require('child_process');
+var ncp_module = require('ncp');
+var checksum = require('./jsgui-node-file-checksum');
+var rimraf = require('rimraf');
+//var child_process = require('child_process');
+
 //define(['jsgui-lang-essentials', 'node-rasters', 'node-spritesheet', 'xpath', 'jsgui-html', 'phantom', 'xmldom', 'ncp'], function (jsgui, node_rasters, node_spritesheet, xpath, jsgui_html, phantom, xmldom, ncp) {
     
     var ncp = ncp_module.ncp;
@@ -217,10 +226,7 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 		        var file_path = a[0];
 		        var file_content = a[1];
 		        var callback = a[2];
-
-                console.log('pre write file');
-
-		        
+                console.log('pre write file file_path', file_path);
 		        fs.writeFile(file_path, file_content, function(err) {
                     if(err) {
                         //console.log(err);
@@ -1808,6 +1814,7 @@ function (jsgui, child_process, ncp_module, checksum, rimraf) {
 
 
 	//module.exports = fs2;
-	return fs2;
-});
+//	return fs2;
+//});
 
+module.exports = fs2;

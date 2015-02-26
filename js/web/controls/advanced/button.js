@@ -17,6 +17,14 @@ var Button = Control.extend({
 
         this.set('dom.attributes.class', 'button');
 
+        // Want to have a system of accessing icons.
+        //  Will be possible to do using a Postgres website db resource
+        //   First want it working from disk though.
+
+
+
+
+
         if (spec.text) {
             this.set('text', spec.text);
         }

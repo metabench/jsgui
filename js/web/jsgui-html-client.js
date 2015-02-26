@@ -126,146 +126,146 @@ define(["./jsgui-html-enh", "./client-page-context", "../resource/core/client-po
 function (jsgui, Client_Page_Context, Client_Resource_Pool) {
 
     */
-    var jsgui = require('./jsgui-html-enh');
-    var Client_Page_Context = require('./client-page-context');
-    var Client_Resource_Pool = require('../resource/core/client-pool');
+var jsgui = require('./jsgui-html-enh');
+var Client_Page_Context = require('./client-page-context');
+var Client_Resource_Pool = require('../resource/core/client-pool');
 
-    var fp = jsgui.fp;
-    //jQuery, canvas and the app/sub module are all
-    //loaded and can be used here now.
+var fp = jsgui.fp;
+//jQuery, canvas and the app/sub module are all
+//loaded and can be used here now.
 
-    //console.log('running client function.');
+//console.log('running client function.');
 
-    // At this point could do various things to activate the document.
+// At this point could do various things to activate the document.
 
-    // However, we could have a part of the file that gets replaced with local variables.
-    //  They could be written here as JSON before the file gets served - with the file being given a special URL?
+// However, we could have a part of the file that gets replaced with local variables.
+//  They could be written here as JSON before the file gets served - with the file being given a special URL?
 
-    // I think including the local variables in the page itself may be mest. No need for dealing with another JavaSvipt file.
-    //  Could possibly compress them in a neat way, like base64.
+// I think including the local variables in the page itself may be mest. No need for dealing with another JavaSvipt file.
+//  Could possibly compress them in a neat way, like base64.
 
-    // Controls will do a fair bit with their client-side code...
-    //  But it will be important to get properties over to the client.
-    //  Data attributes would be a possibility too.
+// Controls will do a fair bit with their client-side code...
+//  But it will be important to get properties over to the client.
+//  Data attributes would be a possibility too.
 
-    // Client side resources too? Don't think so, client side resource needs this.
+// Client side resources too? Don't think so, client side resource needs this.
 
-    //  Also capability for doing HTTP request easily.
-    //  jsgui.http('post', url, callback);
+//  Also capability for doing HTTP request easily.
+//  jsgui.http('post', url, callback);
 
-    var makeHttpObject = function() {
-        try {return new XMLHttpRequest();}
-        catch (error) {}
-        try {return new ActiveXObject("Msxml2.XMLHTTP");}
-        catch (error) {}
-        try {return new ActiveXObject("Microsoft.XMLHTTP");}
-        catch (error) {}
+var makeHttpObject = function() {
+    try {return new XMLHttpRequest();}
+    catch (error) {}
+    try {return new ActiveXObject("Msxml2.XMLHTTP");}
+    catch (error) {}
+    try {return new ActiveXObject("Microsoft.XMLHTTP");}
+    catch (error) {}
 
-        throw new Error("Could not create HTTP request object.");
+    throw new Error("Could not create HTTP request object.");
+}
+
+
+
+jsgui.http = fp(function(a, sig) {
+
+    // we may want to do an HTTP post instead, perhaps posting a document.
+
+    var method = 'GET';
+    var url, callback, body = null;
+    if (sig == '[s,f]') {
+        url = a[0];
+        callback = a[1];
+    }
+    if (sig == '[s,s,f]') {
+        url = a[0];
+        method = a[1].toUpperCase();
+        callback = a[2];
+    }
+    if (sig == '[s,s,s,f]') {
+        url = a[0];
+        method = a[1].toUpperCase();
+        body = a[2];
+        callback = a[3];
+    }
+    if (sig == '[s,s,a,f]') {
+        url = a[0];
+        method = a[1].toUpperCase();
+        body = JSON.stringify(a[2]);
+        callback = a[3];
+    }
+    if (sig == '[s,s,o,f]') {
+        url = a[0];
+        method = a[1].toUpperCase();
+        body = JSON.stringify(a[2]);
+        callback = a[3];
+    }
+    var request = makeHttpObject();
+
+    request.open(method, url, true);
+
+    if (method.toUpperCase() == 'POST' && body) {
+        console.log('body', body);
+        request.send(body);
+    } else {
+        request.send(null);
     }
 
+    request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+            // Perhaps parse that...
+            console.log('request', request);
 
+            var content_type = request.getResponseHeader('Content-Type');
+            console.log('content_type', content_type);
 
-    jsgui.http = fp(function(a, sig) {
-
-        // we may want to do an HTTP post instead, perhaps posting a document.
-
-        var method = 'GET';
-        var url, callback, body = null;
-        if (sig == '[s,f]') {
-            url = a[0];
-            callback = a[1];
-        }
-        if (sig == '[s,s,f]') {
-            url = a[0];
-            method = a[1].toUpperCase();
-            callback = a[2];
-        }
-        if (sig == '[s,s,s,f]') {
-            url = a[0];
-            method = a[1].toUpperCase();
-            body = a[2];
-            callback = a[3];
-        }
-        if (sig == '[s,s,a,f]') {
-            url = a[0];
-            method = a[1].toUpperCase();
-            body = JSON.stringify(a[2]);
-            callback = a[3];
-        }
-        if (sig == '[s,s,o,f]') {
-            url = a[0];
-            method = a[1].toUpperCase();
-            body = JSON.stringify(a[2]);
-            callback = a[3];
-        }
-        var request = makeHttpObject();
-
-        request.open(method, url, true);
-
-        if (method.toUpperCase() == 'POST' && body) {
-            console.log('body', body);
-            request.send(body);
-        } else {
-            request.send(null);
-        }
-
-        request.onreadystatechange = function() {
-            if (request.readyState == 4) {
-                // Perhaps parse that...
-                console.log('request', request);
-
-                var content_type = request.getResponseHeader('Content-Type');
-                console.log('content_type', content_type);
-
-                if (content_type == 'application/json') {
-                    callback(null, JSON.parse(request.responseText));
-                } else {
-                    callback(null, request.responseText);
-                }
-                
+            if (content_type == 'application/json') {
+                callback(null, JSON.parse(request.responseText));
+            } else {
+                callback(null, request.responseText);
             }
-            
-        };
-    });
 
-    // The page needs to get activated.
+        }
 
-    console.log('Running jsgui-html-client');
+    };
+});
 
-    jsgui.Client_Page_Context = Client_Page_Context;
+// The page needs to get activated.
 
-    var client_page_context = new Client_Page_Context();
+console.log('Running jsgui-html-client');
 
-    var resource_pool = client_page_context.resource_pool = new Client_Resource_Pool();
+jsgui.Client_Page_Context = Client_Page_Context;
 
-    resource_pool.start(function() {
-        console.log('client-side resource pool started');
-    });
+var client_page_context = new Client_Page_Context();
 
-    // No automatic activation here, the client app.js may want to load im references.
-    //jsgui.activate(client_page_context);
-    console.log('jsgui-html-client post activate');
+var resource_pool = client_page_context.resource_pool = new Client_Resource_Pool();
 
+resource_pool.start(function() {
+    console.log('client-side resource pool started');
+});
 
-
-
-
-    // Also want this to access resources.
-
-    // Think we will have a client side resource pool (by default?)
-    
+// No automatic activation here, the client app.js may want to load im references.
+//jsgui.activate(client_page_context);
+console.log('jsgui-html-client post activate');
 
 
-    // Possibly this should automatically activate on the client.
 
-    
 
-    //jsgui.Client_Page_Context = Client_Page_Context;
 
-    //return jsgui;
+// Also want this to access resources.
 
-    module.exports = jsgui;
+// Think we will have a client side resource pool (by default?)
+
+
+
+// Possibly this should automatically activate on the client.
+
+
+
+//jsgui.Client_Page_Context = Client_Page_Context;
+
+//return jsgui;
+
+module.exports = jsgui;
 
 
 

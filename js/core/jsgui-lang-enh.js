@@ -23,7 +23,6 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-
 define(["./jsgui-lang-util", "./enhanced-data-object"], function(jsgui, Enhanced_Data_Object) {
 
     */

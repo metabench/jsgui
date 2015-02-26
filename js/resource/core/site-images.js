@@ -1,3 +1,4 @@
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -7,7 +8,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
         //"jpeg-js",
         '../../image/node/jsgui-node-jpeg',
         '../../image/node/jsgui-node-png',
-    'webworker-threads'],
+        'webworker-threads'],
 
     function(module, path, fs, url, jsgui, os, http, libUrl,
              Resource, JeSuisXML, Cookies, fs2,
@@ -84,13 +85,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
         //  Thumbnail versions under key _400x300
         //   I think x will be an OK separator here.
         //   That size will refer to their maximum dimensions.
-
-
-
-
-
-
-
 
 
 
@@ -172,6 +166,17 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
             'start': function(callback) {
                 callback(null, true);
             },
+            'get_image_url': function(image_key) {
+
+            },
+            'get_icon_url': function(icon_key) {
+                // May have different size icons
+                //  For the moment will keep this simple.
+
+                return '/img/icons/' + icon_key + '.png';
+
+
+            },
 
             'get_metadata': fp(function(a, sig) {
                 console.log('get_metadata sig', sig);
@@ -186,45 +191,29 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                         //console.log('pre run web worker')
 
                         /*
-                        var worker = new Worker.Worker(function() {
-                            console.log('running web worker')
-
-
-
-                            //postMessage("I'm working before postMessage('ali').");
-
-                            //this.onmessage = function(event) {
-
-                            // But does the worker have access to jpeg_js?
-
-
-
-                            console.log('pre decode');
-                            var decoded = jpeg_js.decode(value);
-                            console.log('post decode');
-
-                            var width = decoded.width;
-                            var height = decoded.height;
-
-                            var res = {
-                                'width': width,
-                                'height': height,
-                                'type_name': type_name
-                            }
-
-                            callback(null, res);
-
-                            postMessage(res);
-
-                            worker.close();
-
-                        });
-
-                        worker.onmessage = function(event) {
-                            console.log("Worker said : " + event.data);
-                        };
-
-                        */
+                         var worker = new Worker.Worker(function() {
+                         console.log('running web worker')
+                         //postMessage("I'm working before postMessage('ali').");
+                         //this.onmessage = function(event) {
+                         // But does the worker have access to jpeg_js?
+                         console.log('pre decode');
+                         var decoded = jpeg_js.decode(value);
+                         console.log('post decode');
+                         var width = decoded.width;
+                         var height = decoded.height;
+                         var res = {
+                         'width': width,
+                         'height': height,
+                         'type_name': type_name
+                         }
+                         callback(null, res);
+                         postMessage(res);
+                         worker.close();
+                         });
+                         worker.onmessage = function(event) {
+                         console.log("Worker said : " + event.data);
+                         };
+                         */
 
 
                         // It would be nice to improve the speed of the JPEG_JS module.
@@ -259,48 +248,39 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
                                 /*
-                                jpeg.save_to_disk('c:\\users\\james\\test.jpeg', function(err, res_saved) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        console.log('saved');
-
-                                        throw 'stop';
-                                    }
-                                });
-                                */
+                                 jpeg.save_to_disk('c:\\users\\james\\test.jpeg', function(err, res_saved) {
+                                 if (err) {
+                                 throw err;
+                                 } else {
+                                 console.log('saved');
+                                 throw 'stop';
+                                 }
+                                 });
+                                 */
 
                                 /*
-
-                                throw 'stop';
-                                //postMessage('done');
-                                //worker.close();
-
-                                var res = {
-                                    'width': width,
-                                    'height': height,
-                                    'type_name': type_name
-                                };
-
-                                callback(null, res);
-                                */
+                                 throw 'stop';
+                                 //postMessage('done');
+                                 //worker.close();
+                                 var res = {
+                                 'width': width,
+                                 'height': height,
+                                 'type_name': type_name
+                                 };
+                                 callback(null, res);
+                                 */
                             }
                         })
 
                         /*
-
-                        var decoded = jpeg_js.decode(value);
-                        console.log('post decode');
-                        console.log('decoded.data.length', decoded.data.length);
-                        console.log('decoded', decoded);
-
-
-                        throw 'stop';
-
-                        var width = decoded.width;
-                        var height = decoded.height;
-
-                        */
+                         var decoded = jpeg_js.decode(value);
+                         console.log('post decode');
+                         console.log('decoded.data.length', decoded.data.length);
+                         console.log('decoded', decoded);
+                         throw 'stop';
+                         var width = decoded.width;
+                         var height = decoded.height;
+                         */
 
 
 
@@ -333,12 +313,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                 console.trace('');
                 throw 'stop';
-
-
-
-
-
-
 
                 if (sig == '[a,f]') {
                     var sig0 = get_item_sig(a[0], 1);
@@ -389,35 +363,27 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                         })
 
                         /*
-
-                        var worker = new Worker(function() {
-
-                            // Probably no need to put it in a web worker.
-                            //  Likely to optimize the JPEG code to use C / C++.
-
-                            var jpeg = new jsgui_jpeg.JPEG({});
-
-
-                            jpeg.load_from_buffer(buffer_image, function(err, cb_jpeg_loaded) {
-                                if (err) {
-                                    throw err;
-                                } else {
-                                    console.log('jpeg loaded');
-                                    throw 'stop';
-                                    //postMessage('done');
-                                    worker.close();
-                                }
-                            })
-
-                            //postMessage("I'm working before postMessage('ali').");
-
-                            //this.onmessage = function(event) {
-                                //postMessage('Hi ' + event.data);
-                            //    self.close();
-                            //};
-                        });
-
-                        */
+                         var worker = new Worker(function() {
+                         // Probably no need to put it in a web worker.
+                         //  Likely to optimize the JPEG code to use C / C++.
+                         var jpeg = new jsgui_jpeg.JPEG({});
+                         jpeg.load_from_buffer(buffer_image, function(err, cb_jpeg_loaded) {
+                         if (err) {
+                         throw err;
+                         } else {
+                         console.log('jpeg loaded');
+                         throw 'stop';
+                         //postMessage('done');
+                         worker.close();
+                         }
+                         })
+                         //postMessage("I'm working before postMessage('ali').");
+                         //this.onmessage = function(event) {
+                         //postMessage('Hi ' + event.data);
+                         //    self.close();
+                         //};
+                         });
+                         */
                         //worker.onmessage = function(event) {
                         //    console.log("Worker said : " + event.data);
 
@@ -473,7 +439,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                 // {document, type, metadata}
                 //  or value, type, metadata
-                
+
 
 
 
@@ -750,8 +716,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                                         // Looks like it needs to save the original version and get the id first.
 
                                         /*
-
-                                        */
+                                         */
 
                                         save_square_sized_version(128, function(err, transformed_doc_id) {
                                             console.log('saved 128');
@@ -787,16 +752,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                                                 //
 
                                                 /*
-                                                save_square_sized_version(64, function(err, res) {
-                                                    console.log('saved 64');
-
-                                                    //console.log('callback', callback);
-
-                                                    callback(null, true);
-
-
-                                                });
-                                                */
+                                                 save_square_sized_version(64, function(err, res) {
+                                                 console.log('saved 64');
+                                                 //console.log('callback', callback);
+                                                 callback(null, true);
+                                                 });
+                                                 */
 
 
 
@@ -806,26 +767,20 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
                                         /*
-                                        save_square_sized_version(128, function(err, res) {
-                                            console.log('saved 128');
-                                            //throw 'stop';
-
-                                            if (err) {
-                                                throw err;
-                                            } else {
-                                                save_square_sized_version(64, function(err, res) {
-                                                    console.log('saved 64');
-
-                                                    //console.log('callback', callback);
-
-                                                    callback(null, true);
-
-
-                                                });
-                                            }
-
-                                        });
-                                        */
+                                         save_square_sized_version(128, function(err, res) {
+                                         console.log('saved 128');
+                                         //throw 'stop';
+                                         if (err) {
+                                         throw err;
+                                         } else {
+                                         save_square_sized_version(64, function(err, res) {
+                                         console.log('saved 64');
+                                         //console.log('callback', callback);
+                                         callback(null, true);
+                                         });
+                                         }
+                                         });
+                                         */
 
 
 
@@ -918,25 +873,19 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
                                 /*
-
-                                var resized = pb.get_resized([800, 600]);
-
-                                console.log('resized', resized);
-
-                                // Let's save the resized.
-
-                                // A JPEG save pixel buffer to disk?
-
-                                // Could try as PNG too for the moment.
-
-                                jsgui_png.save_pixel_buffer_to_disk(resized, 'resized.png', function(err, res_saved) {
-                                    if (err) {
-                                        throw err;
-                                    } else {
-                                        console.log('resized image saved');
-                                    }
-                                })
-                                */
+                                 var resized = pb.get_resized([800, 600]);
+                                 console.log('resized', resized);
+                                 // Let's save the resized.
+                                 // A JPEG save pixel buffer to disk?
+                                 // Could try as PNG too for the moment.
+                                 jsgui_png.save_pixel_buffer_to_disk(resized, 'resized.png', function(err, res_saved) {
+                                 if (err) {
+                                 throw err;
+                                 } else {
+                                 console.log('resized image saved');
+                                 }
+                                 })
+                                 */
 
 
 
@@ -956,69 +905,42 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
                     /*
-
-                    that.get_metadata(value, type_name, function(err, metadata) {
-                        if (err) {
-                            throw err;
-                        } else {
-                            console.log('metadata', metadata);
-                            //throw 'stop';
-
-                            // also generate the various resized images.
-                            //  will get them all in an array.
-                            // want the images in a bunch of convenient sizes.
-
-                            // Could do get resized versions through this resource, giving it the buffer to work from.
-
-                            // It would load it up as a Pixel Buffer
-                            //  Maybe something that inherits from Pixel Buffer.
-                            //   Raster_Image
-                            //    Or something else, Enhanced_Pixel_Buffer
-                            //  Enh_Pixel_Buffer, E_Pixel_Buffer
-
-                            // Would keep the Pixel_Buffer code simple that way, but the E or Enhanced version will be able to resize images as well.
-
-
-
-                            // get_resized_versions could quickly get the image size itself.
-
-                            // let's try getting one resized version.
-
-
-
-
-                            //throw 'stop';
-
-                            that.get_resized_versions([value, metadata], function(err, arr_resized_versions) {
-                                if (err) {
-                                    throw err;
-                                } else {
-
-                                    // then set all of those resized versions.
-
-                                    console.log('arr_resized_versions.length', arr_resized_versions.length);
-
-                                }
-                            });
-
-
-                            throw 'stop';
-
-
-
-                            // hmmmm... maybe if the DB does not recognise the type name it treats it as binary.
-                            //  or it's fine telling the DB it's a JPEG, it will also remember mime types.
-                            //  The DB won't be doing type-specific processing (or hardly any)
-                            //   it makes more sense to have other resources or adapters build on the solid base functionality of the WEB_DB module.
-
-
-
-
-                            web_db.set_document(key, value, type_name, metadata, callback);
-                        }
-                    })
-
-                    */
+                     that.get_metadata(value, type_name, function(err, metadata) {
+                     if (err) {
+                     throw err;
+                     } else {
+                     console.log('metadata', metadata);
+                     //throw 'stop';
+                     // also generate the various resized images.
+                     //  will get them all in an array.
+                     // want the images in a bunch of convenient sizes.
+                     // Could do get resized versions through this resource, giving it the buffer to work from.
+                     // It would load it up as a Pixel Buffer
+                     //  Maybe something that inherits from Pixel Buffer.
+                     //   Raster_Image
+                     //    Or something else, Enhanced_Pixel_Buffer
+                     //  Enh_Pixel_Buffer, E_Pixel_Buffer
+                     // Would keep the Pixel_Buffer code simple that way, but the E or Enhanced version will be able to resize images as well.
+                     // get_resized_versions could quickly get the image size itself.
+                     // let's try getting one resized version.
+                     //throw 'stop';
+                     that.get_resized_versions([value, metadata], function(err, arr_resized_versions) {
+                     if (err) {
+                     throw err;
+                     } else {
+                     // then set all of those resized versions.
+                     console.log('arr_resized_versions.length', arr_resized_versions.length);
+                     }
+                     });
+                     throw 'stop';
+                     // hmmmm... maybe if the DB does not recognise the type name it treats it as binary.
+                     //  or it's fine telling the DB it's a JPEG, it will also remember mime types.
+                     //  The DB won't be doing type-specific processing (or hardly any)
+                     //   it makes more sense to have other resources or adapters build on the solid base functionality of the WEB_DB module.
+                     web_db.set_document(key, value, type_name, metadata, callback);
+                     }
+                     })
+                     */
 
 
 
@@ -1220,59 +1142,42 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
                                             /*
-
                                              //console.log('url_parts.path ' + url_parts.path);
                                              var filePath = url_parts.path.substr(1);
                                              //console.log('module.uri ' + module.uri);
                                              var val2 =  path.dirname(module.uri);
                                              console.log('val2 ' + val2);
                                              //throw '9) stop';
-
                                              //var diskPath = val2 + '/../../images/' + fileName;
-
                                              var diskPath = '../../ws/img/' + fileName;
-
                                              // Also making use of custom paths...
-
                                              // First check if such an image is in a specifically served directory.
-
                                              var served_directories = this.meta.get('served_directories');
                                              //console.log('served_directories ' + stringify(served_directories));
-
                                              // see if the file exists in any of the served directories
-
                                              // search for the file in the served directories.
                                              //  will be an asyncronous search, and use an array of function calls with call_multi.
-
                                              var fns = [];
                                              var found_path;
-
-
                                              each(served_directories, function(served_directory) {
                                              //console.log('served_directory', served_directory);
                                              var dir_val = served_directory.value();
                                              //console.log('dir_val', dir_val);
                                              var dir_name = dir_val.name;
                                              //console.log('dir_name', dir_name);
-
                                              var search_path = dir_name + '/' + fileName;
                                              //console.log('search_path', search_path);
                                              fns.push(function(callback) {
                                              // check that directory
-
                                              fs.exists(search_path, function(exists) {
                                              //console.log('exists', exists);
-
                                              if (!found_path && exists) {
                                              found_path = search_path;
                                              }
                                              callback(null, exists);
                                              })
-
-
                                              })
                                              });
-
                                              call_multi(fns, function(err, res2) {
                                              if (err) {
                                              throw err;
@@ -1283,11 +1188,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                                              serve_image_file_from_disk(diskPath, res);
                                              }
                                              }
-
                                              });
-
                                              //throw 'stop';
-
                                              */
 
 

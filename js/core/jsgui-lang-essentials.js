@@ -1052,7 +1052,7 @@ if (typeof window === 'undefined') {
 		return _stringify(obj, includeFunctions);
 	};
 
-    
+
 	
     /**
     * Returns a type signature for the given value. 
@@ -1474,38 +1474,30 @@ if (typeof window === 'undefined') {
 	var arrayify = fp(function(a, sig) {
         // but when the function has it's last parameter as a function...
         //  can we assume it is a callback?
-        
         // when given a whole bunch of strings (or numbers) these can be used to make a map for the results.
         //  ie for load_file could give a bunch of string files, it loads them, can provide the results as one object.
-        
         // may also want to specify if functions get called in parallel, and the limit to how many get called at once.
-        
         // this could take options in the signature - be able to return a results map.
-        
-        
 		// What about arrayifying a map rather than a function?
 		// Turns it into name/value pairs. Easier to process with each or
 		// measure the length of.
 
 		// what about a pf function that provides an 'a' map.
 		// has whatever properties have been provided and asked for.
-		var param_index, fn;
+		var param_index, num_parallel = 1, delay = 0, fn;
 		// (param_index, fn)
 		var res;
 		var process_as_fn = function() {
 		    //console.log('process_as_fn');
 			res = function() {
 				// could use pf here? but maybe not
-
 				//console.log('arguments.length ' + arguments.length);
 				//console.log('arguments ' + stringify(arguments));
 				var a = arr_like_to_arr(arguments), ts = atof(a), t = this;
 			    //console.log('a ' + stringify(a));
-
                 var last_arg = a[a.length - 1];
                 //console.log('last_arg ' + last_arg);
                 //console.log('a.length ' + a.length);
-                
                 if (tof(last_arg) == 'function') {
                     // it seems like a callback function.
                     
@@ -1540,8 +1532,10 @@ if (typeof window === 'undefined') {
                         //return res;
                         
                         // call_multi not working right?
+                        console.log('delay', delay);
+                        //throw 'stop';
                         
-                        call_multiple_callback_functions(fns, function(err, res) {
+                        call_multiple_callback_functions(fns, num_parallel, delay, function(err, res) {
                             if (err) {
                                 throw err;
                             } else {
@@ -1565,28 +1559,21 @@ if (typeof window === 'undefined') {
                                 callback(null, a);
                             }
                         })
-                        
                     } else {
                         return fn.apply(t, a);
                     }
-                    
                 } else {
-                    
                     if (typeof param_index !== 'undefined' && ts[param_index] == 'array') {
-
                         // var res = [], a2 = a.slice(1); // don't think this makes
                         // a copy of the array.
                         var res = []; // don't think this makes a copy of the
                                         // array.
                         // console.log('fn ' + fn);
-                        
                         // but we can make this process a function with a callback.
-                        
                         each(a[param_index], function(i, v) {
                             var new_params = a;
                             new_params[param_index] = v;
                             // the rest of the parameters as normal
-    
                             var result = fn.apply(t, new_params);
                             // console.log('result ' + stringify(result));
                             res.push(result);
@@ -1596,13 +1583,11 @@ if (typeof window === 'undefined') {
                         return fn.apply(t, a);
                     }   
                 }
-                
 				// console.log('a.length ' + a.length);
 				// console.log('a ' + stringify(a));
 				// console.log('param_index ' + param_index);
 				// console.log('ts ' + stringify(ts));
                 // but if the last function there is a function... it may be best to compile the results into one object.
-                
 			};
 		}
 
@@ -1617,7 +1602,13 @@ if (typeof window === 'undefined') {
 		} else if (sig == '[n,f]') {
 		    param_index = a[0], fn = a[1];
 			process_as_fn();
-		}
+		} else if (sig == '[n,n,f]') {
+            param_index = a[0], num_parallel = a[1], fn = a[2];
+            process_as_fn();
+        } else if (sig == '[n,n,n,f]') {
+            param_index = a[0], num_parallel = a[1], delay = a[2], fn = a[3];
+            process_as_fn();
+        }
 
 		// maybe done with pf for getting function signature.
 		// console.log('using arrayify');
@@ -2545,6 +2536,7 @@ if (typeof window === 'undefined') {
 		
 		// arr_functions_params_pairs, callback
 		var arr_functions_params_pairs, callback, return_params = false;
+        var delay;
 		
 		//console.log('a.l ' + a.l);
 		//console.log('');
@@ -2591,8 +2583,42 @@ if (typeof window === 'undefined') {
                 callback = a[1];
                 return_params = a[2];
 		    }
+
 			
 		}
+        if (a.l == 4) {
+            // look at the sig
+            // arr, num, fn - number is the number of parallel to do at once.
+            // return_params is a boolean?
+
+            // want a signature that just treats an array as a?
+            //  may make more sense for these function signatures.
+            //   at least for the first stage... could look in more detail at the array.
+            //   not using the more complicated signatures right now. could change to a different sig method when needed, or use different sig or fp options.
+
+            console.log('sig ' + sig);
+
+            if (sig == '[a,n,n,f]') {
+                arr_functions_params_pairs = a[0];
+                num_parallel = a[1];
+                delay = a[2];
+                callback = a[3];
+            }
+            if (sig == '[n,n,a,f]') {
+                arr_functions_params_pairs = a[2];
+                num_parallel = a[0];
+                delay = a[1];
+                callback = a[3];
+            }
+            //if (sig == '[a,f,b]') {
+            //    arr_functions_params_pairs = a[0];
+            //    callback = a[1];
+            //    return_params = a[2];
+            //}
+
+        }
+
+
 		
 		// also want the context.
 		
@@ -2611,191 +2637,233 @@ if (typeof window === 'undefined') {
         
         var num_currently_executing = 0;
         
-		var process = function() {
-		    num_currently_executing++;
-			// they may not be pairs, they could be a triple with a callback.
-			//console.log('num_currently_executing ' + num_currently_executing);
-            //console.log('num_parallel', num_parallel);
-			//console.log('c ' + c);
-			
-			var pair = arr_functions_params_pairs[c];
-			
-			//console.log('pair', pair);
-			
-			// object (context / caller), function, params
-			// object (context / caller), function, params, fn_callback
-			
-			var context;
-			var fn, params, fn_callback;
-			// function, array
-			// context
-			//console.log('pair.length ' + pair.length);
-			var pair_sig = get_item_sig(pair);
-			//console.log('pair_sig ' + pair_sig);
-			//console.log(jsgui.atof(pair));
-			//console.log('pair.length ' + pair.length);
+		var process = function(delay) {
+            num_currently_executing++;
+            var main = function() {
 
-			var t_pair = tof(pair);
-			//console.log('t_pair', t_pair);
+                // they may not be pairs, they could be a triple with a callback.
+                //console.log('num_currently_executing ' + num_currently_executing);
+                //console.log('num_parallel', num_parallel);
+                //console.log('c ' + c);
 
-			if (t_pair == 'function') {
-				fn = pair;
-				params = [];
-			} else {
-				if (pair.length == 1) {
+                var pair = arr_functions_params_pairs[c];
+                // maybe there won't be a pair.
+                //  should try to prevent this situation.
 
-				}
-				
-				if (pair.length == 2) {
-				    // [context, fn]
-				    // [fn, params]
 
-					//if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && pair.length == 2) {
-					//	fn = pair[0];
-					//	params = pair[1];
-					//}
-					// ?, function
-					
-					if (tof(pair[1]) == 'function') {
-						context = pair[0];
-						fn = pair[1];
-						params = [];
-					} else {
-						fn = pair[0];
-						params = pair[1];
-					}			
-				}
-				
-				// function, array, function
-				if (pair.length == 3) {
-				    // [fn, params, fn_callback]
-				    // [context, fn, params]
 
-					if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && tof(pair[2]) == 'function') {
-						fn = pair[0];
-						params = pair[1];
-						fn_callback = pair[2];
-					}
-					// object / data_object?
-					// ?, function, array
-					if (tof(pair[1]) == 'function' && tof(pair[2]) == 'array') {
-					    //console.log('has context');
-						context = pair[0];
-						fn = pair[1];
-						params = pair[2];
-						
-						// may not be a fn_callback in this case.
-					}
-				}
-				
-				if (pair.length == 4) {
-				    // [context, fn, params, fn_callback]
 
-				    // context, function being called, params, cb
-				    context = pair[0];
-				    fn = pair[1];
-				    params = pair[2];
-				    fn_callback = pair[3];
-				}
-			}
 
-				
-			
-			var i = c;
-			// not sure it keeps this same value of i.
-			//  can try some tests on this.
-			
-			c++;
-			//throw 'stop';
-			
-			var cb = function(err, res2) {
-			    num_currently_executing--;
-			    count_unfinished--; 
-				//console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
-				if (err) {
-					var stack = new Error().stack;
-					//console.log(stack);
-					throw err;
-				} else {
-				    //console.log('i ' + i + ', res2 ' + res2);
-					if (return_params) {
-						//console.log('call_multi inner cb return_params ' + stringify(return_params));
-						//throw 'stop';
-						//console.log('params ' + params);
-						res[i] = [params, res2];
-					} else {
-						res[i] = res2;
-					}
-					//console.log('pair.length ' + pair.length);
+                //console.log('pair', pair);
 
-					if (fn_callback) {
-					    fn_callback(null, res2);
-					}
-					/*
-					
-					if (pair.length == 3) {
-						fn_callback(null, res2);
-					}
-					if (pair.length == 4) {
-						fn_callback(null, res2);
-					}
-					*/
-					//console.log('c', c);
-					//console.log('l', l);
-					
-					if (c < l) {
+                // object (context / caller), function, params
+                // object (context / caller), function, params, fn_callback
 
-					    // only process if the num executing is less than the max num to execute.
-					    // otherwise the process will be done when a callabck is produced from the function.
-					    //console.log('num_currently_executing', num_currently_executing);
-					    if (num_currently_executing < num_parallel) {
-					        process();
-					    }
-					    
-						
-					} else {
-						//console.log('count_unfinished', count_unfinished);
-					    if (count_unfinished <= 0) {
-					        callback(null, res);
-					    }
-					}
-				}
-			};
+                var context;
+                var fn, params, fn_callback;
+                // function, array
+                // context
+                //console.log('pair.length ' + pair.length);
+                var pair_sig = get_item_sig(pair);
+                //console.log('pair_sig ' + pair_sig);
+                //console.log(jsgui.atof(pair));
+                //console.log('pair.length ' + pair.length);
 
-            // Clone the params?
-            //  Really not sure about that.
+                var t_pair = tof(pair);
+                //console.log('t_pair', t_pair);
 
-			
-			//var arr_to_call = clone(params) || [];
+                if (t_pair == 'function') {
+                    fn = pair;
+                    params = [];
+                } else {
 
-            var arr_to_call = (params) || [];
-			//console.log('params', params);
-			//console.log('arr_to_call', arr_to_call);
-			//console.log('params ' + params);
-			//console.log('fn ' + fn);
-			arr_to_call.push(cb);
 
-			// but if the function does not have a callback?
-			//console.log('context ' + context);
-			if (context) {
-				fn.apply(context, arr_to_call);
-			} else {
-				fn.apply(that, arr_to_call);
-			}
+                    if (pair) {
+                        if (pair.length == 1) {
+
+                        }
+
+                        if (pair.length == 2) {
+                            // [context, fn]
+                            // [fn, params]
+
+                            //if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && pair.length == 2) {
+                            //	fn = pair[0];
+                            //	params = pair[1];
+                            //}
+                            // ?, function
+
+                            if (tof(pair[1]) == 'function') {
+                                context = pair[0];
+                                fn = pair[1];
+                                params = [];
+                            } else {
+                                fn = pair[0];
+                                params = pair[1];
+                            }
+                        }
+
+                        // function, array, function
+                        if (pair.length == 3) {
+                            // [fn, params, fn_callback]
+                            // [context, fn, params]
+
+                            if (tof(pair[0]) == 'function' && tof(pair[1]) == 'array' && tof(pair[2]) == 'function') {
+                                fn = pair[0];
+                                params = pair[1];
+                                fn_callback = pair[2];
+                            }
+                            // object / data_object?
+                            // ?, function, array
+                            if (tof(pair[1]) == 'function' && tof(pair[2]) == 'array') {
+                                //console.log('has context');
+                                context = pair[0];
+                                fn = pair[1];
+                                params = pair[2];
+
+                                // may not be a fn_callback in this case.
+                            }
+                        }
+
+                        if (pair.length == 4) {
+                            // [context, fn, params, fn_callback]
+
+                            // context, function being called, params, cb
+                            context = pair[0];
+                            fn = pair[1];
+                            params = pair[2];
+                            fn_callback = pair[3];
+                        }
+                    } else {
+                        //console.log('missing pair');
+
+                    }
+
+                    // For some reason the pair can be undefined.
+
+                    // We don't have a pair of them.
+                    //  Have we called with the wrong data?
+                    //   Do a callback, result is false.
+
+
+
+
+
+
+                }
+
+
+
+                var i = c;
+                // not sure it keeps this same value of i.
+                //  can try some tests on this.
+
+                c++;
+                //throw 'stop';
+
+                var cb = function(err, res2) {
+                    num_currently_executing--;
+                    count_unfinished--;
+                    //console.log('cb num_currently_executing ' + num_currently_executing + ', c ' + c);
+                    if (err) {
+                        var stack = new Error().stack;
+                        //console.log(stack);
+                        throw err;
+                    } else {
+                        //console.log('i ' + i + ', res2 ' + res2);
+                        if (return_params) {
+                            //console.log('call_multi inner cb return_params ' + stringify(return_params));
+                            //throw 'stop';
+                            //console.log('params ' + params);
+                            res[i] = [params, res2];
+                        } else {
+                            res[i] = res2;
+                        }
+                        //console.log('pair.length ' + pair.length);
+
+                        if (fn_callback) {
+                            fn_callback(null, res2);
+                        }
+                        /*
+
+                         if (pair.length == 3) {
+                         fn_callback(null, res2);
+                         }
+                         if (pair.length == 4) {
+                         fn_callback(null, res2);
+                         }
+                         */
+                        //console.log('c', c);
+                        //console.log('l', l);
+
+                        if (c < l) {
+
+                            // only process if the num executing is less than the max num to execute.
+                            // otherwise the process will be done when a callabck is produced from the function.
+                            //console.log('num_currently_executing', num_currently_executing);
+                            if (num_currently_executing < num_parallel) {
+                                process(delay);
+                            }
+
+
+                        } else {
+                            //console.log('count_unfinished', count_unfinished);
+                            if (count_unfinished <= 0) {
+                                callback(null, res);
+                            }
+                        }
+                    }
+                };
+                // Clone the params?
+                //  Really not sure about that.
+                //var arr_to_call = clone(params) || [];
+                var arr_to_call = (params) || [];
+                //console.log('params', params);
+                //console.log('arr_to_call', arr_to_call);
+                //console.log('params ' + params);
+                //console.log('fn ' + fn);
+                arr_to_call.push(cb);
+                // but if the function does not have a callback?
+                //console.log('context ' + context);
+
+                if (fn) {
+                    if (context) {
+                        fn.apply(context, arr_to_call);
+                    } else {
+                        fn.apply(that, arr_to_call);
+                    }
+                } else {
+                    //cb(null, undefined);
+                }
+            }
+            //console.log('2) delay', delay);
+
+            if (arr_functions_params_pairs[c]) {
+                if (delay) {
+                    setTimeout(main, delay);
+                } else {
+                    main();
+                }
+            }
+
+
 		}
-		
 		//console.log('** arr_functions_params_pairs.length ' + arr_functions_params_pairs.length);
 		if (arr_functions_params_pairs.length > 0) {
 		    while ((c < l)  && (num_currently_executing < num_parallel)) {
-		        process();
+                if (delay) {
+                    //console.log('sto');
+                    //setTimeout(process, delay * c);
+                    process(delay * c);
+                } else {
+                    process();
+                }
 		    }	
 		} else {
 		    if (callback) {
-		        callback(null, null);
+		        //callback(null, null);
 		    }
 		}
-		
-		
 	});
 	
 	var multi = call_multiple_callback_functions;
@@ -2832,12 +2900,29 @@ if (typeof window === 'undefined') {
     */
 	var Fns = function() {
 	    var fns = [];
-	    fns.go = function(parallel, callback) {
-            if (!callback) {
+	    fns.go = function(parallel, delay, callback) {
+
+
+            //if (!callback) {
+            //    call_multi(fns, parallel);
+            //} else {
+            //    call_multi(parallel, fns, callback);
+            //}
+
+            var a = arguments;
+            var al = a.length;
+
+            if (al == 1) {
                 call_multi(fns, parallel);
-            } else {
-                call_multi(parallel, fns, callback);
             }
+            if (al == 2) {
+                call_multi(parallel, fns, delay);
+            }
+            if (al == 3) {
+                call_multi(parallel, delay, fns, callback);
+            }
+
+
 
 
 

@@ -30,13 +30,25 @@ if (typeof define !== 'function') {
 
 // The abstraction of this is nice, but it gets difficult and time-consuming to make the full ORM-type system.
 
+// Probably should make a disk / fs version of this.
+//  Want to be able to edit images.
+//  Want to be able to refer to images / icons, and have the system load them quickly / automatically.
 
+// A simple image admin system would be useful too.
+//  Nice if it's got the same API as the database version.
+//   Perhaps it's going to be better to work on a disk based system first.
 
 //
 
+// Want a simple interface to some icons, which will be served.
+//  Also need to serve the right size image
+//  Want a fairly quick image service that gets the file path / URL for an image from disk.
+//   Also want to be able to get a higher resolution version, suitable for high-res displays.
+
+// Could possibly specify button images as SVG.
 
 
-
+// Perhaps some functonality should be in the image resource.
 
 
 
