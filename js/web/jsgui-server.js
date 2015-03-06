@@ -597,6 +597,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 								});
 							}
 						});
+                        http_server.timeout = 10800000;
 
 
                         // Single sock server for each server

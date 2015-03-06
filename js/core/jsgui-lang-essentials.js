@@ -2845,8 +2845,6 @@ if (typeof window === 'undefined') {
                     main();
                 }
             }
-
-
 		}
 		//console.log('** arr_functions_params_pairs.length ' + arr_functions_params_pairs.length);
 		if (arr_functions_params_pairs.length > 0) {
@@ -2865,17 +2863,13 @@ if (typeof window === 'undefined') {
 		    }
 		}
 	});
-	
 	var multi = call_multiple_callback_functions;
-	
     /**
     * Alias to the [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} function.
     * @func
     * @memberof module:core/jsgui-lang-essentials
     */
     var call_multi = call_multiple_callback_functions;
-	
-	
     /**
     * Returns a [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} helper object. The object is an array with `go()` method added.
     * You can add the [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} tasks to the array, then call the go() method passing the callback function.
@@ -2902,6 +2896,10 @@ if (typeof window === 'undefined') {
 	    var fns = [];
 	    fns.go = function(parallel, delay, callback) {
 
+            // Should have better param checking here.
+
+
+
 
             //if (!callback) {
             //    call_multi(fns, parallel);
@@ -2911,6 +2909,12 @@ if (typeof window === 'undefined') {
 
             var a = arguments;
             var al = a.length;
+
+
+
+            // No, we may give the number in parallel, alongside a callback.
+
+
 
             if (al == 1) {
                 call_multi(fns, parallel);

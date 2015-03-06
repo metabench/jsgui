@@ -90,9 +90,7 @@ define(['../../core/jsgui-lang-essentials', 'fs', '../../image/node/jsgui-node-p
 								callback(null, true);
 							});
 						}
-					
 					});
-					
 				}
 				
 				var test_load_dice_png_to_rgba_buffer_save_as_png = function() {
