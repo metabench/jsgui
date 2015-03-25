@@ -4,6 +4,7 @@
 
 var jsgui = require('./jsgui-html-core');
 var each = jsgui.eac;
+var tof = jsgui.tof;
 
 var Selection_Scope = jsgui.Data_Object.extend({
 //var Selection_Scope = jsgui.Class.extend({
@@ -35,11 +36,26 @@ var Selection_Scope = jsgui.Data_Object.extend({
 
         // remove the selected class from all that are currently selected (except the target ctrl).
         //console.log('this.map_selected_controls ', this.map_selected_controls);
+
+
+        // And need to trigger deselect where appropriate.
+
+        var selected;
         each(this.map_selected_controls, function(v, i) {
 
             if (v && v !== ctrl) {
-                v.set('selected', false);
-                v.remove_class('selected');
+                selected = v.get('selected').value();
+                //console.log('selected', selected);
+                //console.log('tof selected', tof(selected));
+
+                if (selected) {
+                    v.set('selected', false);
+                    v.remove_class('selected');
+                    v.trigger('deselect');
+                }
+
+
+
 
                 //console.log('should have deselcted ' + v._id())
             }
@@ -53,6 +69,8 @@ var Selection_Scope = jsgui.Data_Object.extend({
 
         // could possibly set a CSS flag.
         ctrl.set('selected', true);
+        ctrl.trigger('select');
+
         ctrl.add_class('selected');
 
         this.trigger('change');
@@ -75,6 +93,9 @@ var Selection_Scope = jsgui.Data_Object.extend({
             //console.log('tv ' + tv);
 
             if (tv == 'control') {
+
+                // TODO: Trigger 'deselect' events when selection changes to negitive
+
                 v.remove_class('selected');
                 v.set('selected', false);
 
@@ -94,7 +115,7 @@ var Selection_Scope = jsgui.Data_Object.extend({
     'select_toggle': function(ctrl) {
         //console.log('');
         //console.log('select_toggle');
-        var sel = ctrl.get('selected');
+        var sel = ctrl.get('selected').value();
         //console.log('tof(sel) ' + tof(sel));
 
         var msc = this.map_selected_controls;
@@ -107,6 +128,8 @@ var Selection_Scope = jsgui.Data_Object.extend({
             if (sel_anc) {
                 console.log('1) not selecting because a selected ancestor in the selection scope has been found.');
             } else {
+
+
                 ctrl.set('selected', true);
                 // Check for a selected ancestor control in the scope.
 
