@@ -47,6 +47,19 @@ define(['../../core/jsgui-lang-essentials', 'fs', 'zlib', './CrcStream', './pixe
 
 */
 
+
+// Pixel buffer is going to be improved to use typed arrays.
+//  Will save the old pixel buffer.
+//   Using some of the old things will be useful on the client?
+//    Never used a pixel buffer on the client anyway, will use typed arrays.
+//     Or maybe even smalloc?
+
+// I don't know if it would be faster, but typed arrays would make for simpler code.
+//  Using smalloc may well be faster.
+//  Perhaps using smalloced image buffers all over the place will be faster.
+
+
+
 var jsgui = require('../../core/jsgui-lang-essentials');
 var fs = require('fs');
 var zlib = require('zlib');
@@ -67,6 +80,10 @@ var stringify = jsgui.stringify, each = jsgui.each, is_defined = jsgui.is_define
 var fp = jsgui.fp, tof = jsgui.tof;
 var Fns = jsgui.Fns;
 var arrayify = jsgui.arrayify;
+
+
+var use_cpp = false;
+
 
 //var get_deflated_length = arrayify(function(buffer, callback) {
 var get_deflated_length = (function(buffer, callback) {
@@ -538,7 +555,14 @@ var PNG = jsgui.Class.extend({
 
             var unfiltered_scanlines_buffer = this.unfiltered_scanlines_buffer;
 
-            res.buffer = cpp_mod.copy_unfiltered_scanlines_buffer_32_bpp_to_rgba_buffer_cpp(unfiltered_scanlines_buffer, res.buffer, unfiltered_scanlines_buffer_line_length);
+            if (use_cpp) {
+                res.buffer = cpp_mod.copy_unfiltered_scanlines_buffer_32_bpp_to_rgba_buffer_cpp(unfiltered_scanlines_buffer, res.buffer, unfiltered_scanlines_buffer_line_length);
+            } else {
+                res.buffer = copy_unfiltered_scanlines_buffer_32_bpp_to_rgba_buffer_cpp(unfiltered_scanlines_buffer, res.buffer, unfiltered_scanlines_buffer_line_length);
+            }
+
+
+
             //console.log('res.buffer.length ' + res.buffer.length);
 
 
@@ -901,7 +925,15 @@ var PNG = jsgui.Class.extend({
         var unfiltered_row_start_pos = scanline_length * y;
         var scanlines_buffer = this.scanlines_buffer;
 
-        if (!this.unfiltered_scanlines_buffer) this.ensure_unfiltered_scanlines_buffer_cpp();
+
+
+        if (!this.unfiltered_scanlines_buffer) {
+            if (use_cpp) {
+                this.ensure_unfiltered_scanlines_buffer_cpp();
+            } else {
+                this._ensure_unfiltered_scanlines_buffer();
+            }
+        }
 
         var unfiltered_scanlines_buffer = this.unfiltered_scanlines_buffer;
         //console.log('unfiltered_scanlines_buffer.length ' + unfiltered_scanlines_buffer.length);
@@ -1872,9 +1904,7 @@ var PNG = jsgui.Class.extend({
                     if (filtered_byte < 0) filtered_byte = filtered_byte + 256;
                     scanlines_buffer.writeUInt8(filtered_byte, byte_pos);
                 }
-
             }
-
         }
 
         if (scanline_filter_byte == 4) {
@@ -2045,6 +2075,9 @@ var PNG = jsgui.Class.extend({
 
         var scanline_num;
 
+        var bit_depth = this.bit_depth;
+        var color_type = this.color_type;
+
         var byte_left_pos, byte_above_pos;
 
         var bytes_per_pixel = -1;
@@ -2198,6 +2231,8 @@ var PNG = jsgui.Class.extend({
                     filtered_byte_4 = unfiltered_byte - paeth_predictor(unfiltered_byte_value_left, unfiltered_byte_value_above, unfiltered_byte_value_above_left);
                     if (filtered_byte_4 < 0) filtered_byte_4 = filtered_byte_4 + 256;
                     //
+
+                    //console.log('optimize', optimize);
 
 
                     if (optimize == 'best') {
@@ -2458,13 +2493,7 @@ var PNG = jsgui.Class.extend({
                 bytes_per_pixel = 4;
             }
         }
-
         cpp_mod.filter_all_scanlines(scanlines_buffer, unfiltered_scanlines_buffer, scanline_length, bytes_per_pixel);
-
-
-
-
-
 
     },
 
@@ -2657,7 +2686,6 @@ var PNG = jsgui.Class.extend({
         for (var y = 0; y < h; y++) {
             this.filter_scanline(y);
         }
-
     },
 
 
@@ -2668,7 +2696,6 @@ var PNG = jsgui.Class.extend({
     // // change to most appropriate filter for compression... would use a means of choosing it line-by-line even.
     //  could have option for highest compression using a GA and lots of time.
     //  as well as using the established filter method selection heuristic(s).
-
 
 
     // convert to different format...
@@ -3201,7 +3228,6 @@ var PNG = jsgui.Class.extend({
     'save_to_disk': fp(function(a, sig) {
         var dest_path, options = {}, callback;
 
-
         if (sig == '[s,f]') {
             dest_path = a[0];
             callback = a[1];
@@ -3238,10 +3264,7 @@ var PNG = jsgui.Class.extend({
             if (optimize.scanline_filters) {
                 // then do the optimization?
                 // or just tell it to do the optimization in the options.
-
-
             }
-
         }
         */
         var that = this;
@@ -3272,15 +3295,11 @@ var PNG = jsgui.Class.extend({
             });
             that.save_to_stream(stream, options);
         }
-
         do_save();
-
         // this does not change the filter used on scanlines, but we may want to reencode scanlines after having changed
         //  unencoded scanlines.
         // This may need to update the scanlines from the unfiltered data.
-
         // Can be broken into a few save functions.
-
         // create a write buffer
         //  the various parts will be saved
 
@@ -3338,8 +3357,8 @@ var PNG = jsgui.Class.extend({
             //console.log('img_width ' + img_width);
             //console.log('img_height ' + img_height);
 
-            bit_depth = chunk_buffer.readUInt8(16);
-            color_type = chunk_buffer.readUInt8(17);
+            var bit_depth = chunk_buffer.readUInt8(16);
+            var color_type = chunk_buffer.readUInt8(17);
             var compression_method = chunk_buffer.readUInt8(18);
             var filter_method = chunk_buffer.readUInt8(19);
             var interlace_method = chunk_buffer.readUInt8(20);
@@ -3473,7 +3492,7 @@ var PNG = jsgui.Class.extend({
             //console.log('value ' + value);
             if (color_type == 3) {
                 // then we read in all the color values.
-                trans = [];
+                var trans = [];
                 for (var c = 8; c < 8 + chunk_length; c++) {
                     var alpha = chunk_buffer.readUInt8(c);
                     //console.log('alpha ' + alpha);
@@ -3696,7 +3715,7 @@ var PNG = jsgui.Class.extend({
             if (chunk_end_position_in_read_buffer > buffer.length) {
                 // need to copy this into the temporary buffer
                 //  buffer for incomplete chuncks that have been read.
-                incomplete_chunk_buffer = new Buffer(buffer.length - chunk_end_position_in_read_buffer);
+                var incomplete_chunk_buffer = new Buffer(buffer.length - chunk_end_position_in_read_buffer);
                 buffer.copy(incomplete_chunk_buffer, 0, chunk_beginning_pos, buffer.length);
                 ctu = false;
 
@@ -3922,6 +3941,7 @@ var load_metadata_from_disk = function(source_path, callback) {
                     }
 
                     var incomplete_chunk_buffer = false;
+                    var chunk_beginning_pos;
 
                     src.on('data', function(data) {
 
@@ -4050,8 +4070,6 @@ var save_pixel_buffer_to_disk = fp(function(a, sig) {
     // problem getting the signature of the buffer.
 
 
-    //throw 'stop';
-
     if (sig == '[o,s,f]') {
         rbga_buffer = a[0];
         dest_path = a[1];
@@ -4066,6 +4084,13 @@ var save_pixel_buffer_to_disk = fp(function(a, sig) {
     }
 
     var scanline_encoding = false;
+
+    // maybe want optimization by default?
+    //  or have a save_optimized function.
+
+
+
+
     var optimize = false;
 
     if (options.scanline_encoding) {
@@ -4076,11 +4101,6 @@ var save_pixel_buffer_to_disk = fp(function(a, sig) {
         optimize = options.optimize;
 
     }
-
-
-
-
-
 
     // rbga_buffer, dest_path, callback
 
@@ -4180,7 +4200,7 @@ var save_pixel_buffer_to_disk = fp(function(a, sig) {
     }
 
     if (optimize) {
-        png.ensure_unfiltered_scanlines_buffer();
+        png._ensure_unfiltered_scanlines_buffer();
         png.optimize_filter_all_scanlines(function(err, res) {
             if (err) {
                 throw err;
@@ -4203,7 +4223,7 @@ var png = {
     'load_pixel_buffer_from_disk': load_pixel_buffer_from_disk,
     'save_pixel_buffer_to_disk': save_pixel_buffer_to_disk
 }
-return png;
+//return png;
 
 
 module.exports = png;
