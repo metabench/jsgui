@@ -2551,6 +2551,8 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
             var domAttributes = this.get('dom.attributes');
 
             domAttributes.set('data-jsgui-id', id);
+
+
             domAttributes.set('data-jsgui-type', this.__type_name);
 
             // Calls active on the inner controls.
@@ -2693,7 +2695,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
         'add_class': function(class_name) {
             // Should have already set these up on activation.
-            console.log('Control add_class ' + class_name);
+            //console.log('Control add_class ' + class_name);
             var cls = this.get('dom.attributes.class');
             //console.log('cls ' + cls);
             var el = this.get('dom.el');
@@ -2711,7 +2713,7 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
 
             } else {
                 var tCls = tof(cls);
-                console.log('tCls ' + tCls);
+                //console.log('tCls ' + tCls);
                 if (tCls == 'object') {
                     //cls
                     cls[class_name] = true;
@@ -2798,11 +2800,11 @@ define(["../core/jsgui-lang-enh"], function (jsgui) {
                     //console.log('str_class ' + str_class);
                 }
                 if (tCls == 'string') {
-                    console.log('cls', cls);
+                    //console.log('cls', cls);
                     var arr_classes = cls.split(' ');
                     var arr_res = [];
                     var l = arr_classes.length, c = 0;
-                    console.log('arr_classes', arr_classes);
+                    //console.log('arr_classes', arr_classes);
                     while (c < l) {
                         if (arr_classes[c] != class_name) {
                             //already_has_class = true;

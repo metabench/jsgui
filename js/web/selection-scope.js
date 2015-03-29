@@ -54,9 +54,6 @@ var Selection_Scope = jsgui.Data_Object.extend({
                     v.trigger('deselect');
                 }
 
-
-
-
                 //console.log('should have deselcted ' + v._id())
             }
         })
