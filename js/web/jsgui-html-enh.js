@@ -22,9 +22,7 @@ var jsgui = require('./jsgui-html-core');
 
 var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
 var Control = jsgui.Control;
-
 var Selection_Scope = require('./selection-scope');
-
 var fp = jsgui.fp;
 var group = jsgui.group;
 var str_arr_mapify = jsgui.str_arr_mapify;
@@ -996,7 +994,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             // I think this works better, 02/05/14
 
-            console.log('tof(dval)', tof(dval));
+            //console.log('tof(dval)', tof(dval));
 
             var t_dval = tof(dval);
 
@@ -1151,6 +1149,9 @@ Control = jsgui.Control = jsgui.Control.extend({
         //console.log('2) content.length()', content.length());
     },
     'activate_dom_attributes': function() {
+
+        // Needs to get the class out of the DOM properly.
+
         //console.log('activate_dom_attributes');
 
         var el = this.get('dom.el');
@@ -1163,11 +1164,17 @@ Control = jsgui.Control = jsgui.Control.extend({
             var item = attrs.item(i);
             //console.log('item', item);
 
+
+
             //console.log('item.name', item.name);
             //console.log('item.value', item.value);
 
             var name = item.name;
             var value = item.value;
+
+            //if (name == 'class') {
+            //    console.log('ACTIVATE DOM class: ' + value);
+            //}
 
             if (name == 'data-jsgui-id') {
                 // Handled elsewhere - not so sure it should be but won't change that right now.
@@ -1264,6 +1271,8 @@ Control = jsgui.Control = jsgui.Control.extend({
                     var val_ss, t_val_ss;
                     //console.log('ss ' + ss);
                     // if we have the selection scope, better to create a proper Selection_Scope object.
+
+
 
                     if (typeof ss !== 'undefined') {
                         val_ss = ss.value();
@@ -1427,6 +1436,8 @@ Control = jsgui.Control = jsgui.Control.extend({
 
     },
     'show': function() {
+        //console.log('show');
+
         this.remove_class('hidden');
 
     },
@@ -1499,11 +1510,11 @@ Control = jsgui.Control = jsgui.Control.extend({
                 return false;
             } else {
 
-                console.log('ctrl_parent', ctrl_parent);
+                //console.log('ctrl_parent', ctrl_parent);
                 // does the parent match the type?
 
                 var parent_type = ctrl_parent.__type_name;
-                console.log('parent_type', parent_type);
+                //console.log('parent_type', parent_type);
 
                 if (parent_type == search) {
                     return ctrl_parent;
@@ -1623,7 +1634,7 @@ Control = jsgui.Control = jsgui.Control.extend({
             //console.log('context_menu', context_menu);
 
             if (!context_menu) {
-                console.log('creating new context menu');
+                //console.log('creating new context menu');
 
                 //console.log('menu_def', menu_def);
 
@@ -1731,19 +1742,19 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 //console.log('pre add context_menu', context_menu);
 
-                console.log('pre add context_menu._.content._arr.length ' + context_menu._.content._arr.length);
+                //console.log('pre add context_menu._.content._arr.length ' + context_menu._.content._arr.length);
                 // Looks like we need to examine the add procedure more.
 
                 body.add(context_menu);
 
-                console.log('pre activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
+                //console.log('pre activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
 
                 context_menu.activate();
 
                 // Why is the context menu's node getting added twice?
 
                 //console.log('added context_menu', context_menu);
-                console.log('post activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
+                //console.log('post activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
 
 
                 // Seems not to be rendering it with its ID.
@@ -1759,7 +1770,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
                 context_menu.one_mousedown_anywhere(function(e_mousedown) {
-                    console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+                    //console.log('e_mousedown.within_this ' + e_mousedown.within_this);
 
                     if (!e_mousedown.within_this) {
                         context_menu.remove();
@@ -2962,10 +2973,6 @@ Control = jsgui.Control = jsgui.Control.extend({
         //  Would mean selection scopes need to be created upon activation.
         //   Perhaps any control that has its selection scope set should also send a selection scope id to the client.
 
-
-
-
-
         ss.select_only(this);
         //this.find_selection_scope().select_only(this);
 
@@ -2995,11 +3002,10 @@ Control = jsgui.Control = jsgui.Control.extend({
         if (parent_control_collection) {
             var parent_control = parent_control_collection.parent();
 
-
             //var parent = this.parent().parent();
 
 
-            console.log('parent_control ' + tof(parent_control));
+            //console.log('parent_control ' + tof(parent_control));
 
 
             if (parent_control) return parent_control.find_selection_scope();
@@ -3967,9 +3973,10 @@ var activate = function(context) {
         }
 
         var num_after = function(id) {
-            var pos1 = id.lastIndexOf('_');
-            var res = parseInt(id.substr(pos1 + 1), 10);
-            return res;
+            //var pos1 = id.lastIndexOf('_');
+            //var res = parseInt(id.substr(pos1 + 1), 10);
+            //return res;
+            return parseInt(id.substr(id.lastIndexOf('_') + 1), 10);
         }
 
         recursive_dom_iterate(document, function(el) {
@@ -4106,7 +4113,7 @@ var activate = function(context) {
         //  But connecting up the activated subcontrols with the control getting activated?
         //   They could be the content.
 
-        console.log('pre recursive_dom_iterate_depth');
+        //console.log('pre recursive_dom_iterate_depth');
         recursive_dom_iterate_depth(document, function(el) {
             //console.log('el ' + el);
             var nt = el.nodeType;
