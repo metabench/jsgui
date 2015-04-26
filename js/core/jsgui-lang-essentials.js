@@ -7,7 +7,7 @@
     */
 
 /* Changelog:
-	
+
 	0.4.4
 	-----
 	Removed excess comments, inlcuding unused commented-out code
@@ -42,7 +42,7 @@ if (typeof window === 'undefined') {
 // needs to use node.js's stream for the moment.
 // Will make a new jsgui-node-lang-essentials version because it's got node-specific & dependant code now.
 
-//define(['Stream'], 
+//define(['Stream'],
 //function (Stream) {
 
 
@@ -55,10 +55,10 @@ if (typeof window === 'undefined') {
     // seems based on http://ejohn.org/blog/simple-javascript-inheritance/
 
     /**
-    * Base class like John Resig's "Simple JavaScript Inheritance" tehnique. 
+    * Base class like John Resig's "Simple JavaScript Inheritance" tehnique.
     *
     * In addition, when the inherited class contains a property that name starts from '#',
-    * then the property adds to the class without '#', and the property value is the base class property value, 
+    * then the property adds to the class without '#', and the property value is the base class property value,
     * but the base class property name used is the rest of the initial property name (after the '#').
     * @see [John Resig's "Simple JavaScript Inheritance"]{@link http://ejohn.org/blog/simple-javascript-inheritance/}
     * @name Class
@@ -70,7 +70,7 @@ if (typeof window === 'undefined') {
 	var initializing = false, fnTest = /xyz/.test(function() { xyz; }) ? /\b_super\b/ : /.*/;
 	var Class = function() {
 	};
-	
+
 	// not so sure of the utility of namespcExtension, propsToMerge
 	Class.extend = function(prop) {
 		var _super = this.prototype;
@@ -113,9 +113,9 @@ if (typeof window === 'undefined') {
 		//Class.constructor = Class;
 		Class.extend = arguments.callee;
 		//Class._superclass = _super;
-		
+
 		Class._superclass = this;
-		
+
 		return Class;
 	};
 
@@ -123,7 +123,7 @@ if (typeof window === 'undefined') {
     // ========================================================
     //                      functions
     // ========================================================
-	
+
 
 
     /**
@@ -216,7 +216,7 @@ if (typeof window === 'undefined') {
     * @example
     *
     * jsgui.each({a: 1, b: 2}, function(key, value, stop){
-    *    if (key == "secretKey"){ 
+    *    if (key == "secretKey"){
     *      stop();
     *      return;
     *    }
@@ -240,16 +240,16 @@ if (typeof window === 'undefined') {
 			var stop = function() {
 				ctu = false;
 			}
-			
+
 			if (is_array(collection)) {
 			    var res = [], res_item;
 				for (var c = 0, l = collection.length; c < l; c++) {
 					res_item;
 					if (ctu == false) break;
-					
+
 					if (context) {
 						res_item = fn.call(context, c, collection[c], stop);
-						
+
 					} else {
 						res_item = fn(c, collection[c], stop);
 					}
@@ -302,9 +302,9 @@ if (typeof window === 'undefined') {
     * @param {Object} [context] - context object
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    * 
+    *
     * // TODO.......
-    * 
+    *
     */
 
     /**
@@ -345,7 +345,7 @@ if (typeof window === 'undefined') {
     * @example
     *
     * jsgui.eac({a: 1, b: 2}, function(value, key, stop){
-    *    if (key == "secretKey"){ 
+    *    if (key == "secretKey"){
     *      stop();
     *      return;
     *    }
@@ -368,16 +368,16 @@ if (typeof window === 'undefined') {
 			var stop = function() {
 				ctu = false;
 			}
-			
+
 			if (is_array(collection)) {
 				var res = [], res_item;
 				for (var c = 0, l = collection.length; c < l; c++) {
 					res_item;
 					if (ctu == false) break;
-					
+
 					if (context) {
 						res_item = fn.call(context, collection[c], c, stop);
-						
+
 					} else {
 						res_item = fn(collection[c], c, stop);
 					}
@@ -420,7 +420,7 @@ if (typeof window === 'undefined') {
 	var is_array = Array.isArray || function (obj) {
 	        return jq_type(obj) === "array";
 	};
-    
+
     /**
     * Returns `true` if the passed `obj` is a DOM node. Uses the duck typing.
     * @func
@@ -502,7 +502,7 @@ if (typeof window === 'undefined') {
     * @memberof module:core/jsgui-lang-essentials
     * @example
     *   jq_extend({a:1}, {b:2})  ==> {a:1, b:2}
-    *   jq_extend([1,2,3], [4,5])  ==> [4,5,3]  
+    *   jq_extend([1,2,3], [4,5])  ==> [4,5,3]
     *
     *   var ext = {sub2:{prop2:2}};
     *   var result1 = jq_extend(true, {}, ext)  ==> {sub2:{prop2:2}}
@@ -614,20 +614,20 @@ if (typeof window === 'undefined') {
 		// console.log('target ' + stringify(target));
 		return target;
 	};
-    
+
     /**
     * Alias to the [jq_extend()]{@link module:core/jsgui-lang-essentials.jq_extend} function.
     * @func
     * @memberof module:core/jsgui-lang-essentials
     */
     var extend = jq_extend;
-	
+
 	/*
 	var x_clones = function(obj, x) {
-		
+
 	};
 	*/
-	
+
     /**
     * Returns a truth map created from the given array.
     *
@@ -727,7 +727,7 @@ if (typeof window === 'undefined') {
 
     // Also a bit of node.js specific code.
     //  May make node version of jsgui-lang-essentials, jsgui-node-lang-essentials.
-    
+
     /**
     * Returns the type of the given object as a string. If the t1 parameter is passed, then returns t1 for all the t1 values excepting 'object' one.
     * Possible results are:
@@ -769,16 +769,16 @@ if (typeof window === 'undefined') {
 		if (res == 'object') {
 
 			if (typeof obj != 'undefined') {
-				
+
 				if (obj === null) {
 					return 'null';
 				}
 
 
-				
+
 				//console.log('typeof obj ' + typeof obj);
 				//console.log('obj === null ' + (obj === null));
-				
+
 				if (obj.__type) {
 					return obj.__type;
 				} else {
@@ -804,7 +804,7 @@ if (typeof window === 'undefined') {
 				        //return res;
 				        return 'control';
 				    } else {
-				        
+
 				        if (obj instanceof RegExp) res = 'regex';
 
 				        // For running inside Node.
@@ -816,24 +816,24 @@ if (typeof window === 'undefined') {
 							if (obj instanceof Stream.Readable) res = 'readable_stream';
 							if (obj instanceof Stream.Writable) res = 'writable_stream';
 				        }
-				        
+
 
 				    }
 				    //console.log('res ' + res);
 					return res;
-					
+
 				}
 			} else {
 				return 'undefined';
 			}
-		    
+
 		}
 
 		return res;
 	};
-	
+
 	// Bug for a test case - checking if a function is an instanceOf stream.
-	
+
     /**
     * Returns an array containing type strings for the passed array elements. The type strings are made using the [tof()]{@link module:core/jsgui-lang-essentials.tof} function.
     * @func
@@ -852,7 +852,7 @@ if (typeof window === 'undefined') {
 			//res.push(tof(arr[c]));
 			res[c] = tof(arr[c]);
 		}
-	
+
 		return res;
 	};
 
@@ -872,32 +872,32 @@ if (typeof window === 'undefined') {
 	}, isdef = is_defined;
 
 	var is_data_object = function(obj) {
-		
+
 		if(obj) {
 			if (obj.__type == 'data_object') return true;
 			if (obj.__type == 'collection') return true;
 		}
-		
+
 		//this.__type = 'collection'
-		
+
 		return false;
-		
+
 	}
-	
+
 	// will test for control using similar means as well.
-	
+
 	var is_collection = function(obj) {
 		//if (obj.__type == 'data_object') return true;
-		
+
 		if (obj) {
 			if (obj.__type == 'collection') return true;
 		}
-		
-		
+
+
 		//this.__type = 'collection'
-		
+
 		return false;
-		
+
 	}
 
     /**
@@ -914,11 +914,11 @@ if (typeof window === 'undefined') {
     * stringify({p1:1, p2:"a", p3:null}) ==> '{"p1": 1, "p2": "a", "p3": null}'
     */
 	var stringify = function(obj, includeFunctions, excludingProps) {
-	
+
 		var _stringify = function(obj, includeFunctions, callerObjItem) {
-		
+
 			//_stringify(a, b, { prev: callerObjItem, obj: obj });
-		
+
 			var isCircularReference = function(obj, callerObjItem){
 				while(callerObjItem){
 					if (callerObjItem.obj === obj) return true;
@@ -926,35 +926,35 @@ if (typeof window === 'undefined') {
 				}
 				return false;
 			};
-			
+
 			if (isCircularReference(obj, callerObjItem)) return "(CircularRef)";
-		
+
 			// Likely optimization: use array to build the string, then join it for
 			// the result.
 			// Now updated.
 			// Could probably use polymorphism here and save space
 
 			// Designed for stringifying specs including functions in mind.
-			
+
 			// Could use tof as well... I think that would make a lot of sense.
-			
+
 			var t = typeof obj, res = [];
-			
+
 			// to stringify a collection?
-			
+
 			if (obj === String) {
 				return 'JS_String';
 			}
-			
+
 			if (t == 'object') {
 				// will be testing it to see if it is a Data_Object
 				//  and then if it is a Collection
-				
-				
+
+
 				if (obj && is_defined(obj.stringify)) {
 					return obj.stringify();
 				} else {
-					
+
 					var ia = is_array(obj);
 					if (ia) {
 						// res = res + '[';
@@ -1029,9 +1029,9 @@ if (typeof window === 'undefined') {
 							res.push('}');
 						}
 					};
-					
+
 				}
-				
+
 			} else if (t == 'string') {
 				// Escape characters in JSON string?
 				// res = '"' + obj + '"';
@@ -1047,15 +1047,15 @@ if (typeof window === 'undefined') {
 				res = [obj.toString()];
 			}
 			return res.join('');
-		}; // var _stringify = 
-	
+		}; // var _stringify =
+
 		return _stringify(obj, includeFunctions);
 	};
 
 
-	
+
     /**
-    * Returns a type signature for the given value. 
+    * Returns a type signature for the given value.
     * Possible results are:
     * - "s" (string)
     * - "n" (number)
@@ -1088,11 +1088,11 @@ if (typeof window === 'undefined') {
     * get_item_sig([1, 2], 1) ==> '[n,n]'
     */
 	var get_item_sig = function(i, arr_depth) {
-	
+
 	    // an option about how far into the array to look.
-	    
-	    
-	
+
+
+
 		// also want to be able to do polymorphic rearrangements.
 		// these will need to be specified so they get rearranged as required.
 		// will check for some signatures and rearrange the arguments, and
@@ -1102,7 +1102,7 @@ if (typeof window === 'undefined') {
 		// or even i2 = [i, i]? maybe not for the moment, plenty of
 		// simplification already, could maybe express things like that at some
 		// stage.
-		
+
 		// rearrangement - '[i, i], s' <- 's, [i, i]'
 		// if second arrangement, output the items in the order given.
 		// that seems to require parsing these signature strings.
@@ -1112,8 +1112,8 @@ if (typeof window === 'undefined') {
 
 		// will get the poly signature for each item in the array?
 		// is it an array?
-    
-        
+
+
 		var res;
 		var t1 = typeof i;
 
@@ -1131,21 +1131,21 @@ if (typeof window === 'undefined') {
 			res = 'f';
 		} else {
 			var t = tof(i, t1);
-			
+
 			//if (i === 0) {
 				//console.log('i ' + i);
 				//console.log('t ' + t);
 			//}
-				
+
 
 
 			//console.log('i ' + i);
 			//console.log('t ' + t);
-			
+
 			// likely to use a map for this logic instead.
 			// console.log('t ' + t);
 			if (t == 'array') {
-			    
+
 			    // look into it with one nested level...
 			    if (arr_depth) {
 			        res = '['
@@ -1158,7 +1158,7 @@ if (typeof window === 'undefined') {
 			        res = 'a';
 			    }
 			    //console.log('res* ' + res);
-				
+
 				// return res;
 			//} else if (t == 'string') {
 				// is it a string that parses to an integer?
@@ -1206,7 +1206,7 @@ if (typeof window === 'undefined') {
 			} else if (t == 'undefined') {
 				res = 'u';
 			} else {
-				
+
 				if (t == 'collection_index') {
 					return 'X';
 				} else if (t == 'data_object') {
@@ -1215,8 +1215,8 @@ if (typeof window === 'undefined') {
 					} else {
 						res = 'D';
 					}
-				
-					
+
+
 				} else {
 					if (t == 'data_value') {
 						if (i._abstract) {
@@ -1224,8 +1224,8 @@ if (typeof window === 'undefined') {
 						} else {
 							res = 'V';
 						}
-					
-						
+
+
 					} else if (t == 'null') {
 						res = '!';
 					} else if (t == 'collection') {
@@ -1234,7 +1234,7 @@ if (typeof window === 'undefined') {
 						} else {
 							res = 'C';
 						}
-						
+
 					} else {
 
 
@@ -1242,26 +1242,26 @@ if (typeof window === 'undefined') {
 						throw 'Unexpected object type ' + t;
 					}
 				}
-				
+
 				// May have decimal type as well?
-				
+
 				// d for the moment?
 				//  May want decimal numbers too?
 				//  D is better for Data_Object.
-				
+
 				// c for Control
 				// C for Collection
-				
+
 				// Could say Data_Object is D
 				// Collection is C?
-				
+
 			}
 		}
 		return res;
-		
+
 	};
 
-	
+
     /**
     * Removes the leading and trailing square brackets from the signature, if the brackets are presented.
     * @func
@@ -1310,9 +1310,9 @@ if (typeof window === 'undefined') {
 		}
 		return res;
 	};
-	
+
     /**
-    * Helps to create a polymorphic version of the passed function. The function will get 2 parameters: `a` and `sig`. 
+    * Helps to create a polymorphic version of the passed function. The function will get 2 parameters: `a` and `sig`.
     * Array `a` will contains the actual parameters, `a.l` property will contains the parameters count.
     * The `sig` parameter will contains the parameter types array signature. The function will use these parameters
     * to select a required polymorphic code branch to execute.
@@ -1334,24 +1334,24 @@ if (typeof window === 'undefined') {
 			fn = a0[0];
 			options = null;
 		}
-		
+
 		//is there a this?
-		
+
 		//var that = this;
 		//var _super = that._super;
-		
+
 		// not having access to this here
 		var arr_slice = Array.prototype.slice;
 		var arr, sig, a2, l, a;
 
 		return function() {
-			
+
 			//that = this;
 
 			// not sure we want super here?
 			//  We hardly ever use this, it would slow things down.
 			//var _super = that._super;
-			
+
 			a = arguments;
 			// and if there is an array of arguments given... give as one
 			// argument.
@@ -1387,7 +1387,7 @@ if (typeof window === 'undefined') {
 			}
 		}
 	};
-    
+
     /**
     * A shortcut for the [functional_polymorphism()]{@link module:core/jsgui-lang-essentials.functional_polymorphism} function.
     * @func
@@ -1398,16 +1398,16 @@ if (typeof window === 'undefined') {
 
     /**
     * Returns an array containing [key, value] arrays of the passed object properties.<br />
-    * 
+    *
     * @name arrayify
     * @func
     * @param {object} obj - arrayifing object
     * @memberof module:core/jsgui-lang-essentials
-    * 
+    *
     * @example
-    * 
+    *
     * arrayify({a: 1, b: 2})  ==> [["a", 1], ["b", 2]]
-    * 
+    *
     */
 
 
@@ -1416,60 +1416,60 @@ if (typeof window === 'undefined') {
     * For example: `func(a, b) ==> arrayified_func([a], b)`
     * The original function will be called several times, one time for each value from the array. The result of the arrayified function
     * will be an array containing the original function return values.
-    * 
+    *
     * By default it arrayifies the first parameter. You can specify the arrayifying parameter index as the first argument of the arrayify() function: <br />
     * `arrayify(func)  ==>  arrayified_func([a], b, c, d, ...)` <br />
-    * `arrayify(2, func)  ==>  arrayified_func(a, b, [c], d, ...)` 
-    * 
-    * You can arrayify an async function as well. If the very last argument passed to the arrayified version is function, then this case is considered 
+    * `arrayify(2, func)  ==>  arrayified_func(a, b, [c], d, ...)`
+    *
+    * You can arrayify an async function as well. If the very last argument passed to the arrayified version is function, then this case is considered
     * as async function call. The last parameter is considered as a callback function receiving the async array processing final result. The callback
     * format is `callback(error, result)`, where `error` is an error object or null, and `result` is the result array.
-    * 
+    *
     * The original async function must call a callback function in turn. The callback function is passed as a last argument to the async function
     * call, following the usual [call_multiple_callback_functions()]{@link module:core/jsgui-lang-essentials.call_multiple_callback_functions} rules.
-    * 
+    *
     * @func
     * @param {number} [param_index = 0] - arrayifing parameter index
     * @param {function} fn - arrayifing function
     * @memberof module:core/jsgui-lang-essentials
-    * 
+    *
     * @example
-    * 
+    *
     * // ------- arrayifing a function: -------
-    * 
+    *
     * var multiply = function (a, b) {
     *     return a * b;
     * };
-    * 
+    *
     * // multiply([a], b):
-    *             
-    * var arrayified_multiply = jsgui.arrayify(multiply); 
-    * 
+    *
+    * var arrayified_multiply = jsgui.arrayify(multiply);
+    *
     * console.log(arrayified_multiply([1, 5, 10], 2));  // [2, 10, 20]);
-    *             
+    *
     * // multiply(a, [b]):
-    * 
-    * var arrayified_multiply2 = jsgui.arrayify(1, multiply); 
-    * 
+    *
+    * var arrayified_multiply2 = jsgui.arrayify(1, multiply);
+    *
     * console.log(arrayified_multiply2(10, [1, 5, 10])); // [10, 50, 100]);
-    * 
-    * 
+    *
+    *
     * // ------- arrayifing an async function: -------
-    * 
+    *
     * var asyncMultiply = function (a, b, cb) {
     *     setTimeout(function () { cb(null, a * b); }, 1000);
     * };
-    * 
+    *
     * var arrayified_asyncMultiply = jsgui.arrayify(asyncMultiply); // asyncMultiply([a], b, cb)
-    * 
+    *
     * var callback = function (error, result) {
     *     console.log(error);  // null
     *     console.log(result); // [2, 10, 20]);
     *     done();
     * };
-    * 
+    *
     * arrayified_asyncMultiply([1, 5, 10], 2, callback);
-    * 
+    *
     */
 	var arrayify = fp(function(a, sig) {
         // but when the function has it's last parameter as a function...
@@ -1496,64 +1496,64 @@ if (typeof window === 'undefined') {
 				var a = arr_like_to_arr(arguments), ts = atof(a), t = this;
 			    //console.log('a ' + stringify(a));
                 var last_arg = a[a.length - 1];
-                //console.log('last_arg ' + last_arg);
+                console.log('last_arg ' + last_arg);
                 //console.log('a.length ' + a.length);
                 if (tof(last_arg) == 'function') {
                     // it seems like a callback function.
-                    
+
                     // will do callback result compilation.
-                    
+
                     //console.log('ts[param_index] ' + ts[param_index]);
-                    
+
                     if (typeof param_index !== 'undefined' && ts[param_index] == 'array') {
                         // var res = [], a2 = a.slice(1); // don't think this makes
                         // a copy of the array.
                         var res = []; // don't think this makes a copy of the
                                         // array.
                         // console.log('fn ' + fn);
-                        
+
                         // but we can make this process a function with a callback.
-                        
-                        
+
+
                         var fns = [];
-                        
+
                         each(a[param_index], function(i, v) {
                             var new_params = a.slice(0, a.length - 1);
                             new_params[param_index] = v;
                             // the rest of the parameters as normal
-                            
+
                             // context, function, params
                             fns.push([t, fn, new_params]);
-                                
+
                             //var result = fn.apply(t, new_params);
                             // console.log('result ' + stringify(result));
                             //res.push(result);
                         });
                         //return res;
-                        
+
                         // call_multi not working right?
                         console.log('delay', delay);
                         //throw 'stop';
-                        
+
                         call_multiple_callback_functions(fns, num_parallel, delay, function(err, res) {
                             if (err) {
                                 throw err;
                             } else {
                                 //
-                                
+
                                 //console.log('res ' + stringify(res));
-                                
+
                                 // we get back the results of the multiple callback functions.
                                 //  let's put them in one array.
-                                
+
                                 // maybe make result array concat optional.
                                 //  likely to be needed.
-                                
+
                                 // concat all of the arrays in the results.
-                                
+
                                 var a = [];
                                 a = a.concat.apply(a, res);
-                                
+
                                 var callback = last_arg;
                                 //console.log('last_arg ' + last_arg);
                                 callback(null, a);
@@ -1563,6 +1563,9 @@ if (typeof window === 'undefined') {
                         return fn.apply(t, a);
                     }
                 } else {
+									//console.log('not cb fn');
+									//console.log('arguments', arguments);
+
                     if (typeof param_index !== 'undefined' && ts[param_index] == 'array') {
                         // var res = [], a2 = a.slice(1); // don't think this makes
                         // a copy of the array.
@@ -1570,18 +1573,30 @@ if (typeof window === 'undefined') {
                                         // array.
                         // console.log('fn ' + fn);
                         // but we can make this process a function with a callback.
+
+												for (var c = 0, l = a[param_index].length; c < l; c++) {
+													//a[param_index] = a[param_index][c];
+													var result = fn.apply(t, a);
+													// console.log('result ' + stringify(result));
+													res.push(result);
+												}
+
+												/*
                         each(a[param_index], function(i, v) {
-                            var new_params = a;
-                            new_params[param_index] = v;
+                            //var new_params = a;
+                            a[param_index] = v;
                             // the rest of the parameters as normal
-                            var result = fn.apply(t, new_params);
+                            var result = fn.apply(t, a);
                             // console.log('result ' + stringify(result));
                             res.push(result);
                         });
+												*/
+
+
                         return res;
                     } else {
                         return fn.apply(t, a);
-                    }   
+                    }
                 }
 				// console.log('a.length ' + a.length);
 				// console.log('a ' + stringify(a));
@@ -1620,41 +1635,41 @@ if (typeof window === 'undefined') {
 
     /**
     * Returns an object containing keys and values from the [key, value] pairs of the array.
-    * 
+    *
     * @name mapify
     * @func
     * @param {array} arr - mapifying array
     * @memberof module:core/jsgui-lang-essentials
-    * 
+    *
     * @example
-    * 
+    *
     * mapify([["name", "John"], ["age", 22]])  ==> { name: "John", age: 22 }
-    * 
+    *
     */
 
     /**
-    * The array is an objects array. The mapify() function gathers values of the (by_property_name) properties. The values will be keys (property names) of the 
+    * The array is an objects array. The mapify() function gathers values of the (by_property_name) properties. The values will be keys (property names) of the
     * returning object. The values of the returning object will be the objects itself.
-    * 
+    *
     * @name mapify
     * @func
     * @param {array} arr - mapifying array
     * @param {string} by_property_name - mapping property name
     * @memberof module:core/jsgui-lang-essentials
-    * 
+    *
     * @example
-    * 
+    *
     * var obj_arr = [{ name: "Larry", age: 21 }, { name: "John", age: 22 }];
-    * 
+    *
     * mapify(obj_arr, "name")  ==> { Larry: { name: "Larry", age: 21 }, John: { name: "John", age: 22 } }
-    * 
+    *
     */
 
     /**
     * Returns an mapified version of the function. The orginal function receives 2 parameters: key and value. The mapified version receives an object, and
     * calls the original function for each key/value pair of the object.
     *
-    * You can mapify an async function as well. If you pass a function as the second parameter to the mapified version call, then this case is considered 
+    * You can mapify an async function as well. If you pass a function as the second parameter to the mapified version call, then this case is considered
     * as async function call. The second parameter is considered as a callback function receiving the async object processing final result. The callback
     * format is `callback(error, result)`, where `error` is an error object or null, and `result` is the result array.
     *
@@ -1663,35 +1678,35 @@ if (typeof window === 'undefined') {
     *
     * So, the mapified function parameters are (object) or (object, function). You can call the mapified function with other parameters type, but in
     * this case it will just call the original function (if the parameters number >= 2).
-    * 
+    *
     * @func
     * @param {function} fn - mapifying function
     * @memberof module:core/jsgui-lang-essentials
-    * 
+    *
     * @example
-    * 
+    *
     * var keys = [];
     * var values = [];
-    * 
+    *
     * var addKeyValue = function (key, value) {
     *     keys.push(key);
     *     values.push(value);
     * };
-    * 
+    *
     * var mapified_addKeyValue = jsgui.mapify(addKeyValue);
-    * 
+    *
     * mapified_addKeyValue({ a: 1, b: 2, name: "John" });
-    * 
+    *
     * console.log(keys); // ["a", "b", "name"]
     * console.log(values); // [1, 2, "John"]
-    * 
-    * 
+    *
+    *
     * // ------- mapify an async function: -------
-    * 
-    * 
+    *
+    *
     * var keys = [];
     * var values = [];
-    * 
+    *
     * var asyncAddKeyValue = function (key, value, cb) {
     *     setTimeout(function () {
     *         keys.push(key);
@@ -1699,30 +1714,30 @@ if (typeof window === 'undefined') {
     *         cb(null, key + "=" + value);
     *     }, 1000);
     * };
-    * 
+    *
     * var callback = function (error, result) {
     *     console.log(result); // ["a=1", "b=2", "name=John"]
     *     //
     *     console.log(keys);   // ["a", "b", "name"]
     *     console.log(values); // [1, 2, "John"]
     * };
-    * 
+    *
     * var mapified_asyncAddKeyValue = jsgui.mapify(asyncAddKeyValue);
-    * 
+    *
     * mapified_asyncAddKeyValue({ a: 1, b: 2, name: "John" }, callback);
-    * 
-    * 
+    *
+    *
     * // ------- call the original function: -------
-    * 
+    *
     * var func = function (a, b, c) {
     *     console.log(a + " " + b + " " + c);  // 1 5 10
     * };
-    * 
+    *
     * var mapified_func = jsgui.mapify(func);
-    * 
+    *
     * mapified_func(1, 5, 10);
-    * 
-    * 
+    *
+    *
     */
     // that target function could take a callback(err, res) parameter.
     //  that means, when calling the function, if the last function is a callback, we can act differently.
@@ -1753,12 +1768,12 @@ if (typeof window === 'undefined') {
 				            callback(null, res_multi);
 				        }
 				    });
-				    
+
 				} else if (a.length >= 2) {
 				    // applying the target function with a callback...
-				    
+
 				    //var last_arg = a[a.length - 1];
-				    
+
 					// could take functions, but not dealing with objects may be
 					// tricky?
 					// or just if there are two params its fine.
@@ -1777,11 +1792,11 @@ if (typeof window === 'undefined') {
 
 
 			// a bunch of items, items could have name
-			
+
 			// could just be given an array to mapify.
-			
+
 			var res = {};
-			
+
 			if (arguments.length == 1) {
 
                 if (is_arr_of_strs(target)) {
@@ -1803,7 +1818,7 @@ if (typeof window === 'undefined') {
 					res[v[by_property_name]] = v;
 				});
 			}
-			
+
 			return res;
 
 		}
@@ -1813,7 +1828,7 @@ if (typeof window === 'undefined') {
 		// been given a map / object
 
 	};
-	
+
     /**
     * Creates a clone of the given value. The result depends of the input value type:
     * - array: an array containing clones of the input array elements
@@ -1845,30 +1860,30 @@ if (typeof window === 'undefined') {
 	var clone = fp(function(a, sig) {
 		var obj = a[0];
 		if (a.l == 1) {
-			
-			
+
+
 			var t = tof(obj);
 			if (t == 'array') {
 
 				// slice removes undefined items
 				// console.log('clone obj ' + stringify(obj));
 				// console.log('obj.length ' + obj.length);
-				
+
 				var res = [];
 
 
 				eac(obj, function(v) {
 					//console.log('i ' + i);
-					res.push(clone(v)); 
+					res.push(clone(v));
 				});
 
 
 
 
 				return res;
-				
+
 				//return obj.slice();
-				
+
 				// deep clone...?
 
 			} else if (t == 'undefined') {
@@ -1890,42 +1905,42 @@ if (typeof window === 'undefined') {
 
 				return extend(true, {}, obj);
 			}
-			
+
 		} else if (a.l == 2 && tof(a[1]) == 'number') {
 			var res = [];
 			for ( var c = 0; c < a[1]; c++) {
 				res.push(clone(obj));
 			}
 			return res;
-			
+
 		}
-		
-		
+
+
 	});
 
     /**
     * Returns true if all the passed arguments are equals. Performs a "deep equals" for objects and arrays.
-    * 
+    *
     * If one array argiment passed, then returns true if all the array elements are equals.
-    * 
+    *
     * If one other (non-array) argument passed, returns true.
-    * 
+    *
     * If no arguments passed, returns null.
-    * 
+    *
     * @func
     * @param {...*} obj - values to compare.
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     * are_equal(1, 1, 1) => true
     * are_equal(1, 2, 1) => false
-    *  
+    *
     * are_equal([1, 1, 1]) => true
     * are_equal([1, 2, 1]) => false
-    *  
+    *
     * are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: "2", b2: 2 }, 3]) => true
     * are_equal([1, { b1: "2", b2: 2 }, 3], [1, { b1: 2, b2: 2 }, 3]) => false
-    *  
+    *
     */
 	var are_equal = function() {
 		var a = arguments;
@@ -1998,7 +2013,7 @@ if (typeof window === 'undefined') {
 		return true;
 	};
 
-	
+
     /**
     * Assigns property values from map to obj.
     * @func
@@ -2007,20 +2022,20 @@ if (typeof window === 'undefined') {
     * @returns undefined
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  var obj1 = {};
     *  jsgui.set_vals(obj1, { a: 1, b: 2});  // obj1 == { a: 1, b: 2 }
-    *  
+    *
     *  var obj2 = { a: 1, b: 2};
     *  jsgui.set_vals(obj2, { b: 200, c: 300});  // obj2 == { a: 1, b: 200, c: 300 }
-    *  
+    *
     */
 	var set_vals = function(obj, map) {
 		each(map, function(i, v) {
 			obj[i] = v;
 		});
 	};
-	
+
 
     /**
     * Assigns a property value of the object using a qualified (dotted) property name. Nested sub-objects are created if needed.
@@ -2034,20 +2049,20 @@ if (typeof window === 'undefined') {
     * @returns property value
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  // object itself:
-    *  
+    *
     *  var obj1 = {};
     *  jsgui.ll_set(obj1, "a", 1);  // obj1 == { a: 1 }
-    *  
+    *
     *  var obj2 = {};
     *  jsgui.ll_set(obj2, "a.b.c", 1);  // obj2 == { a: { b: { c: 1 } } }
-    *  
+    *
     *  var obj3 = { a: { b: { c: 1 } };
     *  jsgui.ll_set(obj3, "a.b.c", 100);  // obj3 == { a: { b: { c: 100 } } }
-    *  
+    *
     *  // internal object:
-    *  
+    *
     *  var obj4 = { _: {}, a: 100 };
     *  jsgui.ll_set(obj4, "a", 1);  // obj4 == { _: { a: 1 }, a: 100 }
     */
@@ -2061,7 +2076,7 @@ if (typeof window === 'undefined') {
 		//console.log('arr ' + arr);
 		var c = 0, l = arr.length;
 		var i = obj._ || obj, s;
-		
+
 		while (c < l) {
 			s = arr[c];
 			//console.log('s ' + s);
@@ -2083,7 +2098,7 @@ if (typeof window === 'undefined') {
 		};
 		return prop_value;
 	};
-	
+
 	/*
 	var ll_get_inner = function(a0, a1) {
 		var i = a0._ || a0;
@@ -2123,7 +2138,7 @@ if (typeof window === 'undefined') {
 		}
 	}
 	*/
-	
+
 
     /**
     * Returns a property value of the object using a qualified (dotted) property name.
@@ -2142,9 +2157,9 @@ if (typeof window === 'undefined') {
     * @returns property value
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  // object itself:
-    *  
+    *
     *  jsgui.ll_get({}, "a");  ==> undefined
     *  jsgui.ll_get({ a: 1 }, "a");  ==> 1
     *  jsgui.ll_get({ '.': 1 }, ".");  ==> 1
@@ -2153,9 +2168,9 @@ if (typeof window === 'undefined') {
     *  jsgui.ll_get({ a: { b: { } } }, "a.b.c");  ==> undefined
     *  jsgui.ll_get({ a: { } }, "a.b.c");  ==> exception
     *  jsgui.ll_get({ }, "a.b.c");  ==> exception
-    *  
+    *
     *  // internal object:
-    *  
+    *
     *  jsgui.ll_get({ _ : { '.': 1 } }, ".");  ==> 1
     *  jsgui.ll_get({ _ : { a: { b: { c: 1 } } } }, "a.b.c");  ==> 1
     *  jsgui.ll_get({ _ : { '.': 1 } }, "a.b.c");  ==> exception
@@ -2175,12 +2190,12 @@ if (typeof window === 'undefined') {
 						return i['.'];
 					}
 				//})();
-				
+
 			} else {
 
 				//return ll_get_inner(a0, a1);
 
-				
+
 				var arr = a1.split('.');
 
 				// shows how much the ll functions get used when they get logged!
@@ -2215,9 +2230,9 @@ if (typeof window === 'undefined') {
 					i = i[s];
 					c++;
 				}
-				
-				
-				
+
+
+
 			}
 			// return i;
 		}
@@ -2244,7 +2259,7 @@ if (typeof window === 'undefined') {
 
 				//console.log('ll_get arr ' + arr);
 				var c = 0, l = arr.length;
-				
+
 
 				while (c < l) {
 					var s = arr[c];
@@ -2278,24 +2293,24 @@ if (typeof window === 'undefined') {
 		}
 	});
 	*/
-	
+
     /**
     * Returns true only if the passed value is a boolean true.
     * @param {*} value - value to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  jsgui.truth(true)  ==> true
     *  jsgui.truth(1)  ==> false
-    *  
-    *  
-    *  
+    *
+    *
+    *
     */
 	var truth = function(value) {
 		return value === true;
 	};
-	
+
     /**
     * Iterates over ancestor classes hierarchy calling the callback function for each class in the inheritance tree. Starts from the passed class, ends on jsgui.Class.
     *
@@ -2306,22 +2321,22 @@ if (typeof window === 'undefined') {
     * @param {function} callback - callback function (obj, stop).
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
 	*  var Class = jsgui.Class;
 	*  var Person = Class.extend({});
 	*  var Ninja = Person.extend({});
-    *  
+    *
 	*  var classes = [];
-    * 
+    *
 	*  var callback = function (_class, stop) {
 	*    classes.push(_class);
 	*  };
-	*  
+	*
 	*  jsgui.iterate_ancestor_classes(Ninja, callback);  // classes == [Ninja, Person, Class]
-    *  
+    *
     */
 	var iterate_ancestor_classes = function(obj, callback) {
-		
+
 		/*
 		if (obj.constructor &! obj._superclass) {
 			iterate_ancestor_classes(obj.constructor, callback)
@@ -2330,25 +2345,25 @@ if (typeof window === 'undefined') {
 			if (obj._superclass) {
 				iterate_ancestor_classes(obj._superclass, callback);
 			}
-			
+
 		}
 		*/
-		
+
 		var ctu = true;
-		
+
 		var stop = function() {
 			ctu = false;
 		}
-		
+
 		callback(obj, stop);
 		if (obj._superclass && ctu) {
 			iterate_ancestor_classes(obj._superclass, callback);
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 
     /**
     * Returns `true` if the passed object is an array containing values of the specified type only.
@@ -2357,21 +2372,21 @@ if (typeof window === 'undefined') {
     * @func
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  jsgui.is_arr_of_t("1", "string")  ==>  false
-    *  
+    *
     *  jsgui.is_arr_of_t([], "string")  ==>  true
-    *  
+    *
     *  jsgui.is_arr_of_t(["1", "2", "3"], "string")  ==>  true
-    *  
+    *
     *  jsgui.is_arr_of_t(["1", 2, "3"], "string")  ==>  false
-    *  
+    *
     */
 	var is_arr_of_t = function(obj, type_name) {
 		var t = tof(obj), tv;
 		if (t == 'array') {
 			var res = true;
-			
+
 			each(obj, function(i, v) {
 				//console.log('2) v ' + stringify(v));
 				tv = tof(v);
@@ -2383,22 +2398,22 @@ if (typeof window === 'undefined') {
 		} else {
 			return false;
 		}
-		
+
 	}
-	
+
     /**
     * Returns `true` if the passed object is an array containing arrays in turn.
     * @param {*} obj - object to check
     * @func
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  jsgui.is_arr_of_arrs([])  ==>  true
-    *  
+    *
     *  jsgui.is_arr_of_arrs(["1", "2", "3"])  ==>  false
-    *  
+    *
     *  jsgui.is_arr_of_arrs([[], [1, "2"]])  ==>  true
-    *  
+    *
     */
 	var is_arr_of_arrs = function(obj) {
 		return is_arr_of_t(obj, 'array');
@@ -2411,22 +2426,22 @@ if (typeof window === 'undefined') {
     * @func
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  jsgui.is_arr_of_strs("1")  ==>  false
-    *  
+    *
     *  jsgui.is_arr_of_strs([])  ==>  true
-    *  
+    *
     *  jsgui.is_arr_of_strs(["1", "2", "3"])  ==>  true
-    *  
+    *
     *  jsgui.is_arr_of_strs(["1", 2, "3"])  ==>  false
-    *  
+    *
     */
 	var is_arr_of_strs = function(obj) {
 		//console.log('obj ' + stringify(obj));
 		return is_arr_of_t(obj, 'string');
 	}
-	
-	
+
+
     /**
     * <mark>description... TODO</mark>
     * @member
@@ -2440,45 +2455,45 @@ if (typeof window === 'undefined') {
     * @memberof module:core/jsgui-lang-essentials
     */
 	var output_processors = {};
-	
+
 	// for data types...
 	//  don't look up the data types directly for the moment.
 	//  they are composed of input processors, validation and output processors.
-	
-	
+
+
     /**
     * <mark>Returns `true` if the passed object has a prototype (typically the object is a function).</mark>
     * @func
     * @param {function} fn - object to check
     * @memberof module:core/jsgui-lang-essentials
     * @example
-    *  
+    *
     *  jsgui.is_constructor_fn(Object)  ==>  true
     *  jsgui.is_constructor_fn(new Object())  ==>  false
-    *  
+    *
     *  jsgui.is_constructor_fn(setInterval)  ==>  true
-    *  
+    *
     */
 	var is_constructor_fn = function(fn) {
 		return is_defined(fn.prototype);
 	}
-	
-	
+
+
 	//var output_processors = {};
-	
+
 	// Possibly validators here too.
 	//  They may well get used for data structures that deal with these data types. The typed constraints could make use of them (the basis that is set in essentials)
 	//  while adding to them. Perhaps a 'core' intermediate layer will be there extending essentials with some of the data types that are to be used throughout the system.
-	
+
 	// May find that the functionality for 'nested' gets moved out from that code file. Not so sure about using the Data_Type_Instance...
 	//  it could be useful, but not really useful on the level of what the user wants the system to do.
 	//  Want to get the Data_Object and Collections system working in some more generic tests, also want to explore some of the more complicated data structures
 	//  that will be used for HTML. The idea is that the HTML section will not need so much code because it is making use of some more generally defined things.
-	
+
 	// Defining an element's style attributes... will use a Data_Object system internally that is customized to reformat data.
 	//  That seems like a fairly big goal, want to get these things working on a simpler level and in collections.
 	//  Will use some kind of polymorphic rearrangement to rearrange where suitable.
-	
+
     /**
     * Executes several tasks one by one (default) or simultaneously (up to specified amount of tasks at the same time).
     *
@@ -2529,15 +2544,15 @@ if (typeof window === 'undefined') {
 		// will look at the signature and choose what to do.
 		//if (sig == )
 		// need to be checking if the item is an array - nice to have a different way of doing that with fp.
-		
+
 		// and want to look out for a number in there.
 		//  want it to call multiple functions, but have them running in parallel too.
 		//  like the async library, but also accepting parameters.
-		
+
 		// arr_functions_params_pairs, callback
 		var arr_functions_params_pairs, callback, return_params = false;
         var delay;
-		
+
 		//console.log('a.l ' + a.l);
 		//console.log('');
 		//console.log('');
@@ -2547,7 +2562,7 @@ if (typeof window === 'undefined') {
         //  maybe try just a very high number at the moment.
 
 
-		
+
 		var num_parallel = 1;
 		//console.log('a.l', a.l);
 		if (a.l == 2) {
@@ -2560,14 +2575,14 @@ if (typeof window === 'undefined') {
 		    // look at the sig
 		    // arr, num, fn - number is the number of parallel to do at once.
 		    // return_params is a boolean?
-		    
+
 		    // want a signature that just treats an array as a?
 		    //  may make more sense for these function signatures.
 		    //   at least for the first stage... could look in more detail at the array.
 		    //   not using the more complicated signatures right now. could change to a different sig method when needed, or use different sig or fp options.
-		    
+
 		    //console.log('sig ' + sig);
-		    
+
 		    if (sig == '[a,n,f]') {
 		        arr_functions_params_pairs = a[0];
 		        num_parallel = a[1];
@@ -2584,7 +2599,7 @@ if (typeof window === 'undefined') {
                 return_params = a[2];
 		    }
 
-			
+
 		}
         if (a.l == 4) {
             // look at the sig
@@ -2619,24 +2634,24 @@ if (typeof window === 'undefined') {
         }
 
 
-		
+
 		// also want the context.
-		
+
 		var res = [];
-		
+
 		var l = arr_functions_params_pairs.length;
 		var c = 0;
 		var that = this;
-		
+
 		var count_unfinished = l;
 
-		// the number of processes going 
-		
+		// the number of processes going
+
 		// the maximum number of processes allowed.
         //  num_parallel
-        
+
         var num_currently_executing = 0;
-        
+
 		var process = function(delay) {
             num_currently_executing++;
             var main = function() {
@@ -2856,7 +2871,7 @@ if (typeof window === 'undefined') {
                 } else {
                     process();
                 }
-		    }	
+		    }
 		} else {
 		    if (callback) {
 		        //callback(null, null);
@@ -2934,7 +2949,7 @@ if (typeof window === 'undefined') {
 	    }
 	    return fns;
 	}
-	
+
     /**
     * Returns a name of the passed native constructor function. Possible return values are:
     * - "String"
@@ -2970,9 +2985,9 @@ if (typeof window === 'undefined') {
 			return 'Object';
 		}
 	}
-	
+
 	//var storage_closure
-	
+
 	// jsgui.get and jsgui.set
 	//  so JSGUI itself would have some properties within a closure.
 	//  Not sure if that would allow some kind of global variables (again).
@@ -3002,7 +3017,7 @@ if (typeof window === 'undefined') {
     * Sets value for the module's internal key/value storage.
     * @func
     * @param {string|*} key - the value key
-    * @param {*} value - the value 
+    * @param {*} value - the value
     * @memberof module:core/jsgui-lang-essentials
     * @example
     *
@@ -3081,7 +3096,7 @@ if (typeof window === 'undefined') {
 
 
 	})();
-	
+
 	*/
 	// will put functions into the jsgui object.
 
@@ -3133,7 +3148,7 @@ if (typeof window === 'undefined') {
         'sig_match': sig_match
 	};
 
-	
+
     /**
     * description...
     * @alias data_types_info
@@ -3142,14 +3157,14 @@ if (typeof window === 'undefined') {
     */
 	// Maybe this will be moved to an intermediate layer.
 	jsgui.data_types_info = jsgui.data_types_info || {};
-	
-	
-	
-	
+
+
+
+
 	// and the local variable shortcuts that go at the beginning:
-	
+
 	/*
-	 
+
 	 var j = jsgui;
 	 var Class = j.Class;
 	 var each = j.each;
@@ -3180,8 +3195,8 @@ if (typeof window === 'undefined') {
 	 var is_arr_of_strs = j.is_arr_of_strs;
 	 var is_arr_of_t = j.is_arr_of_t;
 	 */
-	
-	
+
+
 	// var jsgui = {};
 	// alert('returning jsgui from jsgui-lang');
 	//return jsgui;

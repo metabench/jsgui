@@ -6,7 +6,6 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./data-object-fields-collection", "./constraint",
 	"./collection-index"],
 	*/
@@ -18,14 +17,11 @@ var Data_Object = require('./data-object');
 var Data_Object_Field_Collection = require('./data-object-fields-collection');
 var Constraint = require('./constraint');
 var Collection_Index = require('./collection-index');
-
 //
 
 //function(jsgui, Data_Structures, Data_Object, Data_Object_Field_Collection, Constraint, Collection_Index) {
 
-
 // Collection... use sligntly more than essentials?
-
 var Collection_Index_System = Collection_Index.System;
 var Sorted_Collection_Index = Collection_Index.Sorted;
 
