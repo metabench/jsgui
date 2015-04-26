@@ -40,6 +40,10 @@ var Selection_Scope = jsgui.Data_Object.extend({
 
         // And need to trigger deselect where appropriate.
 
+        // But not if the control was previously selected.
+        var currently_selected;
+        var count_deselected = 0;
+
         var selected;
         each(this.map_selected_controls, function(v, i) {
 
@@ -52,11 +56,16 @@ var Selection_Scope = jsgui.Data_Object.extend({
                     v.set('selected', false);
                     v.remove_class('selected');
                     v.trigger('deselect');
+                    count_deselected++;
                 }
 
                 //console.log('should have deselcted ' + v._id())
             }
-        })
+            if (v === ctrl) {
+              currently_selected = v.get('selected').value();
+            }
+
+        });
 
         this.map_selected_controls = {};
 
@@ -65,12 +74,20 @@ var Selection_Scope = jsgui.Data_Object.extend({
         // and then tell the control that it's selected.
 
         // could possibly set a CSS flag.
-        ctrl.set('selected', true);
-        ctrl.trigger('select');
 
-        ctrl.add_class('selected');
+        if (!currently_selected) {
+          ctrl.set('selected', true);
+          ctrl.trigger('select');
 
-        this.trigger('change');
+          ctrl.add_class('selected');
+        }
+
+
+        if (count_deselected > 0 &! currently_selected) {
+          this.trigger('change');
+        }
+
+
 
 
 
