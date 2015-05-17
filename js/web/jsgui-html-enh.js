@@ -179,7 +179,8 @@ var mapDomEventNames = {
 
 Control = jsgui.Control = jsgui.Control.extend({
     'fields': {
-        'selection_scope': Object
+        'selection_scope': Object,
+        'is_selectable': Boolean
     },
 
     'init': function(spec) {
@@ -212,6 +213,38 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
         this._super(spec);
+
+        // Then there may be a selection scope specified.
+        //  The selection scope may have been specified as a number
+
+        console.log('spec.selection_scope', spec.selection_scope);
+
+
+        if (typeof spec.selection_scope !== 'undefined') {
+          console.log('spec.selection_scope', spec.selection_scope);
+
+          var selection_scope = this._context.get_selection_scope_by_id(spec.selection_scope);
+          //  Do we need to set the control of the selection scope?
+
+
+          this.set('selection_scope', selection_scope);
+
+          // then if we have the selection scope, we should set it up for the control.
+
+
+
+
+
+
+
+        }
+
+        if (spec.is_selectable) {
+          this.selectable();
+        }
+
+
+
     },
 
     'bcr': fp(function(a, sig) {
@@ -1301,10 +1334,12 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 var str_properties = value;
 
-                if (false && str_properties) {
+                if (str_properties) {
                     //console.log('str_ctrl_fields ' + str_ctrl_fields);
                     //console.log('str_properties', str_properties);
                     //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
+
+                    /*
                     var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
                     s_pre_parse = s_pre_parse.replace(/\'/g, '"');
 
@@ -1324,6 +1359,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
                     this.set(props);
+                    */
 
                     // Could be set through flags?
 
@@ -1346,8 +1382,8 @@ Control = jsgui.Control = jsgui.Control.extend({
                     // Doubt we should set up the selection scope like this...
                     //  Probably do it on initialization on the client instead.
 
-                    /*
 
+                    /*
                     var ss = this.get('selection_scope');
                     // Though the selection scope may have been a jsgui field.
 
@@ -1397,13 +1433,20 @@ Control = jsgui.Control = jsgui.Control.extend({
                     */
 
 
+
+
                     // Perhaps selectable behaviour should be within init as well.
+                    // is_selectable could be a field.
+                    //  Need to have it read from the data-jsgui-fields
+                    //  At the moment it's not considered there.
+                    //   The enhanced ctrl could have the is_selectable boolean field.
+
+
 
                     /*
-
                     var is_selectable = this.get('is_selectable');
-                    //console.log('is_selectable', is_selectable);
-                    //console.log('tof is_selectable', tof(is_selectable));
+                    console.log('is_selectable', is_selectable);
+                    console.log('tof is_selectable', tof(is_selectable));
 
                     //
 
@@ -1414,8 +1457,9 @@ Control = jsgui.Control = jsgui.Control.extend({
                     } else {
                         //this.selectable(is_selectable);
                     }
-
                     */
+
+
 
 
 
