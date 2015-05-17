@@ -259,7 +259,9 @@ var String_Viewer = Control.extend({
         }
 
         if (mode == 'tabular') {
-          var span = this.set('span', content.get(0));
+          //var span = this.set('span', content.get(0));
+          var span = this.get('span');
+
           //console.log('span', span);
           // get the value from inside the span.
 

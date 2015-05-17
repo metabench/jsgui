@@ -702,6 +702,41 @@ Control = jsgui.Control = jsgui.Control.extend({
     },
     */
 
+    'set': function(name, value) {
+      // Used for setting controls, on the server, that get persisted to the client.
+
+      // when the value is a control, we also want to set the ._jsgui_ctrl_fields
+
+      var t_val = tof(value);
+      console.log('t_val', t_val);
+
+      if (t_val == 'control') {
+        var cf = this._ctrl_fields = this._ctrl_fields || {};
+
+        //extend(cf, {
+        //  'btn_single_bound': tb_single_bound,
+        //  'btn_dual_bound': tb_dual_bound,
+        //  'btn_ga': tb_genetic,
+        //  'panel_single_bound': panel_single_bound,
+        //  'panel_dual_bound': panel_dual_bound,
+        //  'panel_ga': panel_ga
+        //});
+
+        cf[name] = value;
+      }
+
+      this._super(name, value);
+
+
+      /*
+
+
+
+      */
+
+
+    },
+
 
 
 
@@ -1261,9 +1296,12 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 // ^
             } else if (name == 'data-jsgui-fields') {
+              // Should probably rely on using init a lot more now.
+
+
                 var str_properties = value;
 
-                if (str_properties) {
+                if (false && str_properties) {
                     //console.log('str_ctrl_fields ' + str_ctrl_fields);
                     //console.log('str_properties', str_properties);
                     //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
@@ -1278,6 +1316,13 @@ Control = jsgui.Control = jsgui.Control.extend({
                     var props = JSON.parse(s_pre_parse);
                     //console.log('props ' + stringify(props));
                     //throw 'stop';
+
+                    // However, it goes into the initialization now.
+                    //  That's probably better / smoother overall.
+
+
+
+
                     this.set(props);
 
                     // Could be set through flags?
@@ -1298,10 +1343,19 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
 
+                    // Doubt we should set up the selection scope like this...
+                    //  Probably do it on initialization on the client instead.
+
+                    /*
+
                     var ss = this.get('selection_scope');
+                    // Though the selection scope may have been a jsgui field.
+
+
+
                     //
 
-                    //console.log('ss ' + ss);
+                    console.log('ss ' + ss);
 
                     var val_ss, t_val_ss;
                     //console.log('ss ' + ss);
@@ -1340,8 +1394,12 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                     }
 
+                    */
 
 
+                    // Perhaps selectable behaviour should be within init as well.
+
+                    /*
 
                     var is_selectable = this.get('is_selectable');
                     //console.log('is_selectable', is_selectable);
@@ -1356,6 +1414,8 @@ Control = jsgui.Control = jsgui.Control.extend({
                     } else {
                         //this.selectable(is_selectable);
                     }
+
+                    */
 
 
 

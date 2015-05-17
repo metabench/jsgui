@@ -48,10 +48,22 @@ var Multi_Layout_Document = Client_HTML_Document.extend({
 
 
             // And then we want to directly link to the multi-layout subcontrols.
-            this.set('misc', mlm.get('panel_misc'));
+
+            var pnl_misc = mlm.get('misc');
+            console.log('pnl_misc', pnl_misc);
+
+            this.set('misc', pnl_misc);
+            this.set('main', mlm.get('main'));
             this.set('ctrl_layout', mlm);
 
 
+            // The misc should be transferred as a control?
+
+
+
+            // Probably should not be setting them like this.
+
+            /*
             var ctrl_fields = {
                 'title': this.set('title', mlm.get('title'))._id(),
                 'navigation': this.set('navigation', mlm.get('navigation'))._id(),
@@ -59,11 +71,13 @@ var Multi_Layout_Document = Client_HTML_Document.extend({
                 'misc': this.set('misc', mlm.get('misc'))._id(),
                 'ctrl_layout': mlm._id()
             }
-
-
-
-
             this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
+            */
+
+
+
+
+
 
 
             //this.active();

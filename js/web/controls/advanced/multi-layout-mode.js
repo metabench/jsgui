@@ -269,13 +269,14 @@ var Multi_Layout_Mode = Control.extend({
 
 
             // Having control fields here could be useful.
-
+            /*
             var ctrl_fields = {
                 'title': panel_title._id(),
                 'navigation': panel_navigation._id(),
                 'main': panel_main._id(),
                 'misc': panel_misc._id()
             };
+            */
 
             // Perhaps should make 3 different control classes.
             //  Panel controls would be a bit limited in what they do / are for, and what UI components they include.

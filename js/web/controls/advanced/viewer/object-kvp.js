@@ -225,7 +225,12 @@ var Object_KVP_Viewer = Control.extend({
 
             //this.add(ctrlOpen);
 
-            this.set('ctrl_string_key', ctrl_string_key);
+            // Should set it as a field that persists to the client.
+            this.set('ctrl_key', ctrl_string_key);
+            // ctrl_value
+            this.set('ctrl_value', ctrl_value);
+
+
 
             this.add(ctrl_string_key);
 
@@ -404,23 +409,30 @@ var Object_KVP_Viewer = Control.extend({
         // The placement of the content will depend on the mode.
         //  Maybe want better labelling / name transferrence of the internal controls.
 
-        
 
 
 
+        if (mode == 'json') {
+          if (clength == 3 || clength == 4) {
+              var content_key = content.get(0);
+              //console.log('content_key ' + stringify(content_key));
+              //console.log('content_key ' + tof(content_key));
+              ctrl_key = this.set('ctrl_key', content_key);
+              //console.log('ctrl_key ' + tof(ctrl_key));
+              ctrl_value = this.set('ctrl_value', content.get(2));
+          }
+          if (clength == 4) {
+              ctrl_comma = this.set('ctrl_comma', content.get(4));
+          }
+        } else {
 
+          ctrl_key = this.get('ctrl_key');
+          ctrl_value = this.get('ctrl_value');
 
-        if (clength == 3 || clength == 4) {
-            var content_key = content.get(0);
-            //console.log('content_key ' + stringify(content_key));
-            //console.log('content_key ' + tof(content_key));
-            ctrl_key = this.set('ctrl_key', content_key);
-            //console.log('ctrl_key ' + tof(ctrl_key));
-            ctrl_value = this.set('ctrl_value', content.get(2));
         }
-        if (clength == 4) {
-            ctrl_comma = this.set('ctrl_comma', content.get(4));
-        }
+
+
+
 
         // 4...
 
@@ -436,6 +448,8 @@ var Object_KVP_Viewer = Control.extend({
 
 
         // then the open for the key.
+
+        console.log('ctrl_key', ctrl_key);
         var key_content = ctrl_key.get('content');
 
 
