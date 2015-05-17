@@ -27,6 +27,7 @@ var fp = jsgui.fp;
 var group = jsgui.group;
 var str_arr_mapify = jsgui.str_arr_mapify;
 var map_Controls = jsgui.map_Controls;
+var extend = jsgui.extend;
 
 //var Context_Menu;
 
@@ -182,6 +183,34 @@ Control = jsgui.Control = jsgui.Control.extend({
     },
 
     'init': function(spec) {
+        // The enhanced control can look at the element for data-jsgui-fields
+        //  Those fields will be fed back into the initialization.
+
+
+        if (spec.el) {
+          var jgf = spec.el.getAttribute('data-jsgui-fields');
+
+          if (jgf) {
+
+            //console.log('str_ctrl_fields ' + str_ctrl_fields);
+            //console.log('str_properties', str_properties);
+            //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
+            var s_pre_parse = jgf.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
+            s_pre_parse = s_pre_parse.replace(/\'/g, '"');
+
+            // DBL_QT
+            //console.log('s_pre_parse', s_pre_parse);
+
+            //console.log('s_pre_parse', tof(s_pre_parse));
+
+            var props = JSON.parse(s_pre_parse);
+
+            extend(spec, props);
+          }
+
+        }
+
+
         this._super(spec);
     },
 
@@ -926,7 +955,13 @@ Control = jsgui.Control = jsgui.Control.extend({
             //console.log('activate ' + this._id());
             // activate content controls.
             //console.log('1) ' + this._.content._arr.length);
+
+            // But have this done before initialization?
+            //  Probably want to use some values that have been read in for initialization.
+            //   May disable this later, once the data is being read on initialization.
             this.activate_dom_attributes();
+
+
             //console.log('2) ' + this._.content._arr.length);
 
             this.activate_content_controls();
@@ -1315,8 +1350,9 @@ Control = jsgui.Control = jsgui.Control.extend({
                     //
 
 
-                    if (is_selectable && is_selectable.value() === true) {
-                        this.selectable();
+                    //if (is_selectable && is_selectable.value() === true) {
+                    if (is_selectable === true) {
+                          this.selectable();
                     } else {
                         //this.selectable(is_selectable);
                     }
@@ -4067,6 +4103,13 @@ var activate = function(context) {
                 // Eg can hook up the key (viewer), the value (viewer) and the comma.
 
                 // for the document element we specifically add the control to the context.
+
+                // Also want to read fields out for use in initialization.
+                //  Not the ctrl_fields (for the moment)
+                //  Just the data-jsgui-fields.
+                //   However, it's likely they could be used in the initialization.
+                //    And merged with the spec.
+
 
 
 

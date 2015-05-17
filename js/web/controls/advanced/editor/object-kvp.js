@@ -9,7 +9,7 @@
 /*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../../jsgui-html-enh", "../viewer/object-kvp", "./factory", "./basic/string"], 
+define(["../../../jsgui-html-enh", "../viewer/object-kvp", "./factory", "./basic/string"],
 	function(jsgui, Object_KVP_Viewer, factory, String_Editor) {
 */
 
@@ -65,6 +65,9 @@ var Object_KVP_Editor = Object_KVP_Viewer.extend({
 
         this._super();
 
+    },
+    'activate': function() {
+      this._super();
     }
 })
 module.exports = Object_KVP_Editor;

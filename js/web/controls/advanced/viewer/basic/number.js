@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
-define(["../../../../jsgui-html-enh"], 
+define(["../../../../jsgui-html-enh"],
 	function(jsgui) {
 */
 
@@ -151,6 +151,12 @@ var Number_Viewer = Control.extend({
         // It may also be worth setting up a drop-zone as well.
         //  Then we will have the various events needed for a good UI.
 
+        // Don't have any drag behaviour within the number viewer
+        //  It's just for viewing the number
+        //  Other things may make it draggable.
+
+
+        /*
 
         that.drag(function(e_mousedown) {
 
@@ -214,10 +220,10 @@ var Number_Viewer = Control.extend({
             //console.log('drag end', e_end);
             that._context.end_drag_selection_scope(e_end);
         });
+        */
     }
 });
 module.exports = Number_Viewer;
 		//return Number_Viewer;
 	//}
 //);
-

@@ -1350,6 +1350,27 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         }
 
+        if (this._fields) {
+          // go through the control fields, putting together the data attribute that will be persited to the client.
+
+          // need to compose the string.
+
+          //var obj_fields = {};
+          //each(this._ctrl_fields, function(ctrl_field, name) {
+          //  obj_ctrl_fields[name] = ctrl_field._id();
+          //});
+
+          //this.set('dom.attributes.data-jsgui-fields', stringify({
+          //    'num_days': num_days
+          //}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+
+          this.set('dom.attributes.data-jsgui-fields', stringify(this._fields).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+        }
+
+
+
 
 
 

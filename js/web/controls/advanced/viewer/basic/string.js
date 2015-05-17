@@ -8,7 +8,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
-define(["../../../../jsgui-html-enh"], 
+define(["../../../../jsgui-html-enh"],
 	function(jsgui) {
 */
 
@@ -19,6 +19,7 @@ var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined 
 var Control = jsgui.Control;
 
 var group = jsgui.group;
+var extend = jsgui.extend;
 
 
 var String_Viewer = Control.extend({
@@ -95,6 +96,16 @@ var String_Viewer = Control.extend({
                 this.add(span_close);
             }
 
+            // And set a field so it knows the mode upon activation.
+
+            // And if on the server...
+
+            if (typeof document === 'undefined') {
+              extend(this._fields = this._fields || {}, {
+                'mode': mode
+              })
+            }
+
 
             //this.refresh_internal();
         }
@@ -156,84 +167,123 @@ var String_Viewer = Control.extend({
         var that = this;
 
         var content = this.get('content');
+
+        var mode = this.get('mode');
+        console.log('mode', mode);
+        console.log('mode ' + mode);
+
+
+        // Using type coercion to get the Data_Value as a string
+        if (mode == 'json') {
+          var hover_class = 'bg-light-yellow';
+
+
+
+
+          // then the content are controls which will get set like field controls.
+
+          var ctrl_open = this.set('open', content.get(0));
+          console.log('ctrl_open', ctrl_open);
+
+          //var span = this.get('span');
+
+          //var span_content = span.get('content');
+
+          var span = this.set('span', content.get(1));
+          console.log('span', span);
+          // get the value from inside the span.
+
+
+
+          var value = span.get('dom.el').innerHTML;
+
+
+
+
+
+
+
+          //var group_content = jsgui.group_hover_class([span], hover_class);
+          jsgui.hover_class(span, hover_class);
+
+          var ctrl_close = this.set('close', content.get(2));
+
+
+
+
+          var group_open_close = jsgui.group_hover_class([ctrl_open, ctrl_close], hover_class);
+
+
+
+
+          // click to select, like with the object viewer.
+
+          // A selectable abstraction would be really useful.
+          // event-action links.
+
+          // selectable abstraction means it has a click handler that interprets ctrl / shift key...
+
+          // modifiable actions?
+          // action responses?
+          //  need a simple abstraction.
+
+          // Also, sub-selections.
+
+          //  When selecting something, check if it's ancestor within the same scope is selected.
+          //   if so, ignore making the selection.
+          //    That prevents there being unnecessary selected objects.
+
+
+          // Want the select action to work differently in different places...
+
+          // this.selectable(group_open_close);
+          // span.selectable();
+
+
+
+          group_open_close.click(function(e) {
+              // is control held down?
+              //console.log('e', e);
+              var ctrl_key = e.ctrlKey;
+              if (ctrl_key) {
+                  that.action_select_toggle();
+              } else {
+                  that.action_select_only();
+              }
+          });
+
+
+          //var ctrl_span_content = this.get('span');
+
+          span.selectable();
+        }
+
+        if (mode == 'tabular') {
+          var span = this.set('span', content.get(0));
+          //console.log('span', span);
+          // get the value from inside the span.
+
+
+
+          var value = span.get('dom.el').innerHTML;
+        }
+
+
+        // Can get rendered differently in different modes, so need to activate differently.
+
+
+
+
+
         //console.log('content', stringify(content));
         //console.log('content.length ' + content.length());
 
         //throw 'stop';
 
         // And hover for the value...
-        var hover_class = 'bg-light-yellow';
 
 
-
-
-        // then the content are controls which will get set like field controls.
-
-        var ctrl_open = this.set('open', content.get(0));
-        //var span = this.get('span');
-
-        //var span_content = span.get('content');
-
-        var span = this.set('span', content.get(1));
-        // get the value from inside the span.
-
-        var value = span.get('dom.el').innerHTML;
         this.set('value', value);
-
-
-
-
-        //var group_content = jsgui.group_hover_class([span], hover_class);
-        jsgui.hover_class(span, hover_class);
-
-        var ctrl_close = this.set('close', content.get(2));
-
-
-        var group_open_close = jsgui.group_hover_class([ctrl_open, ctrl_close], hover_class);
-
-
-
-
-        // click to select, like with the object viewer.
-
-        // A selectable abstraction would be really useful.
-        // event-action links.
-
-        // selectable abstraction means it has a click handler that interprets ctrl / shift key...
-
-        // modifiable actions?
-        // action responses?
-        //  need a simple abstraction.
-
-        // Also, sub-selections.
-
-        //  When selecting something, check if it's ancestor within the same scope is selected.
-        //   if so, ignore making the selection.
-        //    That prevents there being unnecessary selected objects.
-
-
-        // Want the select action to work differently in different places...
-
-        // this.selectable(group_open_close);
-        // span.selectable();
-
-
-
-        group_open_close.click(function(e) {
-            // is control held down?
-            //console.log('e', e);
-            var ctrl_key = e.ctrlKey;
-            if (ctrl_key) {
-                that.action_select_toggle();
-            } else {
-                that.action_select_only();
-            }
-        });
-
-
-        //var ctrl_span_content = this.get('span');
-
-        span.selectable();
 
         /*
         span.click(function(e) {
@@ -252,7 +302,7 @@ var String_Viewer = Control.extend({
 });
 
 		// Can use an exports object?
-		
+
 module.exports = String_Viewer;
 
 		//return String_Viewer;

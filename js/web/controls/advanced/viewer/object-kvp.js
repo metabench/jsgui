@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
-define(["../../../jsgui-html-enh", "./factory", "./basic/string"], 
+define(["../../../jsgui-html-enh", "./factory", "./basic/string"],
 	function(jsgui, factory, String_Viewer) {
 		*/
 var jsgui = require('../../../jsgui-html-enh');
@@ -17,6 +17,7 @@ var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined 
 var Control = jsgui.Control;
 
 var group = jsgui.group;
+var extend = jsgui.extend;
 
 // Could this be made to swap a different factory in place?
 //  Object_KVP_Editor would then use the 'Editor' factory
@@ -38,13 +39,6 @@ var Object_KVP_Viewer = Control.extend({
         //  Tabular mode would be like a table, but using DIVs.
         //   Easier for a single row.
         //  Table means actually a table.
-
-
-
-
-
-
-
 
 
 
@@ -77,16 +71,42 @@ var Object_KVP_Viewer = Control.extend({
         //    this.set('value', spec.value);
         //};
 
+
+        // No, maybe the mode has already been set as a field.
+
+        // client-side
+        // possibly should not set the mode at this stage, before it gets activated.
+        //  It may be better for it to see the fields and apply them to the spec.
+        //  Or if it has the element, it could read values from that element
+        //   Earlier activation
+        //   Pre-activation activation?
+        //   Value loading.
+        //   Making what is currently activate_jsgui_fields, activate_jsgui_control_fields, may be better as a part of initialization.
+        //    It would prevent set values being overwritten with default ones.
+
+        // Could have it activate the values before anything else.
+
+
+
+        var mode = this.get('mode');
+
         if (!spec.mode) {
             spec.mode = 'json';
         }
-        var mode = spec.mode;
-        this.set('mode', spec.mode);
+
+        if (!mode) {
+          mode = spec.mode;
+          this.set('mode', mode);
+        }
+        //mode = mode || spec.mode;
+
+        // could ensure the mode with saying it's JSON.
+
+
+
+
 
         this.add_class(mode);
-
-
-
 
         //this.String =
 
@@ -155,10 +175,6 @@ var Object_KVP_Viewer = Control.extend({
 
 
             // only add the ': ' in JSON mode.
-
-
-
-
 
             //ctrlKey.add(span_key_colon_space);
 
@@ -231,6 +247,13 @@ var Object_KVP_Viewer = Control.extend({
 
 
             this.add(ctrl_value_container);
+
+            if (typeof document === 'undefined') {
+              extend(this._fields = this._fields || {}, {
+                'mode': mode
+              })
+            }
+
 
 
             // Less confusing if we don't call refresh as part of the render.
@@ -331,6 +354,18 @@ var Object_KVP_Viewer = Control.extend({
     },
     'activate': function(el) {
 
+        console.log('activate Object_KVP_Viewer');
+
+        var mode = this.get('mode');
+        console.log('mode', mode);
+        console.log('mode ' + mode);
+
+
+        // It may be in a different mode, could have different internal layouts.
+
+
+
+
         // could maybe not that the control is active at some stage to prevent reactivation.
 
         var hover_class = 'bg-light-yellow';
@@ -364,6 +399,14 @@ var Object_KVP_Viewer = Control.extend({
         // Now using a string control for the key.
         //  Need less event handling here I think.
 
+        // The ctrl_value should be saved and loaded automatically.
+
+        // The placement of the content will depend on the mode.
+        //  Maybe want better labelling / name transferrence of the internal controls.
+
+        
+
+
 
 
 
@@ -396,6 +439,16 @@ var Object_KVP_Viewer = Control.extend({
         var key_content = ctrl_key.get('content');
 
 
+
+        // And we want the value itself.
+        // The value will really be a reference to the value of the value viewer.
+
+        // Need to have the internal value linked with the value of the viewer control.
+
+        var value_value = ctrl_value.get('value');
+        console.log('value_value', value_value);
+
+
         //console.log('ctrl_key._id() ' + ctrl_key._id())
         //console.log('key_content.length() ' + key_content.length());
 
@@ -410,11 +463,7 @@ var Object_KVP_Viewer = Control.extend({
             ctrl_key_close_quote = key_content.get(2);
             ctrl_key_colon_space = key_content.get(3);
 
-
-
             var group_key_quotes = jsgui.group_hover_class([ctrl_key_open_quote, ctrl_key_close_quote], hover_class);
-
-
             var that = this;
             //group_key_quotes.click(function(e) {
             //	that.action_select_only();
