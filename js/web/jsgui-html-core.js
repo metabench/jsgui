@@ -2514,6 +2514,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             // produce the inline css from that dict...
 
+            //console.log('styleName', styleName);
+
             var str_css = '';
             //var first = true;
             each(this._icss, function(item_style_value, item_style_name) {
@@ -2540,7 +2542,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
 
-            each(a[0], function(i, v) {
+            each(a[0], function(v, i) {
                 that.style(i, v, false);
             });
 
