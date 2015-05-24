@@ -50,9 +50,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                 // Try to open it from within the app's path.
                 // ../../../ + filePath
 
-				// Could try some different CSS paths
-                var jsgui_css_file_path = '../jsgui/' + filePath;
-                
+                var jsgui_css_file_path = '../../ws/' + filePath;
 
                 fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {
                     if (err) {

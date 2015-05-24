@@ -1,6 +1,6 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-};
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//};
 
 // Needs a general Page_Context
 
@@ -20,7 +20,7 @@ var jsgui = require('./jsgui-html-core');
 // don't think this can have context menu so easily here.
 //var Context_Menu = require('./controls/advanced/context-menu');
 
-var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
+var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, is_defined = jsgui.is_defined;
 var Control = jsgui.Control;
 var Selection_Scope = require('./selection-scope');
 var fp = jsgui.fp;
@@ -550,7 +550,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
 
-            each(my_contents, function(i, v) {
+            each(my_contents, function(v, i) {
                 console.log('i', i);
                 console.log('v', v);
 
@@ -1607,7 +1607,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                     //console.log('content.length()', content.length());
                     // iterate through those child nodes as well.
-                    content.each(function(i, item) {
+                    content.each(function(item, i) {
                         //console.log('item', item);
                         item_callback(item);
                         recursive_iterate(item, item_callback);
@@ -2094,7 +2094,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         // Setting the same thing twice?
 
-        each(ctrl_fields, function(i, v) {
+        each(ctrl_fields, function(v, i) {
             //fields_ctrl.set(i, v);
 
             //fields_ctrl[v] = i;
@@ -2193,7 +2193,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
                     if (ctrl_id) {
-                        content.each(function(i, v) {
+                        content.each(function(v, i) {
                             if (v.__id) {
                                 if (v.__id == ctrl_id) found = true;
                             }
@@ -2325,7 +2325,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
         var fn_mousemove = function(e_mousemove) {
-            console.log('e_mousemove', e_mousemove);
+            //console.log('e_mousemove', e_mousemove);
 
             var pos = [e_mousemove.pageX, e_mousemove.pageY];
 
@@ -2334,11 +2334,13 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
             //console.log('dist', dist);
+            
+            //console.log('is_dragging ' + is_dragging);
 
             if (!is_dragging) {
                 var dist = Math.round(Math.sqrt(pos_offset[0] * pos_offset[0] + pos_offset[1] * pos_offset[1]));
                 if (dist >= drag_start_distance) {
-                    console.log('starting drag');
+                    //console.log('starting drag');
                     is_dragging = true;
 
                     // in ghost copy mode create the ghost copy
@@ -2362,10 +2364,12 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 // could do some of the drag-drop activity depending on the drag mode.
                 //  also want to provide other hooks for functionality.
+                
+                //console.log('fn_dragmove', fn_dragmove);
 
-                if (fn_dragmove) {
+                if (handle_dragmove) {
                     e_mousemove.control = that;
-                    fn_dragmove(e_mousemove);
+                    handle_dragmove(e_mousemove);
                 }
 
             }
@@ -2385,7 +2389,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         }
 
         this.on('mousedown', function(e_mousedown) {
-            console.log('e_mousedown', e_mousedown);
+            //console.log('e_mousedown', e_mousedown);
 
             pos_mousedown = [e_mousedown.pageX, e_mousedown.pageY];
 
@@ -2634,7 +2638,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             //var offset_within_target = jsgui.v_subtract(e_pos_on_page, targetPos);
             mousedown_offset_from_ctrl_lt = jsgui.v_subtract(e_pos_on_page, ctrl_el_pos);
-            //console.log('mousedown_offset_from_ctrl_lt ' + stringify(mousedown_offset_from_ctrl_lt));
+            console.log('mousedown_offset_from_ctrl_lt ' + stringify(mousedown_offset_from_ctrl_lt));
 
             // not bad...
 
@@ -2807,11 +2811,16 @@ Control = jsgui.Control = jsgui.Control.extend({
             //    'left': pageX + 'px',
             //    'top': pageY + 'px'
             //});
-
-            ctrl.style({
+            
+            var style_vals = {
                 'left': ctrl_pos[0] + 'px',
                 'top': ctrl_pos[1] + 'px'
-            });
+            };
+            
+            //console.log('style_vals', style_vals);
+            
+
+            ctrl.style(style_vals);
 
 
             // If the ctrl is anchored, we need to unanchor it.
@@ -4177,7 +4186,7 @@ var activate = function(context) {
 
         var map_controls = context.map_controls;
         // Control construction and registration
-        each(map_jsgui_els, function(jsgui_id, el) {
+        each(map_jsgui_els, function(el, jsgui_id) {
             //console.log('jsgui_id ' + jsgui_id);
             //console.log('3) el.tagName ' + el.tagName);
             var l_tag_name = el.tagName.toLowerCase();

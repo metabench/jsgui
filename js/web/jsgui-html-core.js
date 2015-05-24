@@ -2516,7 +2516,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             var str_css = '';
             //var first = true;
-            each(this._icss, function(item_style_name, item_style_value) {
+            each(this._icss, function(item_style_value, item_style_name) {
                 //if (!first) {
                 //    str_css = str_css + '';
                 //}
