@@ -217,11 +217,11 @@ Control = jsgui.Control = jsgui.Control.extend({
         // Then there may be a selection scope specified.
         //  The selection scope may have been specified as a number
 
-        console.log('spec.selection_scope', spec.selection_scope);
+        //console.log('spec.selection_scope', spec.selection_scope);
 
 
         if (typeof spec.selection_scope !== 'undefined') {
-          console.log('spec.selection_scope', spec.selection_scope);
+          //console.log('spec.selection_scope', spec.selection_scope);
 
           var selection_scope = this._context.get_selection_scope_by_id(spec.selection_scope);
           //  Do we need to set the control of the selection scope?
@@ -741,7 +741,7 @@ Control = jsgui.Control = jsgui.Control.extend({
       // when the value is a control, we also want to set the ._jsgui_ctrl_fields
 
       var t_val = tof(value);
-      console.log('t_val', t_val);
+      //console.log('t_val', t_val);
 
       if (t_val == 'control') {
         var cf = this._ctrl_fields = this._ctrl_fields || {};
@@ -2606,7 +2606,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         var ctrl_el = ctrl.get('dom.el');
         // could go in enhanced....
 
-        this.drag(function(e_mousedown) {
+        //this.drag(function(e_mousedown) {
+        this.draggable(function(e_mousedown) {
             //console.log('e_mousedown', e_mousedown);
 
 
