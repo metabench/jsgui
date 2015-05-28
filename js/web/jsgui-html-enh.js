@@ -758,7 +758,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         cf[name] = value;
       }
 
-      this._super(name, value);
+      return this._super(name, value);
 
 
       /*
@@ -1234,6 +1234,11 @@ Control = jsgui.Control = jsgui.Control.extend({
                     e_change.item.set('dom.el', itemDomEl);
                 };
                 //console.log('itemDomEl', itemDomEl);
+                var t_item_dom_el = tof(itemDomEl);
+
+                if (t_item_dom_el === 'string') {
+                  itemDomEl = document.createTextNode(itemDomEl);
+                }
 
                 //el.insertBefore(itemDomEl, el.childNodes[0]);
                 el.appendChild(itemDomEl);
@@ -3006,7 +3011,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
     'selectable': function(ctrl) {
 
-        console.log('selectable ctrl', ctrl);
+        //console.log('selectable ctrl', ctrl);
         //  Can click on this, select something else.
 
         // if this is on the server, want to mark this so that it gets activated as selectable on the client.
@@ -3021,8 +3026,19 @@ Control = jsgui.Control = jsgui.Control.extend({
         if (typeof document === 'undefined') {
             // set the jsgui field
 
+            // Should use a different version of jsgui data fields.
+            // such as __fields
+            // just _fields
+
+            //  when the control renders the dom attributes, it treats that as a special case.
+            //  it already has a few special cases, eg style, jsgui_ctrl_fields
+
+            /*
+
             var jsf = that.get('dom.attributes.data-jsgui-fields');
             //console.log('jsf', jsf);
+
+
 
             if (jsf) {
 
@@ -3031,10 +3047,16 @@ Control = jsgui.Control = jsgui.Control.extend({
                 var obj = {
                     'is_selectable': true
                 }
+
+
+
                 that.set('dom.attributes.data-jsgui-fields', JSON.stringify(obj).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
                 //.replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]")
             }
+            */
+            that._fields = that._fields || {};
+            that._fields['is_selectable'] = true;
 
 
         } else {
@@ -3048,7 +3070,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 // Or is the click event being bubbled?
 
-                console.log('that click, that:', that);
+                //console.log('that click, that:', that);
 
                 // is control held down?
                 //console.log('e', e);
@@ -3087,7 +3109,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         //this.get('selection_scope').select_only(this);
 
         var ss = this.find_selection_scope();
-        console.log('ss', ss);
+        //console.log('ss', ss);
         // The selection scope shouls be a Selection_Scope object.
 
         //  I think that it would make use of the B+ tree where needed.
@@ -3097,7 +3119,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         //  Though can get all objects that are selected quickly, then quickly get their indexes.
         //  Do that without going through whole selection.
 
-        console.log('this ', this);
+        //console.log('this ', this);
 
         // is there a selection scope?
         //  Want to have selection scoped set up on the server OK.
@@ -3131,7 +3153,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         var parent_control_collection = this.parent();
 
 
-        console.log('parent_control_collection', parent_control_collection);
+        //console.log('parent_control_collection', parent_control_collection);
 
         // In activation, it looks like we need to hook up the parent controls.
 

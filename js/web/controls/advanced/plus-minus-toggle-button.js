@@ -45,8 +45,13 @@ var Toggle_Button = require('./toggle-button');
 
 
 				//var spec_state = spec.state, state, spec_states = spec.states, states;
+				//console.log('spec.state', spec.state);
+
 
 				var state = this.set('state', spec.state);
+				// Set should return the object it sets it as. Possibly a Data_Object.
+
+				//console.log('state', state);
 				//if (spec_state) {
 					//if (spec_state == 'expanded' || spec_state == 'contracted') {
 					//state = this.set('state', spec_state);
@@ -58,11 +63,19 @@ var Toggle_Button = require('./toggle-button');
 				//}
 
 				// Then render the text content itself.
+
+				/*
 				var t_state = tof(state);
-				console.log('t_state', t_state);
+				//console.log('t_state', t_state);
+				//throw 'stop';
 				if (t_state == 'string') {
+					//console.log('state', state);
+					//throw 'stop';
 					this.add(state);
-				}
+				};
+				*/
+
+
 
 
 

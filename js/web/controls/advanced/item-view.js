@@ -22,8 +22,10 @@ var vertical_expander = require('./vertical-expander');
 
 				// Want it so that the name field can be written during the initialization.
 				//  Will depend on the chained fields.
+				var that = this;
 
 				this._super(spec);
+				this.__type_name = 'item_view';
 				var dom = this.get('dom');
 
 				//dom.set('tagName', 'div');
@@ -37,10 +39,11 @@ var vertical_expander = require('./vertical-expander');
 
 				//  More work on controls will help.
 				//   Give them more convenient methods. Make them faster too.
-				var ctrl_expand_contract = new Control({'context': this._context});
+				var ctrl_expand_contract = new Plus_Minus_Toggle_Button({'context': this._context, 'state': '+'});
 				var cec_dom = ctrl_expand_contract.get('dom');
+				this.set('expand_contract', ctrl_expand_contract);
 				//cec_dom.set('tagName', 'div');
-				cec_dom.get('attributes').set('class', 'expansion button');
+				//cec_dom.get('attributes').set('class', 'expansion button');
 				content.add(ctrl_expand_contract);
 
 				// or the name has been set by now and the span with the name can be created.
@@ -66,7 +69,7 @@ var vertical_expander = require('./vertical-expander');
 
 				//var name = this.get('name').get();
 				var name = this.get('name');
-				console.log('name ' + stringify(name));
+				//console.log('name ' + stringify(name));
 
 				//throw('stop');
 
@@ -96,6 +99,49 @@ var vertical_expander = require('./vertical-expander');
 				this.ctrl_subitems = ctrl_subitems;
 
 				ctrl_item_info.add(ctrl_name);
+
+				if (typeof document === 'undefined') {
+					that._fields = that._fields || {};
+					that._fields['name'] = name;
+
+					if (spec.path) that._fields['path'] = spec.path;
+
+				}
+
+
+
+				//that.set('dom.attributes.data-jsgui-fields', stringify({
+				//		'name': name
+				//}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+			},
+			'activate': function() {
+				this._super();
+				var that = this;
+
+				var expand_contract = this.get('expand_contract');
+
+				expand_contract.on('change', function(e_change) {
+          //console.log('e_change', e_change);
+
+          if (e_change.name === 'state') {
+            //e_change.value;
+
+						//console.log('e_change.value', e_change.value);
+
+						if (e_change.value === '-') {
+							that.trigger('expand');
+						}
+						if (e_change.value === '+') {
+							that.trigger('contract');
+						}
+
+            //span_state.clear();
+            //span_state.add(e_change.value);
+
+          }
+        });
+
 			}
 		});
 //	return Item_View;

@@ -8,7 +8,11 @@ var jsgui = require('../../jsgui-html');
 var Plus_Minus_Toggle_Button = require('./plus-minus-toggle-button');
 var Vertical_Expander = require('./vertical-expander');
 var Tree_Node = require('./tree-node');
-var Directory_Item_View = require('./item-view');
+var Directory_Item_View = require('./item-view').extend({
+	'fields': {
+		'path': String
+	}
+});
 
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 		var Control = jsgui.Control;
@@ -39,6 +43,7 @@ var Directory_Item_View = require('./item-view');
 
 			'init': function(spec) {
 				this._super(spec);
+				this.__type_name = 'file_tree';
 
 				//this.get('dom').set('tagName', 'div');
 				this.get('dom').get('attributes').set('class', 'tree');
@@ -161,6 +166,7 @@ var Directory_Item_View = require('./item-view');
 
 	                        var root_dir_view = new Directory_Item_View({
 	                            'name': '/',
+															'path': '/',
 	                            'context': that._context
 	                        });
 													root_dir_view.active();
@@ -199,12 +205,14 @@ var Directory_Item_View = require('./item-view');
 	                        	console.log('directoryName ' + directoryName);
 	                        	var sub_dir_view = new Directory_Item_View({
 	                                'name': directoryName,
+																	'path': '/' + directoryName,
 	                                'context': that._context
 	                            });
+															sub_dir_view.set('tree', that);
 															sub_dir_view.active();
-	                            console.log('pre add content ' + new Date().date);
+	                            //console.log('pre add content ' + new Date().date);
 	                            root_dir_view_subitems_content.add(sub_dir_view);
-	                            console.log('post add content ' + new Date().date);
+	                            //console.log('post add content ' + new Date().date);
 	                        })
 
 	                        //throw 'stop';
@@ -331,6 +339,7 @@ var Directory_Item_View = require('./item-view');
 
 				var root_dir_view = new Directory_Item_View({
 						'name': '/',
+						'path': '/',
 						'context': that._context
 				});
 				root_dir_view.active();
@@ -370,23 +379,144 @@ var Directory_Item_View = require('./item-view');
 					//console.log('directoryName ' + directoryName);
 					var sub_dir_view = new Directory_Item_View({
 								'name': directoryName,
+								'path': '/' + directoryName,
 								'context': that._context
 						});
 						sub_dir_view.add_class('directory');
+						sub_dir_view.set('tree', that);
 						sub_dir_view.selectable();
 						sub_dir_view.active();
 
-
+						// Probably best to give the item_views name properties here, that get sent to client...
+						//  handle in item_view
 
 						//console.log('pre add content ' + new Date().date);
 						//root_dir_view_subitems_content.add(sub_dir_view);
 						root_dir_view.ctrl_subitems.add(sub_dir_view);
 						//console.log('post add content ' + new Date().date);
 				})
+			},
+			'activate': function() {
+				this._super();
+
+				// Get all of the item views inside it?
+				//  Or have item_view events propogate upwards to this?
+
+				// Recursively select matching controls.
+				//  Select the item_view controls. Listen for their expand / contract events.
+				//  Would then send back the user interface events to the file-manager control that interacts with the file system resource.
+				/*
+				var desc = function(ctrl, fn_selector, callback) {
+					var contents = ctrl.get('contents');
+					each(contents, function(v, i) {
+						var content_res =
+					});
+
+
+				}
+
+				desc(this, function(ctrl) {
+					// The selector function
+					console.log('selector ctrl', ctrl);
+				}, function(err, selected_controls) {
+					if (err) { throw err; } else {
+
+
+					}
+
+				});
+				*/
+
+				// Query engine would be really useful, but is a bit complicated.
+
+				// Could do it in 2 stages,
+				//  Descent iterator.
+
+				// Selective callbacks
+
+				// could make this into jsgui.desc
+
+				var desc = function(ctrl, callback) {
+					if (ctrl.get) {
+						var content = ctrl.get('content');
+						each(content, function(v, i) {
+							if (typeof i !== 'string') {
+								callback(v);
+								desc(v, callback);
+							}
+						});
+					}
+				}
+
+				var select_desc = function(ctrl, fn_select, callback) {
+					desc(ctrl, function(d_ctrl) {
+						if (fn_select(d_ctrl)) callback(d_ctrl);
+					})
+				}
+
+				select_desc(this, function(d_ctrl) {
+					//console.log('d_ctrl', d_ctrl);
+					return d_ctrl.__type_name === 'item_view';
+
+					//return true;
+				}, function(selected_ctrl) {
+					//console.log('selected_ctrl', selected_ctrl);
+					// should be item_view controls.
+
+					selected_ctrl.on('expand', function(e_expand) {
+						console.log('item view expand e_expand', e_expand);
+
+						var item_name = selected_ctrl.get('name');
+						console.log('item_name', item_name);
+
+						var item_path = selected_ctrl.get('path').value();
+						console.log('item_path', item_path);
+
+						// then we want to expand by this path.
+						//  maybe reqest the data from file-manager?
+
+						// The file manager will need to communicate with the resource.
+						//  On the client-side, want transparent access to that resource.
+
+						// May need a way of initializing client-side resources.
+						//  They will be an interface to the resource on the server, but available on the client.
+						//  Same syntax to access.
+
+						
+
+
+
+
+
+
+						// be able to get the item's path too?
+
+
+
+
+					});
+					selected_ctrl.on('contract', function(e_contract) {
+						console.log('item view contract', e_contract);
+
+						// We know which control it was, so we can then get it to load those files.
+						//console.log('selected_ctrl.value()', selected_ctrl.value());
+						var item_name = selected_ctrl.get('name');
+						console.log('item_name', item_name);
+
+						// not sure why .value() for the moment
+						var item_path = selected_ctrl.get('path').value();
+						console.log('item_path', item_path);
+
+					});
+
+				});
+
+
+
+
+
 
 			}
-
-
 
 		});
 /*

@@ -3,18 +3,18 @@ if (typeof define !== 'function') {
 }
 
 define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
-	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core'], 
+	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core'],
 
 	function(module, path, fs, url, jsgui, os, http, libUrl,
 		Resource, JeSuisXML, Cookies, fs2) {
 
-	
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
-	
+
 	// Extends AutoStart_Resource?
 
 	// May need to change around a fair few references to make it workable.
@@ -43,7 +43,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		fs2.load_file_as_string(filePath, function (err, data) {
 			if (err) {
-                console.log('could not open file filePath', filePath);
+                //console.log('could not open file filePath', filePath);
 
                 // Try to open it from within the app's path.
                 // ../../../ + filePath
@@ -51,11 +51,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				// Could try some different CSS paths
                 //var jsgui_css_file_path = '../jsgui/' + filePath;
                 var jsgui_css_file_path = '../../ws/' + filePath;
-                
+
 
                 fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {
                     if (err) {
-                        console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+                        //console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
 
                         // Try to open it from within the app's path.
                         // ../../../ + filePath
@@ -108,7 +108,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			// May also want to serve a directory under a different path.
 
-			
+
 
 			served_directories.push({
 				'name': path
@@ -123,7 +123,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 		},
 		'process': function(req, res) {
-			console.log('Site_CSS processing HTTP request');
+			//console.log('Site_CSS processing HTTP request');
 			var remoteAddress = req.connection.remoteAddress;
 
 			var custom_paths = this.meta.get('custom_paths');
@@ -136,7 +136,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//var pool_resources = pool.resources();
 			//console.log('pool_resources ' + stringify(pool_resources));
 
-			
+
 			var url_parts = url.parse(req.url, true);
 			//console.log('url_parts ' + stringify(url_parts));
 			var splitPath = url_parts.path.substr(1).split('/');
@@ -148,7 +148,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//console.log('rurl ' + rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
-			console.log('custom_response_entry ' + stringify(custom_response_entry));
+			//console.log('custom_response_entry ' + stringify(custom_response_entry));
 
 			if (custom_response_entry) {
 				var tcr = tof(custom_response_entry);
@@ -156,7 +156,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				if (tcr == 'data_value') {
 					val = custom_response_entry.value();
-					console.log('val ' + val);
+					//console.log('val ' + val);
 
 					var tval = tof(val);
 
@@ -170,8 +170,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				//throw 'stop';
 			} else {
-                console.log('splitPath.length', splitPath.length);
-                console.log('splitPath', splitPath);
+                //console.log('splitPath.length', splitPath.length);
+                //console.log('splitPath', splitPath);
 				if (splitPath.length > 0) {
 
 					// Can check for /js folder.
@@ -227,7 +227,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                                 var filePath = 'css/' + fileName;
 
-                                console.log('pre serve css file ', filePath);
+                                //console.log('pre serve css file ', filePath);
 
 
 
@@ -239,7 +239,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 								/*
 								fs2.load_file_as_string(diskPath, function (err, data) {
-									if (err) { 
+									if (err) {
 										throw err;
 									} else {
 										//var servableJs = updateReferencesForServing(data);
@@ -259,7 +259,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 										//console.log('val2 ' + val2);
 										var diskPath = val2 + '/../core/' + fileName;
 										fs2.load_file_as_string(diskPath, function (err, data) {
-											if (err) { 
+											if (err) {
 												throw err;
 											} else {
 												//var servableJs = updateReferencesForServing(data);
@@ -282,7 +282,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 			//console.log('remoteAddress ' + remoteAddress);
-			
+
 			// Need to be able to get the resource pool from this resource.
 			//  It routes http calls to particular resources, and resources in the same pool make use of each
 			//   other.
@@ -296,7 +296,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 			//console.log('this.parent() ' + stringify(this.parent()));
-			// then 
+			// then
 
 			// This could send it to an authenticated service / resource.
 
@@ -312,9 +312,9 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//  a gateway to deeper administration.
 		}
 	});
-	
-	
+
+
 	return Site_CSS;
-	
-	
+
+
 });

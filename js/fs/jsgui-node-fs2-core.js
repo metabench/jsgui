@@ -752,7 +752,7 @@ var rimraf = require('rimraf');
 					throw('err ' + err);
 				} else {
 
-					//console.log('files ' + stringify(files));
+					console.log('files ' + stringify(files));
 					//console.log('typeof files ' + stringify(typeof files));
 					//console.log('dir_contents path ' + path);
 					var res = {};
@@ -770,17 +770,17 @@ var rimraf = require('rimraf');
 					        callback(null, res_directories);
 					    } else {
 
-                            if (res_files.length > 0) {
-                                res.files = res_files;
-                            }
-                            if (res_directories.length > 0) {
-                                res.directories = res_directories;
-                            }
-                            //return res;
-                            //console.log('res ' + stringify(res));
-                            //console.log('tof callback ' + tof(callback));
-                            //console.log('callback ' + stringify(callback));
-                            callback(null, res);
+                if (res_files.length > 0) {
+                    res.files = res_files;
+                }
+                if (res_directories.length > 0) {
+                    res.directories = res_directories;
+                }
+                //return res;
+                //console.log('res ' + stringify(res));
+                //console.log('tof callback ' + tof(callback));
+                //console.log('callback ' + stringify(callback));
+                callback(null, res);
 					    }
 
 					}
@@ -834,7 +834,7 @@ var rimraf = require('rimraf');
 						    //console.log('file_name ' + file_name);
 						    proceed = regex_filter.test(file_name);
 						}
-						//console.log('proceed ' + proceed);
+						console.log('proceed ' + proceed);
 
 						/*
 						if (filter) {
@@ -868,7 +868,7 @@ var rimraf = require('rimraf');
                     // Probably don't fail whole thing with error...
 
                   	c--;
-                    console.log('c', c);
+                    //console.log('c', c);
                     if (c == 0) {
                         cb();
                     }
@@ -876,14 +876,14 @@ var rimraf = require('rimraf');
                       //throw(err);
 
                   } else {
-                      //console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));
+                      console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));
 
                       var is_dir = stats.isDirectory();
 
-                      console.log('file_name', file_name);
+                      //console.log('file_name', file_name);
 
                       //console.log('files_or_directories ' + files_or_directories);
-                      console.log('is_dir ' + is_dir);
+                      //console.log('is_dir ' + is_dir);
                       //console.log('file_or_dir_full_path ' + file_or_dir_full_path);
 
                       // not a dir anyway???
@@ -940,7 +940,7 @@ var rimraf = require('rimraf');
                                     throw err;
                                 } else {
 
-                                    console.log('fns_res ' + stringify(fns_res));
+                                    //console.log('fns_res ' + stringify(fns_res));
                                     //console.log('tof(fns_res) ' + tof(fns_res));
 
                                     // we may need to return the fs paths with the data...
@@ -1030,6 +1030,7 @@ var rimraf = require('rimraf');
                             })
 
                           } else {
+                            res_files.push(file_name);
                             c--;
                             if (c == 0) {
                                 cb();

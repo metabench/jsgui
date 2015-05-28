@@ -147,6 +147,12 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 			var req, res, content_type, my_Resource_Control, resource_client_path, included_css;
 
+      // length 2:
+
+      console.log('respond sig', sig);
+
+
+
 			if (a.l == 3) {
 				req = a[0];
 				res = a[1];
@@ -206,7 +212,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 			// Not sure quite how much to include of a specialised client in the HTML inteface for a resource
 			//  I think there should be a default basic client, and also enhanced clients that are specific to that resource.
-
+      var resource = this.meta.get('resource');
 
 
 			// We could read the content type from the end of the req...
@@ -216,13 +222,15 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 			var method = req.method;
 			var params = req.params;
 			var wildcard_value;
-			//console.log('url', url);
-			//console.log('method', method);
-			//console.log('params', params);
+			console.log('url', url);
+			console.log('method', method);
+			console.log('params', params);
 
 			if (params) {
 				wildcard_value = params.wildcard_value;
 			}
+
+      console.log('content_type', content_type);
 
 
 
@@ -234,16 +242,27 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				return (str.substr(str.length - 5) == '.json');
 			}
 
+
+
 			var edj = ends_dot_json(wildcard_value) || ends_dot_json(url);
 			//console.log('edj', edj);
+
+      var is_json = edj || content_type === 'json';
+
+      var json_path;
 
 			if (edj) {
 				var pre_dot_json_path = '';
 				if (wildcard_value) pre_dot_json_path = wildcard_value.substr(0, wildcard_value.length - 5);
 
 				var resource = this.meta.get('resource');
-				//console.log('resource', resource);
-				resource.get(pre_dot_json_path, function(err, res_resource) {
+        json_path = pre_dot_json_path;
+      } else {
+        json_path = decodeURI('/' + wildcard_value);
+      }
+
+      if (is_json) {
+        resource.get(json_path, function(err, res_resource) {
 					if (err) {
 						throw err;
 					} else {
@@ -251,9 +270,10 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 						var output = {
 							'resource': {
-								'meta': {
-									'name': resource.meta.get('name')
-								},
+								//'meta': {
+								//	'name': resource.meta.get('name') + ''
+                  //'name': 'james'
+								//},
 								'data': res_resource
 							}
 						}
@@ -269,6 +289,8 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 							output.inner_path = pre_dot_json_path;
 						}
 
+            console.log('output', output);
+
 						var json = JSON.stringify(output);
 						var mime_type = 'application/json';
 						res.writeHead(200, { 'Content-Type': mime_type });
@@ -276,7 +298,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 					}
 				})
 
-			} else {
+      } else {
 				if (!wildcard_value) {
 
 

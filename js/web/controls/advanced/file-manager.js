@@ -392,7 +392,6 @@ var File_Tree = require('./file-tree');
 
 			var filesystem_resource = spec.filesystem_resource;
 
-
 			// Should try getting the root directory listing, and render that in the first render.
 			//  May have been given a path already, will need to deal with that.
 			var file_tree = new File_Tree({'context': that._context});
@@ -405,7 +404,7 @@ var File_Tree = require('./file-tree');
 				this.__status = 'waiting';
 				filesystem_resource.get('/', function(err, res_fs_get) {
 					if (err) { throw err; } else {
-						console.log('res_fs_get', res_fs_get);
+						//console.log('res_fs_get', res_fs_get);
 
 						//console.log('filesystem_resource', filesystem_resource);
 						var selection_scope = that._context.new_selection_scope(that);
@@ -421,9 +420,12 @@ var File_Tree = require('./file-tree');
 						// wire up the file tree's root directory to this object's root directory.
 						//  maybe so they are actually the same object.
 
-						that.set('dom.attributes.data-jsgui-fields', stringify({
-								'selection_scope': selection_scope
-						}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+						that._fields = that._fields || {};
+						that._fields['selection_scope'] = selection_scope
+						//that.set('dom.attributes.data-jsgui-fields', stringify({
+						//		'selection_scope': selection_scope
+						//}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
 
 						//throw 'stop';
@@ -503,6 +505,12 @@ var File_Tree = require('./file-tree');
 			*/
 			// Let's have this show the root directory to start with.
 		},
+
+		// Needs to have a way of expanding a path, client-side.
+
+
+
+
 		'activate': function() {
 			this._super();
 			var file_tree = this.get('file_tree');

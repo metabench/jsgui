@@ -975,7 +975,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
             // basically get requests, but can handle more than just get.
             'process': function(req, res) {
-                console.log('Site_Images processing');
+                //console.log('Site_Images processing');
                 var remoteAddress = req.connection.remoteAddress;
 
                 var custom_paths = this.meta.get('custom_paths');
@@ -1019,7 +1019,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                     }
                     //throw 'stop';
                 } else {
-                    console.log('splitPath', splitPath);
+                    //console.log('splitPath', splitPath);
                     if (splitPath.length > 0) {
 
                         // Can check for /js folder.
@@ -1057,7 +1057,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                             //   They may have their own bit of caching.
 
 
-                            console.log('splitPath', splitPath);
+                            //console.log('splitPath', splitPath);
 
 
 
@@ -1068,8 +1068,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                                 // At this point, can look for the file on disk within the app directory.
 
-                                console.log('rurl', rurl);
-                                console.log('req.url', req.url);
+                                //console.log('rurl', rurl);
+                                //console.log('req.url', req.url);
 
 
                                 // replace /images/ with /img/

@@ -4344,10 +4344,14 @@ var Data_Object = Evented_Class.extend({
                     //console.log('property_name ' + property_name);
                     this._[property_name] = value;
 
-                    //this.raise_event('change', [property_name, value]);
+                    this.raise_event('change', [property_name, value]);
 
                     // Raise a change event?
                     //  Or is set event OK?
+
+										return value;
+
+
 
                 }
 
@@ -4372,8 +4376,9 @@ var Data_Object = Evented_Class.extend({
                 if (sig == '[c]') {
                     //this._[]
                     this._[property_name] = value;
-                    //this.raise_event('change', [property_name, value]);
+                    this.raise_event('change', [property_name, value]);
                     //throw 'unsupported';
+										return value;
                 }
             }
         }
