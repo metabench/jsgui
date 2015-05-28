@@ -1,12 +1,15 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"], 
-	function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander) {
-		
+//define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"],
+var jsgui = require('../../jsgui-html');
+var Plus_Minus_Toggle_Button = require('./plus-minus-toggle-button');
+var Vertical_Expander = require('./vertical-expander');
+	//function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander) {
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
-		
+
 
 		// Extending, with field values being set?
 		//  Setting field values in definitions may be a useful thing.
@@ -20,7 +23,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 		var Tree_Node = Control.extend({
 			// fields... text, value, type?
 			//  type could specify some kind of validation, or also 'password'.
-				
+
 			// single field?
 
 			// Actually having a different content?
@@ -39,7 +42,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 				['inner_control', Control],
 				['expander', Control]
 
-			],			
+			],
 
 			//'fields': {
 			//	'img_src': 'string',
@@ -47,8 +50,8 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 			//},
 
 			//  and can have other fields possibly.
-			
-			
+
+
 			'init': function(spec, add, make) {
 				// Wont fields have been set?
 
@@ -92,8 +95,8 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 							state = this.set('state', 'expanded');
 						}
 
-						console.log('state', state);
-						console.log('tof state', tof(state));
+						//console.log('state', state);
+						//console.log('tof state', tof(state));
 
 
 						//var span = new jsgui.span({
@@ -113,7 +116,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						//  Then can have a Plus_Minus_Toggle_Button control.
 
 						//var plus_minus = add(Control({ 'class': 'plus_minus' }));
-						
+
 
 						var top_line = add(Control({ 'class': 'top-line' }));
 
@@ -121,7 +124,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						var plus_minus = make(Plus_Minus_Toggle_Button({}));
 						top_line.add(plus_minus);
 
-						
+
 
 						// Hide the plus-minus unless there is another node inside this one.
 
@@ -151,8 +154,8 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						var span = make(jsgui.span({}));
 
 						var text = this.get('text');
-						console.log('text', text);
-						console.log('tof text', tof(text));
+						//console.log('text', text);
+						//console.log('tof text', tof(text));
 
 						span.add(text);
 						top_line.add(span);
@@ -179,22 +182,22 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 						//var expander = add(Control({'class': 'expander'}));
 						var expander = add(Vertical_Expander({}));
-						
 
-						// Then inner control could be 
+
+						// Then inner control could be
 						//  Vertically_Elastic_Control?
 
 						//  Or Control with Vertical_Expand_Contract added in?
 						//  Want to encapsulate that vertical expansion and contraction elsewhere.
 						//   Not sure if I should call it Accordion?
-						//  
+						//
 
 						var inner_control = make(Control({ 'class': 'inner' }));
 						expander.add(inner_control);
 
 						// Inner may not just be the title.
 
-						
+
 
 						var inner_control_content = inner_control.get('content');
 						inner_control_content.on('change', function(e_change) {
@@ -251,7 +254,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 						// Would be good to get this.fields_names_and_types
 						//  Perhaps .fields() could be changed to return the much more user-friendly data.
 
-						
+
 
 
 
@@ -263,9 +266,9 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 					}
 
 				}
-					
 
-				
+
+
 			},
 
 			// I think a pre-render function would be useful.
@@ -289,7 +292,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 				toggle_button.on('toggle', function(e_toggle) {
 					console.log('tree-node toggle', e_toggle);
 
-					// need to expand or contract the 
+					// need to expand or contract the
 
 					// need to expand or contract the inner control.
 					//  Mixins could be good for this type of functionality.
@@ -305,9 +308,14 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 
 			}
 		});
+
+		/*
 		return Tree_Node;
-		
+
 		//return jsgui;
-		
-	
+
+
 });
+*/
+
+module.exports = Tree_Node;

@@ -1,28 +1,28 @@
 // Vertical_Expander
 
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
+var jsgui = require('../../jsgui-html');
+//define(["../../jsgui-html"],
+	//function(jsgui) {
 
-define(["../../jsgui-html"], 
-	function(jsgui) {
-		
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 		var Control = jsgui.Control;
-		
+
 
 		// Extending, with field values being set?
 		//  Setting field values in definitions may be a useful thing.
 		var Vertical_Expander = Control.extend({
 			// fields... text, value, type?
 			//  type could specify some kind of validation, or also 'password'.
-				
+
 			// single field?
 			//'fields': [
 			//	['text', String]
-			//],			
+			//],
 			//  and can have other fields possibly.
-			
-			
+
+
 			'init': function(spec) {
 				this._super(spec);
 
@@ -39,7 +39,7 @@ define(["../../jsgui-html"],
 
 				this.set('states', ['open', 'closed']);
 				this.set('state', spec.state || 'open');
-				
+
 
 
 
@@ -51,7 +51,7 @@ define(["../../jsgui-html"],
 				//span.add(this.get('text').value());
 				//ctrl_title_bar.set('dom.attributes.class', 'titlebar');
 				//this.add(span);
-				
+
 			},
 			'activate': function() {
 				console.log('Vertical Expander activate');
@@ -66,7 +66,7 @@ define(["../../jsgui-html"],
 				var orig_height;
 				var el = that.get('dom.el');
 				var ui_close = function() {
-					
+
 					var h = el.childNodes[0].offsetHeight;
 
 					console.log('h', h);
@@ -81,7 +81,7 @@ define(["../../jsgui-html"],
 
 					el.style.transition = 'height 0.08s linear';
 
-					
+
 
 					//el.style['webkit-transition-property'] = 'height';
 					//el.style['webkit-transition-duration'] = '1s';
@@ -99,7 +99,7 @@ define(["../../jsgui-html"],
 					//  Need the inline css layer.
 					//  Then have the JSGUI style layer on top of that.
 
-					
+
 
 
 				}
@@ -187,9 +187,10 @@ define(["../../jsgui-html"],
 
 
 		});
-		return Vertical_Expander;
-		
+		//return Vertical_Expander;
+
 		//return jsgui;
-		
-	
-});
+
+
+//});
+module.exports = Vertical_Expander;

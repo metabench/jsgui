@@ -1,8 +1,13 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"],
-	function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander) {
+//define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"],
+
+var jsgui = require('../../jsgui-html');
+var Plus_Minus_Toggle_Button = require('./plus-minus-toggle-button');
+var vertical_expander = require('./vertical-expander');
+
+	//function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander) {
 
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 		var Control = jsgui.Control;
@@ -93,5 +98,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander"]
 				ctrl_item_info.add(ctrl_name);
 			}
 		});
-	return Item_View;
-});
+//	return Item_View;
+//});
+
+module.exports = Item_View;

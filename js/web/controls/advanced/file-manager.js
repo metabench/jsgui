@@ -1,7 +1,11 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_View, File_Tree) {
+//define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_View, File_Tree) {
+
+var jsgui = require('../../jsgui-html');
+var Item_View = require('./item-view');
+var File_Tree = require('./file-tree');
 
 	var j = jsgui;
 	var Class = j.Class;
@@ -340,6 +344,7 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 
 			// The files it's given may be much more of an MVC-type object that alerts it to changes in the files.
 			var that = this;
+
 			// This is likely to hold a whole tree structure of files, and make use of some MVC.
 			//  Won't need as much in the way of MVC when purely running on the server.
 			//   On the client, it can subscribe to directory change events, perhaps using Socket.IO.
@@ -362,6 +367,8 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 
 			// This could be given plenty of information for its file system.
 			this._super(spec);
+			this.__type_name = 'file_manager';
+			that.add_class('file-manager');
 			//throw 'stop';
 			//this.get('dom').set('tagName', 'div');
 			//this.get('dom').get('attributes').set('class', 'file_manager');
@@ -372,7 +379,6 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 			//    Potentially this will automatically have files in edit mode.
 			//     Or there will be a simple lock and unlock functionality.
 			//      May make it easy to go back to previous versions as well - could keep track of them.
-
 
 			// responding to when the files are set...
 			//  we need some kind of file data input processor for this.
@@ -393,32 +399,44 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 			that.add(file_tree);
 			that.active();
 
-			this.__status = 'waiting';
-			filesystem_resource.get('/', function(err, res_fs_get) {
-				if (err) { throw err; } else {
-					console.log('res_fs_get', res_fs_get);
+			this.set('file_tree', file_tree);
 
-					//console.log('filesystem_resource', filesystem_resource);
+			if (typeof document === 'undefined') {
+				this.__status = 'waiting';
+				filesystem_resource.get('/', function(err, res_fs_get) {
+					if (err) { throw err; } else {
+						console.log('res_fs_get', res_fs_get);
 
+						//console.log('filesystem_resource', filesystem_resource);
+						var selection_scope = that._context.new_selection_scope(that);
+            that.set('selection_scope', selection_scope);
 
-
-
-					file_tree.set_tree(res_fs_get);
-					//file_tree.set()
-
-					// wire up the file tree's root directory to this object's root directory.
-					//  maybe so they are actually the same object.
+						file_tree.set_tree(res_fs_get);
 
 
 
+						//that.selection_scope();
+						//file_tree.set()
 
-					//throw 'stop';
+						// wire up the file tree's root directory to this object's root directory.
+						//  maybe so they are actually the same object.
+
+						that.set('dom.attributes.data-jsgui-fields', stringify({
+								'selection_scope': selection_scope
+						}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
 
-					that.__status = 'ready';
-					that.trigger('ready');
-				}
-			});
+						//throw 'stop';
+
+
+						that.__status = 'ready';
+						that.trigger('ready');
+					}
+				});
+
+			}
+
+
 
 
 
@@ -476,8 +494,6 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
                         // set the root directory in the file tree.
                         //  the same
 
-
-
                         //throw('stop');
                     }
 
@@ -486,6 +502,13 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 			});
 			*/
 			// Let's have this show the root directory to start with.
+		},
+		'activate': function() {
+			this._super();
+			var file_tree = this.get('file_tree');
+
+
+
 		}
 		// set_root?
 
@@ -497,5 +520,9 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 		'File_Manager': File_Manager
 	}
 
+/*
 	return res;
 });
+*/
+
+module.exports = res;

@@ -1,8 +1,14 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander", "./tree-node", './item-view'],
-	function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander, Tree_Node, Directory_Item_View) {
+//define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander", "./tree-node", './item-view'],
+//	function(jsgui, Plus_Minus_Toggle_Button, Vertical_Expander, Tree_Node, Directory_Item_View) {
+
+var jsgui = require('../../jsgui-html');
+var Plus_Minus_Toggle_Button = require('./plus-minus-toggle-button');
+var Vertical_Expander = require('./vertical-expander');
+var Tree_Node = require('./tree-node');
+var Directory_Item_View = require('./item-view');
 
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 		var Control = jsgui.Control;
@@ -58,7 +64,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 
 				main.get('dom').set('tagName', 'div');
 				main.get('dom').get('attributes').set('class', 'main');
-				this.get('content').add(main);
+				this.add(main);
 
 				this.set('main', main);
 
@@ -84,7 +90,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 				//  Could get the data from a resource.
 				//  We can set the directory, but I think resource connection would be a good mechanism for this.
 
-
+				/*
 				if (typeof document == 'undefined') {
 					var resource = this.get('resource');
 
@@ -116,6 +122,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 
 
 				};
+				*/
 
 
 
@@ -156,6 +163,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 	                            'name': '/',
 	                            'context': that._context
 	                        });
+													root_dir_view.active();
 
 	                        main.get('content').add(root_dir_view);
 
@@ -193,6 +201,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 	                                'name': directoryName,
 	                                'context': that._context
 	                            });
+															sub_dir_view.active();
 	                            console.log('pre add content ' + new Date().date);
 	                            root_dir_view_subitems_content.add(sub_dir_view);
 	                            console.log('post add content ' + new Date().date);
@@ -311,11 +320,7 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 
 					}
 
-
 				});
-
-
-
 
 			},
 			'set_tree': function(tree) {
@@ -328,12 +333,14 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 						'name': '/',
 						'context': that._context
 				});
+				root_dir_view.active();
 
-				main.get('content').add(root_dir_view);
+				//main.get('content').add(root_dir_view);
+				main.add(root_dir_view);
 
 				// But inside that directory item view, there will be others.
 
-				console.log('property_value ' + stringify(property_value));
+				//console.log('property_value ' + stringify(property_value));
 				//throw 'stop';
 				// don't get the contents of the property_value
 
@@ -351,23 +358,30 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 				//  Perhaps we don't need them, as extensions of Data_Object?
 				//
 
-				console.log('root_directory_contents ' + stringify(root_directory_contents));
+				//console.log('root_directory_contents ' + stringify(root_directory_contents));
 
 				// directories, then files
 
-				var root_dir_view_subitems_content = root_dir_view.ctrl_subitems.get('content');
+				//var root_dir_view_subitems_content = root_dir_view.ctrl_subitems.get('content');
 
 				each(root_directory_contents.directories, function(directoryName, i) {
 					// OK, this loop seems to take a very long time.
 
-					console.log('directoryName ' + directoryName);
+					//console.log('directoryName ' + directoryName);
 					var sub_dir_view = new Directory_Item_View({
 								'name': directoryName,
 								'context': that._context
 						});
-						console.log('pre add content ' + new Date().date);
-						root_dir_view_subitems_content.add(sub_dir_view);
-						console.log('post add content ' + new Date().date);
+						sub_dir_view.add_class('directory');
+						sub_dir_view.selectable();
+						sub_dir_view.active();
+
+
+
+						//console.log('pre add content ' + new Date().date);
+						//root_dir_view_subitems_content.add(sub_dir_view);
+						root_dir_view.ctrl_subitems.add(sub_dir_view);
+						//console.log('post add content ' + new Date().date);
 				})
 
 			}
@@ -375,5 +389,9 @@ define(["../../jsgui-html", "./plus-minus-toggle-button", "./vertical-expander",
 
 
 		});
+/*
 		return File_Tree;
 });
+*/
+
+module.exports = File_Tree;

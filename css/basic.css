@@ -171,7 +171,7 @@ body {
     white-space: nowrap;
     width:200px;
     overflow: hidden;
-} 
+}
 /* [contenteditable="true"] */.single-line br {
     display:none;
 
@@ -228,7 +228,7 @@ div.single-line.selected {
 	// Then the flexiboard would be positioned in the right of that.
 
 	// A top, absolutely positioned band.
-	//  
+	//
 */
 
 .flexiboard {
@@ -562,7 +562,7 @@ button {
 
 /* Audio Player */
 
-/* Could have audio player in different size modes 
+/* Could have audio player in different size modes
 
 Full screen desktop - tablet landscape
 Full screen tablet portrait
@@ -637,4 +637,34 @@ html.dragging {
     text-align: center;
     padding-top: 12px;
     margin-bottom: 1px;
+}
+
+.file-manager {
+	-webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+	cursor: default;
+
+}
+
+.file-manager .expansion.button {
+	width: 16px;
+	height: 16px;
+	background-color: #FF0000;
+	float: left;
+}
+.file-manager .icon {
+	width: 24px;
+	height: 24px;
+	background-color: #00FF00;
+	float: left;
+}
+.file-manager .info {
+	width: 400px;
+	height: 32px;
+	background-color: #ABCDEF;
+	float: left;
 }

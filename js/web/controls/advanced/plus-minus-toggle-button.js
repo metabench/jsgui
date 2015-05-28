@@ -1,9 +1,12 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./toggle-button"], 
-	function(jsgui, Toggle_Button) {
-		
+var jsgui = require('../../jsgui-html');
+var Toggle_Button = require('./toggle-button');
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
+
+//define(["../../jsgui-html", "./toggle-button"],
+	//function(jsgui, Toggle_Button) {
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
 
@@ -11,9 +14,9 @@ define(["../../jsgui-html", "./toggle-button"],
 
 			'fields': [
 				//['text', String]
-			],			
+			],
 			//  and can have other fields possibly.
-			
+
 			'init': function(spec, add, make) {
 
 				// Set it so it only has two states
@@ -66,9 +69,11 @@ define(["../../jsgui-html", "./toggle-button"],
 
 			}
 		});
-		return Plus_Minus_Toggle_Button;
-		
+		//return Plus_Minus_Toggle_Button;
+
 		//return jsgui;
-		
-	
-});
+
+
+//});
+
+module.exports = Plus_Minus_Toggle_Button;

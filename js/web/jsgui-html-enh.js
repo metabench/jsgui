@@ -820,6 +820,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         var context = this._context;
         var map_controls = context.map_controls;
 
+        var parent_control;
+
         recursive_dom_iterate_depth(el, function(el2) {
             //console.log('el ' + el);
             var nt = el2.nodeType;
@@ -835,10 +837,16 @@ Control = jsgui.Control = jsgui.Control.extend({
                     // Not so sure the control will exist within a map of controls.
                     //  If we have activated the whole page, then they will exist.
                     //  However, we may just want to do activate on some controls.
-
+                    throw 'stop';
 
 
                     var ctrl = map_controls[jsgui_id];
+
+                    if (parent_control) {
+                      console.log('setting ctrl parent');
+                      ctrl.parent(parent_control);
+                    }
+
                     //console.log('ctrl ' + ctrl);
 
                     // don't want to activate twice.
@@ -851,6 +859,8 @@ Control = jsgui.Control = jsgui.Control.extend({
                     //}
 
                     if (!ctrl.__active) ctrl.activate(el2);
+                    parent_control = ctrl;
+
 
 
 
@@ -1228,17 +1238,6 @@ Control = jsgui.Control = jsgui.Control.extend({
                 //el.insertBefore(itemDomEl, el.childNodes[0]);
                 el.appendChild(itemDomEl);
 
-                // And then activate it?
-                //  Perhaps making it so that it's impossible to add the same content again?
-
-
-
-                //item.activate();
-                // Will switch this off for the moment.
-
-                //  Seems to have a problem with both .active and .activate
-                //  Will turn .activate back on, and look at the activate code.
-
 
             }
 
@@ -1251,6 +1250,193 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         //console.log('2) content.length()', content.length());
     },
+    'activate_content_controls': function() {
+
+
+
+        //console.log('activate_content_controls');
+        // needs to have an el.
+
+        // Every internal control has its selection scope set?
+
+        //  Or it can find the selection scope by moving upwards through the heirachy when needed?
+
+
+
+
+        var el = this.get('dom.el');
+        var context = this._context;
+
+        var ctrl_fields = {};
+        var that = this;
+
+        var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
+        if (str_ctrl_fields) {
+            //console.log('str_ctrl_fields ' + str_ctrl_fields);
+            ctrl_fields = JSON.parse(str_ctrl_fields.replace(/'/g, '"'));
+
+        }
+
+        //console.log('ctrl_fields ' + stringify(ctrl_fields));
+
+        //var fields_ctrl = {};
+        //var selection_scope;
+
+        // PROBLEM!...?
+
+        // Setting the same thing twice?
+
+        each(ctrl_fields, function(v, i) {
+            //fields_ctrl.set(i, v);
+
+            //fields_ctrl[v] = i;
+            var referred_to_control = context.map_controls[v];
+            //console.log('referred_to_control', referred_to_control);
+
+            that.set(i, referred_to_control);
+
+
+        });
+        // context.map_controls
+
+
+
+        //var ss = this.get('selection_scope');
+        //console.log('ss ' + ss);
+        //if (ss) throw 'stop';
+
+
+
+        //console.log('fields_ctrl ' + stringify(fields_ctrl));
+
+        // the other controls will have already been registered, even if they are not active controls.
+
+        // Register, activate
+
+        //console.log('el ' + el);
+
+        // Works in an overly complicated way?
+
+
+        var cns = el.childNodes;
+
+        // For every child node...
+
+        //  Do not want to add it's control each time.
+        //  Should probably only do that if the control is not already there.
+
+
+
+        var content = this.get('content');
+
+        // Adding the content again?
+
+        for (var c = 0, l = cns.length; c < l; c++) {
+            var cn = cns[c];
+
+            var nt = cn.nodeType;
+            //console.log('* nt ' + nt);
+            if (nt == 1) {
+                var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
+                //console.log('cn_jsgui_id ' + cn_jsgui_id);
+
+                var cctrl = context.map_controls[cn_jsgui_id];
+                //console.log('cctrl ' + stringify(cctrl));
+                //content.push(cctrl);
+                // OK, but when adding content it will be good to know what index the content goes to.
+                //  maybe this.add would be better.
+
+
+                // Need to be careful about this.
+                //  Don't want to add controls twice.
+                //  Only want them to be pushed to the content if they are not already there.
+
+
+                // Need to add them to the content when activating from the DOM at the beginning.
+                //  However, we may have the control already associated with its parent control, if it was rendered.
+
+                // Need a fast way of looking up if a control, by name, is within the content collection.
+                //  Could make the collection automatically index the id... but that would be a new requirement for controls to
+                //  always have IDs. Perhaps it would be useful / necessary though.
+                // Or, when a control does have an ID, that id gets recorded.
+
+                // This definitely looks like the problem where it's adding the content that already exists.
+
+                // a .content_contains_control_id function could help in the short term.
+                //  may be a performance bottleneck if it checks all controls.
+                //  a control having a map of its subcontrols may make sense, though that functionality really belongs within Collection.
+
+                // When adding a control, it would index that control's id.
+                //  Make it so that the collection automatically indexes a control's id.
+
+
+
+
+
+                // quick check to see if the control is not already there.
+
+                var found = false;
+
+                // Seems inefficient here. Could check faster, or make check unnecessary (maybe throw error if found, then debug elsewhere).
+
+                if (cctrl) {
+                    var ctrl_id = cctrl.__id;
+                    //console.log('* ctrl_id', ctrl_id);
+
+
+                    if (ctrl_id) {
+                        content.each(function(v, i) {
+                            if (v.__id) {
+                                if (v.__id == ctrl_id) found = true;
+                            }
+                        });
+                    }
+
+                    if (!found) {
+                        this.add(cctrl);
+                    }
+                }
+
+
+
+
+
+
+
+
+
+                // need to be able to get from a control:
+                // _parent()
+                // _index()
+
+                // Though there could be a more complicated relationships system, I think keeping that simple API would be good.
+
+                // or just .parent()
+                // .index()
+
+                // not sure that ._id() was so well named... but anyway.
+
+                //
+                //if (fields_ctrl[cn_jsgui_id]) {
+                //    //console.log('fields_ctrl[cn_jsgui_id] ' + fields_ctrl[cn_jsgui_id]);
+                //    that.set(fields_ctrl[cn_jsgui_id], cctrl);
+                //}
+
+                // Not doing recursive selection scope setting here?
+            }
+            if (nt == 3) {
+                // text
+                var val = cn.nodeValue;
+                //console.log('val ' + val);
+                content.push(val);
+
+            }
+            // we can get the ctrl reference
+
+        }
+
+    },
+
     'activate_dom_attributes': function() {
 
         // Needs to get the class out of the DOM properly.
@@ -1854,26 +2040,6 @@ Control = jsgui.Control = jsgui.Control.extend({
                         'top': '100px'
                     });
                 }
-                /*
-                setTimeout(function() {
-                    //console.log('pre add context menu');
-                    body.add(context_menu);
-                    context_menu.activate();
-
-                    context_menu.one_mousedown_anywhere(function(e_mousedown) {
-                        console.log('e_mousedown.within_this ' + e_mousedown.within_this);
-
-                        if (!e_mousedown.within_this) {
-                            context_menu.remove();
-                        } else {
-                            // maybe open a new level
-                            context_menu.remove();
-                        }
-                    });
-
-
-                }, 0);
-                */
 
 
             }
@@ -2058,192 +2224,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
     }),
-    'activate_content_controls': function() {
 
-
-
-        //console.log('activate_content_controls');
-        // needs to have an el.
-
-        // Every internal control has its selection scope set?
-
-        //  Or it can find the selection scope by moving upwards through the heirachy when needed?
-
-
-
-
-        var el = this.get('dom.el');
-        var context = this._context;
-
-        var ctrl_fields = {};
-        var that = this;
-
-        var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
-        if (str_ctrl_fields) {
-            //console.log('str_ctrl_fields ' + str_ctrl_fields);
-            ctrl_fields = JSON.parse(str_ctrl_fields.replace(/'/g, '"'));
-
-        }
-
-        //console.log('ctrl_fields ' + stringify(ctrl_fields));
-
-        //var fields_ctrl = {};
-        //var selection_scope;
-
-        // PROBLEM!...?
-
-        // Setting the same thing twice?
-
-        each(ctrl_fields, function(v, i) {
-            //fields_ctrl.set(i, v);
-
-            //fields_ctrl[v] = i;
-            var referred_to_control = context.map_controls[v];
-            //console.log('referred_to_control', referred_to_control);
-
-            that.set(i, referred_to_control);
-
-
-        })
-        // context.map_controls
-
-
-
-        //var ss = this.get('selection_scope');
-        //console.log('ss ' + ss);
-        //if (ss) throw 'stop';
-
-
-
-        //console.log('fields_ctrl ' + stringify(fields_ctrl));
-
-        // the other controls will have already been registered, even if they are not active controls.
-
-        // Register, activate
-
-        //console.log('el ' + el);
-
-        // Works in an overly complicated way?
-
-
-        var cns = el.childNodes;
-
-        // For every child node...
-
-        //  Do not want to add it's control each time.
-        //  Should probably only do that if the control is not already there.
-
-
-
-        var content = this.get('content');
-
-        // Adding the content again?
-
-        for (var c = 0, l = cns.length; c < l; c++) {
-            var cn = cns[c];
-
-            var nt = cn.nodeType;
-            //console.log('* nt ' + nt);
-            if (nt == 1) {
-                var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
-                //console.log('cn_jsgui_id ' + cn_jsgui_id);
-
-                var cctrl = context.map_controls[cn_jsgui_id];
-                //console.log('cctrl ' + stringify(cctrl));
-                //content.push(cctrl);
-                // OK, but when adding content it will be good to know what index the content goes to.
-                //  maybe this.add would be better.
-
-
-                // Need to be careful about this.
-                //  Don't want to add controls twice.
-                //  Only want them to be pushed to the content if they are not already there.
-
-
-                // Need to add them to the content when activating from the DOM at the beginning.
-                //  However, we may have the control already associated with its parent control, if it was rendered.
-
-                // Need a fast way of looking up if a control, by name, is within the content collection.
-                //  Could make the collection automatically index the id... but that would be a new requirement for controls to
-                //  always have IDs. Perhaps it would be useful / necessary though.
-                // Or, when a control does have an ID, that id gets recorded.
-
-                // This definitely looks like the problem where it's adding the content that already exists.
-
-                // a .content_contains_control_id function could help in the short term.
-                //  may be a performance bottleneck if it checks all controls.
-                //  a control having a map of its subcontrols may make sense, though that functionality really belongs within Collection.
-
-                // When adding a control, it would index that control's id.
-                //  Make it so that the collection automatically indexes a control's id.
-
-
-
-
-
-                // quick check to see if the control is not already there.
-
-                var found = false;
-
-                // Seems inefficient here. Could check faster, or make check unnecessary (maybe throw error if found, then debug elsewhere).
-
-                if (cctrl) {
-                    var ctrl_id = cctrl.__id;
-                    //console.log('ctrl_id', ctrl_id);
-
-
-                    if (ctrl_id) {
-                        content.each(function(v, i) {
-                            if (v.__id) {
-                                if (v.__id == ctrl_id) found = true;
-                            }
-                        });
-                    }
-
-                    if (!found) {
-                        content.push(cctrl);
-                    }
-                }
-
-
-
-
-
-
-
-
-
-                // need to be able to get from a control:
-                // _parent()
-                // _index()
-
-                // Though there could be a more complicated relationships system, I think keeping that simple API would be good.
-
-                // or just .parent()
-                // .index()
-
-                // not sure that ._id() was so well named... but anyway.
-
-                //
-                //if (fields_ctrl[cn_jsgui_id]) {
-                //    //console.log('fields_ctrl[cn_jsgui_id] ' + fields_ctrl[cn_jsgui_id]);
-                //    that.set(fields_ctrl[cn_jsgui_id], cctrl);
-                //}
-
-                // Not doing recursive selection scope setting here?
-            }
-            if (nt == 3) {
-                // text
-                var val = cn.nodeValue;
-                //console.log('val ' + val);
-                content.push(val);
-
-            }
-            // we can get the ctrl reference
-
-        }
-
-    },
 
     // make full height.
     //  makes the control take the rest of the height of the window.
@@ -2334,7 +2315,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
             //console.log('dist', dist);
-            
+
             //console.log('is_dragging ' + is_dragging);
 
             if (!is_dragging) {
@@ -2364,7 +2345,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 // could do some of the drag-drop activity depending on the drag mode.
                 //  also want to provide other hooks for functionality.
-                
+
                 //console.log('fn_dragmove', fn_dragmove);
 
                 if (handle_dragmove) {
@@ -2663,7 +2644,7 @@ Control = jsgui.Control = jsgui.Control.extend({
             //  also know if it is docked or not.
 
             var ctrlSize = ctrl.size();
-            console.log('ctrlSize', ctrlSize);
+            //console.log('ctrlSize', ctrlSize);
 
             var anchored_to = ctrl.get('anchored_to');
             //console.log('anchored_to', anchored_to);
@@ -2811,14 +2792,14 @@ Control = jsgui.Control = jsgui.Control.extend({
             //    'left': pageX + 'px',
             //    'top': pageY + 'px'
             //});
-            
+
             var style_vals = {
                 'left': ctrl_pos[0] + 'px',
                 'top': ctrl_pos[1] + 'px'
             };
-            
+
             //console.log('style_vals', style_vals);
-            
+
 
             ctrl.style(style_vals);
 
@@ -3106,7 +3087,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         //this.get('selection_scope').select_only(this);
 
         var ss = this.find_selection_scope();
-
+        console.log('ss', ss);
         // The selection scope shouls be a Selection_Scope object.
 
         //  I think that it would make use of the B+ tree where needed.
@@ -3148,6 +3129,13 @@ Control = jsgui.Control = jsgui.Control.extend({
         // .parent for a control should do this I think.
 
         var parent_control_collection = this.parent();
+
+
+        console.log('parent_control_collection', parent_control_collection);
+
+        // In activation, it looks like we need to hook up the parent controls.
+
+
 
         if (parent_control_collection) {
             var parent_control = parent_control_collection.parent();

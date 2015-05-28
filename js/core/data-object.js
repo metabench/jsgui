@@ -4,7 +4,7 @@ if (typeof define !== 'function') {
 }
 
 
-define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"], 
+define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"],
 	function(jsgui, Data_Structures, Constraint, Fields_Collection) {
 
 	*/
@@ -15,16 +15,16 @@ var Data_Value = require('./data-value');
 var Constraint = require('./constraint');
 var Fields_Collection = require('./data-object-fields-collection');
 var Evented_Class = require('./evented-class');
-	
+
 	// Creates the Constraints data type... so a constraint specified with a string can be tested against
 	//  also a cache of the constraints that have been made through the string - quick to get them again for reuse when testing.
-	
+
 	// Constraint objects can be saved and used in various places.
 	//  They may not always be referred to directly, that would save on the amount of code needed.
-	
+
 	// They will help in making a model of what gets put into a database.
 	//  A few constraints put in place in the domain model or similar will help with its translation to a database model.
-	
+
 	// These wide-ranging things should help a lot with creating a wide range of performant databases quickly.
 	// It will also be a good tool in itself.
 
@@ -1311,8 +1311,10 @@ var Data_Object = Evented_Class.extend({
         var obj, index;
         //console.log('parent sig', sig);
 
+				// And _parent should be set automatically when the controls are put in place.
 
         if (a.l == 0) {
+					//console.log('this._parent', this._parent);
             return this._parent;
         }
         if (a.l == 1) {
