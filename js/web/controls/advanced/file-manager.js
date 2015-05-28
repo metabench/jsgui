@@ -339,7 +339,7 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 			// can be given a list of files to show.
 
 			// The files it's given may be much more of an MVC-type object that alerts it to changes in the files.
-
+			var that = this;
 			// This is likely to hold a whole tree structure of files, and make use of some MVC.
 			//  Won't need as much in the way of MVC when purely running on the server.
 			//   On the client, it can subscribe to directory change events, perhaps using Socket.IO.
@@ -389,27 +389,41 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 
 			// Should try getting the root directory listing, and render that in the first render.
 			//  May have been given a path already, will need to deal with that.
+			var file_tree = new File_Tree({'context': that._context});
+			that.add(file_tree);
+			that.active();
 
+			this.__status = 'waiting';
 			filesystem_resource.get('/', function(err, res_fs_get) {
 				if (err) { throw err; } else {
 					console.log('res_fs_get', res_fs_get);
+
+					//console.log('filesystem_resource', filesystem_resource);
+
+
+
+
+					file_tree.set_tree(res_fs_get);
+					//file_tree.set()
+
+					// wire up the file tree's root directory to this object's root directory.
+					//  maybe so they are actually the same object.
+
+
+
+
+					//throw 'stop';
+
+
+					that.__status = 'ready';
+					that.trigger('ready');
 				}
 			});
 
 
 
 
-			console.log('filesystem_resource', filesystem_resource);
 
-
-
-			var file_tree = new File_Tree({'context': this._context});
-			//file_tree.set()
-
-			// wire up the file tree's root directory to this object's root directory.
-			//  maybe so they are actually the same object.
-
-			this.get('content').add(file_tree);
 			//throw 'stop';
 			// something that listens for changes?
 			//  will mean we can keep more code in init and use more local / private variables here.
@@ -417,10 +431,12 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 			// just gets the target and the name of the event (ie set)?
 
 			// Not sure that this gets called.
-			var that = this;
+
 			// Does the 'set' event listener get called?
 
 			//this.add_event_listener('set', function(target, name, set_args) {
+
+			/*
 			this.add_event_listener('set', function(event_params) {
 				// Does not seem to be listening for the set event?
 
@@ -468,6 +484,7 @@ define(["../../jsgui-html", "./item-view", "./file-tree"], function(jsgui, Item_
 			    }
 
 			});
+			*/
 			// Let's have this show the root directory to start with.
 		}
 		// set_root?

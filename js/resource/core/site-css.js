@@ -41,8 +41,6 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-
-
 		fs2.load_file_as_string(filePath, function (err, data) {
 			if (err) {
                 console.log('could not open file filePath', filePath);
@@ -51,7 +49,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                 // ../../../ + filePath
 
 				// Could try some different CSS paths
-                var jsgui_css_file_path = '../jsgui/' + filePath;
+                //var jsgui_css_file_path = '../jsgui/' + filePath;
+                var jsgui_css_file_path = '../../ws/' + filePath;
                 
 
                 fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {

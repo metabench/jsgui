@@ -4,17 +4,20 @@ if (typeof define !== 'function') {
 }
 
 define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/controls/advanced/resource-base',
-	'../../web/jsgui-je-suis-xml', 'cookies', '../../web/server-page-context'], 
+	'../../web/jsgui-je-suis-xml', 'cookies', '../../web/server-page-context'],
 
 	function(jsgui, os, http, libUrl, Web_Resource, Resource_Control,
 		JeSuisXML, Cookies, Server_Page_Context) {
 
-	
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
+
+
+  // Looks like this publishes an HTML interface for the moment.
 
 	// This one is for publishing a single resource
 
@@ -34,7 +37,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 	var Resource_Publisher = Web_Resource.extend({
 
 		// should take the resource to publish as the field...?
-		
+
 		'init': function(spec) {
 
 
@@ -61,7 +64,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 			// gets the table / collection
 			var meta = this.meta;
-			
+
 
 		},
 		'set': fp(function(a, sig) {
@@ -69,7 +72,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 			//console.log('Info Resource set sig ' + sig);
 			// gets the table / collection
 			var meta = this.meta;
-			
+
 		}),
 		// Having some resources processing HTTP requests may not be too bad.
 		//  However, we could have an automatic layer for this so that they do not have to be programmed
@@ -127,7 +130,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				//console.log('publisher resource change event ', e_res);
 				//console.log('will broadcast change with sock');
 
-				// 
+				//
 
 				server.sock_broadcast(e_res);
 
@@ -221,7 +224,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 				wildcard_value = params.wildcard_value;
 			}
 
-			
+
 
 			// Detect if we are looking for JSON
 
@@ -332,7 +335,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 					// And want to be able to serve framework files easily under /js
 
-					
+
 					//hd.include_jsgui_client('js/app.js');
 
 
@@ -367,7 +370,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 					// The jsgui client would include the necessary client resource / resource connection info.
 					// Would need a Resource class on the client side too.
 
-					
+
 					// I send something to the client, as JS, with a bit of information about the resource it's connecting to.
 					//  The client code should already have the necessary code for the actual resource classes.
 
@@ -381,7 +384,6 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 					// Will have the client check back to the server to get more information about the resource (I think)
 					//  Will do a JSON HTTP get request.
 
-					
 
 
 
@@ -389,7 +391,8 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
-					
+
+
 					var body = hd.body();
 
 
@@ -438,7 +441,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 					// I think we need to use some kind of connected data control.
 					//  On the client, it will activate, it will know what resource to ask for, and it will connect to that resource, either directly, or using the resource
 					//  broker.
-					// 
+					//
 
 					// Could use an object or data object viewer of some type.
 
@@ -460,10 +463,10 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 					/*
 					var html = hd.all_html_render();
-					
+
 					var mime_type = 'text/html';
 					//console.log('mime_type ' + mime_type);
-						
+
 					res.writeHead(200, { 'Content-Type': mime_type });
 					res.end(html, 'utf-8');
 					*/
@@ -477,7 +480,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 							var mime_type = 'text/html';
 							//console.log('mime_type ' + mime_type);
-								
+
 							res.writeHead(200, { 'Content-Type': mime_type });
 							res.end(deferred_html, 'utf-8');
 						}
@@ -505,7 +508,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
-				
+
 
 
 				// Would be good to include some kind of connected data view / control.
@@ -513,12 +516,12 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 
 
-				
+
 				//var html = '<html><head></head><body><h1>Resource_Publisher_HTTP response</h1></body></html>';
 				//var mime_type = 'text/html';
 				//res.writeHead(200, { 'Content-Type': mime_type });
 				//res.end(html, 'utf-8');
-				
+
 			}
 
 			if (content_type == 'json') {
@@ -548,19 +551,19 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 					}
 				})
 
-					
+
 			}
 			*/
 
 
 
-			
-			
+
+
 		})
 	});
-	
-	
+
+
 	return Resource_Publisher;
-	
-	
+
+
 });
