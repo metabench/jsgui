@@ -24,6 +24,7 @@ var vertical_expander = require('./vertical-expander');
 				//  Will depend on the chained fields.
 				var that = this;
 
+
 				this._super(spec);
 				this.__type_name = 'item_view';
 				var dom = this.get('dom');
@@ -32,7 +33,7 @@ var vertical_expander = require('./vertical-expander');
 				dom.get('attributes').set('class', 'item');
 
 				// The item's likely to have a name.
-				var content = this.get('content');
+				//var content = this.get('content');
 				// get the name from the spec?
 
 				// and respond to the name being set?
@@ -40,11 +41,12 @@ var vertical_expander = require('./vertical-expander');
 				//  More work on controls will help.
 				//   Give them more convenient methods. Make them faster too.
 				var ctrl_expand_contract = new Plus_Minus_Toggle_Button({'context': this._context, 'state': '+'});
-				var cec_dom = ctrl_expand_contract.get('dom');
+				ctrl_expand_contract.active();
+				//var cec_dom = ctrl_expand_contract.get('dom');
 				this.set('expand_contract', ctrl_expand_contract);
 				//cec_dom.set('tagName', 'div');
 				//cec_dom.get('attributes').set('class', 'expansion button');
-				content.add(ctrl_expand_contract);
+				this.add(ctrl_expand_contract);
 
 				// or the name has been set by now and the span with the name can be created.
 
@@ -54,12 +56,12 @@ var vertical_expander = require('./vertical-expander');
 				//ctrl_icon.get('dom').set('tagName', 'div');
 				ctrl_icon.get('dom').get('attributes').set('class', 'icon');
 
-				content.add(ctrl_icon);
+				this.add(ctrl_icon);
 
 				var ctrl_item_info = new Control({'context': this._context});
 				//ctrl_item_info.get('dom').set('tagName', 'div');
 				ctrl_item_info.get('dom').get('attributes').set('class', 'info');
-				content.add(ctrl_item_info);
+				this.add(ctrl_item_info);
 
 				// then add a name control. this will have a text node inside.
 
@@ -83,19 +85,21 @@ var vertical_expander = require('./vertical-expander');
 				var ctrl_clearall_0 = new Control({'context': this._context});
 				//ctrl_clearall_0.get('dom').set('tagName', 'div');
 				ctrl_clearall_0.get('dom').get('attributes').set('class', 'clearall');
-				content.add(ctrl_clearall_0);
+				this.add(ctrl_clearall_0);
 
 				var ctrl_subitems = new Control({'context': this._context});
 				//ctrl_subitems.get('dom').set('tagName', 'div');
 				ctrl_subitems.get('dom').get('attributes').set('class', 'subitems');
-				content.add(ctrl_subitems);
+
+				this.add(ctrl_subitems);
+				ctrl_subitems.active();
 
 				this.set('ctrl_subitems', ctrl_subitems);
 
 				var ctrl_clearall = new Control({'context': this._context});
 				//ctrl_clearall.get('dom').set('tagName', 'div');
 				ctrl_clearall.get('dom').get('attributes').set('class', 'clearall');
-				content.add(ctrl_clearall);
+				this.add(ctrl_clearall);
 				this.ctrl_subitems = ctrl_subitems;
 
 				ctrl_item_info.add(ctrl_name);
@@ -108,6 +112,8 @@ var vertical_expander = require('./vertical-expander');
 
 				}
 
+				//this.active();
+
 
 
 				//that.set('dom.attributes.data-jsgui-fields', stringify({
@@ -116,31 +122,44 @@ var vertical_expander = require('./vertical-expander');
 
 			},
 			'activate': function() {
-				this._super();
-				var that = this;
+				if (!this.__active) {
+					this._super();
+					var that = this;
 
-				var expand_contract = this.get('expand_contract');
+					var expand_contract = this.get('expand_contract');
 
-				expand_contract.on('change', function(e_change) {
-          //console.log('e_change', e_change);
 
-          if (e_change.name === 'state') {
-            //e_change.value;
+					//console.log('expand_contract', expand_contract);
 
-						//console.log('e_change.value', e_change.value);
+					// When a control is added to the DOM, it as well as its subcontrols should be automatically activated, with the various controls
+					//  registered with the jsgui.map_controls.
 
-						if (e_change.value === '-') {
-							that.trigger('expand');
-						}
-						if (e_change.value === '+') {
-							that.trigger('contract');
-						}
 
-            //span_state.clear();
-            //span_state.add(e_change.value);
+					//expand_contract.activate();
 
-          }
-        });
+					expand_contract.on('change', function(e_change) {
+	          //console.log('e_change', e_change);
+
+	          if (e_change.name === 'state') {
+	            //e_change.value;
+
+							//console.log('e_change.value', e_change.value);
+
+							if (e_change.value === '-') {
+								that.trigger('expand');
+							}
+							if (e_change.value === '+') {
+								that.trigger('contract');
+							}
+
+	            //span_state.clear();
+	            //span_state.add(e_change.value);
+
+	          }
+	        });
+				}
+
+
 
 			}
 		});

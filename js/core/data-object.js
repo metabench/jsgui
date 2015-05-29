@@ -567,7 +567,7 @@ var Data_Object = Evented_Class.extend({
                 // then copy the values over from spec.
 
                 var spec_keys = spec.keys();
-                console.log('spec_keys', spec_keys);
+                //console.log('spec_keys', spec_keys);
 
                 each(spec_keys, function(i, key) {
                     that.set(key, spec.get(key));

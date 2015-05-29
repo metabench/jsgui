@@ -47,6 +47,9 @@ var Number_Viewer = Control.extend({
         this.set('span', span);
         this.refresh_internal();
 
+        // After the span_content, there may be space for an editing tool, such as up and down buttons.
+
+
         /*
 
         this.add_event_listener('change', function(e) {
@@ -61,8 +64,14 @@ var Number_Viewer = Control.extend({
     'refresh_internal': function() {
         var value = this.get('value');
 
+        // But now it's getting a function as the value?
+        //  May be worth doing quite a comprehensive test of value getters + getters.
 
-        console.log('value ' + stringify(value));
+
+
+
+
+        //console.log('value ' + stringify(value));
         //console.log('value ' + tof(value));
 
         var span = this.get('span');
@@ -70,10 +79,10 @@ var Number_Viewer = Control.extend({
 
         var tval = tof(value);
 
-        console.log('tval', tval);
+        //console.log('tval', tval);
 
-        console.log('------------------------------------------');
-        console.log('');
+        //console.log('------------------------------------------');
+        //console.log('');
 
         var context = this._context;
         var content = this.get('content');
@@ -108,6 +117,37 @@ var Number_Viewer = Control.extend({
         // Making it selectable... selectable using the lower level dom binding well...
         //  Changing how it binds the events to the DOM.
 
+        // But in its own selection scope?
+        //
+
+        var span = this.get('span');
+        var span_content = span.get('content');
+        //console.log('span_content', span_content);
+        //console.log('span_content.get(0)', span_content.get(0));
+
+        var content_val = span_content.get(0).value();
+        //console.log('content_val', content_val);
+        //console.log('tof content_val', tof(content_val));
+
+        var num = JSON.parse(content_val);
+        //console.log('num', num);
+
+        this.set('value', num);
+
+
+        // it's a string, but parse it.
+        //  want this control's value to be of the right format.
+        //   with Data_Value?
+        //   but with the presentation of it using a Data_Value string?
+
+
+
+
+
+
+
+
+
         that.selectable();
 
 
@@ -133,6 +173,13 @@ var Number_Viewer = Control.extend({
         */
 
         jsgui.hover_class(this, hover_class);
+
+        // It looks like it needs to read back its own value from the HTML.
+        //  Or its numeric value would need to be transferred as a data-jsgui-field.
+
+
+
+
 
         // beginning a drag on it...
         //  respond to mousedown with no mouseleave?

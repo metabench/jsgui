@@ -159,7 +159,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 
 			// Also should be able to get files themselves.
 
-			console.log('* lfs get');
+			//console.log('* lfs get');
 			//var stack = new Error().stack;
 			//console.log(stack);
 			//throw 'stop';
@@ -176,7 +176,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 
 			var tp = tof(params);
 
-			console.log('tp', tp);
+			//console.log('tp', tp);
 
 			// get may not even have params...
 

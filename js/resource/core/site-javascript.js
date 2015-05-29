@@ -504,15 +504,15 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			var custom_paths = this.meta.get('custom_paths');
 
-			console.log('custom_paths', custom_paths);
-            console.log('tof custom_paths', tof(custom_paths));
+			//console.log('custom_paths', custom_paths);
+            //console.log('tof custom_paths', tof(custom_paths));
 
 			var rurl = req.url.replace(/\./g, '☺');
 
             if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
 
 
-			console.log('rurl', rurl);
+			//console.log('rurl', rurl);
 
 			var custom_response_entry = custom_paths.get(rurl);
 
@@ -520,7 +520,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-			console.log('custom_response_entry', custom_response_entry);
+			//console.log('custom_response_entry', custom_response_entry);
 
 			var pool = this.meta.get('pool');
 			if (custom_response_entry) {
@@ -631,7 +631,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				} else {
 					// Can get the path on disk...
 
-                    console.log('wildcard_value', wildcard_value);
+                    //console.log('wildcard_value', wildcard_value);
 
                     // Best to check the app's directory.
                     //  We probably won't need to be serving the whole jsgui framework from here.
@@ -695,10 +695,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                         // try to load it from the project's js path.
 
-                        console.log('disk_path', disk_path);
+                        //console.log('disk_path', disk_path);
 
                         var project_js_path = 'js/' + wildcard_value;
-                        console.log('project_js_path', project_js_path);
+                        //console.log('project_js_path', project_js_path);
 
                         fs2.load_file_as_string(project_js_path, function(err, str_js) {
                             if (err) {
@@ -708,7 +708,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
                             } else {
                                 // Have loaded the js from the project path, we can serve it.
 
-                                console.log('have loaded js');
+                                //console.log('have loaded js');
 
                                 // serve the js.
                                 res.writeHead(200, {'Content-Type': 'text/javascript'});

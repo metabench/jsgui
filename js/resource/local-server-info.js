@@ -404,7 +404,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 				//  Having it within the resource system will avoid confusion about if things get called with callbacks - they do use callbacks.
 				
 				// get the network info.
-                console.log('pre get_network_info');
+                //console.log('pre get_network_info');
 				get_network_info(function(err, netInfo) {
 					if (err) {
 						throw 'error getting network info ' + err;
@@ -412,7 +412,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 						that.meta.set('status', 'on');
 						that.raise_event('started');
 						////that.set('netInfo', netInfo);
-                        console.log('netInfo', netInfo);
+                        //console.log('netInfo', netInfo);
 						
 
 						//that.set('network.interfaces', netInfo);
@@ -471,7 +471,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 
 
 						if (callback) {
-                            console.log('pre cb lsi');
+                            //console.log('pre cb lsi');
 							callback(null, true);
 						}
 					}

@@ -12,13 +12,13 @@ define(['../../web/jsgui-html-enh', './resource'],
 */
 var jsgui = require('../../web/jsgui-html-enh');
 var Resource = require('./resource');
-	
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
-	
+
 	// Extends AutoStart_Resource?
 
 	// May need to change around a fair few references to make it workable.
@@ -68,6 +68,10 @@ var Resource = require('./resource');
 	//  however, it may be that the user control will just be making use of the client-side resources or client-side resource pool.
 
 
+	var ends_with = function(str, suffix) {
+	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+	}
+
 	var Client_Resource = Resource.extend({
 		//'fields': {
 		//	'url': String
@@ -90,7 +94,7 @@ var Resource = require('./resource');
 
 			var that = this;
 
-			
+
 			// both in one parameter here?
 
 
@@ -106,7 +110,7 @@ var Resource = require('./resource');
 				that.trigger('change', property_name, property_value);
 
 			})
-			
+
 
 			//this.meta.set('custom_paths', new Data_Object({}));
 			// Those are custom file paths.
@@ -124,14 +128,30 @@ var Resource = require('./resource');
 
 
 		},
-		'get': function(callback) {
+		'get': fp(function(a, sig) {
+			var url, callback;
+			var url_path;
+			if (a.l === 1) {
+				url = this.meta.get('url').value();
+				callback = a[0];
+			}
+			if (a.l === 2) {
+				url_path = a[0];
+				callback = a[1];
 
-			var url = this.meta.get('url').value();
+				console.log('url_path', url_path);
+
+				url = this.meta.get('url').value() + url_path;
+			}
+
+			// should be able to supply the url
+
+			//var
 
 			// jsgui lang essentials ends function
 			//  test if a string ends with something.
 
-			var ends_dot_json = jsgui.ends(url, '.json');
+			var ends_dot_json = ends_with(url, '.json');
 			//console.log('ends_dot_json', ends_dot_json);
 
 			var json_url;
@@ -142,7 +162,7 @@ var Resource = require('./resource');
 				json_url = url;
 			}
 
-			//console.log('json_url', json_url);
+			console.log('json_url', json_url);
 			jsgui.http(json_url, function(err, res) {
 				if (err) {
 					callback(err);
@@ -151,7 +171,7 @@ var Resource = require('./resource');
 					callback(null, res);
 				}
 			})
-		},
+		}),
 
 		'notify_change_from_server': function(property_name, property_value) {
 			// needs to do some kind of silent set.
@@ -256,6 +276,6 @@ var Resource = require('./resource');
 
 module.exports = Client_Resource;
 	//return Client_Resource;
-	
-	
+
+
 //});

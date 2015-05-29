@@ -1601,7 +1601,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             // then if we are waiting on any of them we listen for them to complete.
 
-            console.log('arr_waiting_controls.length', arr_waiting_controls.length);
+            //console.log('arr_waiting_controls.length', arr_waiting_controls.length);
 
             if (arr_waiting_controls.length == 0) {
                 var html = this.all_html_render();
@@ -3406,8 +3406,22 @@ var escape_html = function (str) {
 
     //console.log('escape_html str ' + str);
     //console.log('tof str ' + tof(str));
+    
 
-    if (tof(str) == 'data_value') str = str.get();
+    if (tof(str) === 'data_value') str = str.get();
+    if (tof(str) === 'number') str = str + '';
+
+    //console.log('tof(str)', tof(str));
+
+    if (typeof str === 'undefined') {
+      str = '';
+    } else {
+      var single_replacement;
+      for (var c = 0, l = escape_html_replacements.length; c < l; c++) {
+          single_replacement = escape_html_replacements[c]
+          str = str.replace(single_replacement[0], single_replacement[1]);
+      }
+    }
 
     //
 
@@ -3422,11 +3436,7 @@ var escape_html = function (str) {
     */
 
     //var replacements =
-    var single_replacement;
-    for (var c = 0, l = escape_html_replacements.length; c < l; c++) {
-        single_replacement = escape_html_replacements[c]
-        str = str.replace(single_replacement[0], single_replacement[1]);
-    }
+
     //each(escape_html_replacements, function (i, v) {
     //    str = str.replace(v[0], v[1]);
     //});
@@ -3513,6 +3523,7 @@ jsgui.textNode = Control.extend({
         if (nx) {
             res = text || '';
         } else {
+            //console.log('text', text);
             res = escape_html(text || '') || '';
         }
 

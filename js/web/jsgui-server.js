@@ -111,7 +111,7 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
 
             resource_pool.push(server_router);
 
-            console.log('spec', spec);
+            //console.log('spec', spec);
 
             var t_spec = tof(spec);
 
@@ -124,15 +124,15 @@ define(['sockjs', './jsgui-html', 'os', 'http', 'url', '../resource/core/resourc
                     // Create a new Application Resource.
 
                     var app = new Website_Resource(app_spec);
-                    console.log('made Website_Resource');
+                    //console.log('made Website_Resource');
 
                     // But the right context?
                     //
-                    console.log('');
-                    console.log('route', route);
-                    console.log('app', app);
+                    //console.log('');
+                    //console.log('route', route);
+                    //console.log('app', app);
                     //console.log('app.process', app.process);
-                    console.log('');
+                    //console.log('');
                     server_router.set_route(route, app, app.process);
 
 

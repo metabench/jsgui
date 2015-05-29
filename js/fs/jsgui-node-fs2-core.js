@@ -795,9 +795,9 @@ var rimraf = require('rimraf');
 						cb();
 					}
 
-          console.log('files.length', files.length);
+          //console.log('files.length', files.length);
 
-          console.log('files', files);
+          //console.log('files', files);
 
 
 
@@ -813,7 +813,7 @@ var rimraf = require('rimraf');
 
 
 
-						console.log('file_or_dir_full_path ' + stringify(file_or_dir_full_path));
+						//console.log('file_or_dir_full_path ' + stringify(file_or_dir_full_path));
 
 						//console.log('i ' + stringify(i));
 						//console.log('v ' + stringify(v));
@@ -834,7 +834,7 @@ var rimraf = require('rimraf');
 						    //console.log('file_name ' + file_name);
 						    proceed = regex_filter.test(file_name);
 						}
-						console.log('proceed ' + proceed);
+						//console.log('proceed ' + proceed);
 
 						/*
 						if (filter) {
@@ -860,7 +860,7 @@ var rimraf = require('rimraf');
 
 
 
-                  	console.log('stats unavailable for ' + file_or_dir_full_path);
+                  	//console.log('stats unavailable for ' + file_or_dir_full_path);
 
                   	var item_res = file_name;
                   	res_files.push(item_res);
@@ -876,7 +876,7 @@ var rimraf = require('rimraf');
                       //throw(err);
 
                   } else {
-                      console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));
+                      //console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));
 
                       var is_dir = stats.isDirectory();
 
@@ -930,7 +930,7 @@ var rimraf = require('rimraf');
                               fns.push([fs2.load_file_as_string, [file_or_dir_full_path]]);
                           }
 
-                          console.log('fns.length ' + fns.length);
+                          //console.log('fns.length ' + fns.length);
 
                           if (fns.length > 0) {
 

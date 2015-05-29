@@ -177,6 +177,38 @@ var mapDomEventNames = {
 
 };
 
+
+var desc = function(ctrl, callback) {
+  if (ctrl.get) {
+      var content = ctrl.get('content');
+      each(content, function(v, i) {
+          if (typeof i !== 'string') {
+              callback(v);
+              desc(v, callback);
+          }
+      });
+  }
+}
+
+var dom_desc = function(el, callback) {
+  // Possibly need to look at the element's node type.
+
+  //
+  callback(el);
+
+  var cns = el.childNodes;
+
+  var l = cns.length;
+
+  for (var c = 0; c < l; c++) {
+    dom_desc(cns[c], callback);
+
+  }
+
+
+}
+
+
 Control = jsgui.Control = jsgui.Control.extend({
     'fields': {
         'selection_scope': Object,
@@ -822,12 +854,18 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         var parent_control;
 
+        // does the control have a DOM node?
+
+
         recursive_dom_iterate_depth(el, function(el2) {
             //console.log('el ' + el);
             var nt = el2.nodeType;
             //console.log('nt ' + nt);
             if (nt == 1) {
                 var jsgui_id = el2.getAttribute('data-jsgui-id');
+
+
+
 
 
                 //console.log('jsgui_id ' + jsgui_id);
@@ -837,15 +875,17 @@ Control = jsgui.Control = jsgui.Control.extend({
                     // Not so sure the control will exist within a map of controls.
                     //  If we have activated the whole page, then they will exist.
                     //  However, we may just want to do activate on some controls.
-                    throw 'stop';
+                    //throw 'stop';
 
 
                     var ctrl = map_controls[jsgui_id];
 
+                    /*
                     if (parent_control) {
                       console.log('setting ctrl parent');
                       ctrl.parent(parent_control);
                     }
+                    */
 
                     //console.log('ctrl ' + ctrl);
 
@@ -859,7 +899,7 @@ Control = jsgui.Control = jsgui.Control.extend({
                     //}
 
                     if (!ctrl.__active) ctrl.activate(el2);
-                    parent_control = ctrl;
+                    //parent_control = ctrl;
 
 
 
@@ -1022,43 +1062,59 @@ Control = jsgui.Control = jsgui.Control.extend({
     //
 
     'activate': function(el) {
-        //console.log('enh ctrl activate');
 
-        if (!this.__active) {
-            this.__active = true;
-            if (el) {
-                this.set('dom.el', el);
-            }
+      // Need to prevent activation while it's activating already.
+      // For the moment, it would take quite a lot of boilerplate.
+      //  Perhaps some functional programming would solve that.
 
-            //console.log('activate ' + this._id());
-            // activate content controls.
-            //console.log('1) ' + this._.content._arr.length);
+      // Or have an inner activate function. At each level, it calls the inner function if necessary.
+      //  A simple function locking system, where it only runs if non-active?
 
-            // But have this done before initialization?
-            //  Probably want to use some values that have been read in for initialization.
-            //   May disable this later, once the data is being read on initialization.
-            this.activate_dom_attributes();
+      // could have a non-active function wrapper that only runs the function if the control is non-active.
+      //  Only set active to be true on Control.
 
 
-            //console.log('2) ' + this._.content._arr.length);
 
-            this.activate_content_controls();
-            //console.log('3) ' + this._.content._arr.length);
 
-            // then is there is a selection_scope as true, create a new Selection_Scope object, then set it so that subcontrols point
-            //  to it with their selection_scope property.
+      //console.log('enh ctrl activate');
 
-            // so after the fields have been set up.
-
-            this.activate_content_listen();
-            //console.log('4) ' + this._.content._arr.length);
-
-            // Activate style change listen?
-            //  Or generally dom attributes change listen?
-
-            this.activate_other_changes_listen();
-            //console.log('5) ' + this._.content._arr.length);
+      if (!this.__active) {
+        this.__active = true;
+        if (el) {
+            this.set('dom.el', el);
         }
+
+        this.rec_desc_ensure_ctrl_el_refs();
+
+        //console.log('activate ' + this._id());
+        // activate content controls.
+        //console.log('1) ' + this._.content._arr.length);
+
+        // But have this done before initialization?
+        //  Probably want to use some values that have been read in for initialization.
+        //   May disable this later, once the data is being read on initialization.
+        this.activate_dom_attributes();
+
+
+        //console.log('2) ' + this._.content._arr.length);
+
+        this.activate_content_controls();
+        //console.log('3) ' + this._.content._arr.length);
+
+        // then is there is a selection_scope as true, create a new Selection_Scope object, then set it so that subcontrols point
+        //  to it with their selection_scope property.
+
+        // so after the fields have been set up.
+
+        this.activate_content_listen();
+        //console.log('4) ' + this._.content._arr.length);
+
+        // Activate style change listen?
+        //  Or generally dom attributes change listen?
+
+        this.activate_other_changes_listen();
+        //console.log('5) ' + this._.content._arr.length);
+      }
 
 
 
@@ -1119,8 +1175,9 @@ Control = jsgui.Control = jsgui.Control.extend({
                 dval = dval.value();
             }
 
-            el.setAttribute(property_name, dval);
-
+            if (el) {
+              el.setAttribute(property_name, dval);
+            }
 
 
         });
@@ -1135,6 +1192,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         //console.log('1) content.length()', content.length());
 
         var that = this;
+        var context = this._context;
+        var map_controls = context.map_controls;
 
 
         // var el = that.get('dom.el');
@@ -1146,6 +1205,11 @@ Control = jsgui.Control = jsgui.Control.extend({
             //console.log('activated control content change');
 
             var el = that.get('dom.el');
+            //console.log('that', that);
+            //console.log('el', el);
+
+
+
             var type = e_change.type;
 
             if (type == 'insert') {
@@ -1166,10 +1230,19 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
 
+
+
                 var itemDomEl = item.get('dom.el');
 
                 // need to render the item ID in there too.
                 //var id = item._id();
+
+                if (!itemDomEl) {
+                  if (context.map_els[item._id()]) {
+                    itemDomEl = context.map_els[item._id()];
+                  }
+
+                }
 
 
 
@@ -1183,7 +1256,12 @@ Control = jsgui.Control = jsgui.Control.extend({
                     //  this seems to be the culprit.
 
                     // Or is the problem in conjunction with activate?
-                    item.active();
+
+                    //if (typeof document === 'undefined') {
+                    //  item.active();
+                    //}
+
+
                     // Making it active meaning it duplicates the content?
 
 
@@ -1197,8 +1275,13 @@ Control = jsgui.Control = jsgui.Control.extend({
                     // Are items not activated with contexts?
 
                     // Perhaps we should not always use a DIV?
+                    var item_tag_name = 'div';
+                    var dv_tag_name = item.get('tag_name');
+                    if (dv_tag_name) {
+                      item_tag_name = dv_tag_name.value();
+                    }
 
-                    var item_tag_name = item.get('tag_name').value();
+
                     //console.log('item_tag_name', item_tag_name);
                     //console.log('item', item);
 
@@ -1230,8 +1313,137 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
                     //itemDomEl = temp_div.childNodes[0];
+                    // seems not to be working here.
 
+                    // Not so sure about needing / using these two references.
+
+
+                    // Quite probably we should not be doing the recursive activation here,
+                    //  but in activate content.
+
+
+
+
+                    item._.el = itemDomEl;
                     e_change.item.set('dom.el', itemDomEl);
+
+                    // Then set up the childrens' controls.
+
+                    // Need to add the controls to the context's control registry.
+
+                    // Will use some recursive descent to go through the controls.
+                    item.active();
+
+                    //item.rec_desc_activate();
+
+
+                    /*
+                    var desc = function(ctrl, callback) {
+                        if (ctrl.get) {
+                            var content = ctrl.get('content');
+                            each(content, function(v, i) {
+                                if (typeof i !== 'string') {
+                                    callback(v);
+                                    desc(v, callback);
+                                }
+                            });
+                        }
+                    }
+
+                    // Descend through the DOM, making a note of the DOM nodes in the index of DOM nodes by data-jsgui-id.
+                    var c, l, cns;
+                    var dom_desc = function(el, callback) {
+                      // Possibly need to look at the element's node type.
+
+                      //
+                      callback(el);
+
+                      cns = el.childNodes;
+
+                      l = cns.length;
+
+                      for (c = 0; c < l; c++) {
+                        dom_desc(cns[c], callback);
+
+                      }
+
+
+                    }
+                    var jsgui_id;
+
+                    var map_els = {};
+
+
+
+                    dom_desc(itemDomEl, function(el) {
+                      //console.log('el', el);
+                      if (el.getAttribute) {
+                        jsgui_id = el.getAttribute('data-jsgui-id');
+                        //console.log('found jsgui_id', jsgui_id);
+
+                        if (jsgui_id) {
+
+                          //map_controls[jsgui_id] = el;
+
+                          // Make a map of elements...?
+                          map_els[jsgui_id] = el;
+
+                        }
+
+                      }
+
+                    });
+
+                    // Should do the desc twice - once for assignment, one for activation.
+
+                    desc(item, function(ctrl) {
+                      // ensure the control is registered with the context.
+                      //console.log('desc ctrl', ctrl);
+
+                      var t_ctrl = tof(ctrl);
+                      //console.log('t_ctrl', t_ctrl);
+
+                      if (t_ctrl === 'control') {
+                        var id = ctrl._id();
+                        //console.log('id', id);
+
+                        //console.log('map_els[id]', map_els[id]);
+
+                        ctrl.set('dom.el', map_els[id]);
+                        ctrl._.el = map_els[id];
+
+                        //ctrl.activate();
+
+                      }
+
+                    });
+
+
+                    // At least they are connected!
+
+                    desc(item, function(ctrl) {
+                      // ensure the control is registered with the context.
+                      //console.log('desc ctrl', ctrl);
+
+                      var t_ctrl = tof(ctrl);
+                      //console.log('t_ctrl', t_ctrl);
+
+                      if (t_ctrl === 'control') {
+                        //var id = ctrl._id();
+                        //console.log('id', id);
+
+                        //console.log('map_els[id]', map_els[id]);
+
+                        //ctrl.set('dom.el', map_els[id]);
+                        //ctrl._.el = map_els[id];
+
+                        ctrl.activate();
+
+                      }
+
+                    });
+
+                    */
                 };
                 //console.log('itemDomEl', itemDomEl);
                 var t_item_dom_el = tof(itemDomEl);
@@ -1241,7 +1453,37 @@ Control = jsgui.Control = jsgui.Control.extend({
                 }
 
                 //el.insertBefore(itemDomEl, el.childNodes[0]);
+
+                //console.log('item', item);
+                //console.log('that', that);
+
+
+                if (!el) {
+                  //console.log('*** that._id()', that._id());
+                  that.parent().parent().rec_desc_ensure_ctrl_el_refs();
+                  el = context.map_els[that._id()];
+                  that.set('dom.el', el);
+                  that._.el = el;
+                  //console.log('* el', el);
+                }
+
+
                 el.appendChild(itemDomEl);
+
+                // May not have actually gone into the DOM yet!
+
+                //setTimeout(function() {
+                //  that.rec_desc_ensure_ctrl_el_refs();
+                //  if (item.activate) item.activate();
+                //}, 0);
+
+
+
+
+                //if (item.rec_desc_ensure_ctrl_el_refs) item.rec_desc_ensure_ctrl_el_refs(itemDomEl);
+
+
+
 
 
             }
@@ -1255,21 +1497,104 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         //console.log('2) content.length()', content.length());
     },
+
+    'rec_desc_ensure_ctrl_el_refs': function(el) {
+      el = el || this.get('dom.el') || this._.el;
+
+      //if (!el) {
+      //  el = this._context.map
+      //}
+
+      var context = this._context;
+
+
+      if (el) {
+        var c, l, cns;
+
+
+        var jsgui_id;
+
+        var map_els = {};
+
+        dom_desc(el, function(el) {
+          //console.log('dom_desc el', el);
+          if (el.getAttribute) {
+            jsgui_id = el.getAttribute('data-jsgui-id');
+            //console.log('found jsgui_id', jsgui_id);
+
+            if (jsgui_id) {
+
+              //map_controls[jsgui_id] = el;
+
+              // Make a map of elements...?
+              map_els[jsgui_id] = el;
+              context.map_els[jsgui_id] = el;
+
+            }
+
+          }
+
+        });
+
+        desc(this, function(ctrl) {
+          // ensure the control is registered with the context.
+          //console.log('desc ctrl', ctrl);
+
+          var t_ctrl = tof(ctrl);
+          //console.log('t_ctrl', t_ctrl);
+
+          if (ctrl !== this && t_ctrl === 'control') {
+            var id = ctrl._id();
+            //console.log('id', id);
+
+            // Seems like it's not in the map.
+
+            if (map_els[id]) {
+              //console.log('map_els[id]', map_els[id]);
+
+              ctrl.set('dom.el', map_els[id]);
+              ctrl._.el = map_els[id];
+            }
+
+
+
+            //ctrl.activate();
+
+          }
+
+        });
+
+
+
+      }
+    },
+
+    'rec_desc_activate': function() {
+      desc(this, function(ctrl) {
+        // ensure the control is registered with the context.
+        //console.log('desc ctrl', ctrl);
+
+        var t_ctrl = tof(ctrl);
+
+        if (t_ctrl === 'control') {
+
+
+          ctrl.activate();
+
+        }
+
+      });
+    },
+
     'activate_content_controls': function() {
+      // This could do with some enhancement, so that it automatically does a recursive activation.
+      // ensure content dom el refs
+      //  recursively ensures the DOM node references for the elements inside.
+      var el = this.get('dom.el');
 
 
 
-        //console.log('activate_content_controls');
-        // needs to have an el.
-
-        // Every internal control has its selection scope set?
-
-        //  Or it can find the selection scope by moving upwards through the heirachy when needed?
-
-
-
-
-        var el = this.get('dom.el');
+      if (el) {
         var context = this._context;
 
         var ctrl_fields = {};
@@ -1282,113 +1607,30 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         }
 
-        //console.log('ctrl_fields ' + stringify(ctrl_fields));
-
-        //var fields_ctrl = {};
-        //var selection_scope;
-
-        // PROBLEM!...?
-
-        // Setting the same thing twice?
-
         each(ctrl_fields, function(v, i) {
             //fields_ctrl.set(i, v);
 
             //fields_ctrl[v] = i;
             var referred_to_control = context.map_controls[v];
             //console.log('referred_to_control', referred_to_control);
-
             that.set(i, referred_to_control);
-
-
         });
-        // context.map_controls
-
-
-
-        //var ss = this.get('selection_scope');
-        //console.log('ss ' + ss);
-        //if (ss) throw 'stop';
-
-
-
-        //console.log('fields_ctrl ' + stringify(fields_ctrl));
-
-        // the other controls will have already been registered, even if they are not active controls.
-
-        // Register, activate
-
-        //console.log('el ' + el);
-
-        // Works in an overly complicated way?
-
-
         var cns = el.childNodes;
-
-        // For every child node...
-
-        //  Do not want to add it's control each time.
-        //  Should probably only do that if the control is not already there.
-
-
-
         var content = this.get('content');
-
         // Adding the content again?
-
         for (var c = 0, l = cns.length; c < l; c++) {
             var cn = cns[c];
-
             var nt = cn.nodeType;
             //console.log('* nt ' + nt);
             if (nt == 1) {
                 var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
                 //console.log('cn_jsgui_id ' + cn_jsgui_id);
-
                 var cctrl = context.map_controls[cn_jsgui_id];
-                //console.log('cctrl ' + stringify(cctrl));
-                //content.push(cctrl);
-                // OK, but when adding content it will be good to know what index the content goes to.
-                //  maybe this.add would be better.
-
-
-                // Need to be careful about this.
-                //  Don't want to add controls twice.
-                //  Only want them to be pushed to the content if they are not already there.
-
-
-                // Need to add them to the content when activating from the DOM at the beginning.
-                //  However, we may have the control already associated with its parent control, if it was rendered.
-
-                // Need a fast way of looking up if a control, by name, is within the content collection.
-                //  Could make the collection automatically index the id... but that would be a new requirement for controls to
-                //  always have IDs. Perhaps it would be useful / necessary though.
-                // Or, when a control does have an ID, that id gets recorded.
-
-                // This definitely looks like the problem where it's adding the content that already exists.
-
-                // a .content_contains_control_id function could help in the short term.
-                //  may be a performance bottleneck if it checks all controls.
-                //  a control having a map of its subcontrols may make sense, though that functionality really belongs within Collection.
-
-                // When adding a control, it would index that control's id.
-                //  Make it so that the collection automatically indexes a control's id.
-
-
-
-
-
                 // quick check to see if the control is not already there.
-
                 var found = false;
-
-                // Seems inefficient here. Could check faster, or make check unnecessary (maybe throw error if found, then debug elsewhere).
-
                 if (cctrl) {
                     var ctrl_id = cctrl.__id;
                     //console.log('* ctrl_id', ctrl_id);
-
-
                     if (ctrl_id) {
                         content.each(function(v, i) {
                             if (v.__id) {
@@ -1399,35 +1641,10 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                     if (!found) {
                         this.add(cctrl);
+
                     }
+                    //cctrl.activate();
                 }
-
-
-
-
-
-
-
-
-
-                // need to be able to get from a control:
-                // _parent()
-                // _index()
-
-                // Though there could be a more complicated relationships system, I think keeping that simple API would be good.
-
-                // or just .parent()
-                // .index()
-
-                // not sure that ._id() was so well named... but anyway.
-
-                //
-                //if (fields_ctrl[cn_jsgui_id]) {
-                //    //console.log('fields_ctrl[cn_jsgui_id] ' + fields_ctrl[cn_jsgui_id]);
-                //    that.set(fields_ctrl[cn_jsgui_id], cctrl);
-                //}
-
-                // Not doing recursive selection scope setting here?
             }
             if (nt == 3) {
                 // text
@@ -1440,6 +1657,8 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         }
 
+      }
+      this.rec_desc_activate();
     },
 
     'activate_dom_attributes': function() {
@@ -1453,219 +1672,228 @@ Control = jsgui.Control = jsgui.Control.extend({
         // may not have el....?
         var that = this;
         var dom_attributes = this.get('dom.attributes');
-        for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
-            //arr.push(attrs.item(i).nodeName);
-            var item = attrs.item(i);
-            //console.log('item', item);
 
+        //console.log('dom_attributes', dom_attributes);
+        //console.log('el', el);
 
+        if (el) {
+          for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
+              //arr.push(attrs.item(i).nodeName);
+              var item = attrs.item(i);
+              //console.log('item', item);
 
-            //console.log('item.name', item.name);
-            //console.log('item.value', item.value);
 
-            var name = item.name;
-            var value = item.value;
 
-            //if (name == 'class') {
-            //    console.log('ACTIVATE DOM class: ' + value);
-            //}
+              //console.log('item.name', item.name);
+              //console.log('item.value', item.value);
 
-            if (name == 'data-jsgui-id') {
-                // Handled elsewhere - not so sure it should be but won't change that right now.
-            } else if (name == 'data-jsgui-type') {
-                // ^
-            } else if (name == 'style') {
+              var name = item.name;
+              var value = item.value;
 
-                //console.log('inline style value', value);
+              //if (name == 'class') {
+              //    console.log('ACTIVATE DOM class: ' + value);
+              //}
 
-                // Need to parse that style value.
-                //  Put it into the control's inline style dict.
+              if (name == 'data-jsgui-id') {
+                  // Handled elsewhere - not so sure it should be but won't change that right now.
+              } else if (name == 'data-jsgui-type') {
+                  // ^
+              } else if (name == 'style') {
 
-                //._icss
+                  //console.log('inline style value', value);
 
-                //console.log('1) ._icss', this._icss);
+                  // Need to parse that style value.
+                  //  Put it into the control's inline style dict.
 
-                var map_inline_css = this._icss;
+                  //._icss
 
-                var arr_style_items = value.split(';');
-                //console.log('arr_style_items', arr_style_items);
+                  //console.log('1) ._icss', this._icss);
 
-                //each(arr_style_items)
-                for (var c = 0, l2 = arr_style_items.length; c < l2; c++) {
-                    //map_inline_css[]
+                  var map_inline_css = this._icss;
 
-                    var style_item = arr_style_items[c];
-                    //var style_item_name =
-                    var arr_style_item = style_item.split(':');
+                  var arr_style_items = value.split(';');
+                  //console.log('arr_style_items', arr_style_items);
 
-                    if (arr_style_item[0]) {
-                        map_inline_css[arr_style_item[0]] = arr_style_item[1];
-                    }
-                }
+                  //each(arr_style_items)
+                  for (var c = 0, l2 = arr_style_items.length; c < l2; c++) {
+                      //map_inline_css[]
 
-                // and the dom.attributes.style will get set from the ._icss as a later point.
+                      var style_item = arr_style_items[c];
+                      //var style_item_name =
+                      var arr_style_item = style_item.split(':');
 
+                      if (arr_style_item[0]) {
+                          map_inline_css[arr_style_item[0]] = arr_style_item[1];
+                      }
+                  }
 
+                  // and the dom.attributes.style will get set from the ._icss as a later point.
 
-                //  could have some fields, like selectable
-                //   set the selectable field to true
-                //    transfer that using the jsgui-fields system.
-                //     at the moment just setting that DOM attribute.
-                //      perhaps they are really server->client transfer fields.
 
 
+                  //  could have some fields, like selectable
+                  //   set the selectable field to true
+                  //    transfer that using the jsgui-fields system.
+                  //     at the moment just setting that DOM attribute.
+                  //      perhaps they are really server->client transfer fields.
 
 
 
 
-                // ^
-            } else if (name == 'data-jsgui-fields') {
-              // Should probably rely on using init a lot more now.
 
 
-                var str_properties = value;
+                  // ^
+              } else if (name == 'data-jsgui-fields') {
+                // Should probably rely on using init a lot more now.
 
-                if (str_properties) {
-                    //console.log('str_ctrl_fields ' + str_ctrl_fields);
-                    //console.log('str_properties', str_properties);
-                    //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
 
-                    /*
-                    var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
-                    s_pre_parse = s_pre_parse.replace(/\'/g, '"');
+                  var str_properties = value;
 
-                    // DBL_QT
-                    //console.log('s_pre_parse', s_pre_parse);
+                  if (str_properties) {
+                      //console.log('str_ctrl_fields ' + str_ctrl_fields);
+                      //console.log('str_properties', str_properties);
+                      //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
 
-                    //console.log('s_pre_parse', tof(s_pre_parse));
+                      /*
+                      var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
+                      s_pre_parse = s_pre_parse.replace(/\'/g, '"');
 
-                    var props = JSON.parse(s_pre_parse);
-                    //console.log('props ' + stringify(props));
-                    //throw 'stop';
+                      // DBL_QT
+                      //console.log('s_pre_parse', s_pre_parse);
 
-                    // However, it goes into the initialization now.
-                    //  That's probably better / smoother overall.
+                      //console.log('s_pre_parse', tof(s_pre_parse));
 
+                      var props = JSON.parse(s_pre_parse);
+                      //console.log('props ' + stringify(props));
+                      //throw 'stop';
 
+                      // However, it goes into the initialization now.
+                      //  That's probably better / smoother overall.
 
 
-                    this.set(props);
-                    */
 
-                    // Could be set through flags?
 
-                    //  We can set it to be a selection scope at an earlier stage, on the server,
-                    //  and tell it to retain that information going to the client, so that when it is activated there
-                    //  it is also a selection scope.
+                      this.set(props);
+                      */
 
-                    // I think another useful function would just set the selection scope to be at the current level.
+                      // Could be set through flags?
 
-                    // ctrl.selection_scope(ctrl);
-                    //  otherwise it could be getting the selection scope.
-                    //  nice set syntax, consistant with other code too.
+                      //  We can set it to be a selection scope at an earlier stage, on the server,
+                      //  and tell it to retain that information going to the client, so that when it is activated there
+                      //  it is also a selection scope.
 
-                    // Then some specific activations depending on the field
+                      // I think another useful function would just set the selection scope to be at the current level.
 
-                    // Function field_specific_activate
+                      // ctrl.selection_scope(ctrl);
+                      //  otherwise it could be getting the selection scope.
+                      //  nice set syntax, consistant with other code too.
 
+                      // Then some specific activations depending on the field
 
+                      // Function field_specific_activate
 
-                    // Doubt we should set up the selection scope like this...
-                    //  Probably do it on initialization on the client instead.
 
 
-                    /*
-                    var ss = this.get('selection_scope');
-                    // Though the selection scope may have been a jsgui field.
+                      // Doubt we should set up the selection scope like this...
+                      //  Probably do it on initialization on the client instead.
 
 
+                      /*
+                      var ss = this.get('selection_scope');
+                      // Though the selection scope may have been a jsgui field.
 
-                    //
 
-                    console.log('ss ' + ss);
 
-                    var val_ss, t_val_ss;
-                    //console.log('ss ' + ss);
-                    // if we have the selection scope, better to create a proper Selection_Scope object.
+                      //
 
+                      console.log('ss ' + ss);
 
+                      var val_ss, t_val_ss;
+                      //console.log('ss ' + ss);
+                      // if we have the selection scope, better to create a proper Selection_Scope object.
 
-                    if (typeof ss !== 'undefined') {
-                        val_ss = ss.value();
 
-                        t_val_ss = tof(val_ss);
 
-                        if (t_val_ss === 'number') {
-                            // get a selection scope from the context, with that id.
+                      if (typeof ss !== 'undefined') {
+                          val_ss = ss.value();
 
-                            var selection_scope = this._context.get_selection_scope_by_id(val_ss);
-                            //  Do we need to set the control of the selection scope?
+                          t_val_ss = tof(val_ss);
 
+                          if (t_val_ss === 'number') {
+                              // get a selection scope from the context, with that id.
 
-                            this.set('selection_scope', selection_scope);
+                              var selection_scope = this._context.get_selection_scope_by_id(val_ss);
+                              //  Do we need to set the control of the selection scope?
 
 
+                              this.set('selection_scope', selection_scope);
 
 
-                        } else {
-                            var selection_scope = new Selection_Scope({
-                                'control': this
-                            });
 
-                            this.set('selection_scope', selection_scope);
-                        }
 
+                          } else {
+                              var selection_scope = new Selection_Scope({
+                                  'control': this
+                              });
 
+                              this.set('selection_scope', selection_scope);
+                          }
 
 
 
-                    }
 
-                    */
 
+                      }
 
+                      */
 
 
-                    // Perhaps selectable behaviour should be within init as well.
-                    // is_selectable could be a field.
-                    //  Need to have it read from the data-jsgui-fields
-                    //  At the moment it's not considered there.
-                    //   The enhanced ctrl could have the is_selectable boolean field.
 
 
+                      // Perhaps selectable behaviour should be within init as well.
+                      // is_selectable could be a field.
+                      //  Need to have it read from the data-jsgui-fields
+                      //  At the moment it's not considered there.
+                      //   The enhanced ctrl could have the is_selectable boolean field.
 
-                    /*
-                    var is_selectable = this.get('is_selectable');
-                    console.log('is_selectable', is_selectable);
-                    console.log('tof is_selectable', tof(is_selectable));
 
-                    //
 
+                      /*
+                      var is_selectable = this.get('is_selectable');
+                      console.log('is_selectable', is_selectable);
+                      console.log('tof is_selectable', tof(is_selectable));
 
-                    //if (is_selectable && is_selectable.value() === true) {
-                    if (is_selectable === true) {
-                          this.selectable();
-                    } else {
-                        //this.selectable(is_selectable);
-                    }
-                    */
+                      //
 
 
+                      //if (is_selectable && is_selectable.value() === true) {
+                      if (is_selectable === true) {
+                            this.selectable();
+                      } else {
+                          //this.selectable(is_selectable);
+                      }
+                      */
 
 
 
-                    //if (ss) throw 'stop';
 
-                    //throw 'sty';
 
-                }
-            } else {
-                // set the dom attributes value... silent set?
+                      //if (ss) throw 'stop';
 
-                dom_attributes.set(name, value);
-            }
+                      //throw 'sty';
+
+                  }
+              } else {
+                  // set the dom attributes value... silent set?
+
+                  dom_attributes.set(name, value);
+              }
+
+          }
 
         }
+
+
 
         /*
 

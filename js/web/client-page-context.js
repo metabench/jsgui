@@ -24,7 +24,15 @@ var fp = jsgui.fp, is_defined = jsgui.is_defined;
 var Collection = jsgui.Collection;
 
 // The client page context should be able to generate selection scopes.
-//  We ask the context for the selection scope, and the selection scopes have IDs that are individual to the context.
+//  We ask the context for selection scopes, and the selection scopes have IDs that are individual to the context.
+
+// Now thinking that the Client_Page_Context should also hold the Client_Resource_Pool.
+//  That client-side resource pool would hold resources that are usable client-side. They would likely involve interacting with a server.
+//  They would be client-side proxies of the server-side resource, which goes through a Resource_Publisher to get it out over the network.
+
+var Client_Resource_Pool = require('../resource/core/client-pool');
+
+
 
 var Selection_Scope = require('./selection-scope');
 
@@ -43,6 +51,20 @@ var Client_Page_Context = jsgui.Page_Context.extend({
         //  Could have problems with dependencies.
 
 
+        // map_controls
+
+        // map_els
+
+        // The context will have a map of elements by their jsgui ids.
+        //  This will be needed for activation in some places.
+        //   It seems not to be needed (so far) on the server.
+
+
+
+
+
+
+
         //var resource_pool = new Client_Resource_Pool();
         //this.pool = resource_pool;
 
@@ -52,6 +74,9 @@ var Client_Page_Context = jsgui.Page_Context.extend({
         // Add the resource_pool into the page context at a later occasion.
         //  The basic html client will not need resource.
         //  Resource requires some html functionality though.
+        this.resource_pool = new Client_Resource_Pool({});
+
+        this.map_els = {};
 
 
         // The item IDs could be handled here... use the local variable closure here.
@@ -106,8 +131,8 @@ var Client_Page_Context = jsgui.Page_Context.extend({
 module.exports = Client_Page_Context;
 	/*
 	return Client_Page_Context;
-	
-	
+
+
 });
 
 */

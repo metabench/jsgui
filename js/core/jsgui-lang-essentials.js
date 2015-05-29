@@ -1496,7 +1496,7 @@ if (typeof window === 'undefined') {
 				var a = arr_like_to_arr(arguments), ts = atof(a), t = this;
 			    //console.log('a ' + stringify(a));
                 var last_arg = a[a.length - 1];
-                console.log('last_arg ' + last_arg);
+                //console.log('last_arg ' + last_arg);
                 //console.log('a.length ' + a.length);
                 if (tof(last_arg) == 'function') {
                     // it seems like a callback function.

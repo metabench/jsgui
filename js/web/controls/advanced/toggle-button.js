@@ -141,7 +141,7 @@ var Toggle_Button = Control.extend({
 
         //console.log('active_fields', active_fields);
 
-        if (active_fields) {
+        if (active_fields && typeof document === 'undefined') {
             this.set('dom.attributes.data-jsgui-fields', stringify(active_fields).replace(/"/g, "'"));
         }
 
@@ -160,6 +160,8 @@ var Toggle_Button = Control.extend({
 
     },
     'activate': function() {
+
+      if (!this.__active) {
         this._super();
         //console.log('toggle button activate');
 
@@ -198,8 +200,6 @@ var Toggle_Button = Control.extend({
             //that.set('content', e_change.value);
             that.clear();
             that.get('content').add(new jsgui.textNode({'context': that._context, 'text': e_change.value}));
-
-
             that.raise('toggle', e_change);
 
         });
@@ -217,31 +217,19 @@ var Toggle_Button = Control.extend({
           }
         });
 
-
-
         this.on('click', function(e_click) {
             //console.log('toggle button clicked');
-
             // needs to toggle through states.
-
             // Need to send the state field from the server to the client.
             var state = that.get('state');
-
-
             //console.log('state', state);
-
             // And need to look at the states.
 
             var states = that.get('states');
             // Need to send the state field from the server to the client.
-
-
-
             //console.log('states', states);
-
             //State being stored as a Data_Object,
             // States being stored as an Array?
-
             // still, need to shift between them
             var i_current_state;
 
@@ -255,11 +243,9 @@ var Toggle_Button = Control.extend({
                 })
                 //console.log('i_current_state', i_current_state);
                 // then choose the next state
-
                 var i_next_state = i_current_state + 1;
                 if (i_next_state == states.length) i_next_state = 0;
                 var str_next_state = states[i_next_state];
-
                 //console.log('str_next_state', str_next_state);
                 //state.set(str_next_state);
 
@@ -269,16 +255,10 @@ var Toggle_Button = Control.extend({
             } else {
                 throw 'stop'
             }
-
-
-
-
-
-
-
-
-
         })
+      }
+
+
     }
 });
 

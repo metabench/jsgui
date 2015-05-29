@@ -668,3 +668,8 @@ html.dragging {
 	background-color: #DFDFDF;
 	float: left;
 }
+
+.tree .subitems {
+	padding-left: 18px;
+
+}

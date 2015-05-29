@@ -87,12 +87,12 @@ var Website_Resource = Web_Resource.extend({
 
     'init': function(spec) {
 
-        console.log('Website_Resource spec', spec);
+        //console.log('Website_Resource spec', spec);
 
         // speck could be a string, such as 'static'
 
         var t_spec = tof(spec);
-        console.log('t_spec', t_spec);
+        //console.log('t_spec', t_spec);
 
 
         // A website have a resource pool as well.
@@ -145,7 +145,7 @@ var Website_Resource = Web_Resource.extend({
 
 
 
-        console.log('web_database_resource', web_database_resource);
+        //console.log('web_database_resource', web_database_resource);
         //console.log('web_database_resource.meta._.name', web_database_resource.meta._.name);
         //console.log('web_database_resource.meta._.name.value()', web_database_resource.meta._.name);
 
@@ -223,7 +223,7 @@ var Website_Resource = Web_Resource.extend({
 
 
 
-        console.log('Site_Images', Site_Images);
+        //console.log('Site_Images', Site_Images);
 
         var img_resource = new Site_Images({
             'meta': {
