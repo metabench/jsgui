@@ -9,12 +9,12 @@
 
 
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//}
 
-
-define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
+var jsgui = require('../../../../core/jsgui-lang-enh');
+//define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     var Data_Object = jsgui.Data_Object;
     var Collection = jsgui.Collection;
@@ -83,8 +83,7 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
     })
 
 
-    return Primary_Key_Column_Constraint;
-});
+    //return Primary_Key_Column_Constraint;
+//});
 
-
-
+module.exports = Primary_Key_Column_Constraint;

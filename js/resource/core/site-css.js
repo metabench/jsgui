@@ -1,3 +1,5 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -7,6 +9,13 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 	function(module, path, fs, url, jsgui, os, http, libUrl,
 		Resource, JeSuisXML, Cookies, fs2) {
+*/
+
+var path = require('path'), fs = require('fs'),
+url = require('url'), jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'),
+Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-xml'),
+Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core');
+
 
 
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
@@ -314,7 +323,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 	});
 
 
-	return Site_CSS;
+	//return Site_CSS;
 
 
-});
+//});
+module.exports = Site_CSS;

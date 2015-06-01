@@ -1,18 +1,24 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../../web/jsgui-je-suis-xml', 'cookies'], 
+define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../../web/jsgui-je-suis-xml', 'cookies'],
 
 	function(url, jsgui, os, http, libUrl, Resource, JeSuisXML, Cookies) {
-	
+*/
+var url = require('url'), jsgui = require('../../web/jsgui-html'), os = require('os'),
+http = require('http'), libUrl = require('url'), Resource = require('./resource'),
+JeSuisXML = require('../../web/jsgui-je-suis-xml'), Cookies = require('cookies');
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
 	var get_item_sig = jsgui.get_item_sig;
-	
+
 	// Extends AutoStart_Resource?
 
 	// The routing tree could be a specific class of object.
@@ -71,7 +77,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 	// At the root node - there will be a handler path
 	//  there will also be RoutePathNodes which are the normal children of another one
 	//   and for a variable - if the next part takes a variable, then that gets used in that case
-	//   
+	//
 
 	// The root node will be used for '/'
 
@@ -114,7 +120,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 	var Wildcard_Routing_Tree_Node = jsgui.Class.extend({
 		'init': function(spec) {
-			
+
 		}
 	})
 
@@ -158,7 +164,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//  nothing allowed after a wilcard, it makes the string invalid.
 			//console.log('strRoute ' + strRoute);
 
-			
+
 			//console.log('strRoute ' + strRoute);
 			//throw 'stop';
 			if (strRoute == '/') {
@@ -231,7 +237,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 						//throw '8) stop';
 					} else {
-						
+
 						if (isWildcard) {
 
 							//throw '11) stop';
@@ -269,7 +275,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 				//throw '5) stop';
 			}
 
-			
+
 
 
 		},
@@ -398,7 +404,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 							// look for a variableChild.
 							//console.log('currentNode ' + stringify(currentNode));
 							//throw '9)stop';
-							
+
 							if (currentNode.variableChild) {
 								next_level_node = currentNode.variableChild;
 								params = params || {};
@@ -510,9 +516,9 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 								// Could handle a variable handler here?
 							}
 
-							
 
-							
+
+
 						}
 
 					}
@@ -825,7 +831,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 
 
 			} else if (tof(route_res) == 'function') {
-				// 
+				//
 
 				//route_res.call(this, req, res);
 
@@ -860,7 +866,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//console.log('tof processor ' + tof(processor));
 
 			if (processor_values_pair) {
-				
+
 			}
 
             return true;
@@ -928,7 +934,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 									// send it to the JSON file admin web interface.
 
 									// Quite possibly use a JSON adapter.
-									//  need to get the path after 
+									//  need to get the path after
 									var arrRemainingPath = splitPath.slice(3, splitPath.length);
 									//console.log('arrRemainingPath ' + stringify(arrRemainingPath));
 
@@ -1024,10 +1030,10 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 						//console.log('tof processor ' + tof(processor));
 
 						if (processor_values_pair) {
-							
+
 						}
 
-						
+
 						//throw '7) stop';
 
 					}
@@ -1050,7 +1056,7 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 				//   Could become more advanced at some points, serving particular builds.
 
 
-				
+
 
 			}
 
@@ -1070,9 +1076,10 @@ define(['url', '../../web/jsgui-html', 'os', 'http', 'url', './resource', '../..
 			//  a gateway to deeper administration.
 		}
 	});
-	
-	
-	return Router;
-	
-	
-});
+
+
+	//return Router;
+
+
+//});
+module.exports = Router;

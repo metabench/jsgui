@@ -1,3 +1,5 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -11,9 +13,13 @@ if (typeof define !== 'function') {
 
 
 
-define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"], 
+define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 	function(jsgui, Single_Line, Title_Bar, Object_Viewer) {
-		
+
+*/
+var jsgui = require('../../jsgui-html'), Single_Line = require('./single-line'), Title_Bar = require('./title-bar'), Object_Viewer = require('./viewer/object');
+
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
 
@@ -53,7 +59,7 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 					//});
 					//this.add(ctrl_title_bar);
 
-					
+
 
 					var type_levels = resource.meta.get('type_levels');
 
@@ -116,5 +122,7 @@ define(["../../jsgui-html", "./single-line", "./title-bar", "./viewer/object"],
 				//}
 			}
 		});
-		return Ctrl_Resource;
-});
+		//return Ctrl_Resource;
+//});
+
+module.exports = Ctrl_Resource;

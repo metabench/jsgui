@@ -2,7 +2,7 @@
  * Created by James on 28/06/2014.
  */
 
-
+/*
 
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
@@ -10,6 +10,8 @@ if (typeof define !== 'function') {
 
 
 define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
+*/
+var jsgui = require('../../../../core/jsgui-lang-enh');
 
     var Data_Object = jsgui.Data_Object;
     var Collection = jsgui.Collection;
@@ -185,8 +187,7 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
     })
 
 
-    return Database;
-});
+    //return Database;
+//});
 
-
-
+module.exports = Database;

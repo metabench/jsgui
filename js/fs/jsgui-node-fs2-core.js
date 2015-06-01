@@ -752,7 +752,7 @@ var rimraf = require('rimraf');
 					throw('err ' + err);
 				} else {
 
-					console.log('files ' + stringify(files));
+					//console.log('files ' + stringify(files));
 					//console.log('typeof files ' + stringify(typeof files));
 					//console.log('dir_contents path ' + path);
 					var res = {};
@@ -762,8 +762,8 @@ var rimraf = require('rimraf');
 					//console.log('c ' + c);
 					//console.log ('!2callback ' + tof(callback));
 					var cb = function() {
-						console.log('cb ');
-            console.log('files_or_directories', files_or_directories);
+						//console.log('cb ');
+                        //console.log('files_or_directories', files_or_directories);
 					    if (files_or_directories == 'files') {
 					        callback(null, res_files);
 					    } else if (files_or_directories == 'directories') {

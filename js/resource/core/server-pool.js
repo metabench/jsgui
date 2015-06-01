@@ -1,20 +1,27 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 define(['../../web/jsgui-html', 'os', 'http', 'url', './resource', '../../web/jsgui-je-suis-xml', 'cookies',
-	'../local-server-info', './pool', "./publisher"], 
+	'../local-server-info', './pool', "./publisher"],
 
 	function(jsgui, os, http, libUrl, Resource, JeSuisXML,
 		Cookies, Local_Server_Info, Resource_Pool, Resource_Publisher) {
+*/
 
-	
+var jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'),
+libUrl = require('url'), Resource = require('./resource'),
+JeSuisXML = require('../../web/jsgui-je-suis-xml'), Cookies = require('cookies'),
+Local_Server_Info = require('../local-server-info'), Resource_Pool = require('./pool'), Resource_Publisher = require('./publisher');
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
-	
+
 	var exec = require('child_process').exec;
 
 	// Perhaps this will have HTTP endpoints as well?
@@ -33,14 +40,14 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './resource', '../../web/js
 
 
 
-	
+
 	var Server_Resource_Pool = Resource_Pool.extend({
 		'init': function(spec) {
 			this._super(spec);
-			
+
 			// will add the Resource_Local_Server_Information
-			
-			
+
+
 			// Will be nice to set them with an object.
 			//  Not just the normal spec.
 			//  Maybe can see if the spec matches fields?
@@ -54,7 +61,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './resource', '../../web/js
 					'full': ['server_admin']
 				}
 			});
-			
+
 			this.add(lsi);
 
 			// And a resource publisher resource.
@@ -74,19 +81,20 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './resource', '../../web/js
 					'full': ['server_admin']
 				}
 			});
-			
+
 			this.add(publisher);
 			*/
 
 
-			
-			
+
+
 		}
-		
-	}) 
-	
-	
-	return Server_Resource_Pool;
-	
-	
-});
+
+	})
+
+
+	//return Server_Resource_Pool;
+
+
+//});
+module.exports = Server_Resource_Pool;

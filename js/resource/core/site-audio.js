@@ -1,3 +1,5 @@
+
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -16,18 +18,22 @@ if (typeof define !== 'function') {
 
 
 define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
-	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core', '../../audio/jsgui-node-audio-metadata', 'crypto'], 
+	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core', '../../audio/jsgui-node-audio-metadata', 'crypto'],
 
 	function(module, path, fs, url, jsgui, os, http, libUrl,
 		Resource, JeSuisXML, Cookies, fs2, audio_metadata, crypto) {
+*/
 
-	
+var path = require('path'), fs = require('fs'), url = require('url'), jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'),
+  Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-xml'), Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core'), audio_metadata = require('../../audio/jsgui-node-audio-metadata'), crypto = require('crypto');
+
+
 	var stringify = jsgui.stringify, each = jsgui.eac, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
-	
+
 	// This resource may have quite a lot of functionality put in to deal with
 	//  seriving images in an optimized way.
 	// Want this so it also serves the developer in that images can be put in place
@@ -139,7 +145,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		Content-Range:bytes 0-7831024/7831024
 		Content-Type:audio/mpeg3
 		Date:Fri, 02 May 2014 18:01:47 GMT
-		
+
 
 		*/
 
@@ -156,10 +162,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-		// 
+		//
 
 		/*
-		
+
 		fs.open('./data/index.html', 'r', function(err, fd) {
 		    if(err) throw err;
 		    var str = new Buffer(3);
@@ -190,11 +196,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				response.writeHead(404, {
 
 		            "Content-Type": "text/plain"
-	
+
 		        });
-	
+
 		        response.write("404 Not Found\n");
-	
+
 		        response.end();
 
 
@@ -239,7 +245,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 					l = stats.size;
 				}
 
-				
+
 				console.log('rs_opts', rs_opts);
 				var rs = fs.createReadStream(filePath, rs_opts);
 
@@ -257,7 +263,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-				
+
 
 				// Needs to have a new etag for each file.
 				//  Can use a hash of the file path.
@@ -301,7 +307,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						o_head['Content-Range'] = 'bytes ' + start_pos + '-' + (stats.size - 1) + '/' + stats.size
 					}
 
-					
+
 				}
 
 				console.log('o_head', o_head);
@@ -313,7 +319,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 				rs.pipe(response);
 
-				
+
 
 				//rs.on('data', function(chunk) {
 					//c = c + chunk.length;
@@ -322,7 +328,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				//});
 				rs.resume();
 
-				
+
 
 
 
@@ -345,10 +351,10 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				*/
 
 			}
-	        
+
 	    });
 
-		
+
 
 		/*
 
@@ -372,7 +378,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 		//fs2.load_file_as_string(filePath, function (err, data) {
-		//	if (err) { 
+		//	if (err) {
 		//		throw err;
 		//	} else {
 		//		//var servableJs = updateReferencesForServing(data);
@@ -384,7 +390,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 	var Site_Audio = Resource.extend({
-		
+
 
 		'init': function(spec) {
 			this._super(spec);
@@ -444,7 +450,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 					});
 
-					
+
 				});
 
 			} else {
@@ -454,8 +460,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//console.log('albums', albums);
 			//console.log('tof(albums)', tof(albums));
 
-			
-			
+
+
 		},
 		'serve_directory': function(path) {
 			// Serves that directory, as any files given in that directory can be served from /js
@@ -528,7 +534,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			//if (range.substr())
 
-			
+
 
 
 
@@ -561,7 +567,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 					// Then load up and serve the file.
 
-					//var media_file_path = 
+					//var media_file_path =
 
 					// Likely to have been given specialised path info, in the metadata.
 					//  Could have been provided with an album's path.
@@ -621,16 +627,16 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 							serve_audio_file_from_disk(media_file_path, res);
 						}
 
-						
+
 					}
 
 
 
-					
+
 
 					//console.log('tracks', tracks);
 
-					// 
+					//
 				}
 			}
 
@@ -638,9 +644,9 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			/*
 
-			
 
-			
+
+
 			var url_parts = url.parse(req.url, true);
 			//console.log('url_parts ' + stringify(url_parts));
 			var splitPath = url_parts.path.substr(1).split('/');
@@ -722,6 +728,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			*/
 		}
 	});
-	
-	return Site_Audio;
-});
+
+	//return Site_Audio;
+//});
+
+module.exports = Site_Audio;

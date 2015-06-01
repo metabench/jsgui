@@ -1,19 +1,25 @@
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsgui-je-suis-xml', 'cookies', 
-	'../resource/web-admin', '../web/controls/advanced/file-manager'], 
+define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsgui-je-suis-xml', 'cookies',
+	'../resource/web-admin', '../web/controls/advanced/file-manager'],
 
 	function(jsgui, os, http, libUrl, Resource, JeSuisXML, Cookies,
 		Resource_Web_Admin, File_Manager_Module) {
+*/
+
+var jsgui = require('../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'), Resource = require('./core/resource'), JeSuisXML = require('../web/jsgui-je-suis-xml'), Cookies = require('cookies'),
+  Resource_Web_Admin = require('../resource/web-admin'), File_Manager_Module = require('../web/controls/advanced/file-manager');
 
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
-	
+
 	var exec = require('child_process').exec;
 
 	// File system admin will likely be a specialised resource, not using a generic resource admin interface.
@@ -26,7 +32,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 
 
 	var Resource_File_System_Web_Admin = Resource_Web_Admin.extend({
-		
+
 		'init': function(spec) {
 			this._super(spec);
 
@@ -48,7 +54,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 			//    In this case, a resource will be a Client Side JavaScript resource.
 			//     It will process the requests when it is routed to that.
 			//      It's not really a subresource - it exists within the pool.
-			//       However 
+			//       However
 
 			// looking at the directory...
 			//  it may be clear a JavaScript file needs to be returned.
@@ -80,7 +86,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
                  'response': res,
                  'rendering_mode': 'html5'
             });
-			
+
 			var doc = new jsgui.Client_HTML_Document({'context': spc});
 
 
@@ -121,7 +127,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 					//bodyContent.add('Hello World');
 					doc.body().content().add(fm);
 					//console.log('bodyContent ' + stringify(bodyContent));
-					
+
 					// create a File_System_Admin control.
 					//  File_Manager?
 					//   That was done without the Fields capability.
@@ -135,7 +141,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 		  			res.end(html);
 				}
 			});
-			
+
 
 
 
@@ -152,20 +158,21 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource', '../web/jsg
 
 			// Get and set will be a lot of use for this.
 			//  That means there is something for the client to talk to.
-			//   It will still access it as a resource on the client, but in that context it will be a 
+			//   It will still access it as a resource on the client, but in that context it will be a
 			//   remote resource.
 
-			// The first step is the initial render, where the control and the file system resource are 
+			// The first step is the initial render, where the control and the file system resource are
 			//  both running on the (same? dist?) server.
 
 
 			//console.log('body ' + body);
 
-			
+
 			//server.serve_document(req, res, doc);
 
 
 		}
 	});
-	return Resource_File_System_Web_Admin;
-});
+	//return Resource_File_System_Web_Admin;
+//});
+module.exports = Resource_File_System_Web_Admin;

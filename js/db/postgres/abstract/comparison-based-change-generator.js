@@ -1,7 +1,7 @@
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//}
 
 // Used to represent a database.
 //  Want a class for a domain model as well.
@@ -40,7 +40,8 @@ if (typeof define !== 'function') {
 
 
 
-define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract) {
+//define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract) {
+var jsgui = require('../../../core/jsgui-lang-enh');
     var Data_Object = jsgui.Data_Object;
     var Collection = jsgui.Collection;
     // The Data_Object may have a few more features added to it.
@@ -634,9 +635,7 @@ define(["../../../core/jsgui-lang-enh", "./core/all"], function(jsgui, Abstract)
         console.log('cbcg.generate sig', sig);
     });
 
-    return cbcg;
+    //return cbcg;
 
-});
-
-
-
+//});
+module.exports = cbcg;

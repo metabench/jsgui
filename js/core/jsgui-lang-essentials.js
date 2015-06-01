@@ -761,14 +761,14 @@ if (typeof window === 'undefined') {
 	var tof = function(obj, t1) {
 		var res = t1 || typeof obj;
 
-		if (res == 'number' || res == 'string' || res == 'function' || res == 'boolean') {
+		if (res === 'number' || res === 'string' || res === 'function' || res === 'boolean') {
 		    return res;
 		}
 
 
-		if (res == 'object') {
+		if (res === 'object') {
 
-			if (typeof obj != 'undefined') {
+			if (typeof obj !== 'undefined') {
 
 				if (obj === null) {
 					return 'null';
@@ -783,6 +783,11 @@ if (typeof window === 'undefined') {
 					return obj.__type;
 				} else {
 
+          if (is_ctrl(obj)) {
+              //return res;
+              return 'control';
+          }
+
 					// Inline array test, earlier on?
 
 					if (obj instanceof Date) {
@@ -794,15 +799,6 @@ if (typeof window === 'undefined') {
 				        //res = 'array';
 				        //return res;
 				        return 'array';
-				    } else if (is_ctrl(obj)) {
-				    	//throw 'control stop';
-				    	//if (is_defined(obj.__type)) {
-						//	return obj.__type;
-						//}
-
-				        //res = 'control';
-				        //return res;
-				        return 'control';
 				    } else {
 
 				        if (obj instanceof RegExp) res = 'regex';
@@ -1123,11 +1119,11 @@ if (typeof window === 'undefined') {
 
 		if (t1 == 'string') {
 			res = 's';
-		} else if (t1 == 'number') {
+		} else if (t1 === 'number') {
 			res = 'n';
-		} else if (t1 == 'boolean') {
+		} else if (t1 === 'boolean') {
 			res = 'b';
-		} else if (t1 == 'function') {
+		} else if (t1 === 'function') {
 			res = 'f';
 		} else {
 			var t = tof(i, t1);
@@ -1144,7 +1140,7 @@ if (typeof window === 'undefined') {
 
 			// likely to use a map for this logic instead.
 			// console.log('t ' + t);
-			if (t == 'array') {
+			if (t === 'array') {
 
 			    // look into it with one nested level...
 			    if (arr_depth) {
@@ -1174,22 +1170,22 @@ if (typeof window === 'undefined') {
 			//	res = 'b';
 			//} else if (t == 'function') {
 			//	res = 'f';
-			} else if (t == 'control') {
+    } else if (t === 'control') {
 				res = 'c';
-			} else if (t == 'date') {
+			} else if (t === 'date') {
 				res = 'd';
-			} else if (t == 'regex') {
+			} else if (t === 'regex') {
 				res = 'r';
-			} else if (t == 'buffer') { // may remove for non node.js.
+			} else if (t === 'buffer') { // may remove for non node.js.
 				res = 'B';
 			//} else if (t == 'stream') { // may remove for non node.js.
 			//	res = 'S';
 
 			// Will also incorporate dubplex and transformation streams.
 
-			} else if (t == 'readable_stream') { // may remove for non node.js.
+    } else if (t === 'readable_stream') { // may remove for non node.js.
 				res = 'R';
-			} else if (t == 'writable_stream') { // may remove for non node.js.
+			} else if (t === 'writable_stream') { // may remove for non node.js.
 				res = 'W';
 			//} else if (t == 'number') {
 				// is it an integer?
@@ -1198,18 +1194,18 @@ if (typeof window === 'undefined') {
 				// are we checking for those anyway? maybe not by default.
 
 			//	res = 'n';
-			} else if (t == 'object') {
+    } else if (t === 'object') {
 
 				// not sure about showing all the details of the object.
 
 				res = 'o';
-			} else if (t == 'undefined') {
+			} else if (t === 'undefined') {
 				res = 'u';
 			} else {
 
 				if (t == 'collection_index') {
 					return 'X';
-				} else if (t == 'data_object') {
+				} else if (t === 'data_object') {
 					if (i._abstract) {
 						res = '~D';
 					} else {
@@ -1218,7 +1214,7 @@ if (typeof window === 'undefined') {
 
 
 				} else {
-					if (t == 'data_value') {
+					if (t === 'data_value') {
 						if (i._abstract) {
 							res = '~V';
 						} else {
@@ -1226,9 +1222,9 @@ if (typeof window === 'undefined') {
 						}
 
 
-					} else if (t == 'null') {
+					} else if (t === 'null') {
 						res = '!';
-					} else if (t == 'collection') {
+					} else if (t === 'collection') {
 						if (i._abstract) {
 							res = '~C';
 						} else {
@@ -1272,7 +1268,7 @@ if (typeof window === 'undefined') {
     * trim_sig_brackets("n") ==> "n"
     */
 	var trim_sig_brackets = function(sig) {
-	    if (tof(sig) == 'string') {
+	    if (tof(sig) === 'string') {
 	        if (sig.charAt(0) == '[' && sig.charAt(sig.length - 1) == ']') {
 				return sig.substring(1, sig.length - 1);
 			} else {
@@ -1330,7 +1326,7 @@ if (typeof window === 'undefined') {
     */
 	var functional_polymorphism = function(options, fn) {
 		var a0 = arguments;
-		if (a0.length == 1) {
+		if (a0.length === 1) {
 			fn = a0[0];
 			options = null;
 		}
@@ -1357,7 +1353,7 @@ if (typeof window === 'undefined') {
 			// argument.
 			l = a.length;
 
-			if (l == 1) {
+			if (l === 1) {
 				sig = get_item_sig([a[0]], 1);
 				//console.log('fp sig, a.l == 1 ' + sig);
 				// a 'l' property given to array given
@@ -1379,7 +1375,7 @@ if (typeof window === 'undefined') {
 			    //console.log('arr.l ' + arr.l);
 				//return fn.call(that, arr, sig, _super);
 				return fn.call(this, arr, sig);
-			} else if (a.length == 0) {
+			} else if (a.length === 0) {
 				arr = new Array(0);
 				arr.l = 0;
 				//return fn.call(that, arr, '[]', _super);

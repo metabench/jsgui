@@ -1,18 +1,20 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-};
+
+
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//};
 var Mongo = require('mongodb'), MongoClient = Mongo.MongoClient;
 
-//var Mongo_Server  
+//var Mongo_Server
+var jsgui = require('../../../core/jsgui-lang-util'), Resource = require('../../../resource/core/resource');
+//define(["../../../core/jsgui-lang-util", "../../../resource/core/resource"], function(jsgui, Resource) {
 
-define(["../../../core/jsgui-lang-util", "../../../resource/core/resource"], function(jsgui, Resource) {
-	
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
 	var is_defined = jsgui.is_defined, tof = jsgui.tof, stringify = jsgui.stringify, each = jsgui.each;
 	var fp = jsgui.fp;
 	// The basic resource connector... not quite sure what it needs to do 27/02/2012.
 	//  Fills in the gap conceptually.
-	
+
 	var Rsce = Resource;
 
 	// Maybe this won't need much in order to start it.
@@ -138,7 +140,7 @@ define(["../../../core/jsgui-lang-util", "../../../resource/core/resource"], fun
         db.close();
       });
 */
-	
+
 
 				// Somewhat hard to know if we want to get the results, or to get an object.
 				//  Inside, there could be resources we want to reference?
@@ -170,8 +172,8 @@ define(["../../../core/jsgui-lang-util", "../../../resource/core/resource"], fun
 	// We could also have a Mongo_Collection resource. They may follow a similar interface to tables in other DBs.
 	//  They would be creatable from a Database resource.
 	//  The Info resource would interact with one of these
-	
-	return Mongo_Collection;
-	
-});
 
+	//return Mongo_Collection;
+
+//});
+module.exports = Mongo_Collection;

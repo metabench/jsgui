@@ -204,7 +204,7 @@ jsgui.http = fp(function(a, sig) {
     request.open(method, url, true);
 
     if (method.toUpperCase() == 'POST' && body) {
-        console.log('body', body);
+        //console.log('body', body);
         request.send(body);
     } else {
         request.send(null);
@@ -213,10 +213,10 @@ jsgui.http = fp(function(a, sig) {
     request.onreadystatechange = function() {
         if (request.readyState == 4) {
             // Perhaps parse that...
-            console.log('request', request);
+            //console.log('request', request);
 
             var content_type = request.getResponseHeader('Content-Type');
-            console.log('content_type', content_type);
+            //console.log('content_type', content_type);
 
             if (content_type == 'application/json') {
                 callback(null, JSON.parse(request.responseText));
@@ -271,5 +271,3 @@ module.exports = jsgui;
 
 
 //});
-
-

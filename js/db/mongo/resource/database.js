@@ -1,20 +1,23 @@
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
 var Mongo = require('mongodb'), MongoClient = Mongo.MongoClient;
 
-//var Mongo_Server  
+//var Mongo_Server
 
 define(["module", "path",
-	"../../../core/jsgui-lang-util", "../../../resource/core/resource", "../../../resource/core/collection", "./collection"], 
+	"../../../core/jsgui-lang-util", "../../../resource/core/resource", "../../../resource/core/collection", "./collection"],
 
 	// Or server should have the referece to database? Server is the larger one.
 	//  May need to side-load the server at some point.
 
 	function(module, path, jsgui, Resource, Resource_Collection, Mongo_Collection) {
-	
+	*/
+
+var path = require('path'), jsgui = require('../../../core/jsgui-lang-util'), Resource = require('../../../resource/core/resource'),
+Resource_Collection = require('../../../resource/core/collection'), Mongo_Collection = require('./collection');
 	// Will also use a reference to Server?
 	//  May help initializing a Database Resource, where it also provides the server info, and the Database
 	//   Resource automatically creates the Server Resource.
@@ -27,12 +30,12 @@ define(["module", "path",
 	var fp = jsgui.fp;
 	// The basic resource connector... not quite sure what it needs to do 27/02/2012.
 	//  Fills in the gap conceptually.
-	
+
 	var Rsce = Resource;
 
 	// With these resources, need to expose them in a standard way.
-	
-	
+
+
 	var Mongo_Collection;
 
 	// So both extend Resource.
@@ -66,7 +69,7 @@ define(["module", "path",
 
 	// Providing RESTful access to the database.
 
-	
+
 	var Mongo_Database = Rsce.extend({
 
 		// Could have something like fields?
@@ -81,7 +84,7 @@ define(["module", "path",
 			var that = this;
 
 			this._super(spec);
-			
+
 			//console.log('3) spec.server._ ' + stringify(spec.server._));
 			//console.log('this._ ' + stringify(this._));
 
@@ -94,37 +97,37 @@ define(["module", "path",
 				// the server is the 'location' too, if that matters.
 			//	this.set('server', spec.server);
 			//}
-			
+
 			// location is a Mongo_Server.
 			//  Addressable through another component
-			
+
 			// The database also requires a mongo server.
 			//  This could be set up for it, or provided when looking for the local server.
 			//  There will be directories of locations. These could be stored in an Sqlite database on the local machine.
-			
+
 			// It could be given it's location in the initialization.
 			//  When starting it up, it will be checking that it has a location.
 			//   The location would be a resource in this case.
-			
+
 			// The Server Resource is a requirement in this case.
-			
+
 			//  maybe call it can_try_start - something else could prevent it from starting properly.
-			
-			
+
+
 			// Then we want to tell the database to do various things.
-			
+
 			// Want to be able to persist a database structure (where necessary)
 			//  Mongo DBs may be schemaless in terms of the internal structure.
-			
+
 			// Will persist this though - want to be able to set up a mongo web db and use it relatively quickly and easily.
 			//  Also want this to work through a resource transformation system - so when the system has connected to a db through an
 			//   interface, it is able to use this as a web db.
-			
+
 			// I think we need to persist things using the Database.
 			//  Want to have the database object connected to Mongo - or just have an interface to it.
-			
+
 			// Will still deal with sets of information.
-			
+
 			// Maybe should make a simpler resource to start with.
 			//  Ans a simpler resource adapter.
 
@@ -160,14 +163,14 @@ define(["module", "path",
 			if (spec.password) {
 				this.meta.set('password', spec.password);
 			}
-			
+
 			// meta currently a Data_Object rather than Resource... that may make sense.
 			//  Is it worth extending Data_Object to have async access?
 			//  Or are we doing this here by layering an async access method on top of it.
 
 			// We may be able to adapt Data_Objects to work like resources in many cases.
 
-			
+
 			this.meta.set('status', 'off');
 
 			// Metadata about the collections it contains,
@@ -208,7 +211,7 @@ define(["module", "path",
 			// I think that nested get requests are a fairly major thing to tackle.
 			//  Sometimes we need to get a resource that can then get or set further information.
 			//   Is it more efficient to cache some resources too, and access them quickly?
-			//  
+			//
 
 			// Asyncronous access to nested resources.
 			//  I think I should make a doc explaining it.
@@ -218,9 +221,9 @@ define(["module", "path",
 
 
 			// var resource_mongo_collection = this.get_resource('collections.site_info')
-			// 
+			//
 
-			// 
+			//
 
 			var colls = this.set('collections', new Resource_Collection({
 				'fields': {
@@ -230,7 +233,7 @@ define(["module", "path",
 			colls.index_by('name');
 
 			console.log('colls.fields() ' + colls.fields());
-			
+
 
 			// indexes
 			console.log('colls.indexes() ', colls.indexes());
@@ -266,7 +269,7 @@ define(["module", "path",
 
 					// But with the callback too, need to change the response accordingly.
 
-					//if (sig == '[s]') 
+					//if (sig == '[s]')
 
 					// with string and callback, need to do a find based on that string.
 					if (sig == '[s,f]') {
@@ -353,7 +356,7 @@ define(["module", "path",
 
 							// anyway, we would create the Collection object...
 
-							
+
 
 
 
@@ -365,14 +368,14 @@ define(["module", "path",
 							throw 'stop';
 						}
 
-						
+
 					}
 
 
-					
+
 				}
 				// Also get with a string, carries out a find by name.
-				//  However, with name set as the primary key, the index system may/should be able to 
+				//  However, with name set as the primary key, the index system may/should be able to
 
 
 			})
@@ -386,7 +389,7 @@ define(["module", "path",
 			//  that way we can carry out database operations.
 
 			// perhaps a beforeChange event would make sense here.
-			
+
 
 			// This could also listen for changes in the meta.
 			//  It could carry out actions to reflect those changes on the remote resource that the Resource class
@@ -415,7 +418,7 @@ define(["module", "path",
 
 					var field_name = a[0];
 					console.log('field_name', field_name);
-					
+
 					//if (that['get_' + field_name]) {
 
 					//}
@@ -502,7 +505,7 @@ define(["module", "path",
 			var that = this;
 			//this.side_load_collections_module(function() {
 			console.log('sideloaded');
-			
+
 
 			var db = that._i;
 			console.log('db ' + db);
@@ -679,7 +682,7 @@ define(["module", "path",
 
 					db_connector.open(function(err, db) {
 
-						// may have a shorthand / word for the object that is provided from elsewhere and 
+						// may have a shorthand / word for the object that is provided from elsewhere and
 						//  is used by the Resource in order to provide its functionality.
 						// Would be the internal object in use by the resource.
 
@@ -695,11 +698,11 @@ define(["module", "path",
 						//  Loading the collection names when the db starts and storing them locally may make sense.
 						//   However, we now have a resource collection.
 						//    Need to work out some details about how a resource or resource collection can
-						//    cache its data locally. 
+						//    cache its data locally.
 						//   We could refer to a particular db if needed and get it or operate on it async.
 						//  It may be best to make a separate resource caching layer.
-						//  
-						//   
+						//
+						//
 
 
 
@@ -773,7 +776,7 @@ define(["module", "path",
 											if (!mc) {
 												//mColls.push(new Data_Object({'value': {'name': cName}}));
 
-												// I think an easy way of setting the value of the Data_Object at 
+												// I think an easy way of setting the value of the Data_Object at
 												// construction makes sense.
 												console.log('cName ' + cName);
 												console.log('tof cName ' + tof(cName));
@@ -929,7 +932,7 @@ define(["module", "path",
 
 		}),
 		*/
-		// Basic get - 
+		// Basic get -
 		///  get with a string, needs to return one of the fields of this.
 		// Maybe have a particularly defined basic get for only a callback parameter.
 
@@ -983,11 +986,11 @@ define(["module", "path",
 					}
 				})
 
-				
+
 
 				//return res;
 
-			} else 
+			} else
 			if (sig == '[s]') {
 
 				var key = a[0];
@@ -1067,7 +1070,7 @@ define(["module", "path",
 					// Could have collections as a field within the database.
 					//  That way they could be exposed as a resource themselves.
 
-					// Also, collections within the resource here would be a collection itself, maybe a 
+					// Also, collections within the resource here would be a collection itself, maybe a
 					//  Resource_Collection.
 					// That Resource_Collection would have its own URL
 					//  In this case, it would put the request through to the subresource.
@@ -1154,7 +1157,7 @@ define(["module", "path",
 										// Needs to call back with something understandable...
 										//
 
-										/*  
+										/*
 										fcoll.meta._.database.find(function(err, res) {
 											if (err) {
 												throw err;
@@ -1166,7 +1169,7 @@ define(["module", "path",
 										*/
 										fcoll.get(callback);
 
-										
+
 
 										/*
 
@@ -1189,7 +1192,7 @@ define(["module", "path",
 									}
 								});
 
-									
+
 
 
 								//coll.get();
@@ -1206,7 +1209,7 @@ define(["module", "path",
 				} else {
 					return this._super.apply(this, a);
 				}
-				
+
 			}
 		})
 
@@ -1214,13 +1217,12 @@ define(["module", "path",
 		//  Needs to work within the fairly basic architecture of the db.
 
 		// The get and set commands should be useful here...
-		//  They need to perform in a fairly general way but this resource gives access to a particular mongo 
+		//  They need to perform in a fairly general way but this resource gives access to a particular mongo
 		//  database.
 
 	});
-	
-	return Mongo_Database;
-	
-});
 
+	//return Mongo_Database;
 
+//});
+module.exports = Mongo_Database;

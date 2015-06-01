@@ -1,4 +1,14 @@
 
+var jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'),
+libUrl = require('url'), Web_Resource = require('./web'),
+JeSuisXML = require('../../web/jsgui-je-suis-xml'), Cookies = require('cookies'),
+Resource_Control = require('../../web/controls/advanced/resource-base')
+var Server_Page_Context = require('../../web/server-page-context');
+
+//fs = require('fs'), fs2 = require('../fs/jsgui-node-fs2-core');
+
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -8,7 +18,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 
 	function(jsgui, os, http, libUrl, Web_Resource, Resource_Control,
 		JeSuisXML, Cookies, Server_Page_Context) {
-
+*/
 
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
@@ -585,7 +595,9 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 	});
 
 
-	return Resource_Publisher;
+	//return Resource_Publisher;
 
 
-});
+//});
+
+module.exports = Resource_Publisher;

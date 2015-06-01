@@ -1,25 +1,26 @@
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+//if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html"], 
-	function(jsgui, Text_Input) {
-		
+//define(["../../jsgui-html"],
+	//function(jsgui, Text_Input) {
+
+var jsgui = require('../../jsgui-html');
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
-		
+
 		var Single_Line = Control.extend({
 			// fields... text, value, type?
 			//  type could specify some kind of validation, or also 'password'.
-				
+
 			// single field?
 			'fields': [
 				['value', Object],
 				['field', String],
 				['meta_field', String]
-			],			
+			],
 			//  and can have other fields possibly.
-			
-			
+
+
 			'init': function(spec) {
 				this._super(spec);
 
@@ -68,7 +69,7 @@ define(["../../jsgui-html"],
 					if (display_value) {
 						span.add(display_value);
 					}
-					
+
 
 
 					this.add(span);
@@ -76,7 +77,7 @@ define(["../../jsgui-html"],
 					this.set('span', span);
 				}
 
-				
+
 
 
 				// Maybe won't get the field directly.
@@ -120,9 +121,4 @@ define(["../../jsgui-html"],
 
 
 		});
-		return Single_Line;
-		
-		//return jsgui;
-		
-	
-});
+module.exports = Single_Line;

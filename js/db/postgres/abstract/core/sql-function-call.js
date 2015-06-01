@@ -4,13 +4,13 @@
 
 
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//}
 
 
-define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
-
+//define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
+var jsgui = require('../../../../core/jsgui-lang-enh');
     var Data_Object = jsgui.Data_Object;
     var Collection = jsgui.Collection;
 
@@ -135,8 +135,6 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
     });
 
 
-    return SQL_Function_Call;
-});
-
-
-
+    //return SQL_Function_Call;
+//});
+module.exports = SQL_Function_Call;

@@ -1,14 +1,19 @@
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
 define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
-	'../web/jsgui-je-suis-xml', 'cookies'], 
+	'../web/jsgui-je-suis-xml', 'cookies'],
 
 	function(jsgui, os, http, libUrl, Resource,
 		JeSuisXML, Cookies) {
+*/
 
-	
+var jsgui = require('../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'), Resource = require('./core/resource'),
+  JeSuisXML = require('../web/jsgui-je-suis-xml'), Cookies = require('cookies');
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
@@ -33,15 +38,15 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 	//  That could be quite useful.
 	//   The info resource could still be used to hold a few other things.
 
-	
+
 
 
 	var Info = Resource.extend({
-		
-		
+
+
 		'init': function(spec) {
 			this._super(spec);
-			
+
 			// meta.db_resource
 			//  I think that will be the way of connecting it.
 			//  There is an info resource available by default to a server.
@@ -64,7 +69,7 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 
 
 
-			
+
 		},
 		'start': function(callback) {
 			//console.log('lfs start');
@@ -108,9 +113,10 @@ define(['../web/jsgui-html', 'os', 'http', 'url', './core/resource',
 
 
 	});
-	
-	
-	return Info;
-	
-	
-});
+
+
+	//return Info;
+
+
+//});
+module.exports = Info;

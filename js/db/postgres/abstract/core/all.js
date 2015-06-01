@@ -18,9 +18,9 @@
 //  Will also have individual abstract class files.
 
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+//if (typeof define !== 'function') {
+//    var define = require('amdefine')(module);
+//}
 
 // Used to represent a database.
 //  Want a class for a domain model as well.
@@ -40,9 +40,9 @@ if (typeof define !== 'function') {
 // Naming of them... they won't exactly be THE classes to do this, but maybe earlier versions.
 //  Name them sensibly and then replace in the future.
 
+var jsgui = require('../../../../core/jsgui-lang-enh');
 
-
-define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
+//define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
 
     // This could be used on the client too.
 
@@ -463,8 +463,7 @@ define(["../../../../core/jsgui-lang-enh"], function(jsgui) {
     }
 
 
-    return Abstract;
-});
+    //return Abstract;
+//});
 
-
-
+module.exports = Abstract;

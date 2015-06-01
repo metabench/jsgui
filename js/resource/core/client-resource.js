@@ -139,7 +139,7 @@ var Resource = require('./resource');
 				url_path = a[0];
 				callback = a[1];
 
-				console.log('url_path', url_path);
+				//console.log('url_path', url_path);
 
 				url = this.meta.get('url').value() + url_path;
 			}
@@ -162,7 +162,7 @@ var Resource = require('./resource');
 				json_url = url;
 			}
 
-			console.log('json_url', json_url);
+			//console.log('json_url', json_url);
 			jsgui.http(json_url, function(err, res) {
 				if (err) {
 					callback(err);
@@ -176,11 +176,11 @@ var Resource = require('./resource');
 		'notify_change_from_server': function(property_name, property_value) {
 			// needs to do some kind of silent set.
 
-			console.log('client resource notify_change_from_server');
+			//console.log('client resource notify_change_from_server');
 
 			var data = this.data;
 
-			console.log('data', this.data);
+			//console.log('data', this.data);
 
 			// may need to do a set with options, such as {silent: true};
 			//  may need to define message propagation in more detail.

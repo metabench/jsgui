@@ -1,3 +1,5 @@
+/*
+
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -21,19 +23,25 @@ if (typeof define !== 'function') {
 
 
 define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
-	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core', 'uglify-js', 'zlib'], 
+	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core', 'uglify-js', 'zlib'],
 
 	function(module, path, fs, url, jsgui, os, http, libUrl,
 		Resource, JeSuisXML, Cookies, fs2, UglifyJS, zlib) {
 
-	
+	*/
+
+var path = require('path'), fs = require('fs'),
+url = require('url'), jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'),
+Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-xml'), Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core'), UglifyJS = require('uglify-js'), zlib = require('zlib');
+
+
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
 	var call_multi = jsgui.call_multi, get_truth_map_from_arr = jsgui.get_truth_map_from_arr;
-	
+
 	// Extends AutoStart_Resource?
 
 
@@ -107,7 +115,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//console.log('');
 			//console.log('1) definition ' + definition);
 
-			// then go through the definition items, 
+			// then go through the definition items,
 			//definition = definition.replace(/, /g, ',');
 			definition = definition.replace(/,\s+/g, ',');
 			//console.log('2) definition ' + definition);
@@ -195,7 +203,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						var theRest = v.substr(search.length);
 
 						var newDefinition = '"../js/core/' + theRest;
-						
+
 						var pos4 = newDefinition.indexOf('.js"');
 						if (pos4 == -1) {
 							//newDefinition = newDefinition.substr(0, newDefinition.length - 1) + '.js"';
@@ -230,7 +238,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								theRest = v.substring(pos4 + search2.length);
 							}
 
-							
+
 							//console.log('theRest ' + theRest);
 							//var newRef = '"js/' + theRest + '"';
 							var newRef = '"' + theRest + '"';
@@ -248,7 +256,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-							
+
 							if (v.substr(0, 4) == '"../') {
 								v = '"' + v.substr(4);
 							}
@@ -258,13 +266,13 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 							if (v.substr(0, 4) == '"../') {
 								v = '"' + v.substr(4);
 							}
-							
+
 
 							if (v.substr(0, 3) == '"./') {
 								//v = '"' + v.substr(4);
 								//if (v.substr(v.length -))
 
-								
+
 							}
 
 							var last4 = v.substr(v.length - 4);
@@ -324,7 +332,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 	var serve_js_file_from_disk_updated_refs = function(filePath, response, callback) {
 		fs2.load_file_as_string(filePath, function (err, data) {
-			if (err) { 
+			if (err) {
 				throw err;
 			} else {
 				//console.log('');
@@ -359,7 +367,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 		}
 
 		// fns.push([fs2.load_file_as_string, [source_path_item], function(err, res_loaded) {
-		
+
 			// Not so sure I can use the exists function like this...
 		var reconstitutedPathWithinJs = split_path_within_js.join('/');
 		var firstFoundPath;
@@ -392,7 +400,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			}
 		})
 
-		// add a function check for each of the 
+		// add a function check for each of the
 	}
 
 	// A way of serving a file so that it includes custom code.
@@ -477,7 +485,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			console.log('Site_JavaScript processing req.url', req.url);
 			var remoteAddress = req.connection.remoteAddress;
 			//console.log('remoteAddress ' + remoteAddress);
-			
+
 			// Need to be able to get the resource pool from this resource.
 			//  It routes http calls to particular resources, and resources in the same pool make use of each
 			//   other.
@@ -536,14 +544,14 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 				//throw 'stop';
 
 				//var disk_path = '../../ws/js/' + wildcard_value;
-					
+
 				fs2.load_file_as_string(file_path, function (err, data) {
-					if (err) { 
+					if (err) {
 						throw err;
 					} else {
 						//console.log('');
 						//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
-						
+
 
 						//console.log('data ' + data);
 						//var servableJs = updateReferencesForServing(data);
@@ -561,9 +569,9 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 				//console.log('this.parent() ' + stringify(this.parent()));
-				// then 
+				// then
 
-				
+
 				// should have a bunch of resources from the pool.
 
 				//var pool_resources = pool.resources();
@@ -582,7 +590,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 
-				
+
 				var url_parts = url.parse(req.url, true);
 				//console.log('url_parts ' + stringify(url_parts));
 				var splitPath = url_parts.path.substr(1).split('/');
@@ -613,12 +621,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 
 					fs2.load_file_as_string('../../ws/js/web/require.js', function (err, data) {
-						if (err) { 
+						if (err) {
 							throw err;
 						} else {
 							//console.log('');
 							//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
-							
+
 
 							//console.log('data ' + data);
 							//var servableJs = updateReferencesForServing(data);
@@ -651,7 +659,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 					if (compress) {
 						fs2.load_file_as_string(disk_path, function (err, data) {
-							if (err) { 
+							if (err) {
 								throw err;
 							} else {
 
@@ -682,12 +690,12 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 								//console.log('');
 								//console.log('serve_js_file_from_disk_updated_refs filePath ' + filePath);
-								
+
 
 								//console.log('data ' + data);
 								//var servableJs = updateReferencesForServing(data);
 
-								
+
 							}
 						});
 					} else {
@@ -726,13 +734,13 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
                         /*
 						fs2.load_file_as_string(disk_path, function (err, data) {
-							if (err) { 
+							if (err) {
 								throw err;
 							} else {
 
 								// And gzipped too...
 
-								
+
 								res.writeHead(200, {'Content-Type': 'text/javascript'});
 								//response.end(servableJs);
 								res.end(data);
@@ -743,15 +751,15 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						});
 						*/
 
-						
+
 					}
-					
-					
+
+
 
 				}
 
 			}
-				
+
 
 			// For the moment, can load other files from the system.
 			//  Though this will need to check security later on too.
@@ -780,7 +788,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 			if (splitPath.length > 0) {
 				//console.log('req.url ' + req.url);
-				// 
+				//
 
 				var rurl = req.url;
 				if (rurl.substr(0, 1) == '/') rurl = rurl.substr(1);
@@ -849,7 +857,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 								var name = v.get('name').value();
 								// we search for the file on disk in that directory, and serve it if it is found.
 
-								// 
+								//
 								served_dir_names.push(name);
 
 							});
@@ -939,7 +947,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 														serve_js_file_from_disk_updated_refs(diskPath, res);
 													}
 												})
-												
+
 											}
 										}
 									}
@@ -996,7 +1004,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 						}
 					}
 				}
-				
+
 			}
 
 			*/
@@ -1015,9 +1023,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//  a gateway to deeper administration.
 		}
 	});
-	
-	
+
+/*
 	return Site_JavaScript;
-	
-	
+
+
 });
+*/
+module.exports = Site_JavaScript;

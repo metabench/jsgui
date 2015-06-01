@@ -2,9 +2,7 @@
  * Created by James on 25/07/2014.
  */
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+
 
 // As well as resource controls, we will have some other web related resources.
 //  The web db resource (adapter) will adapt a DB resource to provide a Web DB interface.
@@ -53,9 +51,11 @@ if (typeof define !== 'function') {
 
 
 
-define(["./jsgui-html", "../resource/core/resource"],
+//define(["./jsgui-html", "../resource/core/resource"],
 
-    function(jsgui, Resource) {
+    //function(jsgui, Resource) {
+
+var jsgui = require('./jsgui-html'), Resource = require('../resource/core/resource');
 
         var trim = function(obj) {
             var res = {};
@@ -253,7 +253,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                         // That's using the JSON system from Postgres to output the row as JSON, interpreted as an object here.
                     }
                 });
-                
+
             },
 
             'exists_user_by_id': function(id, callback) {
@@ -1048,7 +1048,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                     }
                 });
             },
-            
+
             'get_json_document_value_value_by_document_id': function(document_id, callback) {
                 var db = this.get('database');
                 db.execute_function_single_row('get_json_document_value_value_by_document_id', [document_id], function(err, res_get_json_document_value_value_by_document_id) {
@@ -3176,7 +3176,7 @@ define(["./jsgui-html", "../resource/core/resource"],
                                                             }
                                                         })
                                                     }
-                                                    
+
 
 
 
@@ -4136,5 +4136,7 @@ define(["./jsgui-html", "../resource/core/resource"],
 
 
         });
-        return Web_DB_Resource_Postgres;
-});
+        //return Web_DB_Resource_Postgres;
+//});
+
+module.exports = Web_DB_Resource_Postgres;

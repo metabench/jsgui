@@ -1,12 +1,20 @@
 // This could wind up having a lot of functionality in order to provide the application programmer with ease of use
 // flexibility, and high performance.
 
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(["../../core/jsgui-lang-enh", "../../resource/core/resource", "../mongo/resource/database", "../postgres/resource/database"], function(jsgui, Resource, Mongo, Postgres) {
+define(["../../core/jsgui-lang-enh", "../../resource/core/resource", "../mongo/resource/database", "../postgres/resource/database"],
+ function(jsgui, Resource, Mongo, Postgres) {
+*/
+
+var jsgui = require('../../core/jsgui-lang-enh');
+var Resource = require('../../resource/core/resource');
+var Mongo = require('../mongo/resource/database');
+var Postgres = require('../postgres/resource/database');
+
 
     var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
     var is_defined = jsgui.is_defined, tof = jsgui.tof, stringify = jsgui.stringify, each = jsgui.each;
@@ -52,6 +60,8 @@ define(["../../core/jsgui-lang-enh", "../../resource/core/resource", "../mongo/r
         }
     }
 
-    return Database_Resource_Factory;
+    //return Database_Resource_Factory;
 
-});
+//});
+
+module.exports = Database_Resource_Factory;

@@ -185,7 +185,9 @@ var Enhanced_Data_Object = Data_Object.extend({
         //console.log('Enhanced_Data_Object get sig ' + sig);
         // will also be looking at the output processors.
         //console.log('this.__data_type_name ' + this.__data_type_name);
-        if (is_defined(this.__data_type_name)) {
+        //if (is_defined(this.__data_type_name)) {
+        if (typeof this.__data_type_name !== 'undefined') {
+
             // should possibly have this assigned for controls...
             //var raw_input = a;
             //console.log('this.__data_type_name is defined: ' + this.__data_type_name);
@@ -196,7 +198,7 @@ var Enhanced_Data_Object = Data_Object.extend({
 
         } else {
             // check to see if there is a field defined.
-            if (sig == '[s]') {
+            if (sig === '[s]') {
                 //console.log('get param: ' + a[0]);
 
                 if (!this.fc) this.fc = new Fields_Collection({
@@ -312,8 +314,8 @@ var Enhanced_Data_Object = Data_Object.extend({
                                 // if it's just a string?
                                 if (field_type_name == 'ordered_string_list') {
                                     var osl = new Ordered_String_List();
-                                    this._[field_name] = osl;
-                                    return this._[field_name];
+                                    return this._[field_name] = osl;
+                                    //return this._[field_name];
                                 } else if (field_type_name == 'string') {
                                     // use a Data_Value?
                                     // Data value with no context?
@@ -331,12 +333,14 @@ var Enhanced_Data_Object = Data_Object.extend({
                                         dv.set(field_info.default);
                                     }
 
+                                    dv.parent(this);
+
 
                                     //dv.set()
 
-                                    this._[field_name] = dv;
-                                    dv.parent(this);
-                                    return this._[field_name];
+                                    return this._[field_name] = dv;
+
+                                    //return this._[field_name];
                                 } else {
                                     //console.log('');
                                     //console.log('field_type_name ' + field_type_name);
@@ -379,7 +383,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                             // perhaps getting collection fields should be moved to enhanced_data_object?
                             //  not keen on interdependencies here.
 
-                            if (field_type_name == 'collection') {
+                            if (field_type_name === 'collection') {
 
                                 // lazy creation of fields.
 
@@ -406,14 +410,14 @@ var Enhanced_Data_Object = Data_Object.extend({
                                 this._[field_name] = coll;
                                 return this._[field_name];
 
-                            } else if (field_type_name == 'control') {
+                            } else if (field_type_name === 'control') {
                                 // want to put the control in place basically.
                                 //  but it the control is not there, we can't get it.
                                 // no lazy loading of controls like for other data items.
                                 return undefined;
 
 
-                            } else if (field_type_name == 'string') {
+                            } else if (field_type_name === 'string') {
                                 var dv = new Data_Value();
                                 dv.parent(this);
                                 this._[field_name] = dv;
@@ -518,21 +522,21 @@ var Enhanced_Data_Object = Data_Object.extend({
 
                             return this._[field_name];
 
-                        } else if (sig_field == '[s,[s,s]]') {
+                        } else if (sig_field === '[s,[s,s]]') {
                             var field_name = field[0];
                             var field_info = field[1];
 
 
                             //console.log('field_info ' + stringify(field_info));
 
-                            if (field_info[0] == 'collection') {
+                            if (field_info[0] === 'collection') {
                                 var collection_type_name = field_info[1];
                                 var ncoll = new jsgui.Collection({'context': this._context});
                                 ncoll.parent(this);
                                 this._[field_name] = ncoll;
                                 return this._[field_name];
                             }
-                        } else if (sig_field == '[s,[s,o]]') {
+                        } else if (sig_field === '[s,[s,o]]') {
                             // [fieldName,['collection', objDef]]
 
                             // eg field ["entries", ["collection", {"address": "string", "family": "string", "internal": "boolean"}]]
@@ -542,7 +546,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                             var field_info = field[1];
                             var data_type_name = field_info[0];
 
-                            if (data_type_name == 'collection') {
+                            if (data_type_name === 'collection') {
                                 var objDef = field_info[1];
                                 //throw 'not supported here. should use code in enhanced-data-object.';
 
@@ -606,7 +610,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                     //console.log('res ' + res);
                     return res;
                 }
-            } else if (a.l == 0) {
+            } else if (a.l === 0) {
                 return this._;
             }
         }
@@ -682,5 +686,3 @@ module.exports = Enhanced_Data_Object;
 
 	//return Enhanced_Data_Object;
 //});
-	
-	

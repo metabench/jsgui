@@ -1,20 +1,14 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+var path = require('path'), fs = require('fs'),
+url = require('url'), jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'),
+Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-xml'),
+Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core');
 
-define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'url', './resource',
-	'../../web/jsgui-je-suis-xml', 'cookies', '../../fs/jsgui-node-fs2-core'], 
-
-	function(module, path, fs, url, jsgui, os, http, libUrl,
-		Resource, JeSuisXML, Cookies, fs2) {
-
-	
 	var stringify = jsgui.stringify, each = jsgui.each, arrayify = jsgui.arrayify, tof = jsgui.tof;
 	var filter_map_by_regex = jsgui.filter_map_by_regex;
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 	var fp = jsgui.fp, is_defined = jsgui.is_defined;
 	var Collection = jsgui.Collection;
-	
+
 	// Extends AutoStart_Resource?
 
 	// May need to change around a fair few references to make it workable.
@@ -24,7 +18,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
 	var serve_html_file_from_disk = function(filePath, response) {
 		fs2.load_file_as_string(filePath, function (err, data) {
-			if (err) { 
+			if (err) {
 				throw err;
 			} else {
 				//var servableJs = updateReferencesForServing(data);
@@ -100,7 +94,7 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			//var pool_resources = pool.resources();
 			//console.log('pool_resources ' + stringify(pool_resources));
 
-			
+
 			var url_parts = url.parse(req.url, true);
 			//console.log('url_parts ' + stringify(url_parts));
 			var splitPath = url_parts.path.substr(1).split('/');
@@ -229,9 +223,11 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 			}
 		}
 	});
-	
-	
-	return Site_Static_HTML;
-	
-	
-});
+
+
+	//return Site_Static_HTML;
+
+
+//});
+
+module.exports = Site_Static_HTML;

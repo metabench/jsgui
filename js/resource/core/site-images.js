@@ -1,4 +1,4 @@
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
@@ -12,13 +12,17 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
 
     function(module, path, fs, url, jsgui, os, http, libUrl,
              Resource, JeSuisXML, Cookies, fs2,
-
-
-             //jpeg_js,
              jsgui_jpeg,
              jsgui_png,
              Worker) {
+*/
 
+var path = require('path'), fs = require('fs'),
+url = require('url'), jsgui = require('../../web/jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'),
+Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-xml'), Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core'),
+jsgui_jpeg = require('../../image/node/jsgui-node-jpeg'),
+jsgui_png = require('../../image/node/jsgui-node-png');
+//Worker = require('webworker-threads');
 
         var stringify = jsgui.stringify, each = jsgui.eac, arrayify = jsgui.arrayify, tof = jsgui.tof;
         var call_multi = jsgui.call_multi;
@@ -1392,7 +1396,8 @@ define(['module', 'path', 'fs', 'url', '../../web/jsgui-html', 'os', 'http', 'ur
         });
 
 
-        return Site_Images;
+        //return Site_Images;
 
 
-    });
+    //});
+module.exports = Site_Images;

@@ -1,9 +1,12 @@
-
+/*
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(["../../jsgui-html", "./text-field"], 
+define(["../../jsgui-html", "./text-field"],
 	function(jsgui, Text_Field) {
-		
+*/
+
+var jsgui = require('../../jsgui-html'), Text_Field = require('./text-field');
+
 		var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof;
 		var Control = jsgui.Control;
 
@@ -12,7 +15,7 @@ define(["../../jsgui-html", "./text-field"],
 		//   be useful on very limited platforms.
 
 		// Since this is now an advanced control...
-		
+
 		var Login = Control.extend({
 
 			// Maybe should put this into a form, so that it does a form post.
@@ -21,8 +24,8 @@ define(["../../jsgui-html", "./text-field"],
 
 			'init': function(spec) {
 			    var make = this.make;
-			    
-			
+
+
 				this._super(spec);
 
 				this.set('dom.attributes.class', 'login-control');
@@ -107,22 +110,22 @@ define(["../../jsgui-html", "./text-field"],
 
 					this.add(frm);
 					// and composed of two text fields...
-					
+
 					var tf_username = new Text_Field({
 						'text': 'Username',
 						'name': 'username',
 						'value': '',
 						'type': 'text',
 						'context': this._context
-						
+
 					})
-					
+
 					frm.add(tf_username);
-					
+
 					// This is a factory function that calls the constructor,
 					//  with this context as the context.
 					//make(Text_Field({}));
-					
+
 					var tf_password = new Text_Field({
 						// a name field as well?
 						//  a name for the form
@@ -132,9 +135,9 @@ define(["../../jsgui-html", "./text-field"],
 						'value': '',
 						'type': 'password',
 						'context': this._context
-						
+
 					})
-					
+
 					frm.add(tf_password);
 
 					// <BUTTON name="submit" value="submit" type="submit">
@@ -153,13 +156,15 @@ define(["../../jsgui-html", "./text-field"],
 
 				//throw 'stop';
 
-				
-				
-				
+
+
+
 			}
 		});
-		
-		
-		return Login;
-	
-});
+
+
+		//return Login;
+
+//});
+
+module.exports = Login;

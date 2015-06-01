@@ -910,6 +910,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         })
     },
 
+    // fp removal candidate
+
     'add_event_listener': fp(function(a, sig) {
 
         /*

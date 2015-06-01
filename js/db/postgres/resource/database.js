@@ -3,20 +3,26 @@
 
 
 //http://stackoverflow.com/questions/4881059/how-to-handle-circular-dependencies-with-requirejs-amd
-
+/*
 if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 };
 
 //define("Postgres_Database", ["exports", "../../../core/jsgui-lang-enh", 'pg', '../abstract/core', '../../../resource/core/resource', '../../../resource/core/collection',
-define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstract/comparison-based-change-generator', '../../../resource/core/resource', '../../../resource/core/collection',
+define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstract/comparison-based-change-generator',
+'../../../resource/core/resource', '../../../resource/core/collection',
 	'./schema'], function(jsgui, pg, Abstract, abstract_comparison_based_change_generator, Resource, Resource_Collection, Schema_Resource) {
-    
-	
+    */
+
+var jsgui = require('../../../core/jsgui-lang-enh'), pg = require('pg'), Abstract = require('../abstract/core/all'),
+abstract_comparison_based_change_generator = require('../abstract/comparison-based-change-generator'),
+Resource = require('../../../resource/core/resource'), Resource_Collection = require('../../../resource/core/collection');
+
+
 	var Class = jsgui.Class, arrayify = jsgui.arrayify, fp = jsgui.fp;
 	var tof = jsgui.tof, is_defined = jsgui.is_defined, each = jsgui.eac, stringify = jsgui.stringify, arrayify = jsgui.arrayify, mapify = jsgui.mapify;
 	var get_item_sig = jsgui.get_item_sig, trim_sig_brackets = jsgui.trim_sig_brackets;
-	
+
 	var Data_Object = jsgui.Data_Object;
     var Collection = jsgui.Collection;
 	// This needs to provide resource access to a Postgres database.
@@ -34,7 +40,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 	//   That could hopefully be done using Data_Objects.
 	//  So, a database resource could be given a Database type Data_Object for it to represent.
 	//   Possibly using an Abstract Database?
-	
+
 	// Need to get postgres DB operating as a Resource.
 	//  That means setting up a RESTful (like) interface to it.
 
@@ -48,8 +54,8 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 	// Can make use of DBI_Postgres...?
 	//  Postgres code that is not written as a resource?
 	//   However, maybe not as DBI_Postgres acts a lot like a resource anyway.
-	
-	
+
+
 
     // This will need some significant changes.
     //  There is functionality callable with JS, and it will expose some particular functionality as a resource as well.
@@ -68,7 +74,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 	// Extend a base database class?
 
-	
+
 	var Postgres_Database = Resource.extend({
 
 		/*
@@ -78,13 +84,13 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			'password': String
 		},
 		*/
-		
+
 		// Connects to a Postgres Server.
 		// Want most functionality through get, set, and meta.get, meta.set.
-		
-		
+
+
 		'init': function(spec) {
-			
+
 			this._super(spec);
 
 			this.meta.set('type_levels', ['database', 'rdb', 'postgres']);
@@ -137,7 +143,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 			// Tables should be meta?
 			//  Or data?
-			//  
+			//
 
 
 			// Not so sure about the Resource keeping info about data / resources inside it...
@@ -213,16 +219,16 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			// Possibility of making a Postgres-Web-DB module that does not use the RESTful interface of the Postgres resource?
 			//  Probably better to make the Postgres RESTful resource first.
 
-			// 
-			
-			
+			//
+
+
 		},
-		
+
 		// and reconnect?
-		
+
 		// should know if its in a connected state?
 		// does it have a client?
-		
+
 		// possible to change db using reconnect?
 		/*
 		'reconnect': function(callback) {
@@ -255,14 +261,14 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				return res;
 			}
 			var cs = get_connection_string();
-			
+
 			// When it connects, it could get the information about the tables.
 			//  Perhcps this will be done with dbi-postgres though.
-			
+
 			// Makes use of dbi-postgres, a utility module.
-			
+
 			console.log('pre call pg connect cs', cs);
-			
+
 			pg.connect(cs, function(err, client) {
 
 				if (err) {
@@ -272,7 +278,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					client.query("SELECT NOW() as when", function(err, result) {
 						//console.log("Row count: %d",result.rows.length);  // 1
 						//console.log("Current year: %d", result.rows[0].when.getYear());
-						
+
 						// a little test.
 						that.client = client;
 						//console.log('.client has been set');
@@ -287,17 +293,17 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
                         console.log('done connect');
 						callback(null, that);
-						
+
 					});
 				}
 
 				// So, we are connected now, basically.
-				
-			});	
+
+			});
 		},
-		
+
 		// disconnect?
-		
+
 		'end': function() {
 			pg.end();
 			delete this.client;
@@ -2510,7 +2516,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 
 
-					
+
 				}
 			});
 			//callback(null, true);
@@ -2612,9 +2618,9 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 
 
         },
-		
+
 		// dbi-postgres will do this, making use of the more basic connector API.
-		
+
 		// quite possibly the resource connector should be dealing with the DB names.
 		//  it will be used to connect to other DBs as well.
 
@@ -2680,7 +2686,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				//  /full-structure
 				//  /structure (does not imply its so full)
 
-				// 
+				//
 
 
 				// May get/set from a public schema.
@@ -2763,7 +2769,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 						//  Was thinking that the tables could be meta. I'm not sure.
 
 
-						
+
 						var res = {
 							//'name': that.meta.get('name'),
 							'schemas': schema_names
@@ -2772,7 +2778,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					}
 				})
 
-				
+
 
 
 
@@ -2798,7 +2804,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 		//   Post just having some fields for the object?
 		//  Put containing all the data?
 
-		
+
 
 
 
@@ -2988,7 +2994,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				obj_table = a[0];
 			}
 
-			// 
+			//
 
 
 			if (obj_table) {
@@ -3201,12 +3207,12 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 		},
 
 
-		//SELECT * FROM information_schema.tables 
+		//SELECT * FROM information_schema.tables
 		//WHERE table_schema = 'public'
 
 		'get_table_names': function(schema_name, callback) {
 			var client = this.client;
-			
+
 			// Will do a select exists query.
             console.log('get_table_names');
 
@@ -3220,17 +3226,17 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			var query = client.query(sql);
 
 			var res = [];
-			
+
 			//can stream row results back 1 at a time
 			query.on('row', function(row) {
 			  console.log(row);
 			  //console.log("row", row); //Beatle name: John
 			  //console.log("Beatle birth year: %d", row.birthday.getYear()); //dates are returned as javascript dates
 			  //console.log("Beatle height: %d' %d\"", Math.floor(row.height/12), row.height%12); //integers are returned as javascript ints
-			  
+
 			  res.push(row.table_name);
-			  
-			  
+
+
 			});
 			query.on('end', function() {
 				//fired once and only once, after the last row has been returned and after all 'row' events are emitted
@@ -3239,14 +3245,14 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				//console.log('res ' + stringify(res));
 				callback(null, res);
 			});
-			
-			
+
+
 		},
 
 
 		'get_database_names': function(callback) {
 			// run the query.
-			
+
 			// Could use something to put the select statement together.
 			//  Put an abstract one together
 			//  Have it changed to Postgres
@@ -3256,30 +3262,30 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			// Other complexities will come when making tables out of objects, with their type definitions.
 			// Will produce a domain model and translate to DB implementation too.
 			// Will have a nice GUI for all this.
-			
+
 			// Will have a variety of database utilities and methods that interface easily with JavaScript.
 			//  Separation of the 'business' logic from the database implementation.
-			
-			
+
+
 			var client = this.client;
-			
+
 			// Will do a select exists query.
-			
+
 			var sql = 'SELECT d.datname as "Name", u.usename as "Owner", pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;';
 			var query = client.query(sql);
 
 			var res = [];
-			
+
 			//can stream row results back 1 at a time
 			query.on('row', function(row) {
 			  console.log(row);
 			  //console.log("row", row); //Beatle name: John
 			  //console.log("Beatle birth year: %d", row.birthday.getYear()); //dates are returned as javascript dates
 			  //console.log("Beatle height: %d' %d\"", Math.floor(row.height/12), row.height%12); //integers are returned as javascript ints
-			  
+
 			  res.push(row.Name);
-			  
-			  
+
+
 			});
 			query.on('end', function() {
 				//fired once and only once, after the last row has been returned and after all 'row' events are emitted
@@ -3288,10 +3294,10 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				//console.log('res ' + stringify(res));
 				callback(null, res);
 			});
-			
-			
+
+
 		},
-		
+
 		'table_exists': function(table_name, callback) {
 
 			var db_name = this.meta.get('name');
@@ -3300,7 +3306,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			// SELECT d.datname as "Name", u.usename as "Owner", pg_catalog.pg_encoding_to_char(d.encoding) as "Encoding" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid ORDER BY 1;
 			// SELECT EXISTS(d.datname as "Name", u.usename as "Owner" FROM pg_catalog.pg_database d LEFT JOIN pg_catalog.pg_user u ON d.datdba = u.usesysid WHERE... ORDER BY 1);
-			
+
 			// var sql = 'SELECT table_name FROM information_schema.tables WHERE table_schema = "' + schema_name + '"';
 
 			// We need the schema name for this too...
@@ -3328,21 +3334,21 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			});
 			var sql = sel.toString();
 			//console.log('sql ' + sql);
-			
+
 			//this.execute_query({
 			//})
-			
+
 			// execute a query with the callback.
-			
+
 			// use the multirow version....
-			
+
 			// But possibly we just want the single result.
 			//  Return the first column of the first row as the result?
 			//  I think it had a name in SQL Server parlence...
-			
+
 			// single result value
 			// s_query
-			
+
 			this.s_query(sql, function(err, res) {
 				callback(err, !!res);
 			});
@@ -3460,18 +3466,18 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                 }
             });
         },
-		
+
 		'execute_query': function(query_spec) {
 			//  not wanting (query_spec)
 			//  better to have error, callback.
 			//  not so likely to not want the whole thing in memory.
 			//  could possibly check to see if its given a bunch of callbacks...
-			
+
 			// a connected function...
 			//  if there is no client, then it needs to connect.
 			//  maybe can only really be done when there is a callback function.
-			
-			
+
+
 			// execut a query specified as an object???
 			var query;
 
@@ -3495,7 +3501,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					query = this.client.query(query_spec.query);
 				}
 			}
-			
+
 			if (query) {
 				if (is_defined(query_spec.row)) {
 					query.on('row', query_spec.row);
@@ -3511,18 +3517,18 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			}
 			//var query = this.client.query(query_spec.sql);
 			//query.on('row', query_spec.row);
-			
+
 		},
-		
+
 		'execute_function': function(fn_name, params, callback) {
-			
+
 			console.log('fn_name ' + stringify(fn_name));
-			
+
 			// what about executing an abstract function?
 			//  It seems like maybe this should be the code to do it.
-			
+
 			//  Could take params (set from) the abstract function?
-			
+
 			if (tof(fn_name) != 'string') {
 				if (fn_name.name) {
 					fn_name = fn_name.name;
@@ -3530,59 +3536,59 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					throw 'fn_name type not recognised';
 				}
 			}
-			
-			
-			
-			
+
+
+
+
 			// params could be in various forms.
-			
+
 			// name, value pair,
 			//  just the values.
-			
+
 			// perhaps more params could be given in the arguments list.
-			
+
 			// run a select statement and execute that.
 			//  select a function call.
 			//  may want to put function call into the select statement.
-			
+
 			// use a select statement.
-			
+
 			// a select statement that calls the function, with parameters.
-			
+
 			// think we need an Abstract.Function_Call item.
 			//  can be used as a from_item in a select statement.
-			
-			
+
+
 			// could say params = 4?
-			
+
 			//console.log('a) params ' + stringify(params));
 			var values = [];
 			if (tof(params) == 'string') {
 				params = [params];
 			}
-			
+
 			// the function call is the from_item.
 			var sel = new Abstract.Select({
-				//'from_item': 
+				//'from_item':
 				// the from item is a function call.
-				
+
 				'from_item': new Abstract.SQL_Function_Call({
 					'function_name': fn_name,
 					'parameters': params.length
 				})
-				
+
 			});
-			
+
 			var sql = sel.toString();
 			//console.log('sql ' + sql);
-			
+
 			//client.query({
 			//	  name: 'insert beatle',
 			//	  text: "INSERT INTO beatles(name, height, birthday) values($1, $2, $3)",
 			//	  values: ['George', 70, new Date(1946, 02, 14)]
 			//	});
-			
-			
+
+
 			//console.log('b) params ' + stringify(params));
 			//each(params, function(i, param) {
 				//console.log('param ' + stringify(param));
@@ -3590,7 +3596,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 			//});
 
             var res = [];
-			
+
 			var query = {
 				'query': {
 					'text': sql,
@@ -3619,12 +3625,12 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				'end': function(end) {
 					callback(null, res);
 				}
-				
+
 			};
-			
+
 			// then execute the query.
 			this.execute_query(query);
-			
+
 		},
 
         'execute_function_single_row': function(fn_name, params, callback) {
@@ -3643,7 +3649,7 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
                 }
             })
         },
-		
+
 		// Perhaps the query should be limited.
 		's_query': function(sql, callback) {
 			var res, that = this, first = true;
@@ -3667,13 +3673,13 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 				'error': function(error) {
 					console.log('s_query ' + error);
 					callback.call(that, error);
-					
+
 				}
 			});
-			
-			
+
+
 		},
-		
+
 		'execute_multirow_to_callback': function(sql, callback) {
 			var res = [];
 			var that = this;
@@ -3689,27 +3695,27 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					callback.call(that, undefined, res);
 				},
 				'error': function(error) {
-					
+
 					// error if the schema already exists.
 					//  not sure about throwing a JavaScript error - they are not that useful
-					
+
 					// May have a way of indicating the query has ended with an error.
-					
+
 					// Could maybe return it as parameter 0 all the time.
 					//  Maybe return a query_result object
 					//  array: [error, result]
-					
+
 					// [undefined, true]
 					// [error, undefined]
 					console.log(error);
 					callback.call(that, error);
-					
-					
-					
+
+
+
 					// however, this means an error in the SQL.
 					//  May not want SQL errors going outside of here so much.
-					
-					
+
+
 				}
 			});
 		},
@@ -3732,48 +3738,49 @@ define(["../../../core/jsgui-lang-enh", 'pg', '../abstract/core/all', '../abstra
 					callback.call(that, undefined, res);
 				},
 				'error': function(error) {
-					
+
 					// error if the schema already exists.
 					//  not sure about throwing a JavaScript error - they are not that useful
-					
+
 					// May have a way of indicating the query has ended with an error.
-					
+
 					// Could maybe return it as parameter 0 all the time.
 					//  Maybe return a query_result object
 					//  array: [error, result]
-					
+
 					// [undefined, true]
 					// [error, undefined]
 					console.log(error);
 					callback.call(that, error);
-					
-					
-					
+
+
+
 					// however, this means an error in the SQL.
 					//  May not want SQL errors going outside of here so much.
-					
-					
+
+
 				}
 			});
 		}
 
         // load_abstract_schema
-		
+
 		// could be an abstract function
 		//  or abstract generation. abstract-postgres-gen?
 		//  extends the normal abstract?
-		
+
 		// May want to ensure an abstract schema is in the db
 		//  Abstract table, etc.
 		// Ensure abstract functions are in the db
-		
-	});
-	
-	//exports.Postgres_Database = Postgres_Database;
-	
-	return Postgres_Database;
-	
-	//return jsgui;
-	
-});
 
+	});
+
+	//exports.Postgres_Database = Postgres_Database;
+
+	//return Postgres_Database;
+
+	//return jsgui;
+
+//});
+
+module.exports = Postgres_Database;
