@@ -82,6 +82,7 @@ var arrayify = j.arrayify;
 var mapify = j.mapify;
 var are_equal = j.are_equal;
 var get_item_sig = j.get_item_sig;
+var get_a_sig = j.get_a_sig;
 var set_vals = j.set_vals;
 var truth = j.truth;
 var trim_sig_brackets = j.trim_sig_brackets;
@@ -3860,7 +3861,12 @@ var Data_Object = Evented_Class.extend({
     //
 
 
-    'set': fp(function(a, sig) {
+    //'set': fp(function(a, sig) {
+    'set': (function() {
+      var a = arguments;
+      a.l = arguments.length;
+      var sig = get_a_sig(arguments, 1);
+      //console.log('sig', sig);
         // property_name, value
 
         // May override this with collections...
@@ -4019,6 +4025,8 @@ var Data_Object = Evented_Class.extend({
 
                     // Think we need some kind of recursive get-set type of routine.
                     //  Get will get it to greate objects that are fields anyway.
+
+                    //console.log('property_name', property_name);
 
                     var split_pn = property_name.split('.');
                     //console.log('split_pn.length ' + split_pn.length);

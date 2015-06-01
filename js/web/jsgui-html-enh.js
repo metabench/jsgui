@@ -790,7 +790,13 @@ Control = jsgui.Control = jsgui.Control.extend({
         cf[name] = value;
       }
 
-      return this._super(name, value);
+      if (typeof value !== 'undefined') {
+        return this._super(name, value);
+      } else {
+        return this._super(name);
+      }
+
+
 
 
       /*

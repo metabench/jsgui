@@ -1083,6 +1083,29 @@ if (typeof window === 'undefined') {
     * get_item_sig([1, 2]) ==> 'a'
     * get_item_sig([1, 2], 1) ==> '[n,n]'
     */
+
+  var get_a_sig = function(a) {
+    // For arguments
+    // String building optimized for newer JS?
+
+    var c = 0, l = a.length;
+    var res = '[';
+    var first = true;
+    for (c = 0; c < l; c++) {
+      if (!first) {
+        res = res + ',';
+      } else {
+        first = false;
+      }
+      res = res + get_item_sig(a[c]);
+    }
+
+    res = res + ']';
+    return res;
+
+  }
+
+
 	var get_item_sig = function(i, arr_depth) {
 
 	    // an option about how far into the array to look.
@@ -1117,7 +1140,7 @@ if (typeof window === 'undefined') {
 
 
 
-		if (t1 == 'string') {
+		if (t1 === 'string') {
 			res = 's';
 		} else if (t1 === 'number') {
 			res = 'n';
@@ -1132,6 +1155,8 @@ if (typeof window === 'undefined') {
 				//console.log('i ' + i);
 				//console.log('t ' + t);
 			//}
+
+      // But with array-like?
 
 
 
@@ -3121,6 +3146,7 @@ if (typeof window === 'undefined') {
 		'arrayify' : arrayify,
 		'mapify' : mapify,
 		'are_equal' : are_equal,
+    'get_a_sig': get_a_sig,
 		'get_item_sig' : get_item_sig,
 		'set_vals': set_vals,
 		'truth': truth,
