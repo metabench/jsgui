@@ -171,6 +171,8 @@ var Enhanced_Data_Object = Data_Object.extend({
     // copied from Data_Object because Data_Object was not able to deal with collections within itself.
     //  code works, but should make this call data_object code where possible.
 
+    // Candidate for optimization
+
     'get': fp(function(a, sig) {
         // More difficult to maintain with the separate get code.
         //  Handle specific cases here, otherwise use _super.

@@ -64,6 +64,7 @@ var Data_Value = Evented_Class.extend({
             this._ = spec.value;
         }
 
+        /*
         if (jsgui.__data_id_method == 'init') {
             //throw 'stop';
             // and there may be a map in the context.
@@ -98,6 +99,7 @@ var Data_Value = Evented_Class.extend({
 
             }
         }
+        */
 
         //this._val = spec;
 

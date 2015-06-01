@@ -1690,7 +1690,7 @@ var Data_Object = Evented_Class.extend({
                 //console.log(stack);
 
                 // no such function... but there should be something declared in many situations.
-                console.trace("Here I am!")
+
                 throw 'stop, currently unsupported.';
                 this.__id = new_data_object_id();
 
