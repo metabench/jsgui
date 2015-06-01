@@ -314,6 +314,7 @@ var Website_Resource = Web_Resource.extend({
         router.set_route('js/*', js_resource, js_resource.process);
         // As well as this, it could get the JavaScript resource to serve the JavaScript from the app's js directory.
 
+
         js_resource.serve_directory('js');
 
 

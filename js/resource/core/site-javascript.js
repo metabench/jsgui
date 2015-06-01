@@ -431,6 +431,7 @@ Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-x
 			// could have a collection of directories, indexed by name, that get served.
 
 			// Index the collection by string value?
+
 			this.meta.set('served_directories', new Collection({'index_by': 'name'}));
 
 		},
@@ -448,7 +449,7 @@ Resource = require('./resource'), JeSuisXML = require('../../web/jsgui-je-suis-x
 		'serve_directory': function(path) {
 			// Serves that directory, as any files given in that directory can be served from /js
 			var served_directories = this.meta.get('served_directories');
-			//console.log('served_directories ' + stringify(served_directories));
+			console.log('served_directories ' + stringify(served_directories));
 			//served_directories.push(path);
 			served_directories.push({
 				'name': path

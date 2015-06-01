@@ -1745,9 +1745,9 @@ var Collection = Data_Object.extend({
     * @func
     * @param value
     */
-    'add': function(value) {
-        return this.push(value);
-    },
+    //'add': function(value) {
+    //    return this.push(value);
+    //},
 
 
    /**
@@ -1864,6 +1864,9 @@ var Collection = Data_Object.extend({
 
 
 });
+
+var p = Collection.prototype;
+p.add = p.push;
 
 
 /**

@@ -110,7 +110,7 @@ var Directory_Item_View = Item_View.extend({
                       //console.log('');
                       //console.log('');
 
-                      ctrl_subitems.rec_desc_ensure_ctrl_el_refs();
+                      //ctrl_subitems.rec_desc_ensure_ctrl_el_refs();
 
                       ctrl_subitems.add(sub_dir_view);
                       //

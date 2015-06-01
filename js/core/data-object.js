@@ -4303,7 +4303,6 @@ var Data_Object = Evented_Class.extend({
                                 this._[property_name] = value;
                                 res = value;
 
-
                                 //console.log('set data object next using value');
                             }
 
@@ -4598,74 +4597,85 @@ Data_Object.extend = function(prop, post_init) {
         //throw('*1 stop');
     }
     var prop_item, t_prop_item, tmp, name, res;
-    for (name in prop) {
 
-        prop_item = prop[name];
-        if (name.charAt(0) === '#') {
+    var keys = Object.keys(prop);
+    //var key;
+    for (var c = 0, l = keys.length; c < l; c++) {
+      name = keys[c];
+      prop_item = prop[name];
 
-            // direct copy with '#'... not been using that.
+      if (name.charAt(0) === '#') {
 
-            prototype[name.substring(1)] = prototype[prop_item];
-        } else {
-            // if it's a function, then do the following.
+          // direct copy with '#'... not been using that.
 
-            // if it's an object, then it may be something specific to the DataObject type.
-            //  such as setting / extending fields of an object.
+          prototype[name.substring(1)] = prototype[prop_item];
+      } else {
+          // if it's a function, then do the following.
 
-            // some specific non-object things will be set to the prototype.
-            //  it will be possible to look at this info, the fields chain in the object, will take a bit of trial, error and design.
+          // if it's an object, then it may be something specific to the DataObject type.
+          //  such as setting / extending fields of an object.
 
-            t_prop_item = typeof prop_item;
-            //console.log('prop_item' + prop_item);
-            if (t_prop_item === 'function') {
+          // some specific non-object things will be set to the prototype.
+          //  it will be possible to look at this info, the fields chain in the object, will take a bit of trial, error and design.
 
-                prototype[name] = typeof _super[name] === 'function' && fnTest.test(prop_item) ?
-                // had some difficulty using fp() with 'init' functions. could
-                // it have to do with function names?
+          t_prop_item = typeof prop_item;
+          //console.log('prop_item' + prop_item);
+          if (t_prop_item === 'function') {
 
-                (function(name, fn) {
-                    return function() {
-                        tmp = this._super;
-                        this._super = _super[name];
-                        res = fn.apply(this, arguments);
-                        this._super = tmp;
-                        return res;
-                    };
-                })(name, prop[name]) : prop[name];
+              prototype[name] = typeof _super[name] === 'function' && fnTest.test(prop_item) ?
+              // had some difficulty using fp() with 'init' functions. could
+              // it have to do with function names?
 
-            } else if (t_prop_item === 'object' || t_prop_item === 'boolean') {
+              (function(name, fn) {
+                  return function() {
+                      tmp = this._super;
+                      this._super = _super[name];
+                      res = fn.apply(this, arguments);
+                      this._super = tmp;
+                      return res;
+                  };
+              })(name, prop[name]) : prop[name];
 
-                // don't put these in the prototype.
-                //  they are not for the object itself.
-                //console.log('property name', name);
-                if (name == 'class_name') {
-                    for_class['_class_name'] = prop_item;
-                } else if (name == 'fields') {
-                    // maybe call it something else, fields is a function.
-                    // fields could be a function, so call it _fields
-                    // it sets the array of fields... could be an object representing fields but an array is better because the order gets preserved.
-                    for_class['_fields'] = prop_item;
-                    //this['_fields'] = prop_item;
-                    // then the fields will be read upon initialization?
-                    //  getting all the fields up the chain...
-                } else if (name == 'connect_fields') {
-                    // maybe call it something else, fields is a function.
-                    // fields could be a function, so call it _fields
+          } else if (t_prop_item === 'object' || t_prop_item === 'boolean') {
 
-                    for_class['_connect_fields'] = prop_item;
+              // don't put these in the prototype.
+              //  they are not for the object itself.
+              //console.log('property name', name);
+              if (name == 'class_name') {
+                  for_class['_class_name'] = prop_item;
+              } else if (name == 'fields') {
+                  // maybe call it something else, fields is a function.
+                  // fields could be a function, so call it _fields
+                  // it sets the array of fields... could be an object representing fields but an array is better because the order gets preserved.
+                  //for_class['_fields'] = prop_item;
+                  for_class._fields = prop_item;
+                  //this['_fields'] = prop_item;
+                  // then the fields will be read upon initialization?
+                  //  getting all the fields up the chain...
+              } else if (name == 'connect_fields') {
+                  // maybe call it something else, fields is a function.
+                  // fields could be a function, so call it _fields
 
-                    // then the fields will be read upon initialization?
-                    //  getting all the fields up the chain...
+                  //for_class['_connect_fields'] = prop_item;
+                  for_class._connect_fields = prop_item;
 
-                } else {
-                    prototype[name] = prop[name];
-                }
+                  // then the fields will be read upon initialization?
+                  //  getting all the fields up the chain...
 
-            }  else {
-                prototype[name] = prop[name];
-            }
-        };
-    };
+              } else {
+                  prototype[name] = prop[name];
+              }
+
+          }  else {
+              prototype[name] = prop[name];
+          }
+      };
+    }
+
+    //for (name in prop) {
+
+
+    //};
 
     // Looks like this needs to be changed just to be local...
 
@@ -4682,9 +4692,9 @@ Data_Object.extend = function(prop, post_init) {
                     this.post_init.apply(this, arguments);
                 }
 
-                if (post_init) {
-                    post_init.call(this);
-                }
+                //if (post_init) {
+                //    post_init.call(this);
+                //}
                 // Check to see if there are further functions to call...
                 //  things that have got put into the extend function?
 
@@ -4699,60 +4709,6 @@ Data_Object.extend = function(prop, post_init) {
                 return new Class(spec);
             }
         }
-
-        /*
-        if (!initializing && this.init) {
-            //this.constructor =
-            this.init.apply(this, arguments);
-            if (this.post_init) {
-                //this.post_init();
-                this.post_init.apply(this, arguments);
-            } else {
-                //return return new Class(((arguments[0] || {}).abstract = true));
-
-            }
-        }
-        */
-
-        /*
-        if (!initializing &! this.init) {
-            //console.log('this looks like it has been called without a "new" keyword, as a constructor');
-
-            // init_no_new
-            //console.log('this.init_no_new ' + this.init_no_new);
-            // so that does not help... yet.
-            //console.log('tof(prop) ' + tof(prop));
-
-            //var prop2 = clone(prop);
-            //console.log('tof(prop2) ' + tof(prop2));
-            //prop2.abstract = true;
-
-            var spec = arguments[0] || {};
-
-            spec.abstract = true;
-
-            //var newClass = new Class(spec);
-
-            //return newClass;
-            return new Class(spec);
-
-
-            //function object(o) {
-            //	 function F() {}
-            //	 F.prototype = o;
-            //	 return new F();
-            //}
-
-
-            //function object(o) {
-            //
-            //}
-
-            //if (this.init_no_new) {
-            //	this.init_no_new.apply(this, arguments);
-            //}
-        }
-        */
 
     };
     Class.prototype = prototype;

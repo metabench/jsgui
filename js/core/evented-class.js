@@ -40,32 +40,9 @@ var Evented_Class = Class.extend({
     },
 
     'raise_event': fp(function(a, sig) {
-        // The events system is not working right on the server.
 
-        //console.log('Data_Object.raise_event');
-        // a general event listener would be nice... so we don't need to tell it what events we are listening for, but it presents us with that
-        //  information.
-
-        // A more generalized event handler?
-
-        // this._bound_general_handler
-        //  useful when not quite sure what the event name is... can help with debugging when we can output the event name.
-
-        //console.log('1) raise_event sig ' + sig);
-        //console.log('raise_event a.l ' + a.l);
         var that = this;
-
-        // Will change the way this works fairly significantly.
-        //  First arg is the event name
-        //  Second, third etc are the first, second stc arguments.
-
-        // Won't be so much about checking the sig.
-        // Maybe a particular one for when it is just a string (no arguments)?
-
-        //  Will get the arguments into an array, and use that for apply.
-
-        // Bound general handlers... get called with the event name as the first param.
-        //  Then the other event params as further params.
+        var c, l;
 
         if (sig == '[s]') {
             // just raise an event, given with no parameters,
@@ -77,54 +54,8 @@ var Evented_Class = Class.extend({
             //console.log('Data_Object raise_event ' + event_name);
 
             var bgh = this._bound_general_handler;
-
-            // bound general handler - handles all events???
-
-            //console.log('bgh ' + bgh);
-
-            // not using general handlers for the moment...
-
-            // Will be a convenient way to listen to all events from an object.
-
-            /*
-
-             if (bgh && tof(bgh) == 'array') {
-             each(bgh, function(i, v) {
-             //console.log('calling bgh handler');
-
-             v.call(target, target, event_name);
-             });
-             }
-             if (that._parents) {
-             console.log('Data_Object raise_event that._parents.length ' + that._parents.length);
-             }
-
-             */
-
-            //var parent_obj;
-
-            // Maybe don't do that for the moment.
-            //  It may be better to not have this automatic as it could slow things down, make things more complex.
-
-            /*
-
-             each(that._parents, function(parent_id, parent_and_position_pair) {
-             //parent_obj = parent_and_position_pair[0];
-             //parent_obj.raise_event(target, event_name);
-             parent_and_position_pair[0].raise_event(target, event_name);
-             });
-             */
             var be = this._bound_events;
 
-            // is there really a new context?
-            //  should contexts have their own IDs?
-
-            //console.log('this.__id ' + this.__id);
-
-            // These can get too many bound events after multiple requests at the moment.
-            //  Need to fix this.
-            //console.log('be', be);
-            //console.log('this', this);
             if (be) {
                 // This is attaching events to the same object.
                 //  Not sure why, but this needs to be fixed.
@@ -138,31 +69,9 @@ var Evented_Class = Class.extend({
                     //console.log('1) raise_event bei.length ' + bei.length);
                     var res = [];
 
-                    each(bei, function(i, v) {
-                        // I think it knows what the name of the event
-                        // is already.
-
-                        // get the target, the event name and the params
-                        // all at once?
-                        // That seems OK for an event handler.
-                        // Could have a simpler handler? But maybe it
-                        // hides necessary complexity.
-                        // perhaps don't need to put target in twice,
-                        // having it as a parameter?
-                        // maybe the this context would be enough.
-
-                        // just call it?
-                        //  or is there mor abstraction?
-
-                        //v.call(target, target, event_name);
-                        //console.log('pre call');
-                        res.push(v.call(target));
-
-                        // Perhaps I have sussed out the problem.
-                        //  Or some of it?
-
-
-                    });
+                    for (c = 0, l = bei.length; c < l; c++) {
+                      res.push(bei[c].call(target));
+                    }
 
                     //console.log('Evented_Class raise_event [s] res', res);
                     return res;
@@ -179,14 +88,13 @@ var Evented_Class = Class.extend({
             //console.log('event_name ' + event_name);
 
             var additional_args = [];
-            for (var c = 1, l = a.l; c < l; c++) {
+            for (c = 1, l = a.l; c < l; c++) {
                 additional_args.push(a[c]);
             }
 
             var be = this._bound_events;
             //console.log('be ' + tof(be));
             if (be) {
-
                 // The controls that are activated on the clients need to have bound events.
 
                 //console.log('event_name', event_name);
@@ -200,28 +108,11 @@ var Evented_Class = Class.extend({
 
                         // They are handlers that get called.
 
-                        each(bei, function(i, v) {
-                            // I think it knows what the name of the event
-                            // is already.
+                        for (c = 0, l = bei.length; c < l; c++) {
+                          if (bei[c]) res.push(bei[c].apply(target, additional_args));
 
-                            // get the target, the event name and the params
-                            // all at once?
-                            // That seems OK for an event handler.
-                            // Could have a simpler handler? But maybe it
-                            // hides necessary complexity.
-                            // perhaps don't need to put target in twice,
-                            // having it as a parameter?
-                            // maybe the this context would be enough.
+                        }
 
-                            //v.call(target, target, event_name);
-                            //console.log('1) additional_args', additional_args);
-                            if (v) res.push(v.apply(target, additional_args));
-                            // Perhaps I have sussed out the problem.
-                            //  Or some of it?
-
-
-                        });
-                        //console.log('Evented_Class raise_event [s] res', res);
                         return res;
                     } else {
                         return false;
@@ -236,12 +127,6 @@ var Evented_Class = Class.extend({
 
         }
 
-        // With a single event handler being raised, it's hard to pass on the result of that event.
-
-        // Click events get raised, but they would have a result.
-        //  DO)M events are a bit different to the standard events but work within the same system.
-
-
         if (sig == '[s,o]') {
             var be = this._bound_events;
             //console.log('this._bound_events', this._bound_events);
@@ -254,9 +139,13 @@ var Evented_Class = Class.extend({
                     //console.log('1) raise_event bei.length ' + bei.length);
                     var res = [];
 
-                    each(bei, function(i, v) {
-                        res.push(v.call(target, a[1]));
-                    });
+                    for (c = 0, l = bei.length; c < l; c++) {
+                      res.push(bei[c].call(target, a[1]));
+                    }
+
+                    //each(bei, function(i, v) {
+                    //    res.push(v.call(target, a[1]));
+                    //});
 
                     //console.log('Evented_Class raise_event [s] res', res);
                     return res;
@@ -264,213 +153,18 @@ var Evented_Class = Class.extend({
             }
         }
 
-
-        // Raise event with multiple arguments?
-        //  First argument is the event name. Arguments after that are the arguments for the handler.
-
-        /*
-         if (a.l == 2) {
-         // a.re()
-         // a.re calling the function?
-         // or even a.r?
-         // recalling the original function could work.
-         //console.log('2) a ' + stringify(a));
-         //console.log('a[0] ' + a[0]);
-         //console.log('this ' + this);
-
-         //console.log('***** a ' + stringify(a));
-
-         return this.raise_event(this, a[0], a[1]);
-
-         } else if (a.l == 3) {
-
-         // binds a function to the event.
-         var target = a[0];
-         //console.log('target a[0] ' + a[0]);
-
-         //console.log('!!!!!a ' + stringify(a));
-
-         var event_name = a[1];
-         var event_params = a[2];
-
-
-
-         if (tof(event_params) == 'collection') {
-         var stack = new Error().stack
-         console.log(stack);
-
-         throw '25) stop';
-
-         }
-
-
-         var bgh = this._bound_general_handler;
-
-
-         if (bgh && tof(bgh) == 'array') {
-
-         //console.log('bgh.length ' + bgh.length);
-         each(bgh, function(i, v) {
-         //console.log('calling bgh handler');
-
-         v.call(target, target, event_name, event_params);
-         })
-         }
-
-
-         // the parent Collection will be told about a change for example.
-         //  Perhaps there should be two stages of propagation... one so that the parent can do its updates (like index), another so that it
-         //  could call the events in a bubbling order.
-
-         // may use a .parent function
-         // DataObjects may have more than one parent...
-         //  But it does make sense for a data heirachy.
-         //  Some things will be expressable as data heirachies.
-         //   Particularly objects in documents, collections.
-         //  Something could be in a number of collections though.
-         //  Will need to deal with these cases, for the moment want to get this server execution path going.
-
-         // It's doing quite a few things in the mean-time, the various resources will all help the system fir together.
-         //  It would be very interesting for users of the site to view real-time edits and updates.
-         // Perhaps websockets could come in use for showing these things.
-         // The site will be supporting quite a lot of content.
-         //  Not sure quite how many page views there will be
-         //  Likely to go for a fairly small amount of advertising when people are viewing the project documentation.
-         // I think there could be quite good pieces of documentation and demos.
-         // Discussions too.. there will be discussions about pieces of code that I release.
-
-
-         // need to deal with parents of Data_Objects... have it so that they are the collection that the object was put inside by default.
-
-         // it will do this for each parent.
-
-         // Will be a lot of event propagation.
-         //  It could turn out very useful. Will have a 2-way interaction.
-         //   More finely grained than Backbone.
-
-
-         //var each_parent = function(callback) {
-         //
-         //}
-
-         // It is up to the item itself to raise the event in its parent(s).
-
-
-         //each(that._parents, function(parent_id, parent_and_position_pair) {
-         //	var parent_obj = parent_and_position_pair[0];
-         //	parent_obj.raise_event(target, event_name, event_params);
-         //});
-
-
-         //if (this.has('parent')) {
-         //console.log('has parent');
-
-         //	this.get('parent').raise_event(target, event_name, event_params);
-         //}
-
-
-
-         // _bound_events needs some looking at - currently major performance issues.
-         //   1 July 2013 still causing major performance issues... keeps getting bigger when new
-         //    pages are served.
-         var be = this._bound_events;
-
-         //console.log('this.__id ' + this.__id);
-
-         if (be) {
-         var bei = be[event_name];
-         if (tof(bei) == 'array') {
-         //console.log('2) raise_event bei.length ' + bei.length);
-         //console.log('');
-         each(bei, function(i, v) {
-         // I think it knows what the name of the event
-         // is already.
-
-         // get the target, the event name and the params
-         // all at once?
-         // That seems OK for an event handler.
-         // Could have a simpler handler? But maybe it
-         // hides necessary complexity.
-         // perhaps don't need to put target in twice,
-         // having it as a parameter?
-         // maybe the this context would be enough.
-
-         //console.log('event_params ' + stringify(event_params));
-
-         //v.call(target, target, event_name, event_params);
-         //console.log('tof(event_name) ' + tof(event_name));
-         //console.log('tof(event_params) ' + tof(event_params));
-         //console.log(
-
-
-
-         //v.call(target, target, event_name, event_params);
-         //console.log('calling');
-         v.call(target, event_params);
-
-         // the bound events...
-         //  expect target to be a property of the events.
-
-
-
-         });
-         }
-         }
-
-         }
-
-         */
-
         return [];
     }),
 
     // also just raise and trigger?
 
-    'raise': function() {
-        return this.raise_event.apply(this, arguments);
-    },
-    'trigger': function() {
-        return this.raise_event.apply(this, arguments);
-    },
+    //'raise': function() {
+    //    return this.raise_event.apply(this, arguments);
+  //},
+    //'trigger': function() {
+    //    return this.raise_event.apply(this, arguments);
+    //},
 
-    // fp this
-    //
-
-
-    // fp losing the context?
-
-
-    // Could do further tests on fp to see that it's dealing with the context (this) OK?
-    //  Maybe fp will only work for anonymous functons?
-    //   we could come up with another way of defining them if necessary.
-    // I don't think this made the difference - I think fp is working and tested with
-    //  context.
-    /* ************************* */
-    /* *** not used anywhere *** */
-    /* ************************* */
-    '__add_event_listener': function (eventName, handler) {
-        var a = arguments;
-        if (a.length == 1) {
-            handler = eventName;
-            eventName = null;
-        }
-
-        if (is_defined(eventName)) {
-            this._bound_events = this._bound_events || {};
-
-            // removing from a bound general handler being slow?
-            //  perhaps... but we won't have so many of these anyway.
-            //  could get id for object and have it within collection.
-            //   But not sure about using collections for events... collections use events...?
-            if (!this._bound_events[eventName]) this._bound_events[eventName] = [];
-
-            var bei = this._bound_events[eventName];
-            if (tof(bei) == 'array') {
-                //console.log('add_event_listener bei.length ' + bei.length);
-                bei.push(handler);
-            };
-        }
-    },
 
     'add_event_listener' : fp(function(a, sig) {
 
@@ -491,7 +185,8 @@ var Evented_Class = Class.extend({
             console.log(stack);
             throw 'stop';
             this._bound_general_handler = this._bound_general_handler || [];
-            if (tof(this._bound_general_handler) == 'array') {
+            if (Array.isArray(this._bound_general_handler)) {
+            //if (tof(this._bound_general_handler) == 'array') {
                 this._bound_general_handler.push(a[0]);
             };
         }
@@ -519,43 +214,13 @@ var Evented_Class = Class.extend({
 
             var bei = this._bound_events[event_name];
             //console.log('this._id() ' + this._id());
-            if (tof(bei) == 'array') {
+            if (Array.isArray(bei)) {
+            //if (tof(bei) == 'array') {
                 //console.log('this', this);
                 //console.log('add_event_listener bei.length ' + bei.length);
                 bei.push(fn_listener);
             };
         }
-
-        //console.log('ael finished');
-
-
-
-        // an index that keeps track of the positions of the items
-        // in it?
-        // so functions could get added (no string key, just put
-        // there).
-        // how to get the order back quickly? Is there a way to
-        // avoid the indivual comparisons?
-        // could tag the functions with something?
-
-        // Could be done differently with different data structures.
-        // Not for now.
-        // Could retain a node in a linked list. That way it could
-        // be deleted quickly.
-
-        // Quite simple with an array. This code with the type
-        // checking leaves the possibility of putting in a different
-        // data structure. Linked list could be quite good. Can
-        // quickly insert onto the end.
-        // Can quickly remove a node (and we'll keep track of it
-        // through a closure in this function, this fn will return
-        // the remove fn).
-
-        // ll_ensure?
-
-        //ll_ensure(this, '_bound_events')
-
-        //this.ensure()?
 
     }),
 
@@ -580,10 +245,10 @@ var Evented_Class = Class.extend({
             //console.log('event_name', event_name);
             var bei = this._bound_events[event_name] || [];
 
-            var tbei = tof(bei);
+            //var tbei = tof(bei);
             //console.log('tbei', tbei);
 
-            if (tbei == 'array') {
+            if (Array.isArray(bei)) {
                 // bei.push(fn_listener);
 
                 var c = 0, l = bei.length, found = false;
@@ -626,5 +291,9 @@ var Evented_Class = Class.extend({
         this.on(event_name, inner_handler);
     }
 });
+
+var p = Evented_Class.prototype;
+p.raise = p.raise_event;
+p.trigger = p.raise_event;
 
 module.exports = Evented_Class;

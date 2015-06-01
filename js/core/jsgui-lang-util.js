@@ -28,15 +28,16 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
 	*/
     var jsgui = require('./jsgui-lang-essentials');
 var Data_Structures = require('./jsgui-data-structures');
-var Data_Object = require('.//data-object');
+var Data_Value = require('./data-value');
+var Data_Object = require('./data-object');
 var Collection = require('./collection');
-	
+
 	// Will use data structures.
 	//  Not sure about using all of them here.
-	
+
 	// A mix-in system of enhancing the data structures may work best.
 	//  It does not start with B+ tree, but that gets brought in?
-	
+
 	// However, having B+ as part of it could work quite nicely.
 
 
@@ -68,7 +69,7 @@ var Collection = require('./collection');
 jsgui.Data_Object = Data_Object;
 jsgui.Collection = Collection;
 
-jsgui.Data_Value = Data_Object.Data_Value;
+jsgui.Data_Value = Data_Value;
 
 //var B_Plus_Tree = Data_Structures.B_Plus_Tree;
 var Sorted_KVS = Data_Structures.Sorted_KVS;

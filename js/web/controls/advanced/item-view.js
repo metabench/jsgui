@@ -27,10 +27,11 @@ var vertical_expander = require('./vertical-expander');
 
 				this._super(spec);
 				this.__type_name = 'item_view';
-				var dom = this.get('dom');
+				//var dom = this.get('dom');
 
 				//dom.set('tagName', 'div');
-				dom.get('attributes').set('class', 'item');
+				//dom.get('attributes').set('class', 'item');
+				this.add_class('item');
 
 				// The item's likely to have a name.
 				//var content = this.get('content');
@@ -54,20 +55,23 @@ var vertical_expander = require('./vertical-expander');
 
 				var ctrl_icon = new Control({'context': this._context});
 				//ctrl_icon.get('dom').set('tagName', 'div');
-				ctrl_icon.get('dom').get('attributes').set('class', 'icon');
+				//ctrl_icon.get('dom').get('attributes').set('class', 'icon');
+				ctrl_icon.add_class('icon');
 
 				this.add(ctrl_icon);
 
 				var ctrl_item_info = new Control({'context': this._context});
 				//ctrl_item_info.get('dom').set('tagName', 'div');
-				ctrl_item_info.get('dom').get('attributes').set('class', 'info');
+				//ctrl_item_info.get('dom').get('attributes').set('class', 'info');
+				ctrl_item_info.add_class('info');
 				this.add(ctrl_item_info);
 
 				// then add a name control. this will have a text node inside.
 
 				var ctrl_name = new Control({'context': this._context});
 				//ctrl_name.get('dom').set('tagName', 'div');
-				ctrl_name.get('dom').get('attributes').set('class', 'name');
+				//ctrl_name.get('dom').get('attributes').set('class', 'name');
+				ctrl_name.add_class('name');
 
 				//var name = this.get('name').get();
 				var name = this.get('name');
@@ -80,16 +84,19 @@ var vertical_expander = require('./vertical-expander');
 
 
 				var ctrl_tn_name = new jsgui.textNode({'text': name, 'context': this._context});
-				ctrl_name.get('content').add(ctrl_tn_name);
+				//ctrl_name.get('content').add(ctrl_tn_name);
+				ctrl_name.add(ctrl_tn_name);
 
 				var ctrl_clearall_0 = new Control({'context': this._context});
 				//ctrl_clearall_0.get('dom').set('tagName', 'div');
-				ctrl_clearall_0.get('dom').get('attributes').set('class', 'clearall');
+				//ctrl_clearall_0.get('dom').get('attributes').set('class', 'clearall');
+				ctrl_clearall_0.add_class('clearall');
 				this.add(ctrl_clearall_0);
 
 				var ctrl_subitems = new Control({'context': this._context});
 				//ctrl_subitems.get('dom').set('tagName', 'div');
-				ctrl_subitems.get('dom').get('attributes').set('class', 'subitems');
+				//ctrl_subitems.get('dom').get('attributes').set('class', 'subitems');
+				ctrl_subitems.add_class('subitems');
 
 				this.add(ctrl_subitems);
 				ctrl_subitems.active();
@@ -98,7 +105,8 @@ var vertical_expander = require('./vertical-expander');
 
 				var ctrl_clearall = new Control({'context': this._context});
 				//ctrl_clearall.get('dom').set('tagName', 'div');
-				ctrl_clearall.get('dom').get('attributes').set('class', 'clearall');
+				//ctrl_clearall.get('dom').get('attributes').set('class', 'clearall');
+				ctrl_clearall.add_class('clearall');
 				this.add(ctrl_clearall);
 				this.ctrl_subitems = ctrl_subitems;
 

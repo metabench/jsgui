@@ -28,6 +28,7 @@ var group = jsgui.group;
 var str_arr_mapify = jsgui.str_arr_mapify;
 var map_Controls = jsgui.map_Controls;
 var extend = jsgui.extend;
+var is_ctrl = jsgui.is_ctrl;
 
 //var Context_Menu;
 
@@ -178,15 +179,58 @@ var mapDomEventNames = {
 };
 
 
+//var t_content;
 var desc = function(ctrl, callback) {
   if (ctrl.get) {
+
+
+    var content = ctrl.get('content');
+    //console.log('content', content);
+    var t_content = typeof content;
+    //console.log('t_content', t_content);
+
+    if (t_content === 'string' || t_content === 'number') {
+
+    } else {
+      // it's a Collection
+
+      var arr = content._arr;
+      var c, l = arr.length;
+
+      //console.log('l', l);
+      var item, t_item;
+
+      for (c = 0; c < l; c++) {
+        item = arr[c];
+        t_item = typeof item;
+        if (t_item === 'string' || t_item === 'numbers') {
+
+        } else {
+          callback(arr[c]);
+          desc(arr[c], callback);
+        }
+
+
+
+      }
+
+
+
+
+    }
+
+
+      /*
       var content = ctrl.get('content');
+      console.log('content', content);
       each(content, function(v, i) {
           if (typeof i !== 'string') {
               callback(v);
               desc(v, callback);
           }
       });
+      */
+
   }
 }
 
@@ -767,30 +811,34 @@ Control = jsgui.Control = jsgui.Control.extend({
     },
     */
 
+    // can have different monomorphic versions.
+
     'set': function(name, value) {
       // Used for setting controls, on the server, that get persisted to the client.
 
       // when the value is a control, we also want to set the ._jsgui_ctrl_fields
 
-      var t_val = tof(value);
-      //console.log('t_val', t_val);
 
-      if (t_val == 'control') {
-        var cf = this._ctrl_fields = this._ctrl_fields || {};
-
-        //extend(cf, {
-        //  'btn_single_bound': tb_single_bound,
-        //  'btn_dual_bound': tb_dual_bound,
-        //  'btn_ga': tb_genetic,
-        //  'panel_single_bound': panel_single_bound,
-        //  'panel_dual_bound': panel_dual_bound,
-        //  'panel_ga': panel_ga
-        //});
-
-        cf[name] = value;
-      }
 
       if (typeof value !== 'undefined') {
+          //var t_val = tof(value);
+          //console.log('t_val', t_val);
+
+          if (is_ctrl(value)) {
+              var cf = this._ctrl_fields = this._ctrl_fields || {};
+
+              //extend(cf, {
+              //  'btn_single_bound': tb_single_bound,
+              //  'btn_dual_bound': tb_dual_bound,
+              //  'btn_ga': tb_genetic,
+              //  'panel_single_bound': panel_single_bound,
+              //  'panel_dual_bound': panel_dual_bound,
+              //  'panel_ga': panel_ga
+              //});
+
+              cf[name] = value;
+          }
+
         return this._super(name, value);
       } else {
         return this._super(name);
