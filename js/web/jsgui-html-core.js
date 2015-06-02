@@ -1399,13 +1399,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         for (c = 0; c < l; c++) {
           n = arr[c];
-
           // Could use faster duck typing here.
-
           tn = tof(n);
-
-
-
           if (tn == 'string') {
               // escape the string.
               //var output = jsgui.output_processors['string'](n);
@@ -1423,10 +1418,10 @@ var Control = jsgui.Enhanced_Data_Object.extend({
           */
           if (tn == 'data_value') {
               //var output = jsgui.output_processors['string'](n.get());
-              res.push(jsgui.output_processors['string'](n.get()));
+              res.push(jsgui.output_processors['string'](n._));
           } else {
               if (tn == 'data_object') {
-                  console.log('n', n);
+                  //console.log('n', n);
                   //
                   throw 'stop';
               } else {

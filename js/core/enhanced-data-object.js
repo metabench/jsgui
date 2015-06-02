@@ -14,7 +14,7 @@ var Fields_Collection = require('./data-object-fields-collection');
 
 var Data_Object = jsgui.Data_Object;
 var Collection = jsgui.Collection;
-
+var get_a_sig = jsgui.get_a_sig;
 var fp = jsgui.fp;
 var stringify = jsgui.stringify;
 // Using actual JavaScript objects like String should be quite good.
@@ -173,7 +173,12 @@ var Enhanced_Data_Object = Data_Object.extend({
 
     // Candidate for optimization
 
-    'get': fp(function(a, sig) {
+    //'get': fp(function(a, sig) {
+    'get': (function() {
+      var a = arguments;
+      a.l = arguments.length;
+      var sig = get_a_sig(arguments, 1);
+
         // More difficult to maintain with the separate get code.
         //  Handle specific cases here, otherwise use _super.
 
@@ -249,26 +254,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                     }
                     return current_obj;
                 }
-
-                //console.log('field ' + stringify(field));
-
-                // fields seem to stop having been set up properly.
-
-                //console.log('field ' + (field));
-
-
-                //console.log('* field_name ' + field_name);
-                //console.log('* field ' + stringify(field));
-
-
                 if (field) {
-                    // May not be able to stringify the field object without making an infinite loop / call stack error.
-                    //console.log('this._[field_name] ' + stringify(this._[field_name]));
-                    //console.log('field_name ' + field_name);
-                    // So the DOM attributes were not created properly.
-
-
-
 
                     if (!this._[field_name]) {
                         //console.log('does not have field already');
@@ -297,14 +283,9 @@ var Enhanced_Data_Object = Data_Object.extend({
                         if (sig_field == '[s,s,o]') {
                             var field_name = field[0];
                             var field_type_name = field[1];
-
                             // default_value?
-
                             var field_info = field[2];
-
                             //console.log('field_type_name ' + field_type_name);
-
-
 
                             if (field_type_name == 'collection') {
                                 //console.log('lazy loading - creating new collection');
@@ -603,8 +584,6 @@ var Enhanced_Data_Object = Data_Object.extend({
                     //if (!is_defined(res)) {
                         // No, don't thin we just create a new one. It may need to get overwritten by some other code.
 
-
-
                         //res = new Enhanced_Data_Object({'context': this._context});
                     //}
 
@@ -616,7 +595,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                 return this._;
             }
         }
-    })
+    });
 
 
 
