@@ -2,6 +2,8 @@
 var jsgui = require('../../jsgui-html');
 var Item_View = require('./item-view');
 
+var File_Item_View = require('./file-item-view');
+
 var j = jsgui;
 var Class = j.Class;
 var each = j.eac;
@@ -39,6 +41,7 @@ var Directory_Item_View = Item_View.extend({
   'init': function(spec) {
     this._super(spec);
     this.__type_name = 'directory_item_view';
+    this.add_class('directory');
 
   },
   'activate': function() {
@@ -76,12 +79,6 @@ var Directory_Item_View = Item_View.extend({
                   // For the moment will only add directory items.
 
                   each(fs_res.resource.data.directories, function(directoryName) {
-                      // OK, this loop seems to take a very long time.
-
-                      //console.log('directoryName ' + directoryName);
-
-                      // could stagger the times they come in...
-
                       setTimeout(function() {
                         var sub_dir_view = new Directory_Item_View({
                             'name': directoryName,
@@ -90,68 +87,41 @@ var Directory_Item_View = Item_View.extend({
                         });
                         sub_dir_view.set('tree', that);
 
-                        //sub_dir_view.active();
-
-
-                        //console.log('pre add content ' + new Date().date);
-                        //console.log('sub_dir_view', sub_dir_view);
-                        //console.log('selected_ctrl', selected_ctrl);
-
-
-
-
-
                         var ctrl_subitems = that.get('ctrl_subitems');
-                        //ctrl_subitems.active();
-                        //console.log('ctrl_subitems', ctrl_subitems);
-                        //ctrl_subitems.activate();
-
-                        //console.log('ctrl_subitems', ctrl_subitems);
-                        //console.log('sub_dir_view', sub_dir_view);
-
-
-
                         //var cached_control = context.map_controls[ctrl_subitems._id()]
                         sub_dir_view.active();
-                        //console.log('');
-                        //console.log('');
-                        //console.log('');
-
-                        //ctrl_subitems.rec_desc_ensure_ctrl_el_refs();
-
                         ctrl_subitems.add(sub_dir_view);
-                        //
-
-                        //sub_dir_view.activate();
-                        //sub_dir_view.activate();
-                        //sub_dir_view.activate();
-
-
-                        //sub_dir_view.activate_recursive();
-
-                        // seems like the control has not been assigned its dom element.
-
-
-                        //sub_dir_view.selectable();
-                        // Need to work on
-
-                        //console.log('sub_dir_view', sub_dir_view);
-                        // should be activated in terms of jsgui by now.
                         sub_dir_view.activate();
                       }, c * delay);
-
-
-
-
-
                       c++;
-
                       //activate_item(sub_dir_view);
-
-
 
                       //console.log('post add content ' + new Date().date);
                   });
+
+                  console.log('fs_res.resource.data.files', fs_res.resource.data.files);
+                  each(fs_res.resource.data.files, function(file_name) {
+                      setTimeout(function() {
+                        var sub_dir_view = new File_Item_View({
+                            'name': file_name,
+                            'path': item_path + '/' + file_name,
+                            'context': context
+                        });
+                        sub_dir_view.set('tree', that);
+
+                        var ctrl_subitems = that.get('ctrl_subitems');
+                        //var cached_control = context.map_controls[ctrl_subitems._id()]
+                        sub_dir_view.active();
+                        ctrl_subitems.add(sub_dir_view);
+                        sub_dir_view.activate();
+                      }, c * delay);
+                      c++;
+                      //activate_item(sub_dir_view);
+
+                      //console.log('post add content ' + new Date().date);
+                  });
+
+
 
 
               }

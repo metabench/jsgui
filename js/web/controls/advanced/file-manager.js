@@ -192,126 +192,6 @@ var File = Data_Object.extend({
 
 
 
-// Will change this to a directory-tree-node.
-//  They will be put together as a tree in  a standard way.
-//  Should be able to load inner contents (from resource?)
-
-
-/*
-
-
-var Directory_Item_View = Item_View.extend({
-	'class_name': 'Directory_Item_View',
-
-	'init': function(spec) {
-		this._super(spec);
-		// also the name...
-		//  will be constructing itself out of some properties given?
-
-		// or when responding to properties being set?
-		//  Think in response to properties being set, but could do that cleanly after a first run of properties.
-		this.get('dom').get('attributes').set('class', 'directory item control');
-
-		//this.add_event_listener('set', function(target, name, set_args) {
-
-
-		this.add_event_listener('set', function(set_args) {
-			//console.log('name ' + name);
-			//console.log('value ' + value);
-			//console.log('set_args ' + stringify(set_args));
-
-			var property_name = set_args[0];
-			var property_value = set_args[1];
-
-			//console.log('property_name ' + property_name);
-
-		});
-	},
-	'set_content_from_model': function(model_content) {
-		var content = this.get('content');
-		// then get the subitems from within the content.
-		//var sub_items
-
-		// should be controls (at this stage);
-
-		// Default user interface controls for types of Data_Object.
-		var ctrl_subitems = this.get('ctrl_subitems');
-		//console.log('ctrl_subitems ' + ctrl_subitems);
-		//throw('stop');
-		var ctrl_subitems_content = ctrl_subitems.get('content');
-
-		//console.log('model_content ' + stringify(model_content));
-		var that = this;
-		var context = that._context;
-		if (model_content instanceof Collection) {
-
-			// really want to get the directories and then the files separately.
-			//  the Collection should be indexed by the type of object in there.
-			// Luckily the collection already provides them in that order.
-
-			model_content.each(function(i, v) {
-				//console.log('v ' + stringify(v));
-
-				var is_directory = v instanceof Directory;
-				var is_file = v instanceof File;
-
-				if (is_directory) {
-					var ctrl_directory = new Directory_Item_View({
-						'name': v.get('name'),
-						'context': context
-					});
-					// and add all thge items to that directory control.
-
-					var vc = v.get('contents');
-					var vcl = vc.length();
-
-					if (vcl > 0) {
-						// set the content of the new ctrl.
-						ctrl_directory.set_content_from_model(vc);
-					}
-
-					ctrl_subitems_content.add(ctrl_directory);
-
-				}
-				if (is_file) {
-					var ctrl_file = new File_Item_View({
-						'name': v.get('name'),
-						'context': context
-					});
-
-					ctrl_subitems_content.add(ctrl_file);
-				}
-
-
-			})
-
-		}
-
-		//throw 'stop';
-	}
-});
-var File_Item_View = Item_View.extend({
-	'class_name': 'File_Item_View',
-	'init': function(spec) {
-		this._super(spec);
-
-		// also the name...
-		//  will be constructing itself out of some properties given?
-
-		// or when responding to properties being set?
-		//  Think in response to properties being set, but could do that cleanly after a first run of properties.
-		this.get('dom').get('attributes').set('class', 'file item control');
-
-
-
-	}
-});
-*/
-// File_System_Item_View
-//  For either a directory or a file.
-
-
-
 var Menu_Bar = Control.extend({
 	'init': function(spec) {
 		this._super(spec);
@@ -319,20 +199,6 @@ var Menu_Bar = Control.extend({
 		this.get('dom').get('attributes').set('class', 'menu bar control');
 	}
 });
-
-// Tree_Item_View
-//  Can be used to represent a file or directory
-
-// Item_View
-// List_Item_View
-// Grid_Item_View
-// Item_View
-// Item_Editor_View
-// Item_Full_View
-
-// it's still a DIV.
-
-// File_Manager would have the tree on the left and item view on the right.
 
 
 
@@ -345,50 +211,9 @@ var File_Manager = Control.extend({
 		// The files it's given may be much more of an MVC-type object that alerts it to changes in the files.
 		var that = this;
 
-		// This is likely to hold a whole tree structure of files, and make use of some MVC.
-		//  Won't need as much in the way of MVC when purely running on the server.
-		//   On the client, it can subscribe to directory change events, perhaps using Socket.IO.
-
-		// Has a collection of files?
-		//  Has a collection of files within a path.
-
-		// Just showing the files within a path...
-
-		//  The file manager should have a tree / list on the left.
-
-		//  There should be a data structure holding the tree contents.
-
-		// Can give the root directory of the file manager.
-		//  The root should really be the application root directory.
-
-		// This won't handle node.js interaction though, won't read actual files.
-
-		// will be given directory contents (maybe as JSON) to represent.
-
-		// This could be given plenty of information for its file system.
 		this._super(spec);
 		this.__type_name = 'file_manager';
 		that.add_class('file-manager');
-		//throw 'stop';
-		//this.get('dom').set('tagName', 'div');
-		//this.get('dom').get('attributes').set('class', 'file_manager');
-
-		// Will show a File_Tree
-		//  And a File_System_Object_View
-		//   Can view a file or a directory.
-		//    Potentially this will automatically have files in edit mode.
-		//     Or there will be a simple lock and unlock functionality.
-		//      May make it easy to go back to previous versions as well - could keep track of them.
-
-		// responding to when the files are set...
-		//  we need some kind of file data input processor for this.
-
-		// Would maybe be best using the fields system..
-
-		// File_Manager.set_files...
-		//  would be a temporary means to set the root directory's files?
-
-		// will have a file_system_resource.
 
 		var filesystem_resource = spec.filesystem_resource;
 		// Though this resource should also be available in the Resource_Pool.
@@ -439,77 +264,6 @@ var File_Manager = Control.extend({
 			});
 
 		}
-
-		// Could also have code that listens for the file_tree events.
-
-
-
-
-
-
-
-
-
-		//throw 'stop';
-		// something that listens for changes?
-		//  will mean we can keep more code in init and use more local / private variables here.
-
-		// just gets the target and the name of the event (ie set)?
-
-		// Not sure that this gets called.
-
-		// Does the 'set' event listener get called?
-
-		//this.add_event_listener('set', function(target, name, set_args) {
-
-		/*
-		this.add_event_listener('set', function(event_params) {
-			// Does not seem to be listening for the set event?
-
-
-		    //throw 'stop';
-
-		    // target = this;
-
-		    // need to check the target?
-		    //console.log('that == this ' + that == this);
-
-
-		    if (that == this) {
-
-                  console.log('event_params ' + stringify(event_params));
-
-
-                  //console.log('target ' + target);
-                  //console.log('name ' + name);
-                  //console.log('value ' + value);
-                  //console.log('set_args ' + stringify(set_args));
-
-                  var property_name = event_params[0];
-                  var property_value = event_params[1];
-                  console.log('property_value ' + stringify(property_value));
-                  //throw 'stop';
-
-                  if (property_name == 'root_directory') {
-                      //console.log('setting root directory');
-
-                      //property_value.set('app_rel_path', '/');
-
-
-                      console.log('property_value ' + stringify(property_value));
-                      //throw('4) stop');
-                      file_tree.set('root_directory', property_value);
-                      // set the root directory in the file tree.
-                      //  the same
-
-                      //throw('stop');
-                  }
-
-		    }
-
-		});
-		*/
-		// Let's have this show the root directory to start with.
 	},
 
 	// Needs to have a way of expanding a path, client-side.

@@ -748,7 +748,7 @@ var rimraf = require('rimraf');
 				if (err) {
 					//console.log('err ' + err);
 					var stack = new Error().stack;
-					//console.log(stack);
+					console.log(stack);
 					throw('err ' + err);
 				} else {
 

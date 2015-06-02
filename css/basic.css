@@ -656,12 +656,20 @@ html.dragging {
 	background-color: #FF0000;
 	float: left;
 }
-.file-manager .icon {
+.file-manager .directory .icon {
 	width: 24px;
 	height: 24px;
 	background-color: #00FF00;
 	float: left;
 }
+
+.file-manager .file .icon {
+	width: 24px;
+	height: 24px;
+	background-color: #0000AA;
+	float: left;
+}
+
 .file-manager .info {
 	width: 400px;
 	height: 32px;

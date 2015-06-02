@@ -159,135 +159,23 @@ var File_Tree = Control.extend({
             //console.log('post add content ' + new Date().date);
         });
 
+        
+
+        // go through the files.
+        //  making new FileItemViews
+
+
 
 
     },
     'activate': function() {
       if (!this.__active) {
         this._super();
-        var that = this;
 
 
-        var context = this._context;
-        var rp = context.resource_pool;
-        var fs = rp.get_resource('File System');
-
-        var select_desc = function(ctrl, fn_select, callback) {
-            desc(ctrl, function(d_ctrl) {
-                if (fn_select(d_ctrl)) callback(d_ctrl);
-            })
-        }
-
-        select_desc(this, function(d_ctrl) {
-            //console.log('d_ctrl', d_ctrl);
-            return d_ctrl.__type_name === 'item_view';
-
-            //return true;
-        }, function(selected_ctrl) {
-
-            activate_item(selected_ctrl);
-            //console.log('selected_ctrl', selected_ctrl);
-            // should be item_view controls.
-
-            // We could access the resource here, rather than having it go back to the file_manager?
-            //  However, file_manager needs to stay informed...?
-            //  Could raise other events.
-
-        });
-
-        //this.
-
-        //console.log('fs', fs);
-        //throw 'stop';
-
-
-
-        // Get all of the item views inside it?
-        //  Or have item_view events propogate upwards to this?
-
-        // Recursively select matching controls.
-        //  Select the item_view controls. Listen for their expand / contract events.
-        //  Would then send back the user interface events to the file-manager control that interacts with the file system resource.
-        /*
-         var desc = function(ctrl, fn_selector, callback) {
-         var contents = ctrl.get('contents');
-         each(contents, function(v, i) {
-         var content_res =
-         });
-
-
-         }
-
-         desc(this, function(ctrl) {
-         // The selector function
-         console.log('selector ctrl', ctrl);
-         }, function(err, selected_controls) {
-         if (err) { throw err; } else {
-
-
-         }
-
-         });
-         */
-
-        // Query engine would be really useful, but is a bit complicated.
-
-        // Could do it in 2 stages,
-        //  Descent iterator.
-
-        // Selective callbacks
-
-        // could make this into jsgui.desc
-        /*
-        var desc = function(ctrl, callback) {
-            if (ctrl.get) {
-                var content = ctrl.get('content');
-                each(content, function(v, i) {
-                    if (typeof i !== 'string') {
-                        callback(v);
-                        desc(v, callback);
-                    }
-                });
-            }
-        }
-
-        var select_desc = function(ctrl, fn_select, callback) {
-            desc(ctrl, function(d_ctrl) {
-                if (fn_select(d_ctrl)) callback(d_ctrl);
-            })
-        }
-
-        // Possibly make a Directory_Item_View class.
-        //  Would have their own activation.
-
-
-        var activate_item = function(ctrl_item) {
-            var selected_ctrl = ctrl_item;
-
-
-        }
-
-        select_desc(this, function(d_ctrl) {
-            //console.log('d_ctrl', d_ctrl);
-            return d_ctrl.__type_name === 'item_view';
-
-            //return true;
-        }, function(selected_ctrl) {
-
-            activate_item(selected_ctrl);
-            //console.log('selected_ctrl', selected_ctrl);
-            // should be item_view controls.
-
-            // We could access the resource here, rather than having it go back to the file_manager?
-            //  However, file_manager needs to stay informed...?
-            //  Could raise other events.
-
-
-
-        });
       }
-      */
-      }
+
+
 
 
         //});

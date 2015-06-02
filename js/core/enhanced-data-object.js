@@ -254,7 +254,26 @@ var Enhanced_Data_Object = Data_Object.extend({
                     }
                     return current_obj;
                 }
+
+                //console.log('field ' + stringify(field));
+
+                // fields seem to stop having been set up properly.
+
+                //console.log('field ' + (field));
+
+
+                //console.log('* field_name ' + field_name);
+                //console.log('* field ' + stringify(field));
+
+
                 if (field) {
+                    // May not be able to stringify the field object without making an infinite loop / call stack error.
+                    //console.log('this._[field_name] ' + stringify(this._[field_name]));
+                    //console.log('field_name ' + field_name);
+                    // So the DOM attributes were not created properly.
+
+
+
 
                     if (!this._[field_name]) {
                         //console.log('does not have field already');
@@ -283,9 +302,14 @@ var Enhanced_Data_Object = Data_Object.extend({
                         if (sig_field == '[s,s,o]') {
                             var field_name = field[0];
                             var field_type_name = field[1];
+
                             // default_value?
+
                             var field_info = field[2];
+
                             //console.log('field_type_name ' + field_type_name);
+
+
 
                             if (field_type_name == 'collection') {
                                 //console.log('lazy loading - creating new collection');
@@ -459,46 +483,6 @@ var Enhanced_Data_Object = Data_Object.extend({
                                     //throw 'stop';
                                 };
 
-                                //console.log('input_processors[field_type_name] ' + input_processors[field_type_name]);
-                                // so we may have an input processor for the data.
-                                //  However, we may also have information about how to construct a data object with the data.
-
-                                // not just the input processors... we need the data type info.
-
-                                // data_type_info
-
-
-
-                                //if (input_processors[field_type_name]) {
-                                //	var processed_value = input_processors[field_type_name]()
-
-                                //}
-
-                                // OK, but this will need to actually create a new constructor for an empty object, and set it in place.
-                                //  We have some kind of a linking to the later modules.
-                                // Need to do some kind of back-referencing because we don't have global variables.
-                                //  _module_jsgui will be enough for now.
-                                //   It should get overwritten before object construction, so should be at an advanced level with
-                                //    instances of advanced objects.
-                                //   May be removed when JS is put into one large code file.
-
-                                // I think defining data type object constructors may make sense...
-                                //  Like for an indexed array?
-
-
-
-
-                                // dtoc = this.mod_link().ensure_data_type_data_object_constructor(field_type_name);
-                                //console.log('dtoc ' + dtoc);
-
-                                // then use this to construct the empty field.
-                                //  without the new constructor it was trying to make an abstract version!!!
-                                //var obj = new dtoc({'context': this._context});
-                                //if (this._context) obj._context = this._context;
-                                //obj.parent(this);
-
-                                //this._[field_name] = obj;
-
                             }
 
                                 //console.log('this._ ' + stringify(this._));
@@ -584,6 +568,8 @@ var Enhanced_Data_Object = Data_Object.extend({
                     //if (!is_defined(res)) {
                         // No, don't thin we just create a new one. It may need to get overwritten by some other code.
 
+
+
                         //res = new Enhanced_Data_Object({'context': this._context});
                     //}
 
@@ -595,38 +581,8 @@ var Enhanced_Data_Object = Data_Object.extend({
                 return this._;
             }
         }
-    });
-
-
-
-    // oh but this is treated differently...
-    //  may wish to set the flags property?
-
-    // need a different name for this?
-    // or just don't need that function with flags connected?
-
-    /*
-
-    'flags': fp(function(a, sig) {
-        if (sig == '[s,b]') {
-            var flags = this.get('flags');
-            console.log('flags ' + stringify(flags));
-
-
-        }
-
     })
-    */
 
-    // OK, but we may also want some of these fields to work with css as well.
-
-    // When defining css flags in the Control... they are normal flags, but they also
-    //  have a corresponding css class.
-
-    // data_object.flag_item(true);
-    // data_object.flag_item(false);
-    // data_object.flag_item('toggle');
-    //  data_object.flag_item(-1); ??? looks confusing. but could be ok.
 
 });
 
