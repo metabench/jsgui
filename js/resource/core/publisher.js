@@ -237,7 +237,7 @@ define(['../../web/jsgui-html', 'os', 'http', 'url', './web', '../../web/control
 			console.log('params', params);
 
 			if (params) {
-				wildcard_value = params.wildcard_value;
+				wildcard_value = decodeURI(params.wildcard_value);
 			}
 
       console.log('content_type', content_type);
