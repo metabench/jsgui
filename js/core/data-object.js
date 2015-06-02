@@ -1308,7 +1308,11 @@ var Data_Object = Evented_Class.extend({
 
     // One parent and one index for the moment. That's what DOM nodes need.
 
-    'parent': fp(function(a, sig) {
+    //'parent': fp(function(a, sig) {
+    'parent': (function() {
+	      var a = arguments;
+	      a.l = arguments.length;
+	      var sig = get_a_sig(arguments, 1);
         var obj, index;
         //console.log('parent sig', sig);
 
@@ -4467,6 +4471,9 @@ var get_chained_fields = function(data_object_class) {
         //  However, do want it to properly interpret the fields at a later stage.
 
         var c = 0;
+
+        //console.log('item', item);
+        // item is either an object or an array.
 
         each(item, function(i2, field_info) {
 

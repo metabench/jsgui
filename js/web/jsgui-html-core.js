@@ -1390,6 +1390,53 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         });
     	*/
         var tn, output;
+        //console.log('content', content);
+
+        // content._arr
+
+        var arr = content._arr;
+        var c, l = arr.length, n;
+
+        for (c = 0; c < l; c++) {
+          n = arr[c];
+
+          // Could use faster duck typing here.
+
+          tn = tof(n);
+
+
+
+          if (tn == 'string') {
+              // escape the string.
+              //var output = jsgui.output_processors['string'](n);
+              //res.push(output);
+              res.push(jsgui.output_processors['string'](n));
+          }
+          /*
+          if (tof(n) == 'string') {
+              // escape the string.
+
+              var output = jsgui.output_processors['string'](n);
+              res.push(output);
+
+          }
+          */
+          if (tn == 'data_value') {
+              //var output = jsgui.output_processors['string'](n.get());
+              res.push(jsgui.output_processors['string'](n.get()));
+          } else {
+              if (tn == 'data_object') {
+                  console.log('n', n);
+                  //
+                  throw 'stop';
+              } else {
+                  res.push(n.all_html_render());
+              }
+              //htm = n.all_html_render();
+          }
+        }
+
+        /*
         content.each(function (i, n) {
             //console.log('-------------------------');
             //console.log('tof(n) ' + tof(n));
@@ -1398,27 +1445,13 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             tn = tof(n);
             if (tn == 'string') {
                 // escape the string.
-
                 //var output = jsgui.output_processors['string'](n);
                 //res.push(output);
                 res.push(jsgui.output_processors['string'](n));
-
             }
-            /*
-            if (tof(n) == 'string') {
-                // escape the string.
-
-                var output = jsgui.output_processors['string'](n);
-                res.push(output);
-
-            }
-            */
             if (tn == 'data_value') {
                 //var output = jsgui.output_processors['string'](n.get());
                 res.push(jsgui.output_processors['string'](n.get()));
-
-
-
             } else {
                 if (tn == 'data_object') {
                     console.log('n', n);
@@ -1427,13 +1460,10 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 } else {
                     res.push(n.all_html_render());
                 }
-
                 //htm = n.all_html_render();
-
             }
-
-
         });
+        */
 
         //console.log('res', res);
         return res.join('');

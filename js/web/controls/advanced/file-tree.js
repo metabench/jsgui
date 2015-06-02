@@ -8,7 +8,7 @@ var jsgui = require('../../jsgui-html');
 var Plus_Minus_Toggle_Button = require('./plus-minus-toggle-button');
 var Vertical_Expander = require('./vertical-expander');
 var Tree_Node = require('./tree-node');
-
+var desc = jsgui.desc;
 /*
 var Directory_Item_View = require('./item-view').extend({
     'fields': {
@@ -172,6 +172,31 @@ var File_Tree = Control.extend({
         var rp = context.resource_pool;
         var fs = rp.get_resource('File System');
 
+        var select_desc = function(ctrl, fn_select, callback) {
+            desc(ctrl, function(d_ctrl) {
+                if (fn_select(d_ctrl)) callback(d_ctrl);
+            })
+        }
+
+        select_desc(this, function(d_ctrl) {
+            //console.log('d_ctrl', d_ctrl);
+            return d_ctrl.__type_name === 'item_view';
+
+            //return true;
+        }, function(selected_ctrl) {
+
+            activate_item(selected_ctrl);
+            //console.log('selected_ctrl', selected_ctrl);
+            // should be item_view controls.
+
+            // We could access the resource here, rather than having it go back to the file_manager?
+            //  However, file_manager needs to stay informed...?
+            //  Could raise other events.
+
+        });
+
+        //this.
+
         //console.log('fs', fs);
         //throw 'stop';
 
@@ -213,7 +238,7 @@ var File_Tree = Control.extend({
         // Selective callbacks
 
         // could make this into jsgui.desc
-
+        /*
         var desc = function(ctrl, callback) {
             if (ctrl.get) {
                 var content = ctrl.get('content');
@@ -261,7 +286,8 @@ var File_Tree = Control.extend({
 
         });
       }
-
+      */
+      }
 
 
         //});

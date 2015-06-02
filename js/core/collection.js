@@ -1736,7 +1736,7 @@ var Collection = Data_Object.extend({
                 throw('wrong data type');
             }
         }
-        this._arr_idx++;
+        //this._arr_idx++;
         return value;
     },
 

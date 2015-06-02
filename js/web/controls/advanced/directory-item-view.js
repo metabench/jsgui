@@ -64,6 +64,9 @@ var Directory_Item_View = Item_View.extend({
 
           // OK, maybe don't get it to work so recursively.
 
+          var delay = 6, c = 0;
+
+
           fs.get(item_path, function(err, fs_res) {
               if (err) { throw err; } else {
                   //console.log('fs_res', fs_res);
@@ -76,61 +79,72 @@ var Directory_Item_View = Item_View.extend({
                       // OK, this loop seems to take a very long time.
 
                       //console.log('directoryName ' + directoryName);
-                      var sub_dir_view = new Directory_Item_View({
-                          'name': directoryName,
-                          'path': item_path + '/' + directoryName,
-                          'context': context
-                      });
-                      sub_dir_view.set('tree', that);
 
-                      //sub_dir_view.active();
+                      // could stagger the times they come in...
 
+                      setTimeout(function() {
+                        var sub_dir_view = new Directory_Item_View({
+                            'name': directoryName,
+                            'path': item_path + '/' + directoryName,
+                            'context': context
+                        });
+                        sub_dir_view.set('tree', that);
 
-                      //console.log('pre add content ' + new Date().date);
-                      //console.log('sub_dir_view', sub_dir_view);
-                      //console.log('selected_ctrl', selected_ctrl);
-
+                        //sub_dir_view.active();
 
 
-
-
-                      var ctrl_subitems = that.get('ctrl_subitems');
-                      //ctrl_subitems.active();
-                      //console.log('ctrl_subitems', ctrl_subitems);
-                      //ctrl_subitems.activate();
-
-                      //console.log('ctrl_subitems', ctrl_subitems);
-                      //console.log('sub_dir_view', sub_dir_view);
+                        //console.log('pre add content ' + new Date().date);
+                        //console.log('sub_dir_view', sub_dir_view);
+                        //console.log('selected_ctrl', selected_ctrl);
 
 
 
-                      //var cached_control = context.map_controls[ctrl_subitems._id()]
-                      sub_dir_view.active();
-                      //console.log('');
-                      //console.log('');
-                      //console.log('');
-
-                      //ctrl_subitems.rec_desc_ensure_ctrl_el_refs();
-
-                      ctrl_subitems.add(sub_dir_view);
-                      //
-
-                      //sub_dir_view.activate();
-                      //sub_dir_view.activate();
-                      //sub_dir_view.activate();
 
 
-                      //sub_dir_view.activate_recursive();
+                        var ctrl_subitems = that.get('ctrl_subitems');
+                        //ctrl_subitems.active();
+                        //console.log('ctrl_subitems', ctrl_subitems);
+                        //ctrl_subitems.activate();
 
-                      // seems like the control has not been assigned its dom element.
+                        //console.log('ctrl_subitems', ctrl_subitems);
+                        //console.log('sub_dir_view', sub_dir_view);
 
 
-                      //sub_dir_view.selectable();
-                      // Need to work on
 
-                      //console.log('sub_dir_view', sub_dir_view);
-                      // should be activated in terms of jsgui by now.
-                      sub_dir_view.activate();
+                        //var cached_control = context.map_controls[ctrl_subitems._id()]
+                        sub_dir_view.active();
+                        //console.log('');
+                        //console.log('');
+                        //console.log('');
+
+                        //ctrl_subitems.rec_desc_ensure_ctrl_el_refs();
+
+                        ctrl_subitems.add(sub_dir_view);
+                        //
+
+                        //sub_dir_view.activate();
+                        //sub_dir_view.activate();
+                        //sub_dir_view.activate();
+
+
+                        //sub_dir_view.activate_recursive();
+
+                        // seems like the control has not been assigned its dom element.
+
+
+                        //sub_dir_view.selectable();
+                        // Need to work on
+
+                        //console.log('sub_dir_view', sub_dir_view);
+                        // should be activated in terms of jsgui by now.
+                        sub_dir_view.activate();
+                      }, c * delay);
+
+
+
+
+
+                      c++;
 
                       //activate_item(sub_dir_view);
 

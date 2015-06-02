@@ -1252,41 +1252,14 @@ Control = jsgui.Control = jsgui.Control.extend({
         var map_controls = context.map_controls;
 
 
-        // var el = that.get('dom.el');
-
-        // Important piece of code here.
-
-
         content.on('change', function(e_change) {
             //console.log('activated control content change');
 
             var el = that.get('dom.el');
-            //console.log('that', that);
-            //console.log('el', el);
-
-
-
             var type = e_change.type;
 
             if (type == 'insert') {
-                //console.log('control content change');
-                //console.log('e_change ', e_change);
-                //item._.parent = that;
-                //item._.index = position;
-
-                // need to put it into the dom...
-
-                // basically, need to render it to an element, or document fragment.
-                //  then put it into the DOM.
-
-                // ctrl.render_to_element?
-
-                //var p = el.parentNode;
                 var item = e_change.item;
-
-
-
-
 
                 var itemDomEl = item.get('dom.el');
 
@@ -1299,50 +1272,12 @@ Control = jsgui.Control = jsgui.Control.extend({
                   }
 
                 }
-
-
-
-
-                //console.log('e_change.item._context', item._context);
                 if (!itemDomEl) {
-
-
-                    // Making it get added twice?
-                    // does this cause problems?
-                    //  this seems to be the culprit.
-
-                    // Or is the problem in conjunction with activate?
-
-                    //if (typeof document === 'undefined') {
-                    //  item.active();
-                    //}
-
-
-                    // Making it active meaning it duplicates the content?
-
-
-                    // This seems to do the trick for making a newly inserted item have the right document properties.
-                    //  Will it also be in the context properly?
-
-
-                    //itemDomEl = e_change.item._context.document.createElement(e_change.item.get('dom.tagName'));
-                    // render the
-
-                    // Are items not activated with contexts?
-
-                    // Perhaps we should not always use a DIV?
                     var item_tag_name = 'div';
                     var dv_tag_name = item.get('tag_name');
                     if (dv_tag_name) {
                       item_tag_name = dv_tag_name.value();
                     }
-
-
-                    //console.log('item_tag_name', item_tag_name);
-                    //console.log('item', item);
-
-                    // check for SVG tag names.
-
                     var temp_el;
 
 
@@ -1360,146 +1295,9 @@ Control = jsgui.Control = jsgui.Control.extend({
                         temp_el.innerHTML = e_change.item.all_html_render();
                         itemDomEl = temp_el.childNodes[0];
                     }
-
-
-                    //var temp_div =
-
-                    // It may need to be inside an SVG element.
-
-
-
-                    //itemDomEl = temp_div.childNodes[0];
-                    // seems not to be working here.
-
-                    // Not so sure about needing / using these two references.
-
-
-                    // Quite probably we should not be doing the recursive activation here,
-                    //  but in activate content.
-
-
-
-
                     item._.el = itemDomEl;
                     e_change.item.set('dom.el', itemDomEl);
-
-                    // Then set up the childrens' controls.
-
-                    // Need to add the controls to the context's control registry.
-
-                    // Will use some recursive descent to go through the controls.
                     item.active();
-
-                    //item.rec_desc_activate();
-
-
-                    /*
-                    var desc = function(ctrl, callback) {
-                        if (ctrl.get) {
-                            var content = ctrl.get('content');
-                            each(content, function(v, i) {
-                                if (typeof i !== 'string') {
-                                    callback(v);
-                                    desc(v, callback);
-                                }
-                            });
-                        }
-                    }
-
-                    // Descend through the DOM, making a note of the DOM nodes in the index of DOM nodes by data-jsgui-id.
-                    var c, l, cns;
-                    var dom_desc = function(el, callback) {
-                      // Possibly need to look at the element's node type.
-
-                      //
-                      callback(el);
-
-                      cns = el.childNodes;
-
-                      l = cns.length;
-
-                      for (c = 0; c < l; c++) {
-                        dom_desc(cns[c], callback);
-
-                      }
-
-
-                    }
-                    var jsgui_id;
-
-                    var map_els = {};
-
-
-
-                    dom_desc(itemDomEl, function(el) {
-                      //console.log('el', el);
-                      if (el.getAttribute) {
-                        jsgui_id = el.getAttribute('data-jsgui-id');
-                        //console.log('found jsgui_id', jsgui_id);
-
-                        if (jsgui_id) {
-
-                          //map_controls[jsgui_id] = el;
-
-                          // Make a map of elements...?
-                          map_els[jsgui_id] = el;
-
-                        }
-
-                      }
-
-                    });
-
-                    // Should do the desc twice - once for assignment, one for activation.
-
-                    desc(item, function(ctrl) {
-                      // ensure the control is registered with the context.
-                      //console.log('desc ctrl', ctrl);
-
-                      var t_ctrl = tof(ctrl);
-                      //console.log('t_ctrl', t_ctrl);
-
-                      if (t_ctrl === 'control') {
-                        var id = ctrl._id();
-                        //console.log('id', id);
-
-                        //console.log('map_els[id]', map_els[id]);
-
-                        ctrl.set('dom.el', map_els[id]);
-                        ctrl._.el = map_els[id];
-
-                        //ctrl.activate();
-
-                      }
-
-                    });
-
-
-                    // At least they are connected!
-
-                    desc(item, function(ctrl) {
-                      // ensure the control is registered with the context.
-                      //console.log('desc ctrl', ctrl);
-
-                      var t_ctrl = tof(ctrl);
-                      //console.log('t_ctrl', t_ctrl);
-
-                      if (t_ctrl === 'control') {
-                        //var id = ctrl._id();
-                        //console.log('id', id);
-
-                        //console.log('map_els[id]', map_els[id]);
-
-                        //ctrl.set('dom.el', map_els[id]);
-                        //ctrl._.el = map_els[id];
-
-                        ctrl.activate();
-
-                      }
-
-                    });
-
-                    */
                 };
                 //console.log('itemDomEl', itemDomEl);
                 var t_item_dom_el = tof(itemDomEl);
@@ -1655,6 +1453,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         var ctrl_fields = {};
         var that = this;
+        var c, l;
 
         var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
         if (str_ctrl_fields) {
@@ -1663,18 +1462,33 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         }
 
-        each(ctrl_fields, function(v, i) {
+        var ctrl_fields_keys = Object.keys(ctrl_fields);
+
+        var l_ctrl_fields_keys = ctrl_fields_keys.length;
+        var key, value;
+        for (c = 0; c < l_ctrl_fields_keys; c++) {
+          key = ctrl_fields_keys[c];
+          value = ctrl_fields[key];
+
+          var referred_to_control = context.map_controls[value];
+          //console.log('referred_to_control', referred_to_control);
+          that.set(key, referred_to_control);
+        }
+
+        //each(ctrl_fields, function(v, i) {
             //fields_ctrl.set(i, v);
 
             //fields_ctrl[v] = i;
-            var referred_to_control = context.map_controls[v];
+        //    var referred_to_control = context.map_controls[v];
             //console.log('referred_to_control', referred_to_control);
-            that.set(i, referred_to_control);
-        });
+        //    that.set(i, referred_to_control);
+        //});
+
+
         var cns = el.childNodes;
         var content = this.get('content');
         // Adding the content again?
-        for (var c = 0, l = cns.length; c < l; c++) {
+        for (c = 0, l = cns.length; c < l; c++) {
             var cn = cns[c];
             var nt = cn.nodeType;
             //console.log('* nt ' + nt);
@@ -1729,41 +1543,18 @@ Control = jsgui.Control = jsgui.Control.extend({
         var that = this;
         var dom_attributes = this.get('dom.attributes');
 
-        //console.log('dom_attributes', dom_attributes);
-        //console.log('el', el);
-
         if (el) {
           for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
               //arr.push(attrs.item(i).nodeName);
               var item = attrs.item(i);
-              //console.log('item', item);
-
-
-
-              //console.log('item.name', item.name);
-              //console.log('item.value', item.value);
-
               var name = item.name;
               var value = item.value;
-
-              //if (name == 'class') {
-              //    console.log('ACTIVATE DOM class: ' + value);
-              //}
 
               if (name == 'data-jsgui-id') {
                   // Handled elsewhere - not so sure it should be but won't change that right now.
               } else if (name == 'data-jsgui-type') {
                   // ^
               } else if (name == 'style') {
-
-                  //console.log('inline style value', value);
-
-                  // Need to parse that style value.
-                  //  Put it into the control's inline style dict.
-
-                  //._icss
-
-                  //console.log('1) ._icss', this._icss);
 
                   var map_inline_css = this._icss;
 
@@ -1782,241 +1573,22 @@ Control = jsgui.Control = jsgui.Control.extend({
                           map_inline_css[arr_style_item[0]] = arr_style_item[1];
                       }
                   }
-
-                  // and the dom.attributes.style will get set from the ._icss as a later point.
-
-
-
-                  //  could have some fields, like selectable
-                  //   set the selectable field to true
-                  //    transfer that using the jsgui-fields system.
-                  //     at the moment just setting that DOM attribute.
-                  //      perhaps they are really server->client transfer fields.
-
-
-
-
-
-
-                  // ^
-              } else if (name == 'data-jsgui-fields') {
+              //} else if (name == 'data-jsgui-fields') {
                 // Should probably rely on using init a lot more now.
 
 
-                  var str_properties = value;
+              //    var str_properties = value;
 
-                  if (str_properties) {
-                      //console.log('str_ctrl_fields ' + str_ctrl_fields);
-                      //console.log('str_properties', str_properties);
-                      //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
+              //    if (str_properties) {
 
-                      /*
-                      var s_pre_parse = str_properties.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
-                      s_pre_parse = s_pre_parse.replace(/\'/g, '"');
-
-                      // DBL_QT
-                      //console.log('s_pre_parse', s_pre_parse);
-
-                      //console.log('s_pre_parse', tof(s_pre_parse));
-
-                      var props = JSON.parse(s_pre_parse);
-                      //console.log('props ' + stringify(props));
-                      //throw 'stop';
-
-                      // However, it goes into the initialization now.
-                      //  That's probably better / smoother overall.
-
-
-
-
-                      this.set(props);
-                      */
-
-                      // Could be set through flags?
-
-                      //  We can set it to be a selection scope at an earlier stage, on the server,
-                      //  and tell it to retain that information going to the client, so that when it is activated there
-                      //  it is also a selection scope.
-
-                      // I think another useful function would just set the selection scope to be at the current level.
-
-                      // ctrl.selection_scope(ctrl);
-                      //  otherwise it could be getting the selection scope.
-                      //  nice set syntax, consistant with other code too.
-
-                      // Then some specific activations depending on the field
-
-                      // Function field_specific_activate
-
-
-
-                      // Doubt we should set up the selection scope like this...
-                      //  Probably do it on initialization on the client instead.
-
-
-                      /*
-                      var ss = this.get('selection_scope');
-                      // Though the selection scope may have been a jsgui field.
-
-
-
-                      //
-
-                      console.log('ss ' + ss);
-
-                      var val_ss, t_val_ss;
-                      //console.log('ss ' + ss);
-                      // if we have the selection scope, better to create a proper Selection_Scope object.
-
-
-
-                      if (typeof ss !== 'undefined') {
-                          val_ss = ss.value();
-
-                          t_val_ss = tof(val_ss);
-
-                          if (t_val_ss === 'number') {
-                              // get a selection scope from the context, with that id.
-
-                              var selection_scope = this._context.get_selection_scope_by_id(val_ss);
-                              //  Do we need to set the control of the selection scope?
-
-
-                              this.set('selection_scope', selection_scope);
-
-
-
-
-                          } else {
-                              var selection_scope = new Selection_Scope({
-                                  'control': this
-                              });
-
-                              this.set('selection_scope', selection_scope);
-                          }
-
-
-
-
-
-                      }
-
-                      */
-
-
-
-
-                      // Perhaps selectable behaviour should be within init as well.
-                      // is_selectable could be a field.
-                      //  Need to have it read from the data-jsgui-fields
-                      //  At the moment it's not considered there.
-                      //   The enhanced ctrl could have the is_selectable boolean field.
-
-
-
-                      /*
-                      var is_selectable = this.get('is_selectable');
-                      console.log('is_selectable', is_selectable);
-                      console.log('tof is_selectable', tof(is_selectable));
-
-                      //
-
-
-                      //if (is_selectable && is_selectable.value() === true) {
-                      if (is_selectable === true) {
-                            this.selectable();
-                      } else {
-                          //this.selectable(is_selectable);
-                      }
-                      */
-
-
-
-
-
-                      //if (ss) throw 'stop';
-
-                      //throw 'sty';
-
-                  }
+              //    }
               } else {
                   // set the dom attributes value... silent set?
 
                   dom_attributes.set(name, value);
               }
-
           }
-
         }
-
-
-
-        /*
-
-
-        var cls = el.className;
-
-        //console.log('cls ' + cls);
-        var aCls = cls.split(' ');
-
-
-        if (aCls.length > 0) {
-            // can use a map of the css classes.
-            //  faster to add and remove.
-
-            var map_classes = jsgui.get_truth_map_from_arr(aCls);
-
-            this.set('dom.attributes.class', map_classes);
-        }
-
-        // Need to read through all of the DOM atributes.
-        //
-
-
-        var str_properties = el.getAttribute('data-jsgui-fields');
-        //console.log('str_properties', str_properties);
-        if (str_properties) {
-            //console.log('str_ctrl_fields ' + str_ctrl_fields);
-            //console.log('str_properties', str_properties);
-            var props = JSON.parse(str_properties.replace(/'/g, '"'));
-            //console.log('props ' + stringify(props));
-            //throw 'stop';
-            this.set(props);
-
-            // Could be set through flags?
-
-            //  We can set it to be a selection scope at an earlier stage, on the server,
-            //  and tell it to retain that information going to the client, so that when it is activated there
-            //  it is also a selection scope.
-
-            // I think another useful function would just set the selection scope to be at the current level.
-
-            // ctrl.selection_scope(ctrl);
-            //  otherwise it could be getting the selection scope.
-            //  nice set syntax, consistant with other code too.
-
-
-            var ss = this.get('selection_scope');
-            //console.log('ss ' + ss);
-            // if we have the selection scope, better to create a proper Selection_Scope object.
-
-            if (ss && ss.value() === true) {
-                // will create a proper selection scope
-
-                var selection_scope = new Selection_Scope({
-                    'control': this
-                });
-
-                this.set('selection_scope', selection_scope);
-                //throw 'stop';
-            }
-
-            //if (ss) throw 'stop';
-
-            //throw 'sty';
-
-        }
-        */
     },
     'hide': function() {
         // set the style to hidden.
@@ -2271,50 +1843,7 @@ Control = jsgui.Control = jsgui.Control.extend({
                     });
 
                 }
-
-
-
-                // Then put it into the dom.
-
-                // Need to render it?
-                //  Add it to the document Control's body (the body control) and then
-                //  the rendering should be done automatically.
-
-                // Not sure I can get the body control like that.
-                // A different way to get the body?
-                //  Make a body function?
-
                 var context = that._context;
-                //console.log('context', context);
-
-
-                // The context should have access to the document and body controls?
-                //  There is already the document reference.
-
-
-                // Should have both the document and the document control available in the Page_Context.
-
-
-                // It should find the body...
-                //console.log('context.ctrl_document', context.ctrl_document);
-
-
-                //console.log('body', body);
-
-
-
-
-
-
-
-
-                // I think we need another demo / test of dynamically adding content to a control.
-                //  Should try insert as well as add.
-
-                // Want the coder to update it within the control system, the framework renders and inserts into the DOM as necessary.
-
-                //console.log('post add context menu to body');
-
             } else {
 
                 if (pos) {
@@ -2335,34 +1864,11 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             setTimeout(function() {
 
-                //console.log('pre add context_menu', context_menu);
-
-                //console.log('pre add context_menu._.content._arr.length ' + context_menu._.content._arr.length);
-                // Looks like we need to examine the add procedure more.
-
                 body.add(context_menu);
 
                 //console.log('pre activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
 
                 context_menu.activate();
-
-                // Why is the context menu's node getting added twice?
-
-                //console.log('added context_menu', context_menu);
-                //console.log('post activate context_menu._.content._arr.length ' + context_menu._.content._arr.length);
-
-
-                // Seems not to be rendering it with its ID.
-                //  Would prefer its id to be rendered as data-jsgui-id
-
-
-                // Why is it adding more to the context menu when it's appearing a 2nd time?
-
-                // do we need to activate it here?
-                //  will that be done automatically?
-                //  I think that adding the control should activate it if necessary.
-                //context_menu.activate();
-
 
                 context_menu.one_mousedown_anywhere(function(e_mousedown) {
                     //console.log('e_mousedown.within_this ' + e_mousedown.within_this);
@@ -2403,49 +1909,12 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                         menu_node.raise('select');
 
-
-                        // But the inner control, the menu node which was dynamically created, has not been rendered with its
-                        //  necessary jsgui properties, like data-jsgui-id
-
-                        // then from that, we find the menu node it corresponds with.
-
-                        //var el_menu_node = el_target.parentNode.parentNode;
-                        // and need to get the Control itself from the context.
-
-                        //var menu_node_id =
-
-
                         context_menu.remove();
                     }
 
 
                 });
 
-
-
-                /*
-                 setTimeout(function() {
-
-
-                 // Need to hide the context menu on mousedown outside it.
-
-                 // one_mousedown_outside
-                 //  that could be a useful specialised function to have.
-
-                 // Would only want it to be removed once.
-
-
-
-
-                 ctrl_html_root.one('mouseup', function(e_mouseup) {
-                 console.log('');
-                 console.log('one mouseup');
-                 if (context_menu) {
-                 context_menu.remove();
-                 }
-                 });
-                 }, 20)
-                 */
             }, 0);
 
         });
@@ -2494,22 +1963,6 @@ Control = jsgui.Control = jsgui.Control.extend({
                 return false;
             }
         })
-
-        // Create a context menu with those nodes.
-
-        // When control is right clicked on, create and show a context menu?
-        //  I think keeping the menu within the control, rendered by hidden would work. Maybe?
-        //  Or easier to show in an overlay if it is generated?
-        //  I think absolute positioning would be OK, but then it could run into problems with the element's overflow: hidden
-        //  So rendering in an absolute div may make the most sense.
-        //   Could then keep the DOM el once it exists.
-
-        // This would mean Context_Menu would be a requirement of html-enh, which means a whole load of other
-        //  components could also fit in that space in the heirachy, logically.
-
-
-
-
 
 
     }),
@@ -2678,32 +2131,6 @@ Control = jsgui.Control = jsgui.Control.extend({
             }
 
         })
-
-
-
-
-        // think we want the various drag and drop signifier events.
-
-
-
-
-
-        // There will be different drag options.
-        //  Drag a ghost copy
-        //  Drag the original
-        //   Automatically snap/transition back into place (depending on conditions)
-
-        // I think dragging a ghost copy of the original is best for dragging items from a toolbox
-
-
-
-
-        // with no sig...
-
-
-        // basically make the control draggable.
-
-
 
 
     }),
@@ -3101,94 +2528,6 @@ Control = jsgui.Control = jsgui.Control.extend({
             //  That could do things like scan for it being in an outside border.
 
             ctrl._context.move_drag_ctrl(e_move, ctrl);
-
-            // so the context has been notified.
-            //  It can check for various things like the mouse being in an outer border region.
-
-            //  Other controls could check for the mouse being above them.
-
-
-
-
-
-            // also, it's worth telling the context about the drag.
-
-            // There could be docking regions set up.
-            //  Also, there could be different ways of implementing this.
-            //  I think comparing to the edge of the document.
-            //   Checking the cursor position in relation to the width of the screen.
-            //   Seeing if it is in an outer section.
-            //    If so, we can have a docking indication.
-
-            // Want to define the docking areas.
-            //  May need to dock an item next to another one.
-            //   So possibly invisible docking divs would help.
-
-            // This could also use a bit of a collision detection algorithm.
-
-            // Anyway, to start with the flexigrid should be able to dock to the top, left, bottom, or right.
-
-            // May be necessary to move the main content around, creating panels on the edges where the docked control stays.
-            //  I think rearranging the page layout using more than just the docked control will be necessary.
-
-            // Being able to flexibly change layouts will be useful.
-            //  With a page control, or an active control that is the main part of the page.
-
-            // Defining where side panels go.
-            //  Controls (elements) can have side panels put next to them.
-            //   Could be inside them in the DOM.
-            //    At the beginning or the end.
-            //  Could effectively split up a control into two columns, with the side panel being on the left.
-            //   Could go for up to four side panels.
-            //    And have 8 corner panels too.
-
-            // Division of a div into 9 seems like it would be very useful. Potentially 9.
-            //  Keeping the layout valid while making an abstraction for this will be very useful.
-
-            // Activating 9-panel functionality on a div...
-            //  I think I should do much of this in html enhancements.
-
-            //  Dom tools before control.
-            // And separate out control.
-            //  Then html builds on top of control, adds more
-            //  Then we have enh-control, which will still be used as a default in many cases.
-            //   Will have extra functionality which could be useful, but not part of the core control functionality.
-            //    These enhancements could then be made more modular.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // need to look into the get system.
-            //  this will also need to update the element too.
-            //  ctrl.render_inline_css
-            //   gets a string
-            //  ctrl.update_inline_css
-
-
-
-
-
-
-
 
         }, function(e_end) {
             // tell the context that the drag has ended.
@@ -3604,9 +2943,6 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
         // use the grid_9's dock placeholder position?
-
-
-
 
 
         //console.log('dock_placeholder_pos ' + stringify(dock_placeholder_pos));
@@ -4775,62 +4111,6 @@ var HTML_Document = jsgui.html.extend({
     }
 
 
-    /*
-    'all_html_render': function () {
-
-
-
-        //if (this.pre_all_html_render) {
-        //
-        //}
-        var that = this;
-        var res = [];
-
-        this.pre_all_html_render();
-
-        var dom = this.get('dom');
-
-        if (dom) {
-
-            res.push(that.render_dtd());
-
-            // the super all_html_render.
-
-
-            res.push(this._super());
-            //res.push(that.render_content());
-
-            //res.push(
-
-            // does it have innerHTML?
-            //  I think that will just be a content item that gets rendered anyway.
-            //console.log('has dom');
-
-            //var beginning = this.renderBeginTagToHtml();
-            //var middle = this.all_html_render_internal_controls();
-            //var end = this.renderEndTagToHtml();
-            //var appendment = this.renderHtmlAppendment();
-
-            //console.log('beginning ' + beginning);
-            //console.log('middle ' + middle);
-            //console.log('end ' + end);
-
-            //res = [beginning, middle, end, appendment].join('');
-            //throw ('stop');
-        }
-
-
-
-        //if (this.dom && this.dom._ && this.dom._.innerHtml) {
-        //	res = [this.renderBeginTagToHtml(), this.dom._.innerHtml, this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
-        //} else {
-        //	res = [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
-        //};
-
-        return res.join('');
-    }
-    */
-
 });
 
 var Blank_HTML_Document = HTML_Document.extend({
@@ -5080,6 +4360,7 @@ jsgui.recursive_dom_iterate = recursive_dom_iterate;
 jsgui.recursive_dom_iterate_depth = recursive_dom_iterate_depth;
 jsgui.get_window_size = get_window_size;
 jsgui.Client_HTML_Document = Client_HTML_Document;
+jsgui.desc = desc;
 //jsgui.Selection_Scope = Selection_Scope;
 
 // And a Page_Control as well...

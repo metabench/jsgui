@@ -53,6 +53,7 @@ var Constraint = require('./constraint');
 	var arrayify = j.arrayify;
 	var mapify = j.mapify;
 	var are_equal = j.are_equal;
+	var get_a_sig = j.get_a_sig;
 	var get_item_sig = j.get_item_sig;
 	var set_vals = j.set_vals;
 	var truth = j.truth;
@@ -293,7 +294,12 @@ var Constraint = require('./constraint');
 		// Non polymorphic version would be a lot faster.
 		//  Perhaps using an inner function for the [string, value] operations, and the
 		//   iterative version makes use of that.
-		'set': fp(function(a, sig) {
+		//'set': fp(function(a, sig) {
+		'set': (function() {
+	      var a = arguments;
+	      a.l = arguments.length;
+	      var sig = get_a_sig(arguments, 1);
+
 			// Prime candidate for optimization here.
 
 			// When setting an indexed array Data_Object, it sets a field collection.
@@ -774,6 +780,7 @@ var Constraint = require('./constraint');
 			if (sig == '[o]') {
 				// add each one
 				//var that = this;
+				var a0 = a[0];
 
 				// object.keys will hopefully be faster.
 
@@ -783,7 +790,7 @@ var Constraint = require('./constraint');
 
 				for(c = 0; c < l; c++) {
 					this.set(a0[a0_keys[c]]);
-					
+
 				}
 
 				// Older JS code
