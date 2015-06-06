@@ -423,7 +423,7 @@ div.single-line.selected {
 	text-indent: 3px;
 	line-height: 14px;
 	position: relative;
-	top: 3px;
+	top: 4px;
 
 }
 
@@ -656,6 +656,11 @@ html.dragging {
 	background-color: #FF0000;
 	float: left;
 }
+
+.file-manager .icon {
+	margin-left: 2px;
+}
+
 .file-manager .directory .icon {
 	width: 24px;
 	height: 24px;
@@ -675,9 +680,15 @@ html.dragging {
 	height: 32px;
 	background-color: #DFDFDF;
 	float: left;
+	margin-left: 2px;
 }
 
 .tree .subitems {
 	padding-left: 18px;
 
+}
+
+.file-manager .item .name {
+	margin-left: 2px;
+	line-height: 24px;
 }

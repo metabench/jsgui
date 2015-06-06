@@ -32,6 +32,35 @@ var Collection = jsgui.Collection;
 
 var Client_Resource_Pool = require('../resource/core/client-pool');
 
+// Also should have the means to send socks messages to the server.
+
+// Want there to be a client socks resource, which proxies all socks connections???
+
+// Or particularly set up a socks router.
+
+
+// On the client, may want to set a task for the server resource.
+//  Though task setting seems like a roundabout way of using constrained verbs here. Fits in with grammar OK.
+
+
+
+// Let's write some code on the client that would set a task for a resource.
+//  Need a Resource that can accept tasks too.
+
+// Linux System resource for the moment.
+//  Will have it capable of getting / setting Linux system information.
+//  Will include the capability to set it tasks.
+
+// Let's keep things (specific resources) within the 'Resource' directory, as it's an abstraction that makes use of other parts of the jsgui platform.
+
+
+
+
+
+
+
+
+
 
 
 var Selection_Scope = require('./selection-scope');

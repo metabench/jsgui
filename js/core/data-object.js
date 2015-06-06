@@ -1309,7 +1309,7 @@ var Data_Object = Evented_Class.extend({
     // One parent and one index for the moment. That's what DOM nodes need.
 
     //'parent': fp(function(a, sig) {
-    'parent': (function() {
+    'parent': function() {
 	      var a = arguments;
 	      a.l = arguments.length;
 	      var sig = get_a_sig(arguments, 1);
@@ -1396,7 +1396,7 @@ var Data_Object = Evented_Class.extend({
 
 
         }
-    }),
+    },
 
     /*
     'parent': function(a1, a2) {

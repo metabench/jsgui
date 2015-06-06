@@ -1455,6 +1455,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         var that = this;
         var c, l;
 
+        var my_content = this.get('content');
+
         var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
         if (str_ctrl_fields) {
             //console.log('str_ctrl_fields ' + str_ctrl_fields);
@@ -1488,41 +1490,49 @@ Control = jsgui.Control = jsgui.Control.extend({
         var cns = el.childNodes;
         var content = this.get('content');
         // Adding the content again?
+        //console.log('cns', cns);
+        //console.log('cns.length', cns.length);
         for (c = 0, l = cns.length; c < l; c++) {
             var cn = cns[c];
-            var nt = cn.nodeType;
-            //console.log('* nt ' + nt);
-            if (nt == 1) {
-                var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
-                //console.log('cn_jsgui_id ' + cn_jsgui_id);
-                var cctrl = context.map_controls[cn_jsgui_id];
-                // quick check to see if the control is not already there.
-                var found = false;
-                if (cctrl) {
-                    var ctrl_id = cctrl.__id;
-                    //console.log('* ctrl_id', ctrl_id);
-                    if (ctrl_id) {
-                        content.each(function(v, i) {
-                            if (v.__id) {
-                                if (v.__id == ctrl_id) found = true;
-                            }
-                        });
-                    }
 
-                    if (!found) {
-                        this.add(cctrl);
+            if (cn) {
+              var nt = cn.nodeType;
+              //console.log('* nt ' + nt);
+              if (nt == 1) {
+                  var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
+                  //console.log('cn_jsgui_id ' + cn_jsgui_id);
+                  var cctrl = context.map_controls[cn_jsgui_id];
+                  // quick check to see if the control is not already there.
+                  var found = false;
+                  if (cctrl) {
+                      var ctrl_id = cctrl.__id;
+                      //console.log('* ctrl_id', ctrl_id);
+                      if (ctrl_id) {
+                          content.each(function(v, i) {
+                              if (v.__id) {
+                                  if (v.__id == ctrl_id) found = true;
+                              }
+                          });
+                      }
 
-                    }
-                    //cctrl.activate();
-                }
+                      if (!found) {
+                        my_content.add(cctrl);
+
+                      }
+                      //cctrl.activate();
+                  }
+              }
+              if (nt == 3) {
+                  // text
+                  var val = cn.nodeValue;
+                  //console.log('val ' + val);
+                  content.push(val);
+
+              }
             }
-            if (nt == 3) {
-                // text
-                var val = cn.nodeValue;
-                //console.log('val ' + val);
-                content.push(val);
 
-            }
+            //console.log('cn', cn);
+
             // we can get the ctrl reference
 
         }
@@ -1978,7 +1988,10 @@ Control = jsgui.Control = jsgui.Control.extend({
 
     'draggable': fp(function(a, sig) {
         var that = this;
-        console.log('draggable sig', sig);
+        //console.log('draggable sig', sig);
+
+        //console.trace();
+
         var options = {}, mode, drag_start_distance = 4;
 
         // options could contain event handlers.
@@ -2103,7 +2116,11 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         }
         var fn_mouseup = function(e_mouseup) {
-            console.log('e_mouseup', e_mouseup);
+            //console.log('e_mouseup', e_mouseup);
+
+            //console.log('pre switch off mousemove, mouseup');
+
+            // Seems the events are being added too many times.
 
             body.off('mousemove', fn_mousemove);
             body.off('mouseup', fn_mouseup);
@@ -2335,7 +2352,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             //var offset_within_target = jsgui.v_subtract(e_pos_on_page, targetPos);
             mousedown_offset_from_ctrl_lt = jsgui.v_subtract(e_pos_on_page, ctrl_el_pos);
-            console.log('mousedown_offset_from_ctrl_lt ' + stringify(mousedown_offset_from_ctrl_lt));
+            //console.log('mousedown_offset_from_ctrl_lt ' + stringify(mousedown_offset_from_ctrl_lt));
 
             // not bad...
 

@@ -584,20 +584,6 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             this.set('dom.tagName', tagName);
 
-            // this.set_s_s;
-            //  different versions of set, one of which will just set using 2 string params.
-
-
-
-            //  using two strings.
-            //  a version of the function
-
-            // could have inline creation of the dom Data_Object.
-
-            //var dom = this._.dom = this._.dom || new Data_Object({'context': this.context});
-            //var tag_name = dom._.tagName = new Data_Value({'value': tagName});
-            //tag_name.parent(dom);
-
             this._icss = {};
             //this._.dom = {'tagName': 'div'};
 
@@ -618,7 +604,15 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             }
 
             if (spec.el) {
-                this.set('dom.el', spec.el);
+              // Not sure this type of setting is that speedy, or would be that good for the dom element.
+
+              // Though maybe a specialised set would be good.
+
+              this.set_dom_el(spec.el);
+
+              //this.set('dom.el', spec.el);
+              //this._.el = spec.el;
+
             }
 
             var that = this;
@@ -647,7 +641,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             if (spec['class']) {
                 //this.set('dom.attributes.class', spec['class']);
-                this.add_class(spec['class']);
+                this.add_class(spec.class);
             }
 
             var context = this._context;
@@ -661,110 +655,109 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 //  a context at some stage.
             }
 
-
-
-
-            // When content gets added, need to update the relationships.
-
-            // Perhaps change is the better event to use.
-
-            //  And then within the change event there are more details.
-            //  Fewer event listeners to add.
-
-            //
-
             var content = this.get('content');
             content._parent = this;
 
-            // Want to have the list of fields
-            //var cc = 0;
-
-            // Want to listen to changes in fields.
-            //  Change gets triggered so frequently!
-
-            // Why is the event getting bound too many times?
-            //  Have a strange problem, where this event is firing more than expected and more appear bound on the control.
-
-            // Are change events being bubbled?
-
-            // Why is on change setting up so many event handlers?
-
-
-            // A change event here seems to be creating lots of event handlers on one control.
-
-
-
-
-            // Need to work out why event binding here causes problems, with it seeming to bind lots of events to one control.
-
-            // It will probably be best to do smaller test cases to do with event binding and bubbling,
-            //  possibly also browser based cases that will be easier to follow.
-
-
-            // Onchange here makes it go drastically wrong.
-            //  Between page views, event handlers are building up on a control.
-            //  Seems like some Data_Objects or Controls may not have contexts applied.
-
-
-
-            // The control's onchange event is not working.
-            //  It seems like onchange for the content is working though.
-
-            //  On change any of the control fields...
-            //   Could create onchange events for each of the control fields automatically.
-
-
-
-
-            /*
-            this.on('change', function(e_change) {
-
-                // Change takes place in the collection?
-                //  So when an item gets added, it's added to the collection, and the collection changes.
-                //  Does the collection have the right context? The collection is initialised as a field.
-
-
-
-                //console.log('e_change', e_change);
-
-                // There are very many changes...
-                //  It seems like too many change events get reported.
-                //   Need to tell the difference between a change of something, and a change to something.
-                //   Like an inner control gets replaced with something different, or an inner control has a change happen to it.
-
-
-                // It looks like changes are bubbling, need to find a way of tracking the initiator of a change event.
-
-
-
-                if (e_change.name) {
-                    //console.log('e_change.name', e_change.name);
-
-
-                    if (e_change.name == 'inner_control') {
-                        console.log('e_change.bubbled ' + e_change.bubbled);
-
-                        //console.log('that', that);
-                        //var my_ctrl_id = that._id();
-                        // Controls may not have contexts yet?
-
-                        //console.log('my_ctrl_id', my_ctrl_id);
-
-                        //console.log('e_change', e_change);
-                        //console.trace("Here I am!")
-                        //cc++;
-                    }
-                }
-
-                //console.log('change sig ' , jsgui.get_item_sig(e_change));
-            })
-            */
-
-
-
         }
 
+        // but can the rest be skipped if this is abstract?
+        //  with abstract Data_Objects or controls, don't call the normal constructor?
+
+        //  we need to keep the spec.
+
+
+        // FIX / Clarify
+
+        // __type
+        //if (spec.page_context) {
+        //	this._.page_context = spec.page_context;
+        //}
+        //if (spec.context) {
+        //	this._context = spec.context;
+        //}
+
+        //this.content = this.get('content');
+        // should connect the content field with connect_fields = true;
+        // need to have this listen for some changes.
+        //  changes in flags being an important one.
+
+        // some flags will also correspond to css classes which get toggled.
+        //  such as 'hidden' or 'selected' or maybe 'clearall'.
+
+        // Think we need something that listens for content being added (or removed).
     },
+
+    // Needs activate, and behaviour fields (or similar).
+
+    // ctrl.set('hover-class', 'hover');
+    //  Want this to respond to state changes.
+    //  that will be the in and out functions on the element.
+    // May be better to do the hover event functions because it could work accross more browsers.
+    //  Also, for the drag and drop, we'll need to know what's being picked up... could do that in another way.
+
+    // Configure what is draggable
+    //  That would be on the editable version.
+    //  Perhaps on this version we allow drag starts?
+
+
+
+    // Configure how the parts of the components recieve drops.
+    //  Don't want things to be changing all over the place in response to changes.
+    //  When something gets picked up, grey out its place in the document.
+    //   Put a fairly small placeholder in the document to show where it could go.
+
+    // Probably should implement my own drag and drop interface so it works on mobile.
+    // In the editor version, various controls will have a opetions for drag and drop.
+
+    // Will want some encapsulation for drag and drop, but some of the behaviours to do with placeholders will be custom (maybe).
+    //  I think that thinking in terms of general cases is best.
+
+    // Draggable
+    // Drop_Zone
+    //  What can be dropped here?
+    // How does the placeholder look?
+    // For the moment, should keep the original item in place, possibly shade it.
+    //  An item that follows the mouse pointer.
+    //   Some kind of clone / ghost copy of the original.
+    //   I think ghost may be good because it's just the appearance without an effect for the moment.
+
+    // Can use data attributes in the DOM for indicating behaviours?
+    //  Or could be in the activation information for controls.
+
+    // Selectable.
+    // Selection handles - basically events wired to select/deselct the object
+    //  Things are likely to be selected in order to drag...
+    //   Not necessarily though.
+
+    // Possibly want better facilities for adding and removing css classes.
+    //  Could have an object to hold them...
+    //   Could do a generally quite fast system of updating the style attribute
+    //    Logically quite simple.
+
+    // Could use flags for behaviours. Such as a 'selectable' flag.
+    //  That in turn interacts with a (css) flag, selected.
+
+    // Anyway, want activation.
+
+    // Upgraded event binding...
+    //  Some events will be DOM events.
+    // So, when some events, such as 'blur' are bound to a control, we want it to be bound as an
+    //  event listener on the DOM so that the control is listening to that DOM event.
+
+    // The jsgui programmer will use the same API to bind DOM events to controls as to bind other sorts of events
+    //  to controls and other objects.
+
+    // The 'blur' event will be the one I start with.
+
+    //console.log('this', this);
+    // set_dom_el
+    'set_dom_el': function(el) {
+      this._.el = el;
+      console.log('this', this);
+    },
+
+
+
 
 
     'post_init': function (spec) {
@@ -990,93 +983,118 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         //  Just setting a property of a control with another control, on the server, should be enough to get this mechanism operating.
         //  It will be available as a field on the client-side.
 
-        var dom_attrs = this.get('dom.attributes');
+        if (this._ctrl_fields) {
+          // go through the control fields, putting together the data attribute that will be persited to the client.
 
-        if (!dom_attrs) {
-          throw 'expecting dom_attrs';
-        } else {
-          if (this._ctrl_fields) {
-            // go through the control fields, putting together the data attribute that will be persited to the client.
+          // need to compose the string.
 
-            // need to compose the string.
-
-            var obj_ctrl_fields = {};
-
-            var keys = Object.keys(this._ctrl_fields);
-            var key;
-            for (var c = 0, l = keys.length; c < l; c++) {
-              key = keys[c];
-              obj_ctrl_fields[key] = this._ctrl_fields[key]._id();
-            }
-
-            //each(this._ctrl_fields, function(ctrl_field, name) {
-            //  obj_ctrl_fields[name] = ctrl_field._id();
-            //});
+          var obj_ctrl_fields = {};
+          each(this._ctrl_fields, function(ctrl_field, name) {
+            obj_ctrl_fields[name] = ctrl_field._id();
+          });
 
 
-            //this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(obj_ctrl_fields).replace(/"/g, "'"));
-            // lower level set here?
-            dom_attrs.set('data-jsgui-ctrl-fields', stringify(obj_ctrl_fields).replace(/"/g, "'"))
+          this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(obj_ctrl_fields).replace(/"/g, "'"));
 
-
-          }
-
-          if (this._fields) {
-            // go through the control fields, putting together the data attribute that will be persited to the client.
-
-            // need to compose the string.
-
-            //var obj_fields = {};
-            //each(this._ctrl_fields, function(ctrl_field, name) {
-            //  obj_ctrl_fields[name] = ctrl_field._id();
-            //});
-
-            //this.set('dom.attributes.data-jsgui-fields', stringify({
-            //    'num_days': num_days
-            //}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
-
-
-            //this.set('dom.attributes.data-jsgui-fields', stringify(this._fields).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
-            dom_attrs.set('data-jsgui-fields', stringify(this._fields).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"))
-
-          }
-          var arr = [];
-          //var arr_dom = dom_attrs._arr;
-
-          //for (var c = 0, l = arr_dom.length; c < l; c++) {
-          //  arr.push(' ', c, '="', arr_dom[c], '"');
-          //}
-          var _ = dom_attrs._;
-          var dom_attrs_keys = Object.keys(_);
-          //console.log('dom_attrs_keys', dom_attrs_keys);
-          //throw 'stop';
-
-          var key, item;
-          for (var c = 0, l = dom_attrs_keys.length; c < l; c++) {
-            key = dom_attrs_keys[c];
-            item = _[key];
-            arr.push(' ', key, '="', item, '"');
-          }
-
-
-
-          //dom_attrs.each(function (i, v) {
-          //    arr.push(' ', i, '="', v, '"');
-          //});
-          return arr.join('');
         }
 
+        if (this._fields) {
+          // go through the control fields, putting together the data attribute that will be persited to the client.
+
+          // need to compose the string.
+
+          //var obj_fields = {};
+          //each(this._ctrl_fields, function(ctrl_field, name) {
+          //  obj_ctrl_fields[name] = ctrl_field._id();
+          //});
+
+          //this.set('dom.attributes.data-jsgui-fields', stringify({
+          //    'num_days': num_days
+          //}).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+
+          this.set('dom.attributes.data-jsgui-fields', stringify(this._fields).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+        var inline_css = this.get_rendered_inline_css();
+        //console.log('inline_css ' + inline_css);
+
+        //throw('10)stop');
+
+        // style currently goes first here... does it matter though?
+        // could be in the dom.attributes.style - it being using some kind of MVC interaction with this.style.
+        if (inline_css.length > 0) {
+
+            // no, not quite like this.
+            //
+            //this.domAttributes('style', inline_css);
+
+            // don't set the style attribute there - render it as the style attribute
+
+            arr.push(' ', 'style', '="', inline_css, '"');
+            //console.log('*_ ' + stringify(this._.dom));
+        }
+        */
+        //var dom = this.get('dom');
+
+        //var dom_attrs = dom.get('attributes');
+
+        var dom_attrs = this.get('dom.attributes');
+        //console.log('dom_attrs ' + tof(dom_attrs));
+        // don't know the number of keys?
+
+        var arr = [];
 
         // Maintaining a dict, or some data structure of the inline styles will help.
 
 
 
 
+        //var arr = new Array(dom_attrs.length * 5);
+        if (dom_attrs) {
+
+            // Going to handle the style attribute differently.
+            //  Maybe at a different level though.
+
+
+
+            dom_attrs.each(function (i, v) {
+                /*
+                if (i != 'style') {
+                    // check just in case
+
+                    // when rendering the style...
+                    //  I think the DOM attributes style will already be rendered (so far)
+                    // Probably render style like the others.
+                    // May use a data type that allows the style / class to be done effectively.
+                    //  could be a dict or an object that does this.
+                    //console.log('dom attr i ' + i);
+                    arr.push(' ', i, '="', v, '"');
+                }
+                */
+                arr.push(' ', i, '="', v, '"');
+            });
+        }
 
 
         //res = arr.join('');
         //return res;
-
+        return arr.join('');
     },
     'renderBeginTagToHtml': function () {
 
@@ -1088,11 +1106,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         //  iterations, nested existance checks. Could have shortcuts so it knows what dom.translate3d means.
         // do we have 'get'?
         //var dom = this.get('dom');
-        //var tagName = this.get('dom.tagName'),
-        var tagName = this._.dom._.tagName;
-        //console.log('this._.dom', this._.dom._.attributes);
-
-        //console.log('tagName', tagName);
+        var tagName = this.get('dom.tagName'),
             res;
 
         if (tagName === false) {
@@ -1235,7 +1249,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             // then if we are waiting on any of them we listen for them to complete.
 
-            //console.log('arr_waiting_controls.length', arr_waiting_controls.length);
+            console.log('arr_waiting_controls.length', arr_waiting_controls.length);
 
             if (arr_waiting_controls.length == 0) {
                 var html = this.all_html_render();
@@ -1298,7 +1312,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 //  I think that will just be a content item that gets rendered anyway.
                 //console.log('has dom');
 
-                /*
+
 
                 var beginning = this.renderBeginTagToHtml();
                 var middle = this.all_html_render_internal_controls();
@@ -1306,8 +1320,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 var appendment = this.renderHtmlAppendment();
 
                 res = [beginning, middle, end, appendment].join('');
-                */
-                return [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
+
+                //return [this.renderBeginTagToHtml(), this.all_html_render_internal_controls(), this.renderEndTagToHtml(), this.renderHtmlAppendment()].join('');
                 //throw ('stop');
             }
         }
@@ -1351,6 +1365,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         var content = this.get('content');
 
+        //console.log('content', content);
+
         // Does not have content?
         //  That's very strange.
 
@@ -1374,6 +1390,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         var contentLength = content.length();
 
+        console.log('contentLength', contentLength);
+
         // var res = [];
 
         var res = new Array(contentLength);
@@ -1390,63 +1408,36 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         });
     	*/
         var tn, output;
-        //console.log('content', content);
-
-        // content._arr
-
-        var arr = content._arr;
-        var c, l = arr.length, n;
-
-        for (c = 0; c < l; c++) {
-          n = arr[c];
-          // Could use faster duck typing here.
-          tn = tof(n);
-          if (tn == 'string') {
-              // escape the string.
-              //var output = jsgui.output_processors['string'](n);
-              //res.push(output);
-              res.push(jsgui.output_processors['string'](n));
-          }
-          /*
-          if (tof(n) == 'string') {
-              // escape the string.
-
-              var output = jsgui.output_processors['string'](n);
-              res.push(output);
-
-          }
-          */
-          if (tn == 'data_value') {
-              //var output = jsgui.output_processors['string'](n.get());
-              res.push(jsgui.output_processors['string'](n._));
-          } else {
-              if (tn == 'data_object') {
-                  //console.log('n', n);
-                  //
-                  throw 'stop';
-              } else {
-                  res.push(n.all_html_render());
-              }
-              //htm = n.all_html_render();
-          }
-        }
-
-        /*
         content.each(function (i, n) {
             //console.log('-------------------------');
             //console.log('tof(n) ' + tof(n));
             //console.log('(n) ' + stringify(n));
             //throw 'stop';
             tn = tof(n);
+            console.log('tn', tn);
             if (tn == 'string') {
                 // escape the string.
+
                 //var output = jsgui.output_processors['string'](n);
                 //res.push(output);
                 res.push(jsgui.output_processors['string'](n));
+
             }
+            /*
+            if (tof(n) == 'string') {
+                // escape the string.
+
+                var output = jsgui.output_processors['string'](n);
+                res.push(output);
+
+            }
+            */
             if (tn == 'data_value') {
                 //var output = jsgui.output_processors['string'](n.get());
                 res.push(jsgui.output_processors['string'](n.get()));
+
+
+
             } else {
                 if (tn == 'data_object') {
                     console.log('n', n);
@@ -1455,10 +1446,13 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 } else {
                     res.push(n.all_html_render());
                 }
+
                 //htm = n.all_html_render();
+
             }
+
+
         });
-        */
 
         //console.log('res', res);
         return res.join('');
@@ -1943,7 +1937,6 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
             var inner_control = this.get('inner_control');
-            //console.log('inner_control', inner_control);
 
             // Does it add a Data_Object successfully?
 
@@ -2230,61 +2223,22 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         //console.log('active');
         var id = this._id();
 
-        //var domAttributes = this.get('dom.attributes');
+        var domAttributes = this.get('dom.attributes');
 
-        //domAttributes.set('data-jsgui-id', id);
-        //domAttributes.set('data-jsgui-type', this.__type_name);
+        domAttributes.set('data-jsgui-id', id);
+        domAttributes.set('data-jsgui-type', this.__type_name);
 
-
-        // Longer code version...
-        var dom = this._.dom;
-
-
-        //console.log('this', this);
-
-        var dom_attributes = this._.dom._.attributes;
-        if (!dom_attributes) {
-          dom_attributes = dom.get('attributes');
-          //dom_attributes.set('data-jsgui-id', id);
-          //dom_attributes.set('data-jsgui-type', this.__type_name);
-          //console.log('dom_attributes', dom_attributes);
-          //dom_attributes._['data-jsgui-id'] = new Data_Value({'value': id});
-          //dom_attributes._['data-jsgui-type'] = new Data_Value({'value': this.__type_name});
-        } else {
-
-        }
-        //console.log('dom_attributes', dom_attributes);
-        //throw 'stop';
-        dom_attributes._['data-jsgui-id'] = new Data_Value({'value': id});
-        dom_attributes._['data-jsgui-type'] = new Data_Value({'value': this.__type_name});
-        //var el = this._.el || dom._.el;
-        var el = dom._.el;
-        if (el) {
-          //console.log('el', el);
-          el.setAttribute('data-jsgui-id', id);
-          el.setAttribute('data-jsgui-type', this.__type_name);
-        }
-
-
-
-
-
-
-        // Then update the DOM?
-
-
-
+        console.log('this', this);
 
         // Calls active on the inner controls.
 
-        //
 
         this.get('content').each(function(i, ctrl) {
+
             //console.log('active i', i);
 
             var tCtrl = tof(ctrl);
-            //console.log('tCtrl', tCtrl);
-            if (tCtrl === 'control') {
+            if (tCtrl == 'control') {
                 ctrl.active();
             }
         });
@@ -3101,25 +3055,25 @@ var escape_html_replacements = [
 
 var escape_html = function (str) {
 
-    //console.log('tof(str) ' + tof(str));
+  if (str === undefined) {
+    return '';
 
-    //console.log('escape_html str ' + str);
+  } else {
+    console.log('tof(str) ' + tof(str));
+
+    console.log('escape_html str ' + str);
     //console.log('tof str ' + tof(str));
 
+    if (tof(str) == 'data_value') str = str.get();
 
-    if (tof(str) === 'data_value') str = str.get();
-    if (tof(str) === 'number') str = str + '';
-
-    //console.log('tof(str)', tof(str));
-
-    if (typeof str === 'undefined') {
-      str = '';
-    } else {
+    if (tof(str) == 'string') {
       var single_replacement;
       for (var c = 0, l = escape_html_replacements.length; c < l; c++) {
           single_replacement = escape_html_replacements[c]
           str = str.replace(single_replacement[0], single_replacement[1]);
       }
+    } else {
+      str = '';
     }
 
     //
@@ -3141,6 +3095,10 @@ var escape_html = function (str) {
     //});
 
     return str;
+
+  }
+
+
 };
 
 
@@ -3212,19 +3170,34 @@ jsgui.textNode = Control.extend({
         var text = this.get('text');
         // These get and set operations should not rely on the page_context.
 
-        //console.log('text ' + text);
+
+
+        console.log('text ' + text);
+        //console.log('this', this);
 
         var nx = this.get('no_escape');
 
 
         //console.log('nx ' + nx);
 
-        if (nx) {
-            res = text || '';
-        } else {
-            //console.log('text', text);
-            res = escape_html(text || '') || '';
+        //if (text === undefined) {
+          //res = '';
+
+        //} else {
+
+        if (text) {
+          if (nx) {
+              res = text || '';
+          } else {
+              res = escape_html(text || '') || '';
+          }
+
         }
+
+
+        //}
+
+
 
         return res;
     }

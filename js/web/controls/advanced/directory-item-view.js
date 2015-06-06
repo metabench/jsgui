@@ -99,7 +99,7 @@ var Directory_Item_View = Item_View.extend({
                       //console.log('post add content ' + new Date().date);
                   });
 
-                  console.log('fs_res.resource.data.files', fs_res.resource.data.files);
+                  //console.log('fs_res.resource.data.files', fs_res.resource.data.files);
                   each(fs_res.resource.data.files, function(file_name) {
                       setTimeout(function() {
                         var sub_dir_view = new File_Item_View({
@@ -120,10 +120,6 @@ var Directory_Item_View = Item_View.extend({
 
                       //console.log('post add content ' + new Date().date);
                   });
-
-
-
-
               }
           });
       });

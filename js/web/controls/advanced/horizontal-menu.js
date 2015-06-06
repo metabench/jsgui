@@ -4,16 +4,16 @@
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 // html-enh depending on Context_Menu?
-	
 
 
-define(["../../jsgui-html", "./menu-node"], 
+
+define(["../../jsgui-html", "./menu-node"],
 	function(jsgui, Menu_Node) {
 
 */
 var jsgui = require('../../jsgui-html');
 var Menu_Node = require('./menu-node');
-		
+
 		var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, is_defined = jsgui.is_defined;
 		var Control = jsgui.Control;
 
@@ -34,7 +34,7 @@ var Menu_Node = require('./menu-node');
 				this.__type_name = 'horizontal_menu';
 
 				this.set('dom.attributes.class', 'horizontal menu');
-				console.log('spec.el', spec.el);
+				//console.log('spec.el', spec.el);
 
 				// Then inside the menu we want a variety of menu nodes.
 
@@ -53,7 +53,7 @@ var Menu_Node = require('./menu-node');
 					//  The drag system will integrate with various bands / window positions.
 
 					// Maybe a property to say that it's dockable.
-					
+
 
 					//var top_bar = new Control({
 					//	'context': this._context
@@ -61,11 +61,11 @@ var Menu_Node = require('./menu-node');
 					//top_bar.set('dom.attributes.class', 'title bar');
 					//this.add(top_bar);
 
-					// 
+					//
 
 					var obj = spec.value;
 
-					console.log('menu obj', obj);
+					//console.log('menu obj', obj);
 
 					// Create the menu nodes from it.
 					var that = this;
@@ -99,72 +99,77 @@ var Menu_Node = require('./menu-node');
 
 					//throw 'stop';
 
-					
 
-					
+
+
 				}
 
 			},
 			'activate': function() {
 				// May need to register Flexiboard in some way on the client.
-				this._super();
 
-				console.log('activate Horizontal_Menu');
+				if (!this.__active) {
+					this._super();
 
-				// While it is open, clicking outside of the menu should close it.
+					//console.log('activate Horizontal_Menu');
 
-				// Something for opening the menu.
-				//  Need to respond to a click on a (root) node.
+					// While it is open, clicking outside of the menu should close it.
 
-				// Want a quick way to get all controls of a certain type inside.
-				//  eg this.find(':horizontal_menu')
-				//  this.children(':horizontal_menu')
+					// Something for opening the menu.
+					//  Need to respond to a click on a (root) node.
 
-				// this.matches_selector(':horizontal_menu');
+					// Want a quick way to get all controls of a certain type inside.
+					//  eg this.find(':horizontal_menu')
+					//  this.children(':horizontal_menu')
 
-				// Needs to have various states
-				//  Different parts of it can be open, closed.
+					// this.matches_selector(':horizontal_menu');
 
-
-				// On click, want to see if any of the nodes are open.
-				//  I think being able to do some kind of selector / query that gets a group of controls would be very helpful here.
-
-				// this.children(':menu_node[open]')
-				//  Some kind of notation like that to find any open menu nodes.
-
-				// The menu items should have 'state' properties
-
-				this.get('content').each(function(i, v) {
-					//console.log('i', i);
-					//console.log('v', v);
-
-					//v.close_all();
-
-					var v_state = v.get('state');
-					console.log('v_state', v_state);
-
-					// Undefined state?
+					// Needs to have various states
+					//  Different parts of it can be open, closed.
 
 
-					// respond to a click on any of these.
+					// On click, want to see if any of the nodes are open.
+					//  I think being able to do some kind of selector / query that gets a group of controls would be very helpful here.
 
-					v.on('click', function(e_click) {
-						console.log('menu item clicked');
+					// this.children(':menu_node[open]')
+					//  Some kind of notation like that to find any open menu nodes.
 
-						v.open();
+					// The menu items should have 'state' properties
 
-						// And mousedown anywhere (else) to close.
+					this.get('content').each(function(i, v) {
+						//console.log('i', i);
+						//console.log('v', v);
 
-						v.one_mousedown_anywhere(function(e_mousedown) {
-							console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+						//v.close_all();
 
-							if (!e_mousedown.within_this) {
-								v.close();
-							}
-						});
+						var v_state = v.get('state');
+						//console.log('v_state', v_state);
 
-					})
-				});
+						// Undefined state?
+
+
+						// respond to a click on any of these.
+
+						v.on('click', function(e_click) {
+							//console.log('menu item clicked');
+
+							v.open();
+
+							// And mousedown anywhere (else) to close.
+
+							v.one_mousedown_anywhere(function(e_mousedown) {
+								//console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+
+								if (!e_mousedown.within_this) {
+									v.close();
+								}
+							});
+
+						})
+					});
+				}
+
+
 
 
 
@@ -174,9 +179,9 @@ var Menu_Node = require('./menu-node');
 
 
 
-				
 
-				// 
+
+				//
 
 			},
 			'close_all': function() {

@@ -13,45 +13,45 @@ var jsgui = require('../../core/jsgui-lang-util');
 var Resource = require('./resource');
 
 
-	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
-	var is_defined = jsgui.is_defined, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsgui.tof;
-	var call_multiple_callback_functions = jsgui.call_multiple_callback_functions, call_multi = jsgui.call_multi;
-	var each = jsgui.each;
+var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
+var is_defined = jsgui.is_defined, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsgui.tof;
+var call_multiple_callback_functions = jsgui.call_multiple_callback_functions, call_multi = jsgui.call_multi;
+var each = jsgui.each;
 
-    // Could maybe make a website resource as well?
+// Could maybe make a website resource as well?
 
-    // It would publish a web db, I think.
-    //  A website resource would contain a variety of requests.
+// It would publish a web db, I think.
+//  A website resource would contain a variety of requests.
 
-	var Web_Resource = Resource.extend({
+var Web_Resource = Resource.extend({
 
-		'init': function(spec) {
-			//
-			if (!is_defined(spec)) spec = {};
+    'init': function(spec) {
+        //
+        if (!is_defined(spec)) spec = {};
 
-			this._super(spec);
+        this._super(spec);
 
-		},
+    },
 
-		'start': function(callback) {
-			// check the requirements
+    'start': function(callback) {
+        // check the requirements
 
-			//  check requirements recursive - checks the requirements of everything required, and if they have the check_requirements function, it uses that.
-			//   I think using the system of names APIs will help here.
+        //  check requirements recursive - checks the requirements of everything required, and if they have the check_requirements function, it uses that.
+        //   I think using the system of names APIs will help here.
 
-			throw 'no start function defined for web resource (subclass)'
+        throw 'no start function defined for web resource (subclass)'
 
-		},
+    },
 
-		'meets_requirements': function() {
-			// Likely will be part of Status
+    'meets_requirements': function() {
+        // Likely will be part of Status
 
-			//return false;
+        //return false;
 
-			return true;
-		},
+        return true;
+    }
 
-	});
+});
 
 	//return Web_Resource;
 //});

@@ -61,20 +61,43 @@ Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core');
                 //var jsgui_css_file_path = '../jsgui/' + filePath;
                 var jsgui_css_file_path = '../../ws/' + filePath;
 
+								// can try some other paths too...
 
                 fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {
                     if (err) {
                         //console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+
+												jsgui_css_file_path = '../../' + filePath;
+
+												// can try some other paths too...
+
+				                fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {
+				                    if (err) {
+				                        //console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+
+
+
+				                        // Try to open it from within the app's path.
+				                        // ../../../ + filePath
+
+				                        //var jsgui_css_file_path = '../../../' + filePath;
+
+				                        throw err;
+				                    } else {
+				                        //var servableJs = updateReferencesForServing(data);
+				                        response.writeHead(200, {'Content-Type': 'text/css'});
+				                        response.end(data);
+				                    }
+				                });
+
+
 
                         // Try to open it from within the app's path.
                         // ../../../ + filePath
 
                         //var jsgui_css_file_path = '../../../' + filePath;
 
-
-
-
-                        throw err;
+                        //throw err;
                     } else {
                         //var servableJs = updateReferencesForServing(data);
                         response.writeHead(200, {'Content-Type': 'text/css'});

@@ -5,34 +5,13 @@
 //  A clock is also useful because it contains time signals so we can see how long it takes for data to reach various machines.
 
 
+// Intersted in having a remote Linux computer.
+//  Ability to SSH into it and run commands.
 
-/*
-
-
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
-*/
-
-// Resources could also have events which objects can listen to.
-//  Programmatic objects can listen.
-//  The resources may broadcast to whatever is listening.
-
-// Also, maintaining one connection stream, communicating with multiple resources - could connect through a Resource Pool, or maybe there
-//  could be a Multi Resource Publisher that publishes a bunch of resources.
-
-// The Application router at the moment sending requests to resources.
-//  I am thinking that rather than doing that, the requests should be handled by a resource publisher that interacts with the resource and publishes it over HTTP.
-
-// Resources in general won't handle HTTP requests, though they will have the capability.
-//  More likely that a resource, when it is served online, will be served using a Resource Publisher (which is itself a resource), which handles HTTP implementation details that would otherwise have
-//  to be repeated between resources.
+// Want to be able to remotely configure and access a Raspberry Pi as a Resource.
 
 
 
-
-//define(["./jsgui-lang-util", './abstract-resource'], function(jsgui, AR) {
-//define(["../../core/jsgui-lang-util"], function(jsgui) {
 
 
 var jsgui = require('../../core/jsgui-lang-util');
@@ -55,6 +34,8 @@ var each = jsgui.each;
 
 
 
+// Resources can have events as well.
+//  Look into how the publisher deals with them.
 
 
 var Resource = Data_Object.extend({
@@ -312,6 +293,3 @@ return res;
 module.exports = Resource;
 	//return Resource;
 //});
-
-
-

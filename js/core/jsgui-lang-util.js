@@ -29,6 +29,7 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "
     var jsgui = require('./jsgui-lang-essentials');
 var Data_Structures = require('./jsgui-data-structures');
 var Data_Value = require('./data-value');
+var Evented_Class = require('./evented-class');
 var Data_Object = require('./data-object');
 var Collection = require('./collection');
 
@@ -70,6 +71,7 @@ jsgui.Data_Object = Data_Object;
 jsgui.Collection = Collection;
 
 jsgui.Data_Value = Data_Value;
+jsgui.Evented_Class = Evented_Class;
 
 //var B_Plus_Tree = Data_Structures.B_Plus_Tree;
 var Sorted_KVS = Data_Structures.Sorted_KVS;
