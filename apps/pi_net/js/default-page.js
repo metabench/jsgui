@@ -5,6 +5,7 @@
 
 var jsgui = require('../../../js/web/jsgui-html-enh');
 var Window = require('../../../js/web/controls/advanced/window');
+var Button = require('../../../js/web/controls/advanced/button');
 var Control = jsgui.Control;
 var stringify = jsgui.stringify;
 
@@ -43,20 +44,46 @@ var Default_Page = jsgui.Client_HTML_Document.extend({
             //  Just a Window Container? Window Context?
 
 
-            var ctrl_0 = new Window({
+            var window = new Window({
                 'context': context
             });
-            ctrl_0.resizable();
-            ctrl_0.active();
+            window.resizable();
+            window.active();
 
             // style should at least set the CSS.
             //
 
-            ctrl_0.style('background-color', '#DDDDDD');
-            ctrl_0.style('width', '800px');
-            ctrl_0.style('height', '600px');
+            window.style('background-color', '#DDDDDD');
+            window.style('width', '800px');
+            window.style('height', '600px');
 
+
+
+
+
+            // Want to get the USB data.
             // Would be nice to be able to set up a menu with some simple JSON like this.
+            // A button that gets activated, when it clicks it sets one of the LED lights on or off.
+            // More general Linux to start with.
+            // Get the USB information
+
+            //  Possible with websockets - but would need to make a request / response pattern system over the websockets.
+
+
+
+            // Reset a USB device (with set task)
+
+            // Get the USB devices' info sounds like one of the best ways of approaching it.
+
+
+            // linux_system_resource.get('usb', cb);
+            //  And the linux_system_resource will be a client-side proxy that uses websockets?
+
+            // Maybe use a Websocket_Client_Resource?
+
+
+
+
 
 
 
@@ -83,21 +110,9 @@ var Default_Page = jsgui.Client_HTML_Document.extend({
             // From the client, want to be able to access various services on the server.
             //  Publishing events from resources through websockets looks important, and like it could be done relatively simply with the right code.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             // Should show a server status
             //  It would be nice if the client uses a websocket connection to stay connected to the server.
+
 
             // Want to possibly be getting frequent status info
 
@@ -107,7 +122,7 @@ var Default_Page = jsgui.Client_HTML_Document.extend({
             // Want to get it broadcasting server status info to its clients.
 
 
-            body.add(ctrl_0);
+            body.add(window);
 
             this.active();
 
@@ -115,8 +130,23 @@ var Default_Page = jsgui.Client_HTML_Document.extend({
         }
     },
     'activate': function() {
-        this._super();
-        console.log('activate Default_Page control');
+        if (!this.__active) {
+            this._super();
+            console.log('activate Default_Page control');
+
+            // may as well get the USB devices at this stage.
+
+            var rp = this._context.resource_pool;
+            //var linux_resource = rp.get('Linux System');
+
+            //linux_resource.get('usb' function(err, res_usb) {
+            //    console.log('res_usb', res_usb);
+            //});
+
+
+
+        }
+
     }
 });
 module.exports = Default_Page;

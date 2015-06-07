@@ -7,6 +7,8 @@ var Server_Page_Context = require("../../js/web/server-page-context");
 var Default_Page = require('./js/default-page');
 
 
+var Linux_System_Resource = require("../../js/resource/advanced/linux-system");
+
 var Data_Object = jsgui.Data_Object;
 var Collection = jsgui.Collection;
 
@@ -111,58 +113,21 @@ var rt = ar.get('routing_tree');
 
 var os = require("os");
 
-//Create function to get CPU information
-var cpuAverage = function() {
+var resource_linux_system = new Linux_System_Resource({ 'meta': { 'name': 'Linux System' }});
+rp.add(resource_linux_system);
 
-  //Initialise sum of idle and time of cores and fetch CPU info
-  var totalIdle = 0, totalTick = 0;
-  var cpus = os.cpus();
+// Should also have a Linux System Resource.
 
-  //Loop through CPU cores
-  for(var i = 0, len = cpus.length; i < len; i++) {
-
-    //Select CPU core
-    var cpu = cpus[i];
-
-    //Total up the time in the cores tick
-    for(type in cpu.times) {
-      totalTick += cpu.times[type];
-   }
-
-    //Total up the idle time of the core
-    totalIdle += cpu.times.idle;
-  }
-  var res = {idle: totalIdle / cpus.length,  total: totalTick / cpus.length};
+// Probably should have it run on Windows, but raise errors?
 
 
-  //startMeasure = res;
-  //Return the average Idle and Tick times
-  return res;
-}
 
-//Grab first CPU Measure
-var startMeasure = cpuAverage();
 
 //Set delay for second Measure
 
-server.start(port, function(ree, res_started) {
+server.start(port, function(err, res_started) {
 
-  setInterval(function() {
-    setTimeout(function() {
-      //Grab second Measure
-      var endMeasure = cpuAverage();
-      //Calculate the difference in idle and total time between the measures
-      var idleDifference = endMeasure.idle - startMeasure.idle;
-      var totalDifference = endMeasure.total - startMeasure.total;
-      //Calculate the average percentage CPU usage
-      var percentageCPU = 100 - ~~(100 * idleDifference / totalDifference);
-      //Output result to console
-      server.broadcast({
-        'percentageCPU': percentageCPU
-      })
-      startMeasure = endMeasure;
-    }, 100);
-  }, 1000);
+
 
 	rt.set('/', function(req, res) {
 		//console.log('1) server function from routing_tree');
@@ -176,8 +141,8 @@ server.start(port, function(ree, res_started) {
 			'context': server_page_context
 		});
 		hd.include_client_css();
-		hd.include_js('/js/app-bundle.js');
         hd.include_js('http://cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js');
+		hd.include_js('/js/app-bundle.js');
 
 		hd.all_html_render(function(err, deferred_html) {
 			if (err) {
@@ -203,7 +168,6 @@ server.start(port, function(ree, res_started) {
 		res.write("</body>");
 		res.write("</html>");
 		res.end();
-
 	});
 	// We should be able to put info into the db.
 });

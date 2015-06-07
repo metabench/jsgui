@@ -2,13 +2,15 @@
 
 
 var sockjs = require('sockjs'), jsgui = require('./jsgui-html'), os = require('os'), http = require('http'), libUrl = require('url'),
-  Resource = require('../resource/core/resource'), JeSuisXML = require('./jsgui-je-suis-xml'), Cookies = require('cookies'),
-  Local_Server_Information = require('../resource/local-server-info'), Local_File_System = require('../resource/local-file-system'),
-  Server_Resource_Pool = require('../resource/core/server-pool'), Router = require('../resource/core/router'), Website_Resource = require('../resource/core/website'),
-  Resource_File_System_Web_Admin = require('../resource/file-system-web-admin'), Resource_Web_Admin = require('../resource/web-admin'),
-  Site_Static_HTML = require('../resource/core/site-static-html'), Site_JavaScript = require('../resource/core/site-javascript'),
-  Site_CSS = require('../resource/core/site-css'), Site_Images = require('../resource/core/site-images'), Site_Audio = require('../resource/core/site-audio'), Info = require('../resource/info'),
-  Login = require('../resource/login'), Server_Page_Context = require('./server-page-context');
+    Resource = require('../resource/core/resource'), JeSuisXML = require('./jsgui-je-suis-xml'), Cookies = require('cookies'),
+    Local_Server_Information = require('../resource/local-server-info'), Local_File_System = require('../resource/local-file-system'),
+    Server_Resource_Pool = require('../resource/core/server-pool'),
+    Router = require('../resource/core/router'), Server_Sock_Router = require('../resource/core/server-sock-router'),
+    Website_Resource = require('../resource/core/website'),
+    Resource_File_System_Web_Admin = require('../resource/file-system-web-admin'), Resource_Web_Admin = require('../resource/web-admin'),
+    Site_Static_HTML = require('../resource/core/site-static-html'), Site_JavaScript = require('../resource/core/site-javascript'),
+    Site_CSS = require('../resource/core/site-css'), Site_Images = require('../resource/core/site-images'), Site_Audio = require('../resource/core/site-audio'), Info = require('../resource/info'),
+    Login = require('../resource/login'), Server_Page_Context = require('./server-page-context');
 var Server = {};
 
 var Login_Html_Resource = Login.Html;
@@ -26,281 +28,321 @@ var Collection = jsgui.Collection;
 
 var exec = require('child_process').exec;
 
-  // And automatically starts an Application within a Server process?
+// And automatically starts an Application within a Server process?
 
-  // Now we have the server process as code (making it distinct from the server abstraction), we have got to make the application code.
-  //  An application in it's default configuration, and then tell the app to do some things with certain pages.
+// Now we have the server process as code (making it distinct from the server abstraction), we have got to make the application code.
+//  An application in it's default configuration, and then tell the app to do some things with certain pages.
 
-  // Could give the app a defailt path of '/'
-  //  Then perhaps the server can route some other things as instructed.
-  //  The Site_JavaScript resource will exist on a per-site basis.
+// Could give the app a defailt path of '/'
+//  Then perhaps the server can route some other things as instructed.
+//  The Site_JavaScript resource will exist on a per-site basis.
 
-  // Need to make a Jsgui Application object, and there will be a Collection of them inside the Server.
+// Need to make a Jsgui Application object, and there will be a Collection of them inside the Server.
 
 
-  // This needs to have more in the init section to support it serving (mostly) static sites.
+// This needs to have more in the init section to support it serving (mostly) static sites.
 var JSGUI_Server = Enhanced_Data_Object.extend({
 
-	'init': function(spec) {
+    'init': function(spec) {
 
 
-          // The spec may be quite different.
-          //  It may be an object containing routes and applications.
+        // The spec may be quite different.
+        //  It may be an object containing routes and applications.
 
-          // object containing application routes...
+        // object containing application routes...
 
-          var resource_pool = new Server_Resource_Pool({
-              // Other things can be made available through the server resource pool.
-              'access': {
-                  'full': ['server_admin']
-              }
-          });
+        var resource_pool = new Server_Resource_Pool({
+            // Other things can be made available through the server resource pool.
+            'access': {
+                'full': ['server_admin']
+            }
+        });
 
 
-          // Having both a server router and a socks router.
-          //  Need to recieve the socks connection(s) and send them on to the correct application within the server.
-          //   Currently not dealing with more than one app within the server.
+        // Having both a server router and a socks router.
+        //  Need to recieve the socks connection(s) and send them on to the correct application within the server.
+        //   Currently not dealing with more than one app within the server.
 
 
 
 
 
-          // Use a different router for the socks connections?
-          //  Probably makes the most design sense.
+        // Use a different router for the socks connections?
+        //  Probably makes the most design sense.
 
 
 
 
-          var server_router = new Router({
-              'meta': {
-                  'name': 'Server Router'
-              }
-          });
-          resource_pool.push(server_router);
+        var server_router = new Router({
+            'meta': {
+                'name': 'Server Router'
+            }
+        });
+        resource_pool.push(server_router);
 
-            var server_websockets_router = new Router({
-                'meta': {
-                    'name': 'Server Websockets Router'
-                }
-            });
-            resource_pool.push(server_websockets_router);
 
+        // Probably better to have a specific Server_Websockets_Router, likely quite simple.
 
+        var server_sock_router = new Server_Sock_Router({
+            'meta': {
+                'name': 'Server Sock Router'
+            }
+        });
+        resource_pool.push(server_sock_router);
 
-          //console.log('spec', spec);
 
-          var t_spec = tof(spec);
 
-          // Normally have an object in the spec?
-          //  And then set some things up on the website resource...
-          //   using the app spec.
+        //console.log('spec', spec);
 
-          if (t_spec == 'object') {
-              each(spec, function(app_spec, route) {
-                  // Create a new Application Resource.
+        var t_spec = tof(spec);
 
-                  var app = new Website_Resource(app_spec);
-                  //console.log('made Website_Resource');
+        // Normally have an object in the spec?
+        //  And then set some things up on the website resource...
+        //   using the app spec.
 
-                  // But the right context?
-                  //
-                  //console.log('');
-                  //console.log('route', route);
-                  //console.log('app', app);
-                  //console.log('app.process', app.process);
-                  //console.log('');
-                  server_router.set_route(route, app, app.process);
-                  // And set it to that route in the routing table.
+        if (t_spec == 'object') {
+            each(spec, function(app_spec, route) {
+                // Create a new Application Resource.
 
-              })
-          }
+                var app = new Website_Resource(app_spec);
+                //console.log('made Website_Resource');
 
-		this._super({});
+                // But the right context?
+                //
+                //console.log('');
+                //console.log('route', route);
+                //console.log('app', app);
+                //console.log('app.process', app.process);
+                //console.log('');
+                server_router.set_route(route, app, app.process);
+                // And set it to that route in the routing table.
 
-		// Resource_File_System_Web_Admin
+            })
+        }
 
-		this.set('resource_pool', resource_pool);
-		//console.log('resource_pool ' + stringify(resource_pool.start));
+        this._super({});
 
-		//var rp = this.get('resource_pool');
-		//console.log('this._.resource_pool ' + this._.resource_pool);
-		//console.log('rp ' + stringify(rp.start));
-		//throw 'stop';
+        // Resource_File_System_Web_Admin
 
-	},
+        this.set('resource_pool', resource_pool);
+        //console.log('resource_pool ' + stringify(resource_pool.start));
 
+        //var rp = this.get('resource_pool');
+        //console.log('this._.resource_pool ' + this._.resource_pool);
+        //console.log('rp ' + stringify(rp.start));
+        //throw 'stop';
 
-	'start': function(port, callback, fnProcessRequest) {
-		//throw 'stop';
-		// The resource_pool is not just a Data_Value. need to fix some get or create new field value code.
-		//console.log('start');
-		var resource_pool = this.get('resource_pool');
-		//console.log('resource_pool ' + stringify(resource_pool));
-		//throw 'stop';
+    },
 
-		var that = this;
-          //console.log('pre start resource pool');
 
-		resource_pool.start(function(err) {
-		    if (err) {
-		        throw err;
-		    } else {
-                  //console.log('jsgui-server resource pool started');
+    'start': function(port, callback, fnProcessRequest) {
+        //throw 'stop';
+        // The resource_pool is not just a Data_Value. need to fix some get or create new field value code.
+        //console.log('start');
+        var resource_pool = this.get('resource_pool');
+        //console.log('resource_pool ' + stringify(resource_pool));
+        //throw 'stop';
 
-                  var rp = that.get('resource_pool');
-                  //console.log('rp ' + rp);
+        var that = this;
+        //console.log('pre start resource pool');
 
+        resource_pool.start(function(err) {
+            if (err) {
+                throw err;
+            } else {
+                //console.log('jsgui-server resource pool started');
 
-                  // get_resource should do the query for the
-                  var lsi = rp.get_resource('Local Server Info');
-                  //console.log('lsi ' + stringify(lsi));
-                  var js = rp.get_resource('Site JavaScript');
-                  var css = rp.get_resource('Site CSS');
-                  var images = rp.get_resource('Site Images');
-                  var audio = rp.get_resource('Site Audio');
+                var rp = that.get('resource_pool');
+                //console.log('rp ' + rp);
 
 
-                  var login = rp.get_resource('Login HTML Resource');
-                  // An HTML resource may be changed to a Resource Publisher + Resource Client.
-                  //  The Resource itself should be separate from the transport mechanism used to access it.
+                // get_resource should do the query for the
+                var lsi = rp.get_resource('Local Server Info');
+                //console.log('lsi ' + stringify(lsi));
+                var js = rp.get_resource('Site JavaScript');
+                var css = rp.get_resource('Site CSS');
+                var images = rp.get_resource('Site Images');
+                var audio = rp.get_resource('Site Audio');
 
-                  var admin = rp.get_resource('Web Admin');
-                  var resource_publisher = rp.get_resource('HTTP Resource Publisher');
 
-                  // .get on a resource.
-                  //  could get a sub-resource.
+                var login = rp.get_resource('Login HTML Resource');
+                // An HTML resource may be changed to a Resource Publisher + Resource Client.
+                //  The Resource itself should be separate from the transport mechanism used to access it.
 
+                var admin = rp.get_resource('Web Admin');
+                var resource_publisher = rp.get_resource('HTTP Resource Publisher');
 
-                  var nis = lsi.get('networkInterfaces');
+                var sock_router = rp.get_resource('Server Sock Router');
 
 
-                  var matching = nis.find('entries', {
-                  	'family': 'IPv4',
-                  	'internal': false
-                  })
+                // .get on a resource.
+                //  could get a sub-resource.
 
-                  // matching.extract
 
+                var nis = lsi.get('networkInterfaces');
 
-                  //console.log('matching ' + stringify(matching));
 
-                  // Then extract the IP addresses themselves.
+                var matching = nis.find('entries', {
+                    'family': 'IPv4',
+                    'internal': false
+                })
 
-                  var ipAddresses = [];
+                // matching.extract
 
-                  each(matching, function(v, i) {
-                  	var ipAddress = v.get('address');
-                  	ipAddresses.push(ipAddress);
-                  });
 
-                  var application_router = resource_pool.get_resource('Server Router');
-                  var rt = application_router.get('routing_tree');
+                //console.log('matching ' + stringify(matching));
 
-                  var map_connections = {};
+                // Then extract the IP addresses themselves.
 
-				var i_connections = 0;
+                var ipAddresses = [];
 
-                  each(ipAddresses, function(ipAddress, i) {
+                each(matching, function(v, i) {
+                    var ipAddress = v.get('address');
+                    ipAddresses.push(ipAddress);
+                });
 
-                  	// Different HTTP servers for the different network addresses.
+                var application_router = resource_pool.get_resource('Server Router');
+                var rt = application_router.get('routing_tree');
 
-                  	// Not sure if to integrate websockets here.
-                  	//  It's likely that there won't need to be multiple websocket endpoints like there are with http.
+                var map_connections = {};
 
-                  	// need to save a map of the http servers to the IP addersses.
+                var i_connections = 0;
 
-                  	// Or also setup the websocket servers too.
+                each(ipAddresses, function(ipAddress, i) {
 
-                  	// Could perhaps set up websocket servers by default.
+                    // Different HTTP servers for the different network addresses.
 
-                  	// However, need to pay attention to the HTTPS protocol for this as well.
-                  	//  For the moment will focus on HTTP.
+                    // Not sure if to integrate websockets here.
+                    //  It's likely that there won't need to be multiple websocket endpoints like there are with http.
 
-                  	// Running a websocket server could be optional.
-                  	// It may be worth having some socket abstraction here, so it handles all websocket servers at once.
+                    // need to save a map of the http servers to the IP addersses.
 
-					var http_server = http.createServer(function(req, res) {
+                    // Or also setup the websocket servers too.
 
-                          //console.log('process server request');
+                    // Could perhaps set up websocket servers by default.
 
-						var authentication_resource = resource_pool.get_resource('Authentication');
-						// Why is the request being identified as a Readable Stream?
+                    // However, need to pay attention to the HTTPS protocol for this as well.
+                    //  For the moment will focus on HTTP.
 
-                          //console.log('authentication_resource', authentication_resource);
+                    // Running a websocket server could be optional.
+                    // It may be worth having some socket abstraction here, so it handles all websocket servers at once.
 
-						if (!authentication_resource) {
+                    var http_server = http.createServer(function(req, res) {
 
-                              // However, a static app set to * should be routed here?
+                        //console.log('process server request');
 
+                        var authentication_resource = resource_pool.get_resource('Authentication');
+                        // Why is the request being identified as a Readable Stream?
 
+                        //console.log('authentication_resource', authentication_resource);
 
+                        if (!authentication_resource) {
 
+                            // However, a static app set to * should be routed here?
 
 
-							var server_routing_res = application_router.process(req, res);
-                              //console.log('server_routing_res', server_routing_res);
 
-						} else {
-							authentication_resource.authenticate(req, function(err, auth_res) {
-								if (err) {
-									throw err;
-								} else {
-									//console.log('auth_res ' + stringify(auth_res));
 
-									var tar = tof(auth_res);
-									if (tar == 'object') {
-										// it's a username
 
-										// we can include authentication information with the req.
 
-										req.auth = auth_res;
+                            var server_routing_res = application_router.process(req, res);
+                            //console.log('server_routing_res', server_routing_res);
 
-									}
+                        } else {
+                            authentication_resource.authenticate(req, function(err, auth_res) {
+                                if (err) {
+                                    throw err;
+                                } else {
+                                    //console.log('auth_res ' + stringify(auth_res));
 
-									application_router.process(req, res);
-								}
-							});
-						}
-					});
-                      http_server.timeout = 10800000;
+                                    var tar = tof(auth_res);
+                                    if (tar == 'object') {
+                                        // it's a username
 
+                                        // we can include authentication information with the req.
 
-                      // Single sock server for each server
-                      //  The applications will make use of the server's sock facility.
-					var sock_server = sockjs.createServer();
+                                        req.auth = auth_res;
 
+                                    }
 
-					sock_server.on('connection', function(conn) {
+                                    application_router.process(req, res);
+                                }
+                            });
+                        }
+                    });
+                    http_server.timeout = 10800000;
 
-						//console.log('sock_server on connection');
 
-						var connection_id = i_connections;
-						conn.id = connection_id;
-						i_connections++;
+                    // Single sock server for each server
+                    //  The applications will make use of the server's sock facility.
+                    var sock_server = sockjs.createServer();
 
-						map_connections[connection_id] = conn;
 
-						//console.log('map_connections', map_connections);
+                    sock_server.on('connection', function(conn) {
 
+                        //console.log('sock_server on connection');
 
-						// We can have it give an update message every 10s...
+                        var connection_id = i_connections;
+                        conn.id = connection_id;
+                        i_connections++;
 
-						// Or more frequent updates maybe...
+                        map_connections[connection_id] = conn;
 
-						conn.on('data', function(message) {
+                        //console.log('map_connections', map_connections);
 
 
-				        	//conn.write('received', message);
+                        // We can have it give an update message every 10s...
 
-				        	// Broadcast the message?
-				        	//  Nothin to do here.
+                        // Or more frequent updates maybe...
 
-				        	//console.log('tof message', tof(message));
+                        conn.on('data', function(message) {
 
-				        	//console.log('socks connection on data: ', message);
-				        	//console.log('sock_server.recieved', sock_server.recieved);
+                            // Not so sure about the acknowledgement just yet.
+                            //conn.write('received', message);
 
-				        	//if (typeof _sock != 'undefined') {
+                            // Broadcast the message?
+                            //  Nothin to do here.
+
+                            console.log('tof message', tof(message));
+
+                            var obj_message = JSON.parse(message);
+                            console.log('obj_message', obj_message);
+
+                            sock_router.process(obj_message, conn);
+
+
+
+
+
+                            // Perhaps we need a barrier between here and the resources.
+                            //  Some mechanism of checking that it's available for the client to use, rather than just the system.
+
+                            // Both in setting up routes to the resources, and having the resources themselves authenticate the request
+                            //  Though having the resources doing the authentication would allow for an abstraction that does authentication while the resource code focuses on specific functionality.
+
+
+                            // So having a router to these resources makes sense, but it could be really simple.
+                            // Maybe just a routing system here?
+
+
+
+
+
+
+
+                            // then send the message onto the websockets router.
+                            //  though routing these will be a lot simpler (at this stage).
+                            //  just use the first part of the URL as the name of the resource to route to.
+                            //   resources could then process the rest of the path.
+
+
+
+
+
+                            //console.log('socks connection on data: ', message);
+                            //console.log('sock_server.recieved', sock_server.recieved);
+
+                            //if (typeof _sock != 'undefined') {
 
                             // Need more advanced default socket reception.
                             //  The client will be sending some kind of specific message.
@@ -341,9 +383,9 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
 
 
 
-				        	if (typeof that.recieved_sock != 'undefined') {
-				        		that.recieved_sock(JSON.parse(message));
-				        	}
+                            //if (typeof that.recieved_sock != 'undefined') {
+                            //	that.recieved_sock(JSON.parse(message));
+                            //}
 
                             // So there would need to be a server function to specifically handle / read the sock message.
 
@@ -351,143 +393,145 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
 
 
 
-				        	//}
+                            //}
 
-				        	//console.log('conn.id', conn.id);
+                            //console.log('conn.id', conn.id);
 
-				        	// But it needs to be for the right connection.
-
-
-					        //that.trigger('websocket_data', message);
+                            // But it needs to be for the right connection.
 
 
-					    });
-					    conn.on('close', function() {
-					    	//console.log('connection ' + conn.id + ' closed');
-					    	map_connections[conn.id] = null;
-					    });
-
-					});
-
-					var broadcast = function(message) {
-						if (!(tof(message) == 'string')) {
-							message = JSON.stringify(message);
-						}
-						//console.log('broadcast');
-						//console.log('map_connections', map_connections);
-						each(map_connections, function(conn, i) {
+                            //that.trigger('websocket_data', message);
 
 
-							if (conn) {
-								//console.log('conn i', i);
-								//conn.write(message);
-								//console.log('message', message);
-								//console.log('t message', tof(message));
-								conn.write(message);
-							}
-							//conn.write(message);
-						})
-					}
+                        });
+                        conn.on('close', function() {
+                            //console.log('connection ' + conn.id + ' closed');
+                            map_connections[conn.id] = null;
+                        });
 
-					that.sock_broadcast = broadcast;
-					that.broadcast = broadcast;
+                    });
 
-
-					sock_server.installHandlers(http_server, {prefix:'/ws'});
-
-                      console.log('port', port);
-
-                      if (ipAddress.value) ipAddress = ipAddress.value();
-
-                      console.log('ipAddress', ipAddress);
+                    var broadcast = function(message) {
+                        if (!(tof(message) == 'string')) {
+                            message = JSON.stringify(message);
+                        }
+                        //console.log('broadcast');
+                        //console.log('map_connections', map_connections);
+                        each(map_connections, function(conn, i) {
 
 
-					http_server.listen(port, ipAddress);
-                  	console.log('* Server running at http://' + ipAddress + ':' + port + '/');
+                            if (conn) {
+                                //console.log('conn i', i);
+                                //conn.write(message);
+                                //console.log('message', message);
+                                //console.log('t message', tof(message));
+                                conn.write(message);
+                            }
+                            //conn.write(message);
+                        })
+                    }
+
+                    that.sock_broadcast = broadcast;
+                    that.broadcast = broadcast;
 
 
+                    sock_server.installHandlers(http_server, {prefix:'/ws'});
+
+                    console.log('port', port);
+
+                    if (ipAddress.value) ipAddress = ipAddress.value();
+
+                    console.log('ipAddress', ipAddress);
 
 
-                  });
-                  if (callback) callback(null, true);
-		    }
-
-		});
-	},
-
-    'recieved_sock': function(sock_message) {
-        // Need to look at the message, and unpack the socks_path from the rest of the message
-        //  Socks will be used to deliver a message to the relevant service.
-
-        // perhaps sock messages could contain a URL.
-        //  Just need to route them to the right place.
-
-        // server_websockets_router
-
-        var rp = this.get('resource_pool');
-        var websocket_router = rp.get_resource('Server Websocket Router');
-
-        // need to extract the sock path from the recieved_sock message.
+                    http_server.listen(port, ipAddress);
+                    console.log('* Server running at http://' + ipAddress + ':' + port + '/');
 
 
 
 
+                });
+                if (callback) callback(null, true);
+            }
 
-
-
+        });
     },
 
-	'process_request': function(req, res) {
-		// check to see if the 1st word in the path is 'admin'.
-		//  Then if it is, we'll be giving something to an admin route.
-		// And if it is within the admin path, then
-		var url = req.url;
-		//console.log('*** server process_request url ' + url);
-		var s_url = url.split('/');
-		//console.log('s_url ' + stringify(s_url));
+    /*
+     'recieved_sock': function(sock_message) {
+     // Need to look at the message, and unpack the socks_path from the rest of the message
+     //  Socks will be used to deliver a message to the relevant service.
 
-		var a_path = [];
-		each(s_url, function(i, v) {
-			if (v.length > 0) {
-				a_path.push(v);
-			}
-		});
+     // perhaps sock messages could contain a URL.
+     //  Just need to route them to the right place.
 
-		//var spc = new Server_Page_Context(req, res);
-		var spc = new Server_Page_Context({
-			'req': req,
-			'res': res
-		});
+     // server_websockets_router
+
+     var rp = this.get('resource_pool');
+     var websocket_router = rp.get_resource('Server Websocket Router');
+
+     // need to extract the sock path from the recieved_sock message.
+
+
+
+
+
+
+
+     },
+     */
+
+    'process_request': function(req, res) {
+        // check to see if the 1st word in the path is 'admin'.
+        //  Then if it is, we'll be giving something to an admin route.
+        // And if it is within the admin path, then
+        var url = req.url;
+        //console.log('*** server process_request url ' + url);
+        var s_url = url.split('/');
+        //console.log('s_url ' + stringify(s_url));
+
+        var a_path = [];
+        each(s_url, function(i, v) {
+            if (v.length > 0) {
+                a_path.push(v);
+            }
+        });
+
+        //var spc = new Server_Page_Context(req, res);
+        var spc = new Server_Page_Context({
+            'req': req,
+            'res': res
+        });
 
         var router = this.get('router');
 
         // and will have a separate router for the websocket requests.
 
-		// then that should be able to understand things about the browser from the user agent string.
+        // then that should be able to understand things about the browser from the user agent string.
 
-		//console.log('a_path ' + stringify(a_path));
+        //console.log('a_path ' + stringify(a_path));
 
-		if (a_path.length > 0) {
+        if (a_path.length > 0) {
             var routing_res = router.process(req, res);
-		} else {
-              console.log('need to process short path');
+        } else {
+            console.log('need to process short path');
         }
 
-	},
-	'serve_document': function(req, res, jsgui_html_document) {
-		var html = jsgui_html_document.all_html_render();
+    },
+    'serve_document': function(req, res, jsgui_html_document) {
+        var html = jsgui_html_document.all_html_render();
 
-		var mime_type = 'text/html';
-		//console.log('mime_type ' + mime_type);
+        var mime_type = 'text/html';
+        //console.log('mime_type ' + mime_type);
 
-		res.writeHead(200, { 'Content-Type': mime_type });
-		res.end(html, 'utf-8');
+        res.writeHead(200, { 'Content-Type': mime_type });
+        res.end(html, 'utf-8');
 
 
-	},
-	'status': function(callback) {
+    },
+    'status': function(callback) {
 
-	}
+    }
 });
 
 

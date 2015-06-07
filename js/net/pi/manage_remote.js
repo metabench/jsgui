@@ -135,63 +135,6 @@ var ssh_exec = function(command, callback) {
   }).start();
 }
 
-/*
-
-ssh.exec(command, {
-    out: function(stdout) {
-        //console.log('stdout ' + stdout);
-
-        //var res_scan = usb_scan.parse_res_scan_devices(stdout);
-
-        //console.log('res_scan', res_scan);
-        text = text + stdout;
-
-
-    },
-    err: function(stderr) {
-        console.log('stderr ' + stderr); // this-does-not-exist: command not found
-    },
-    exit: function(code) {
-        console.log('exit ' + code); // 69
-
-        var res_scan = usb_scan.parse_res_scan_devices(text);
-
-        console.log('res_scan', res_scan);
-    }
-}).start();
-
-
-// May want to:
-
-// Create new jsgui_admin user, root privilages.
-//  Send jsgui over to /lib/jsgui
-//   node modules are also in lib.
-
-// Just having jsgui in lib/jsgui will be useful.
-//  Perhaps could even be in the npm directory - but so far web have just copied the js files.
-
-// For the moment will only deploy js.
-//  That should be enough to run server-side code that will carry out more functions.
-
-*/
-
-// Want more functionality here.
-
-// get_wpa_supplicants?
-
-// Files seem available with SFPT.
-
-// Will need to be looking into the wpa_supplicants file.
-
-
-// Want to have Zipped_File_Copy functionality, where it zips up files before copying them.
-
-// May want to unzip in a particular location, and copy to others.
-
-
-
-
-
 
 
 var get_users_list = function(callback) {
@@ -446,6 +389,11 @@ var apt_get_install = function(host, username, password, package_name, callback)
   fns.push([ssh_exec, [`sudo DEBIAN_FRONTEND=noninteractive apt-get install -q -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" ` + package_name]]);
   fns.go(callback);
 }
+
+
+
+// Will be much faster at carrying out tasks when using the websockets connection.
+//  The connection would already be open.
 
 
 var red_led_off = function(host, username, password, callback) {

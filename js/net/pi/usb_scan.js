@@ -63,8 +63,8 @@ var map_adapters = {
 
 var parse_res_scan_devices = function(str_output) {
 	var stdout = str_output;
-	console.log('stdout', stdout);
-	var lsusb_lines = stdout.split('\n');
+	//console.log('stdout', stdout);
+	var lsusb_lines = str_output.split('\n');
 	console.log('lsusb_lines.length ' + lsusb_lines.length);
 
 
@@ -141,6 +141,8 @@ var parse_res_scan_devices = function(str_output) {
 		}
 	})
 	devices.push(current_device);
+
+    console.log('devices', devices);
 
 	return devices;
 }
@@ -230,6 +232,8 @@ var scan_devices = function(callback) {
 		//console.log('devices', devices);
 
 		// Want to get the device numbers.
+        callback(null, devices);
+        /*
 
 		system_monitor.get_dmesg_wifi_view(function(err, res_wifi_view) {
 			if (err) { throw err; } else {
@@ -237,6 +241,7 @@ var scan_devices = function(callback) {
 				callback(null, devices);
 			}
 		})
+		*/
 
 
 
@@ -248,11 +253,26 @@ var scan_devices = function(callback) {
 
 };
 
+/*
+var parsed_scan = function(callback) {
+    scan_devices(function(err, res_scan) {
+
+
+        if (err) { callback(err) } else {
+            var res = parse_res_scan_devices(res_scan);
+            console.log('cb scan_devices res', res);
+            callback(null, res);
+        }
+    })
+}
+*/
+
 // Also want to look at the logs to see which of these have been assigned to any logical device such as wlan0, wlan1
 
 
 
 module.exports = {
 	'scan_devices': scan_devices,
-	'parse_res_scan_devices': parse_res_scan_devices
+	'parse_res_scan_devices': parse_res_scan_devices//,
+    //'parsed_scan': parsed_scan
 };
