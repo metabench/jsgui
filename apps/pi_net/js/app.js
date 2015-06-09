@@ -31,6 +31,11 @@ var Default_Page = require('./default-page');
 
 var each = jsgui.each, stringify = jsgui.stringify;
 
+var Client_Sock_Resources_Proxy = require('../../../js/resource/core/sock-client-resources-proxy');
+var Client_Sock_Resource = require('../../../js/resource/core/sock-client-resource');
+
+
+
 var pc = new Client_Page_Context({
     'document': document
 });
@@ -50,23 +55,83 @@ pc.update_Controls('menu_node', Menu_Node);
 pc.update_Controls('default_page', Default_Page);
 
 
+// Need to set up a Linux_System resource that makes requests to the Linux system on the server.
+// Could have more things automatically wired on the client.
+
+
+
+
+
+// Could make a different type of client side resource that connects to the resource with the already open Socks connection rather than making new HTTP connections.
+
+
+
+//var linux_system = new
+
+
 
 
 window.onload = function() {
     // Let's show the omega Ω
     console.log('pre activate');
 
-    var sock = new SockJS('/ws');
+    // Don't have the client-side websockets set up automatically.
 
-    sock.onopen = function() {
-       console.log('open');
-    };
-    sock.onmessage = function(e) {
-       console.log('message', e.data);
-    };
-    sock.onclose = function() {
-       console.log('close');
-    };
+    // Should set it up from within the framework, or switch it on.
+    //  The Sock_Resource_Connector would allow connection from the client to the resources that support sock connections.
+    //   Then local client-side sock proxied resources would take that Sock_Resource_Connector in their constructor - or can get it from the context.
+    //   It would be one of the resources that live within the resource pool.
+
+
+    // start a sock_resource_connector, then various resource instances.
+
+    // The user interface controls would then be able to access resource data with the same function call syntax both on the client and on the server.
+
+    var rp = pc.resource_pool;
+
+    var csrp = new Client_Sock_Resources_Proxy({'meta': {
+        'name': 'Sock Resources Proxy'
+    }});
+
+// Then a client side resource that deals with the server's (linux) config.
+//  However, we don't reference the resource itself.
+//  The resource would have an address on the server. It will look at the first part of the path to find which resource it needs to route it to, and then gives that resource the
+//   truncated URL for it to process. Likely to go via a Sock_Resource_Publisher on the server.
+
+    var linux_resource = new Client_Sock_Resource({'meta': {
+        'name': 'Linux System'
+    }});
+
+
+    rp.add(csrp);
+    rp.add(linux_resource);
+
+    setTimeout(function() {
+        /*
+        linux_resource.get('usb', function(err, res_usb) {
+            if (err) { throw err; } else {
+                console.log('res_usb', res_usb);
+            }
+        });
+        */
+
+        linux_resource.on('usb', function(e_usb) {
+            console.log('e_usb', e_usb);
+        })
+
+
+    }, 1000);
+
+
+
+
+
+
+
+
+
+
+
 
     //sock.send('test');
 

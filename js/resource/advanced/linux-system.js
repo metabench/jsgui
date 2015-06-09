@@ -1,5 +1,3 @@
-var jsgui = require('../../web/jsgui-html');
-var Resource = require('../core/resource');
 
 // Want it to deal with the USB info.
 
@@ -46,13 +44,87 @@ var each = jsgui.eac;
 
 
 var usb_scan = require('../../net/pi/usb_scan');
+var system_monitor = require('../../net/pi/system_monitor');
+
+var USB_Connection_Change_Monitor = system_monitor.USB_Connection_Change_Monitor;
+
+
+
 
 var Linux_System_Resource = Resource.extend({
     'init': function(spec) {
         var that = this;
         if (!is_defined(spec)) spec = {};
         this._super(spec);
+
+
+        // Listening for events as well.
+        //  This should listen for USB events.
+
+        // In the future, maybe have a separate Linux USB Resource.
+
+        // For the moment, want this to handle a variety of different situations.
+
+
+        // This Resource will use its pub/sub for events.
+
+        // Listen for the USB...
+        console.log('creating usbcm');
+        var usbcm = new USB_Connection_Change_Monitor();
+        usbcm.on(function(event_name, params) {
+            //console.log('* usbcm event_name', event_name);
+            //console.log('event_name', event_name);
+            //console.log('2) params', params);
+
+            // Then raise an event on this?
+            //  The resource publisher could be listening for events on this.
+
+            // raise it as a 'subresource_event'?
+
+            // raise a usb event?
+
+            // just raise an event?
+
+            // Have the client-side system just listen to all events from this?
+
+            // Naming the event 'usb' seems logical if that's what we are giving in the 'on' path.
+
+            // possibly raise a 'usb' event.
+            //  easier than making a subresource for the moment.
+
+            // Encapsulated events.
+
+            that.raise('usb', {
+                'event_name': event_name,
+                'params': params
+            });
+
+
+
+        });
+
+
+
+        //
+
+
+
+
+
+
+
     },
+
+    // on may listen for a path as well.
+    //  seems like the easiest way of coding it from here.
+    //  but is that an event name or a sub-object.
+    //   with some flexibility could support both.
+
+
+
+
+
+
 
     'start': function(callback) {
         console.log('Linux_System_Resource start');

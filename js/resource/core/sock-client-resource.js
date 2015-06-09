@@ -92,13 +92,74 @@ var Sock_Client_Resource = Resource.extend({
 
     // likely just to be getting a value by string.
 
+    // out needs to go throught the proxy as well.
 
+
+
+    'on': fp(function(a, sig) {
+
+        // Needs to pass the get request to the resource proxy.
+
+        //console.log('this', this);
+
+        var proxy = this._proxy || this.meta.get('pool').get_resource('Sock Resources Proxy');
+
+        if (proxy) {
+            //throw 'call socks proxy get'
+
+            var url, callback;
+            var url_path;
+            if (a.l === 1) {
+                url = this.meta.get('name').value();
+                callback = a[0];
+            }
+            if (a.l === 2) {
+                url_path = a[0];
+                callback = a[1];
+
+                //console.log('url_path', url_path);
+
+                url = this.meta.get('name').value() + '/' + url_path;
+            }
+
+            //var name = this.meta.get('name');
+            //console.log('name', name);
+
+            //var full_path = name + '/' + url_path;
+
+            console.log('url', url);
+
+            //throw 'stop';
+
+            // then call get through the proxy.
+            proxy.on(url, callback);
+
+
+
+        } else {
+            throw 'Requires "Socks Proxy" resource in Resource Pool.';
+
+        }
+
+        // and needs to send it to the proxy
+        //  with extended path?
+        //   best to do it with a path or URL if practical.
+        //  with extra resource_name field?
+
+
+
+        /*
+
+         */
+
+
+    }),
 
     'get': fp(function(a, sig) {
 
         // Needs to pass the get request to the resource proxy.
 
-        console.log('this', this);
+        //console.log('this', this);
 
         var proxy = this._proxy || this.meta.get('pool').get_resource('Sock Resources Proxy');
 

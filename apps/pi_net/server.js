@@ -116,6 +116,10 @@ var os = require("os");
 var resource_linux_system = new Linux_System_Resource({ 'meta': { 'name': 'Linux System' }});
 rp.add(resource_linux_system);
 
+// But then when publising the resource...
+
+// need to make the server-sock-router
+
 // Should also have a Linux System Resource.
 
 // Probably should have it run on Windows, but raise errors?

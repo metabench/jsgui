@@ -99,7 +99,13 @@ var USB_Connection_Change_Monitor = Evented_Class.extend({
 
 						//console.log('device_number', device_number);
 
-						that.raise('disconnect', physical_usb_address, device_number);
+                        // This type of result is harder to decipher.
+                        //  Including the property names in the result will be easier for humans, but make for less optimized packets.
+
+                        // Going for simpler and more expandable object event properties. More standard and expected.
+
+                        //console.log('pre raise disconnect');
+						that.raise('disconnect', { 'physical_usb_address': physical_usb_address, 'device_number': device_number });
 
 					}
 
@@ -119,18 +125,11 @@ var USB_Connection_Change_Monitor = Evented_Class.extend({
 						//console.log('physical_usb_address', physical_usb_address);
 
 						//console.log('device_number', device_number);
-
-						that.raise('connect', physical_usb_address, device_number);
+                        //console.log('pre raise connect');
+						that.raise('connect', { 'physical_usb_address': physical_usb_address, 'device_number': device_number });
 
 					}
-
-
-
-
-
 				}
-
-
 
 			});
 

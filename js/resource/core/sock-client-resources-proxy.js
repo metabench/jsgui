@@ -22,7 +22,7 @@ var ends_with = function(str, suffix) {
 // It looks like this one needs to act as a proxy for a bunch of different resources on the server.
 
 
-var message_count = 0;
+var get_message_count = 0, on_message_count = 0;
 
 
 var Sock_Client_Resources_Proxy = Resource.extend({
@@ -77,6 +77,7 @@ var Sock_Client_Resources_Proxy = Resource.extend({
         // Sock resources will make use of the resources proxy, which will be in the resource pool.
 
         var get_handlers = this._get_handlers = {};
+        var on_handlers = this._on_handlers = {};
 
 
         var sock = this._sock = new SockJS('/ws');
@@ -97,16 +98,26 @@ var Sock_Client_Resources_Proxy = Resource.extend({
             var obj_message = JSON.parse(e.data);
 
             var type = obj_message.type;
+            var request_response_id = obj_message.id;
 
+            var body = obj_message.body;
 
             if (type === 'get_reply') {
-                var request_response_id = obj_message.id;
-                var body = obj_message.body;
 
-                get_handlers[request_response_id](null, body);
+
+
+                get_handlers[request_response_id](body);
                 get_handlers[request_response_id] = null;
 
                 // We need to notify the resource that asked for this.
+
+            }
+
+            if (type === 'event') {
+                console.log('process event message', obj_message);
+
+                on_handlers[request_response_id](body);
+                //on_handlers[request_response_id] = null;
 
             }
 
@@ -143,13 +154,49 @@ var Sock_Client_Resources_Proxy = Resource.extend({
 
     },
 
+    'on': fp(function(a, sig) {
+        var event_path, callback;
+        var on_handlers = this._on_handlers;
+        var sock = this._sock;
+        if (sig === '[f]') {
+            callback = a[0];
+        }
+        if (sig === '[s,f]') {
+            event_path = a[0];
+            callback = a[1];
+        }
+
+        // Remembering that the particular 'on' call has a specific callback.
+        //  just deal with the paths as strings.
+
+
+        var obj_message = {
+            //'url': url,
+            'type': 'on',
+            'id': on_message_count++ + ''
+        };
+
+        if (event_path.length > 0) obj_message.url = event_path;
+
+        on_handlers[obj_message.id] = callback;
+        sock.send(JSON.stringify(obj_message));
+
+    }),
+
+    // on
+
+    // need to listen for events on this...
+    //  but some is automatic I think?
+
+
+
 
     // likely just to be getting a value by string.
 
 
 
     'get': fp(function(a, sig) {
-        var get_handlers = this._get_handlers
+        var get_handlers = this._get_handlers;
         var sock = this._sock;
 
         var url, callback;
@@ -172,9 +219,9 @@ var Sock_Client_Resources_Proxy = Resource.extend({
         }
 
         if (url) {
-            console.log('url', url);
+            //console.log('url', url);
 
-            console.log('this', this);
+            //console.log('this', this);
 
             //var rp = this.meta.get('pool');
 
@@ -188,16 +235,12 @@ var Sock_Client_Resources_Proxy = Resource.extend({
 
             var obj_message = {
                 'url': url,
-                'method': 'get',
-                'id': message_count++ + ''
+                'type': 'get',
+                'id': get_message_count++ + ''
             }
 
             get_handlers[obj_message.id] = callback;
             sock.send(JSON.stringify(obj_message));
-
-
-
-
 
 
         }

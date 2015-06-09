@@ -137,10 +137,14 @@ var Default_Page = jsgui.Client_HTML_Document.extend({
             // may as well get the USB devices at this stage.
 
             var rp = this._context.resource_pool;
-            //var linux_resource = rp.get('Linux System');
+            var linux_resource = rp.get_resource('Linux System');
 
             //linux_resource.get('usb' function(err, res_usb) {
             //    console.log('res_usb', res_usb);
+            //});
+
+            //linux_resource.on('usb', function(e_usb) {
+            //    console.log('e_usb', e_usb);
             //});
 
 
