@@ -44,6 +44,8 @@ var Evented_Class = Class.extend({
         var that = this;
         var c, l;
 
+        //console.log('raise_event sig', sig);
+
         if (sig == '[s]') {
             // just raise an event, given with no parameters,
             //  maybe like 'started'.
@@ -54,7 +56,14 @@ var Evented_Class = Class.extend({
             //console.log('Data_Object raise_event ' + event_name);
 
             var bgh = this._bound_general_handler;
+
             var be = this._bound_events;
+            var res = [];
+            if (bgh) {
+                for (c = 0, l = bgh.length; c < l; c++) {
+                    res.push(bgh[c].call(target, event_name));
+                }
+            }
 
             if (be) {
                 // This is attaching events to the same object.
@@ -67,7 +76,7 @@ var Evented_Class = Class.extend({
                 //console.log('tof bei', tof(bei));
                 if (tof(bei) == 'array') {
                     //console.log('1) raise_event bei.length ' + bei.length);
-                    var res = [];
+                    //var res = [];
 
                     for (c = 0, l = bei.length; c < l; c++) {
                       res.push(bei[c].call(target));
@@ -81,18 +90,32 @@ var Evented_Class = Class.extend({
             }
         }
 
-        if (a.l >= 2) {
+        if (a.l > 2) {
             var target = this;
             var event_name = a[0];
 
             //console.log('event_name ' + event_name);
 
             var additional_args = [];
+            var bgh_args = [event_name];
+
             for (c = 1, l = a.l; c < l; c++) {
                 additional_args.push(a[c]);
+                bgh_args.push(a[c]);
             }
 
             var be = this._bound_events;
+            var bgh = this._bound_general_handler;
+
+            var res = [];
+
+            if (bgh) {
+                for (c = 0, l = bgh.length; c < l; c++) {
+                    res.push(bgh[c].apply(target, bgh_args));
+                }
+            }
+
+
             //console.log('be ' + tof(be));
             if (be) {
                 // The controls that are activated on the clients need to have bound events.
@@ -104,7 +127,7 @@ var Evented_Class = Class.extend({
                     //console.log('1) raise_event bei.length ' + bei.length);
 
                     if (bei.length > 0) {
-                        var res = [];
+
 
                         // They are handlers that get called.
 
@@ -115,7 +138,7 @@ var Evented_Class = Class.extend({
 
                         return res;
                     } else {
-                        return false;
+                        return res;
                     }
 
 
@@ -129,15 +152,31 @@ var Evented_Class = Class.extend({
 
         if (sig == '[s,o]') {
             var be = this._bound_events;
+
+            // And its general bound events as well.
+            var bgh = this._bound_general_handler;
+            var event_name = a[0];
+
+            var res = [];
+            if (bgh) {
+
+                //console.log('bgh.length', bgh.length);
+
+                for (c = 0, l = bgh.length; c < l; c++) {
+                    res.push(bgh[c].call(target, event_name, a[1]));
+                }
+            }
+
+
             //console.log('this._bound_events', this._bound_events);
             if (be) {
                 var bei = be[event_name];
 
                 //console.log('bei.length', bei.length);
                 //console.log('tof bei', tof(bei));
-                if (tof(bei) == 'array') {
+                if (tof(bei) === 'array') {
                     //console.log('1) raise_event bei.length ' + bei.length);
-                    var res = [];
+
 
                     for (c = 0, l = bei.length; c < l; c++) {
                       res.push(bei[c].call(target, a[1]));
@@ -148,12 +187,12 @@ var Evented_Class = Class.extend({
                     //});
 
                     //console.log('Evented_Class raise_event [s] res', res);
-                    return res;
+                    //return res;
                 }
             }
         }
 
-        return [];
+        return res;
     }),
 
     // also just raise and trigger?
@@ -181,9 +220,12 @@ var Evented_Class = Class.extend({
         // Why is the bound events array getting so big?
 
         if (sig == '[f]') {
-            var stack = new Error().stack;
-            console.log(stack);
-            throw 'stop';
+            //var stack = new Error().stack;
+            //console.log(stack);
+            //throw 'stop';
+
+
+
             this._bound_general_handler = this._bound_general_handler || [];
             if (Array.isArray(this._bound_general_handler)) {
             //if (tof(this._bound_general_handler) == 'array') {
@@ -236,6 +278,13 @@ var Evented_Class = Class.extend({
     },
 
     'remove_event_listener': function(event_name, fn_listener) {
+
+
+        // TODO
+        // And remove something that's bound to the general handler...?
+
+
+
         // needs to go through the whole array?
         // think so....
 
