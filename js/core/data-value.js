@@ -173,7 +173,7 @@ var Data_Value = Evented_Class.extend({
             'value': val
         });
 
-        console.log('res', res);
+        //console.log('res', res);
         //throw 'stop';
 
         return res;

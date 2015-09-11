@@ -10,7 +10,7 @@ function (jsgui, assert) {
         //	empty arr_functions_params_pairs
         // -----------------------------------------------------
 
-        it("should call the callback when the arr_functions_params_pairs array is empty", function (done) {
+        xit("should call the callback when the arr_functions_params_pairs array is empty", function (done) {
 
             var callback = function (err, res) {
                 assert.equal(err, null);
@@ -184,7 +184,8 @@ function (jsgui, assert) {
             jsgui.call_multiple_callback_functions(tasks, function (error, result) {
                 //console.log("All the tasks are done. The first task result is " + result[0]);
                 assert.equal(error, null);
-                assert.equal(result, 20);
+                assert.equal(result.length, 1);
+                assert.equal(result[0], 20);
                 done();
             });
         });
@@ -239,6 +240,29 @@ function (jsgui, assert) {
 
         });
 
+        // -----------------------------------------------------
+        //	(n,a,f)
+        // -----------------------------------------------------
+
+        it("should process (num_parallel, tasks, callback) parameters", function (done) {
+
+            var callback = function (err, res) {
+                assert.equal(err, null);
+                assert.deepEqual(res, [222]);
+                done();
+            };
+
+            var task1_fn = function (arg1, cb) {
+                setTimeout(function () { cb(null, (arg1 * 2)); }, 1);
+            };
+            var task1_args = [111];
+
+            var tasks = [[task1_fn, task1_args]];
+
+            jsgui.call_multiple_callback_functions(100, tasks, callback);
+
+        });
+
 
         // -----------------------------------------------------
         //	(a,f,b)
@@ -262,6 +286,53 @@ function (jsgui, assert) {
             jsgui.call_multiple_callback_functions(tasks, callback, true);
 
         });
+
+        // -----------------------------------------------------
+        //	(a,n,n,f)
+        // -----------------------------------------------------
+
+        it("should process (tasks, num_parallel, delay, callback) parameters", function (done) {
+
+            var callback = function (err, res) {
+                assert.equal(err, null);
+                assert.deepEqual(res, [222]);
+                done();
+            };
+
+            var task1_fn = function (arg1, cb) {
+                setTimeout(function () { cb(null, (arg1 * 2)); }, 1);
+            };
+            var task1_args = [111];
+
+            var tasks = [[task1_fn, task1_args]];
+
+            jsgui.call_multiple_callback_functions(tasks, 100, 1, callback);
+
+        });
+
+        // -----------------------------------------------------
+        //	(n,n,a,f)
+        // -----------------------------------------------------
+
+        it("should process (num_parallel, delay, tasks, callback) parameters", function (done) {
+
+            var callback = function (err, res) {
+                assert.equal(err, null);
+                assert.deepEqual(res, [222]);
+                done();
+            };
+
+            var task1_fn = function (arg1, cb) {
+                setTimeout(function () { cb(null, (arg1 * 2)); }, 1);
+            };
+            var task1_args = [111];
+
+            var tasks = [[task1_fn, task1_args]];
+
+            jsgui.call_multiple_callback_functions(100, 1, tasks, callback);
+
+        });
+
 
         // ================================================================================================================================
         //	                        test different task signatures

@@ -164,7 +164,10 @@ function (Constraint, Data_Object, assert) {
         // -----------------------------------------------------
 
         it("Data_Object_Constraint", function () {
-            // the Data_Object_Constraint class does nothing, and is not public
+            var data_object = { __type: "data_object" };
+            var c = Constraint.from_obj(data_object);
+            //
+            assert.deepEqual(c.match(data_object), true);
         });
 
         // -----------------------------------------------------

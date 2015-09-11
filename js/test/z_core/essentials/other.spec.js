@@ -391,6 +391,21 @@ define(['../../../core/jsgui-lang-essentials', 'assert'], function (jsgui, asser
         });
 
         // -----------------------------------------------------
+        //	get_a_sig()
+        // -----------------------------------------------------
+
+        it("get_a_sig() should return type signature string for arguments parameter", function () {
+
+            var return_arguments_sig = function () {
+                return jsgui.get_a_sig(arguments);
+            }
+
+            assert.equal(return_arguments_sig(), "[]");
+            assert.equal(return_arguments_sig(1, "2", new Date(), null), "[n,s,d,!]");
+
+        });
+
+        // -----------------------------------------------------
         //	get_item_sig()
         // -----------------------------------------------------
 
@@ -923,6 +938,46 @@ define(['../../../core/jsgui-lang-essentials', 'assert'], function (jsgui, asser
 
         });
 
+        it("Fns() should returns a call_multiple_callback_functions() helper object - 2.", function (done) {
+
+            var taskPlus = function (a, b, cb) { cb(null, a + b); };
+            var taskMinus = function (a, b, cb) { cb(null, a - b); };
+
+            var fns = jsgui.Fns();
+
+            fns.push([taskPlus, [1, 2]]);
+            fns.push([taskPlus, [3, 4]]);
+            fns.push([taskMinus, [1, 2]]);
+            fns.push([taskPlus, [10, 12]]);
+
+            fns.go(2, function (error, result) {
+                assert.deepEqual(error, null);
+                assert.deepEqual(result, [3, 7, -1, 22]);
+                done();
+            });
+
+        });
+
+        it("Fns() should returns a call_multiple_callback_functions() helper object - 3.", function (done) {
+
+            var taskPlus = function (a, b, cb) { cb(null, a + b); };
+            var taskMinus = function (a, b, cb) { cb(null, a - b); };
+
+            var fns = jsgui.Fns();
+
+            fns.push([taskPlus, [1, 2]]);
+            fns.push([taskPlus, [3, 4]]);
+            fns.push([taskMinus, [1, 2]]);
+            fns.push([taskPlus, [10, 12]]);
+
+            fns.go(2, 1, function (error, result) {
+                assert.deepEqual(error, null);
+                assert.deepEqual(result, [3, 7, -1, 22]);
+                done();
+            });
+
+        });
+
         // -----------------------------------------------------
         //	native_constructor_tof()
         // -----------------------------------------------------
@@ -961,6 +1016,29 @@ define(['../../../core/jsgui-lang-essentials', 'assert'], function (jsgui, asser
             jsgui.set(100, "2");
             assert.deepEqual(jsgui.get(100), "2");
 
+        });
+
+        // -----------------------------------------------------
+        //	sig_match()
+        // -----------------------------------------------------
+
+        it("sig_match() should compare pattern sig and real sig.", function () {
+
+            assert.deepEqual(jsgui.sig_match("[]", "[]"), true);
+
+            assert.deepEqual(jsgui.sig_match("[s]", "[s]"), true);
+            assert.deepEqual(jsgui.sig_match("[s]", "[n]"), false);
+            assert.deepEqual(jsgui.sig_match("[s]", "[S]"), false);
+
+            assert.deepEqual(jsgui.sig_match("[?]", "[s]"), true);
+
+            assert.deepEqual(jsgui.sig_match("[a,s,f,n]", "[a,s,f,n]"), true);
+            assert.deepEqual(jsgui.sig_match("[a,?,f,?]", "[a,s,f,n]"), true);
+            assert.deepEqual(jsgui.sig_match("[a,?,f,?]", "[a,~D,f,~V]"), true);
+            assert.deepEqual(jsgui.sig_match("[?,?,?,?]", "[a,s,f,n]"), true);
+
+            assert.deepEqual(jsgui.sig_match("[a,s,f,n]", "[a,?,f,n]"), false);
+            assert.deepEqual(jsgui.sig_match("[a,s,f,n]", "[a,n,f,n]"), false);
         });
 
     });

@@ -1,8 +1,8 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/data-object', "../../../core/jsgui-data-structures", "../../../core/constraint", "../../../core/enhanced-data-object", 'assert', '../../test-utils/test-utils'],
-function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert, test_utils) {
+define(['../../../core/data-object', '../../../core/data-value', "../../../core/jsgui-data-structures", "../../../core/constraint", "../../../core/enhanced-data-object", 'assert', '../../test-utils/test-utils'],
+function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Object, assert, test_utils) {
 
     describe("z_core/data-object /Data_Object.spec.js ", function () {
 
@@ -277,12 +277,12 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             // with field definition but without set(): create Data_Value or Data_Object or something else:
             //
             data_object.set_field("Field2", "int");
-            assert.deepEqual(data_object.get("Field2"), new Data_Object.Data_Value());
+            assert.deepEqual(data_object.get("Field2"), new Data_Value());
             //
             // without field definition: create Data_Value for 'string', 'number', 'boolean', 'date':
             //
             data_object.set("Field3", "abc");
-            assert.deepEqual(data_object.get("Field3"), new Data_Object.Data_Value({ value: "abc" }));
+            assert.deepEqual(data_object.get("Field3"), new Data_Value({ value: "abc" }));
             //
             // without field definition: assign just value for other types:
             //
@@ -382,8 +382,8 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
         it("get() should return an object with all values", function () {
             var data_object = new Data_Object();
             // 
-            var data_value1 = new Data_Object.Data_Value({ value: 100 });
-            var data_value2 = new Data_Object.Data_Value({ value: "200" });
+            var data_value1 = new Data_Value({ value: 100 });
+            var data_value2 = new Data_Value({ value: "200" });
             //
             data_object.set("Field1", 100);
             data_object.set("Field2", "200");
@@ -415,8 +415,8 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             assert.deepEqual(change_eventArgs, null);
             //
             change_eventArgs = null;
-            data_object.set("Field1", [123], "false"); // !!!
-            assert.deepEqual(change_eventArgs, null); // !!!
+            data_object.set("Field1", [123], false);
+            assert.deepEqual(change_eventArgs, { name: "Field1", value: [123] }); // !!!
             //
             change_eventArgs = null;
             data_object.set("Field1", [123], ""); // ???
@@ -485,11 +485,11 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             var data_object = new Data_Object();
             //
             data_object.set_field("Field_String", String); assert_field_sig(data_object, "Field_String", "[s,s,f]");
-            var value_String = new Data_Object.Data_Value();
+            var value_String = new Data_Value();
             assert.deepEqual(data_object.get("Field_String"), value_String);
             //
             data_object.set_field("Field_Number", Number); assert_field_sig(data_object, "Field_Number", "[s,s,f]");
-            var value_Number = new Data_Object.Data_Value();
+            var value_Number = new Data_Value();
             assert.deepEqual(data_object.get("Field_Number"), value_Number);
             //
             var MyBook = function () { this.book = "Secret City"; };
@@ -521,19 +521,19 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             assert.deepEqual(v1_ordered_string_list, v2_ordered_string_list);
             //
             data_object.set_field("Field_string", "string"); assert_field_sig(data_object, "Field_string", "[s,s,o]");
-            var value_string = new Data_Object.Data_Value();
+            var value_string = new Data_Value();
             value_string._parent = data_object; // !!!
             assert.deepEqual(data_object.get("Field_string"), value_string);
             //
             data_object.set_field("Field_text", "text", { data_type: ["text", 10] }); assert_field_sig(data_object, "Field_text", "[s,s,o]");
-            var value_text = new Data_Object.Data_Value();
+            var value_text = new Data_Value();
             assert.deepEqual(data_object.get("Field_text"), value_text);
             //
             data_object.set_field("Field_text2", "text"); assert_field_sig(data_object, "Field_text2", "[s,s,o]");
             assert.deepEqual(data_object.get("Field_text2"), undefined); // !!!
             //
             data_object.set_field("Field_int", "int"); assert_field_sig(data_object, "Field_int", "[s,s,o]");
-            var value_int = new Data_Object.Data_Value();
+            var value_int = new Data_Value();
             assert.deepEqual(data_object.get("Field_int"), value_int);
             //
             data_object.set_field("Field_wrong", "wrong"); assert_field_sig(data_object, "Field_wrong", "[s,s,o]");
@@ -634,7 +634,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             //
             // how it's probably intended:
             //
-            var data_value = new Data_Object.Data_Value({ value: 31 });
+            var data_value = new Data_Value({ value: 31 });
             data_object.set("Field_int", data_value);
             assert.deepEqual(data_object.get("Field_int"), data_value); // ???
         });
@@ -690,7 +690,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             //
             data_object.set("a.b.c", [45]);
             assert.deepEqual(data_object.get("a.b.c"), [45]);
-            assert.deepEqual(change_eventArgs, { name: "a.b.c", value: [45] });
+            assert.deepEqual(change_eventArgs, { name: "a.b.c", value: [45], bubbled: true });
         });
 
         xit("should use input_processors and output_processors", function () {
@@ -740,8 +740,8 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             //
             // internal Data_Value:
             //
-            data_object.set("Field2", new Data_Object.Data_Value({ value: 123 }));
-            assert.deepEqual(data_object.get("Field2"), new Data_Object.Data_Value({ value: 123 }));
+            data_object.set("Field2", new Data_Value({ value: 123 }));
+            assert.deepEqual(data_object.get("Field2"), new Data_Value({ value: 123 }));
             assert.deepEqual(data_object.value(), { Field1: ["abc"], Field2: 123 }); // because Data_Value have value() method
         });
 
@@ -798,6 +798,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             assert.deepEqual(data_object.fields(), [["Field1", "int", { data_type: "int" }], ["Field2", "string", { data_type: "string" }], ["Field3", "bool", { data_type: "bool" }]]);
             //
             assert.deepEqual(data_object.fields("Field2"), ["Field2", "string", { data_type: "string" }]);
+            assert.deepEqual(data_object.fields("Field5"), undefined);
             //
             // setting the same field again adds a field with the same name !!!
             //
@@ -876,7 +877,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             //
             data_object = new Data_Object();
             data_object.set("Field1", 12.5);
-            assert.deepEqual(data_object.get("Field1"), new Data_Object.Data_Value({ value: 12.5 }));
+            assert.deepEqual(data_object.get("Field1"), new Data_Value({ value: 12.5 }));
             //
             assert.deepEqual(data_object.matches_field_constraint("Field1", "int"), false);
             assert.deepEqual(data_object.matches_field_constraint("Field1", "number"), false); // !!!
@@ -957,6 +958,14 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             //
             assert.deepEqual(data_object.obj_matches_field_constraints(obj), true);
             assert.deepEqual(args, [["Field1", "int"], ["Field2", "number"]]);
+            //
+            //
+            //
+            var data_object2 = new Data_Object();
+            data_object2.set("Field1", []); data_object2.set("Field1", 1); // set twice to make it pure value
+            data_object2.set("Field2", []); data_object2.set("Field2", 1.5);
+            //
+            assert.deepEqual(data_object.obj_matches_field_constraints(data_object2), true);
         });
 
         // ----------------------------------------------------------------------------------------------
@@ -965,6 +974,8 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
 
         it("works strangely", function () {
             var data_object = new Data_Object();
+            //
+            assert.deepEqual(data_object.get_field_data_type_constraint("Field1"), undefined);
             //
             var field_info = { data_type: "int" };
             //
@@ -1071,6 +1082,17 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
         // ======================================================
 
         // -----------------------------------------------------
+        //	keys()
+        // -----------------------------------------------------
+
+        it("should do keys()", function () {
+            var data_object = new Data_Object();
+            data_object.set("Field1", 111);
+            data_object.set("Field2", 222);
+            assert.deepEqual(data_object.keys(), ["Field1", "Field2"]);
+        });
+
+        // -----------------------------------------------------
         //	stringify()
         // -----------------------------------------------------
 
@@ -1078,6 +1100,11 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             var data_object = new Data_Object();
             data_object._ = "123";
             assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
+            //
+            data_object = new Data_Object();
+            data_object.set("Field1", 111);
+            data_object.set("Field2", 222);
+            assert.deepEqual(data_object.stringify(), 'Data_Object({"Field1": 111, "Field2": 222})');
         });
 
         // -----------------------------------------------------
@@ -1102,6 +1129,11 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             data_object = new Data_Object();
             data_object._ = obj
             assert.deepEqual(data_object.toObject(), {});  // !!!
+            //
+            data_object = new Data_Object();
+            data_object.set("Field1", 111);
+            data_object.set("Field2", 222);
+            assert.deepEqual(data_object.toObject(), { "Field1": 111, "Field2": 222 });
         });
 
         // -----------------------------------------------------
@@ -1560,7 +1592,7 @@ function (Data_Object, Data_Structures, Constraint, Enhanced_Data_Object, assert
             assert.deepEqual(data_object.stringify(), 'Data_Object({"Field1": [123]})');
             data_object.connect_fields("stringify");
             //
-            assert.deepEqual(data_object.stringify(), undefined);
+            //assert.deepEqual(data_object.stringify(), undefined);
             data_object.stringify([45]);
             assert.deepEqual(data_object.stringify(), [45]);
             //

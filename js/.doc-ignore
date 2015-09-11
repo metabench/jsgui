@@ -1,0 +1,9 @@
+build
+source
+test
+test-in-browser 
+
+.gitignore 
+.jshintrc 
+binding.gyp 
+jsdoc.cmd 

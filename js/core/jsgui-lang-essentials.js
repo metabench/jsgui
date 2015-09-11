@@ -1553,7 +1553,7 @@ if (typeof window === 'undefined') {
                         //return res;
 
                         // call_multi not working right?
-                        console.log('delay', delay);
+                        //console.log('delay', delay);
                         //throw 'stop';
 
                         call_multiple_callback_functions(fns, num_parallel, delay, function(err, res) {
@@ -1596,7 +1596,8 @@ if (typeof window === 'undefined') {
                         // but we can make this process a function with a callback.
 
 												for (var c = 0, l = a[param_index].length; c < l; c++) {
-													//a[param_index] = a[param_index][c];
+												    //a[param_index] = a[param_index][c];
+												    a[param_index] = arguments[param_index][c];
 													var result = fn.apply(t, a);
 													// console.log('result ' + stringify(result));
 													res.push(result);
@@ -2632,7 +2633,7 @@ if (typeof window === 'undefined') {
             //   at least for the first stage... could look in more detail at the array.
             //   not using the more complicated signatures right now. could change to a different sig method when needed, or use different sig or fp options.
 
-            console.log('sig ' + sig);
+            //console.log('sig ' + sig);
 
             if (sig == '[a,n,n,f]') {
                 arr_functions_params_pairs = a[0];
@@ -2852,8 +2853,8 @@ if (typeof window === 'undefined') {
                 };
                 // Clone the params?
                 //  Really not sure about that.
-                //var arr_to_call = clone(params) || [];
-                var arr_to_call = (params) || [];
+                var arr_to_call = clone(params) || [];
+                //var arr_to_call = (params) || [];
                 //console.log('params', params);
                 //console.log('arr_to_call', arr_to_call);
                 //console.log('params ' + params);
@@ -2896,7 +2897,7 @@ if (typeof window === 'undefined') {
 		} else {
 		    if (callback) {
 		        //callback(null, null);
-		    }
+            }
 		}
 	});
 	var multi = call_multiple_callback_functions;
@@ -2950,19 +2951,20 @@ if (typeof window === 'undefined') {
 
             // No, we may give the number in parallel, alongside a callback.
 
-
+            // call cases:
+	        // (callback)
+	        // (parallel, callback)
+	        // (parallel, delay, callback)
 
             if (al == 1) {
-                call_multi(fns, parallel);
+                call_multi(fns, parallel); // meaning call_multi(fns, callback);
             }
             if (al == 2) {
-                call_multi(parallel, fns, delay);
+                call_multi(parallel, fns, delay); // meaning call_multi(parallel, fns, callback);
             }
             if (al == 3) {
                 call_multi(parallel, delay, fns, callback);
             }
-
-
 
 
 
@@ -3066,17 +3068,18 @@ if (typeof window === 'undefined') {
         //  Or we could do this recursively anyway.
 
         var sig1_inner = sig1.substr(1, sig1.length - 2);
-        console.log('sig1_inner', sig1_inner);
+        //console.log('sig1_inner', sig1_inner);
 
         var sig2_inner = sig2.substr(1, sig2.length - 2);
-        console.log('sig2_inner', sig2_inner);
+        //console.log('sig2_inner', sig2_inner);
 
         if (sig1_inner.indexOf('[') > -1 || sig1_inner.indexOf(']') > -1 || sig2_inner.indexOf('[') > -1 || sig2_inner.indexOf(']') > -1) {
             throw 'sig_match only supports flat signatures.';
         }
 
         var sig1_parts = sig1_inner.split(',');
-        var sig2_parts = sig1_inner.split(',');
+        //var sig2_parts = sig1_inner.split(',');
+        var sig2_parts = sig2_inner.split(',');
 
         var res = true;
 

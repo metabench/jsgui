@@ -333,8 +333,10 @@ var Evented_Class = Class.extend({
 
         var inner_handler = function(e) {
 
+            //var result = fn_handler.call(this, e);
             fn_handler.call(this, e);
             this.off(event_name, inner_handler);
+            //return result;
         };
 
         this.on(event_name, inner_handler);

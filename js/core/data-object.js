@@ -187,7 +187,7 @@ var Mini_Context = Class.extend({
             // we need the constructor function.
 
             var constructor = abstract_object.constructor;
-            console.log('constructor ' + constructor);
+            //console.log('constructor ' + constructor);
 
 
             //throw 'stop';
@@ -202,7 +202,7 @@ var Mini_Context = Class.extend({
             //console.log('abstract_object._spec ' + stringify(abstract_object._spec));
             // Not sure it is creating the right constructor.
 
-
+            
             var res = new constructor(aos);
             r
             return res;
