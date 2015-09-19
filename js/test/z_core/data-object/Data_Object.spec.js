@@ -254,7 +254,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         //
         //function set(field_name, value) {
         //    if (!get(field_name)) {
-        //        // nof field defined, and no value was set previously:
+        //        // no field defined, and no value was set previously:
         //        if (typeof (value) in ['string', 'number', 'boolean', 'date']) {
         //            this._[field_name] = new Data_Value({ 'value': value });
         //        } else {
@@ -288,6 +288,18 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             data_object.set("Field4", ["abc"]);
             assert.deepEqual(data_object.get("Field4"), ["abc"]);
+        });
+
+        it("should works strangely", function () {
+            var data_object = new Data_Object();
+            //
+            data_object.set("Field1", false);
+            assert.deepEqual(data_object.get("Field1"), new Data_Value({ value: false }));
+            //
+            data_object.set("Field2", null);
+            assert.deepEqual(data_object.get("Field2"), undefined);
+            //
+            assert.deepEqual(data_object.get("_"), { Field1: new Data_Value({ value: false }), Field2: null });
         });
 
         // -----------------------------------------------------
@@ -391,6 +403,19 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             assert.deepEqual(data_object.get("Field2"), data_value2);
             //
             assert.deepEqual(data_object.get(), { Field1: data_value1, Field2: data_value2 });
+        });
+
+        it("get() should return an object with all values - 2", function () {
+            var data_object = new Data_Object();
+            // 
+            assert.deepEqual(data_object.get(), {});
+            //
+            data_object.set("Field1", [100]);
+            data_object.set("Field2", ["200"]);
+            assert.deepEqual(data_object.get("Field1"), [100]);
+            assert.deepEqual(data_object.get("Field2"), ["200"]);
+            //
+            assert.deepEqual(data_object.get(), { Field1: [100], Field2: ["200"] });
         });
 
         it("set() should raise change event", function () {
@@ -740,9 +765,10 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             // internal Data_Value:
             //
-            data_object.set("Field2", new Data_Value({ value: 123 }));
-            assert.deepEqual(data_object.get("Field2"), new Data_Value({ value: 123 }));
-            assert.deepEqual(data_object.value(), { Field1: ["abc"], Field2: 123 }); // because Data_Value have value() method
+            var data_value = new Data_Value({ value: 123 });
+            data_object.set("Field2", data_value);
+            assert.deepEqual(data_object.get("Field2"), data_value);
+            assert.deepEqual(data_object.value(), { Field1: ["abc"], Field2: 123 }); // because Data_Value have value() method in turn
         });
 
         // -----------------------------------------------------
@@ -1163,11 +1189,15 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             var jsgui = Data_Object.prototype.mod_link();
             //
+            assert.deepEqual(jsgui, data_object.mod_link());
+            //
             assert.deepEqual(typeof (jsgui.Class), "function");
             assert.deepEqual(typeof (jsgui.arrayify), "function");
             assert.deepEqual(typeof (jsgui.functional_polymorphism), "function");
             assert.deepEqual(typeof (jsgui.get_item_sig), "function");
             assert.deepEqual(typeof (jsgui.get_truth_map_from_arr), "function");
+            //
+            assert.deepEqual(jsgui.get_truth_map_from_arr(["a", "b", "c"]), { a: true, b: true, c: true });
         });
 
         // -----------------------------------------------------
@@ -1342,7 +1372,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             assert.deepEqual(data_object.position_within(parent_data_object), 3);
             //
             // remove_from() does not works:
-            //
+            //            
             assert.throws(function () { data_object.remove_from(parent_data_object); });
         });
 

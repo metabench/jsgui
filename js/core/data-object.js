@@ -2976,7 +2976,7 @@ var Data_Object = Evented_Class.extend({
 
     'remove_from': function(parent) {
         var p_id = parent._id();
-
+        
         if (this._parents && is_defined(this._parents[p_id])) {
 
             var parent = this._parents[p_id][0];
