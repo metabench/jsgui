@@ -263,16 +263,19 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         //    } else {
         //        this._[field_name] = value;
         //    }
+        //    return value;
         //}
 
-        it("should works strangely", function () {
+        it("should work strangely", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             // with field definition: set any value directly
             //
             data_object.set_field("Field1", "int");
-            data_object.set("Field1", "abc");
+            set_result = data_object.set("Field1", "abc");
             assert.deepEqual(data_object.get("Field1"), "abc");
+            assert.deepEqual(set_result, "abc");
             //
             // with field definition but without set(): create Data_Value or Data_Object or something else:
             //
@@ -281,23 +284,28 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             // without field definition: create Data_Value for 'string', 'number', 'boolean', 'date':
             //
-            data_object.set("Field3", "abc");
+            set_result = data_object.set("Field3", "abc");
             assert.deepEqual(data_object.get("Field3"), new Data_Value({ value: "abc" }));
+            assert.deepEqual(set_result, "abc");
             //
             // without field definition: assign just value for other types:
             //
-            data_object.set("Field4", ["abc"]);
+            set_result = data_object.set("Field4", ["abc"]);
             assert.deepEqual(data_object.get("Field4"), ["abc"]);
+            assert.deepEqual(set_result, ["abc"]);
         });
 
-        it("should works strangely", function () {
+        it("should work strangely", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
-            data_object.set("Field1", false);
+            set_result = data_object.set("Field1", false);
             assert.deepEqual(data_object.get("Field1"), new Data_Value({ value: false }));
+            assert.deepEqual(set_result, false);
             //
-            data_object.set("Field2", null);
+            set_result = data_object.set("Field2", null);
             assert.deepEqual(data_object.get("Field2"), undefined);
+            assert.deepEqual(set_result, null);
             //
             assert.deepEqual(data_object.get("_"), { Field1: new Data_Value({ value: false }), Field2: null });
         });
@@ -323,6 +331,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
 
         it("internal ll_get() and ll_set()", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             // Data_Object allows to set and get values directly, without the internal Data_Value creation
             // it does not works for the following types: 'string', 'number', 'boolean', 'date'
@@ -330,65 +339,85 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             // BTW ll_set() found to be not used 
             //
-            data_object.set("Field1", [123]);
+            set_result = data_object.set("Field1", [123]);
             assert.deepEqual(data_object.get("Field1"), [123]);
+            assert.deepEqual(set_result, [123]);
             //
-            data_object.set("Field2", ["45"]);
+            set_result = data_object.set("Field2", ["45"]);
             assert.deepEqual(data_object.get("Field2"), ["45"]);
+            assert.deepEqual(set_result, ["45"]);
             //
             var value = { x: 100 };
-            data_object.set("Field1", value);
+            set_result = data_object.set("Field1", value);
             assert.deepEqual(data_object.get("Field1"), value);
+            assert.deepEqual(set_result, value);
         });
 
         it("native types", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             // Data_Object creates an internal Data_Value for native types ('string', 'number', 'boolean', 'date')
-            // notice the additional .get() call:
             //
-            data_object.set("Field1", "45");
-            assert.deepEqual(data_object.get("Field1").get(), "45");
+            set_result = data_object.set("Field1", "45");
+            assert.deepEqual(data_object.get("Field1"), new Data_Value({ value: "45" }));
+            assert.deepEqual(set_result, "45");
             //
-            data_object.set("Field2", 123);
-            assert.deepEqual(data_object.get("Field2").get(), 123);
+            set_result = data_object.set("Field2", 123);
+            assert.deepEqual(data_object.get("Field2"), new Data_Value({ value: 123 }));
+            assert.deepEqual(set_result, 123);
             //
-            data_object.set("Field3", false);
-            assert.deepEqual(data_object.get("Field3").get(), false);
+            set_result = data_object.set("Field3", false);
+            assert.deepEqual(data_object.get("Field3"), new Data_Value({ value: false }));
+            assert.deepEqual(set_result, false);
             //
             // probably error
             // "date" is listed in the hard-coded types inside the set() method code, 
             // but typeof returns "object" instead of "date". So, it does not create 
-            // the internal Data_Value for Date (notice no additional .get() call):
+            // the internal Data_Value for Date:
             //
             var date_value = new Date(10000);
-            data_object.set("Field4", date_value);
+            set_result = data_object.set("Field4", date_value);
             assert.deepEqual(data_object.get("Field4"), date_value); // !!!
+            assert.deepEqual(set_result, date_value);
         });
 
         it("allows to set anything if the field exists", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             // if the field was set previously, then Data_Object allows to set anything without the internal Data_Object creation
             // bug?
             //
-            data_object.set("Field1", [123]);
+            set_result = data_object.set("Field1", [123]);
             assert.deepEqual(data_object.get("Field1"), [123]);
+            assert.deepEqual(set_result, [123]);
             //
-            data_object.set("Field1", 123);
+            set_result = data_object.set("Field1", 123);
             assert.deepEqual(data_object.get("Field1"), 123); // !!!
+            assert.deepEqual(set_result, 123);
+            //
+            set_result = data_object.set("Field3", false);
+            assert.deepEqual(data_object.get("Field3"), new Data_Value({ value: false }));
+            assert.deepEqual(set_result, false);
+            //
+            set_result = data_object.set("Field3", true);
+            assert.deepEqual(data_object.get("Field3"), true);
+            assert.deepEqual(set_result, true);
         });
 
         it("should prevent read-only fields from setting", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             data_object.read_only("Field1");
             assert.throws(function () { data_object.set("Field1", [123]); });
             assert.deepEqual(data_object.get("Field1"), undefined);
             //
             data_object.read_only("Field1", false);
-            data_object.set("Field1", [123]);
+            set_result = data_object.set("Field1", [123]);
             assert.deepEqual(data_object.get("Field1"), [123]);
+            assert.deepEqual(set_result, [123]);
         });
 
         it("get() should return an object with all values", function () {
@@ -397,10 +426,12 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             var data_value1 = new Data_Value({ value: 100 });
             var data_value2 = new Data_Value({ value: "200" });
             //
-            data_object.set("Field1", 100);
-            data_object.set("Field2", "200");
+            var set_result1 = data_object.set("Field1", 100);
+            var set_result2 = data_object.set("Field2", "200");
             assert.deepEqual(data_object.get("Field1"), data_value1);
             assert.deepEqual(data_object.get("Field2"), data_value2);
+            assert.deepEqual(set_result1, 100);
+            assert.deepEqual(set_result2, "200");
             //
             assert.deepEqual(data_object.get(), { Field1: data_value1, Field2: data_value2 });
         });
@@ -410,10 +441,12 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             // 
             assert.deepEqual(data_object.get(), {});
             //
-            data_object.set("Field1", [100]);
-            data_object.set("Field2", ["200"]);
+            var set_result1 = data_object.set("Field1", [100]);
+            var set_result2 = data_object.set("Field2", ["200"]);
             assert.deepEqual(data_object.get("Field1"), [100]);
             assert.deepEqual(data_object.get("Field2"), ["200"]);
+            assert.deepEqual(set_result1, [100]);
+            assert.deepEqual(set_result2, ["200"]);
             //
             assert.deepEqual(data_object.get(), { Field1: [100], Field2: ["200"] });
         });
@@ -441,11 +474,19 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             change_eventArgs = null;
             data_object.set("Field1", [123], false);
-            assert.deepEqual(change_eventArgs, { name: "Field1", value: [123] }); // !!!
+            assert.deepEqual(change_eventArgs, { name: "Field1", value: [123] }); 
             //
             change_eventArgs = null;
             data_object.set("Field1", [123], ""); // ???
             assert.deepEqual(change_eventArgs, { name: "Field1", value: [123] });
+            //
+            change_eventArgs = null;
+            data_object.set("Field1", [123], "true"); 
+            assert.deepEqual(change_eventArgs, null);
+            //
+            change_eventArgs = null;
+            data_object.set("Field1", [123], "false");
+            assert.deepEqual(change_eventArgs, null);
         });
 
         xit("set() should include a source property to the change event when a control is passed", function () {
@@ -458,7 +499,8 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         it("set() using object instead of name/value pairs", function () {
             var data_object = new Data_Object();
             //
-            data_object.set({ Field1: [123], Field2: ["45"] });
+            var set_result = data_object.set({ Field1: [123], Field2: ["45"] });
+            assert.deepEqual(set_result, { Field1: [123], Field2: ["45"] });
             //
             assert.deepEqual(data_object.get("Field1"), [123]);
             assert.deepEqual(data_object.get("Field2"), ["45"]);
@@ -467,10 +509,17 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         it("set() using Data_Object instead of name/value pairs", function () {
             var data_object = new Data_Object();
             //
+            var change_eventArgs = "not set";
+            data_object.on("change", function (eventArgs) {
+                change_eventArgs = eventArgs;
+            });
+            //
             var data_object_as_value = new Data_Object();
             //
-            data_object.set(data_object_as_value);
+            var set_result = data_object.set(data_object_as_value);
             assert.deepEqual(data_object.get(), { undefined: undefined }); // !!!
+            assert.deepEqual(change_eventArgs, "not set");
+            assert.deepEqual(set_result, undefined);
         });
 
         xit("set() using control instead of name/value pairs", function () {
@@ -510,18 +559,15 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             var data_object = new Data_Object();
             //
             data_object.set_field("Field_String", String); assert_field_sig(data_object, "Field_String", "[s,s,f]");
-            var value_String = new Data_Value();
-            assert.deepEqual(data_object.get("Field_String"), value_String);
+            assert.deepEqual(data_object.get("Field_String"), new Data_Value());
             //
             data_object.set_field("Field_Number", Number); assert_field_sig(data_object, "Field_Number", "[s,s,f]");
-            var value_Number = new Data_Value();
-            assert.deepEqual(data_object.get("Field_Number"), value_Number);
+            assert.deepEqual(data_object.get("Field_Number"), new Data_Value());
             //
             var MyBook = function () { this.book = "Secret City"; };
             //
             data_object.set_field("Field_MyBook", MyBook); assert_field_sig(data_object, "Field_MyBook", "[s,s,f]");
-            var value_MyBook = new MyBook();
-            assert.deepEqual(data_object.get("Field_MyBook"), value_MyBook);
+            assert.deepEqual(data_object.get("Field_MyBook"), new MyBook());
         });
 
         // get() before set(): [s,[s,u]] - I see no way to create such field
@@ -652,16 +698,19 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
 
         it("should set and get values", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             data_object.set_field("Field_int", "int");
-            data_object.set("Field_int", "abc");
+            set_result = data_object.set("Field_int", "abc");
             assert.deepEqual(data_object.get("Field_int"), "abc"); // !!!
+            assert.deepEqual(set_result, "abc");
             //
             // how it's probably intended:
             //
             var data_value = new Data_Value({ value: 31 });
-            data_object.set("Field_int", data_value);
+            set_result = data_object.set("Field_int", data_value);
             assert.deepEqual(data_object.get("Field_int"), data_value); // ???
+            assert.deepEqual(set_result, data_value);
         });
 
         it("should not allow an asyncronous access for get()", function () {
@@ -680,27 +729,33 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
 
         it("should set and get values", function () {
             var data_object = new Data_Object();
+            var set_result = null;
             //
             // set() allows to set a field named ".", but get() is unable to get this field:
             //
-            data_object.set(".", ["dot"]);
+            set_result = data_object.set(".", ["dot"]);
             assert.deepEqual(data_object.get(), { '.': ["dot"] });
             assert.deepEqual(data_object.get("."), undefined);
+            assert.deepEqual(set_result, ["dot"]);
             //
             // Data_Object allows to set values using qualified names,
             // if all the nested data objects are created:
             //
             var data_object_b = new Data_Object();
-            data_object_b.set("c", ["abc"]);
+            set_result = data_object_b.set("c", ["abc"]);
+            assert.deepEqual(set_result, ["abc"]);
             //
             var data_object_a = new Data_Object();
-            data_object_a.set("b", data_object_b);
+            set_result = data_object_a.set("b", data_object_b);
+            assert.deepEqual(set_result, data_object_b);
             //
-            data_object.set("a", data_object_a);
+            set_result = data_object.set("a", data_object_a);
             assert.deepEqual(data_object.get("a.b.c"), ["abc"]);
+            assert.deepEqual(set_result, data_object_a);
             //
-            data_object.set("a.b.c", [123]);
+            set_result = data_object.set("a.b.c", [123]);
             assert.deepEqual(data_object.get("a.b.c"), [123]);
+            assert.deepEqual(set_result, [123]);
             //
             // Data_Object is unable to create the nested data objects itself:
             //
@@ -713,9 +768,10 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
                 change_eventArgs = eventArgs;
             });
             //
-            data_object.set("a.b.c", [45]);
+            set_result = data_object.set("a.b.c", [45]);
             assert.deepEqual(data_object.get("a.b.c"), [45]);
             assert.deepEqual(change_eventArgs, { name: "a.b.c", value: [45], bubbled: true });
+            assert.deepEqual(set_result, [45]);
         });
 
         xit("should use input_processors and output_processors", function () {
@@ -921,7 +977,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         //	matches_field_constraints()
         // -----------------------------------------------------
 
-        it("works strangely ", function () {
+        it("work strangely ", function () {
             var data_object = new Data_Object();
             //
             // it seems that the constraints should be an object with key/value pairs, probably field_name/field_constraint:
@@ -998,7 +1054,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         //	ensure_field_constraint(), get_field_data_type_constraint(), set_field_data_type_constraint
         // ----------------------------------------------------------------------------------------------
 
-        it("works strangely", function () {
+        it("work strangely", function () {
             var data_object = new Data_Object();
             //
             assert.deepEqual(data_object.get_field_data_type_constraint("Field1"), undefined);
@@ -1067,7 +1123,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         //	_____meets_requirements()
         // -----------------------------------------------------
 
-        it("works strangely", function () {
+        it("work strangely", function () {
             var data_object = new Data_Object();
             //
             // returns true if the requirements are not set
@@ -1290,7 +1346,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         //	_fp_parent()
         // -----------------------------------------------------
 
-        it("works strangely", function () {
+        it("work strangely", function () {
             var data_object = new Data_Object();
             //
             // _fp_parent() always returns undefined (here and below):  !!!
