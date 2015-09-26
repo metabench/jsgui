@@ -1455,7 +1455,8 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             var Data_Object_Ex = Data_Object.extend("depth");
             //
             assert.deepEqual(Data_Object_Ex.depth, "depth"); // !!!
-            assert.deepEqual(Data_Object_Ex.int, "int"); // !!!  imagine "text(10)" instead of "int"...
+            assert.deepEqual(Data_Object_Ex.int, "int"); // !!!
+            assert.deepEqual(Data_Object_Ex["int"], "int"); 
             //
             var data_object = new Data_Object_Ex();
             //
@@ -1503,33 +1504,55 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
 
         it("should extend the original Class by the custom addition...", function () {
             //
-            var Person = Data_Object.extend({
+            var Data_Object_2 = Data_Object.extend({
+                'prop1': 111,
+                'prop2': 222,
+                '#prop3': 'prop1'
+            });
+            //
+            var do2 = new Data_Object_2();
+            //
+            assert.equal(do2.prop1, 111);
+            assert.equal(do2.prop2, 222);
+            assert.equal(do2.prop3, 111);
+            assert.equal(do2['#prop3'], undefined);
+            //
+            do2.prop1 = 1000; // change the .prop1 value
+            assert.equal(do2.prop3, 111); // .prop3 not changed
+        });
+
+        it("should extend the original Class by the custom addition... - 2", function () {
+            //
+            var Data_Object_2 = Data_Object.extend({
                 'prop1': 111,
                 'prop2': 222
             });
             //
-            var Ninja = Person.extend({
+            var Data_Object_3 = Data_Object_2.extend({
                 'prop3': 333,
                 '#prop4': 'prop2'
             });
             //
-            var p = new Person(true);
-            var n = new Ninja();
+            var do2 = new Data_Object_2();
+            var do3 = new Data_Object_3();
             //
-            assert.equal(n['prop4'], 222);
-            assert.equal(n.prop4, 222);
+            assert.equal(do3['prop4'], 222);
+            assert.equal(do3.prop4, 222);
             //
-            assert.equal(p.prop1, 111);
-            assert.equal(p.prop2, 222);
-            assert.equal(p.prop3, undefined);
-            assert.equal(p.prop4, undefined);
-            assert.equal(p['#prop4'], undefined);
+            assert.equal(do2.prop1, 111);
+            assert.equal(do2.prop2, 222);
+            assert.equal(do2.prop3, undefined);
+            assert.equal(do2.prop4, undefined);
+            assert.equal(do2['#prop4'], undefined);
             //
-            assert.equal(n.prop1, 111);
-            assert.equal(n.prop2, 222);
-            assert.equal(n.prop3, 333);
-            assert.equal(n.prop4, 222);
-            assert.equal(n.prop5, undefined);
+            assert.equal(do3.prop1, 111);
+            assert.equal(do3.prop2, 222);
+            assert.equal(do3.prop3, 333);
+            assert.equal(do3.prop4, 222);
+            assert.equal(do3.prop5, undefined);
+            //
+            do3.prop2 = 2000;
+            assert.equal(do3.prop4, 222);
         });
 
         // -----------------------------------------------------
@@ -1558,6 +1581,19 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             });
             var data_object = null;
             assert.throws(function () { data_object = new Data_Object_Ex(); });
+            //
+            //
+            //var Data_Object_Ex = Data_Object.extend({});
+            //Data_Object_Ex.init = null;
+            //var data_object = null;
+            //data_object = new Data_Object_Ex(); 
+            //
+            //
+            //var old_init = Data_Object.init;
+            //Data_Object.init = null;
+            //data_object = new Data_Object();
+            //Data_Object.init = old_init;
+            //
             //
             //assert.deepEqual(data_object.init, null);
             //assert.deepEqual(data_object.abstract, true);
