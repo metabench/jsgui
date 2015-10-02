@@ -197,9 +197,34 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
         // -----------------------------------------------------
 
         it("should call methods mentioned in the spec, passing parameter from the spec", function () {
-            var myConstraints = { c1: 1 };
+            //
+            // if typeof(spec)=="object", then it iterates over the spec fields. 
+            // If the Data_Object contains a method named as the spec field name, then it calls the method passing the field value as a parameter.
+            // I.e. { method_name: method_parameter }
+            //
+            var myConstraints = { Field1: "int" };
             var data_object = new Data_Object({ constraints: myConstraints }); // calls constraints(myConstraints)
             assert.deepEqual(data_object._field_constraints, myConstraints);
+        });
+
+        // -----------------------------------------------------
+        //	spec: set chained fields
+        // -----------------------------------------------------
+
+        it("should set chained fields mentioned in the spec", function () {
+            //
+            // if typeof(spec)=="object", then it iterates over the spec fields. 
+            // If the Data_Object does not contains a method named as the spec field name, 
+            // but there is a chained field with the name, then it calls set(chained_field_name, value)
+            // I.e. { chained_field_name: value }
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                fields: { Field1: "int", Field2: "text" }                
+            });
+            //
+            var data_object = new Data_Object_Ex({ Field2: "abc" });
+            //
+            assert.deepEqual(data_object.get(), { Field2: new Data_Value({ value: "abc"}) });
         });
 
         // -----------------------------------------------------
@@ -1207,10 +1232,10 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             data_object._ = obj
             assert.deepEqual(data_object.toObject(), obj);
             //
-            obj = 7;
-            data_object = new Data_Object();
-            data_object._ = obj
-            assert.deepEqual(data_object.toObject(), {});  // !!!
+            //obj = 7; // probably wrong value for data_object._
+            //data_object = new Data_Object();
+            //data_object._ = obj
+            //assert.deepEqual(data_object.toObject(), {});  // !!!
             //
             data_object = new Data_Object();
             data_object.set("Field1", 111);
