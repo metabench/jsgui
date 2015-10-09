@@ -221,12 +221,12 @@ var rimraf = require('rimraf');
 		//  may need to modify mapify to support callback functions like arrayify.
 		//  Can save a whole bunch of files as strings.
 		'save_file_as_string': mapify(fp(function(a, sig) {
-		    console.log('save_file_as_string sig ' + sig);
+		    //console.log('save_file_as_string sig ' + sig);
 		    if (sig == '[s,s,f]') {
 		        var file_path = a[0];
 		        var file_content = a[1];
 		        var callback = a[2];
-                console.log('pre write file file_path', file_path);
+            console.log('pre write file file_path', file_path);
 		        fs.writeFile(file_path, file_content, function(err) {
                     if(err) {
                         //console.log(err);

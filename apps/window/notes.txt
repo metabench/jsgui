@@ -1,0 +1,117 @@
+notes.txt
+
+Want it to be easy to make site documentation.
+
+Want client-side code here
+
+Seems like more back-end work needs to be done here.
+
+Want the docs system to provide annotations to the code.
+I think having a directory viewing system would make sense
+
+As well as showing things in an API order.
+Perhaps this system could rearrange the code (change order of functions)
+
+Nicely presented
+
+There need to be pages / pieces / items about general concepts.
+ They will have links to code
+
+Also need to have some demos intersperced, including code samples.
+
+Something like tryit editor?
+
+Want to have authenticated editing system
+Likely to need further non-specific back-end work for this to function.
+
+	Editing a shared JSON object.
+
+This may use some more general types of renderers. There could be some JSON info about documentation and it renders that.
+	Extra information that is associated with the code's functions.
+
+Need to do a bit more general back-end work on things such as authentication and user spaces.
+	Meaning users' personal settings and ability to securely store data.
+
+Users will be using resources.
+
+Resources will appear differently depending on user credentials.
+EG could get my giles with a URL?
+
+Or better not in general.
+Maybe getting a user's files through the user's path in the URL?
+
+/users/username
+And admin and that user has got access
+
+So have user specific paths, keep them separate
+
+/users/james/files
+
+/users/james/docs
+
+/docs/files
+
+Some types of system files?
+
+// Want the documentation to read the actual source files.
+// Be able to provide the JavaScript
+
+// Store and provide annotations for the function names
+
+// Perhaps we need some lower level DB persistance functionality to be set up?
+//  Something so that users can store data.
+//  I think an abstraction so that users can be authenticated and store data makes sense.
+//  Both in file system and database / relational / object.
+
+// May need to defined objects that get stored.
+//  May define RDB tables?
+
+// Anyway, there are plenty of things to do in general before the documentation system itself
+
+// Having the file manager
+//  Having access to the JavaScript files
+//   (could have an editor of some kind)
+
+// Somehow store annotations for files which are elsewhere in the system.
+
+// Also granting a user access to the system files.
+//  That could depend on the user's assigned roles and permissions.
+
+// There would be a user resource? A user authentication resource?
+
+// A user would be authenticated and authorised to access particular resources, such as the file system.
+
+// If they have access to the filesystem, they can make notes from files.
+//  A user with access to the file system should be able to use various tools such as source code scanning.
+
+// I think user authenticated and authorised file system access is the first step.
+
+Not sure if the resources should be authenticated out-of-the-box?
+I think there will be secure default setups, but at the moment I'm still defining them.
+
+Also, ability to share some particular files on a filesystem. Maybe not share? just access?
+
+Want it so the authenticated admin user can at least view the jsgui files.
+And view them as a list in the directories.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
