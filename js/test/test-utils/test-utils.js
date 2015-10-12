@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['assert'], function(assert) {
+define(['assert', './toText'], function(assert, toText) {
 	
         function isInBrowser() {
             if (typeof (window) === 'undefined') return false;
@@ -75,12 +75,116 @@ define(['assert'], function(assert) {
 		    return result;
 		}
 
+
+    //#region assert.deepEqual
+
+
+		function deepEqual(actual, expected, message) {
+		    if (!_deepEqual(actual, expected, false)) {
+		        assert.fail(actual, expected, message, 'deepEqual', assert.deepEqual);
+		    }
+		};
+
+		function _deepEqual(actual, expected, strict, history) {
+		    //var actual_text = toText.toText(actual);
+		    //var expected_text = toText.toText(expected);
+		    //console.log("_deepEqual(" + actual_text + ", " + expected_text + ", " + strict + ", " + toText.toText(history));
+		    //
+		    if ((actual === undefined) || (expected === undefined)) {
+		        return (actual === expected);
+		    }
+            //
+		    var h = history;
+		    while (h) {
+		        if ((actual === h.actual) && (expected === h.expected)) return true;
+		        h = h.prev;
+		    }
+            //
+		    // 7.1. All identical values are equivalent, as determined by ===.
+		    if (actual === expected) {
+		        return true;
+
+		        // 7.4. Other pairs that do not both pass typeof value == 'object',
+		        // equivalence is determined by ==.
+		    } else if ((actual === null || typeof actual !== 'object') &&
+                       (expected === null || typeof expected !== 'object')) {
+		        return strict ? actual === expected : actual == expected;
+
+		        // 7.5 For all other Object pairs, including Array objects, equivalence is
+		        // determined by having the same number of owned properties (as verified
+		        // with Object.prototype.hasOwnProperty.call), the same set of keys
+		        // (although not necessarily the same order), equivalent values for every
+		        // corresponding key, and an identical 'prototype' property. Note: this
+		        // accounts for both named and indexed properties on Arrays.
+		    } else {
+		        return objEquiv(actual, expected, strict, history);
+		    }
+		}
+
+		function isArguments(object) {
+		    return Object.prototype.toString.call(object) == '[object Arguments]';
+		}
+
+		function isPrimitive(arg) {
+		    return arg === null || typeof arg !== 'object' && typeof arg !== 'function';
+		}
+
+		const pSlice = Array.prototype.slice;
+
+		function objEquiv(a, b, strict, history) {
+		    if (a === null || a === undefined || b === null || b === undefined)
+		        return false;
+		    // if one is a primitive, the other must be same
+		    if (isPrimitive(a) || isPrimitive(b))
+		        return a === b;
+		    if (strict && Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
+		        return false;
+		    var aIsArgs = isArguments(a),
+                bIsArgs = isArguments(b);
+		    if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs))
+		        return false;
+		    if (aIsArgs) {
+		        a = pSlice.call(a);
+		        b = pSlice.call(b);
+		        return _deepEqual(a, b, strict, { actual: a, expected: b, prev: history });
+		    }
+		    var ka = Object.keys(a),
+                kb = Object.keys(b),
+                key, i;
+		    // having the same number of owned properties (keys incorporates
+		    // hasOwnProperty)
+		    if (ka.length !== kb.length)
+		        return false;
+		    //the same set of keys (although not necessarily the same order),
+		    ka.sort();
+		    kb.sort();
+		    //~~~cheap key test
+		    for (i = ka.length - 1; i >= 0; i--) {
+		        if (ka[i] !== kb[i])
+		            return false;
+		    }
+		    //equivalent values for every corresponding key, and
+		    //~~~possibly expensive deep test
+		    for (i = ka.length - 1; i >= 0; i--) {
+		        key = ka[i];
+		        //console.log("key=" + key);
+		        if (!_deepEqual(a[key], b[key], strict, { actual: a, expected: b, prev: history })) return false;
+		        //console.log("key=" + key + " - done");
+            }
+		    return true;
+		}
+
+    //#endregion
+
+
+
 		var test_utils = {
 		    'isInBrowser': isInBrowser,
             'assertListedProps': assertListedProps,		
             'assertArraysContentEqual': assertArraysContentEqual,		
             //'assertFilesEqual': assertFilesEqual,
-            'functionsToStrings': functionsToStrings
+            'functionsToStrings': functionsToStrings,
+            'assertDeepEqual': deepEqual
         }
 		
         return test_utils;
