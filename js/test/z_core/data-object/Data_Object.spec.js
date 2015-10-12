@@ -604,6 +604,7 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             //
             data_object.set_field("Field_collection", "collection"); assert_field_sig(data_object, "Field_collection", "[s,s,o]");
             assert.throws(function () { data_object.get("Field_collection") });  // it's unable to create this field (line 4172 jsgui.Collection undefined) !!!
+            assert.equal(jsgui.Collection, undefined);
             //
             data_object.set_field("Field_data_object", "data_object"); assert_field_sig(data_object, "Field_data_object", "[s,s,o]");
             var value_data_object = new Data_Object();
@@ -642,10 +643,15 @@ function (Data_Object, Data_Value, Data_Structures, Constraint, Enhanced_Data_Ob
             var data_object = new Data_Object();
             //
             data_object.set_field(0, ["Field_collection", "collection"]); assert_field_sig(data_object, "Field_collection", "[s,s]");
-            assert.throws(function () { data_object.get("Field_collection") });
+            assert.throws(function () { data_object.get("Field_collection") }, /not supported here. should use code in enhanced-data-object./);
             //
             data_object.set_field(0, ["Field_data_object", "data_object"]); assert_field_sig(data_object, "Field_data_object", "[s,s]");
-            assert.throws(function () { data_object.get("Field_data_object") }); // "new jsgui.Data_Object(...)" data-object.js line 4347
+            assert.throws(function () { data_object.get("Field_data_object") }, /jsgui.Data_Object is not a function/); // "new jsgui.Data_Object(...)" 
+            //
+            data_object.set_field(0, ["Field_text", "text"]); assert_field_sig(data_object, "Field_text", "[s,s]");
+            var value_text = new (jsgui.ensure_data_type_data_object_constructor("text"))();
+            value_text.parent(data_object);
+            test_utils.assertDeepEqual(data_object.get("Field_text"), value_text);
         });
 
         // get() before set(): [s,s] using jsgui.data_types_info:
