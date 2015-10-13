@@ -459,7 +459,14 @@ var ensure_remote_jsgui = function(host, username, password, callback) {
 
 }
 
+//
+// Maybe should have a server app for this.
+//  Views the network and configures raspberry pis.
 
+
+// The remote config / setup may not be so useful if we just give each raspberry pi an image.
+//  Possibly set a single variable?
+//  Also a machine name.
 
 
 //var jsgui_admin_password = 'sdjkj3;cds';

@@ -6,8 +6,8 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 	
 	var Class = jsgui.Class, Data_Object = jsgui.Data_Object, Collection = jsgui.Collection;
 	var is_defined = jsgui.is_defined, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsgui.tof;
-	var call_multiple_callback_functions = jsgui.call_multiple_callback_functions, call_multi = jsgui.call_multi;
-	var each = jsgui.each;
+	var call_multi = jsgui.call_multi;
+	var each = jsgui.eac;
 	
 	var Clock = Resource.extend({
 		'init': function(spec) {
@@ -125,7 +125,7 @@ define(["../../core/jsgui-lang-util", "../core/resource"], function(jsgui, Resou
 			//return false;
 
 			return true;
-		},
+		}
 		
 	});
 

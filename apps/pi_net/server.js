@@ -113,6 +113,11 @@ var rt = ar.get('routing_tree');
 
 var os = require("os");
 
+
+// Should not have to be run on a Raspberry Pi.
+
+
+
 var resource_linux_system = new Linux_System_Resource({ 'meta': { 'name': 'Linux System' }});
 rp.add(resource_linux_system);
 
@@ -130,8 +135,6 @@ rp.add(resource_linux_system);
 //Set delay for second Measure
 
 server.start(port, function(err, res_started) {
-
-
 
 	rt.set('/', function(req, res) {
 		//console.log('1) server function from routing_tree');
