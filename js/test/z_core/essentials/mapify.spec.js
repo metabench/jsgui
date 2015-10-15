@@ -17,6 +17,16 @@ function (jsgui, assert) {
         });
 
         // -----------------------------------------------------
+        //	mapify() - array of strings
+        // -----------------------------------------------------
+
+        it("mapify() should convert an array of strings to a truth map", function () {
+
+            assert.deepEqual(jsgui.mapify(["name", "John"]), { name: true, John: true });
+
+        });
+
+        // -----------------------------------------------------
         //	mapify() - array, name
         // -----------------------------------------------------
 

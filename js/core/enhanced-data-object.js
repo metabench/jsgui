@@ -523,7 +523,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                                 // Specifying a collection constraint as well (perhaps these are fields for the obejcts)
                                 //  I think calling it a collection constraint with specified fields for the objects makes
                                 //  sense.
-                                console.log('objDef ' + stringify(objDef));
+                                //console.log('objDef ' + stringify(objDef));
                                 // will be an object rather than array (for now at least)
 
                                 // Not sure about setting through fields...

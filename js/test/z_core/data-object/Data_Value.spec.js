@@ -1,8 +1,8 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/data-object', 'assert'],
-function (Data_Object, assert) {
+define(['../../../core/data-value', 'assert'],
+function (Data_Value, assert) {
 
     describe("z_core/data-object /Data_Value.spec.js ", function () {
 
@@ -11,7 +11,7 @@ function (Data_Object, assert) {
         // -----------------------------------------------------
 
         it("should gets and sets values", function () {
-            var data_value = new Data_Object.Data_Value();
+            var data_value = new Data_Value();
             //
             var change_old = null;
             var change_new = null;
@@ -53,23 +53,38 @@ function (Data_Object, assert) {
         it("should perform value initialization", function () {
             var data_value = null;
             //
-            data_value = new Data_Object.Data_Value();
+            data_value = new Data_Value();
             assert.deepEqual(data_value.get(), undefined);
             //
-            data_value = new Data_Object.Data_Value({ value: 31 });
+            data_value = new Data_Value({ value: 31 });
             assert.deepEqual(data_value.get(), 31);
+        });
+
+        it("should be able to clone itself", function () {
+            var data_value = null;
+            var data_value2 = null;
+            //
+            data_value = new Data_Value({ value: 31 });
+            data_value2 = data_value.clone();
+            assert.deepEqual(data_value2.get(), 31);
+            //
+            var obj = { a: 1, b: 2 };
+            data_value = new Data_Value({ value: obj });
+            data_value2 = data_value.clone();
+            obj.a = 2;
+            assert.deepEqual(data_value2.get(), { a: 2, b: 2 });
         });
 
         it("should be able to provide an id", function () {
             var data_value = null;
             //
-            data_value = new Data_Object.Data_Value();
+            data_value = new Data_Value();
             assert.throws(function () { data_value._id(); });
             //
             var nextId = 7;
             var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
             //
-            data_value = new Data_Object.Data_Value({ context: context });
+            data_value = new Data_Value({ context: context });
             assert.deepEqual(data_value._id(), "data_value_007");
             assert.deepEqual(data_value._id(), "data_value_007"); // the same as above, new_id() was not called
         });
@@ -79,7 +94,7 @@ function (Data_Object, assert) {
             //
             // no parent:
             //
-            data_value = new Data_Object.Data_Value();
+            data_value = new Data_Value();
             assert.deepEqual(data_value.parent(), undefined);
             //
             // set something as parent:
@@ -106,7 +121,7 @@ function (Data_Object, assert) {
             //
             // set a parent with a context, with index:
             //
-            data_value = new Data_Object.Data_Value();
+            data_value = new Data_Value();
             assert.deepEqual(data_value.parent(), undefined);
             //
             data_value.parent(myParent, 0);
