@@ -42,6 +42,12 @@ if (typeof define !== 'function') {
 
 
 
+// Perhaps dealing with Vectorious data structures, or simple arrays would be easier.
+//  May not always want to wrap the data as a pixel buffer (though may do sometimes).
+
+
+
+
 
 /*
 

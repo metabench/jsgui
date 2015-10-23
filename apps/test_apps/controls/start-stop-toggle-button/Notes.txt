@@ -1,0 +1,2 @@
+This may take longer to make if it uses Vector rendering.
+Rendering vector images (to VML or SVG) would be very useful functionality.

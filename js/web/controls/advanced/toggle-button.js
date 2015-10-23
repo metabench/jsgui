@@ -25,6 +25,29 @@ var jsgui = require('../../jsgui-html-enh');
 var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof;
 var Control = jsgui.Control;
 
+// Can the button contain an image?
+//  Would be useful for a start/stop button.
+//  Toggle button toggling between two images.
+
+// Can we have an abstraction that will handle a variety of images in a variety of contexts?
+//  We want to have SVGs that are suitable for start and stop.
+//  Want to make use of the right images or the right image abstractions.
+//   Possibly vector abstractions would be useful.
+//   Perhaps late 2015 we can count on svg support. Deos not seem to have that good Android support.
+//    Legacy support too?
+//    Spritesheets may be quicker.
+
+// Using image files / sprites makes sense.
+//  A sprite + build abstraction would be nice.
+//  Just using image files would be easy to begin with.
+
+
+
+
+
+// Inherit from Button, with change events, and the possibility of changing between images?
+
+
 var Toggle_Button = Control.extend({
 
     'fields': [

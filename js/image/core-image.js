@@ -24,12 +24,35 @@ var jsgui = require('../core/jsgui-lang-enh');
 //  get the versions of the image
 
 // Perhaps don't use this abstraction for the moment.
+//  May be useful when functionality gets wrapped here. Want Typed Arrays to be used a lot more, rather than buffers.
+
+// Should not necessarily need the current (Oct 2015) node specific functionality.
+//  It may be worth working on newer image processing functionality that would work within modern browsers too, using Uint8Array.
+
+// Some image processing would be node-specific using C++, but I would prefer to have things written in a fairly generic way, then with the possibility
+// of calling c++ optimized code.
+
+// Will use Uint8Arrays and parts of them as the storage for images.
+
+// Maybe don't have much that is 'core' for images.
+//  A lot will be procedural, especially to start with.
 
 
+// Could define an image through a URL.
+// Could define it through its data.
 
+// or those are fields of some kind?
 
+// .url
+// .data
+// ._data
 
+// We may be given the image's size.
+
+// Maybe we want to have more modules written that specifically deal with the Unit8Array data.
 
 var Img = jsgui.Data_Object.extend({
+  'init': function(spec) {
 
+  }
 })

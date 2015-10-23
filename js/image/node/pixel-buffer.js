@@ -1,5 +1,9 @@
 // jsgui-node-pixel-buffer
 
+// Replacement for a pixel-buffer?
+
+// Or just a bunch of procedures that can access arrays of pixel data?
+
 // have pixel-buffer as its own module?
 //  quite a simple one - will be used to hold image data as an intermediate format.
 //   simpler than PNG.
@@ -36,18 +40,16 @@ if (typeof define !== 'function') {
 
 
 
-
-
 /*
 
 define(["../../core/jsgui-lang-essentials", "../../build/Release/binding_png.node"],
-    
+
     // can use bit depth constants.
-    
+
     // bits_per_pixel
-    
+
     // These will only operate as rgb24 or argb 32.
-    
+
     function(jsgui, cpp_mod) {
     */
 
@@ -57,6 +59,28 @@ var cpp_mod = {};
 
 var Class = jsgui.Class, each = jsgui.each, stringify = jsgui.stringify, fp = jsgui.fp;
 var tof = jsgui.tof;
+
+// Using some kind of matrix with built-in C++ goodness may work well here.
+//  Possibly making use of a typed array as the data store as well?
+//  Buffers are now built on top of V8 typed arrays, so not as good it seems.
+
+// Perhaps will deprecate pixel buffers, in favour of typed arrays, and portions of typed arrays (including as sprites)
+//  because buffers are less core to V8 as well as not available in the browser.
+
+// Will have procedures for interacting with typed arrays - and will get used to the maths as well.
+
+// This could do with being replaced or retired.
+//  It may well be best to make new versions, that make use of Uint8Array as the most basic data type.
+
+
+
+// May be able to extend a Uint8Array, rather than wrap it.
+//  Perhaps through object composition?
+//  Wrapping a Uint8Array makes sense.
+
+// Having procedural code that operates on Uint8Array objects makes a lot of sense.
+
+
 
 
 var Pixel_Buffer = Class.extend({
@@ -89,9 +113,19 @@ var Pixel_Buffer = Class.extend({
 
         var bytes_per_pixel = this.bits_per_pixel / 8;
 
+        // Though typed arrays may work better.
+
+
 
         if (this.size) {
-            this.buffer = new Buffer(bytes_per_pixel * this.size[0] * this.size[1]);
+
+          // A typed array may well be better than a buffer?
+          //  Though it may depend, as some other types of bits per pixel may need less than 1 byte space.
+          //   Though not supporting that right now.
+
+
+            //this.buffer = new Buffer(bytes_per_pixel * this.size[0] * this.size[1]);
+            this.buffer = new Uint8Array(bytes_per_pixel * this.size[0] * this.size[1]);
         }
 
     },
@@ -109,6 +143,9 @@ var Pixel_Buffer = Class.extend({
         var pixel_buffer_pos = bytes_per_pixel * (x + y * this.size[0]);
         var buffer = this.buffer;
         var r, g, b, a;
+
+        // Would be easier if it was using a typed array, probably.
+        //  Possibly better to use a data structure
 
 
         if (this.bits_per_pixel == 24) {
@@ -135,8 +172,6 @@ var Pixel_Buffer = Class.extend({
     'set_pixel': fp(function(a, sig) {
         // Could this whole thing be sped up with C++?
 
-
-
         var bytes_per_pixel = this.bits_per_pixel / 8;
         var l = a.l;
         // x, y, r, g, b, a  l = 6
@@ -147,9 +182,7 @@ var Pixel_Buffer = Class.extend({
         //console.log('set_pixel sig ' + sig);
         //console.log('set_pixel a ' + stringify(a));
 
-
         var x, y, r, g, b, alpha;
-
         var w = this.size[0];
 
         // x, y, [r, g, b, a] l = 3
@@ -181,9 +214,7 @@ var Pixel_Buffer = Class.extend({
                 b = arr_pixel[2];
                 alpha = arr_pixel[3];
             }
-
         }
-
         if (l == 5) {
             if (this.bits_per_pixel != 24) {
                 throw 'Must specify the pixel as r, g, b with bits_per_pixel of 24';
@@ -214,7 +245,6 @@ var Pixel_Buffer = Class.extend({
             buffer.writeUInt8(r, pixel_buffer_pos);
             buffer.writeUInt8(g, pixel_buffer_pos + 1);
             buffer.writeUInt8(b, pixel_buffer_pos + 2);
-
         } else if (this.bits_per_pixel == 32) {
             buffer.writeUInt8(r, pixel_buffer_pos);
             buffer.writeUInt8(g, pixel_buffer_pos + 1);
@@ -226,7 +256,6 @@ var Pixel_Buffer = Class.extend({
             throw 'Must have bits_per_pixel set to 24 or 32';
         }
     }),
-
     'place_image_from_pixel_buffer': function(pixel_buffer, dest_pos) {
         // can do a fast copy.
         //  or can do pixel iteration.
@@ -245,12 +274,9 @@ var Pixel_Buffer = Class.extend({
         //console.log('dest_pos ' + stringify(dest_pos));
         // It's also worth making RGB->RGBA and RGBA->RGB
         if (this.bits_per_pixel == 32 && pixel_buffer.bits_per_pixel == 32) {
-
             var dest_w = this.size[0];
             var dest_h = this.size[1];
-
             var dest_buffer_line_length = dest_w * 4;
-
             var source_w = pixel_buffer.size[0];
             var source_h = pixel_buffer.size[1];
 
@@ -308,9 +334,6 @@ var Pixel_Buffer = Class.extend({
         } else {
             throw 'unsupported color mode'
         }
-
-
-
     }
 
 
@@ -320,7 +343,7 @@ module.exports = Pixel_Buffer;
 
 /*
         return Pixel_Buffer;
-        
+
     }
 );
     */

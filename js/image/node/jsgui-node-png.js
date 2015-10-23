@@ -1,4 +1,20 @@
 // Maybe will not be node specific?
+//  More PNG processing can happen in browsers once jsgui is using Typed Arrays rather than buffers.
+//  Would be a lot of changes within this module to use a Typed Array throughout.
+
+// It may even be best to upgrade and then use Vectorious?
+//  Though possibly want a data structure / simple convention that uses RGBA and RGB in Uint8 Typed Arrays
+
+// Want a way of loading a typed array from disk.
+//  Then we will be able to interpret it, and decompress it into another typed array
+//   Or structure that presents a similar interface.
+
+
+
+
+
+
+
 
 /*
 
@@ -27,7 +43,7 @@ if (typeof define !== 'function') {
 // could also use image_buffer...
 //  will get a new image_buffer from a PNG.
 
-//  will also load an image_buffer from 
+//  will also load an image_buffer from
 
 // May need more work on PNGs with palettes.
 //  Have been working on truecolor 32 and 24 and filter handling.
@@ -134,7 +150,7 @@ PNG starts with an 8 byte signature
 Then it has chunks
 
 PNG Chunks
-----------        
+----------
 IHDR
 Header, metadata
 gAMA
@@ -153,7 +169,7 @@ Bits per pixel
 --------------
 Color option	Channels	Bits per channel
             1	2	4	8	16
-Indexed	            1	1	2	4	8	
+Indexed	            1	1	2	4	8
 Grayscale	        1	1	2	4	8	16
 Grayscale & alpha	2				16	32
 Truecolor	        3				24	48
@@ -164,7 +180,7 @@ PNG color types
 Color
 type	Name	Binary	Masks
 A	C	P
-0	Grayscale   	                0	0	0	0	 
+0	Grayscale   	                0	0	0	0
 1	(Indexed grayscale)	            0	0	0	1	palette
 2	Truecolor	                    0	0	1	0	color
 3	Indexed	                        0	0	1	1	palette
@@ -181,7 +197,7 @@ Type byte	Filter name	Predicted value
 3	        Average	    Mean of bytes A and B, rounded down
 4	        Paeth	    A, B, or C, whichever is closest to p = A + B − C
 
-PNG compression method 0 
+PNG compression method 0
 (the only compression method presently defined for PNG) specifies deflate/inflate compression with a 32K sliding window.
 */
 
@@ -3328,6 +3344,24 @@ var PNG = jsgui.Class.extend({
     // Also want to be able to save to a stream, and have the save_to_disk function use that one.
 
     // this needs to use a callback because of deflate/inflate being async.
+
+    // Buffers are just built on top of typed arrays now though.
+
+    // Maybe could do this syncronously too.
+    //  Possibly we should be reading typed arrays from disk.
+    //  Also keeping typed arrays in memory.
+    //  Will need to deal with some memory allocation of such typed arrays, and collections of them.
+
+    // Want to be loading a typed array from disk.
+    //  Not having to go through it being a buffer. Typed arrays will be easier to work with in the browser as well.
+
+
+
+
+
+
+
+
 
     'load_from_buffer': function(buffer, callback) {
         // get to read through the whole buffer.
