@@ -782,29 +782,22 @@ var Constraint = require('./constraint');
 				//var that = this;
 				var a0 = a[0];
 
-				// object.keys will hopefully be faster.
-
-				var a0_keys = Object.keys(a0);
-
-				var c = 0, l = a0_keys.length;
-
-				for(c = 0; c < l; c++) {
-					this.set(a0[a0_keys[c]]);
-
+				if (Object.keys) {
+				    // object.keys will hopefully be faster.
+				    var a0_keys = Object.keys(a0);
+                    //
+				    var c = 0, l = a0_keys.length;
+				    for (c = 0; c < l; c++) {
+				        var a0_key = a0_keys[c];
+				        this.set([a0_key, a0[a0_key]]);
+				    }
+				} else {
+				    // Older JS code
+                    for (i in a0) {
+                        this.set.call(this, [i, a0[i]]);   
+                    }
 				}
 
-				// Older JS code
-				/*
-
-				var this_set_call = this.set.call, a0 = a[0];
-				for (i in a0) {
-				    //console.log(this_set_call);
-				    //this_set_call(this, [i, a0[i]]);
-				    this.set.call(this, [i, a0[i]]);
-
-				}
-
-				*/
 
 				/*
 				each(a[0], function(field_name, field_def) {
@@ -826,8 +819,9 @@ var Constraint = require('./constraint');
 			if (a.l > 1) {
 				//console.log('longer a.l');
 				//throw 'stop';
-				this.set(a);
-			}
+			    //this.set(a);
+			    this.set(arr_like_to_arr(a));
+            }
 
 
 			/*

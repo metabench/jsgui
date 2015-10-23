@@ -1,8 +1,8 @@
 ﻿
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../../core/data-object', 'assert'],
-function (Data_Object, assert) {
+define(['../../../core/evented-class', '../../../core/data-value', '../../../core/data-object', 'assert'],
+function (Evented_Class, Data_Value, Data_Object, assert) {
 
     describe("z_core/data-object /Evented_Class.spec.js ", function () {
 
@@ -31,8 +31,11 @@ function (Data_Object, assert) {
 
         it("should works", function () {
             //
-            // test Data_Object.Data_Value evented class:
-            test_evented_object(new Data_Object.Data_Value());
+            // test Evented_Class:
+            test_evented_object(new Evented_Class());
+            //
+            // test Data_Value evented class:
+            test_evented_object(new Data_Value());
             //
             // test Data_Object evented class:
             test_evented_object(new Data_Object());
@@ -98,6 +101,21 @@ function (Data_Object, assert) {
             //
             check_event_not_subscribed(evented_object, "event1");
             check_event_not_subscribed(evented_object, "event2");
+            //
+            // --- test one() method: ---
+            //
+            evented_object.one("event1", handler);
+            check_event_subscribed_one(evented_object, "event1");
+            //
+            // --- general listener: ---
+            //
+            evented_object.add_event_listener(handler);
+            check_event_subscribed(evented_object, "event1", 1, true);
+            check_event_subscribed(evented_object, "event2", 1, true);
+            //
+            evented_object.add_event_listener(handler);
+            check_event_subscribed(evented_object, "event1", 2, true);
+            check_event_subscribed(evented_object, "event2", 2, true);
         }
 
         // === check_event_not_subscribed() ===
@@ -119,20 +137,28 @@ function (Data_Object, assert) {
 
         // === check_event_subscribed() ===
 
-        function check_event_subscribed(evented_object, event_name, handlers_count) {
+        function check_event_subscribed(evented_object, event_name, handlers_count, isGeneral) {
             if (handlers_count === undefined) handlers_count = 1;
             //
             // try to raise the event using 3 different methods:
             //
-            check_raised(evented_object.raise_event(event_name), [], handlers_count);
-            check_raised(evented_object.raise(event_name), [], handlers_count);
-            check_raised(evented_object.trigger(event_name), [], handlers_count);
+            var args = [];
+            if (isGeneral) args.push(event_name);
+            //
+            check_raised(evented_object.raise_event(event_name), args, handlers_count);
+            check_raised(evented_object.raise(event_name), args, handlers_count);
+            check_raised(evented_object.trigger(event_name), args, handlers_count);
             //
             // try to raise the event using 3 different methods and passing parameters:
             //
-            check_raised(evented_object.raise_event(event_name, 101, "102"), [101, "102"], handlers_count);
-            check_raised(evented_object.raise(event_name, 101, "102"), [101, "102"], handlers_count);
-            check_raised(evented_object.trigger(event_name, 101, "102"), [101, "102"], handlers_count);
+            args = [];
+            if (isGeneral) args.push(event_name);
+            args.push(101);
+            args.push("102");
+            //
+            check_raised(evented_object.raise_event(event_name, 101, "102"), args, handlers_count);
+            check_raised(evented_object.raise(event_name, 101, "102"), args, handlers_count);
+            check_raised(evented_object.trigger(event_name, 101, "102"), args, handlers_count);
         }
 
         function check_raised(raise_event_result, estimated_args, handlers_count) {
@@ -143,6 +169,33 @@ function (Data_Object, assert) {
             //
             assert.deepEqual(raise_event_result, estimated_raise_event_result);
             //
+            assert.deepEqual(handler_call_args, estimated_args);
+            assert.deepEqual(handler_call_count, handlers_count);
+            //
+            // reset for the next use:
+            //
+            handler_call_args = null;
+            handler_call_count = 0;
+        }
+
+        function check_event_subscribed_one(evented_object, event_name, handlers_count) {
+            if (handlers_count === undefined) handlers_count = 1;
+            //
+            // try to raise the event:
+            //
+            check_raised_one(evented_object.raise_event(event_name, 101, "102"), [101, "102"], handlers_count);
+            check_not_raised(evented_object.raise(event_name));
+        }
+
+        function check_raised_one(raise_event_result, estimated_args, handlers_count) {
+            var estimated_raise_event_result = [];
+            for (var i = 1; i <= handlers_count; i++) {
+                estimated_raise_event_result.push(undefined); // !!! .one() handler wrapper does not return anything
+            }
+            //
+            assert.deepEqual(raise_event_result, estimated_raise_event_result);
+            //
+            estimated_args = estimated_args.slice(0, 1); // !!! .one() handler wrapper pass the first argument only
             assert.deepEqual(handler_call_args, estimated_args);
             assert.deepEqual(handler_call_count, handlers_count);
             //

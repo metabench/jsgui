@@ -84,6 +84,50 @@ function (jsgui, assert) {
         });
 
         // -----------------------------------------------------
+        //	arrayify() - async3
+        // -----------------------------------------------------
+
+        it("arrayify() should create an arrayifed async version from a function, for the specified parameter, with specified num_parallel", function (done) {
+
+            var asyncMultiply = function (a, b, cb) {
+                setTimeout(function () { cb(null, a * b); }, 1);
+            };
+
+            var arr_asyncMultiply = jsgui.arrayify(1, 2, asyncMultiply); // asyncMultiply(a, [b], cb)
+
+            var callback = function (error, result) {
+                assert.equal(error, null);
+                assert.deepEqual(result, [10, 50, 100]);
+                done();
+            };
+
+            arr_asyncMultiply(10, [1, 5, 10], callback);
+
+        });
+
+        // -----------------------------------------------------
+        //	arrayify() - async4
+        // -----------------------------------------------------
+
+        it("arrayify() should create an arrayifed async version from a function, for the specified parameter, with specified num_parallel and delay", function (done) {
+
+            var asyncMultiply = function (a, b, cb) {
+                setTimeout(function () { cb(null, a * b); }, 1);
+            };
+
+            var arr_asyncMultiply = jsgui.arrayify(1, 2, 1, asyncMultiply); // asyncMultiply(a, [b], cb)
+
+            var callback = function (error, result) {
+                assert.equal(error, null);
+                assert.deepEqual(result, [10, 50, 100]);
+                done();
+            };
+
+            arr_asyncMultiply(10, [1, 5, 10], callback);
+
+        });
+
+        // -----------------------------------------------------
         //	arrayify() - synthetic test 1
         // -----------------------------------------------------
 

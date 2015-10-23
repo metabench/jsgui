@@ -65,6 +65,7 @@ function (Fields_Collection, assert) {
             assert.deepEqual(fieldsCollection.get("field1"), ["field1", "int", { data_type: "int" }]);
 
             assert.deepEqual(fieldsCollection.fields(), [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
+            assert.deepEqual(fieldsCollection.fields("field1"), ["field1", "int", { data_type: "int" }]);
 
             fieldsCollection.out("field1");
             //
@@ -205,6 +206,8 @@ function (Fields_Collection, assert) {
             check_set(["field1", "int"], ["field2", "string"], [["field1", "int", { data_type: "int" }], ["field2", "string", { data_type: "string" }]]);
 
             check_set("field1", "int", { data_type: "int" }, [["field1", "int", { data_type: "int" }]]);
+
+            check_set("field1", ["collection", "int"], [["field1", ["collection", "int"]]]);
 
         });
 
