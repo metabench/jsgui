@@ -71,9 +71,63 @@ Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core');
 
 												// can try some other paths too...
 
-				                fs2.load_file_as_string(jsgui_css_file_path, function (err, data) {
-				                    if (err) {
+				                fs2.load_file_as_string(jsgui_css_file_path, function (err1, data) {
+				                    if (err1) {
 				                        //console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+
+																// Try three paths back...
+																jsgui_css_file_path = '../../../' + filePath;
+
+																fs2.load_file_as_string(jsgui_css_file_path, function (err2, data) {
+								                    if (err2) {
+								                        //console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+
+																				// Try three paths back...
+
+
+
+
+
+								                        // Try to open it from within the app's path.
+								                        // ../../../ + filePath
+
+								                        //var jsgui_css_file_path = '../../../' + filePath;
+
+								                        //throw err2;
+
+																				jsgui_css_file_path = '../../../../' + filePath;
+
+																				fs2.load_file_as_string(jsgui_css_file_path, function (err3, data) {
+												                    if (err3) {
+												                        //console.log('could not open file jsgui_css_file_path', jsgui_css_file_path);
+
+																								// Try three paths back...
+
+
+
+
+
+												                        // Try to open it from within the app's path.
+												                        // ../../../ + filePath
+
+												                        //var jsgui_css_file_path = '../../../' + filePath;
+
+												                        throw err2;
+												                    } else {
+												                        //var servableJs = updateReferencesForServing(data);
+												                        response.writeHead(200, {'Content-Type': 'text/css'});
+												                        response.end(data);
+												                    }
+												                });
+
+								                    } else {
+								                        //var servableJs = updateReferencesForServing(data);
+								                        response.writeHead(200, {'Content-Type': 'text/css'});
+								                        response.end(data);
+								                    }
+								                });
+
+
 
 
 
@@ -82,7 +136,7 @@ Cookies = require('cookies'), fs2 = require('../../fs/jsgui-node-fs2-core');
 
 				                        //var jsgui_css_file_path = '../../../' + filePath;
 
-				                        throw err;
+				                        //throw err;
 				                    } else {
 				                        //var servableJs = updateReferencesForServing(data);
 				                        response.writeHead(200, {'Content-Type': 'text/css'});

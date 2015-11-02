@@ -1,6 +1,6 @@
 
-var jsgui = require('../../../ws/js/web/jsgui-html-client');
-var Client_Page_Context = require('../../../ws/js/web/client-page-context');
+var jsgui = require('../../../js/web/jsgui-html-client');
+var Client_Page_Context = require('../../../js/web/client-page-context');
 //var Web_Admin = require('../../../../ws/js/web/controls/advanced/web-admin');
 //var Web_Admin_Images = require('../../../../ws/js/web/controls/advanced/web-admin-images');
 //var Web_Admin_Flexidocs = require('../../../../ws/js/web/controls/advanced/web-admin-flexidocs');
@@ -10,22 +10,22 @@ var Client_Page_Context = require('../../../ws/js/web/client-page-context');
 //var Flexidoc_Component_Text = require('../../../../ws/js/web/controls/advanced/flexidoc-component-text');
 //var Flexidoc_Component_Image = require('../../../../ws/js/web/controls/advanced/flexidoc-component-image');
 
-var Panel = require('../../../ws/js/web/controls/advanced/panel');
-var Titled_Panel = require('../../../ws/js/web/controls/advanced/titled-panel');
-var List = require('../../../ws/js/web/controls/advanced/list');
-var Window = require('../../../ws/js/web/controls/advanced/window');
-var Horizontal_Menu = require('../../../ws/js/web/controls/advanced/horizontal-menu');
+var Panel = require('../../../js/web/controls/advanced/panel');
+var Titled_Panel = require('../../../js/web/controls/advanced/titled-panel');
+var List = require('../../../js/web/controls/advanced/list');
+var Window = require('../../../js/web/controls/advanced/window');
+var Horizontal_Menu = require('../../../js/web/controls/advanced/horizontal-menu');
 
-var Button = require('../../../ws/js/web/controls/advanced/button');
-var Multi_Layout_Mode = require('../../../ws/js/web/controls/advanced/multi-layout-mode');
-var Menu_Node = require('../../../ws/js/web/controls/advanced/menu-node');
+var Button = require('../../../js/web/controls/advanced/button');
+var Multi_Layout_Mode = require('../../../js/web/controls/advanced/multi-layout-mode');
+var Menu_Node = require('../../../js/web/controls/advanced/menu-node');
 
 
-var Object_KVP_Editor = require('../../../ws/js/web/controls/advanced/editor/object-kvp');
-var String_Editor = require('../../../ws/js/web/controls/advanced/editor/basic/string');
-var Number_Editor = require('../../../ws/js/web/controls/advanced/editor/basic/number');
+var Object_KVP_Editor = require('../../../js/web/controls/advanced/editor/object-kvp');
+var String_Editor = require('../../../js/web/controls/advanced/editor/basic/string');
+var Number_Editor = require('../../../js/web/controls/advanced/editor/basic/number');
 
-Up_Down_Arrow_Buttons = require('../../../ws/js/web/controls/advanced/editor/basic/up-down-arrow-buttons');
+var Up_Down_Arrow_Buttons = require('../../../js/web/controls/advanced/editor/basic/up-down-arrow-buttons');
 
 var each = jsgui.each, stringify = jsgui.stringify;
 
