@@ -15,22 +15,15 @@ var Titled_Panel = require('../../../js/web/controls/advanced/titled-panel');
 var List = require('../../../js/web/controls/advanced/list');
 var Window = require('../../../js/web/controls/advanced/window');
 var Horizontal_Menu = require('../../../js/web/controls/advanced/horizontal-menu');
-
 var Button = require('../../../js/web/controls/advanced/button');
 var Multi_Layout_Mode = require('../../../js/web/controls/advanced/multi-layout-mode');
 var Menu_Node = require('../../../js/web/controls/advanced/menu-node');
-
-
 var Object_KVP_Editor = require('../../../js/web/controls/advanced/editor/object-kvp');
 var String_Editor = require('../../../js/web/controls/advanced/editor/basic/string');
 var Number_Editor = require('../../../js/web/controls/advanced/editor/basic/number');
-
 var Up_Down_Arrow_Buttons = require('../../../js/web/controls/advanced/editor/basic/up-down-arrow-buttons');
-
 var Default_Page = require('./default-page');
-
 var each = jsgui.each, stringify = jsgui.stringify;
-
 var Client_Sock_Resources_Proxy = require('../../../js/resource/core/sock-client-resources-proxy');
 var Client_Sock_Resource = require('../../../js/resource/core/sock-client-resource');
 
