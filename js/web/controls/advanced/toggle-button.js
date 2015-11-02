@@ -58,8 +58,6 @@ var Toggle_Button = Control.extend({
 
     'init': function(spec, add, make) {
 
-
-
         this._super(spec);
         this.__type_name = 'toggle_button';
 

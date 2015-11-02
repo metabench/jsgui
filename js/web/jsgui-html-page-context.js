@@ -5,13 +5,13 @@ if (typeof define !== 'function') {
 }
 
 
-define(["./jsgui-html-core"], 
+define(["./jsgui-html-core"],
 	function(jsgui) {
 	    */
 
 var jsgui = require('./jsgui-html-core');
 
-var stringify = jsgui.stringify, each = jsgui.each, tof = jsgui.tof, is_defined = jsgui.is_defined;
+var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, is_defined = jsgui.is_defined;
 var Control = jsgui.Control, Class = jsgui.Class;
 
 var fp = jsgui.fp;
@@ -22,7 +22,7 @@ var get_window_size = jsgui.get_window_size;
 
 // this is the enhanced HTML module.
 
-var Page_Context = Class.extend({
+var Page_Context = jsgui.Evented_Class.extend({
     'init': function (spec) {
         spec = spec || {};
         if (spec.browser_info) {
@@ -231,7 +231,7 @@ var Page_Context = Class.extend({
         }
     }),
 
-    register_control: function(control) {
+    'register_control': function(control) {
         // Put it into the map of IDs
 
         //console.log('register_control');
@@ -244,6 +244,26 @@ var Page_Context = Class.extend({
         //console.log('id', id);
 
         this.map_controls[id] = control;
+
+    },
+
+    'first_ctrl_matching_type': function(type_name) {
+      // Want to iterate through the controls.
+      var res;
+      each(this.map_controls, function(ctrl, ctrl_id, fn_stop) {
+        //console.log('fn_stop', fn_stop);
+
+        //console.log('ctrl', ctrl);
+        //console.log('ctrl.__type_name', ctrl.__type_name);
+
+        if (ctrl.__type_name === type_name) {
+          //console.log('have match');
+          fn_stop();
+          res = ctrl;
+        }
+      });
+      return res;
+
 
     },
 
@@ -308,6 +328,8 @@ var Page_Context = Class.extend({
 
     // Make this an Evented_Class?
 
+    /*
+
     'raise': function(event_name) {
         // need to access the object's bound events.
 
@@ -349,6 +371,8 @@ var Page_Context = Class.extend({
         this.__bound_events[event_name] = this.__bound_events[event_name] || [];
         this.__bound_events[event_name].push(handler);
     },
+
+    */
 
 
     'move_drag_ctrl': function(e_move, ctrl) {
@@ -661,7 +685,3 @@ module.exports = Page_Context;
 		//return Page_Context;
 	//}
 //);
-
-
-
-

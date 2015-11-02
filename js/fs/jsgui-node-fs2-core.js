@@ -281,7 +281,7 @@ var fs2 = {
 	        var file_path = a[0];
 	        var file_content = a[1];
 	        var callback = a[2];
-          console.log('pre write file file_path', file_path);
+          //console.log('pre write file file_path', file_path);
 	        fs.writeFile(file_path, file_content, function(err) {
                   if(err) {
                       //console.log(err);

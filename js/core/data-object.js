@@ -202,7 +202,7 @@ var Mini_Context = Class.extend({
             //console.log('abstract_object._spec ' + stringify(abstract_object._spec));
             // Not sure it is creating the right constructor.
 
-            
+
             var res = new constructor(aos);
             r
             return res;
@@ -2976,7 +2976,7 @@ var Data_Object = Evented_Class.extend({
 
     'remove_from': function(parent) {
         var p_id = parent._id();
-        
+
         if (this._parents && is_defined(this._parents[p_id])) {
 
             var parent = this._parents[p_id][0];
@@ -4260,6 +4260,8 @@ var Data_Object = Evented_Class.extend({
 
 
                             //throw 'stop!!!';
+
+                            // Perhaps should return the Data_Value?
 
                             return value;
 
