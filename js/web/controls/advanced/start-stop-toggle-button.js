@@ -19,7 +19,7 @@ var Start_Stop_Toggle_Button = Toggle_Button.extend({
 		spec.state = spec.state || 'start';
 
 		this._super(spec);
-		this.set('dom.attributes.class', 'plus-minus toggle-button');
+		this.set('dom.attributes.class', 'start-stop toggle-button');
 		var state = this.set('state', spec.state);
 
 	}

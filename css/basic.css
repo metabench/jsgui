@@ -424,8 +424,20 @@ div.single-line.selected {
 	line-height: 14px;
 	position: relative;
 	top: 4px;
-
 }
+
+.toggle-button.start-stop {
+	width: 50px;
+	height: 32px;
+	border: 1px solid #888888 ;
+	float: left;
+	font-family: monospace;
+	text-indent: 6px;
+	line-height: 32px;
+	position: relative;
+	top: 4px;
+}
+
 
 .tree-node .expander {
 	padding-left: 18px;

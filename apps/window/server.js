@@ -8,7 +8,6 @@ var Data_Object = jsgui.Data_Object;
 var Collection = jsgui.Collection;
 
 
-//var Simple_Authentication_Provider = Resource_Authentication.Simple_Provider;
 
 var j = jsgui;
 var Class = j.Class;
