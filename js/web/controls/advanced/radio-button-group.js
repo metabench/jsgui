@@ -147,8 +147,70 @@ var Radio_Button_Group = Control.extend({
     //'resizable': function() {
     //},
     'activate': function() {
-        // May need to register Flexiboard in some way on the client.
+
+      if (!this.__active) {
+        var that = this;
+
+
         this._super();
+
+        // No, some bubbling is taking place.
+
+
+        // Need to have it listen to all of its radio buttons.
+        //  Perhaps we don't need to make control references to all of its internal controls.
+        //  We need to listen to all of them.
+
+        // Though, what about event bubbling?
+
+        // Setting up even listeners on all of the lower down control does not seem as good as making use of event bubbling.
+
+        //  However, subcontrol events do not bubble at the moment.
+        //   Was performing slowly, and raising too many events.
+
+        // Maybe will be better to specifically set up bubbling.
+
+        // Will use individual control event handlers for the moment.
+        //  Less efficient, but need to work on the delegation / bubbling side of things.
+        var ctrl_checked;
+
+
+
+
+        this.get('content').each(function(i, ctrl) {
+          console.log('ctrl', ctrl);
+
+          // Not using the DOM change.
+          //  Though on some controls, it may be best to have them default to non-dom events.
+
+
+
+
+
+          ctrl.on('change', false, function(e_change) {
+            //console.log('rbg e_change', e_change);
+
+            ctrl_checked = ctrl;
+
+            that.raise('change', {
+              'checked': ctrl_checked
+            })
+
+          })
+
+        })
+
+
+      }
+
+
+
+
+
+
+
+
+
 
         //
 

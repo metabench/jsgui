@@ -295,12 +295,16 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         //console.log('spec.selection_scope', spec.selection_scope);
 
+        console.log('spec.selection_scope', spec.selection_scope);
+
 
         if (typeof spec.selection_scope !== 'undefined') {
           //console.log('spec.selection_scope', spec.selection_scope);
 
           var selection_scope = this._context.get_selection_scope_by_id(spec.selection_scope);
           //  Do we need to set the control of the selection scope?
+
+          console.log('selection_scope', selection_scope);
 
 
           this.set('selection_scope', selection_scope);
@@ -1038,12 +1042,24 @@ Control = jsgui.Control = jsgui.Control.extend({
         // So, it should also bind the event to the control, so a listener will hear that.
 
         // But does this apply itself???
-        this._super.apply(this, a);
+
+        if (a.l === 2) {
+          this._super.apply(this, a);
+        }
+        if (a.l === 3) {
+          this._super.apply(this, [a[0], a[2]]);
+        }
+
 
         // then if it appears in the dom events, attach it.
 
-        if (sig == '[s,f]') {
+        if (sig === '[s,f]' || sig === '[s,b,f]') {
             var event_name = a[0];
+            var using_dom = true;
+            if (a.l === 3 && a[1] === false) using_dom = false;
+
+            console.log('using_dom', using_dom);
+
 
             // change is also a DOM event
             //  that's a tricky one.
@@ -1052,7 +1068,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
 
-            if (mapDomEventNames[a[0]]) {
+            if (mapDomEventNames[a[0]] && using_dom) {
                 //console.log('we have a DOM event: ' + event_name);
 
                 var listener = this.mapListeners[event_name];
@@ -1461,7 +1477,6 @@ Control = jsgui.Control = jsgui.Control.extend({
         if (str_ctrl_fields) {
             //console.log('str_ctrl_fields ' + str_ctrl_fields);
             ctrl_fields = JSON.parse(str_ctrl_fields.replace(/'/g, '"'));
-
         }
 
         var ctrl_fields_keys = Object.keys(ctrl_fields);
@@ -1517,7 +1532,6 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                       if (!found) {
                         my_content.add(cctrl);
-
                       }
                       //cctrl.activate();
                   }
@@ -1672,7 +1686,6 @@ Control = jsgui.Control = jsgui.Control.extend({
                     })
                 }
             }
-
         }
 
         var arr_matching = [];
@@ -2749,7 +2762,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         //this.get('selection_scope').select_only(this);
 
         var ss = this.find_selection_scope();
-        //console.log('ss', ss);
+        console.log('ss', ss);
         // The selection scope shouls be a Selection_Scope object.
 
         //  I think that it would make use of the B+ tree where needed.
@@ -2778,7 +2791,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
     // So I think the resource-pool will have a selection scope.
     'find_selection_scope': function() {
-        //console.log('find_selection_scope');
+        console.log('find_selection_scope');
 
         var res = this.get('selection_scope');
         if (res) return res;
@@ -2791,9 +2804,10 @@ Control = jsgui.Control = jsgui.Control.extend({
         // .parent for a control should do this I think.
 
         var parent_control_collection = this.parent();
+        // Not getting the parent controls.
 
 
-        //console.log('parent_control_collection', parent_control_collection);
+        console.log('parent_control_collection', parent_control_collection);
 
         // In activation, it looks like we need to hook up the parent controls.
 

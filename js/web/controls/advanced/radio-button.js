@@ -57,7 +57,8 @@ var Radio_Button = Control.extend({
     'fields': {
         'name': String,
         'text': String,
-        'value': String
+        'value': String,
+        'checked': Boolean
     },
 
     // maybe add before make would be better. add will probably be used more.
@@ -69,6 +70,16 @@ var Radio_Button = Control.extend({
         this.set('dom.attributes.class', 'radio-button');
         var context = this._context;
         var that = this;
+
+        // A different way of raising change events?
+        //  .on('change') often translates to the dom el's onchange.
+
+        // Want a way to refer to the event for the Control itself, not adding a DOM listener.
+        //  (..., false) seems OK.
+
+
+
+
 
         //console.log('spec.el', spec.el);
 
@@ -89,6 +100,8 @@ var Radio_Button = Control.extend({
           html_radio.set('dom.attributes.name', name);
           html_radio.set('dom.attributes.id', html_radio._id());
 
+
+
           var html_label = new Control({
             'context': context
           });
@@ -100,9 +113,17 @@ var Radio_Button = Control.extend({
 
           that.add(html_radio);
           that.add(html_label);
+          that.set('radio', html_radio);
+          that.set('label', html_label);
           //html_radio.set('dom.attributes.type', 'radio');
 
+          that.set('dom.attributes.data-jsgui-fields', stringify({
+              'value': that.get('value')
+          }).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
           // Look at the items.
+
+
 
 
             /*
@@ -123,7 +144,40 @@ var Radio_Button = Control.extend({
     //},
     'activate': function() {
         // May need to register Flexiboard in some way on the client.
-        this._super();
+
+
+        if (!this.__active) {
+          this._super();
+
+          var radio = this.get('radio');
+          var el_radio = radio.get('el');
+          var label = this.get('label');
+          var that = this;
+
+          //var el = this.get('dom.el');
+          //
+
+          // No, refer specifically to the radio button element's control.
+
+
+
+          // Changes upon becoming checked?
+          radio.on('change', function(e_change) {
+            console.log('el_radio.checked', el_radio.checked);
+
+            if (el_radio.checked) {
+              that.raise('change');
+            }
+          });
+
+          // Need to listen for DOM change events. That will chage the value.
+          //  The checked value true or false.
+
+
+
+        }
+
+
 
         //
 
