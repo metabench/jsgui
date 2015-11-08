@@ -97,7 +97,8 @@ extend(jsgui.data_types_info, {
         'margin': 'margin',
         // when dealing with 'any': there may need to be a map that says if a value is contained.
         //  could even store these maps in a tree. would use something like 'ensure'
-        'cursor': ['any', ['auto', 'crosshair', 'default', 'e-resize', 'help', 'move', 'n-resize', 'ne-resize', 'nw-resize', 'pointer', 'progress', 's-resize', 'se-resize', 'sw-resize', 'text', 'w-resize', 'wait', 'inherit']]
+        'cursor': ['any', ['auto', 'crosshair', 'default', 'e-resize', 'help', 'move', 'n-resize', 'ne-resize',
+          'nw-resize', 'pointer', 'progress', 's-resize', 'se-resize', 'sw-resize', 'text', 'w-resize', 'wait', 'inherit']]
     }
 });
 
@@ -850,9 +851,6 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         // Not going to use this._.style.
         //  will have this._icss for inline css
 
-
-
-
         return clone(this._.style);
     },
 
@@ -1472,72 +1470,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
     },
 
-    // May happen through Data_Object events as well.
 
-    // bind dom event to normal events?
-    //  Be quite explicit in which ones get bound for the moment.
-
-    // Want it so that the dom attributes style gets changed with the css_flags.
-    /*
-
-    'bind_dom_event': function (evt_name, evt_handler) {
-
-        // but make this raise a jsgui event too
-        var n = this.domNode();
-
-        // this._el?
-        if (n) {
-            n.addEventListener(evt_name, evt_handler, false);
-        }
-    },
-
-    'unbind_dom_event': function (evt_name, evt_handler) {
-
-        //jsgui._dom_removeEventListener(dom_node, evt_name, evt_handler, false);
-        // jsgui._dom_unbind_event(dom_node, evt_name, evt_handler) - phase assumed, no boolean here, different API.
-        // a (jsgui) api outside of the controls.
-
-        var n = this.domNode();
-        if (n) {
-            n.removeEventListener(evt_name, evt_handler, false);
-        }
-    },
-
-    // event handling - likely to be moved to DataObject. Controls will still handle events!
-
-    'bind_ctrl_event': function (evt_name, evt_handler) {
-
-        // could use a ll_ensure function...
-        //  clearer naming that it's simple.
-        //  will compress better.
-
-        //var ceen = this.ensure('_.bound_ctrl_events.' + evt_name, []);
-        var ceen = ll_ensure(this, '_.bound_ctrl_events.' + evt_name, []);
-
-        ceen.push(evt_handler);
-    },
-
-    'trigger_ctrl_event': function (evt_name) {
-        //console.log('trigger_ctrl_event ' + evt_name);
-
-        var a = arr_like_to_arr(arguments),
-            p = [];
-        if (a.length > 1) {
-            p = a.slice(1);
-        };
-        var ce = this._.bound_ctrl_events,
-            that = this;
-        //console.log('ce ' + ce);
-        if (ce) {
-            //console.log('ce[evt_name] ' + ce[evt_name]);
-            if (ce[evt_name]) {
-                each(ce[evt_name], function (i, v) {
-                    v.apply(that, p);
-                });
-            };
-        };
-    },
-    */
 
     'compose': function () {
 
@@ -1870,7 +1803,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
     // will just be adding to the content.
 
-    'add_control': function (new_content) {
+    '_add_control': function (new_content) {
         //var content = this.get('content');
 
 
@@ -2052,7 +1985,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             // For the moment, will look at style of control property (need to develop that more).
 
             var styleName = a[0];
-            console.log('get style ' + styleName);
+            //console.log('get style ' + styleName);
 
             var el = this.get('dom.el');
 
@@ -2278,11 +2211,12 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         // Calls active on the inner controls.
 
         //
+				var tCtrl;
 
         this.get('content').each(function(i, ctrl) {
             //console.log('active i', i);
 
-            var tCtrl = tof(ctrl);
+            tCtrl = tof(ctrl);
             //console.log('tCtrl', tCtrl);
             if (tCtrl === 'control') {
                 ctrl.active();
@@ -2310,90 +2244,6 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         if (parent) return parent.find_selection_scope();
 
     },
-
-
-    // This should not just add the listener to the DOM event.
-    //  This should listen to the relevant DOM event, and then apply the superclass's function
-    //   (meaning it gets raised as a control event).
-
-    // It gets raised as a control event anyway.
-    //  If it matches a dom event then it gets raised as a control event when that dom event happens.
-
-    /*
-
-    'add_event_listener': function(event_name, handler) {
-        var el = this.get('dom.el');
-        if (el) {
-
-            // Check if the element has that event listener...
-            //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
-
-
-
-            el.addEventListener(event_name, handler, false);
-        }
-    },
-    */
-
-
-
-    /*
-    '_add_event_listener': fp(function(a, sig) {
-
-        // depending on what the event is, we also bind it to the DOM.
-        //  can use addEventListener.
-
-        if (sig == '[s,f]') {
-            var event_name = a[0];
-
-            var listener = this.mapListeners[event_name];
-            var that = this;
-
-            var el = this.get('dom.el');
-
-
-            //if (el) {
-
-                // Check if the element has that event listener...
-                //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
-
-            //    if (!listener) {
-                    // a single listener called when a bound dom event fires.
-                    //  this will then split up the event calls to everything that is listening to this.
-                    // for the DOM event on the object, we raise the event on the control.
-
-            //        listener = this.mapListeners[event_name] = function(e) {
-            //            that.raise(event_name, e);
-            //        };
-            //        el.addEventListener(event_name, listener, false);
-
-            //    }
-
-
-                //el.addEventListener(event_name, handler, false);
-            //}
-
-
-            // This causes an infinite loop for some reason.
-            //  Maybe when the event takes place....
-
-            Enhanced_Data_Object.prototype.add_event_listener.apply(this, a);
-
-
-            //this._super.apply(this, a);
-
-
-            //console.log('html core add_event_listener event_name', event_name);
-
-            // And the base event listener as well?
-            //  Does it make an infinite recursive loop when I try?
-
-            //
-
-        }
-
-    }),
-    */
 
     'click': function(handler) {
         // Adding the click event listener... does that add it to the DOM?
@@ -2747,6 +2597,27 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
     'size': fp(function(a, sig) {
         //console.log('sig', sig);
+
+        // Would it be worth using the input processors system?
+        //  Would turn it into a string.
+        //  Would then be able to give the styling necessary?
+        // Or to have the more generic jsgui representation of the size internally, and then to represent that in the DOM.
+
+        // Using the more complicated input processing system would help with size and some other properties.
+        //  Would help the code in these parts to be more concise.
+
+        // However, for the moment, directly getting access to some properties would be useful.
+
+        // Having a size property, or field for controls would be useful.
+        //  It would render using CSS, and its value would be loaded from CSS.
+
+        // The size would be an internal property of the jsgui controls, and they will be addressable like .size.width, .size[0]
+        //  As an indexed array there will be the logic needed to input / output the internal size value to / from a variety of formats.
+
+        // And the system could have data that tells it which css properties are to be synced with the size property.
+
+
+
         if (sig == '[]') {
             var el = this.get('dom.el');
 
@@ -2762,9 +2633,49 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             this.style({
                 'width': a[0][0] + 'px',
                 'height': a[0][1] + 'px'
-            })
-
+            });
         }
+    }),
+
+    'color': fp(function(a, sig) {
+
+			// It may be worth having a color field.
+			//  And that color field gets listened to, and DOM changes get made from that.
+
+
+
+
+      // Should probably try to use color input and output processors.
+
+      var input_processor = jsgui.input_processors['color'];
+      //console.log('input_processor', input_processor);
+
+			var output_processor = jsgui.output_processors['color'];
+      //console.log('output_processor', output_processor);
+
+      if (sig == '[]') {
+          var el = this.get('dom.el');
+
+          //var w = parseInt(getStyle(el, 'width'), 10);
+          //var h = parseInt(getStyle(el, 'height'), 10);
+          //var res = [w, h];
+          //return res;
+      }
+      if (sig == '[a]') {
+        var processed = input_processor(a[0]);
+        //console.log('processed', processed);
+
+				this.set('color', processed, false); // false not to raise change event from it?
+
+				var html_color = output_processor(processed);
+
+				//console.log('html_color', html_color);
+
+				var color_property_name = this.__color_property_name || 'background-color';
+
+				this.style(color_property_name, html_color);
+
+      }
 
     }),
 

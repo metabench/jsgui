@@ -520,135 +520,6 @@ var set_vals = function(obj, map) {
 // moving items around the array, changing the array index of items.
 // may not be worth so much indexing with those inherant limitations?
 
-// could make different collections with different internal storage?
-// linked list? something that maintains an order?
-
-// at the moment, controls are stored in an array, other indexing is done
-// too.
-
-// A single index.
-
-
-/*
-var DataCollection = Class.extend({
-    'init' : function(spec) {
-        this._id_map = {};
-        this._arr = [];
-        this.length = 0;
-    },
-
-    // function reference - add functions to that?
-
-    // much like fn_call. Perhaps DataObject could have fn_call - the same
-    // as this. But this one deals with an empty sig, maybe that's the
-    // default function which can be assigned.
-    'action' : fp(function(a, sig) {
-        // what about calling this with more parameters?
-
-        // console.log('action sig ' + sig);
-
-        if (sig == '[]') {
-            // console.log('1) this._arr ' + tof(this._arr));
-            // console.log(this._arr.length);
-            return this._arr;
-        } else {
-            var action_name = a[0];
-
-            // console.log('action_name ' + action_name);
-
-            // then call the relevant function... eg add(a[1])
-
-            // and then make it so that more parameters can be given.
-
-            var params = a.slice(1);
-
-            // return this[action_name](a[1]);
-
-            return this[action_name].apply(this, params);
-
-        }
-
-    }),
-
-    'add' : fp(function(a, sig) {
-        // item
-        console.log('add sig ' + sig);
-
-        if (sig == '[o]' || sig == '[c]') {
-            // if ()
-            var i = this._arr.length;
-            this._arr.push(a[0]);
-            this.length++;
-            // console.log('2) this._arr ' + (this._arr));
-            // console.log('2) this._arr ' + stringify(this._arr));
-
-            // circular references with controls?
-
-            // but could index be a read-only property?
-            if (tof(a[0].index) == 'function') {
-                a[0].index(i);
-            }
-
-            if (tof(a[0].id) == 'function') {
-                var id = a[0].id();
-                this._id_map[id] = a[0];
-            }
-
-        }
-
-    }),
-    'get' : fp(function(a, sig) {
-        // string, it's an id
-        if (sig == '[s]') {
-            return this._id_map[a[0]];
-        } else if (sig == '[n]') {
-            return this._arr[a[0]];
-        }
-
-        // number it's an index
-
-    }),
-    'insert' : fp(function(a, sig) {
-        // can be given one object to insert, can be given an array of items
-        // to insert?
-        // not for actually inserting an array though. For use with controls
-        // really, could be used with other objects.
-        // Could maybe turn this off as an object in the construction.
-        // maybe told to insert(control, position)
-
-        console.log('insert sig ' + sig);
-        // if (sig == '[')
-        // checking for an array in the sig is tricky.
-
-        if (sig == '[o,n]') {
-            // will need to move the index of items above forward.
-
-            this._arr.splice(a[1], 0, a[0]);
-            for ( var c = a[1], l = this._arr.length; c < l; c++) {
-                var item = this._arr[c];
-                if (item.index) {
-                    item._.index = c;
-                }
-            }
-            this.length++;
-
-        } else {
-
-            if (tof(a[0]) == 'array') {
-
-            } else if (tof(a[0]) == 'object' || tof(a[0]) == 'control') {
-                // will need to move the ones after it up as well.
-
-            }
-
-        }
-
-    })
-});
-var p = DataCollection.prototype;
-*/
-// Functionality for the control's IDs - that seems like its page_context,
-// which could be part of html.
 
 var _data_generators = {
     //'Ordered_String_List' : function() {
@@ -1069,19 +940,36 @@ jsgui.ensure_data_type_data_object_constructor = ensure_data_type_data_object_co
 var dti_color = jsgui.data_types_info['color'];
 
 jsgui.input_processors['color'] = function(input) {
-    console.log('processing color input: ' + stringify(input));
 
-    var input_sig = get_item_sig(input, 2);
-    //console.log('input_sig ' + input_sig);
 
-    if (input_sig == '[s]') input = input[0];
+	var res;
+	console.log('processing color input: ' + stringify(input));
 
-    var res = color_preprocessor_parser(input);
-    // not sure that using the preprocessor is right...
-    //  it returns a function, I think it applies to a function.
-    throw '!!stop';
-    //console.log('res ' + stringify(res));
-    return res;
+	var input_sig = get_item_sig(input, 2);
+	console.log('input_sig ' + input_sig);
+
+	//var i;
+
+	if (input_sig == '[s]') {
+		//i = input[0];
+		res = color_preprocessor_parser(input[0]);
+	}
+
+	if (input_sig == '[n,n,n]') {
+		//input = input[0];
+		//i = input[0];
+		//var res = color_preprocessor_parser(input);
+		res = input;
+	}
+
+
+
+
+	// not sure that using the preprocessor is right...
+	//  it returns a function, I think it applies to a function.
+	//throw '!!stop';
+	//console.log('res ' + stringify(res));
+	return res;
 }
 
 //color_preprocessor(create_input_function_from_data_type_info(dti_color));
