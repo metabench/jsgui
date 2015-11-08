@@ -78,8 +78,3 @@ var Panel = Control.extend({
 })
 
 module.exports = Panel;
-/*
-        return Panel;
-    }
-);
-    */

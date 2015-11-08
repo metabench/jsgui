@@ -107,17 +107,6 @@ var Radio_Button_Group = Control.extend({
             // Should put them in a Div for the moment, the find a way to remove that DIV from the markup.
             //  Avoid more hacks + complexity for now. Just get the tabs etc working smoothly.
 
-
-
-
-
-
-
-
-
-
-
-
             var radio_button = new Radio_Button({
               'context': context,
               'name': id,
