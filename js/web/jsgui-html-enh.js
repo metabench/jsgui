@@ -1058,7 +1058,7 @@ Control = jsgui.Control = jsgui.Control.extend({
             var using_dom = true;
             if (a.l === 3 && a[1] === false) using_dom = false;
 
-            console.log('using_dom', using_dom);
+            //console.log('using_dom', using_dom);
 
 
             // change is also a DOM event

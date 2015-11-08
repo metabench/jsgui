@@ -76,7 +76,7 @@ var Radio_Button_Group = Control.extend({
           var id = this._id();
 
           var items = this.get('items');
-          console.log('items', items);
+          //console.log('items', items);
 
           each(items, function(v, i) {
 
@@ -167,7 +167,7 @@ var Radio_Button_Group = Control.extend({
 
 
         this.get('content').each(function(i, ctrl) {
-          console.log('ctrl', ctrl);
+          //console.log('ctrl', ctrl);
 
           // Not using the DOM change.
           //  Though on some controls, it may be best to have them default to non-dom events.

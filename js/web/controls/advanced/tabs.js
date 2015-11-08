@@ -15,9 +15,11 @@ define(["../../jsgui-html", "./horizontal-menu"],
 
 var jsgui = require('../../jsgui-html');
 var Radio_Button_Group = require('./radio-button-group');
+var Panel = require('./panel');
 
 var stringify = jsgui.stringify, each = jsgui.eac, tof = jsgui.tof, is_defined = jsgui.is_defined;
 var Control = jsgui.Control;
+var fp = jsgui.fp;
 
 var group = jsgui.group;
 
@@ -34,17 +36,6 @@ var group = jsgui.group;
 
 // RadioButtonGroup could be a useful Control as well.
 //  May provide an easier interface that abstracts away from having to directly make some of the controls.
-
-
-
-
-
-
-
-
-
-
-
 
 
 var Tabs = Control.extend({
@@ -70,8 +61,9 @@ var Tabs = Control.extend({
         this.set('dom.attributes.class', 'tabs');
         //console.log('spec.el', spec.el);
 
-        console.log('init Tabs');
+        //console.log('init Tabs');
         var context = this._context;
+        var that = this;
 
         if (!spec.abstract && !spec.el) {
 
@@ -97,6 +89,10 @@ var Tabs = Control.extend({
 
           var rbg_items = [];
 
+          // Then make the separate panels.
+          var panels = [];
+          var t_panel;
+
           each(tabs, function(tab) {
             console.log('tab', tab);
 
@@ -105,9 +101,12 @@ var Tabs = Control.extend({
 
             if (t_tab === 'string') {
               rbg_items.push(tab);
-            }
-
-
+              t_panel = new Panel({
+                'context': context
+              });
+              t_panel.add_class('hidden');
+              panels.push(t_panel);
+            };
 
           })
 
@@ -115,14 +114,24 @@ var Tabs = Control.extend({
             'context': context,
             'items': rbg_items
           });
+          rbg.add_class('horizontal');
+          this.set('rbg', rbg);
 
           this.add(rbg);
 
-          rbg.add_class('horizontal');
+          // Would be worth having a collection / control collection of panels.
+          //  Better built in referencing and preservation of references (probably)
+          //   Will be possible to transfer such a collection to the client. Not so easy just with an array.
+
+          // Having a Collection of Controls does make sense here.
+          //  May raise new challenges to do with sending that Collection to the client.
 
 
+          // Could assign jsgui-index values to the panels?
 
-
+          each(panels, function(panel) {
+            that.add(panel);
+          });
 
 
             /*
@@ -137,16 +146,39 @@ var Tabs = Control.extend({
 
 
         }
-
     },
+
+    'panel': fp(function(a, sig) {
+      if (sig === '[n]') {
+        var res = this.get('content').get(a[0] + 1);
+        return res;
+      }
+    }),
+
     //'resizable': function() {
     //},
     'activate': function() {
-        // May need to register Flexiboard in some way on the client.
-        this._super();
 
+        if (!this.__active) {
+          var that = this;
+          this._super();
+
+          var prev_showing_panel, showing_panel;
+
+          var rbg = this.get('rbg');
+          rbg.on('change', false, function(e_change) {
+            //console.log('e_change', e_change);
+
+            var checked_index = e_change.checked._index;
+
+            prev_showing_panel = showing_panel;
+            showing_panel = that.panel(checked_index);
+            if (prev_showing_panel) prev_showing_panel.hide();
+            showing_panel.show();
+          });
+          // Listen to changes in the rbg.
+        }
         //
-
     }
 })
 
