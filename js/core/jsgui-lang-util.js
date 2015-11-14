@@ -150,7 +150,7 @@ var vector_magnitude = function(vector) {
 
 var distance_between_points = function(points) {
     var offset = v_subtract(points[1], points[0]);
-    console.log('offset ' + stringify(offset));
+    //console.log('offset ' + stringify(offset));
     return vector_magnitude(offset);
 }
 
@@ -565,7 +565,7 @@ extend(jsgui.data_types_info, {
 });
 
 var create_input_function_from_data_type_info = function (data_type_info) {
-    console.log('create_input_function_from_data_type_info data_type_info ' + stringify(data_type_info));
+    //console.log('create_input_function_from_data_type_info data_type_info ' + stringify(data_type_info));
 
     if (tof(data_type_info) == 'array') {
         var secondary_instruction = data_type_info[0];
@@ -652,8 +652,8 @@ var create_input_function_from_data_type_info = function (data_type_info) {
                         data_type_info.map_pos = {};
 
                         each(arr_items, function (i, v) {
-                            console.log('i ' + i);
-                            console.log('v ' + v);
+                            //console.log('i ' + i);
+                            //console.log('v ' + v);
                             data_type_info.map_pos[v[0]] = i;
                         });
                     }
@@ -668,8 +668,8 @@ var create_input_function_from_data_type_info = function (data_type_info) {
 
                         each(o, function (i, v) {
                             var pos = dtimp[i];
-                            console.log('pos ' + pos);
-                            console.log('v ' + v);
+                            //console.log('pos ' + pos);
+                            //console.log('v ' + v);
                             res[pos] = v;
                         });
                         //console.log('res ' + stringify(res));
@@ -707,8 +707,8 @@ var create_input_function_from_data_type_info = function (data_type_info) {
 // color preprocessor_parser
 
 var color_preprocessor_parser = fp(function(a, sig) {
-    console.log('color_preprocessor_parser a ' + stringify(a));
-    console.log('color_preprocessor_parser sig ' + sig);
+    //console.log('color_preprocessor_parser a ' + stringify(a));
+    //console.log('color_preprocessor_parser sig ' + sig);
     if (sig == '[s]') {
         var input = a[0];
         var rx_hex = /(#([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})([0-9A-Fa-f]{2}))/;
@@ -943,10 +943,10 @@ jsgui.input_processors['color'] = function(input) {
 
 
 	var res;
-	console.log('processing color input: ' + stringify(input));
+	//console.log('processing color input: ' + stringify(input));
 
 	var input_sig = get_item_sig(input, 2);
-	console.log('input_sig ' + input_sig);
+	//console.log('input_sig ' + input_sig);
 
 	//var i;
 

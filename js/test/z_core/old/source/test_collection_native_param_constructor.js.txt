@@ -1,7 +1,7 @@
 
 if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(['../../core/jsgui-lang-util', 'assert'], function (jsgui, assert) {
+define(['../../../core/jsgui-lang-util', 'assert'], function (jsgui, assert) {
     
 	var j = jsgui;
 	

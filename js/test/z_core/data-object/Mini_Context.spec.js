@@ -1,45 +1,73 @@
 ﻿
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+describe("z_core/data-object /Mini_Context.spec.js ", function () {
 
-define(['../../../core/data-object', 'assert'],
-function (Data_Object, assert) {
+    var assert;
+    var jsgui;
+    var Data_Object;
 
-    describe("z_core/data-object /Mini_Context.spec.js ", function () {
+    // -----------------------------------------------------
+    //	Mini_Context
+    // -----------------------------------------------------
 
-        // -----------------------------------------------------
-        //	Mini_Context
-        // -----------------------------------------------------
+    //var save_jsgui__data_id_method = null;
 
-        // =========================================
-        //                  the test:
-        // =========================================
+    before(function () {
+        var jsgui_module_name = require.resolve('../../../core/jsgui-lang-essentials');
+        delete require.cache[jsgui_module_name];
+        var data_object_module_name = require.resolve('../../../core/data-object');
+        delete require.cache[data_object_module_name];
+        //
+        assert = require('assert');
+        jsgui = require('../../../core/jsgui-lang-essentials');
+        Data_Object = require('../../../core/data-object');
+        // runs before all tests in this block
+        //save_jsgui__data_id_method = jsgui.__data_id_method;
+    });
 
-        it("new_id() should throw", function () {
-            //
-            var mini_context = new Data_Object.Mini_Context();
-            //
-            //mini_context.new_id();
-            //
-            assert.throws(function () { mini_context.new_id(); }, function (err) { return err === "stop Mini_Context typed id"; });
-        });
+    after(function () {
+        // runs after all tests in this block
+        //jsgui.__data_id_method = save_jsgui__data_id_method;
+    });
 
-        it("make() should not works", function () {
-            //
-            var mini_context = new Data_Object.Mini_Context();
-            //
-            assert.throws(function () { mini_context.make({}); }, function (err) { return err === "Object must be abstract, having ._abstract == true"; });
-            //
-            var data_object = new Data_Object({ abstract: true });
-            //
-            //mini_context.make(data_object);
-            //
-            assert.throws(function () { mini_context.make(data_object); }, function (err) { return err === "stop Mini_Context typed id"; });
-        });
+    // =========================================
+    //                  the test:
+    // =========================================
 
+    it("new_id() should throw", function () {
+        //
+        var mini_context = new Data_Object.Mini_Context();
+        //
+        //mini_context.new_id();
+        //
+        assert.throws(function () { mini_context.new_id(); }, function (err) { return err === "stop Mini_Context typed id"; });
+    });
+
+    it("make() should not works", function () {
+        //
+        // ------------------------------
+        jsgui.__data_id_method = "init";
+        // ------------------------------
+        //
+        var mini_context = new Data_Object.Mini_Context();
+        //
+        assert.throws(function () { mini_context.make({}); }, function (err) { return err === "Object must be abstract, having ._abstract == true"; });
+        //
+        var data_object = new Data_Object({ abstract: true });
+        //
+        assert.throws(function () { mini_context.make(data_object); }, function (err) { return err === "stop Mini_Context typed id"; });
+        //
+        //
+        // ------------------------------
+        jsgui.__data_id_method = "lazy";
+        // ------------------------------
+        //
+        assert.throws(function () { mini_context.make({}); }, function (err) { return err === "Object must be abstract, having ._abstract == true"; });
+        //
+        var data_object2 = new Data_Object({ abstract: true });
+        //
+        assert.throws(function () { mini_context.make(data_object2); }, "Reference error: r is not defined");
 
     });
 
 
 });
-
-
