@@ -128,9 +128,21 @@ var Data_Value = Evented_Class.extend({
     },
     'set': function(val) {
         //this._val = val;
+
+        // This may also need to make use of input_processors
+
+        var input_processors = jsgui.input_processors;
+        var input_processor = input_processors[this.__type_name];
+
+        if (input_processor) {
+            val = input_processor(val);
+        }
+
         var old_val = this._;
 
         this._ = val;
+        console.log('val', val);
+
         this.raise('change', {
             'old': old_val,
             'value': val
