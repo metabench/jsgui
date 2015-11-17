@@ -278,7 +278,7 @@ var Collection = Data_Object.extend({
                 spec.load_array = spec.load_array || spec.items;
             }
             if (arr_values) {
-                console.log('load arr_values ------------');
+                //console.log('load arr_values ------------');
                 spec.load_array = arr_values;
             }
 
@@ -353,6 +353,7 @@ var Collection = Data_Object.extend({
                 })
 
             } else {
+                //console.log("_super:" + value);
                 return this._super(value);
             }
 
@@ -666,6 +667,7 @@ var Collection = Data_Object.extend({
             if (ix_sys) {
                 //console.log('ix_sys', ix_sys);
                 var pui = ix_sys._primary_unique_index;
+                //console.log(pui);
                 res = pui.get(a[0])[0];
             }
 
@@ -678,7 +680,6 @@ var Collection = Data_Object.extend({
             // Works differently when getting from an indexed collection.
             //  Need to look into the index_system
             //  there may be a primary_unique_index
-
 
 
 
@@ -1295,7 +1296,7 @@ var Collection = Data_Object.extend({
         //console.log('tof(a[0]) ' + tof(a[0]));
         //if (a.l == 1 && tof(a[0]) == 'array') {
         if (sig == '[a]') {
-            console.log('a[0] ' + stringify(a[0]));
+            //console.log('a[0] ' + stringify(a[0]));
 
             if (is_arr_of_strs(a[0])) {
                 // then it's a single index.
@@ -1732,7 +1733,7 @@ var Collection = Data_Object.extend({
                     this.index_system.unsafe_add_object(dv);
                 }
             } else {
-                console.trace();
+                //console.trace();
                 throw('wrong data type');
             }
         }
