@@ -1267,6 +1267,7 @@ var Data_Object = Evented_Class.extend({
             */
 
             this[a[0]] = function(a1) {
+                console.log('connected field function a[0]: ' + a[0]);
 
                 if (typeof a1 == 'undefined') {
                     // 0 params
@@ -3199,6 +3200,9 @@ var Data_Object = Evented_Class.extend({
         //console.log('Data_Object get sig ' + sig);
         //console.log('* get a ' + stringify(a));
         // will also be looking at the output processors.
+
+
+        console.log('Data_Object get this.__type_name', this.__type_name);
         if (is_defined(this.__type_name)) {
             // should possibly have this assigned for controls...
             //var raw_input = a;
@@ -3384,6 +3388,12 @@ var Data_Object = Evented_Class.extend({
 
                 //console.log('get: field ' + (field));
                 //throw 'stop';
+
+                // Contains some longwinded code to get new field objects.
+
+                // The size value itself, when done as a field, should be an indexed_array.
+
+
                 if (field) {
                     //console.log('tof(field) ' + tof(field));
                     //console.log('field ' + stringify(field));
@@ -3515,6 +3525,7 @@ var Data_Object = Evented_Class.extend({
 
 
                                 if (field_type_name == 'ordered_string_list') {
+                                    console.log('Ordered_String_List field_name', field_name);
                                     var osl = new Ordered_String_List();
                                     this._[field_name] = osl;
                                     return this._[field_name];
@@ -3890,10 +3901,10 @@ var Data_Object = Evented_Class.extend({
 
         // The signature for set as well?
 
-        //console.log('');
-        //console.log('set');
+        // console.log('');
+        // console.log('set');
 
-        //console.log('this.__type_name ' + this.__type_name);
+        console.log('data_object set this.__type_name ' + this.__type_name);
         //console.log('this._data_type_name ' + this._data_type_name);
 
 
@@ -3905,7 +3916,16 @@ var Data_Object = Evented_Class.extend({
             input_processors = this._get_input_processors();
         }
 
-        //console.log('*** input_processors ' + stringify(Object.keys(input_processors)));
+        console.log('*** input_processors ' + stringify(Object.keys(input_processors)));
+
+        // While we can use the input processors for size, we want to just change the property correctly.
+        //  The data type had been defined.
+        //  Some objects may have type indexed_array
+
+
+
+
+
 
         // or some other value will be set?
         //console.log('jsgui.input_processors ' + stringify(jsgui.input_processors));
@@ -3930,425 +3950,503 @@ var Data_Object = Evented_Class.extend({
 
         // Less important a distinction now.
         //  The data types may have been set up so that they just apply fields, not that they have got
-        //   input and output processors.
+        //   input and output processors???
 
-        if (is_defined(this._data_type_name) && input_processors[this._data_type_name]) {
-            // use the input processor of the data_type.
+        // Planning on using the IO processors for various data types. Maybe not here though.
 
-            throw 'stop';
+        // Need to get the type name for the field.
 
-            console.log('is_defined _data_type_name and input_processors[this._data_type_name]');
-
-            //console.log('this.__type_name ' + this.__type_name);
-            //throw 'stop';
-            var raw_input = a;
-
-            // we may not have the means to parse that raw input...
-            //console.log('input_processors)
-
-            // OK, so when setting using the type that has come about through the type system...
-
-            //console.log('raw_input ' + stringify(raw_input));
+        
+        //console.log('no dtn defined');
+        console.log('a.l ' + a.l);
+        //console.log('');
 
 
-            // if there is no input processor, to set _, we process it directly.
-
-            // ['name, value'];
-            //  set our own fields.
-            //if (input_processors[this._data_type_name]) {
-                var parsed_input_obj = input_processors[this._data_type_name](raw_input);
-                //console.log('parsed_input_obj ' + stringify(parsed_input_obj));
-                //throw('2) stop');
-
-                this._ = parsed_input_obj;
-
-            this.trigger('change');
-            //} else {
-
-            //}
+        if (a.l == 2 || a.l == 3) {
 
 
+            var property_name = a[0], value = a[1];
+
+            var ta2 = tof(a[2]);
+            //console.log('ta2', ta2);
+
+            var silent = false;
+            var source;
+
+            if (ta2 == 'string' || ta2 == 'boolean') {
+                silent = a[2]
+            }
+
+            if (ta2 == 'control') {
+                source = a[2];
+            }
+
+            //silent = false || a[2];
 
 
+            console.log('set property_name ' + property_name + ', value ' + value);
+            //console.log('set value ' + value);
+            //console.log('set value ' + stringify(value));
 
-            // set, just with a value... just with the __type_name.
-            //  Uses the data type parsing to do this.
-            //  Should work for fields.
+            // is the property read_only?
 
+            if (!this._initializing && this._map_read_only && this._map_read_only[property_name]) {
+                throw 'Property "' + property_name + '" is read-only.';
+            } else {
 
+                //console.log('***');
 
+                // not using ll_set any longer.
 
+                // need to use a routine that deals with the data_types.
 
-            // but then with get() - get according to an output format like HTML / CSS, or the internal JSGUI representation.
-            //  could still make use of _ for the internal representation.
+                // Think we need some kind of recursive get-set type of routine.
+                //  Get will get it to greate objects that are fields anyway.
 
+                //console.log('property_name', property_name);
 
-        } else {
-            //console.log('no dtn defined');
-            //console.log('a.l ' + a.l);
-            //console.log('');
+                var split_pn = property_name.split('.');
+                //console.log('split_pn.length ' + split_pn.length);
 
-
-            if (a.l == 2 || a.l == 3) {
-
-
-                var property_name = a[0], value = a[1];
-
-                var ta2 = tof(a[2]);
-                //console.log('ta2', ta2);
-
-                var silent = false;
-                var source;
-
-                if (ta2 == 'string' || ta2 == 'boolean') {
-                    silent = a[2]
-                }
-
-                if (ta2 == 'control') {
-                    source = a[2];
-                }
-
-                //silent = false || a[2];
-
-
-                //console.log('set property_name ' + property_name + ', value ' + value);
-                //console.log('set value ' + value);
-                //console.log('set value ' + stringify(value));
-
-                // is the property read_only?
-
-                if (!this._initializing && this._map_read_only && this._map_read_only[property_name]) {
-                    throw 'Property "' + property_name + '" is read-only.';
-                } else {
-
-                    //console.log('***');
-
-                    // not using ll_set any longer.
-
-                    // need to use a routine that deals with the data_types.
-
-                    // Think we need some kind of recursive get-set type of routine.
-                    //  Get will get it to greate objects that are fields anyway.
-
-                    //console.log('property_name', property_name);
-
-                    var split_pn = property_name.split('.');
-                    //console.log('split_pn.length ' + split_pn.length);
-
-                    // When setting some types of Data_Object class
-                    //  (like Server, a subclass of Data_Object, and a Resource)
-                    // need to make sure it sets it with the item given.
+                // When setting some types of Data_Object class
+                //  (like Server, a subclass of Data_Object, and a Resource)
+                // need to make sure it sets it with the item given.
 
 
 
-                    if (split_pn.length > 1 && property_name != '.') {
-                        //console.log('split_pn ' + stringify(split_pn));
+                if (split_pn.length > 1 && property_name != '.') {
+                    //console.log('split_pn ' + stringify(split_pn));
 
-                        var spn_first = split_pn[0];
-                        var spn_arr_next = split_pn.slice(1);
+                    var spn_first = split_pn[0];
+                    var spn_arr_next = split_pn.slice(1);
 
-                        // For dealing with a root item?
-                        //  So can set its . property?
+                    // For dealing with a root item?
+                    //  So can set its . property?
 
-                        // I think we have a special '.' field.
-                        //  Treat it as an object.
+                    // I think we have a special '.' field.
+                    //  Treat it as an object.
 
 
 
-                        //console.log('spn_first ' + stringify(spn_first));
-                        //console.log('spn_arr_next ' + stringify(spn_arr_next));
+                    //console.log('spn_first ' + stringify(spn_first));
+                    //console.log('spn_arr_next ' + stringify(spn_arr_next));
 
-                        var data_object_next = this.get(spn_first);
-                        //console.log('data_object_next', data_object_next);
-                        if (data_object_next) {
+                    var data_object_next = this.get(spn_first);
+                    //console.log('data_object_next', data_object_next);
+                    if (data_object_next) {
 
-                            var res = data_object_next.set(spn_arr_next.join('.'), value);
+                        var res = data_object_next.set(spn_arr_next.join('.'), value);
 
-                            if (!silent) {
+                        if (!silent) {
 
-                                var e_change = {
-                                    'name': property_name,
-                                    'value': value,
-                                    'bubbled': true
-                                };
+                            var e_change = {
+                                'name': property_name,
+                                'value': value,
+                                'bubbled': true
+                            };
 
-                                if (source) {
-                                    e_change.source = source;
-                                }
-
-                                // I think this is bubbling.
-                                //  Maybe mark it as bubbled.
-
-                                this.raise_event('change', e_change);
+                            if (source) {
+                                e_change.source = source;
                             }
 
+                            // I think this is bubbling.
+                            //  Maybe mark it as bubbled.
 
-                            return res;
-
-                        } else {
-
-                            // Could create a new Data_Object.
-
-                            //var ndo = new Data_Object({
-                            //	// with a context?
-                            //	'context': this._context
-                            //});
-
-                            // but for the '.' property...
-
-
-
-
-
-
-
-
-
-                            // Is this recursive?
-                            //  Need to fix this.
-
-                            // May need to specify a data model?
-                            //  But we want this to be flexible?
-
-                            // Maybe we need to declare that Script has got some deeper attributes.
-
-                            //var data_object_next = new
-
-                            // Not sure how this is recursing properly.
-                            //  Maybe work on this at some other time, using an example that's more sandboxed,
-                            //   such as the US presidents example.
-
-
-
-
-
-                            //var stack = new Error().stack
-                            //console.log(stack);
-                            throw('No data object at this level.');
+                            this.raise_event('change', e_change);
                         }
-                        throw('10)stop');
-                        // call a multi-level-set function?
-                        //  could do it recursively here for the moment I think, without much code.
-                        //   like it is now :)
 
+
+                        return res;
 
                     } else {
 
-                        //console.log('2) no split');
+                        // Could create a new Data_Object.
 
-                        // not necessarily, it still may apply to a data_object.
+                        //var ndo = new Data_Object({
+                        //	// with a context?
+                        //	'context': this._context
+                        //});
 
-                        //console.log('pre get ');
-                        //  if there is nothing, get should return undefined / null.
-                        //   perhaps make it if it is an expected object though.
-                        //    it looks like it is expected? or we have it from the value anyway.
-                        //    maybe it's only fine to set it to a data_object / data_value.
-
-                        // if it is just a string we can make a Data_Value to hold it and then put it in place.
-                        // can use the dobj function???
-
-                        // can just set the value.
-                        //  could just record the string in here.
-                        //  putting it in a Data_Value would eventually help with automatic string indexing.
-                        //   And it would potentially be an indexed field anyway.
-
-                        // Potentially parsing object input?
-                        //  Will have more of that working to do with some HTML properties to start with.
+                        // but for the '.' property...
 
 
 
 
 
-                        // get it???
-                        //  that could work... could create the right constructor.
-
-                        //  There maybe will only be a
-
-                        // Maybe don't need to get this...
-                        //console.log('---');
-                        // We may be able to get it, using lazy loading in some cases.
-                        //  This may look at the fields and create a new object.
-
-                        //console.log('1) property_name ' + property_name);
-                        // But we are setting it!!!
-
-
-
-                        // May do away with data_object_next.
-                        //
-
-                        var data_object_next = this.get(property_name);
-
-                        // Looking for these in resources, and doing more than needs to be done on init?
-
-
-
-                        // So, the property has not been defined correctly.
-                        //  Need to make it so that data_def sets up the fields so that they work.
 
 
 
 
-                        //console.log('---');
-                        //  gets it as a string?
+                        // Is this recursive?
+                        //  Need to fix this.
 
+                        // May need to specify a data model?
+                        //  But we want this to be flexible?
 
-                        // Stringifying this causes an endless loop (sometimes)
-                        //console.log('data_object_next ' + stringify(data_object_next));
+                        // Maybe we need to declare that Script has got some deeper attributes.
 
-                        // failing to get tagName property - it's a string proper
+                        //var data_object_next = new
 
-                        // and when setting the tag_name object?
-
-                        //console.log('property_name ' + property_name);
-                        //console.log('value ', (value));
-                        //console.log('***** data_object_next ' + data_object_next);
-                        if (!is_defined(data_object_next)) {
-
-                            // add it to the fields collection?
-                            //this._[property_name] = new Data_Object({});
-                            //return this.set(property_name, value);
-                            //console.log('tof(value) ' + tof(value));
-
-
-                            //var tv = tof(value);
-                            var tv = typeof value;
-
-                            /*
-                            if (tv == 'data_object') {
-                                // copy directly in more cases than this... maybe just for primitive types do we use the
-                                //  data_value.
-
-                            } else {
-
-                            }
-                            */
-                            var dv;
-                            //console.log('tv ' + tv);
-                            if (tv == 'string' || tv == 'number' || tv == 'boolean' || tv == 'date') {
-                                dv = new Data_Value({'value': value});
-                            } else {
-                                dv = value;
-                            }
-
-
-                            //console.log('dv ' + stringify(dv));
-                            //this._[property_name] = value;
-                            //throw 'Should make a new Data_Value';
-
-                            this._[property_name] = dv;
-                            // Not making a new Data_Value?
-
-                            //console.log('this._[property_name] ' + this._[property_name])
-
-                            //this.raise_event('change', [property_name, dv]);
-
-                            if (!silent) {
-                                var e_change = {
-                                    'name': property_name,
-                                    'value': dv
-                                }
-
-                                if (source) {
-                                    e_change.source = source;
-                                }
-
-                                this.raise_event('change', e_change);
-                            }
+                        // Not sure how this is recursing properly.
+                        //  Maybe work on this at some other time, using an example that's more sandboxed,
+                        //   such as the US presidents example.
 
 
 
 
-                            //throw 'stop!!!';
 
-                            // Perhaps should return the Data_Value?
+                        //var stack = new Error().stack
+                        //console.log(stack);
+                        throw('No data object at this level.');
+                    }
+                    throw('10)stop');
+                    // call a multi-level-set function?
+                    //  could do it recursively here for the moment I think, without much code.
+                    //   like it is now :)
 
-                            return value;
+
+                } else {
+
+                    //console.log('2) no split');
+
+                    // not necessarily, it still may apply to a data_object.
+
+                    //console.log('pre get ');
+                    //  if there is nothing, get should return undefined / null.
+                    //   perhaps make it if it is an expected object though.
+                    //    it looks like it is expected? or we have it from the value anyway.
+                    //    maybe it's only fine to set it to a data_object / data_value.
+
+                    // if it is just a string we can make a Data_Value to hold it and then put it in place.
+                    // can use the dobj function???
+
+                    // can just set the value.
+                    //  could just record the string in here.
+                    //  putting it in a Data_Value would eventually help with automatic string indexing.
+                    //   And it would potentially be an indexed field anyway.
+
+                    // Potentially parsing object input?
+                    //  Will have more of that working to do with some HTML properties to start with.
+
+
+
+
+
+                    // get it???
+                    //  that could work... could create the right constructor.
+
+                    //  There maybe will only be a
+
+                    // Maybe don't need to get this...
+                    //console.log('---');
+                    // We may be able to get it, using lazy loading in some cases.
+                    //  This may look at the fields and create a new object.
+
+                    //console.log('1) property_name ' + property_name);
+                    // But we are setting it!!!
+
+
+
+                    // May do away with data_object_next.
+                    //
+
+                    console.log('pre get data_object_next');
+                    console.log('property_name', property_name);
+
+                    // And get could have a look to see if it is a field.
+                    //  Get would return data in the right format?
+                    //   Or set, when the value actually gets set, applies the input_filter?
+                    //    Probably best that the input filter is done on setting object through Data_Object or Data_Value, rather than in a new OO type.
+
+                    // However, with fields there can be a function to operate on the values.
+                    //  This seems to have been the case with 'body'. Need to change .get to make sure it returns the right kind of object.
+
+                    // If there is a function .body, it's not the Data_Object, that gets stored at ._.body
+
+
+
+
+
+
+
+                    var data_object_next = this.get(property_name);
+
+                    // For some reason this is returning a function sometimes.
+
+
+
+                    // Looking for these in resources, and doing more than needs to be done on init?
+
+
+
+                    // So, the property has not been defined correctly.
+                    //  Need to make it so that data_def sets up the fields so that they work.
+
+
+
+
+                    //console.log('---');
+                    //  gets it as a string?
+
+
+                    // Stringifying this causes an endless loop (sometimes)
+                    //console.log('data_object_next ' + stringify(data_object_next));
+
+                    // failing to get tagName property - it's a string proper
+
+                    // and when setting the tag_name object?
+
+                    //console.log('property_name ' + property_name);
+                    //console.log('value ', (value));
+                    console.log('***** data_object_next ' + data_object_next);
+                    console.log('***** tof data_object_next ' + tof(data_object_next));
+
+                    // That data_object having an assigned type_name of size (when setting size)?
+
+                    if (data_object_next) {
+                        // Check to see if we are getting an object for a Field...
+
+                        console.log('tof(this)', tof(this));
+
+                        if (this.fields) {
+                            console.log('tof(this.fields) ' + tof(this.fields));
+                            console.log('this.fields', this.fields);
+                            console.log(this);
+                        }
+
+
+
+                        var field = this.fields(property_name);
+                        if (field) {
+                            console.log('has field');
+                            console.log('field', field);
+
+                            data_object_next.__type_name = field[1];
+
+                        }
+
+                        console.log('***** data_object_next.__type_name ' + data_object_next.__type_name);
+
+                        data_object_next.set(value);
+                    }
+
+                    
+
+                    if (!is_defined(data_object_next)) {
+
+                        // add it to the fields collection?
+                        //this._[property_name] = new Data_Object({});
+                        //return this.set(property_name, value);
+                        //console.log('tof(value) ' + tof(value));
+
+
+                        //var tv = tof(value);
+                        var tv = typeof value;
+
+                        /*
+                        if (tv == 'data_object') {
+                            // copy directly in more cases than this... maybe just for primitive types do we use the
+                            //  data_value.
 
                         } else {
-                            //console.log('this ' + stringify(this));
-                            //console.log('2) property_name ' + property_name);
-                            //console.log('data_object_next ' + stringify(data_object_next));
-                            //console.log('tof data_object_next ' + tof(data_object_next));
 
-                            // Just because we can get the server as a next data object, does not mean we need to.
-
-                            //  If we have been given a value, use it.
-                            //  However, need to clarify this code here.
-                            //   At some times we will want it to produce the next level of data object, but not at others.
-
-                            // Setting a field should be a fairly simple procedure if possible, maybe this code could
-                            //  be refactored.
-
-                            // So when we have been given a server property, we want to set ._.server to it
-
-                            //
-
-
-                            // REFACTOR?
-
-
-
-                            // if it is a data object?
-                            //  if it is a native type?
-
-
-
-                            if (is_js_native(data_object_next)) {
-                                //console.log('is_js_native');
-                                //this.set
-                                // but maybe that object should be wrapped in Data_Object?
-                                this._[property_name] = value;
-                                res = value;
-
-
-                            } else {
-                                //console.log('not is_js_native');
-                                //var res = data_object_next.set(value);
-
-                                this._[property_name] = value;
-                                res = value;
-
-                                //console.log('set data object next using value');
-                            }
-
-
-
-
-                            //var res = ll_set(this._, property_name, value);
-                            // should raise an event here.
-
-                            // this.raise_event('set', [property_name, value]);
-                            // then the event tells everything that is listening to it.
-                            //console.log('this', this);
-
-                            //this.trigger('change', [property_name, value]);
-                            //console.log('property_name', property_name);
-                            //console.log('value', value);
-                            //console.log('this', this);
-
-                            if (!silent) {
-                                var e_change = {
-                                    'name': property_name,
-                                    'value': value
-                                };
-                                if (source) {
-                                    e_change.source = source;
-                                }
-                                this.trigger('change', e_change);
-                            }
-
-
-                            // want to listen to the set event for some things such as GUI components in particular.
-
-                            return res;
                         }
+                        */
+                        var dv;
+                        //console.log('tv ' + tv);
+                        if (tv == 'string' || tv == 'number' || tv == 'boolean' || tv == 'date') {
+                            dv = new Data_Value({'value': value});
+                        } else {
+                            dv = value;
+                        }
+
+
+                        //console.log('dv ' + stringify(dv));
+                        //this._[property_name] = value;
+                        //throw 'Should make a new Data_Value';
+
+                        this._[property_name] = dv;
+                        // Not making a new Data_Value?
+
+                        //console.log('this._[property_name] ' + this._[property_name])
+
+                        //this.raise_event('change', [property_name, dv]);
+
+                        if (!silent) {
+                            var e_change = {
+                                'name': property_name,
+                                'value': dv
+                            }
+
+                            if (source) {
+                                e_change.source = source;
+                            }
+
+                            this.raise_event('change', e_change);
+                        }
+
+
+
+
+                        //throw 'stop!!!';
+
+                        // Perhaps should return the Data_Value?
+
+                        return value;
+
+                    } else {
+                        //console.log('this ' + stringify(this));
+                        //console.log('2) property_name ' + property_name);
+                        //console.log('data_object_next ' + stringify(data_object_next));
+                        //console.log('tof data_object_next ' + tof(data_object_next));
+
+                        // Just because we can get the server as a next data object, does not mean we need to.
+
+                        //  If we have been given a value, use it.
+                        //  However, need to clarify this code here.
+                        //   At some times we will want it to produce the next level of data object, but not at others.
+
+                        // Setting a field should be a fairly simple procedure if possible, maybe this code could
+                        //  be refactored.
+
+                        // So when we have been given a server property, we want to set ._.server to it
+
+                        //
+
+
+                        // REFACTOR?
+
+
+
+                        // if it is a data object?
+                        //  if it is a native type?
+
+                        var next_is_js_native = is_js_native(data_object_next);
+                        console.log('next_is_js_native', next_is_js_native);
+
+
+
+                        if (next_is_js_native) {
+                            //console.log('is_js_native');
+                            //this.set
+                            // but maybe that object should be wrapped in Data_Object?
+                            this._[property_name] = value;
+                            res = value;
+
+
+                        } else {
+                            //console.log('not is_js_native');
+
+                            //var res = data_object_next.set(value);
+                            res = data_object_next
+                            this._[property_name] = data_object_next;
+
+
+
+                            // It is at this point that we may need to use input or output processors?
+                            //  The fields have got a data type specified.
+                            //  If that data type is listed in the IO processors, we use them upon input or output.
+
+
+                            //this._[property_name] = value;
+                            //res = value;
+
+                            //console.log('set data object next using value');
+                        }
+
+
+
+
+                        //var res = ll_set(this._, property_name, value);
+                        // should raise an event here.
+
+                        // this.raise_event('set', [property_name, value]);
+                        // then the event tells everything that is listening to it.
+                        //console.log('this', this);
+
+                        //this.trigger('change', [property_name, value]);
+                        //console.log('property_name', property_name);
+                        //console.log('value', value);
+                        //console.log('this', this);
+
+                        if (!silent) {
+                            var e_change = {
+                                'name': property_name,
+                                'value': data_object_next.value()
+                            };
+                            if (source) {
+                                e_change.source = source;
+                            }
+                            this.trigger('change', e_change);
+                        }
+
+
+                        // want to listen to the set event for some things such as GUI components in particular.
+
+                        return res;
                     }
                 }
-            } else {
-                // But maybe it should be a data_value, not a data_object.
+            }
+        } else {
+            // But maybe it should be a data_value, not a data_object.
+            console.log('3) else sig ' + sig);
+            var value = a[0];
+            console.log('value', value);
 
-                //console.log('3) else sig ' + sig);
+            // However at this stage we have not given a property name.
+            //  Its setting the object itself.
+            //   Then it becomes harder to know it was for the size property.
+            //   Need to easily respond to changes in size and other properties.
+
+
+
+
+
+            // At this stage we may be setting a field with a defined type.
+
+            // Want to call some automatic input processors.
+            //  It will recognise the size data type.
+
+            // Need it to understand the size data type from the definition that's been given.
+
+            // Will use input processors.
+            //  They will have that understanding built in.
+            //  It's also a functional structure that could be extended, by having processing before another one is called.
+
+
+            var input_processor = input_processors[this.__type_name];
+
+            if (input_processor) {
+
+                // Act differently if it has a field as well?
+
+                var processed_input = input_processor(value);
+                console.log('processed_input', processed_input);
+                value = processed_input;
+                this._[property_name] = value;
+                console.log('value', value);
+                console.log('tof value', tof(value));
+
+                // When the event bubbles, and is in the domain of the correct data_object, can it then say it was for that property?
+
+                this.raise_event('change', {
+                    'value': value
+                });
+
+
+                //this.raise_event('change', [property_name, value]);
+                //console.log('property_name', property_name);
+                //this.raise_event('change', property_name, value);
+
+
+                //throw 'unsupported';
+                //throw 'stop';
+                return value;
+
+
+            } else {
+                // Need to be on the lookout for that.
+
 
                 // And for a Data_Object?
                 //  Basically put it into place.
@@ -4357,15 +4455,13 @@ var Data_Object = Evented_Class.extend({
                     //console.log('property_name ' + property_name);
                     this._[property_name] = value;
 
+                    // Or just have 3 parameters?
+
                     this.raise_event('change', [property_name, value]);
 
                     // Raise a change event?
                     //  Or is set event OK?
-
-										return value;
-
-
-
+                    return value;
                 }
 
                 if (sig == '[o]') {
@@ -4391,10 +4487,17 @@ var Data_Object = Evented_Class.extend({
                     this._[property_name] = value;
                     this.raise_event('change', [property_name, value]);
                     //throw 'unsupported';
-										return value;
+                    return value;
                 }
             }
+            
+
+
+
+
+            
         }
+        
     }),
     'has' : function(property_name) {
         return is_defined(this.get(property_name));
@@ -4867,7 +4970,7 @@ var parse_data_type = Fields_Collection.parse_data_type;
 
 jsgui.map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors || {};
 jsgui.map_data_type_data_object_constructors['boolean'] = Data_Value;
-//boolean': Data_Value
+
 
 
 
