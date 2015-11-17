@@ -203,7 +203,7 @@ var Enhanced_Data_Object = Data_Object.extend({
         //if (is_defined(this.__data_type_name)) {
 
         //console.log('Enhanced_Data_Object get this.__type_name', this.__type_name);
-        //console.log('sig', sig);
+        //console.log('Enhanced_Data_Object get sig', sig);
 
             // check to see if there is a field defined.
         if (sig === '[s]') {
@@ -225,6 +225,8 @@ var Enhanced_Data_Object = Data_Object.extend({
             // could have .s in it, making it nested, and have removed nested from here.
             //console.log('pre fc get');
             var field = fc.get(field_name);
+
+            //console.log('!!field', !!field);
             //console.log('EDO field ' + stringify(field));
 
             if (field_name.indexOf('.') > -1) {
@@ -254,20 +256,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                     current_obj = new_obj;
                 }
                 return current_obj;
-            }
-
-            //console.log('field ' + stringify(field));
-
-            // fields seem to stop having been set up properly.
-
-            //console.log('field ' + (field));
-
-
-            //console.log('* field_name ' + field_name);
-            //console.log('* field ' + stringify(field));
-
-
-            if (field) {
+            } else if (field) {
                 // May not be able to stringify the field object without making an infinite loop / call stack error.
                 //console.log('this._[field_name] ' + stringify(this._[field_name]));
                 //console.log('field_name ' + field_name);
@@ -308,7 +297,11 @@ var Enhanced_Data_Object = Data_Object.extend({
 
                         var field_info = field[2];
 
-                        //console.log('field_type_name ' + field_type_name);
+                        //console.log('field_name', field_name);
+                        //console.log('field_type_name', field_type_name);
+                        //console.log('field_info', field_info);
+
+
 
 
 
@@ -320,6 +313,9 @@ var Enhanced_Data_Object = Data_Object.extend({
                             return this._[field_name];
                         } else {
                             // if it's just a string?
+
+
+
                             if (field_type_name == 'ordered_string_list') {
 
                                 throw 'stop';
@@ -363,15 +359,20 @@ var Enhanced_Data_Object = Data_Object.extend({
                                 //var dtoc = this.mod_link().ensure_data_type_data_object_constructor(field_type_name);
                                 var dtoc = ensure_data_type_data_object_constructor(field_type_name);
 
-                                //console.log('dtoc ', dtoc);
+                                //console.log('!!dtoc ', !!dtoc);
 
                                 var context = this.context;
+
+                                //console.log('');
+                                //console.log('pre create new value object');
                                 if (context) {
                                     var field_val = new dtoc({'context': this._context});
                                 } else {
                                     var field_val = new dtoc();
                                 }
                                 field_val.__type_name = field_type_name;
+                                //console.log('default_value', default_value);
+                                //console.log('field_val', field_val);
                                 if (is_defined(default_value)) {
                                     field_val.set(default_value);
                                 }
@@ -383,6 +384,8 @@ var Enhanced_Data_Object = Data_Object.extend({
 
                                 field_val.parent(this);
                                 this._[field_name] = field_val;
+                                //console.log('this._[field_name]', this._[field_name]);
+                                //console.log('tof this._[field_name].fields', tof(this._[field_name].fields));
                                 return this._[field_name];
                             }
                         }
@@ -536,7 +539,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                             // will be an object rather than array (for now at least)
 
                             // Not sure about setting through fields...
-                            ncoll.fields(objDef);
+                            ncoll.field(objDef);
                             // that should set the constraint as well.
                             //ncoll.
 
@@ -561,6 +564,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                 }
             } else {
                 //console.log('this._ ' + stringify(this._));
+                //console.log('has field already');
 
                 var res = ll_get(this._, a[0]);
 

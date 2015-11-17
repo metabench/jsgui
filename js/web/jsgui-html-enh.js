@@ -295,7 +295,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         //console.log('spec.selection_scope', spec.selection_scope);
 
-        console.log('spec.selection_scope', spec.selection_scope);
+        //console.log('spec.selection_scope', spec.selection_scope);
 
 
         if (typeof spec.selection_scope !== 'undefined') {
@@ -304,7 +304,7 @@ Control = jsgui.Control = jsgui.Control.extend({
           var selection_scope = this._context.get_selection_scope_by_id(spec.selection_scope);
           //  Do we need to set the control of the selection scope?
 
-          console.log('selection_scope', selection_scope);
+          //console.log('selection_scope', selection_scope);
 
 
           this.set('selection_scope', selection_scope);
@@ -388,6 +388,9 @@ Control = jsgui.Control = jsgui.Control.extend({
             return y;
         }
     }),
+
+		// Likely to be within the core.
+		//  Meaning it's not done with progressive enhancement.
 
     'padding': fp(function(a, sig) {
         if (sig == '[]') {
@@ -539,9 +542,6 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         // insert a new relative div?
         //  relative for layout?
-
-
-
 
 
     }),
@@ -2845,6 +2845,10 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         this.style('height', h + 'px', true);
     },
+
+		// grid_9 Likely should be it's own module.
+		//  It would make more sense as a mix-in.
+
     'grid_9': function() {
         var res = this.get('grid_9');
         if (res) return res;

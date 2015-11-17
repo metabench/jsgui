@@ -141,7 +141,7 @@ var Data_Value = Evented_Class.extend({
         var old_val = this._;
 
         this._ = val;
-        console.log('val', val);
+        //console.log('val', val);
 
         this.raise('change', {
             'old': old_val,
