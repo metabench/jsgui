@@ -94,20 +94,18 @@ server.start(port, function(ree, res_started) {
 		//   Or then would it only work if we have a listener for the size change?
 
 
-
-
 		var ctrl_0 = new Control({
 			'context': server_page_context,
 			//	'size': [800, 600]
 		});
 
 		// Size field goes through the input and output processors.
-		console.log('pre set size');
-		console.log('ctrl_0.__type_name', ctrl_0.__type_name);
+		//console.log('pre set size');
+		//console.log('ctrl_0.__type_name', ctrl_0.__type_name);
 
-		console.log('');
-		console.log('');
-		console.log('pre set size');
+		//console.log('');
+		//console.log('');
+		//console.log('pre set size');
 
 		// Basically gets the size object, then sets it.
 
@@ -119,6 +117,9 @@ server.start(port, function(ree, res_started) {
 
 		var dom_attributes = ctrl_0.get('dom.attributes');
 		console.log('dom_attributes.fields', dom_attributes.fields);
+		console.log('tof dom_attributes.fields', tof(dom_attributes.fields));
+		
+		
 		throw 'stop';
 
 		// Seems like the DOM attribute fields go wrong.
@@ -143,15 +144,11 @@ server.start(port, function(ree, res_started) {
 		});
 
 
-
 		//ctrl_0.color([255, 0, 0]);
 
 		// Setting .color
 		//  In some cases will change the background color.
 		//  In other cases will change the text / foreground / stroke color. Important to check what kind of element it is.
-
-
-
 
 		body.add(ctrl_0);
 		ctrl_0.active();
