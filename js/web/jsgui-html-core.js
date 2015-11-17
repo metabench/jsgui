@@ -39,6 +39,14 @@ var ensure_data_type_data_object_constructor = jsgui.ensure_data_type_data_objec
 
 var Enhanced_Data_Object = jsgui.Enhanced_Data_Object;
 
+// Dealing with fields of a specified type...
+//  Could involve automatic invokation of the input and output processors
+
+
+var map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors;
+map_data_type_data_object_constructors['size'] = Data_Value;
+
+
 extend(jsgui.data_types_info, {
     'border_style': ['any', ['solid', 'dotted', 'dashed']],
     'distance': ['n_units', 'px'],
@@ -132,6 +140,16 @@ jsgui.input_processors['margin'] = function (input) {
 
 jsgui.input_processors['size'] = function (input) {
     // use the n_units processor, but with 'px'
+		console.log('using jsgui size input processor');
+
+		// Though, if size is an already defined type, we could have an input processor that deals with that.
+		//  Could also make use of a default unit, px.
+
+    // And could also use some specific preprocessing before the indexed array one.
+
+
+
+
     return jsgui.input_processors['indexed_array'](['width', 'height'], 'distance', input);
 };
 
@@ -440,6 +458,8 @@ var getStyle = function (el, property_name) {
 
 // Making it so a Control needs to be initialised with a context every time?
 
+// Having size as a field of the control seems like a good way to do things.
+//  And it would have a specified data type.
 
 
 var Control = jsgui.Enhanced_Data_Object.extend({
@@ -468,7 +488,20 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         //   (I think)
 
         ['content', 'collection'],
-        ['dom', 'control_dom']//,
+        ['dom', 'control_dom'],
+
+
+				['size', 'size']//,
+
+				// Seems like it's automatically made functions to access the fields?
+
+
+
+				// Size not really working right as a field.
+				//  Perhaps alongide input and output processors, we need to specify linkage with a DOM property.
+
+
+
 
         // What are the CSS flags?
         //  Should this use the flag system?
@@ -624,7 +657,20 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             var that = this;
 
+						var context = this._context;
+            if (context) {
+                if (context.register_control) context.register_control(this);
+            } else {
+                //console.trace('');
+                //throw 'Control requires context'
+
+                // I think the very first Control object's prototype or something that inherits from it does not have
+                //  a context at some stage.
+            }
+
             if (spec.size) {
+
+							/*
                 var size = spec.size;
                 var t_size = tof(size);
                 if (t_size == 'array') {
@@ -644,6 +690,12 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
                     // Needs to set inline styles.
                 }
+								*/
+							console.log('spec.size', spec.size);
+							console.log('this.size', this.size);
+							this.size(spec.size);
+
+
             }
 
             if (spec['class']) {
@@ -651,16 +703,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 this.add_class(spec['class']);
             }
 
-            var context = this._context;
-            if (context) {
-                if (context.register_control) context.register_control(this);
-            } else {
-                //console.trace('');
-                //throw 'Control requires context'
 
-                // I think the very first Control object's prototype or something that inherits from it does not have
-                //  a context at some stage.
-            }
 
 
 
@@ -716,8 +759,39 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
 
+            var that = this;
 
+            // Want something in the change event that indicates the bubble level.
+            //  It looks like the changes bubble upwards.
+
+            // Want a 'target' for the change event.
+
+            this.get('size').on('change', function(e_size_change) {
+                //console.log('e_size_change', e_size_change);
+
+                var target = e_size_change.target, name = e_size_change.name, value = e_size_change.value;
+
+                console.log('*** value', value);
+                console.log('*** tof value', tof(value));
+
+                var width = value[0].join('');
+                var height = value[1].join('');
+
+                console.log('width', width);
+                console.log('height', height);
+
+
+
+                
+                that.style({
+                    'width': width,
+                    'height': height
+                })
+                
+
+            });
             /*
+
             this.on('change', function(e_change) {
 
                 // Change takes place in the collection?
@@ -727,6 +801,39 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
                 //console.log('e_change', e_change);
+                // Not if the target applies to a sub-property / field that is another object in its own right?
+                console.log('*** e_change.target === that ',  e_change.target === that);
+
+                var target = e_change.target, name = e_change.name, value = e_change.value;
+
+                if (target === that) {
+                    // Then look for specific changes like the size.
+                    //  When the size property has changed, we need to update DOM properties.
+
+                    if (name) {
+                        console.log('e_change.name', name);
+                        //console.log('that', that._id());
+
+                        
+                        if (name === 'size') {
+                            // need to update the DOM.
+
+                            // Needs to be the value that has gone through the processor!!!
+
+                            
+
+                            //that.style('width', width);
+                            //that.style('height', height);
+
+
+
+
+                        }
+
+                    }
+
+
+                }
 
                 // There are very many changes...
                 //  It seems like too many change events get reported.
@@ -738,28 +845,13 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
 
-                if (e_change.name) {
-                    //console.log('e_change.name', e_change.name);
-
-
-                    if (e_change.name == 'inner_control') {
-                        console.log('e_change.bubbled ' + e_change.bubbled);
-
-                        //console.log('that', that);
-                        //var my_ctrl_id = that._id();
-                        // Controls may not have contexts yet?
-
-                        //console.log('my_ctrl_id', my_ctrl_id);
-
-                        //console.log('e_change', e_change);
-                        //console.trace("Here I am!")
-                        //cc++;
-                    }
-                }
+                
 
                 //console.log('change sig ' , jsgui.get_item_sig(e_change));
-            })
+            });
+
             */
+            
 
 
 
@@ -2136,6 +2228,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
             each(a[0], function(v, i) {
+                console.log('v', v);
+                console.log('i', i);
                 that.style(i, v, false);
             });
 
@@ -2594,9 +2688,13 @@ var Control = jsgui.Enhanced_Data_Object.extend({
     //  want to measure the control at a suitable time.
 
     // Should probably be in html-enh instead.
+	//
+    //  Though with size as a field, it could byoass this particular function.
+
 
     'size': fp(function(a, sig) {
-        //console.log('sig', sig);
+        console.log('size sig', sig);
+
 
         // Would it be worth using the input processors system?
         //  Would turn it into a string.
