@@ -22,6 +22,7 @@
 	        test_utils = require('../../test-utils/test-utils');
 	        toText = require('../../test-utils/toText');
 	        Data_Object = require('../../../core/data-object');
+	        html_core = require('../../../web/jsgui-html-core.js');
 	    });
 
 
@@ -31,10 +32,12 @@
 
 	    it("test... ", function () {
 
-	        var Book = function (obj) { this.title = obj.bookTitle; this.objtype = "Book"; };
+	        var control = new html_core.Control();
+	        console.log(control.dom_attributes);
+	        //var Book = function (obj) { this.title = obj.bookTitle; this.objtype = "Book"; };
 
-	        var data_object = new Data_Object();
-	        data_object.set_field("field1", [Book]);
+	        //var data_object = new Data_Object();
+	        //data_object.set_field("field1", [Book]);
 	        //
 	        ////
 	        //collection.constraint(Book);
