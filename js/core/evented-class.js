@@ -42,6 +42,7 @@ var Evented_Class = Class.extend({
     'raise_event': fp(function(a, sig) {
 
         var that = this;
+        var target = this;
         var c, l;
 
         //console.log('raise_event sig', sig);
@@ -90,72 +91,18 @@ var Evented_Class = Class.extend({
             }
         }
 
-        if (a.l > 2) {
-            var target = this;
-            var event_name = a[0];
+        // And s,a would be a value given as an array
+        //  We don't have more properties, just a value.
 
-            //console.log('event_name ' + event_name);
-
-            var additional_args = [];
-            var bgh_args = [event_name];
-
-            for (c = 1, l = a.l; c < l; c++) {
-                additional_args.push(a[c]);
-                bgh_args.push(a[c]);
-            }
-
-            var be = this._bound_events;
-            var bgh = this._bound_general_handler;
-
-            var res = [];
-
-            if (bgh) {
-                for (c = 0, l = bgh.length; c < l; c++) {
-                    res.push(bgh[c].apply(target, bgh_args));
-                }
-            }
-
-
-            //console.log('be ' + tof(be));
-            if (be) {
-                // The controls that are activated on the clients need to have bound events.
-
-                //console.log('event_name', event_name);
-                var bei = be[event_name];
-                //console.log('bei ', bei);
-                if (tof(bei) == 'array') {
-                    //console.log('1) raise_event bei.length ' + bei.length);
-
-                    if (bei.length > 0) {
-
-
-                        // They are handlers that get called.
-
-                        for (c = 0, l = bei.length; c < l; c++) {
-                          if (bei[c]) res.push(bei[c].apply(target, additional_args));
-
-                        }
-
-                        return res;
-                    } else {
-                        return res;
-                    }
-
-
-                    //console.log('2) raised the bound events');
-                }
-                // Or if it's just a function?
-
-            }
-
-        }
-
-        if (sig == '[s,o]') {
+        if (sig == '[s,a]') {
             var be = this._bound_events;
 
             // And its general bound events as well.
             var bgh = this._bound_general_handler;
             var event_name = a[0];
+
+            // Hard to include an event target in this situation.
+            //a[1].target = target;
 
             var res = [];
             if (bgh) {
@@ -189,6 +136,116 @@ var Evented_Class = Class.extend({
                     //console.log('Evented_Class raise_event [s] res', res);
                     //return res;
                 }
+            }
+        }
+
+
+        
+
+        if (sig == '[s,o]') {
+            var be = this._bound_events;
+
+            // And its general bound events as well.
+            var bgh = this._bound_general_handler;
+            var event_name = a[0];
+
+            a[1].target = target;
+
+            var res = [];
+            if (bgh) {
+
+                //console.log('bgh.length', bgh.length);
+
+                for (c = 0, l = bgh.length; c < l; c++) {
+                    res.push(bgh[c].call(target, event_name, a[1]));
+                }
+            }
+
+
+            //console.log('this._bound_events', this._bound_events);
+            if (be) {
+                var bei = be[event_name];
+
+                //console.log('bei.length', bei.length);
+                //console.log('tof bei', tof(bei));
+                if (tof(bei) === 'array') {
+                    //console.log('1) raise_event bei.length ' + bei.length);
+
+
+                    for (c = 0, l = bei.length; c < l; c++) {
+                      res.push(bei[c].call(target, a[1]));
+                    }
+
+                    //each(bei, function(i, v) {
+                    //    res.push(v.call(target, a[1]));
+                    //});
+
+                    //console.log('Evented_Class raise_event [s] res', res);
+                    //return res;
+                }
+            }
+        } else {
+            if (a.l > 2) {
+                
+
+                // Want to pass the target value onwards so that the event handlers can read it.
+
+                var event_name = a[0];
+
+                //console.log('event_name ' + event_name);
+
+                var additional_args = [];
+                var bgh_args = [event_name];
+
+                for (c = 1, l = a.l; c < l; c++) {
+                    additional_args.push(a[c]);
+                    bgh_args.push(a[c]);
+                }
+
+                var be = this._bound_events;
+                var bgh = this._bound_general_handler;
+
+                var res = [];
+
+                if (bgh) {
+                    for (c = 0, l = bgh.length; c < l; c++) {
+                        res.push(bgh[c].apply(target, bgh_args));
+                    }
+                }
+
+
+                //console.log('be ' + tof(be));
+                if (be) {
+                    // The controls that are activated on the clients need to have bound events.
+
+                    //console.log('event_name', event_name);
+                    var bei = be[event_name];
+                    //console.log('bei ', bei);
+                    if (tof(bei) == 'array') {
+                        //console.log('1) raise_event bei.length ' + bei.length);
+
+                        if (bei.length > 0) {
+
+
+                            // They are handlers that get called.
+
+                            for (c = 0, l = bei.length; c < l; c++) {
+                              if (bei[c]) res.push(bei[c].apply(target, additional_args));
+
+                            }
+
+                            return res;
+                        } else {
+                            return res;
+                        }
+
+
+                        //console.log('2) raised the bound events');
+                    }
+                    // Or if it's just a function?
+
+                }
+
             }
         }
 
