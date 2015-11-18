@@ -472,6 +472,8 @@ var Data_Object = Evented_Class.extend({
         //   I think abstract mode fits in well with names we already are using.
 
         //console.log('begin Data_Object init');
+        //console.trace("Here I am!")
+        //console.log('-2) tof(this.field)', tof(this.field));
 
         // bound_events needs to be overhauled quite a lot.
         //  There is a major problem with it right now.
@@ -484,6 +486,9 @@ var Data_Object = Evented_Class.extend({
         // can have 'abstract': true in the spec,
         //  we will get this if it was called without the 'new' keyword as well.
         if (!spec) spec = {};
+
+
+
         //if (!is_defined(spec)) {
         //	spec = {};
         //};
@@ -557,6 +562,9 @@ var Data_Object = Evented_Class.extend({
                     this.__id = spec._id;
                 }
 
+                // want to see if we are using any of the spec items as fields.
+
+
             }
             if (t_spec == 'data_object') {
                 // Initialization by Data_Object value (for the moment)
@@ -568,14 +576,19 @@ var Data_Object = Evented_Class.extend({
                 // then copy the values over from spec.
 
                 var spec_keys = spec.keys();
-                //console.log('spec_keys', spec_keys);
+                console.log('spec_keys', spec_keys);
 
                 each(spec_keys, function(i, key) {
+
+
+                    //that.set(key, spec.get(key));
                     that.set(key, spec.get(key));
                 });
 
 
             }
+
+
 
 
             // Why would the spec be a function?
@@ -584,7 +597,7 @@ var Data_Object = Evented_Class.extend({
 
 
 
-
+            //console.log('-1) tof(this.field)', tof(this.field));
 
 
             //this._relationships = {};
@@ -676,7 +689,7 @@ var Data_Object = Evented_Class.extend({
             //  the _fields will have different things in them.
 
             // Not sure about this.
-
+            // ????????
             if (is_defined(this.__type_name)) {
                 spec = {
                     'set': spec
@@ -731,6 +744,8 @@ var Data_Object = Evented_Class.extend({
 
             // Need to have the dom field available to HTML.
 
+            //console.log('0) tof(this.field)', tof(this.field));
+
             var chained_fields = get_chained_fields(this.constructor);
             var chained_fields_list = chained_fields_to_fields_list(chained_fields);
 
@@ -765,6 +780,10 @@ var Data_Object = Evented_Class.extend({
             // Need to set the Context?
 
             // I think only make the fields collection if there are fields.
+
+            //console.log('chained_fields_list.length', chained_fields_list.length);
+
+            //console.log('1) tof(this.field)', tof(this.field));
 
             if (chained_fields_list.length > 0) {
                 this.fc = new Fields_Collection({
@@ -812,6 +831,8 @@ var Data_Object = Evented_Class.extend({
                     this.connect_fields(arr_field_names);
                 }
             }
+
+            //console.log('2) tof(this.field)', tof(this.field));
 
 
             // does set work OK?
@@ -874,9 +895,28 @@ var Data_Object = Evented_Class.extend({
             //console.log('tof(spec) ' + spec);
             var chained_field_name;
 
+
+
             // If the spec is an object.
 
             if (t_spec == 'object') {
+
+                /*
+                var v, field;
+                for (i in spec) {
+                    console.log('i', i);
+                    //v = spec[i]
+                    field = that.field(i);
+                    console.log('!!field ' + !!field);
+                    if (field) {
+                        console.log('spec[i]', spec[i]);
+                        that.set(i, spec[i]);
+                    }
+                }
+                */
+
+
+
                 each(spec, function(i, v) {
 
                     // Just copy the functions for the moment?
@@ -908,7 +948,11 @@ var Data_Object = Evented_Class.extend({
 
                         // such as setting the fields...
 
-                        that[i](v);
+                        //setTimeout(function() {
+                            that[i](v);
+                        //}, 0);
+
+
                     } else {
                         // _[i] = v;
 
@@ -979,62 +1023,43 @@ var Data_Object = Evented_Class.extend({
                                 // Need to make sure we a are properly holding the field types.
 
                                 if (chained_field_name == i) {
-                                    //console.log('*** chained_field_name ' + chained_field_name);
+                                    console.log('*** chained_field_name ' + chained_field_name);
                                     //console.log('setting');
                                     //that.set([i, v]);
 
                                     // Need to check setting a collection with an array.
                                     that.set(i, v);
 
+                                    // However, it won't set the right properties yet, this early on.
+                                    //  It should do these set function calls right at the end...
+
+                                    // Post init?
+
+
                                     //console.log('that._[i] ' + stringify(that._[i]));
                                 }
                             }
 
-                            /*
-                             each(chained_fields_list, function(i2, chained_field) {
-                             //console.log('chained_field ' + stringify(tof(chained_field)));
 
-
-
-                             if (tof(chained_field) == 'string') {
-                             chained_field_name = chained_field;
-                             }
-                             if (tof(chained_field) == 'array') {
-                             chained_field_name = chained_field[0];
-                             }
-
-                             //console.log('chained_field_name ' + chained_field_name);
-                             //console.log('i ' + i);
-
-                             if (chained_field_name == i) {
-                             //console.log('chained_field_name ' + chained_field_name);
-                             //console.log('setting');
-                             //that.set([i, v]);
-
-                             // Need to check setting a collection with an array.
-                             that.set(i, v);
-
-                             //console.log('that._[i] ' + stringify(that._[i]));
-                             }
-                             });
-                             */
                         }
 
 
                         //throw('stop');
-                        /*
-                         //chained_fields_list
-                         if(chained_fields_map && is_defined(chained_fields_map[i])) {
-                         console.log('chained_fields i ' + i);
-                         console.log('chained_fields v ' + v);
+
+                        // //chained_fields_list
+                        // if(chained_fields_map && is_defined(chained_fields_map[i])) {
+                        // console.log('chained_fields i ' + i);
+                        // console.log('chained_fields v ' + v);
 
 
 
-                         that.set(i, v);
-                         }
-                         */
+                        // that.set(i, v);
+                        // }
+
                     }
                 });
+
+
 
                 // events as a list?
                 // or named anyway?
@@ -1049,6 +1074,7 @@ var Data_Object = Evented_Class.extend({
                         if (tof(v) == 'array') {
                             each(v, function(event_name, fn_event) {
                                 if (tof(fn_event) == 'function') {
+                                    this.add_event_listener(event_name, fn_event);
                                     this.add_event_listener(event_name, fn_event);
                                 }
                             });
@@ -1097,6 +1123,8 @@ var Data_Object = Evented_Class.extend({
                     this.set('parent', spec.parent);
                 }
             }
+
+            //console.log('3) tof(this.field)', tof(this.field));
 
 
 
@@ -1267,7 +1295,7 @@ var Data_Object = Evented_Class.extend({
             */
 
             this[a[0]] = function(a1) {
-                console.log('connected field function a[0]: ' + a[0]);
+                //console.log('connected field function a[0]: ' + a[0]);
 
                 if (typeof a1 == 'undefined') {
                     // 0 params
@@ -1706,7 +1734,15 @@ var Data_Object = Evented_Class.extend({
         return this.__id;
     },
 
-    'fields': fp(function(a, sig) {
+
+    // Problems with name (fields).
+    //  Fields are given as a description of the fields.
+    //   Gets more complicated when we have a function to access the fields as well.
+    //   What if we want to override that function?
+
+    // Will call it field
+
+    'field': fp(function(a, sig) {
 
         //.fields() may be better suited to getting info about the fields, rather than all of the fields' info.
         //  Making the APIs return relatively simple data is a step to take.
@@ -1841,9 +1877,13 @@ var Data_Object = Evented_Class.extend({
             // get a single field.
 
             // get the field from the field_collection.
+            var fc = this.fc = this.fc || new Fields_Collection();
 
-            var fc = this.fc;
+
+            //var fc = this.fc || this.fc = new Fields_Collection();
             //console.log('** fc ' + fc);
+
+
             var res = fc.get(a[0]);
             //console.log('res ' + stringify(res));
             return res;
@@ -3202,7 +3242,7 @@ var Data_Object = Evented_Class.extend({
         // will also be looking at the output processors.
 
 
-        console.log('Data_Object get this.__type_name', this.__type_name);
+        //console.log('Data_Object get this.__type_name', this.__type_name);
         if (is_defined(this.__type_name)) {
             // should possibly have this assigned for controls...
             //var raw_input = a;
@@ -3904,7 +3944,7 @@ var Data_Object = Evented_Class.extend({
         // console.log('');
         // console.log('set');
 
-        console.log('data_object set this.__type_name ' + this.__type_name);
+        //console.log('data_object set this.__type_name ' + this.__type_name);
         //console.log('this._data_type_name ' + this._data_type_name);
 
 
@@ -3916,7 +3956,7 @@ var Data_Object = Evented_Class.extend({
             input_processors = this._get_input_processors();
         }
 
-        console.log('*** input_processors ' + stringify(Object.keys(input_processors)));
+        //console.log('*** input_processors ' + stringify(Object.keys(input_processors)));
 
         // While we can use the input processors for size, we want to just change the property correctly.
         //  The data type had been defined.
@@ -3958,7 +3998,7 @@ var Data_Object = Evented_Class.extend({
 
         
         //console.log('no dtn defined');
-        console.log('a.l ' + a.l);
+        //console.log('a.l ' + a.l);
         //console.log('');
 
 
@@ -3984,7 +4024,7 @@ var Data_Object = Evented_Class.extend({
             //silent = false || a[2];
 
 
-            console.log('set property_name ' + property_name + ', value ' + value);
+            //console.log('set property_name ' + property_name + ', value ' + value);
             //console.log('set value ' + value);
             //console.log('set value ' + stringify(value));
 
@@ -4150,8 +4190,8 @@ var Data_Object = Evented_Class.extend({
                     // May do away with data_object_next.
                     //
 
-                    console.log('pre get data_object_next');
-                    console.log('property_name', property_name);
+                    //console.log('pre get data_object_next');
+                    //console.log('property_name', property_name);
 
                     // And get could have a look to see if it is a field.
                     //  Get would return data in the right format?
@@ -4198,34 +4238,34 @@ var Data_Object = Evented_Class.extend({
 
                     //console.log('property_name ' + property_name);
                     //console.log('value ', (value));
-                    console.log('***** data_object_next ' + data_object_next);
-                    console.log('***** tof data_object_next ' + tof(data_object_next));
+                    //console.log('***** data_object_next ' + data_object_next);
+                    //console.log('***** tof data_object_next ' + tof(data_object_next));
 
                     // That data_object having an assigned type_name of size (when setting size)?
 
                     if (data_object_next) {
                         // Check to see if we are getting an object for a Field...
 
-                        console.log('tof(this)', tof(this));
+                        //console.log('tof(this)', tof(this));
 
-                        if (this.fields) {
-                            console.log('tof(this.fields) ' + tof(this.fields));
-                            console.log('this.fields', this.fields);
-                            console.log(this);
-                        }
+                        //if (this.fields) {
+                            //console.log('tof(this.fields) ' + tof(this.fields));
+                            //console.log('this.fields', this.fields);
+                            //console.log(this);
+                        //}
 
 
 
-                        var field = this.fields(property_name);
+                        var field = this.field(property_name);
                         if (field) {
-                            console.log('has field');
-                            console.log('field', field);
+                            //console.log('has field');
+                            //console.log('field', field);
 
                             data_object_next.__type_name = field[1];
 
                         }
 
-                        console.log('***** data_object_next.__type_name ' + data_object_next.__type_name);
+                        //console.log('***** data_object_next.__type_name ' + data_object_next.__type_name);
 
                         data_object_next.set(value);
                     }
@@ -4322,7 +4362,7 @@ var Data_Object = Evented_Class.extend({
                         //  if it is a native type?
 
                         var next_is_js_native = is_js_native(data_object_next);
-                        console.log('next_is_js_native', next_is_js_native);
+                        //console.log('next_is_js_native', next_is_js_native);
 
 
 
@@ -4389,9 +4429,9 @@ var Data_Object = Evented_Class.extend({
             }
         } else {
             // But maybe it should be a data_value, not a data_object.
-            console.log('3) else sig ' + sig);
+            //console.log('3) else sig ' + sig);
             var value = a[0];
-            console.log('value', value);
+            //console.log('value', value);
 
             // However at this stage we have not given a property name.
             //  Its setting the object itself.
@@ -4421,11 +4461,11 @@ var Data_Object = Evented_Class.extend({
                 // Act differently if it has a field as well?
 
                 var processed_input = input_processor(value);
-                console.log('processed_input', processed_input);
+                //console.log('processed_input', processed_input);
                 value = processed_input;
                 this._[property_name] = value;
-                console.log('value', value);
-                console.log('tof value', tof(value));
+                //console.log('value', value);
+                //console.log('tof value', tof(value));
 
                 // When the event bubbles, and is in the domain of the correct data_object, can it then say it was for that property?
 

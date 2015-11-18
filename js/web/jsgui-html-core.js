@@ -11,10 +11,6 @@ var jsgui = require('../core/jsgui-lang-enh');
 //      Maybe make it so that controls default to that Page_Context.
 
 
-
-
-
-
 var stringify = jsgui.stringify,
     fp = jsgui.fp,
     tof = jsgui.tof,
@@ -140,15 +136,12 @@ jsgui.input_processors['margin'] = function (input) {
 
 jsgui.input_processors['size'] = function (input) {
     // use the n_units processor, but with 'px'
-		console.log('using jsgui size input processor');
+    //console.log('using jsgui size input processor');
 
 		// Though, if size is an already defined type, we could have an input processor that deals with that.
 		//  Could also make use of a default unit, px.
 
     // And could also use some specific preprocessing before the indexed array one.
-
-
-
 
     return jsgui.input_processors['indexed_array'](['width', 'height'], 'distance', input);
 };
@@ -489,9 +482,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         ['content', 'collection'],
         ['dom', 'control_dom'],
-
-
-				['size', 'size']//,
+        ['size', 'size']//,
 
 				// Seems like it's automatically made functions to access the fields?
 
@@ -656,8 +647,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             }
 
             var that = this;
-
-						var context = this._context;
+            var context = this._context;
             if (context) {
                 if (context.register_control) context.register_control(this);
             } else {
@@ -691,9 +681,12 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                     // Needs to set inline styles.
                 }
 								*/
-							console.log('spec.size', spec.size);
-							console.log('this.size', this.size);
-							this.size(spec.size);
+							//console.log('spec.size', spec.size);
+							//console.log('this.size', this.size);
+
+                // Though, maybe fields should automatically be settable in the spec.
+
+                //this.size(spec.size);
 
 
             }
@@ -766,30 +759,49 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             // Want a 'target' for the change event.
 
-            this.get('size').on('change', function(e_size_change) {
+            var size = this.get('size');
+
+            // has the value been set?
+
+            //console.log('size._', size._);
+
+            var set_dom_size = function(size) {
+                var width = size[0].join('');
+                var height = size[1].join('');
+
+                //console.log('width', width);
+                //console.log('height', height);
+
+
+                that.style({
+                    'width': width,
+                    'height': height
+                });
+            }
+
+            if (size._) {
+                set_dom_size(size._);
+            }
+
+            size.on('change', function(e_size_change) {
                 //console.log('e_size_change', e_size_change);
 
                 var target = e_size_change.target, name = e_size_change.name, value = e_size_change.value;
 
-                console.log('*** value', value);
-                console.log('*** tof value', tof(value));
+                set_dom_size(value);
 
-                var width = value[0].join('');
-                var height = value[1].join('');
+                //console.log('*** value', value);
+                //console.log('*** tof value', tof(value));
 
-                console.log('width', width);
-                console.log('height', height);
+                // Could use an html/css output processor.
 
 
-
-                
-                that.style({
-                    'width': width,
-                    'height': height
-                })
-                
 
             });
+
+            // And look at thie size for the first time.
+
+
             /*
 
             this.on('change', function(e_change) {
@@ -2228,8 +2240,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
             each(a[0], function(v, i) {
-                console.log('v', v);
-                console.log('i', i);
+                //console.log('v', v);
+                //console.log('i', i);
                 that.style(i, v, false);
             });
 
@@ -2689,8 +2701,14 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
     // Should probably be in html-enh instead.
 	//
-    //  Though with size as a field, it could byoass this particular function.
+    //  Though with size as a field, it could bypass this particular function.
 
+
+    //  Won't use this function for the moment.
+    //   Want to use some of the Data_Object capabilities to set / get / output the size.
+    //   Will also have controls listen for a change in their size property
+
+    /*
 
     'size': fp(function(a, sig) {
         console.log('size sig', sig);
@@ -2734,6 +2752,13 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             });
         }
     }),
+
+    */
+
+    // Likely to directly use fields, data types and input_processors.
+    //  Will have it somewhat automatic / abstract, so there is not much code to specifically handle some CSS/HTML/DOM things, but there is a definition of what the
+    //  data formats are, and it works out or is told how to do translations between that internal representaion, and the formats it may be given, and may need to output.
+
 
     'color': fp(function(a, sig) {
 
