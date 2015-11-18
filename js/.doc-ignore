@@ -2,7 +2,7 @@ build
 source
 test
 test-in-browser 
-test-fails
+test-edge
 
 .gitignore 
 .jshintrc 
