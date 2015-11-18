@@ -562,6 +562,9 @@ var Data_Object = Evented_Class.extend({
                     this.__id = spec._id;
                 }
 
+                // want to see if we are using any of the spec items as fields.
+
+
             }
             if (t_spec == 'data_object') {
                 // Initialization by Data_Object value (for the moment)
@@ -573,14 +576,19 @@ var Data_Object = Evented_Class.extend({
                 // then copy the values over from spec.
 
                 var spec_keys = spec.keys();
-                //console.log('spec_keys', spec_keys);
+                console.log('spec_keys', spec_keys);
 
                 each(spec_keys, function(i, key) {
+
+
+                    //that.set(key, spec.get(key));
                     that.set(key, spec.get(key));
                 });
 
 
             }
+
+
 
 
             // Why would the spec be a function?
@@ -681,7 +689,7 @@ var Data_Object = Evented_Class.extend({
             //  the _fields will have different things in them.
 
             // Not sure about this.
-
+            // ????????
             if (is_defined(this.__type_name)) {
                 spec = {
                     'set': spec
@@ -887,9 +895,28 @@ var Data_Object = Evented_Class.extend({
             //console.log('tof(spec) ' + spec);
             var chained_field_name;
 
+
+
             // If the spec is an object.
 
             if (t_spec == 'object') {
+
+                /*
+                var v, field;
+                for (i in spec) {
+                    console.log('i', i);
+                    //v = spec[i]
+                    field = that.field(i);
+                    console.log('!!field ' + !!field);
+                    if (field) {
+                        console.log('spec[i]', spec[i]);
+                        that.set(i, spec[i]);
+                    }
+                }
+                */
+
+
+
                 each(spec, function(i, v) {
 
                     // Just copy the functions for the moment?
@@ -921,7 +948,11 @@ var Data_Object = Evented_Class.extend({
 
                         // such as setting the fields...
 
-                        that[i](v);
+                        //setTimeout(function() {
+                            that[i](v);
+                        //}, 0);
+
+
                     } else {
                         // _[i] = v;
 
@@ -992,62 +1023,43 @@ var Data_Object = Evented_Class.extend({
                                 // Need to make sure we a are properly holding the field types.
 
                                 if (chained_field_name == i) {
-                                    //console.log('*** chained_field_name ' + chained_field_name);
+                                    console.log('*** chained_field_name ' + chained_field_name);
                                     //console.log('setting');
                                     //that.set([i, v]);
 
                                     // Need to check setting a collection with an array.
                                     that.set(i, v);
 
+                                    // However, it won't set the right properties yet, this early on.
+                                    //  It should do these set function calls right at the end...
+
+                                    // Post init?
+
+
                                     //console.log('that._[i] ' + stringify(that._[i]));
                                 }
                             }
 
-                            /*
-                             each(chained_fields_list, function(i2, chained_field) {
-                             //console.log('chained_field ' + stringify(tof(chained_field)));
 
-
-
-                             if (tof(chained_field) == 'string') {
-                             chained_field_name = chained_field;
-                             }
-                             if (tof(chained_field) == 'array') {
-                             chained_field_name = chained_field[0];
-                             }
-
-                             //console.log('chained_field_name ' + chained_field_name);
-                             //console.log('i ' + i);
-
-                             if (chained_field_name == i) {
-                             //console.log('chained_field_name ' + chained_field_name);
-                             //console.log('setting');
-                             //that.set([i, v]);
-
-                             // Need to check setting a collection with an array.
-                             that.set(i, v);
-
-                             //console.log('that._[i] ' + stringify(that._[i]));
-                             }
-                             });
-                             */
                         }
 
 
                         //throw('stop');
-                        /*
-                         //chained_fields_list
-                         if(chained_fields_map && is_defined(chained_fields_map[i])) {
-                         console.log('chained_fields i ' + i);
-                         console.log('chained_fields v ' + v);
+
+                        // //chained_fields_list
+                        // if(chained_fields_map && is_defined(chained_fields_map[i])) {
+                        // console.log('chained_fields i ' + i);
+                        // console.log('chained_fields v ' + v);
 
 
 
-                         that.set(i, v);
-                         }
-                         */
+                        // that.set(i, v);
+                        // }
+
                     }
                 });
+
+
 
                 // events as a list?
                 // or named anyway?
