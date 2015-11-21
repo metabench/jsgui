@@ -2,7 +2,7 @@ if (typeof define !== 'function') {
     var define = require('amdefine')(module);
 }
 
-define(['assert', './toText'], function(assert, toText) {
+define(['assert', './toText'], function(assert, toTextModule) {
 	
         function isInBrowser() {
             if (typeof (window) === 'undefined') return false;
@@ -89,9 +89,9 @@ define(['assert', './toText'], function(assert, toText) {
 		    //console.log("typeof actual: " + typeof actual);
 		    //console.log("typeof expected: " + typeof expected);
 		    //console.log("==1==");
-		    //var actual_text = toText.toText(actual);
-		    //var expected_text = toText.toText(expected);
-		    //console.log("_deepEqual(" + actual_text + ", " + expected_text + ", " + strict + ", " + toText.toText(history));
+		    //var actual_text = toTextModule.toText(actual);
+		    //var expected_text = toTextModule.toText(expected);
+		    //console.log("_deepEqual(" + actual_text + ", " + expected_text + ", " + strict + ", " + toTextModule.toText(history));
 		    //
 		    if ((actual === undefined) || (expected === undefined)) {
 		        return (actual === expected);
@@ -194,16 +194,19 @@ define(['assert', './toText'], function(assert, toText) {
 
     //#endregion
 
-
+		function toText(obj) {
+		    return toTextModule.toText(obj);
+		}
 
 		var test_utils = {
 		    'isInBrowser': isInBrowser,
-            'assertListedProps': assertListedProps,		
-            'assertArraysContentEqual': assertArraysContentEqual,		
-            //'assertFilesEqual': assertFilesEqual,
-            'functionsToStrings': functionsToStrings,
-            'assertDeepEqual': deepEqual
-        }
+		    'assertListedProps': assertListedProps,
+		    'assertArraysContentEqual': assertArraysContentEqual,
+		    //'assertFilesEqual': assertFilesEqual,
+		    'functionsToStrings': functionsToStrings,
+		    'assertDeepEqual': deepEqual,
+		    'toText': toText
+		};
 		
         return test_utils;
 
