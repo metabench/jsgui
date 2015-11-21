@@ -411,7 +411,7 @@ describe("z_core/lang/jsgui-lang-util.spec.js", function () {
         var data_object = new (jsgui_util.map_data_type_data_object_constructors['color'])();
         //
         test_utils.assertDeepEqual(data_object.stringify(), "Data_Object({})");
-        test_utils.assertDeepEqual(data_object.fields(), []);
+        test_utils.assertDeepEqual(data_object.field(), []);
         test_utils.assertDeepEqual(data_object._data_type_name, "color");
     });
 
