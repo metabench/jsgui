@@ -174,7 +174,7 @@ describe("z_core /test_data_object_fields.spec.js ", function () {
 				
 			// let's have a look at the fields collection.
 				
-			var fields = pres.fields();
+			var fields = pres.field();
 			//console.log('fields ' + stringify(fields));
 			assert.equal(stringify(fields), '[["name", "indexed text(32)", {"data_type": ["text", 32], "indexed": true}], ["party", "indexed text(32)", {"data_type": ["text", 32], "indexed": true}], ["y1", "int", {"data_type": "int"}], ["y2", "int", {"data_type": "int"}]]');
 				
@@ -239,11 +239,11 @@ describe("z_core /test_data_object_fields.spec.js ", function () {
 			var ctrl1 = new Control();
 			//ctrl1.add('Hello World');
 				
-			var ctrl1_fields = ctrl1.fields();
+			var ctrl1_fields = ctrl1.field();
 			//console.log('ctrl1_fields ' + stringify(ctrl1_fields));
 			assert.equal(stringify(ctrl1_fields), '[["content", "collection", {"data_type": "collection"}]]');
 
-			var content_field = ctrl1.fields('content');
+			var content_field = ctrl1.field('content');
 			//console.log('content_field ' + stringify(content_field));
 			assert.equal(stringify(content_field), '["content", "collection", {"data_type": "collection"}]');
 

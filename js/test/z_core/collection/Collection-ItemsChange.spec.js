@@ -56,7 +56,7 @@
         collection.on("change", function (args) { event_args = args; });
         //
         collection.clear();
-        test_utils.assertDeepEqual(event_args, { type: "clear" });
+        test_utils.assertDeepEqual(event_args, { type: "clear", target: collection });
     });
 
     // -----------------------------------------------------
@@ -419,7 +419,7 @@
         var item1 = presidents.get(1);
         test_utils.assertDeepEqual(stringify(item1), '{"name": "John Adams", "y1": 1797, "y2": 1801, "party": "Federalist"}'); // without "Data_Object(...)" wrapping
         //
-        test_utils.assertDeepEqual(event_args, { 'name': 'insert', 'item': { 'name': 'John Adams', 'y1': 1797, 'y2': 1801, 'party': 'Federalist' }, 'pos': 1 });
+        test_utils.assertDeepEqual(event_args, { 'name': 'insert', 'item': { 'name': 'John Adams', 'y1': 1797, 'y2': 1801, 'party': 'Federalist' }, 'pos': 1, target: presidents });
     });
 
     // -----------------------------------------------------

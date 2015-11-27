@@ -22,12 +22,12 @@ requirejs(
         "data-structures/Sorted_KVS.spec",
         "data-structures/StiffArray.spec",
         //
-        "essentials/arrayify.spec",
-        "essentials/call_multiple_callback_functions.spec",
-        "essentials/Class.spec",
-        "essentials/each.spec",
-        "essentials/mapify.spec",
-        "essentials/other.spec"
+        "lang-essentials/arrayify.spec",
+        "lang-essentials/call_multiple_callback_functions.spec",
+        "lang-essentials/Class.spec",
+        "lang-essentials/each.spec",
+        "lang-essentials/mapify.spec",
+        "lang-essentials/other.spec"
     ],
     function () {
       //mocha.checkLeaks();

@@ -134,13 +134,13 @@ describe("z_core/data-object /Data_Object-with-EDO.spec.js ", function () {
 
     it("dobj() - Enhanced_Data_Object", function () {
         var data_object = Data_Object.dobj();
-        assert.deepEqual(data_object.fields(), [["flags", ["collection", "string"]]]);
+        assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]]]);
         assert.ok(data_object instanceof Enhanced_Data_Object);
         //
         // data_def does nothing:
         //
         data_object = Data_Object.dobj({}, { Field1: "int" });
-        assert.deepEqual(data_object.fields(), [["flags", ["collection", "string"]]]);
+        assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]]]);
         //
         // set values:
         //
@@ -168,7 +168,7 @@ describe("z_core/data-object /Data_Object-with-EDO.spec.js ", function () {
         //
         var data_object = new MyTestTypeConstructor();
         assert.ok(data_object instanceof Enhanced_Data_Object);
-        assert.deepEqual(data_object.fields(), [["flags", ["collection", "string"]], ["Field1", "int", { data_type: "int" }], ["Field2", "number", { data_type: "number" }]]);
+        assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]], ["Field1", "int", { data_type: "int" }], ["Field2", "number", { data_type: "number" }]]);
         //
         jsgui.data_types_info = save_data_types_info;
         jsgui.map_data_type_data_object_constructors = save_map_data_type_data_object_constructors;

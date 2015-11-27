@@ -33,7 +33,7 @@
 
 	    it("test Collection(String)", function () {
 	        //
-            // everything is ok:
+	        // everything is ok:
 	        test_utils.assertDeepEqual(String.abstract, undefined);
 	        test_utils.assertDeepEqual(stringify(new Data_Object(String)), "Data_Object({})");
 	        test_utils.assertDeepEqual(stringify(new Collection(String)), "Collection()");
@@ -41,15 +41,15 @@
 	        // Collection(String) call sets String.abstract = true:
 	        var abstract_collection = Collection(String);
 	        //
-            // now it's broken:
+	        // now it's broken:
 	        test_utils.assertDeepEqual(String.abstract, true);
 	        test_utils.assertDeepEqual(stringify(new Data_Object(String)), "Data_Object(undefined)");
 	        test_utils.assertDeepEqual(stringify(new Collection(String)), "~Collection(String)");
 	        //
-            // fix back:
+	        // fix back:
 	        delete String.abstract;
 	        //
-            // now it's fixed:
+	        // now it's fixed:
 	        test_utils.assertDeepEqual(String.abstract, undefined);
 	        test_utils.assertDeepEqual(stringify(new Data_Object(String)), "Data_Object({})");
 	        test_utils.assertDeepEqual(stringify(new Collection(String)), "Collection()");

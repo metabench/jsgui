@@ -50,8 +50,8 @@ describe("z_core /test_enhanced_data_object.spec.js ", function() {
 	    assert.equal(flags.has('selectable'), undefined);
 	    assert.equal(flags.has('resizable'), undefined);
         //
-	    edo.add_flag('hidden');
-	    assert.equal(stringify(flags), 'Collection("selectable", "resizable", "hidden")');
+	    assert.throws(function () { edo.add_flag('hidden'); });
+	    //assert.equal(stringify(flags), 'Collection("selectable", "resizable", "hidden")');
 	});
 
 

@@ -111,8 +111,8 @@ describe("z_core /test_data_object_data_types.spec.js ", function() {
 
                         // data_types_info could have associated maps, attached to the data_types_info.
 
-                        console.log('input processor for dti ' + stringify(data_type_info));
-                        console.log('sig ' + sig);
+                        //console.log('input processor for dti ' + stringify(data_type_info));
+                        //console.log('sig ' + sig);
                         // with an indexed array, there should be a dti.position_map
 
                         if (sig == '[[[n,n,n]]]') {
@@ -347,7 +347,7 @@ describe("z_core /test_data_object_data_types.spec.js ", function() {
             var that = this;
             var res = fp(function (a, sig) {
 
-                console.log('color_preprocessor sig ' + sig);
+                //console.log('color_preprocessor sig ' + sig);
 
                 if (sig == '[[s]]') {
                     //var new_input = 
@@ -598,16 +598,34 @@ describe("z_core /test_data_object_data_types.spec.js ", function() {
 
 
 
-        assert.throws(function () { new Color({ 'red': 255, 'green': 0, 'blue': 122 }); }, /not yet implemented/);
-        //--var red = new Color({ 'red': 255, 'green': 0, 'blue': 122 });
-        //--console.log('red.get() ' + red.get());
+        //assert.throws(function () { new Color({ 'red': 255, 'green': 0, 'blue': 122 }); }, /not yet implemented/);
+
+        // --------------------------------------------------------------------------------------------
+        // !!! it does not use the input_processors and output_processors from jsgui-lang-util.js module,
+        // but use the processors from this file instead
+        // --------------------------------------------------------------------------------------------
+
+        var red = null;
+        //
+        red = new Color({ 'red': 255, 'green': 0, 'blue': 122 });
+        assert.equal(red.get(), "#NaN");
 
         // also use regular expression identifiers for parsing from a string?
 
-        //var red = new Color('#FF0000');
-        //var red = new Color('#ff0000');
-        //var red = new Color('FF0000');
-        //var red = new Color('ff0000');
+        red = new Color('#FF0000');
+        assert.equal(red.get(), "#NaN");
+        //
+        red = new Color('#ff0000');
+        assert.equal(red.get(), "#NaN");
+        //
+        red = new Color('FF0000');
+        assert.equal(red.get(), "#NaN");
+        //
+        red = new Color('ff0000');
+        assert.equal(red.get(), "#NaN");
+        //
+        //
+
         // then some of the other properties that get used in HTML will get built into the system.
 
 

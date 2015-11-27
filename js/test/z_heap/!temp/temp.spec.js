@@ -34,54 +34,34 @@
 	    // -----------------------------------------------------
 
 	    it("test... ", function () {
-
-	        var control = new html_core.Control();
-	        //
-	        console.log("=== ===");
-	        var dom = control.get('dom');
-	        var da = control.get('dom.attributes');
-
-	        //console.log(toText.toText(dom));
-	        //
-	        //console.log(control.fields());  // [ [flags..], [content..], ['dom', 'control_dom', {data_type: 'control_dom'}], [size..] ]
-	        //console.log(dom.fields());  // [ [flags..], [node..], ['attributes', 'dom_attributes', {data_type: 'dom_attributes'}], [tagname..] ]
-	        console.log(da.fields);  // 'ordered_string_list'
-
-	        //console.log(dom.get());
-
-	        //console.log(control.fields());
-
-
-	        //console.log(toText.toText(da));
-	        //var Book = function (obj) { this.title = obj.bookTitle; this.objtype = "Book"; };
-
-	        //var data_object = new Data_Object();
-	        //data_object.set_field("field1", [Book]);
-	        //
-	        ////
-	        //collection.constraint(Book);
-	        ////
-	        ////
-	        //var value = collection.push({ bookTitle: "The Little Prince" });
-	        ////
-	        //// the value is converted into Book, but not added to the collection:
-	        ////
-	        //test_utils.assertDeepEqual(value, new Book({ bookTitle: "The Little Prince" }));
-	        //test_utils.assertDeepEqual(stringify(collection), 'Collection()');
-	        //test_utils.assertDeepEqual(collection.length(), 0);
 	    });
 
+	    describe("part1", function () {
 
-	    xit("test2 ", function () {
-
-	        var dtc = Enhanced_Data_Object.extend({
-	            'fields': 'ordered_string_list'
+	        it("test11", function () {
 	        });
-	        //
-	        var edo = new dtc();
-	        console.log(edo.fields);
+	        it("test12 ", function () {
+	        });
+
+	        describe("part12", function () {
+
+	            it("test121", function () {
+	            });
+	            it("test122 ", function () {
+	            });
+
+	        });
+
 	    });
 
+	    describe("part2", function () {
+
+	        it("test21", function () {
+	        });
+	        it("test22 ", function () {
+	        });
+
+	    });
 
 	});
 	

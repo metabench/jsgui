@@ -7,6 +7,7 @@ describe("z_core /test_data_object_collections.spec.js ", function() {
     var test_utils;
 
     var Collection;
+    var Data_Value;
     var stringify;
     var Data_Object;
     var tof;
@@ -21,6 +22,7 @@ describe("z_core /test_data_object_collections.spec.js ", function() {
         test_utils = require('../../test-utils/test-utils');
         //
         Collection = jsgui.Collection;
+        Data_Value = jsgui.Data_Value;
         stringify = jsgui.stringify;
         Data_Object = jsgui.Data_Object;
         tof = jsgui.tof;
@@ -338,7 +340,7 @@ describe("z_core /test_data_object_collections.spec.js ", function() {
             [1, ["car", "indexed text(32)"]]
 	    ]);
 	    //
-	    test_utils.assertDeepEqual(pres_jackson.fields(), [
+	    test_utils.assertDeepEqual(pres_jackson.field(), [
             ["name", "indexed text(32)", { "data_type": ["text", 32], "indexed": true }],
             ["party", "indexed text(32)", { "data_type": ["text", 32], "indexed": true }],
             ["y1", "int", { "data_type": "int" }],
@@ -347,7 +349,7 @@ describe("z_core /test_data_object_collections.spec.js ", function() {
             ["car", "indexed text(32)", { "data_type": ["text", 32], "indexed": true }]
 	    ]);
 	    //
-	    test_utils.assertDeepEqual(mapify(pres_jackson.fields()), {
+	    test_utils.assertDeepEqual(mapify(pres_jackson.field()), {
 	        "name": "indexed text(32)",
 	        "party": "indexed text(32)",
 	        "y1": "int",
@@ -356,9 +358,32 @@ describe("z_core /test_data_object_collections.spec.js ", function() {
 	        "car": "indexed text(32)"
 	    });
 	    //
-	    test_utils.assertDeepEqual(pres_jackson.get(), { "name": "Andrew Jackson", "y1": 1829, "y2": 1837, "party": "Democratic" });
+	    //test_utils.assertDeepEqual(pres_jackson.get(), { "name": "Andrew Jackson", "y1": 1829, "y2": 1837, "party": "Democratic" });
+        //
+	    var value_name = new Data_Value({ value: "Andrew Jackson" }); value_name.__type_name = "indexed text(32)";
+	    var value_y1 = new Data_Value({ value: 1829 }); value_y1.__type_name = "int";
+	    var value_y2 = new Data_Value({ value: 1837 }); value_y2.__type_name = "int";
+	    var value_party = new Data_Value({ value: "Democratic" }); value_party.__type_name = "indexed text(32)";
+	    //
+	    test_utils.assertDeepEqual(pres_jackson.get(), {
+	        "name": value_name,
+	        "y1": value_y1,
+	        "y2": value_y2,
+	        "party": value_party
+	    });
+        //
 	    pres_jackson.party('Totalitarian');
-	    test_utils.assertDeepEqual(pres_jackson.get(), { "name": "Andrew Jackson", "y1": 1829, "y2": 1837, "party": "Totalitarian" });
+	    //test_utils.assertDeepEqual(pres_jackson.get(), { "name": "Andrew Jackson", "y1": 1829, "y2": 1837, "party": "Totalitarian" });
+	    //
+	    value_party = new Data_Value({ value: "Totalitarian" }); value_party.__type_name = "indexed text(32)";
+	    //
+	    test_utils.assertDeepEqual(pres_jackson.get(), {
+	        "name": value_name,
+	        "y1": value_y1,
+	        "y2": value_y2,
+	        "party": value_party
+	    });
+
 	});
 					
 	// -----------------------------------------------------
@@ -429,7 +454,7 @@ describe("z_core /test_data_object_collections.spec.js ", function() {
 		//assert.throws(function () { pres_jackson.party('Totalitarian'); }); // !!! no error
 		pres_jackson.party('Totalitarian');  // !!! no error
 		//		
-		test_utils.assertDeepEqual(pres_jackson.fields(), [
+		test_utils.assertDeepEqual(pres_jackson.field(), [
             ["name", "indexed text(32)", { "data_type": ["text", 32], "indexed": true }],
             ["party", "readonly indexed text(32)", { "data_type": ["text", 32], "read_only": true, "indexed": true }],
             ["y1", "int", { "data_type": "int" }],
