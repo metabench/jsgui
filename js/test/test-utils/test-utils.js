@@ -1,8 +1,8 @@
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
 
-define(['assert', './toText'], function(assert, toTextModule) {
+var assert = require('assert');
+//var toTextModule = require('./toText');
+
+
 	
         function isInBrowser() {
             if (typeof (window) === 'undefined') return false;
@@ -147,6 +147,8 @@ define(['assert', './toText'], function(assert, toTextModule) {
 
 		const pSlice = Array.prototype.slice;
 
+		const DEBUG = true;
+
 		function objEquiv(a, b, strict, history) {
 		    if (a === null || a === undefined || b === null || b === undefined)
 		        return false;
@@ -170,14 +172,33 @@ define(['assert', './toText'], function(assert, toTextModule) {
                 key, i;
 		    // having the same number of owned properties (keys incorporates
 		    // hasOwnProperty)
-		    if (ka.length !== kb.length)
+		    if (ka.length !== kb.length) {
+		        if (DEBUG) {
+		            console.log("ka.length !== kb.length: ka.length=" + ka.length + " kb.length=" + kb.length);
+		            //
+		            console.log("==ka==");
+		            console.log(ka);
+		            console.log("==kb==");
+		            console.log(kb);
+		        }
+                //
 		        return false;
+		    }
 		    //the same set of keys (although not necessarily the same order),
 		    ka.sort();
 		    kb.sort();
 		    //~~~cheap key test
 		    for (i = ka.length - 1; i >= 0; i--) {
 		        if (ka[i] !== kb[i]) {
+		            if (DEBUG) {
+		                console.log("ka[i] !== kb[i]: ka[i]=" + ka[i] + " kb[i]=" + kb[i]);
+		                //
+		                console.log("==ka==");
+		                console.log(ka);
+		                console.log("==kb==");
+		                console.log(kb);
+		            }
+		            //
 		            return false;
 		        }
 		    }
@@ -186,7 +207,10 @@ define(['assert', './toText'], function(assert, toTextModule) {
 		    for (i = ka.length - 1; i >= 0; i--) {
 		        key = ka[i];
 		        //console.log("key=" + key);
-		        if (!_deepEqual(a[key], b[key], strict, { actual: a, expected: b, prev: history })) return false;
+		        if (!_deepEqual(a[key], b[key], strict, { actual: a, expected: b, prev: history })) {
+		            if (DEBUG) console.log("!_deepEqual: key=" + key);
+		            return false;
+		        }
 		        //console.log("key=" + key + " - done");
             }
 		    return true;
@@ -198,7 +222,8 @@ define(['assert', './toText'], function(assert, toTextModule) {
 		    return toTextModule.toText(obj);
 		}
 
-		var test_utils = {
+
+		module.exports = {
 		    'isInBrowser': isInBrowser,
 		    'assertListedProps': assertListedProps,
 		    'assertArraysContentEqual': assertArraysContentEqual,
@@ -207,8 +232,7 @@ define(['assert', './toText'], function(assert, toTextModule) {
 		    'assertDeepEqual': deepEqual,
 		    'toText': toText
 		};
-		
-        return test_utils;
 
-});
+
+
 	
