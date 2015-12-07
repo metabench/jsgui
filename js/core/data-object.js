@@ -1,13 +1,4 @@
-/*
- if (typeof define !== 'function') {
- var define = require('amdefine')(module);
- }
 
-
- define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"],
- function(jsgui, Data_Structures, Constraint, Fields_Collection) {
-
- */
 var jsgui = require('./jsgui-lang-essentials');
 var Data_Structures = require('./jsgui-data-structures');
 var Data_Value = require('./data-value');
@@ -695,11 +686,16 @@ var Data_Object = Evented_Class.extend({
 
             // Not sure about this.
             // ????????
+
+            // Probably best not to set every object with a __type_name differently like this.
+
+            /*
             if (is_defined(this.__type_name)) {
-                spec = {
-                    'set': spec
-                }
-            };
+             spec = {
+             'set': spec
+             }
+             };
+            */
 
             /*
              if (is_defined(spec.data_def)) {
