@@ -1,11 +1,11 @@
 /*
 
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+ if (typeof define !== 'function') {
+ var define = require('amdefine')(module);
+ }
 
-define(["./jsgui-lang-util", "./data-object-fields-collection"], function(jsgui, Fields_Collection) {
-    */
+ define(["./jsgui-lang-util", "./data-object-fields-collection"], function(jsgui, Fields_Collection) {
+ */
 
 var jsgui = require('./jsgui-lang-util');
 var Data_Value = require('./data-value');
@@ -109,32 +109,32 @@ var Enhanced_Data_Object = Data_Object.extend({
 
     /*
 
-    'init': function(spec) {
-        //this._super(spec);
-        do_init.call(this, spec);
-        // need to respond to flag fields being added and removed.
-        //  when a flag gets added, there needs to be the flag's connected function.
+     'init': function(spec) {
+     //this._super(spec);
+     do_init.call(this, spec);
+     // need to respond to flag fields being added and removed.
+     //  when a flag gets added, there needs to be the flag's connected function.
 
-        //.flags().selected?
-        //.flags('selected');
+     //.flags().selected?
+     //.flags('selected');
 
-        // .selected(true); .selected(1);
+     // .selected(true); .selected(1);
 
-        // can leave the flags unconnected for the moment, and return to the flags connection so there is
-        //  easier syntax and probably faster code.
+     // can leave the flags unconnected for the moment, and return to the flags connection so there is
+     //  easier syntax and probably faster code.
 
-        // but want it so we know when flags have changed (the collection of flags)?
+     // but want it so we know when flags have changed (the collection of flags)?
 
-        // also when any flags' value has changed.
+     // also when any flags' value has changed.
 
-        // can quite simply add and remove flags from an object.
-        //  also may pay some attention to a restricted list of flags, where if the flags are not set then we know
-        //  the values are false.
+     // can quite simply add and remove flags from an object.
+     //  also may pay some attention to a restricted list of flags, where if the flags are not set then we know
+     //  the values are false.
 
-        // want to make it easy to deal with flags that correspond to css as well.
+     // want to make it easy to deal with flags that correspond to css as well.
 
-    },
-    */
+     },
+     */
     // or an enhanced version of the set function that deals with more input processors?
     //  Or have the supercalssed set function send mack the input processors in parameters.
     //   I think that is the best option.
@@ -178,14 +178,17 @@ var Enhanced_Data_Object = Data_Object.extend({
 
     // copied from Data_Object because Data_Object was not able to deal with collections within itself.
     //  code works, but should make this call data_object code where possible.
+    //
 
     // Candidate for optimization
 
+
+
     //'get': fp(function(a, sig) {
     'get': (function() {
-      var a = arguments;
-      a.l = arguments.length;
-      var sig = get_a_sig(arguments, 1);
+        var a = arguments;
+        a.l = arguments.length;
+        var sig = get_a_sig(arguments, 1);
 
         // More difficult to maintain with the separate get code.
         //  Handle specific cases here, otherwise use _super.
@@ -205,7 +208,7 @@ var Enhanced_Data_Object = Data_Object.extend({
         //console.log('Enhanced_Data_Object get this.__type_name', this.__type_name);
         //console.log('Enhanced_Data_Object get sig', sig);
 
-            // check to see if there is a field defined.
+        // check to see if there is a field defined.
         if (sig === '[s]') {
             //console.log('get param: ' + a[0]);
 
@@ -224,7 +227,32 @@ var Enhanced_Data_Object = Data_Object.extend({
             //console.log('this.fields() ' + stringify(this.fields()));
             // could have .s in it, making it nested, and have removed nested from here.
             //console.log('pre fc get');
+
+            // At this stage it seems like the field collection's field definition contains a function.
+            //  That should not be the case.
+            //
+
+            //console.log('field_name', field_name);
+
+
             var field = fc.get(field_name);
+            // As well as the field collection, there are the chained fields.
+
+            // Want a map of the fields too...
+
+
+
+            var obj_fields = this.field();
+            //console.log('obj_fields', obj_fields);
+
+            var obj_field = this.field(field_name);
+            //console.log('obj_field', obj_field);
+
+            //
+
+
+
+            //
 
             //console.log('!!field', !!field);
             //console.log('EDO field ' + stringify(field));
@@ -266,7 +294,11 @@ var Enhanced_Data_Object = Data_Object.extend({
 
 
                 if (!this._[field_name]) {
+                    // The field definitions should not include a function?
+
                     //console.log('does not have field already');
+
+                    //console.log('field', field);
 
                     var sig_field = get_item_sig(field, 20);
                     //console.log('');
@@ -275,13 +307,13 @@ var Enhanced_Data_Object = Data_Object.extend({
                     //console.log('enhanced data_object sig_field ' + stringify(sig_field));
                     //console.log('field ' + stringify(field));
 
-                    //console.log('sig_field ' + sig_field);
+                    //console.log('EDO sig_field ' + sig_field);
 
 
                     if (sig_field == '[s,[s,u]]') {
                         // it looks like it has gone wrong.
                         var stack = new Error().stack;
-                        console.log(stack);
+                        //console.log(stack);
                     }
 
                     // ss?
@@ -327,7 +359,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                                 // Data value with no context?
 
                                 //var dv = new Data_Value({
-                                    //'context': this._context
+                                //'context': this._context
                                 //});
                                 // Tell the Data_Value it's a string only?
                                 // context?
@@ -370,7 +402,7 @@ var Enhanced_Data_Object = Data_Object.extend({
                                 } else {
                                     var field_val = new dtoc();
                                 }
-                                field_val.__type_name = field_type_name;
+                                field_val.__type_name = field_val.__type_name || field_type_name;
                                 //console.log('default_value', default_value);
                                 //console.log('field_val', field_val);
                                 if (is_defined(default_value)) {
@@ -440,8 +472,12 @@ var Enhanced_Data_Object = Data_Object.extend({
                             var dv = new Data_Value();
                             dv.parent(this);
                             this._[field_name] = dv;
+                        } else if (field_type_name === 'array') {
+                            var dv = new Data_Value();
+                            dv.parent(this);
+                            this._[field_name] = dv;
                         } else {
-                                //
+                            //
 
                             // a different function?
                             //  we could look for the input processors?
@@ -497,7 +533,7 @@ var Enhanced_Data_Object = Data_Object.extend({
 
                         }
 
-                            //console.log('this._ ' + stringify(this._));
+                        //console.log('this._ ' + stringify(this._));
 
                         return this._[field_name];
 
@@ -584,11 +620,11 @@ var Enhanced_Data_Object = Data_Object.extend({
                 //console.log('res ' + res);
 
                 //if (!is_defined(res)) {
-                    // No, don't thin we just create a new one. It may need to get overwritten by some other code.
+                // No, don't thin we just create a new one. It may need to get overwritten by some other code.
 
 
 
-                    //res = new Enhanced_Data_Object({'context': this._context});
+                //res = new Enhanced_Data_Object({'context': this._context});
                 //}
 
                 //console.log('property_name ' + property_name);
@@ -615,10 +651,10 @@ Enhanced_Data_Object.extend = function(prop, namespcExtension, propsToMerge) {
     // if in the prop or map_props there is something called 'flags' we need to pay attention.
     //  That will then get put in the prototype (or constructor?)
     /*
-    for (var name in prop) {
+     for (var name in prop) {
 
-    }
-    */
+     }
+     */
     if (prop.flags) {
         //res[
         res._flags = prop.flags;
@@ -638,5 +674,5 @@ Enhanced_Data_Object.register_data_type = register_data_type;
 
 module.exports = Enhanced_Data_Object;
 
-	//return Enhanced_Data_Object;
+//return Enhanced_Data_Object;
 //});

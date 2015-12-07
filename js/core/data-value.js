@@ -38,6 +38,7 @@ var Data_Value = Evented_Class.extend({
     'init': function(spec) {
 
         this._super();
+        this.__data_value = true;
         // the spec will be the value.
         //  could be the value and its type.
 

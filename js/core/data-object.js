@@ -1,13 +1,13 @@
 /*
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+ if (typeof define !== 'function') {
+ var define = require('amdefine')(module);
+ }
 
 
-define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"],
-	function(jsgui, Data_Structures, Constraint, Fields_Collection) {
+ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./constraint", "./data-object-fields-collection"],
+ function(jsgui, Data_Structures, Constraint, Fields_Collection) {
 
-	*/
+ */
 var jsgui = require('./jsgui-lang-essentials');
 var Data_Structures = require('./jsgui-data-structures');
 var Data_Value = require('./data-value');
@@ -16,39 +16,39 @@ var Constraint = require('./constraint');
 var Fields_Collection = require('./data-object-fields-collection');
 var Evented_Class = require('./evented-class');
 
-	// Creates the Constraints data type... so a constraint specified with a string can be tested against
-	//  also a cache of the constraints that have been made through the string - quick to get them again for reuse when testing.
+// Creates the Constraints data type... so a constraint specified with a string can be tested against
+//  also a cache of the constraints that have been made through the string - quick to get them again for reuse when testing.
 
-	// Constraint objects can be saved and used in various places.
-	//  They may not always be referred to directly, that would save on the amount of code needed.
+// Constraint objects can be saved and used in various places.
+//  They may not always be referred to directly, that would save on the amount of code needed.
 
-	// They will help in making a model of what gets put into a database.
-	//  A few constraints put in place in the domain model or similar will help with its translation to a database model.
+// They will help in making a model of what gets put into a database.
+//  A few constraints put in place in the domain model or similar will help with its translation to a database model.
 
-	// These wide-ranging things should help a lot with creating a wide range of performant databases quickly.
-	// It will also be a good tool in itself.
+// These wide-ranging things should help a lot with creating a wide range of performant databases quickly.
+// It will also be a good tool in itself.
 
-	// Change events
-	// -------------
+// Change events
+// -------------
 
-	// Want to have different levels of responding to change events.
-	//  It gets a bit complicated with the same data represented in different places and also in transmission between them.
-	//  Data will have various different statuses.
-	//  Need to be able to recieve data from the server, and update the client data models, and announce it within the client app,
-	//   without then telling the server that the data has been changed on the client, unless it makes it clear to the server that the client was
-	//   making the change as the server requested. That change acknowledgement could be a useful feature on the client.
-	//    Don't want that to be more than an acknowledgement though.
-	//   Also need to deal with change initiation properly.
-	//    The change could be initiated on the client, needs to be updated on the server, and then sent to the various different clients.
-	//     Could have different levels of receipt validation there too, so that the client knows once the change has been recieved (and processed?) by
-	//      the other clients. This could be useful for amber and green lights in a chat system, for example.
-	///    Receipt of message validation would also be useful for data structures and making them transactional if possible.
+// Want to have different levels of responding to change events.
+//  It gets a bit complicated with the same data represented in different places and also in transmission between them.
+//  Data will have various different statuses.
+//  Need to be able to recieve data from the server, and update the client data models, and announce it within the client app,
+//   without then telling the server that the data has been changed on the client, unless it makes it clear to the server that the client was
+//   making the change as the server requested. That change acknowledgement could be a useful feature on the client.
+//    Don't want that to be more than an acknowledgement though.
+//   Also need to deal with change initiation properly.
+//    The change could be initiated on the client, needs to be updated on the server, and then sent to the various different clients.
+//     Could have different levels of receipt validation there too, so that the client knows once the change has been recieved (and processed?) by
+//      the other clients. This could be useful for amber and green lights in a chat system, for example.
+///    Receipt of message validation would also be useful for data structures and making them transactional if possible.
 
-	// So, we need a type of set that is for updating the data from an updated external source.
+// So, we need a type of set that is for updating the data from an updated external source.
 
-	// notify_change_from_external
-	//  and when that has processed it could send a receipt of update message notification back to the server.
-	//  That should probably be optional.
+// notify_change_from_external
+//  and when that has processed it could send a receipt of update message notification back to the server.
+//  That should probably be optional.
 
 
 
@@ -161,21 +161,21 @@ var Mini_Context = Class.extend({
             }
             return res;
             /*
-            var iTypedIds = {};
-            if (typeof iTypedIds[str_type] === 'undefined') {
-                    iTypedIds[str_type] = 1;
-            }
+             var iTypedIds = {};
+             if (typeof iTypedIds[str_type] === 'undefined') {
+             iTypedIds[str_type] = 1;
+             }
 
-            var typed_id = function(str_type) {
-                if (typeof iTypedIds[str_type] === 'undefined') {
-                    iTypedIds[str_type] = 1;
-                }
-                var res = iTypedIds[str_type];
-                iTypedIds[str_type] = iTypedIds[str_type] + 1;
-                return res;
-            };
-            this.qid = qid;
-            */
+             var typed_id = function(str_type) {
+             if (typeof iTypedIds[str_type] === 'undefined') {
+             iTypedIds[str_type] = 1;
+             }
+             var res = iTypedIds[str_type];
+             iTypedIds[str_type] = iTypedIds[str_type] + 1;
+             return res;
+             };
+             this.qid = qid;
+             */
         }
         this.new_id = typed_id;
         //new_id
@@ -374,12 +374,12 @@ var Mini_Context = Class.extend({
 
 /*
 
-var new_data_value_id = function() {
-    var res = data_value_abbreviation + '_' + data_value_index;
-    data_value_index++;
-    return res;
-};
-*/
+ var new_data_value_id = function() {
+ var res = data_value_abbreviation + '_' + data_value_index;
+ data_value_index++;
+ return res;
+ };
+ */
 
 // I think Data_Object will be made so that it can act as a Data_Value.
 //  It will work in a very constrained mode, such as only holding one value, such as a string.
@@ -418,16 +418,16 @@ var new_data_value_id = function() {
 
 /*
 
-var data_object_index = 0;
-var data_object_abbreviation = 'do';
+ var data_object_index = 0;
+ var data_object_abbreviation = 'do';
 
-var new_data_object_id = function() {
-    var res = data_object_abbreviation + '_' + data_object_index;
-    data_object_index++;
-    return res;
-};
+ var new_data_object_id = function() {
+ var res = data_object_abbreviation + '_' + data_object_index;
+ data_object_index++;
+ return res;
+ };
 
-*/
+ */
 
 // What about turning a normal object into a DataObject?
 //var t_id_num = 0;
@@ -463,6 +463,9 @@ var is_js_native = function(obj) {
 
 var Data_Object = Evented_Class.extend({
     'init': function(spec) {
+
+        this.__data_object = true;
+
         // but it could do a different initialization as an abstract object.
         //  Collection(String) seems more like an abstract collection, or even a newly defined type.
         //  because of its easy syntax, Collection(String) makes a lot of sense to use.
@@ -544,6 +547,8 @@ var Data_Object = Evented_Class.extend({
                 this.__type = 'data_object';
 
             }
+
+            this.__type_name = 'data_object';
 
             if (!this.hasOwnProperty('_')) {
                 this._ = {};
@@ -655,18 +660,18 @@ var Data_Object = Evented_Class.extend({
 
                     //var create_id = function()
                     /*
-                    var new_data_object_id = function() {
-                        var res = '_tid_' + t_id_num;
-                        t_id_num++;
-                        console.log('new temp id ' + res);
-                        return res;
-                    }
+                     var new_data_object_id = function() {
+                     var res = '_tid_' + t_id_num;
+                     t_id_num++;
+                     console.log('new temp id ' + res);
+                     return res;
+                     }
 
-                    console.log('no context found - creating new temp id. should have context');
+                     console.log('no context found - creating new temp id. should have context');
 
-                    this.__id = new_data_object_id();
+                     this.__id = new_data_object_id();
 
-                    */
+                     */
                     // don't think we keep a map of all IDs, or we will do within a Page_Context.
                     //map_jsgui_ids[this.__id] = this;
                     // and make sure it is within the index / map of jsgui objects with ids.
@@ -697,15 +702,15 @@ var Data_Object = Evented_Class.extend({
             };
 
             /*
-            if (is_defined(spec.data_def)) {
-                //spec = {
-                //	'set': spec
-                //}
+             if (is_defined(spec.data_def)) {
+             //spec = {
+             //	'set': spec
+             //}
 
-                this.
+             this.
 
-            };
-            */
+             };
+             */
 
             // data_def
 
@@ -868,7 +873,7 @@ var Data_Object = Evented_Class.extend({
             //var chained_fields_map = mapify(chained_fields_list, 0);
             //console.log('chained_fields_map ' + stringify(chained_fields_map));
             //each(chained_fields_list, function(i, v) {
-                //chained_fields_map[v[0]] = v[1];
+            //chained_fields_map[v[0]] = v[1];
             //});
 
             // go through chained_fields_map[i]), setting up fields.
@@ -876,20 +881,20 @@ var Data_Object = Evented_Class.extend({
             // maybe best to use the list.
 
             /*
-            each(chained_fields, function(i, chained_field) {
-                var field_name = chained_field[0];
-                var field_def = chained_field[1];
+             each(chained_fields, function(i, chained_field) {
+             var field_name = chained_field[0];
+             var field_def = chained_field[1];
 
-                // The point is, I think, that I am not making field classes, but processing them using some more basic variable types.
+             // The point is, I think, that I am not making field classes, but processing them using some more basic variable types.
 
-                //console.log('field_name ' + field_name);
-                //console.log('field_def ' + stringify(field_def));
+             //console.log('field_name ' + field_name);
+             //console.log('field_def ' + stringify(field_def));
 
-                // at least it has those fields... I am not sure it needs to do anything until 'get', maybe even if there are default values.
+             // at least it has those fields... I am not sure it needs to do anything until 'get', maybe even if there are default values.
 
 
-            })
-            */
+             })
+             */
 
 
             //console.log('tof(spec) ' + spec);
@@ -902,18 +907,18 @@ var Data_Object = Evented_Class.extend({
             if (t_spec == 'object') {
 
                 /*
-                var v, field;
-                for (i in spec) {
-                    console.log('i', i);
-                    //v = spec[i]
-                    field = that.field(i);
-                    console.log('!!field ' + !!field);
-                    if (field) {
-                        console.log('spec[i]', spec[i]);
-                        that.set(i, spec[i]);
-                    }
-                }
-                */
+                 var v, field;
+                 for (i in spec) {
+                 console.log('i', i);
+                 //v = spec[i]
+                 field = that.field(i);
+                 console.log('!!field ' + !!field);
+                 if (field) {
+                 console.log('spec[i]', spec[i]);
+                 that.set(i, spec[i]);
+                 }
+                 }
+                 */
 
 
 
@@ -949,7 +954,7 @@ var Data_Object = Evented_Class.extend({
                         // such as setting the fields...
 
                         //setTimeout(function() {
-                            that[i](v);
+                        that[i](v);
                         //}, 0);
 
 
@@ -1163,38 +1168,38 @@ var Data_Object = Evented_Class.extend({
     'init_default_events': function() {
 
         /*
-        var that = this;
-        this.add_event_listener('add', function(e) {
+         var that = this;
+         this.add_event_listener('add', function(e) {
 
-            if (tof(e) == 'collection') {
-                var stack = new Error().stack;
-                console.log(stack);
-                throw 'The event object should not be a collection.';
-            }
+         if (tof(e) == 'collection') {
+         var stack = new Error().stack;
+         console.log(stack);
+         throw 'The event object should not be a collection.';
+         }
 
-            var parent = that.parent();
-            if (parent) {
-                parent.raise_event('add', e);
-                //throw 'stop';
-            }
+         var parent = that.parent();
+         if (parent) {
+         parent.raise_event('add', e);
+         //throw 'stop';
+         }
 
-        });
+         });
 
-        this.add_event_listener('remove', function(e) {
-            var change_e = {};
-            each(e, function(i, v) {
-                change_e[i] = v;
-            });
-            change_e.event_name = 'remove';
-            that.raise_event('change', change_e);
+         this.add_event_listener('remove', function(e) {
+         var change_e = {};
+         each(e, function(i, v) {
+         change_e[i] = v;
+         });
+         change_e.event_name = 'remove';
+         that.raise_event('change', change_e);
 
-            var parent = that.parent();
-            if (parent) {
-                parent.raise_event('remove', e);
-                //throw 'stop';
-            }
-        })
-        */
+         var parent = that.parent();
+         if (parent) {
+         parent.raise_event('remove', e);
+         //throw 'stop';
+         }
+         })
+         */
 
 
     },
@@ -1283,16 +1288,16 @@ var Data_Object = Evented_Class.extend({
             // connect a singular field.
 
             /*
-            this[a[0]] = fp(function(a2, sig) {
+             this[a[0]] = fp(function(a2, sig) {
 
-                //console.log('sig ' + sig);
-                if (a2.l == 1) {
-                    return that.set(a[0], a2[0]);
-                } else if (a2.l == 0) {
-                    return that.get(a[0]);
-                }
-            });
-            */
+             //console.log('sig ' + sig);
+             if (a2.l == 1) {
+             return that.set(a[0], a2[0]);
+             } else if (a2.l == 0) {
+             return that.get(a[0]);
+             }
+             });
+             */
 
             this[a[0]] = function(a1) {
                 //console.log('connected field function a[0]: ' + a[0]);
@@ -1339,16 +1344,16 @@ var Data_Object = Evented_Class.extend({
 
     //'parent': fp(function(a, sig) {
     'parent': function() {
-	      var a = arguments;
-	      a.l = arguments.length;
-	      var sig = get_a_sig(arguments, 1);
+        var a = arguments;
+        a.l = arguments.length;
+        var sig = get_a_sig(arguments, 1);
         var obj, index;
         //console.log('parent sig', sig);
 
-				// And _parent should be set automatically when the controls are put in place.
+        // And _parent should be set automatically when the controls are put in place.
 
         if (a.l == 0) {
-					//console.log('this._parent', this._parent);
+            //console.log('this._parent', this._parent);
             return this._parent;
         }
         if (a.l == 1) {
@@ -1428,56 +1433,56 @@ var Data_Object = Evented_Class.extend({
     },
 
     /*
-    'parent': function(a1, a2) {
-        var ta1 = typeof a1, ta2 = typeof a2, tri, info;
-        if (ta1 == 'undefined') {
-            // 0 params
+     'parent': function(a1, a2) {
+     var ta1 = typeof a1, ta2 = typeof a2, tri, info;
+     if (ta1 == 'undefined') {
+     // 0 params
 
-            // could call the simple get function here, but maybe we can have it inline and fast.
-            var arr_parents = [];
-            for (i in this._relationships) {
-                info = this._relationships[i];
-                tri = typeof info;
-                if (tri == 'number') {
+     // could call the simple get function here, but maybe we can have it inline and fast.
+     var arr_parents = [];
+     for (i in this._relationships) {
+     info = this._relationships[i];
+     tri = typeof info;
+     if (tri == 'number') {
 
-                } else if (tri.__type === 'collection') {
-                    arr_parents.push(info);
-                } else if (tri.__type === 'data_object') {
-                    arr_parents.push(info);
-                }
-            }
-            if (arr_parents.length == 1) {
-                return arr_parents[0];
-            } else if (arr_parents.length > 1) {
-                return arr_parents;
-            }
+     } else if (tri.__type === 'collection') {
+     arr_parents.push(info);
+     } else if (tri.__type === 'data_object') {
+     arr_parents.push(info);
+     }
+     }
+     if (arr_parents.length == 1) {
+     return arr_parents[0];
+     } else if (arr_parents.length > 1) {
+     return arr_parents;
+     }
 
-        } else if (ta2 == 'undefined') {
-            // 1 param
-            if (a1.__type == 'data_object') {
-                if (a1._context) this._context = a1._context;
-            }
+     } else if (ta2 == 'undefined') {
+     // 1 param
+     if (a1.__type == 'data_object') {
+     if (a1._context) this._context = a1._context;
+     }
 
-        } else {
-            // 2 params
-            if (a1.__type == 'data_object' && typeof a2 == 'number') {
-                var parent = a1;
-                var p_id = parent._id();
-                var position_in_array = a2;
+     } else {
+     // 2 params
+     if (a1.__type == 'data_object' && typeof a2 == 'number') {
+     var parent = a1;
+     var p_id = parent._id();
+     var position_in_array = a2;
 
-                if (parent._context) this._context = parent._context;
+     if (parent._context) this._context = parent._context;
 
-                // it's the child saying it's got the attribution to the parent here
+     // it's the child saying it's got the attribution to the parent here
 
-                // child knows what poisition it is within parent.
+     // child knows what poisition it is within parent.
 
-                this._parents = this._parents || {};
+     this._parents = this._parents || {};
 
-                this._parents[p_id] = [parent, position_in_array];
-            }
-        }
-    },
-    */
+     this._parents[p_id] = [parent, position_in_array];
+     }
+     }
+     },
+     */
 
     '_fp_parent': fp(function(a, sig) {
 
@@ -1529,14 +1534,14 @@ var Data_Object = Evented_Class.extend({
                     throw 'Relationships system needs more work here. Had been using the map of all many objects, which has been removed for web server performance reasons.';
 
                     /*
-                    var id_map = map_jsgui_ids;
+                     var id_map = map_jsgui_ids;
 
-                    if (this._context) {
-                        id_map = this._context.map_objects;
-                    }
+                     if (this._context) {
+                     id_map = this._context.map_objects;
+                     }
 
-                    arr_parents.push(id_map[relative_id]);
-                    */
+                     arr_parents.push(id_map[relative_id]);
+                     */
 
 
                 } else {
@@ -1555,10 +1560,10 @@ var Data_Object = Evented_Class.extend({
             /*
 
 
-            each(this._parents, function(i, v) {
-                arr_parents.push(v);
-            });
-            */
+             each(this._parents, function(i, v) {
+             arr_parents.push(v);
+             });
+             */
             if (arr_parents.length == 1) {
                 return arr_parents[0];
             } else if (arr_parents.length > 1) {
@@ -1664,29 +1669,29 @@ var Data_Object = Evented_Class.extend({
 
             /*
 
-            if (a.l == 1) {
+             if (a.l == 1) {
 
-                //console.log('sig ' + sig);
-                //throw 'stop';
+             //console.log('sig ' + sig);
+             //throw 'stop';
 
-                // the signature could be D, a Data_Object.
-
-
+             // the signature could be D, a Data_Object.
 
 
-                console.log('p_id ' + p_id);
-
-                // parents dict of objects... not sure about using an actual collection here.
-                //  could get too complicated unnecessarily.
-                // Could try it later when data structures are more finished.
-
-                this._parents = this._parents || {};
-
-                this._parents[p_id] = parent;
 
 
-            }
-            */
+             console.log('p_id ' + p_id);
+
+             // parents dict of objects... not sure about using an actual collection here.
+             //  could get too complicated unnecessarily.
+             // Could try it later when data structures are more finished.
+
+             this._parents = this._parents || {};
+
+             this._parents[p_id] = parent;
+
+
+             }
+             */
 
         }
     }),
@@ -1803,45 +1808,45 @@ var Data_Object = Evented_Class.extend({
 
             /*
 
-            //console.log('fields this._map_field_constraints ' + stringify(this._map_field_constraints));
+             //console.log('fields this._map_field_constraints ' + stringify(this._map_field_constraints));
 
-            var res = [];
+             var res = [];
 
-            each(this._map_field_constraints, function(field_name, v) {
-                //console.log('field_name ' + field_name);
-                //console.log('v ' + stringify(v));
+             each(this._map_field_constraints, function(field_name, v) {
+             //console.log('field_name ' + field_name);
+             //console.log('v ' + stringify(v));
 
-                // then for each constraint, get an info object from it.
-                // v.to_obj_info
-                // v.to_info_obj
+             // then for each constraint, get an info object from it.
+             // v.to_obj_info
+             // v.to_info_obj
 
-                each(v, function(i2, constraint_for_field) {
+             each(v, function(i2, constraint_for_field) {
 
-                    // May also be saying it's a primary key field
-                    //  Need more work on setting fields
+             // May also be saying it's a primary key field
+             //  Need more work on setting fields
 
 
-                    if (constraint_for_field instanceof Constraint.Field_Data_Type) {
-                        var field_constraint_info_obj = constraint_for_field.to_info_obj();
-                        //console.log('field_constraint_info_obj ' + stringify(field_constraint_info_obj));
+             if (constraint_for_field instanceof Constraint.Field_Data_Type) {
+             var field_constraint_info_obj = constraint_for_field.to_info_obj();
+             //console.log('field_constraint_info_obj ' + stringify(field_constraint_info_obj));
 
-                        // find out if the field is read-only.
+             // find out if the field is read-only.
 
-                        var flags = [];
-                        if (that._map_read_only && that._map_read_only[field_name]) {
-                            flags.push('read_only');
-                        }
-                        if (flags.length == 0) {
-                            res.push([field_name, field_constraint_info_obj]);
-                        } else {
-                            res.push([field_name, field_constraint_info_obj, flags]);
-                        }
-                    }
-                });
-            });
+             var flags = [];
+             if (that._map_read_only && that._map_read_only[field_name]) {
+             flags.push('read_only');
+             }
+             if (flags.length == 0) {
+             res.push([field_name, field_constraint_info_obj]);
+             } else {
+             res.push([field_name, field_constraint_info_obj, flags]);
+             }
+             }
+             });
+             });
 
-            return res;
-            */
+             return res;
+             */
 
             // an index of the position of a field within the array? Would that be useful?
             //  means some encapsulation may be worthwhile here
@@ -1853,6 +1858,8 @@ var Data_Object = Evented_Class.extend({
 
             // not just the field values.
             var res;
+
+            // So has it been given the values?
 
 
             if (fields_collection) {
@@ -1877,6 +1884,17 @@ var Data_Object = Evented_Class.extend({
             // get a single field.
 
             // get the field from the field_collection.
+
+            // So it looks as though all of the fields that have been defined should be within the fields collection.
+            //  Or if we get rid of the fields collection...
+
+
+            // And if the field collection does not exist, it would need to be populated with the fields.
+            //  However, the fields' data is not currently stored in that Fields_Collection.
+
+
+
+
             var fc = this.fc = this.fc || new Fields_Collection();
 
 
@@ -2150,19 +2168,19 @@ var Data_Object = Evented_Class.extend({
 
 
     /*
-    'fields': fp(function(a, sig) {
-        if (sig == '[o]') {
-            // overwrite all fields.
+     'fields': fp(function(a, sig) {
+     if (sig == '[o]') {
+     // overwrite all fields.
 
-            // will use the set_field to set the individual fields?
+     // will use the set_field to set the individual fields?
 
-        }
+     }
 
-        //console.log('Collection fields sig ' + sig);
+     //console.log('Collection fields sig ' + sig);
 
 
-    }),
-    */
+     }),
+     */
     // The field constraints, and data_type system is getting quite large and a bit fragmented.
     //  Hopefully it will be closer integrated into the core, and tested with some relatively simple examples to show that it works
     //  and what results to expect.
@@ -2237,77 +2255,77 @@ var Data_Object = Evented_Class.extend({
 
         // sets a data type constraint on that field
         /*
-        if (sig == '[s,[f]]') {
+         if (sig == '[s,[f]]') {
 
-            throw '10) Stop';
-        }
-        */
+         throw '10) Stop';
+         }
+         */
         // Collection has something that overrides this.
         /*
-        if (sig == '[s,s]') {
-            // will need to interpret the second part
-            var field_name = a[0];
-            var field_text = a[1];
+         if (sig == '[s,s]') {
+         // will need to interpret the second part
+         var field_name = a[0];
+         var field_text = a[1];
 
-            //console.log('field_text ' + field_text);
-            // parse the fiex text. it may have some things to do with constraints that apply to the collection, if it is in a collection.
-            //  not so sure about saving these here. They could be saved so that they get put into a collection fine with other unique fields...
-            // but then we'll be taking more care specifying things in the collection if necessary.
+         //console.log('field_text ' + field_text);
+         // parse the fiex text. it may have some things to do with constraints that apply to the collection, if it is in a collection.
+         //  not so sure about saving these here. They could be saved so that they get put into a collection fine with other unique fields...
+         // but then we'll be taking more care specifying things in the collection if necessary.
 
-            var field_info = input_processors['field_text'](field_text);
+         var field_info = input_processors['field_text'](field_text);
 
-            //console.log('field_info ' + stringify(field_info));
+         //console.log('field_info ' + stringify(field_info));
 
-            // then ensure the constraint(s) corresponding to the field, where possible.
-            //  not able to put uniqueness constraint in place here, yet. It's really dealt with and enforced by the Collection class.
+         // then ensure the constraint(s) corresponding to the field, where possible.
+         //  not able to put uniqueness constraint in place here, yet. It's really dealt with and enforced by the Collection class.
 
-            // I think the library core is getting pretty big now, it could still do with more for HTML, CSS processing.
-            //  The database side of things will be expanded, it will be good to have code using very nice syntax provided by the library.
+         // I think the library core is getting pretty big now, it could still do with more for HTML, CSS processing.
+         //  The database side of things will be expanded, it will be good to have code using very nice syntax provided by the library.
 
-            this.ensure_field_constraint(field_name, field_info);
+         this.ensure_field_constraint(field_name, field_info);
 
-            if (field_info.read_only) {
-                this.read_only(field_name);
-            }
+         if (field_info.read_only) {
+         this.read_only(field_name);
+         }
 
-            // Just need to do quite a lot more...
-            //  Quite a bit more needed for the objects to work like they should, then I'll be using those objects for the HTML components, and also for the
-            //  database layer.
+         // Just need to do quite a lot more...
+         //  Quite a bit more needed for the objects to work like they should, then I'll be using those objects for the HTML components, and also for the
+         //  database layer.
 
-            // Persisting to that DB layer seems like a really useful stage, not sure about open-sourcing that code.
-            //  May be best to... may be better that my ORM is used. I'd still have the powerful web app too?
-            //   Could have different licensing for that component... commercial deployments cost money?
-            //    But then want to have things distributed nice and easily. Perhaps could have different options for this. With the website running out-of-the-box,
-            //     could directly go to the Mongo layer.
-            // Would be very nice to have open-source code producing everything that's needed. Could get quite a lot of interest.
-            //  Maybe will keep that on my server for the moment, or in the client-side applications people use.
-            // Will be fine without OSing all the ORM, but a relatively simple Mongo layer would work fine.
-            //  It may be more what people want, and would get developer interest. The ORM would be useful for accessing legacy systems? SQL can be very useful in its
-            //   own right, but could be harder to use effectively in this case.
+         // Persisting to that DB layer seems like a really useful stage, not sure about open-sourcing that code.
+         //  May be best to... may be better that my ORM is used. I'd still have the powerful web app too?
+         //   Could have different licensing for that component... commercial deployments cost money?
+         //    But then want to have things distributed nice and easily. Perhaps could have different options for this. With the website running out-of-the-box,
+         //     could directly go to the Mongo layer.
+         // Would be very nice to have open-source code producing everything that's needed. Could get quite a lot of interest.
+         //  Maybe will keep that on my server for the moment, or in the client-side applications people use.
+         // Will be fine without OSing all the ORM, but a relatively simple Mongo layer would work fine.
+         //  It may be more what people want, and would get developer interest. The ORM would be useful for accessing legacy systems? SQL can be very useful in its
+         //   own right, but could be harder to use effectively in this case.
 
 
-            // does it have the not_null constraint?
-            //  each field can have more than one constraint.
-            //  not sure about a collection of constraints though.
-            //   perhaps a simpler collection would be very useful in implementing some of the more advanced things.
-            //  array of constraints for each field will do for the moment.
+         // does it have the not_null constraint?
+         //  each field can have more than one constraint.
+         //  not sure about a collection of constraints though.
+         //   perhaps a simpler collection would be very useful in implementing some of the more advanced things.
+         //  array of constraints for each field will do for the moment.
 
-            // can be both a Not_Null constraint and a data type constrint.
-            // easy then to create the field with this information.
+         // can be both a Not_Null constraint and a data type constrint.
+         // easy then to create the field with this information.
 
-            //  find out if there is an existing field (constraint).
-            //  find out about existing indexes for that field, create one if needed
-            //  find out about existing constraints, such as not_null
-            //   perhaps not_null can be a value constraint - but it's something that translates readily into the database system.
+         //  find out if there is an existing field (constraint).
+         //  find out about existing indexes for that field, create one if needed
+         //  find out about existing constraints, such as not_null
+         //   perhaps not_null can be a value constraint - but it's something that translates readily into the database system.
 
-            // this will be for setting single field indexes.
+         // this will be for setting single field indexes.
 
-            // Other indexes could be defined with multiple fields.
+         // Other indexes could be defined with multiple fields.
 
-            // Will be useful for iterating through a collection, getting the values that match two given values.
+         // Will be useful for iterating through a collection, getting the values that match two given values.
 
-        }
-        */
+         }
+         */
 
     }),
 
@@ -2739,19 +2757,19 @@ var Data_Object = Evented_Class.extend({
             // Anyway, need to get this matching the field constraints here.
 
             /*
-            var field_constraints = a[0];
+             var field_constraints = a[0];
 
 
-            // check for matching a single constraint
+             // check for matching a single constraint
 
 
 
-            each(field_constraints, function(i, v) {
-                console.log('field_constraints i ' + i);
-                console.log('field_constraints v ' + stringify(v));
+             each(field_constraints, function(i, v) {
+             console.log('field_constraints i ' + i);
+             console.log('field_constraints v ' + stringify(v));
 
-            });
-            */
+             });
+             */
 
             return data_object_matches_field_constraints(this, a[0]);
 
@@ -2975,10 +2993,10 @@ var Data_Object = Evented_Class.extend({
 
 
         /*
-        each(this._, function(i, v) {
-            callback(i, v);
-        });
-        */
+         each(this._, function(i, v) {
+         callback(i, v);
+         });
+         */
 
         // Could have inline code here for speed?
         each(this._, callback);
@@ -3242,17 +3260,26 @@ var Data_Object = Evented_Class.extend({
         // will also be looking at the output processors.
 
 
-        //console.log('Data_Object get this.__type_name', this.__type_name);
-        if (is_defined(this.__type_name)) {
+        console.log('Data_Object get this.__type_name', this.__type_name);
+
+        var do_typed_processing = false;
+
+        if (is_defined(this.__type_name) && this.__type_name !== 'data_object') do_typed_processing = true;
+
+
+        if (do_typed_processing) {
+
             // should possibly have this assigned for controls...
             //var raw_input = a;
-            //console.log('this.__type_name is defined: ' + this.__type_name);
+            console.log('this.__type_name is defined: ' + this.__type_name);
 
             //var parsed_input_obj = jsgui.input_processors[this.__type_name](raw_input);
             if (a.l == 0) {
                 var output_obj = jsgui.output_processors[this.__type_name](this._);
                 return output_obj;
             } else {
+
+
                 throw 'not yet implemented';
             }
         } else {
@@ -3294,7 +3321,7 @@ var Data_Object = Evented_Class.extend({
 
             // check to see if there is a field defined.
             if (sig == '[s]') {
-                //console.log('get param: ' + a[0]);
+                console.log('get param: ' + a[0]);
                 var fc = this.fc;
 
                 // let's have a look at the fields
@@ -3345,57 +3372,57 @@ var Data_Object = Evented_Class.extend({
 
                         // I think this branch should only handle synchronous chaining.
                         /*
-                        if (typeof current_obj == 'function') {
-                            // the gotten info is there I hope
-                            // This totally would not work in a while loop I think.
-                            //  Maybe would need to split up the getting, and ending the while loop.
-                            // May be worth seeing what is next...
+                         if (typeof current_obj == 'function') {
+                         // the gotten info is there I hope
+                         // This totally would not work in a while loop I think.
+                         //  Maybe would need to split up the getting, and ending the while loop.
+                         // May be worth seeing what is next...
 
-                            // if this was called without a callback, and needs to be async, can return
-                            //  a function to call.
+                         // if this was called without a callback, and needs to be async, can return
+                         //  a function to call.
 
-                            // let's have a look at the next levels field names...
-                            console.log('level', level);
-                            console.log('arr_field_names', arr_field_names);
+                         // let's have a look at the next levels field names...
+                         console.log('level', level);
+                         console.log('arr_field_names', arr_field_names);
 
-                            // want to get the slice of arr_field_names until the next
-                            //  maybe return a promise to get it here?
-                            //   and set it up so that it proceeds to get it...
+                         // want to get the slice of arr_field_names until the next
+                         //  maybe return a promise to get it here?
+                         //   and set it up so that it proceeds to get it...
 
-                            var next = arr_field_names.slice(level).join('.');
+                         var next = arr_field_names.slice(level).join('.');
 
-                            return function(callback) {
-                                //return current_obj.get(next, callback);
-                                return current_obj(function(err, res) {
-                                    console.log('got res', res);
-                                    console.log('got res', stringify(res));
+                         return function(callback) {
+                         //return current_obj.get(next, callback);
+                         return current_obj(function(err, res) {
+                         console.log('got res', res);
+                         console.log('got res', stringify(res));
 
-                                    // That's assuming res is a resource or data_object?
+                         // That's assuming res is a resource or data_object?
 
-                                    res.get(next, callback);
-                                    //res(next, callback);
-                                    //callback(null, res);
-                                })
-                            }
-
-
-                            // want to call get on the item returned.
+                         res.get(next, callback);
+                         //res(next, callback);
+                         //callback(null, res);
+                         })
+                         }
 
 
-                            //throw 'stop';
+                         // want to call get on the item returned.
 
-                            //current_obj(function(err, gotten) {
-                            //	//new_obj = current_obj.get(fname);
-                            //	level++;
-                            //	// too late by now. would need to break out of the while.
-                            //	//  not really possibly (right now)?
-                            //	//
 
-                            //	current_obj = new_obj;
-                            //})
+                         //throw 'stop';
 
-                        } else {
-                        */
+                         //current_obj(function(err, gotten) {
+                         //	//new_obj = current_obj.get(fname);
+                         //	level++;
+                         //	// too late by now. would need to break out of the while.
+                         //	//  not really possibly (right now)?
+                         //	//
+
+                         //	current_obj = new_obj;
+                         //})
+
+                         } else {
+                         */
                         new_obj = current_obj.get(fname);
                         //console.log('fname ' + fname);
 
@@ -3408,8 +3435,8 @@ var Data_Object = Evented_Class.extend({
                         level++;
                         current_obj = new_obj;
                         /*
-                        }
-                        */
+                         }
+                         */
 
 
 
@@ -3446,7 +3473,7 @@ var Data_Object = Evented_Class.extend({
 
                     // do we know the field name yet?
                     // yes
-                    //console.log('field_name ' + field_name);
+                    console.log('field_name ' + field_name);
                     //console.log('this._[field_name] ' + this._[field_name]);
 
 
@@ -3458,7 +3485,11 @@ var Data_Object = Evented_Class.extend({
                         //  just collections for the moment.
 
                         var sig_field = get_item_sig(field, 20);
-                        //console.log('1) sig_field ' + stringify(sig_field));
+
+
+                        console.log('1) sig_field ' + stringify(sig_field));
+
+
                         //console.log('field ' + stringify(field));
                         // And a function here? The definition of a field? String consructor etc.
                         //  Harder to differentiate between that and callbacks now.
@@ -3864,48 +3895,48 @@ var Data_Object = Evented_Class.extend({
 
         /*
 
-        var sc = this._superclass;
-        console.log('sc ' + sc);
+         var sc = this._superclass;
+         console.log('sc ' + sc);
 
 
 
-        console.log('this._fields ' + stringify(this._fields));
+         console.log('this._fields ' + stringify(this._fields));
 
-        if (con) {
-            var con_fields = con._fields;
-            console.log('con_fields ' + stringify(con_fields));
+         if (con) {
+         var con_fields = con._fields;
+         console.log('con_fields ' + stringify(con_fields));
 
-            var con_super = con._superclass;
-            console.log('con_super ' + stringify(con_super));
+         var con_super = con._superclass;
+         console.log('con_super ' + stringify(con_super));
 
-            var con_pro = con.prototype;
-            console.log('con_pro ' + stringify(con_pro));
+         var con_pro = con.prototype;
+         console.log('con_pro ' + stringify(con_pro));
 
-            var con_pro_super = con.prototype._superclass;
-            console.log('con_pro_super ' + stringify(con_pro_super));
+         var con_pro_super = con.prototype._superclass;
+         console.log('con_pro_super ' + stringify(con_pro_super));
 
-            var con_pro_fields = con_pro._fields;
-            console.log('con_pro_fields ' + stringify(con_pro_fields));
-
-
-        }
+         var con_pro_fields = con_pro._fields;
+         console.log('con_pro_fields ' + stringify(con_pro_fields));
 
 
-        var pro = this.prototype;
-        console.log('pro ' + pro);
-
-        if (pro) {
-            var pro_fields = pro._fields;
-            //var con_pro = con.prototype;
-            console.log('pro_fields ' + stringify(pro_fields));
+         }
 
 
-            var pro_super = pro._super;
-            console.log('pro_super ' + stringify(pro_super));
+         var pro = this.prototype;
+         console.log('pro ' + pro);
+
+         if (pro) {
+         var pro_fields = pro._fields;
+         //var con_pro = con.prototype;
+         console.log('pro_fields ' + stringify(pro_fields));
 
 
-        }
-        */
+         var pro_super = pro._super;
+         console.log('pro_super ' + stringify(pro_super));
+
+
+         }
+         */
     },
 
     '_get_input_processors': function() {
@@ -3918,10 +3949,10 @@ var Data_Object = Evented_Class.extend({
 
     //'set': fp(function(a, sig) {
     'set': (function() {
-      var a = arguments;
-      a.l = arguments.length;
-      var sig = get_a_sig(arguments, 1);
-      //console.log('sig', sig);
+        var a = arguments;
+        a.l = arguments.length;
+        var sig = get_a_sig(arguments, 1);
+        //console.log('sig', sig);
         // property_name, value
 
         // May override this with collections...
@@ -3996,7 +4027,7 @@ var Data_Object = Evented_Class.extend({
 
         // Need to get the type name for the field.
 
-        
+
         //console.log('no dtn defined');
         //console.log('a.l ' + a.l);
         //console.log('');
@@ -4168,10 +4199,6 @@ var Data_Object = Evented_Class.extend({
                     // Potentially parsing object input?
                     //  Will have more of that working to do with some HTML properties to start with.
 
-
-
-
-
                     // get it???
                     //  that could work... could create the right constructor.
 
@@ -4205,7 +4232,10 @@ var Data_Object = Evented_Class.extend({
 
 
 
+                    // Looks like the el is no longer stored in a Data_Value.
 
+
+                    console.log('* property_name', property_name);
 
 
 
@@ -4241,17 +4271,26 @@ var Data_Object = Evented_Class.extend({
                     //console.log('***** data_object_next ' + data_object_next);
                     //console.log('***** tof data_object_next ' + tof(data_object_next));
 
+                    // So the fields will not be a Data_Object?
+                    //  Handling of an array that is a field...
+                    //   Possibly want it to be a Data_Value.
+
+
+
+
                     // That data_object having an assigned type_name of size (when setting size)?
 
                     if (data_object_next) {
+                        // Should be a Data_Object...
+
                         // Check to see if we are getting an object for a Field...
 
                         //console.log('tof(this)', tof(this));
 
                         //if (this.fields) {
-                            //console.log('tof(this.fields) ' + tof(this.fields));
-                            //console.log('this.fields', this.fields);
-                            //console.log(this);
+                        //console.log('tof(this.fields) ' + tof(this.fields));
+                        //console.log('this.fields', this.fields);
+                        //console.log(this);
                         //}
 
 
@@ -4261,16 +4300,20 @@ var Data_Object = Evented_Class.extend({
                             //console.log('has field');
                             //console.log('field', field);
 
-                            data_object_next.__type_name = field[1];
+
+                            // Is this messing up controls / control activation?
+                            //  Perhaps only set this if it's not there already.
+                            data_object_next.__type_name = data_object_next.__type_name || field[1];
 
                         }
 
                         //console.log('***** data_object_next.__type_name ' + data_object_next.__type_name);
-
+                        console.log('data_object_next', data_object_next);
+                        console.log('value', value);
                         data_object_next.set(value);
                     }
 
-                    
+
 
                     if (!is_defined(data_object_next)) {
 
@@ -4284,20 +4327,56 @@ var Data_Object = Evented_Class.extend({
                         var tv = typeof value;
 
                         /*
-                        if (tv == 'data_object') {
-                            // copy directly in more cases than this... maybe just for primitive types do we use the
-                            //  data_value.
+                         if (tv == 'data_object') {
+                         // copy directly in more cases than this... maybe just for primitive types do we use the
+                         //  data_value.
 
-                        } else {
+                         } else {
 
-                        }
-                        */
+                         }
+                         */
                         var dv;
                         //console.log('tv ' + tv);
-                        if (tv == 'string' || tv == 'number' || tv == 'boolean' || tv == 'date') {
+
+                        // And for an array?
+
+
+                        if (tv === 'string' || tv === 'number' || tv === 'boolean' || tv === 'date') {
                             dv = new Data_Value({'value': value});
                         } else {
-                            dv = value;
+
+                            // And could make an array into a collection.
+                            //  That seems like the most logical internal way of doing things.
+                            //  An option to have them as arrays would make sense for performance (or typed arrays),
+                            //   but a Collection makes the most sense logically.
+
+                            if (tv === 'array') {
+                                dv = new Data_Value({'value': value});
+                            } else {
+
+                                if (tv === 'object') {
+
+                                    if (value.__data_object || value.__data_value) {
+                                        dv = value;
+                                    } else {
+                                        dv = new Data_Value({'value': value});
+                                    }
+
+
+                                } else {
+
+                                    console.log('tv', tv);
+
+
+                                    dv = value;
+                                }
+
+
+                                //dv = value;
+                            }
+
+
+
                         }
 
 
@@ -4362,6 +4441,11 @@ var Data_Object = Evented_Class.extend({
                         //  if it is a native type?
 
                         var next_is_js_native = is_js_native(data_object_next);
+
+                        // Or rework fields so that native types don't always get stores in a Data_Value?
+
+
+
                         //console.log('next_is_js_native', next_is_js_native);
 
 
@@ -4530,14 +4614,14 @@ var Data_Object = Evented_Class.extend({
                     return value;
                 }
             }
-            
 
 
 
 
-            
+
+
         }
-        
+
     }),
     'has' : function(property_name) {
         return is_defined(this.get(property_name));
@@ -4599,7 +4683,7 @@ var get_chained_fields = function(data_object_class) {
 
     while(i--)
     {
-      //...
+        //...
         var item = fc[i];
 
         // the item can be an object... or an array. Array is better.
@@ -4652,13 +4736,13 @@ var chained_fields_to_fields_list = function(chained_fields) {
 
 
     /*
-    var res = [];
-    each(chained_fields, function(i, v) {
-        var field_number = v[0];
-        var field = v[1];
-        res.push(field);
-    });
-    */
+     var res = [];
+     each(chained_fields, function(i, v) {
+     var field_number = v[0];
+     var field = v[1];
+     res.push(field);
+     });
+     */
 
     //console.log('chained_fields ' + stringify(chained_fields));
 
@@ -4679,14 +4763,14 @@ var chained_fields_to_fields_list = function(chained_fields) {
 jsgui.map_classes = {};
 
 /*
-Object.prototype.begetObject = function () {
-    function F() {}
-    F.prototype = this;
-    return new F();
-};
+ Object.prototype.begetObject = function () {
+ function F() {}
+ F.prototype = this;
+ return new F();
+ };
 
-newObject = oldObject.begetObject();
-*/
+ newObject = oldObject.begetObject();
+ */
 
 // Also want to specify functions that execute upon initialization that call
 //  a function, using a parameter that gets set in the definition.
@@ -4753,75 +4837,75 @@ Data_Object.extend = function(prop, post_init) {
     var keys = Object.keys(prop);
     //var key;
     for (var c = 0, l = keys.length; c < l; c++) {
-      name = keys[c];
-      prop_item = prop[name];
+        name = keys[c];
+        prop_item = prop[name];
 
-      if (name.charAt(0) === '#') {
+        if (name.charAt(0) === '#') {
 
-          // direct copy with '#'... not been using that.
+            // direct copy with '#'... not been using that.
 
-          prototype[name.substring(1)] = prototype[prop_item];
-      } else {
-          // if it's a function, then do the following.
+            prototype[name.substring(1)] = prototype[prop_item];
+        } else {
+            // if it's a function, then do the following.
 
-          // if it's an object, then it may be something specific to the DataObject type.
-          //  such as setting / extending fields of an object.
+            // if it's an object, then it may be something specific to the DataObject type.
+            //  such as setting / extending fields of an object.
 
-          // some specific non-object things will be set to the prototype.
-          //  it will be possible to look at this info, the fields chain in the object, will take a bit of trial, error and design.
+            // some specific non-object things will be set to the prototype.
+            //  it will be possible to look at this info, the fields chain in the object, will take a bit of trial, error and design.
 
-          t_prop_item = typeof prop_item;
-          //console.log('prop_item' + prop_item);
-          if (t_prop_item === 'function') {
+            t_prop_item = typeof prop_item;
+            //console.log('prop_item' + prop_item);
+            if (t_prop_item === 'function') {
 
-              prototype[name] = typeof _super[name] === 'function' && fnTest.test(prop_item) ?
-              // had some difficulty using fp() with 'init' functions. could
-              // it have to do with function names?
+                prototype[name] = typeof _super[name] === 'function' && fnTest.test(prop_item) ?
+                    // had some difficulty using fp() with 'init' functions. could
+                    // it have to do with function names?
 
-              (function(name, fn) {
-                  return function() {
-                      tmp = this._super;
-                      this._super = _super[name];
-                      res = fn.apply(this, arguments);
-                      this._super = tmp;
-                      return res;
-                  };
-              })(name, prop[name]) : prop[name];
+                    (function(name, fn) {
+                        return function() {
+                            tmp = this._super;
+                            this._super = _super[name];
+                            res = fn.apply(this, arguments);
+                            this._super = tmp;
+                            return res;
+                        };
+                    })(name, prop[name]) : prop[name];
 
-          } else if (t_prop_item === 'object' || t_prop_item === 'boolean') {
+            } else if (t_prop_item === 'object' || t_prop_item === 'boolean') {
 
-              // don't put these in the prototype.
-              //  they are not for the object itself.
-              //console.log('property name', name);
-              if (name == 'class_name') {
-                  for_class['_class_name'] = prop_item;
-              } else if (name == 'fields') {
-                  // maybe call it something else, fields is a function.
-                  // fields could be a function, so call it _fields
-                  // it sets the array of fields... could be an object representing fields but an array is better because the order gets preserved.
-                  //for_class['_fields'] = prop_item;
-                  for_class._fields = prop_item;
-                  //this['_fields'] = prop_item;
-                  // then the fields will be read upon initialization?
-                  //  getting all the fields up the chain...
-              } else if (name == 'connect_fields') {
-                  // maybe call it something else, fields is a function.
-                  // fields could be a function, so call it _fields
+                // don't put these in the prototype.
+                //  they are not for the object itself.
+                //console.log('property name', name);
+                if (name == 'class_name') {
+                    for_class['_class_name'] = prop_item;
+                } else if (name == 'fields') {
+                    // maybe call it something else, fields is a function.
+                    // fields could be a function, so call it _fields
+                    // it sets the array of fields... could be an object representing fields but an array is better because the order gets preserved.
+                    //for_class['_fields'] = prop_item;
+                    for_class._fields = prop_item;
+                    //this['_fields'] = prop_item;
+                    // then the fields will be read upon initialization?
+                    //  getting all the fields up the chain...
+                } else if (name == 'connect_fields') {
+                    // maybe call it something else, fields is a function.
+                    // fields could be a function, so call it _fields
 
-                  //for_class['_connect_fields'] = prop_item;
-                  for_class._connect_fields = prop_item;
+                    //for_class['_connect_fields'] = prop_item;
+                    for_class._connect_fields = prop_item;
 
-                  // then the fields will be read upon initialization?
-                  //  getting all the fields up the chain...
+                    // then the fields will be read upon initialization?
+                    //  getting all the fields up the chain...
 
-              } else {
-                  prototype[name] = prop[name];
-              }
+                } else {
+                    prototype[name] = prop[name];
+                }
 
-          }  else {
-              prototype[name] = prop[name];
-          }
-      };
+            }  else {
+                prototype[name] = prop[name];
+            }
+        };
     }
 
     //for (name in prop) {
@@ -4872,12 +4956,12 @@ Data_Object.extend = function(prop, post_init) {
     Class.extend = arguments.callee;
 
     /*
-    if (for_class) {
-        for (var c = 0, l = for_class.length; c < l; c++) {
-            Class[i] = for_class[v];
-        }
-    }
-    */
+     if (for_class) {
+     for (var c = 0, l = for_class.length; c < l; c++) {
+     Class[i] = for_class[v];
+     }
+     }
+     */
     //console.log('for_class', for_class);
     for (i in for_class) {
         Class[i] = for_class[i];
