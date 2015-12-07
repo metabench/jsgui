@@ -1,5 +1,6 @@
 ﻿
-describe("z_core/data-object /Data_Object.spec.js ", function () {
+//describe("z_core/data-object /Data_Object.spec.js ", function () {
+describe("Data_Object tests", function () {
 
     var Data_Object;
     var Data_Value;
@@ -83,19 +84,7 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
     //    Data_Object.set_Enhanced_Data_Object(save_Data_Object_Enhanced_Data_Object);
     //});
 
-    function base_check(data_object) {
-        if (data_object._abstract) {
-            assert.deepEqual(data_object.__type, undefined);
-            assert.deepEqual(data_object._, undefined);
-        } else {
-            assert.deepEqual(data_object.__type, 'data_object');
-            assert.deepEqual(data_object._, {});
-        }
-        //
-        assert.deepEqual(data_object.fc, undefined); // !!!
-    }
-
-    describe("Initialization", function () {
+    describe("new Data_Object(spec)", function () {
 
         // ======================================================
         //
@@ -107,64 +96,572 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
         //	init()
         // -----------------------------------------------------
 
-        it("should performs some basic initialization", function () {
+        //this.log = '<mark>Something</mark> a user has logged.\n\nI am currently in the process of fixing indentation';
+        //this.tag = "yellow";
+
+        it("no spec or empty spec", function () {
             var data_object = null;
             //
-            // default
-            //
+            // no spec:
             data_object = new Data_Object();
-            base_check(data_object);
+            assert.deepEqual(data_object.__type, 'data_object');
+            assert.deepEqual(data_object._, {});
             //
-            assert.deepEqual(data_object.stringify(), "Data_Object({})");
-            assert.deepEqual(data_object.toObject(), {});
+            // empty spec:
+            data_object = new Data_Object({});
+            assert.deepEqual(data_object.__type, 'data_object');
+            assert.deepEqual(data_object._, {});
+        });
+
+        it("abstract: spec is constructor", function () {
+            var TypeConstructor = function () { };
+            TypeConstructor.abstract = true;
             //
-            // abstract: object
-            //
-            data_object = new Data_Object({ abstract: true });
-            base_check(data_object);
-            //
-            //
-            assert.deepEqual(data_object._abstract, true);
-            assert.deepEqual(data_object._type_constructor, undefined);
-            assert.deepEqual(data_object._spec, { abstract: true }); // ?
-            //
-            assert.deepEqual(data_object.stringify(), "Data_Object(undefined)");
-            assert.deepEqual(data_object.toObject(), {});
-            //
-            // abstract: function
-            //
-            var type_constructor = function () { };
-            type_constructor.abstract = true;
-            data_object = new Data_Object(type_constructor);
-            base_check(data_object);
+            var data_object = new Data_Object(TypeConstructor);
             //
             assert.deepEqual(data_object._abstract, true);
-            assert.deepEqual(data_object._type_constructor, type_constructor);
-            assert.deepEqual(data_object._spec, undefined);
+            assert.deepEqual(data_object._type_constructor, TypeConstructor);
             //
-            assert.deepEqual(data_object.stringify(), "Data_Object(undefined)");
-            assert.deepEqual(data_object.toObject(), {});
+            // BTW, in contrast to "real" (non-abstract) Data_Object:
+            //assert.deepEqual(data_object.__type, undefined);
+            //assert.deepEqual(data_object._, undefined);
+        });
+
+        it("abstract: spec is object", function () {
+            var data_object = new Data_Object({ abstract: true });
+            //
+            assert.deepEqual(data_object._abstract, true);
+            assert.deepEqual(data_object._spec, { abstract: true });
+            //
+            // BTW, in contrast to "real" (non-abstract) Data_Object:
+            //assert.deepEqual(data_object.__type, undefined);
+            //assert.deepEqual(data_object._, undefined);
+        });
+
+        // -----------------------------------------------------
+        //	spec: call a method
+        // -----------------------------------------------------
+
+        //var myConstraints = { Field1: "int" };
+        //var data_object = new Data_Object({ constraints: myConstraints }); // calls constraints(myConstraints)
+        //assert.deepEqual(data_object._field_constraints, myConstraints);
+
+        it("call a method // spec: { method_name: method_parameter }", function () {
+            //
+            // it should call methods mentioned in the spec, passing parameter from the spec
+            //
+            // if typeof(spec)=="object", then it iterates over the spec fields. 
+            // If the Data_Object contains a method named as the spec field name, 
+            // then it calls the method passing the field value as a parameter.
+            // I.e. spec looks like { method_name: method_parameter }
+            //
+            var data_object = new Data_Object({ set_field: { Field1: "int" } }); // calls set_field({ Field1: "int" })
+            assert.deepEqual(data_object.field(), [["Field1", "int", { data_type: "int" }]]);
+        });
+
+        // -----------------------------------------------------
+        //	spec: set chained fields
+        // -----------------------------------------------------
+
+        it("set chained fields // spec: { field_name: field_value }", function () {
+            //
+            // it should set chained fields mentioned in the spec
+            //
+            // if typeof(spec)=="object", then it iterates over the spec fields. 
+            // If the Data_Object does not contains a method named as the spec field name, 
+            // but there is a chained field with the name, then it calls set(chained_field_name, value)
+            // I.e. spec looks like { chained_field_name: value }
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                fields: { Field1: "int", Field2: "text" }
+            });
+            //
+            var data_object = new Data_Object_Ex({ Field2: "abc" });
+            //
+            assert.deepEqual(data_object.get(), { Field2: new Data_Value({ value: "abc" }) });
+        });
+
+        // -----------------------------------------------------
+        //	spec: event_bindings
+        // -----------------------------------------------------
+
+        it("spec.event_bindings", function () {
+            //
+            // it should prohibit the event_bindings parameter ???
+            //
+            // !!! it seems was intended to process spec.event_bindings,
+            // !!! but presently it throws an exception
+            //
+            assert.throws(function () { new Data_Object({ event_bindings: [] }); });
+        });
+
+        // -----------------------------------------------------
+        //	spec: constraint
+        // -----------------------------------------------------
+
+        it("spec.constraint", function () {
+            // !!! it seems was intended to process spec.constraint,
+            // !!! but presently it throws an exception
+            //
+            assert.throws(function () { new Data_Object({ constraint: {} }); });
+        });
+
+        // -----------------------------------------------------
+        //	spec: parent
+        // -----------------------------------------------------
+
+        it("spec.parent", function () {
+            // !!! it seems was intended to process spec.parent,
+            // !!! but presently it throws an exception
+            //
+            assert.throws(function () { new Data_Object({ parent: new Data_Object() }); });
+        });
+        // new Data_Object({ parent: ? });  - calls set('parent',..) instead of parent()
+        //var data_object = new Data_Object({ parent: 123 });
+        //var data_object = new Data_Object();
+        //data_object.set("parent2", 123);
+        //assert.deepEqual(data_object.get(), { parent: new Data_Value({ value: 123 }) });
+
+    });
+
+    describe("creation related methods", function () {
+
+        // ======================================================
+        //
+        //	                 creation related methods
+        //
+        // ======================================================
+
+        // -----------------------------------------------------
+        //	dobj()
+        // -----------------------------------------------------
+
+        it("dobj() - Data_Object", function () {
+            //
+            // test dobj() creating Data_Object instance
+            //
+            var data_object = Data_Object.dobj();
+            assert.ok(!(data_object instanceof Enhanced_Data_Object));
+            assert.deepEqual(data_object.field(), []);
+            //
+            // data_def parameter does nothing: !!!
+            //
+            data_object = Data_Object.dobj({}, { Field1: "int" });
+            assert.deepEqual(data_object.field(), []);
+            //
+            // set values:
+            //
+            data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
+            assert.deepEqual(data_object.get("Field1"), [111]);
+            assert.deepEqual(data_object.get("Field2"), [222]);
+        });
+
+        it("dobj() - Enhanced_Data_Object", function () {
+            //
+            // test dobj() creating Enhanced_Data_Object instance
+            //
+            // prepare dobj() to create Enhanced_Data_Object:
+            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
+            Data_Object.set_Enhanced_Data_Object(Enhanced_Data_Object);
+            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), Enhanced_Data_Object);
+            //
+            // test dobj() without parameters:
+            var data_object = Data_Object.dobj();
+            assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]]]);
+            assert.ok(data_object instanceof Enhanced_Data_Object);
+            //
+            // data_def parameter does nothing: !!!
+            //
+            data_object = Data_Object.dobj({}, { Field1: "int" });
+            assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]]]);
+            //
+            // set values:
+            //
+            data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
+            assert.deepEqual(data_object.get("Field1"), [111]);
+            assert.deepEqual(data_object.get("Field2"), [222]);
+            //
+            // restore module state (turn off the Enhanced_Data_Object creation mode):
+            Data_Object.set_Enhanced_Data_Object(null);
+        });
+
+        // -----------------------------------------------------
+        //	ensure_data_type_data_object_constructor()
+        // -----------------------------------------------------
+
+        it("ensure_data_type_data_object_constructor()", function () {
+            //
+            // prepare the "pure" environment:
+            //
+            var save_map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors;
+            var save_data_types_info = jsgui.data_types_info;
+            //
+            jsgui.map_data_type_data_object_constructors = [];
+            jsgui.data_types_info = [];
+            //
+            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
+            //
+            // add the test data type, create the constructor:
+            //
+            jsgui.data_types_info['my_test_type'] = { Field1: "int", Field2: "number" };
+            var MyTestTypeConstructor = Data_Object.ensure_data_type_data_object_constructor('my_test_type');
+            //
+            // create and check the data object:
+            //
+            var data_object = new MyTestTypeConstructor();
+            assert.ok(data_object instanceof Data_Object);
+            assert.ok(!(data_object instanceof Enhanced_Data_Object));
+            assert.deepEqual(data_object.field(), [["Field1", "int", { data_type: "int" }], ["Field2", "number", { data_type: "number" }]]);
+            //
+            // restore the environment:
+            //
+            jsgui.data_types_info = save_data_types_info;
+            jsgui.map_data_type_data_object_constructors = save_map_data_type_data_object_constructors;
+        });
+
+    });
+
+    describe("Data_Object.extend()", function () {
+
+        // ======================================================
+        //
+        //	                 Data_Object.extend()
+        //
+        // ======================================================
+
+        // -----------------------------------------------------
+        //	base extension
+        // -----------------------------------------------------
+
+        it("usual class extension", function () {
+            //
+            // extend Data_Object class: add a property and a method:
+            //
+            // create test class:
+            var Data_Object_Ex = Data_Object.extend({
+                Prop1: 123,
+                Func1: function () { return "hello"; }
+            });
+            //
+            // create test class object:
+            var data_object = new Data_Object_Ex();
+            //
+            // check the result:
+            assert.deepEqual(data_object.Prop1, 123);
+            assert.deepEqual(data_object.Func1(), "hello");
+            //
+            // override Data_Object.stringify() method:
+            //
+            // check the initial stringify() behaviour:
+            data_object._ = "123";
+            assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
+            //
+            // create the test class:
+            var Data_Object_Ex_2 = Data_Object.extend({
+                stringify: function () { return this._super() + "-extended"; }
+            });
+            //
+            // create the test object:
+            data_object = new Data_Object_Ex_2();
+            //
+            // check the result:
+            data_object._ = "123";
+            assert.deepEqual(data_object.stringify(), 'Data_Object("123")-extended');
+        });
+
+        // -----------------------------------------------------
+        //	jsgui.data_types_info[]
+        // -----------------------------------------------------
+
+        it("use jsgui.data_types_info[]: data type info as string", function () {
+            //
+            // it should use type information from jsgui.data_types_info
+            //
+            // save the jsgui.data_types_info:
+            var old_data_types_info = jsgui.data_types_info;
+            //
+            // prepare test data type info:
+            jsgui.data_types_info = [];
+            jsgui.data_types_info["depth"] = "int";
+            //
+            // create the test class:
+            var Data_Object_Ex = Data_Object.extend("depth");
+            //
+            // check the test class:
+            // !!! the keys (property names) and values are equal,
+            // !!! is it indended and useful?
+            assert.deepEqual(Data_Object_Ex.depth, "depth"); // !!!
+            assert.deepEqual(Data_Object_Ex.int, "int"); // !!!
+            assert.deepEqual(Data_Object_Ex["int"], "int"); // !!!
+            //
+            // create the test class object:
+            var data_object = new Data_Object_Ex();
+            //
+            // check the test class object:
+            assert.deepEqual(data_object.__type_name, "depth");
+            assert.deepEqual(data_object.__data_type_info, "int");
+            //
+            // restore the jsgui.data_types_info:
+            jsgui.data_types_info = old_data_types_info;
+        });
+
+        //it("should use type information from jsgui.data_types_info - 2", function () {
+        it("use jsgui.data_types_info[]: data type info as object", function () {
+            //
+            // it should use type information from jsgui.data_types_info
+            //
+            // save the jsgui.data_types_info:
+            var old_data_types_info = jsgui.data_types_info;
+            //
+            // prepare test data type info:
+            jsgui.data_types_info = [];
+            jsgui.data_types_info['my_test_type'] = { Field1: "int", Field2: "number" };
+            //
+            // create the test class:
+            var Data_Object_Ex = Data_Object.extend("my_test_type");
+            //
+            // check the test class:
+            //
+            // !!! the keys (property names) and values are equal
+            // !!! is it indended and useful?
+            //
+            // !!! the data type info can be accessed by any object as key (e.g. empty object: {})
+            // !!! because objects are converted to "[object Object]" when used as associative array keys
+            //
+            assert.deepEqual(Data_Object_Ex.my_test_type, "my_test_type"); // !!!
+            assert.deepEqual(Data_Object_Ex[{}], { Field1: "int", Field2: "number" }); // !!!
+            assert.deepEqual(Data_Object_Ex["[object Object]"], { Field1: "int", Field2: "number" }); // !!!
+            //
+            // create the test class object:
+            var data_object = new Data_Object_Ex();
+            //
+            // check the test class object:
+            assert.deepEqual(data_object.__type_name, "my_test_type");
+            assert.deepEqual(data_object.__data_type_info, { Field1: "int", Field2: "number" });
+            //
+            // restore the jsgui.data_types_info:
+            jsgui.data_types_info = old_data_types_info;
+        });
+
+        // -----------------------------------------------------------------------------
+        //	(name.charAt(0) === '#') addition  (just like the corresponding Class test)
+        // -----------------------------------------------------------------------------
+
+        //it("should extend the original Class by the custom addition...", function () {
+        it("#name feature", function () {
+            //
+            // create test class:
+            var Data_Object_Ex = Data_Object.extend({
+                'prop1': 111,
+                'prop2': 222,
+                '#prop3': 'prop1'
+            });
+            //
+            // create test data object:
+            var data_object = new Data_Object_Ex();
+            //
+            // check the data_object:
+            assert.equal(data_object.prop1, 111);
+            assert.equal(data_object.prop2, 222);
+            assert.equal(data_object.prop3, 111);
+            assert.equal(data_object['#prop3'], undefined);
+            //
+            // check if the properties still be connected:
+            data_object.prop1 = 1000; // change the .prop1 value
+            assert.equal(data_object.prop3, 111); // .prop3 not changed
+        });
+
+        // it("should extend the original Class by the custom addition... - 2", function () {
+        it("#name feature: 2 levels", function () {
+            //
+            // create test classes:
+            var Data_Object_2 = Data_Object.extend({
+                'prop1': 111,
+                'prop2': 222
+            });
+            var Data_Object_3 = Data_Object_2.extend({
+                'prop3': 333,
+                '#prop4': 'prop2'
+            });
+            //
+            // create test objects:
+            var do2 = new Data_Object_2();
+            var do3 = new Data_Object_3();
+            //
+            // quick main check:
+            assert.equal(do3['prop4'], 222);
+            assert.equal(do3.prop4, 222);
+            //
+            // do2 detailed check:
+            assert.equal(do2.prop1, 111);
+            assert.equal(do2.prop2, 222);
+            assert.equal(do2.prop3, undefined);
+            assert.equal(do2.prop4, undefined);
+            assert.equal(do2['#prop4'], undefined);
+            //
+            // do3 detailed check:
+            assert.equal(do3.prop1, 111);
+            assert.equal(do3.prop2, 222);
+            assert.equal(do3.prop3, 333);
+            assert.equal(do3.prop4, 222);
+            assert.equal(do3.prop5, undefined);
+            //
+            // check if the properties still be connected:
+            do3.prop2 = 2000;
+            assert.equal(do3.prop4, 222); // not changed
+        });
+
+        // -----------------------------------------------------
+        //	post_init()
+        // -----------------------------------------------------
+
+        it("post_init feature", function () {
+            //
+            // should call the post_init method (if present)
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                post_init: function () { this.PI = 3.14; }
+            });
+            var data_object = new Data_Object_Ex();
+            //
+            assert.deepEqual(data_object.PI, 3.14);
+        });
+
+        // -----------------------------------------------------
+        //	for_class[]
+        // -----------------------------------------------------
+
+        it("for_class feature", function () {
+            //
+            // should assign some values to the resulting class instead of the class instance
+            //
+            // save the environment:
+            var old_map_classes = jsgui.map_classes;
+            //
+            // class_name, fields, and connect_fields are involved into "for_class" feature:
+            //
+            var Data_Object_Ex = Data_Object.extend({
+                class_name: { name: "MyClass" }, // object
+                fields: { f1: 1, f2: 2 },  // object
+                connect_fields: false  // boolean
+            });
+            var data_object = new Data_Object_Ex();
+            //
+            assert.deepEqual(Data_Object_Ex._class_name, { name: "MyClass" });
+            assert.deepEqual(Data_Object_Ex._fields, { f1: 1, f2: 2 });
+            assert.deepEqual(Data_Object_Ex._connect_fields, false);
+            //
+            assert.notDeepEqual(data_object.class_name, { name: "MyClass" });
+            assert.notDeepEqual(data_object.fields, { f1: 1, f2: 2 });
+            assert.notDeepEqual(data_object.connect_fields, false);
+            //
+            // the 'for_class' feature works for 'object' and 'boolean' types only;
+            // other types just extends the class as usual:
+            //
+            var func_fields = function () { };
+            //
+            Data_Object_Ex = Data_Object.extend({
+                class_name: "MyClass",  // not object
+                fields: func_fields,  // not object
+                connect_fields: 100  // not boolean
+            });
+            data_object = new Data_Object_Ex();
+            //
+            assert.deepEqual(Data_Object_Ex._class_name, undefined);
+            assert.deepEqual(Data_Object_Ex._fields, undefined);
+            assert.deepEqual(Data_Object_Ex._connect_fields, undefined);
+            //
+            assert.deepEqual(data_object.class_name, "MyClass");
+            assert.deepEqual(data_object.fields, func_fields);
+            assert.deepEqual(data_object.connect_fields, 100);
+            //
+            // restore the environment:
+            jsgui.map_classes = old_map_classes;
+        });
+
+        // -----------------------------------------------------
+        //	jsgui.map_classes[]
+        // -----------------------------------------------------
+
+        it("jsgui.map_classes[]", function () {
+            //
+            // probably should register Data_Object derived classes in map_classes[]
+            //
+            // save the environment:
+            var old_map_classes = jsgui.map_classes;
+            //
+            // create the test class (trying to set Class['class_name']):
+            var Data_Object_Ex = Data_Object.extend({
+                class_name: { name: "MyClass" }
+            });
+            //
+            // no effect. I see no way to set the 'class_name' property for a derived class. // !!!
+            //
+            assert.deepEqual(Data_Object_Ex['class_name'], undefined);
+            assert.deepEqual(jsgui.map_classes, old_map_classes);
+            //
+            // restore the environment:
+            jsgui.map_classes = old_map_classes;
+        });
+
+        // -----------------------------------------------------
+        //	_superclass
+        // -----------------------------------------------------
+
+        it("base class reference", function () {
+            //
+            // it should keep the base class reference
+            //
+            // function to get the base class:
+            function calcSuperClass(ctor) {
+                var result = [];
+                jsgui.iterate_ancestor_classes(ctor, function (_class) { result.push(_class); });
+                return result[1];
+            }
+            //
+            // create derived class:
+            var Data_Object_Ex = Data_Object.extend({});
+            // check the base class:
+            assert.deepEqual(calcSuperClass(Data_Object_Ex), Data_Object);
+            //
+            // create next level derived class:
+            var Data_Object_Ex_2 = Data_Object_Ex.extend({});
+            // check the base class:
+            assert.deepEqual(calcSuperClass(Data_Object_Ex_2), Data_Object_Ex);
+        });
+
+    });
+
+    describe("_id(), parent", function () {
+
+        // ======================================================
+        //
+        //	                 _id(), parent
+        //
+        // ======================================================
+
+        //
+        // parent() and other methods (_fp_parent(), position_within(), and remove_from()) use different implementation private variables
+        //
+
+
+        it(".......", function () {
             //
             // _context
             //
             var nextId = 7;
             var myContext = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
             data_object = new Data_Object({ context: myContext });
-            base_check(data_object);
+            //base_check(data_object);
             //
             assert.deepEqual(data_object._context, myContext);
             //
             // __id
             //
             data_object = new Data_Object({ _id: "008" });
-            base_check(data_object);
+            //base_check(data_object);
             //
             assert.deepEqual(data_object.__id, "008");
-            //
-            // empty spec
-            //
-            data_object = new Data_Object({});
-            base_check(data_object);
         });
 
         // -----------------------------------------------------
@@ -209,410 +706,6 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
             assert.deepEqual(data_object.__id, undefined);
         });
 
-        // -----------------------------------------------------
-        //	spec: call a method
-        // -----------------------------------------------------
-
-        it("should call methods mentioned in the spec, passing parameter from the spec", function () {
-            //
-            // if typeof(spec)=="object", then it iterates over the spec fields. 
-            // If the Data_Object contains a method named as the spec field name, then it calls the method passing the field value as a parameter.
-            // I.e. { method_name: method_parameter }
-            //
-            var myConstraints = { Field1: "int" };
-            var data_object = new Data_Object({ constraints: myConstraints }); // calls constraints(myConstraints)
-            assert.deepEqual(data_object._field_constraints, myConstraints);
-        });
-
-        // -----------------------------------------------------
-        //	spec: set chained fields
-        // -----------------------------------------------------
-
-        it("should set chained fields mentioned in the spec", function () {
-            //
-            // if typeof(spec)=="object", then it iterates over the spec fields. 
-            // If the Data_Object does not contains a method named as the spec field name, 
-            // but there is a chained field with the name, then it calls set(chained_field_name, value)
-            // I.e. { chained_field_name: value }
-            //
-            var Data_Object_Ex = Data_Object.extend({
-                fields: { Field1: "int", Field2: "text" }
-            });
-            //
-            var data_object = new Data_Object_Ex({ Field2: "abc" });
-            //
-            assert.deepEqual(data_object.get(), { Field2: new Data_Value({ value: "abc" }) });
-        });
-
-        // -----------------------------------------------------
-        //	spec: event_bindings
-        // -----------------------------------------------------
-
-        it("should prohibit the event_bindings parameter", function () {
-            assert.throws(function () { new Data_Object({ event_bindings: [] }) });
-        });
-
-        // -----------------------------------------------------
-        //	spec: constraint
-        // -----------------------------------------------------
-
-        it("should throw an error...", function () {
-            assert.throws(function () { new Data_Object({ constraint: {} }) });
-        });
-
-        // -----------------------------------------------------
-        //	spec: parent
-        // -----------------------------------------------------
-
-        xit("should ...", function () {
-            // new Data_Object({ parent: ? });  - calls set('parent',..) instead of parent()
-        });
-
-    });
-
-    describe("creation...", function () {
-
-        // ======================================================
-        //
-        //	                 creation...
-        //
-        // ======================================================
-
-        // -----------------------------------------------------
-        //	dobj()
-        // -----------------------------------------------------
-
-        it("dobj()", function () {
-            var data_object = Data_Object.dobj();
-            assert.ok(!(data_object instanceof Enhanced_Data_Object));
-            assert.deepEqual(data_object.field(), []);
-            //
-            // data_def does nothing:
-            //
-            data_object = Data_Object.dobj({}, { Field1: "int" });
-            assert.deepEqual(data_object.field(), []);
-            //
-            // set values:
-            //
-            data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
-            assert.deepEqual(data_object.get("Field1"), [111]);
-            assert.deepEqual(data_object.get("Field2"), [222]);
-        });
-
-        it("dobj() - Enhanced_Data_Object", function () {
-            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
-            Data_Object.set_Enhanced_Data_Object(Enhanced_Data_Object);
-            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), Enhanced_Data_Object);
-            //
-            var data_object = Data_Object.dobj();
-            assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]]]);
-            assert.ok(data_object instanceof Enhanced_Data_Object);
-            //
-            // data_def does nothing:
-            //
-            data_object = Data_Object.dobj({}, { Field1: "int" });
-            assert.deepEqual(data_object.field(), [["flags", ["collection", "string"]]]);
-            //
-            // set values:
-            //
-            data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
-            assert.deepEqual(data_object.get("Field1"), [111]);
-            assert.deepEqual(data_object.get("Field2"), [222]);
-            //
-            Data_Object.set_Enhanced_Data_Object(null);
-        });
-
-        // -----------------------------------------------------
-        //	ensure_data_type_data_object_constructor()
-        // -----------------------------------------------------
-
-        it("ensure_data_type_data_object_constructor()", function () {
-            var save_map_data_type_data_object_constructors = jsgui.map_data_type_data_object_constructors;
-            var save_data_types_info = jsgui.data_types_info;
-            //
-            jsgui.map_data_type_data_object_constructors = [];
-            jsgui.data_types_info = [];
-            //
-            assert.deepEqual(Data_Object.get_Enhanced_Data_Object(), null);
-
-            jsgui.data_types_info['my_test_type'] = { Field1: "int", Field2: "number" };
-            var MyTestTypeConstructor = Data_Object.ensure_data_type_data_object_constructor('my_test_type'); // ???
-            //
-            var data_object = new MyTestTypeConstructor();
-            assert.ok(data_object instanceof Data_Object);
-            assert.ok(!(data_object instanceof Enhanced_Data_Object));
-            assert.deepEqual(data_object.field(), [["Field1", "int", { data_type: "int" }], ["Field2", "number", { data_type: "number" }]]);
-            //
-            jsgui.data_types_info = save_data_types_info;
-            jsgui.map_data_type_data_object_constructors = save_map_data_type_data_object_constructors;
-        });
-
-    });
-
-    describe("Data_Object.extend()", function () {
-
-        // ======================================================
-        //
-        //	                 Data_Object.extend()
-        //
-        // ======================================================
-
-        // -----------------------------------------------------
-        //	jsgui.data_types_info[]
-        // -----------------------------------------------------
-
-        it("should use type information from jsgui.data_types_info", function () {
-            var old_data_types_info = jsgui.data_types_info;
-            //
-            jsgui.data_types_info = [];
-            jsgui.data_types_info["depth"] = "int";
-            //
-            var Data_Object_Ex = Data_Object.extend("depth");
-            //
-            assert.deepEqual(Data_Object_Ex.depth, "depth"); // !!!
-            assert.deepEqual(Data_Object_Ex.int, "int"); // !!!
-            assert.deepEqual(Data_Object_Ex["int"], "int");
-            //
-            var data_object = new Data_Object_Ex();
-            //
-            assert.deepEqual(data_object.__type_name, "depth");
-            assert.deepEqual(data_object.__data_type_info, "int");
-            //
-            jsgui.data_types_info = old_data_types_info;
-            //
-            // BTW personally I don't like this approach; probably something like separate class factory engine can be better
-            //
-        });
-
-        // -----------------------------------------------------
-        //	base extension
-        // -----------------------------------------------------
-
-        it("should perform usual base extension", function () {
-            var Data_Object_Ex = Data_Object.extend({
-                Prop1: 123,
-                Func1: function () { return "hello"; }
-            });
-            //
-            var data_object = new Data_Object_Ex();
-            //
-            assert.deepEqual(data_object.Prop1, 123);
-            assert.deepEqual(data_object.Func1(), "hello");
-            //
-            data_object._ = "123";
-            assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
-            //
-            // override stringify() method:
-            //
-            var Data_Object_Ex_2 = Data_Object.extend({
-                stringify: function () { return this._super() + "-extended"; }
-            });
-            //
-            data_object = new Data_Object_Ex_2();
-            data_object._ = "123";
-            assert.deepEqual(data_object.stringify(), 'Data_Object("123")-extended');
-        });
-
-        // -----------------------------------------------------------------------------
-        //	(name.charAt(0) === '#') addition  (just like the corresponding Class test)
-        // -----------------------------------------------------------------------------
-
-        it("should extend the original Class by the custom addition...", function () {
-            //
-            var Data_Object_2 = Data_Object.extend({
-                'prop1': 111,
-                'prop2': 222,
-                '#prop3': 'prop1'
-            });
-            //
-            var do2 = new Data_Object_2();
-            //
-            assert.equal(do2.prop1, 111);
-            assert.equal(do2.prop2, 222);
-            assert.equal(do2.prop3, 111);
-            assert.equal(do2['#prop3'], undefined);
-            //
-            do2.prop1 = 1000; // change the .prop1 value
-            assert.equal(do2.prop3, 111); // .prop3 not changed
-        });
-
-        it("should extend the original Class by the custom addition... - 2", function () {
-            //
-            var Data_Object_2 = Data_Object.extend({
-                'prop1': 111,
-                'prop2': 222
-            });
-            //
-            var Data_Object_3 = Data_Object_2.extend({
-                'prop3': 333,
-                '#prop4': 'prop2'
-            });
-            //
-            var do2 = new Data_Object_2();
-            var do3 = new Data_Object_3();
-            //
-            assert.equal(do3['prop4'], 222);
-            assert.equal(do3.prop4, 222);
-            //
-            assert.equal(do2.prop1, 111);
-            assert.equal(do2.prop2, 222);
-            assert.equal(do2.prop3, undefined);
-            assert.equal(do2.prop4, undefined);
-            assert.equal(do2['#prop4'], undefined);
-            //
-            assert.equal(do3.prop1, 111);
-            assert.equal(do3.prop2, 222);
-            assert.equal(do3.prop3, 333);
-            assert.equal(do3.prop4, 222);
-            assert.equal(do3.prop5, undefined);
-            //
-            do3.prop2 = 2000;
-            assert.equal(do3.prop4, 222);
-        });
-
-        // -----------------------------------------------------
-        //	post_init()
-        // -----------------------------------------------------
-
-        it("should call the post_init method (if present)", function () {
-            var Data_Object_Ex = Data_Object.extend({
-                post_init: function () { this.PI = 3.14; }
-            });
-            var data_object = new Data_Object_Ex();
-            //
-            assert.deepEqual(data_object.PI, 3.14);
-        });
-
-        // -----------------------------------------------------
-        //	abstract
-        // -----------------------------------------------------
-
-        it("should probably create an abstract object when init() method does not exists", function () {
-            //
-            // I see no way to remove the init() method:
-            //
-            var Data_Object_Ex = Data_Object.extend({
-                init: undefined
-            });
-            var data_object = null;
-            assert.throws(function () { data_object = new Data_Object_Ex(); });
-            //
-            //
-            //var Data_Object_Ex = Data_Object.extend({});
-            //Data_Object_Ex.init = null;
-            //var data_object = null;
-            //data_object = new Data_Object_Ex(); 
-            //
-            //
-            //var old_init = Data_Object.init;
-            //Data_Object.init = null;
-            //data_object = new Data_Object();
-            //Data_Object.init = old_init;
-            //
-            //
-            //assert.deepEqual(data_object.init, null);
-            //assert.deepEqual(data_object.abstract, true);
-        });
-
-        // -----------------------------------------------------
-        //	for_class[]
-        // -----------------------------------------------------
-
-        it("should assign some values to the resulting class instead of the class instance", function () {
-            var old_map_classes = jsgui.map_classes;
-            //
-            // class_name, fields, and connect_fields are involved into "for_class" feature:
-            // the test is implementation specific !!!
-            //
-            var Data_Object_Ex = Data_Object.extend({
-                class_name: { name: "MyClass" }, // object
-                fields: { f1: 1, f2: 2 },  // object
-                connect_fields: false  // boolean
-            });
-            var data_object = new Data_Object_Ex();
-            //
-            assert.deepEqual(Data_Object_Ex._class_name, { name: "MyClass" });
-            assert.deepEqual(Data_Object_Ex._fields, { f1: 1, f2: 2 });
-            assert.deepEqual(Data_Object_Ex._connect_fields, false);
-            //
-            assert.notDeepEqual(data_object.class_name, { name: "MyClass" });
-            assert.notDeepEqual(data_object.fields, { f1: 1, f2: 2 });
-            assert.notDeepEqual(data_object.connect_fields, false);
-            //
-            // the 'for_class' feature works for 'object' and 'boolean' types only;
-            // other types just extends the class as usual:
-            //
-            var func_fields = function () { };
-            //
-            Data_Object_Ex = Data_Object.extend({
-                class_name: "MyClass",  // not object
-                fields: func_fields,  // not object
-                connect_fields: 100  // not boolean
-            });
-            data_object = new Data_Object_Ex();
-            //
-            assert.deepEqual(Data_Object_Ex._class_name, undefined);
-            assert.deepEqual(Data_Object_Ex._fields, undefined);
-            assert.deepEqual(Data_Object_Ex._connect_fields, undefined);
-            //
-            assert.deepEqual(data_object.class_name, "MyClass");
-            assert.deepEqual(data_object.fields, func_fields);
-            assert.deepEqual(data_object.connect_fields, 100);
-            //
-            jsgui.map_classes = old_map_classes;
-        });
-
-        // -----------------------------------------------------
-        //	jsgui.map_classes[]
-        // -----------------------------------------------------
-
-        it("probably should register Data_Object derived classes in map_classes[]", function () {
-            var old_map_classes = jsgui.map_classes;
-            //
-            var Data_Object_Ex = Data_Object.extend({
-                class_name: { name: "MyClass" }
-            });
-            //
-            // no effect. I see no way to set the 'class_name' property for a derived class. // !!!
-            // on the other hand, I don't like such side effects, maybe it's better without this feature
-            //
-            assert.deepEqual(Data_Object_Ex['class_name'], undefined);
-            assert.deepEqual(jsgui.map_classes, old_map_classes);
-            //
-            jsgui.map_classes = old_map_classes;
-        });
-
-        // -----------------------------------------------------
-        //	_superclass
-        // -----------------------------------------------------
-
-        it("should keep the base class reference", function () {
-            function calcSuperClass(ctor) {
-                var result = [];
-                jsgui.iterate_ancestor_classes(ctor, function (_class) { result.push(_class); });
-                return result[1];
-            }
-            //
-            var Data_Object_Ex = Data_Object.extend({});
-            assert.deepEqual(calcSuperClass(Data_Object_Ex), Data_Object);
-            //
-            var Data_Object_Ex_2 = Data_Object_Ex.extend({});
-            assert.deepEqual(calcSuperClass(Data_Object_Ex_2), Data_Object_Ex);
-        });
-
-    });
-
-    describe("_id(), parent", function () {
-
-        // ======================================================
-        //
-        //	                 _id(), parent
-        //
-        // ======================================================
-
-        //
-        // parent() and other methods (_fp_parent(), position_within(), and remove_from()) use different implementation private variables
-        //
 
         // -----------------------------------------------------
         //	_id(): just like Data_Value._id()
@@ -785,7 +878,12 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
             //
             data_object = new Data_Object();
             data_object.data_def({ Field1: "int" });
-            base_check(data_object); // nothing changed !!!
+            //
+            //base_check(data_object); // nothing changed !!!
+            assert.deepEqual(data_object.__type, 'data_object');
+            assert.deepEqual(data_object._, {});
+            assert.deepEqual(data_object.fc, undefined); // !!!
+            //
             assert.deepEqual(data_object.data_def(), undefined); // !!!
         });
 
@@ -2253,7 +2351,7 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
         //	keys()
         // -----------------------------------------------------
 
-        it("should do keys()", function () {
+        it("keys()", function () {
             var data_object = new Data_Object();
             data_object.set("Field1", 111);
             data_object.set("Field2", 222);
@@ -2264,11 +2362,18 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
         //	stringify()
         // -----------------------------------------------------
 
-        it("should do stringify", function () {
-            var data_object = new Data_Object();
-            data_object._ = "123";
-            assert.deepEqual(data_object.stringify(), 'Data_Object("123")');
+        it("!!! stringify", function () {
+            var data_object = null;
             //
+            // empty Data_Object (just created):
+            var data_object = new Data_Object();
+            assert.deepEqual(data_object.stringify(), 'Data_Object({})');
+            //
+            // empty abstract Data_Object:
+            data_object = new Data_Object({ abstract: true });
+            assert.deepEqual(data_object.stringify(), 'Data_Object(undefined)'); // !!! without the starting '~'
+            //
+            // Data_Object with some data:
             data_object = new Data_Object();
             data_object.set("Field1", 111);
             data_object.set("Field2", 222);
@@ -2279,59 +2384,58 @@ describe("z_core/data-object /Data_Object.spec.js ", function () {
         //	toObject()
         // -----------------------------------------------------
 
-        it("should do toObject()", function () {
+        it("toObject()", function () {
             var data_object = null;
-            var obj = null;
             //
-            obj = { a: 1, b: "2" };
+            // empty Data_Object:
             data_object = new Data_Object();
-            data_object._ = obj
-            assert.deepEqual(data_object.toObject(), obj);
+            assert.deepEqual(data_object.toObject(), {});
             //
-            obj = [1, 2, "3"];
-            data_object = new Data_Object();
-            data_object._ = obj
-            assert.deepEqual(data_object.toObject(), obj);
-            //
-            //obj = 7; // probably wrong value for data_object._
-            //data_object = new Data_Object();
-            //data_object._ = obj
-            //assert.deepEqual(data_object.toObject(), {});  // !!!
-            //
+            // Data_Object with some data:
             data_object = new Data_Object();
             data_object.set("Field1", 111);
             data_object.set("Field2", 222);
             assert.deepEqual(data_object.toObject(), { "Field1": 111, "Field2": 222 });
+            //
+            // BTW these field values are Data_Value in fact, but processed by own toObject() method in turn:
+            assert.deepEqual(data_object.get(), { "Field1": new Data_Value({value: 111}), "Field2": new Data_Value({value: 222}) });
         });
 
         // -----------------------------------------------------
         //	each()
         // -----------------------------------------------------
 
-        it("should iterate over values", function () {
+        it("each()", function () {
             var data_object = new Data_Object();
             //
             var result = [];
             var callback = function (name, value) { result.push([name, value]) };
             //
-            data_object.set("Field1", ["abc"]);
-            data_object.set("Field2", [123]);
+            data_object.set("Field1", "abc");
+            data_object.set("Field2", 123);
             //
             data_object.each(callback);
             //
-            assert.deepEqual(result, [["Field1", ["abc"]], ["Field2", [123]]]);
+            assert.deepEqual(result, [
+                ["Field1", new Data_Value({ value: "abc" })],
+                ["Field2", new Data_Value({ value: 123 })]
+            ]);
         });
 
         // -----------------------------------------------------
         //	mod_link()
         // -----------------------------------------------------
 
-        it("should return jsgui reference", function () {
+        it("mod_link()", function () {
+            //
+            // mod_link() returns jsgui module reference
+            // it can be 'jsgui-lang-essentials', 'jsgui-lang-util' or 'jsgui-lang-enh' depending of the require() calls sequence
+            // so, use a duck test:
+            //
             var data_object = new Data_Object();
+            var jsgui = data_object.mod_link();
             //
-            var jsgui = Data_Object.prototype.mod_link();
-            //
-            assert.deepEqual(jsgui, data_object.mod_link());
+            // the duck test:
             //
             assert.deepEqual(typeof (jsgui.Class), "function");
             assert.deepEqual(typeof (jsgui.arrayify), "function");
