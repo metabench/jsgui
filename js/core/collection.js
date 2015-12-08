@@ -2,13 +2,13 @@
 /* * @module core/collection */
 
 /*
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+ if (typeof define !== 'function') {
+ var define = require('amdefine')(module);
+ }
 
-define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./data-object-fields-collection", "./constraint",
-	"./collection-index"],
-	*/
+ define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./data-object-fields-collection", "./constraint",
+ "./collection-index"],
+ */
 
 var jsgui = require('./jsgui-lang-essentials');
 var Data_Structures = require('./jsgui-data-structures');
@@ -98,9 +98,9 @@ var new_set_field = fp(function(a, sig) {
 dop.set_field = new_set_field;
 
 /**
-* @param obj
-* @param query
-*/
+ * @param obj
+ * @param query
+ */
 var obj_matches_query_obj = function(obj, query) {
     //console.log('obj_matches_query_obj');
     //console.log('obj ' + stringify(obj));
@@ -145,9 +145,9 @@ var obj_matches_query_obj = function(obj, query) {
  */
 
 /**
-* A module representing a collection.
-* @exports core/collection
-*/
+ * A module representing a collection.
+ * @exports core/collection
+ */
 var Collection = Data_Object.extend({
 
     'init': function(spec, arr_values) {
@@ -315,10 +315,10 @@ var Collection = Data_Object.extend({
 
     // maybe use fp, and otherwise apply with the same params and context.
 
-   /**
-    * @func
-    * @param value
-    */
+    /**
+     * @func
+     * @param value
+     */
     'set': function(value) {
         // get the tof(value)
         var tval = tof(value);
@@ -362,9 +362,9 @@ var Collection = Data_Object.extend({
 
     },
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'clear': function() {
         this._arr_idx = 0;
         this._arr = [];
@@ -380,9 +380,9 @@ var Collection = Data_Object.extend({
         })
     },
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'stringify': function() {
         var res = [];
         if (this._abstract) {
@@ -419,17 +419,17 @@ var Collection = Data_Object.extend({
         return res.join('');
     },
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'toString': function() {
         return stringify(this._arr);
 
     },
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'toObject': function() {
         var res = [];
         this.each(function(i, v) {
@@ -438,10 +438,10 @@ var Collection = Data_Object.extend({
         return res;
     },
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'each' : fp(function(a, sig) {
         // was callback, context
         // ever given the context?
@@ -495,9 +495,9 @@ var Collection = Data_Object.extend({
     }),
 
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     '_id' : function() {
         // gets the id.
 
@@ -521,33 +521,40 @@ var Collection = Data_Object.extend({
     },
 
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'length': function() {
         return this._arr.length;
     },
 
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'find': fp(function(a, sig) {
 
 
         // var found = coll_presidents.find([['name', 'Franklin Pierce'], ['party', 'Republican']]);
 
         // it can be an array of fields.
-        //console.log('collection find ' + sig);
+        console.log('collection find ' + sig);
         //console.log('a ' + stringify(a));
         if (a.l == 1) {
 
             // Make it so that index_system handles object queries...
             //  field: value
 
+            console.log('this.index_system', this.index_system);
+
+            //throw 'stop';
+
             var index_system_find_res = this.index_system.find(a[0]);
+
+
             //console.log('index_system_find_res ' + index_system_find_res);
+            //throw 'stop';
 
             // How to know if these have been indexed or not.
             //  Perhaps the index system will only do certain queries.
@@ -566,7 +573,13 @@ var Collection = Data_Object.extend({
                     throw 'stop';
                 })
             } else {
-                return index_system_find_res;
+                if (index_system_find_res) {
+                    return index_system_find_res;
+                } else {
+                    return [];
+                }
+
+
             }
             // if there is only one index in the system then the search will be simple.
         }
@@ -603,8 +616,19 @@ var Collection = Data_Object.extend({
         if (sig == '[s,o]') {
             var propertyName = a[0];
             var query = a[1];
-            //console.log('propertyName ' + propertyName);
-            //console.log('query ' + stringify(query));
+            console.log('propertyName ' + propertyName);
+            console.log('query ' + stringify(query));
+
+            console.log('this.index_system', this.index_system);
+
+            // So when items got added / pushed into the collection, with the current 0.5 version they are not ending up mapped in the index.
+
+
+
+            console.log('this.length()', this.length());
+
+            //throw 'stop';
+
             // Maybe return a Collection, not an array.
             // don't consult the index system.
             var foundItems = [];
@@ -621,9 +645,30 @@ var Collection = Data_Object.extend({
                 //console.log('tof(itemProperty) ' + tof(itemProperty));
                 var tip = tof(itemProperty);
 
-                if (tip == 'array') {
+                //console.log('tip', tip);
+                var tip2;
+
+                var ip2;
+
+                if (tip === 'data_value') {
+                    var ip2 = itemProperty.value();
+                    tip2 = tof(ip2);
+
+                    //console.log('tip2', tip2);
+
+
+
+
+                } else {
+                    ip2 = itemProperty;
+                    tip2 = tip;
+                }
+
+                //throw 'stop';
+
+                if (tip2 === 'array') {
                     // possibly should be a collection
-                    each(itemProperty, function(i, v) {
+                    each(ip2, function(i, v) {
                         //console.log('v ' + stringify(v));
                         var matches = obj_matches_query_obj(v, query);
                         //console.log('matches ' + matches);
@@ -642,10 +687,10 @@ var Collection = Data_Object.extend({
     // get seems like the way to get unique values.
 
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'get' : fp(function(a, sig, _super) {
 
 
@@ -698,10 +743,10 @@ var Collection = Data_Object.extend({
 
     // Will a control always know what position it's in?
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'insert': function(item, pos) {
         // use array splice...
         //  then modify the index somehow.
@@ -720,6 +765,8 @@ var Collection = Data_Object.extend({
         //   for controls, that should be enough to render that control and put it onto the screen
         //   if the context is active.
 
+
+
         this.index_system.notify_insertion(pos);
 
 
@@ -737,10 +784,10 @@ var Collection = Data_Object.extend({
     // may have efficiencies for adding and removing multiple items at once.
     //  can be sorted for insertion into index with more rapid algorithmic time.
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'remove': fp(function(a, sig) {
         var that = this;
 
@@ -839,10 +886,10 @@ var Collection = Data_Object.extend({
 
     }),
 
-   /**
-    * @func
-    * @param obj_key
-    */
+    /**
+     * @func
+     * @param obj_key
+     */
     'has': function(obj_key) {
         // will operate differently depending on how the collection is being used.
         //console.log('this._data_type_constraint ' + stringify(this._data_type_constraint));
@@ -867,10 +914,10 @@ var Collection = Data_Object.extend({
     // Unique index being replaced with a constraint, and it also makes the index when the constraint is put in place if the index is not already there.
 
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'get_index': fp(function(a, sig) {
         if (sig == '[s]') {
             return this.index_system.search(a[0]);
@@ -893,10 +940,10 @@ var Collection = Data_Object.extend({
     // Don't want to change the syntax, and make developers have to type 'Constraint' all the time, but I think that Constraints is the right
     //  way of expressing the underlying system, partly to aid transitions to databases, and its proven to be a flexible (inflexible) model.
 
-   /**
-    * @func
-    * @param field
-    */
+    /**
+     * @func
+     * @param field
+     */
     'find_unique_constraint': function(field) {
         // can be one field, or an array.
 
@@ -935,10 +982,10 @@ var Collection = Data_Object.extend({
     // The constraints will also be available, but they will likely make for a less user-friendly interface than fields.
 
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'fields': fp(function(a, sig) {
 
         //console.log('Collection fields sig ' + sig);
@@ -988,10 +1035,10 @@ var Collection = Data_Object.extend({
 
     // May be the fields from the prototype, as well as fields that have been added.
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'set_field': fp(function(a, sig) {
         //console.log('set_field');
         // sets a field?
@@ -1024,24 +1071,24 @@ var Collection = Data_Object.extend({
 
 
         //if (doc) {
-            if(a.l == 2 && tof(a[0]) == 'string') {
-                doc.data_object.fc = doc.data_object.fc || new Data_Object_Field_Collection();
+        if(a.l == 2 && tof(a[0]) == 'string') {
+            doc.data_object.fc = doc.data_object.fc || new Data_Object_Field_Collection();
 
-                // May need to set up indexing on the fields as well.
+            // May need to set up indexing on the fields as well.
 
 
-                return doc.data_object.fc.set(a[0], a[1]);
-            }
+            return doc.data_object.fc.set(a[0], a[1]);
+        }
         //}
 
 
     }),
 
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'remove_field': fp(function(a, sig) {
         var doc = this._data_object_constraint;
 
@@ -1058,9 +1105,9 @@ var Collection = Data_Object.extend({
 
     // Give a data type to give a type constraint.
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'get_data_type_constraint': function() {
         // there may just be one ._data_type_constraint.
         //  not having all the constraints listed together.
@@ -1070,10 +1117,10 @@ var Collection = Data_Object.extend({
 
     },
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'constraint': fp(function(a, sig) {
         if (sig == '[]') {
             // Get all of the constraints.
@@ -1217,10 +1264,10 @@ var Collection = Data_Object.extend({
     //  May have some different data wiring / connection options.
     // Likely to be best to do a lot in the abstract so changes can be viewed before being made.
 
-   /**
-    * @func
-    * @param fields
-    */
+    /**
+     * @func
+     * @param fields
+     */
     'get_unique_constraint': function(fields) {
         if (tof(fields) == 'string') fields = [fields];
         each(this._unique_constraints, function(i, unique_constraint) {
@@ -1231,10 +1278,10 @@ var Collection = Data_Object.extend({
         });
     },
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'unique': fp(function(a, sig) {
         var that = this;
         //console.log('a[0] ' + stringify(a[0]));
@@ -1264,10 +1311,10 @@ var Collection = Data_Object.extend({
     // indexes
     //  will get all the indexes... may set a particular index? Or replace the indexes?
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'indexes': fp(function(a, sig) {
         if (a.l == 0) {
             // get all indexes.
@@ -1282,10 +1329,10 @@ var Collection = Data_Object.extend({
     //  may just use the index() method, but that could call index_by to make things a bit clearer.
 
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'index_by': fp(function(a, sig) {
         var that = this;
         //console.log('index_by a ' + stringify(a));
@@ -1410,10 +1457,10 @@ var Collection = Data_Object.extend({
         }
     }),
 
-   /**
-    * @func
-    * @param ...
-    */
+    /**
+     * @func
+     * @param ...
+     */
     'index': fp(function(a, sig) {
 
         if (a.l == 1) {
@@ -1424,10 +1471,10 @@ var Collection = Data_Object.extend({
     }),
 
 
-   /**
-    * @func
-    * @param obj
-    */
+    /**
+     * @func
+     * @param obj
+     */
     'test_object_against_constraints': function(obj) {
         // will do the test for the various constraints
         //console.log('test_object_against_constraints');
@@ -1492,10 +1539,10 @@ var Collection = Data_Object.extend({
     },
 
 
-   /**
-    * @func
-    * @param value
-    */
+    /**
+     * @func
+     * @param value
+     */
 
     // Sometimes wrap a normal JS obj as a Data_Value, Data_Object or Collection?
 
@@ -1508,7 +1555,7 @@ var Collection = Data_Object.extend({
         //console.log('--------------------')
         //console.log('push tv ' + tv);
 
-        if (tv == 'object') {
+        if (tv === 'object') {
 
             var dtc = this._data_type_constraint;
             //  but we can have an object definition constraint?
@@ -1551,6 +1598,14 @@ var Collection = Data_Object.extend({
                     if (ddc) {
                         value = dobj(value, ddc.data_def);
                     } else {
+
+                        // Some objects, like DOM objects, won't work when put into a data_object or data_value.
+
+
+
+                        //console.log('tof value', tof(value));
+                        //console.log('value', value);
+
                         value = dobj(value);
                     }
                     //console.log('value ' + stringify(value));
@@ -1689,7 +1744,7 @@ var Collection = Data_Object.extend({
             // check if the index system can add the object.
         }
 
-        if (tv == 'array') {
+        if (tv === 'array') {
             // wrap it or not? could put it in another collection.
             //  will that be useful for a function's parameters?
             //  that would maintain the whole system with the wrapper and relationships.
@@ -1742,22 +1797,22 @@ var Collection = Data_Object.extend({
     },
 
 
-   /**
-    * @func
-    * @param value
-    */
+    /**
+     * @func
+     * @param value
+     */
     //'add': function(value) {
     //    return this.push(value);
     //},
 
 
-   /**
-    * @func
-    * @param arr
-    */
+    /**
+     * @func
+     * @param arr
+     */
     'load_array': function(arr) {
         var that = this;
-        //console.log('load_array arr ' + stringify(arr));
+        console.log('load_array arr ' + stringify(arr));
         // there could be a data type that this is expecting... a constraint?
         //  could have a data type constructor.
         // so, if the item given is not a Data_Object, we can try making the Data_Object, and putting it in place.
@@ -1779,10 +1834,10 @@ var Collection = Data_Object.extend({
             //console.log('data_type_constructor ' + data_type_constructor);
 
             /*
-            each(arr, function(i, v) {
-                that.push(v);
-            });
-            */
+             each(arr, function(i, v) {
+             that.push(v);
+             });
+             */
             for (var c = 0, l = arr.length; c < l; c++) {
                 that.push(arr[c]);
             }
@@ -1790,11 +1845,11 @@ var Collection = Data_Object.extend({
 
         } else {
             /*
-            each(arr, function(i, v) {
+             each(arr, function(i, v) {
 
-                that.push(v);
-            });
-            */
+             that.push(v);
+             });
+             */
             for (var c = 0, l = arr.length; c < l; c++) {
                 that.push(arr[c]);
             }
@@ -1803,20 +1858,20 @@ var Collection = Data_Object.extend({
     },
 
 
-   /**
-    * polymorphic version
-    * @name values
-    * @func
-    * @param {string} parm1 - param description
-    * @memberof module:core/collection
-    * @inner
-    */
+    /**
+     * polymorphic version
+     * @name values
+     * @func
+     * @param {string} parm1 - param description
+     * @memberof module:core/collection
+     * @inner
+     */
 
-   /**
-    * @func
-    * @param ...
-    * @variation 2
-    */
+    /**
+     * @func
+     * @param ...
+     * @variation 2
+     */
     'values': fp(function(a, sig) {
         if (a.l == 0) {
             return this._arr;
@@ -1831,9 +1886,9 @@ var Collection = Data_Object.extend({
     }),
 
 
-   /**
-    * @func
-    */
+    /**
+     * @func
+     */
     'value': function() {
         var res = [];
         this.each(function(i, v) {
@@ -1901,5 +1956,5 @@ Collection.extend = function() {
 
 module.exports = Collection;
 
-	//return Collection;
+//return Collection;
 //});

@@ -4,14 +4,14 @@
 
 /*
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 
-// Also want to make an MDI window system (Multiple Document Interface)
+ // Also want to make an MDI window system (Multiple Document Interface)
 
-define(["../../jsgui-html", "./horizontal-menu"],
-    function(jsgui, Horizontal_Menu) {
-*/
+ define(["../../jsgui-html", "./horizontal-menu"],
+ function(jsgui, Horizontal_Menu) {
+ */
 
 var jsgui = require('../../jsgui-html');
 var Radio_Button_Group = require('./radio-button-group');
@@ -54,6 +54,7 @@ var Tabs = Control.extend({
 
     // maybe add before make would be better. add will probably be used more.
     'init': function(spec, add, make) {
+        console.log('init Tabs');
         this._super(spec);
 
         this.__type_name = 'tabs';
@@ -67,116 +68,141 @@ var Tabs = Control.extend({
 
         if (!spec.abstract && !spec.el) {
 
-          // The tab bar
-          //  (the main display area)
-          //  separate panels to be hidden or shown.
-          //  Needs to link the radio buttons to the panels somehow.
-          //  Best to use the index of the button? Or buttons could be rearranged?
-          //   Then reindex?
+            // The tab bar
+            //  (the main display area)
+            //  separate panels to be hidden or shown.
+            //  Needs to link the radio buttons to the panels somehow.
+            //  Best to use the index of the button? Or buttons could be rearranged?
+            //   Then reindex?
 
-          // Each button has got corresponding panel.
-          //  ???
-          //  While using the RadioButtonGroup abstraction?
+            // Each button has got corresponding panel.
+            //  ???
+            //  While using the RadioButtonGroup abstraction?
 
-          // Make a Radio_Button_Group that
+            // Make a Radio_Button_Group that
 
-          // Each tab will have either a combined name and label, or two properties.
-          //  Two properties would be much better for internationalization.
-          //  label_text.
-
-
-          var tabs = this.get('tabs');
-
-          var rbg_items = [];
-
-          // Then make the separate panels.
-          var panels = [];
-          var t_panel;
-
-          each(tabs, function(tab) {
-            console.log('tab', tab);
-
-            var t_tab = tof(tab);
-            console.log('t_tab', t_tab);
-
-            if (t_tab === 'string') {
-              rbg_items.push(tab);
-              t_panel = new Panel({
-                'context': context
-              });
-              t_panel.add_class('hidden');
-              panels.push(t_panel);
-            };
-
-          })
-
-          var rbg = new Radio_Button_Group({
-            'context': context,
-            'items': rbg_items
-          });
-          rbg.add_class('horizontal');
-          this.set('rbg', rbg);
-
-          this.add(rbg);
-
-          // Would be worth having a collection / control collection of panels.
-          //  Better built in referencing and preservation of references (probably)
-          //   Will be possible to transfer such a collection to the client. Not so easy just with an array.
-
-          // Having a Collection of Controls does make sense here.
-          //  May raise new challenges to do with sending that Collection to the client.
+            // Each tab will have either a combined name and label, or two properties.
+            //  Two properties would be much better for internationalization.
+            //  label_text.
 
 
-          // Could assign jsgui-index values to the panels?
+            var tabs = this.get('tabs').value();
 
-          each(panels, function(panel) {
-            that.add(panel);
-          });
+            var rbg_items = [];
+
+            // Then make the separate panels.
+            var panels = [];
+            var t_panel;
+
+            each(tabs, function(tab) {
+                console.log('tab', tab);
+
+                var t_tab = tof(tab);
+                console.log('t_tab', t_tab);
+
+                if (t_tab === 'string') {
+                    rbg_items.push(tab);
+                    // Want to set a name property of the panel.
+                    // That name property would need to be sent to the client as well.
+
+                    // Make it so that name is a field of the panel that can be sent to the client.
+
+
+
+
+                    t_panel = new Panel({
+                        'context': context,
+                        'name': tab
+                    });
+                    t_panel.add_class('hidden');
+                    panels.push(t_panel);
+                };
+
+            })
+
+            var rbg = new Radio_Button_Group({
+                'context': context,
+                'items': rbg_items
+            });
+            rbg.add_class('horizontal');
+            this.set('rbg', rbg);
+
+            this.add(rbg);
+
+            // Would be worth having a collection / control collection of panels.
+            //  Better built in referencing and preservation of references (probably)
+            //   Will be possible to transfer such a collection to the client. Not so easy just with an array.
+
+            // Having a Collection of Controls does make sense here.
+            //  May raise new challenges to do with sending that Collection to the client.
+
+
+            // Could assign jsgui-index values to the panels?
+
+            each(panels, function(panel) {
+                that.add(panel);
+            });
 
 
             /*
-            var ctrl_fields = {
-                'ctrl_relative': div_relative._id(),
-                'title_bar': title_bar._id()
-            }
+             var ctrl_fields = {
+             'ctrl_relative': div_relative._id(),
+             'title_bar': title_bar._id()
+             }
 
 
-            this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
-            */
+             this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
+             */
 
 
         }
     },
 
     'panel': fp(function(a, sig) {
-      if (sig === '[n]') {
-        var res = this.get('content').get(a[0] + 1);
-        return res;
-      }
+        if (sig === '[n]') {
+            var res = this.get('content').get(a[0] + 1);
+            return res;
+        }
     }),
 
     //'resizable': function() {
     //},
     'activate': function() {
 
+        console.log('1) Activate Tabs');
+
         if (!this.__active) {
-          var that = this;
-          this._super();
 
-          var prev_showing_panel, showing_panel;
+            console.log('2) Activate Tabs');
 
-          var rbg = this.get('rbg');
-          rbg.on('change', false, function(e_change) {
-            //console.log('e_change', e_change);
 
-            var checked_index = e_change.checked._index;
+            var that = this;
+            this._super();
 
-            prev_showing_panel = showing_panel;
-            showing_panel = that.panel(checked_index);
-            if (prev_showing_panel) prev_showing_panel.hide();
-            showing_panel.show();
-          });
-          // Listen to changes in the rbg.
+            var prev_showing_panel, showing_panel;
+
+            var rbg = this.get('rbg');
+            rbg.on('change', false, function(e_change) {
+                //console.log('e_change', e_change);
+
+                var checked_index = e_change.checked._index;
+
+                prev_showing_panel = showing_panel;
+                showing_panel = that.panel(checked_index);
+                if (prev_showing_panel) prev_showing_panel.hide();
+                showing_panel.show();
+
+                // and raise a change event here.
+
+                // And want to have the panel name.
+
+                var panel_name = showing_panel.get('name');
+                e_change.tab_name = panel_name + '';
+                that.raise('change', e_change);
+
+
+            });
+            // Listen to changes in the rbg.
         }
         //
     }
@@ -184,7 +210,7 @@ var Tabs = Control.extend({
 
 module.exports = Tabs;
 /*
-        return Panel;
-    }
-);
-    */
+ return Panel;
+ }
+ );
+ */

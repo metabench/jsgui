@@ -159,6 +159,9 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                 // get_resource should do the query for the
                 var lsi = rp.get_resource('Local Server Info');
                 //console.log('lsi ' + stringify(lsi));
+
+                //throw 'stop';
+
                 var js = rp.get_resource('Site JavaScript');
                 var css = rp.get_resource('Site CSS');
                 var images = rp.get_resource('Site Images');
@@ -185,7 +188,12 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                 var matching = nis.find('entries', {
                     'family': 'IPv4',
                     'internal': false
-                })
+                });
+
+                //console.log('nis', nis);
+
+                //console.log('matching', matching);
+                //throw 'stop';
 
                 // matching.extract
 
@@ -197,7 +205,7 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                 var ipAddresses = [];
 
                 each(matching, function(v, i) {
-                    var ipAddress = v.get('address');
+                    var ipAddress = v.get('address').value();
                     ipAddresses.push(ipAddress);
                 });
 
@@ -207,6 +215,9 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                 var map_connections = {};
 
                 var i_connections = 0;
+
+                //console.log('ipAddresses', ipAddresses);
+                //throw 'stop';
 
                 each(ipAddresses, function(ipAddress, i) {
 
@@ -303,10 +314,10 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                             // Broadcast the message?
                             //  Nothin to do here.
 
-                            console.log('tof message', tof(message));
+                            //console.log('tof message', tof(message));
 
                             var obj_message = JSON.parse(message);
-                            console.log('obj_message', obj_message);
+                            //console.log('obj_message', obj_message);
 
                             sock_router.process(obj_message, conn);
 
@@ -434,18 +445,17 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                     that.sock_broadcast = broadcast;
                     that.broadcast = broadcast;
 
-
                     sock_server.installHandlers(http_server, {prefix:'/ws'});
 
-                    console.log('port', port);
+                    //console.log('port', port);
 
                     if (ipAddress.value) ipAddress = ipAddress.value();
 
-                    console.log('ipAddress', ipAddress);
+                    //console.log('ipAddress', ipAddress);
 
 
                     http_server.listen(port, ipAddress);
-                    console.log('* Server running at http://' + ipAddress + ':' + port + '/');
+                    //console.log('* Server running at http://' + ipAddress + ':' + port + '/');
 
 
 

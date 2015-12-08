@@ -4,14 +4,14 @@
 
 /*
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 
-// Also want to make an MDI window system (Multiple Document Interface)
+ // Also want to make an MDI window system (Multiple Document Interface)
 
-define(["../../jsgui-html", "./horizontal-menu"],
-    function(jsgui, Horizontal_Menu) {
-*/
+ define(["../../jsgui-html", "./horizontal-menu"],
+ function(jsgui, Horizontal_Menu) {
+ */
 
 var jsgui = require('../../jsgui-html');
 //var Horizontal_Menu = require('./horizontal-menu');
@@ -73,61 +73,65 @@ var Radio_Button_Group = Control.extend({
 
 
         if (!spec.abstract && !spec.el) {
-          var id = this._id();
+            var id = this._id();
 
-          var items = this.get('items');
-          //console.log('items', items);
+            //
+            var items = this.get('items').value();
+            //console.log('items', items);
+            //throw 'stop';
 
-          each(items, function(v, i) {
+            each(items, function(v, i) {
 
-            // jsgui advanced Radio Buttons will also be able to have a text label next to them.
-            //  May render itself as an item inside a div, with the value next to it.
-            //  Would be interesting to have a control that is 0 depth container...
-            //   Like a div, but does not exist.
+                // jsgui advanced Radio Buttons will also be able to have a text label next to them.
+                //  May render itself as an item inside a div, with the value next to it.
+                //  Would be interesting to have a control that is 0 depth container...
+                //   Like a div, but does not exist.
 
-            // So a control could have contents, but could have no DOM node of its own.
-            //  Or it has got more than one top level DOM node?
-            // Do not want to have to put everything inside a DIV.
-            //  An HTML radio button with its label next to it looks just like the kind of thing that could work as a 2 element control.
-            //   Make it have an array of elements as its .el?
-            //    or .els?
-            //  Seems like it would add more complexity to the branching.
-            //   Brings up more edge cases, makes rules more complex.
+                // So a control could have contents, but could have no DOM node of its own.
+                //  Or it has got more than one top level DOM node?
+                // Do not want to have to put everything inside a DIV.
+                //  An HTML radio button with its label next to it looks just like the kind of thing that could work as a 2 element control.
+                //   Make it have an array of elements as its .el?
+                //    or .els?
+                //  Seems like it would add more complexity to the branching.
+                //   Brings up more edge cases, makes rules more complex.
 
-            // Could get on with this and override the rendering mechanism?
-            //  Or have an option not to render the control itself?
+                // Could get on with this and override the rendering mechanism?
+                //  Or have an option not to render the control itself?
 
-            // .content_only property?
-            //  Does not render the control itself, only its content.
-            //   Then the content can include the HTML radio button control itself.
+                // .content_only property?
+                //  Does not render the control itself, only its content.
+                //   Then the content can include the HTML radio button control itself.
 
-            // But then sending the control that has not HTML element to the client?
-            //  Details of that control could be included in the next level down that does get shown.
+                // But then sending the control that has not HTML element to the client?
+                //  Details of that control could be included in the next level down that does get shown.
 
-            // Should put them in a Div for the moment, the find a way to remove that DIV from the markup.
-            //  Avoid more hacks + complexity for now. Just get the tabs etc working smoothly.
+                // Should put them in a Div for the moment, the find a way to remove that DIV from the markup.
+                //  Avoid more hacks + complexity for now. Just get the tabs etc working smoothly.
 
-            var radio_button = new Radio_Button({
-              'context': context,
-              'name': id,
-              'text': v,
-              'value': v
+
+
+                var radio_button = new Radio_Button({
+                    'context': context,
+                    'name': id,
+                    'text': v,
+                    'value': v
+                });
+
+                that.add(radio_button);
             });
-
-            that.add(radio_button);
-          });
 
 
 
             /*
-            var ctrl_fields = {
-                'ctrl_relative': div_relative._id(),
-                'title_bar': title_bar._id()
-            }
+             var ctrl_fields = {
+             'ctrl_relative': div_relative._id(),
+             'title_bar': title_bar._id()
+             }
 
 
-            this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
-            */
+             this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
+             */
 
 
         }
@@ -137,60 +141,66 @@ var Radio_Button_Group = Control.extend({
     //},
     'activate': function() {
 
-      if (!this.__active) {
-        var that = this;
+        console.log('1) Activate radio_button_group');
+
+        if (!this.__active) {
+            var that = this;
 
 
-        this._super();
+            this._super();
 
-        // No, some bubbling is taking place.
-
-
-        // Need to have it listen to all of its radio buttons.
-        //  Perhaps we don't need to make control references to all of its internal controls.
-        //  We need to listen to all of them.
-
-        // Though, what about event bubbling?
-
-        // Setting up even listeners on all of the lower down control does not seem as good as making use of event bubbling.
-
-        //  However, subcontrol events do not bubble at the moment.
-        //   Was performing slowly, and raising too many events.
-
-        // Maybe will be better to specifically set up bubbling.
-
-        // Will use individual control event handlers for the moment.
-        //  Less efficient, but need to work on the delegation / bubbling side of things.
-        var ctrl_checked;
+            // No, some bubbling is taking place.
 
 
+            // Need to have it listen to all of its radio buttons.
+            //  Perhaps we don't need to make control references to all of its internal controls.
+            //  We need to listen to all of them.
 
+            // Though, what about event bubbling?
 
-        this.get('content').each(function(i, ctrl) {
-          //console.log('ctrl', ctrl);
+            // Setting up even listeners on all of the lower down control does not seem as good as making use of event bubbling.
 
-          // Not using the DOM change.
-          //  Though on some controls, it may be best to have them default to non-dom events.
+            //  However, subcontrol events do not bubble at the moment.
+            //   Was performing slowly, and raising too many events.
+
+            // Maybe will be better to specifically set up bubbling.
+
+            // Will use individual control event handlers for the moment.
+            //  Less efficient, but need to work on the delegation / bubbling side of things.
+            var ctrl_checked;
+
+            console.log('2) Activate radio_button_group');
 
 
 
 
 
-          ctrl.on('change', false, function(e_change) {
-            //console.log('rbg e_change', e_change);
 
-            ctrl_checked = ctrl;
+            this.get('content').each(function(i, ctrl) {
+                //console.log('ctrl', ctrl);
 
-            that.raise('change', {
-              'checked': ctrl_checked
+                // Not using the DOM change.
+                //  Though on some controls, it may be best to have them default to non-dom events.
+
+
+
+
+
+                ctrl.on('change', false, function(e_change) {
+                    //console.log('rbg e_change', e_change);
+
+                    ctrl_checked = ctrl;
+
+                    that.raise('change', {
+                        'checked': ctrl_checked
+                    })
+
+                })
+
             })
 
-          })
 
-        })
-
-
-      }
+        }
 
 
 
@@ -208,7 +218,7 @@ var Radio_Button_Group = Control.extend({
 
 module.exports = Radio_Button_Group;
 /*
-        return Panel;
-    }
-);
-    */
+ return Panel;
+ }
+ );
+ */

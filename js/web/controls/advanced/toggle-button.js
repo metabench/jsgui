@@ -48,11 +48,19 @@ var Control = jsgui.Control;
 // Inherit from Button, with change events, and the possibility of changing between images?
 
 
+// If we defined something as a Collection, we would need to have different handling.
+//  Want to be able to have collections as fields.
+
+
 var Toggle_Button = Control.extend({
+
+    // Though maybe tell it to be an array and it should be an array rather than a collection?
+    //  Or a Data_Value that holds an array?
 
     'fields': [
         ['text', String],
-        ['state', String]
+        ['state', String],
+        ['states', Array]
     ],
     //  and can have other fields possibly.
 
@@ -120,7 +128,16 @@ var Toggle_Button = Control.extend({
         if (spec_state) {
           //console.log('spec_state', spec_state);
             //if (spec_state == 'expanded' || spec_state == 'contracted') {
-            state = this.set('state', spec_state);
+            //state = this.set('state', spec_state);
+            state = this.get('state').value();
+            console.log('state', state);
+            //console.log()
+
+            // So it's a Data_Value when it's a string...
+            // But when it's an array it's an array?
+
+            //throw 'stop';
+
             if (!active_fields) active_fields = {};
             active_fields.state = state;
 
@@ -131,10 +148,17 @@ var Toggle_Button = Control.extend({
             //that.add(ctrl_text);
             //that.set('ctrl_text', ctrl_text);
 
-            var span_state = new jsgui.span({ 'context': this._context});
-            span_state.add(state + '');
-            that.add(span_state);
-            that.set('span_state', span_state);
+            // May be better to put this into more general purpose composition.
+
+            if (!spec.abstract && !spec.el) {
+                var span_state = new jsgui.span({ 'context': this._context});
+                span_state.add(state + '');
+                that.add(span_state);
+                that.set('span_state', span_state);
+
+            }
+
+
             //that.add(state + '');
             //ctrl_fields['state'] = state;
             //} else {
@@ -146,7 +170,17 @@ var Toggle_Button = Control.extend({
 
         if (spec_states) {
             //if (spec_state == 'expanded' || spec_state == 'contracted') {
-            states = this.set('states', spec_states);
+
+            states = this.get('states').value();
+
+            // Should probably get the collection.
+
+            console.log('states', states);
+            console.log('tof states', tof(states));
+            console.log('tof states', tof(this._.states));
+            //throw 'stop';
+
+            //states = this.set('states', spec_states);
 
             //state = this.set('state', spec_state);
 
@@ -189,6 +223,13 @@ var Toggle_Button = Control.extend({
         // Need references?
         var that = this;
 
+        // Only want jsgui wrappers in some places.
+        // When getting a jsgui Data_Object or Control, we don't want it wrapped within its own Data_Object.
+
+
+
+
+
         var span_state = this.get('span_state');
 
         // read the active fields.
@@ -203,7 +244,7 @@ var Toggle_Button = Control.extend({
         // Automatically make strings get set as Data_Objects?
         //
 
-        var state = that.get('state');
+        var state = that.get('state').value();
 
         //console.log('tof state', tof(state));
 
@@ -230,10 +271,26 @@ var Toggle_Button = Control.extend({
           //console.log('e_change', e_change);
 
           if (e_change.name === 'state') {
-            e_change.value;
+            //e_change.value;
+              console.log('e_change.value', e_change.value);
+              console.log('tof e_change.value', tof(e_change.value));
+              console.log('');
+              console.log('1) span_state.__id', span_state.__id);
 
             span_state.clear();
-            span_state.add(e_change.value);
+
+              var tn_new_value = new jsgui.textNode({
+                  'context': that._context,
+                  'text': e_change.value
+              })
+
+              console.log('');
+              console.log('2) span_state.__id', span_state.__id);
+
+              // Activated the span state with the wrong ID?
+              //  Or it needs to generate another id?
+
+            span_state.add(tn_new_value);
 
           }
         });
@@ -242,11 +299,11 @@ var Toggle_Button = Control.extend({
             //console.log('toggle button clicked');
             // needs to toggle through states.
             // Need to send the state field from the server to the client.
-            var state = that.get('state');
+            var state = that.get('state').value();
             //console.log('state', state);
             // And need to look at the states.
 
-            var states = that.get('states');
+            var states = that.get('states').value();
             // Need to send the state field from the server to the client.
             //console.log('states', states);
             //State being stored as a Data_Object,
@@ -254,7 +311,7 @@ var Toggle_Button = Control.extend({
             // still, need to shift between them
             var i_current_state;
 
-            if (tof(states) == 'array') {
+            if (tof(states) === 'array') {
                 each(states, function(i_state, i) {
                     //console.log('i_state', i_state);
                     //console.log('tof i_state', tof(i_state));

@@ -4,14 +4,14 @@
 
 /*
 
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
+ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 
-// Also want to make an MDI window system (Multiple Document Interface)
+ // Also want to make an MDI window system (Multiple Document Interface)
 
-define(["../../jsgui-html", "./horizontal-menu"],
-    function(jsgui, Horizontal_Menu) {
-*/
+ define(["../../jsgui-html", "./horizontal-menu"],
+ function(jsgui, Horizontal_Menu) {
+ */
 
 var jsgui = require('../../jsgui-html');
 //var Horizontal_Menu = require('./horizontal-menu');
@@ -63,7 +63,18 @@ var Radio_Button = Control.extend({
 
     // maybe add before make would be better. add will probably be used more.
     'init': function(spec, add, make) {
+
+
         this._super(spec);
+
+        // Will have set up some fields.
+        //  However, will not be directly using a Field_Collection.
+        //   Though perhaps that would help with keeping the ordering of the fields.
+        //   Currently we are just treating ._ as holding all fields.
+        //    Though not everything in there need be considered a field or set up as one.
+
+
+
 
         this.__type_name = 'radio_button';
 
@@ -87,54 +98,89 @@ var Radio_Button = Control.extend({
 
         if (!spec.abstract && !spec.el) {
 
-          var name = this.get('name').value();
+            var name = this.get('name').value();
 
-          // Will need to render its ID in the DOM.
+            // Will need to render its ID in the DOM.
 
-          var html_radio = new Control({
-            'context': context
-          });
+            var html_radio = new Control({
+                'context': context
+            });
 
-          html_radio.set('dom.tagName', 'input');
-          html_radio.set('dom.attributes.type', 'radio');
-          html_radio.set('dom.attributes.name', name);
-          html_radio.set('dom.attributes.id', html_radio._id());
+            html_radio.set('dom.tagName', 'input');
+            html_radio.set('dom.attributes.type', 'radio');
+            html_radio.set('dom.attributes.name', name);
+            html_radio.set('dom.attributes.id', html_radio._id());
+
+            var html_label = new Control({
+                'context': context
+            });
+
+            html_label.set('dom.tagName', 'label');
+            //console.log('that._', that._);
+
+            var text_value = that.get('text').value();
+
+            //console.log('spec.text', spec.text);
+
+            // Value should have been set during the initialization.
+
+
+            //console.log('text_value', text_value);
+            //console.log('tof text_value', tof(text_value));
+            //console.log('that._.text', that._.text);
+            //console.log('tof(that._.text)', tof(that._.text));
+            //console.log('tof(that._.text._)', tof(that._.text._));
+
+            // So it seems as though the text field has not been assigned.
+            //  It should have been, as its specified as a field.
+
+            // However, there is a Data_Value for the text field, but it has not been set.
+
+            // The field should have been set during initialization.
 
 
 
-          var html_label = new Control({
-            'context': context
-          });
+            //throw 'stop';
 
-          html_label.set('dom.tagName', 'label');
-          console.log('text ', that.get('text'));
-          html_label.add(that.get('text').value());
-          html_label.set('dom.attributes.for', html_radio._id());
+            if (is_defined(text_value)) {
+                html_label.add(text_value);
+            }
 
-          that.add(html_radio);
-          that.add(html_label);
-          that.set('radio', html_radio);
-          that.set('label', html_label);
-          //html_radio.set('dom.attributes.type', 'radio');
+            // The text is a field.
+            //  Should be automatically assigned from the spec.
 
-          that.set('dom.attributes.data-jsgui-fields', stringify({
-              'value': that.get('value')
-          }).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
-          // Look at the items.
+            // Needs to have a context for the text that gets added.
+            //  Text is not an element in of itself, so will not need a context.
+
+
+
+            html_label.set('dom.attributes.for', html_radio._id());
+
+            that.add(html_radio);
+            that.add(html_label);
+            that.set('radio', html_radio);
+            that.set('label', html_label);
+            //html_radio.set('dom.attributes.type', 'radio');
+
+            that.set('dom.attributes.data-jsgui-fields', stringify({
+                'value': that.get('value')
+            }).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+
+            // Look at the items.
 
 
 
 
             /*
-            var ctrl_fields = {
-                'ctrl_relative': div_relative._id(),
-                'title_bar': title_bar._id()
-            }
+             var ctrl_fields = {
+             'ctrl_relative': div_relative._id(),
+             'title_bar': title_bar._id()
+             }
 
 
-            this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
-            */
+             this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
+             */
 
 
         }
@@ -147,31 +193,31 @@ var Radio_Button = Control.extend({
 
 
         if (!this.__active) {
-          this._super();
+            this._super();
 
-          var radio = this.get('radio');
-          var el_radio = radio.get('el');
-          var label = this.get('label');
-          var that = this;
+            var radio = this.get('radio');
+            var el_radio = radio.get('dom.el').value();
+            var label = this.get('label');
+            var that = this;
 
-          //var el = this.get('dom.el');
-          //
+            //var el = this.get('dom.el');
+            //
 
-          // No, refer specifically to the radio button element's control.
+            // No, refer specifically to the radio button element's control.
 
 
 
-          // Changes upon becoming checked?
-          radio.on('change', function(e_change) {
-            console.log('el_radio.checked', el_radio.checked);
+            // Changes upon becoming checked?
+            radio.on('change', function(e_change) {
+                //console.log('el_radio.checked', el_radio.checked);
 
-            if (el_radio.checked) {
-              that.raise('change');
-            }
-          });
+                if (el_radio.checked) {
+                    that.raise('change');
+                }
+            });
 
-          // Need to listen for DOM change events. That will chage the value.
-          //  The checked value true or false.
+            // Need to listen for DOM change events. That will chage the value.
+            //  The checked value true or false.
 
 
 
@@ -186,7 +232,7 @@ var Radio_Button = Control.extend({
 
 module.exports = Radio_Button;
 /*
-        return Panel;
-    }
-);
-    */
+ return Panel;
+ }
+ );
+ */

@@ -643,12 +643,20 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             }
 
             if (spec.el) {
+
+                //console.log('spec.el', spec.el);
                 this.set('dom.el', spec.el);
+                //console.log('this._.dom._.el', this._.dom._.el);
+                //throw 'stop';
             }
 
             var that = this;
             var context = this._context;
+
+            //console.log('context', context);
+
             if (context) {
+
                 if (context.register_control) context.register_control(this);
             } else {
                 //console.trace('');
@@ -729,9 +737,6 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
             // A change event here seems to be creating lots of event handlers on one control.
 
-
-
-
             // Need to work out why event binding here causes problems, with it seeming to bind lots of events to one control.
 
             // It will probably be best to do smaller test cases to do with event binding and bubbling,
@@ -760,6 +765,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             // Want a 'target' for the change event.
 
             var size = this.get('size');
+
 
             // has the value been set?
 
@@ -796,77 +802,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 // Could use an html/css output processor.
 
 
-
             });
-
-            // And look at thie size for the first time.
-
-
-            /*
-
-            this.on('change', function(e_change) {
-
-                // Change takes place in the collection?
-                //  So when an item gets added, it's added to the collection, and the collection changes.
-                //  Does the collection have the right context? The collection is initialised as a field.
-
-
-
-                //console.log('e_change', e_change);
-                // Not if the target applies to a sub-property / field that is another object in its own right?
-                console.log('*** e_change.target === that ',  e_change.target === that);
-
-                var target = e_change.target, name = e_change.name, value = e_change.value;
-
-                if (target === that) {
-                    // Then look for specific changes like the size.
-                    //  When the size property has changed, we need to update DOM properties.
-
-                    if (name) {
-                        console.log('e_change.name', name);
-                        //console.log('that', that._id());
-
-                        
-                        if (name === 'size') {
-                            // need to update the DOM.
-
-                            // Needs to be the value that has gone through the processor!!!
-
-                            
-
-                            //that.style('width', width);
-                            //that.style('height', height);
-
-
-
-
-                        }
-
-                    }
-
-
-                }
-
-                // There are very many changes...
-                //  It seems like too many change events get reported.
-                //   Need to tell the difference between a change of something, and a change to something.
-                //   Like an inner control gets replaced with something different, or an inner control has a change happen to it.
-
-
-                // It looks like changes are bubbling, need to find a way of tracking the initiator of a change event.
-
-
-
-                
-
-                //console.log('change sig ' , jsgui.get_item_sig(e_change));
-            });
-
-            */
-            
-
-
-
         }
 
     },
@@ -1924,6 +1860,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
     },
     'add': function(new_content) {
 
+        //console.log('new_content', new_content);
+
         // Will also turn XML strings describing jsgui controls/content into controls/content.
 
         var tnc = tof(new_content);
@@ -1980,6 +1918,8 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
             var inner_control = this.get('inner_control');
+
+
             //console.log('inner_control', inner_control);
 
             // Does it add a Data_Object successfully?
@@ -2297,11 +2237,22 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         dom_attributes._['data-jsgui-id'] = new Data_Value({'value': id});
         dom_attributes._['data-jsgui-type'] = new Data_Value({'value': this.__type_name});
         //var el = this._.el || dom._.el;
-        var el = dom._.el;
+        var el;
+
+        if (dom._.el) {
+            el = dom._.el._;
+        }
+
         if (el) {
           //console.log('el', el);
-          el.setAttribute('data-jsgui-id', id);
-          el.setAttribute('data-jsgui-type', this.__type_name);
+            //console.log('el.nodeType', el.nodeType);
+
+            if (el.nodeType === 1) {
+                el.setAttribute('data-jsgui-id', id);
+                el.setAttribute('data-jsgui-type', this.__type_name);
+            }
+
+
         }
 
 
@@ -2925,6 +2876,7 @@ Control.extend = function(prop, post_init) {
                     return function() {
                         tmp = this._super;
                         this._super = _super[name];
+                        //console.log('pre apply function ' + name);
                         res = fn.apply(this, arguments);
                         this._super = tmp;
                         return res;

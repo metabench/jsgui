@@ -4,16 +4,16 @@
 
 
 /*
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module);
-}
+ if (typeof define !== 'function') {
+ var define = require('amdefine')(module);
+ }
 
 
-//['jsgui-lang-essentials', 'node-rasters']
+ //['jsgui-lang-essentials', 'node-rasters']
 
-define(['../core/jsgui-lang-essentials', 'child_process', 'ncp', './jsgui-node-file-checksum', 'rimraf'],
-function (jsgui, child_process, ncp_module, checksum, rimraf) {
-*/
+ define(['../core/jsgui-lang-essentials', 'child_process', 'ncp', './jsgui-node-file-checksum', 'rimraf'],
+ function (jsgui, child_process, ncp_module, checksum, rimraf) {
+ */
 
 var jsgui = require('../core/jsgui-lang-essentials', 'child_process', 'ncp', './jsgui-node-file-checksum', 'rimraf');
 var child_process = require('child_process');
@@ -203,14 +203,14 @@ var fs2 = {
 
 	},
 
-      'exists': function(path, callback) {
-          fs.exists(path, function(res) {
-              callback(null, res);
-          })
-      },
+	'exists': function(path, callback) {
+		fs.exists(path, function(res) {
+			callback(null, res);
+		})
+	},
 
 
-      // want to save a binary file as well.
+	// want to save a binary file as well.
 
 	// But loading binary gets more complicated as we need to know the format in many cases, so will have specific functions
 	//  to load typed arrays.
@@ -266,37 +266,37 @@ var fs2 = {
 	//  may need to modify mapify to support callback functions like arrayify.
 	//  Can save a whole bunch of files as strings.
 	'save_file_as_string': mapify(fp(function(a, sig) {
-	    //console.log('save_file_as_string sig ' + sig);
+		//console.log('save_file_as_string sig ' + sig);
 
-			// and could JSON stringify an object.
+		// and could JSON stringify an object.
 
-			if (sig == '[s,o,f]' || sig == '[s,a,f]') {
-				var file_path = a[0];
-				var file_content = JSON.stringify(a[1]);
-				var callback = a[2];
-				return this.save_file_as_string(file_path, file_content, callback);
-			}
+		if (sig == '[s,o,f]' || sig == '[s,a,f]') {
+			var file_path = a[0];
+			var file_content = JSON.stringify(a[1]);
+			var callback = a[2];
+			return this.save_file_as_string(file_path, file_content, callback);
+		}
 
-	    if (sig == '[s,s,f]') {
-	        var file_path = a[0];
-	        var file_content = a[1];
-	        var callback = a[2];
-          //console.log('pre write file file_path', file_path);
-	        fs.writeFile(file_path, file_content, function(err) {
-                  if(err) {
-                      //console.log(err);
-                      callback(err);
-                  } else {
-                      //console.log("The file was saved!");
-                      callback(null, true);
-                      // could return the file path?
-                      //  returning timing info would be cool as well.
-                      //  could maybe make a function that keeps track of it as a function is executed.
+		if (sig == '[s,s,f]') {
+			var file_path = a[0];
+			var file_content = a[1];
+			var callback = a[2];
+			//console.log('pre write file file_path', file_path);
+			fs.writeFile(file_path, file_content, function(err) {
+				if(err) {
+					//console.log(err);
+					callback(err);
+				} else {
+					//console.log("The file was saved!");
+					callback(null, true);
+					// could return the file path?
+					//  returning timing info would be cool as well.
+					//  could maybe make a function that keeps track of it as a function is executed.
 
 
-                  }
-              });
-	    };
+				}
+			});
+		};
 	})),
 
 	'process_file_as_string': function(file_path, fnProcess, callback) {
@@ -309,162 +309,173 @@ var fs2 = {
 		});
 	},
 
-  // Loading a file as a Uint8 Typed array will become more important.
-  //  Will be using them rather than buffers in many cases.
-  //  Will be easier to interface with C++ code.
+	// Loading a file as a Uint8 Typed array will become more important.
+	//  Will be using them rather than buffers in many cases.
+	//  Will be easier to interface with C++ code.
 
-  // Probably not needed - as buffer is a Uint8Array.
+	// Probably not needed - as buffer is a Uint8Array.
 
-  // May be easier to carry out operations on a Uint8Array in general though.
-
-
-  // Also want to be able to load a file as a buffer.
-
-  'load_file_as_buffer': fp(function(a, sig) {
-      //source_path, callback
-
-      // should work as an array...
-      // so when you give it an array of source paths, it loads them all, and returns the result as an array by default.
-      //  can return a map if asked to... would be easier to access in many cases, but problems when there are repeated params.
-      // I think return map by default.
-      //  Arrayify input, mapify output.
-
-      // could use arrayify here possibly...
-
-      // could have a concurrency_limit argument.
-      //  would be useful to incorporate that into a lot of code as an option.
-
-      var source_path, concurrency_limit = 4, callback;
-
-      //console.log('load_file_as_string sig ' + sig);
-
-      if (sig == '[a,n,f]') {
-          source_path = a[0];
-          concurrency_limit = a[1];
-          callback = a[2];
-      }
-      if (sig == '[s,n,f]') {
-          source_path = a[0];
-          concurrency_limit = a[1];
-          callback = a[2];
-      }
-      if (sig == '[a,f]') {
-          source_path = a[0];
-          callback = a[1];
-      }
-      if (sig == '[s,f]') {
-          source_path = a[0];
-          callback = a[1];
-      }
-
-      if (tof(source_path) == 'string') {
-          fs.readFile(source_path, function(err, data_buffer) {
-              if (err) {
-                  //console.log('error reading file at ' + source_path);
-                  //var stack = new Error().stack;
-
-                  // callback with the error.
+	// May be easier to carry out operations on a Uint8Array in general though.
 
 
-                  //console.log(stack);
+	// Also want to be able to load a file as a buffer.
 
-                  //throw err;
+	'load_file_as_buffer': fp(function(a, sig) {
+		//source_path, callback
 
-                  callback(err);
-              } else {
-                  callback(null, data_buffer);
-              }
-              //console.log('OK: ' + filename);
-              //console.log(data)
-          });
+		// should work as an array...
+		// so when you give it an array of source paths, it loads them all, and returns the result as an array by default.
+		//  can return a map if asked to... would be easier to access in many cases, but problems when there are repeated params.
+		// I think return map by default.
+		//  Arrayify input, mapify output.
 
-      } else if (tof(source_path) == 'array') {
-          var res = {};
-          var fns = [];
-          each(source_path, function(i, source_path_item) {
-              fns.push([fs2.load_file_as_buffer, [source_path_item], function(err, res_loaded) {
-                  if (err) throw err;
+		// could use arrayify here possibly...
 
-                  res[source_path_item] = res_loaded;
+		// could have a concurrency_limit argument.
+		//  would be useful to incorporate that into a lot of code as an option.
 
-              }]);
-          });
-          call_multi(fns, function(err, res_multi) {
-              if (err) throw err;
-              callback(null, res);
-          });
-      }
+		var source_path, concurrency_limit = 4, callback;
 
-      //fs.readFile(filename, 'utf8', function(err, data_buffer) {
+		//console.log('load_file_as_string sig ' + sig);
 
-  }),
+		if (sig == '[a,n,f]') {
+			source_path = a[0];
+			concurrency_limit = a[1];
+			callback = a[2];
+		}
+		if (sig == '[s,n,f]') {
+			source_path = a[0];
+			concurrency_limit = a[1];
+			callback = a[2];
+		}
+		if (sig == '[a,f]') {
+			source_path = a[0];
+			callback = a[1];
+		}
+		if (sig == '[s,f]') {
+			source_path = a[0];
+			callback = a[1];
+		}
+
+		if (tof(source_path) == 'string') {
+			fs.readFile(source_path, function(err, data_buffer) {
+				if (err) {
+					//console.log('error reading file at ' + source_path);
+					//var stack = new Error().stack;
+
+					// callback with the error.
+
+
+					//console.log(stack);
+
+					//throw err;
+
+					callback(err);
+				} else {
+					callback(null, data_buffer);
+				}
+				//console.log('OK: ' + filename);
+				//console.log(data)
+			});
+
+		} else if (tof(source_path) == 'array') {
+			var res = {};
+			var fns = [];
+			each(source_path, function(i, source_path_item) {
+				fns.push([fs2.load_file_as_buffer, [source_path_item], function(err, res_loaded) {
+					if (err) throw err;
+
+					res[source_path_item] = res_loaded;
+
+				}]);
+			});
+			call_multi(fns, function(err, res_multi) {
+				if (err) throw err;
+				callback(null, res);
+			});
+		}
+
+		//fs.readFile(filename, 'utf8', function(err, data_buffer) {
+
+	}),
+
+	'load_json_as_object': function(path, callback) {
+		this.load_file_as_string(path, function(err, str_file) {
+			if (err) { callback(err); } else {
+				// try/catch?
+				//return JSON.parse(str_file);
+
+				callback(null, JSON.parse(str_file));
+			}
+		});
+	},
 
 	'load_file_as_string': fp(function(a, sig) {
-	    //source_path, callback
+		//source_path, callback
 
-	    // should work as an array...
-	    // so when you give it an array of source paths, it loads them all, and returns the result as an array by default.
-	    //  can return a map if asked to... would be easier to access in many cases, but problems when there are repeated params.
-	    // I think return map by default.
-	    //  Arrayify input, mapify output.
+		// should work as an array...
+		// so when you give it an array of source paths, it loads them all, and returns the result as an array by default.
+		//  can return a map if asked to... would be easier to access in many cases, but problems when there are repeated params.
+		// I think return map by default.
+		//  Arrayify input, mapify output.
 
-	    // could use arrayify here possibly...
+		// could use arrayify here possibly...
 
-	    // could have a concurrency_limit argument.
-	    //  would be useful to incorporate that into a lot of code as an option.
+		// could have a concurrency_limit argument.
+		//  would be useful to incorporate that into a lot of code as an option.
 
-	    var source_path, concurrency_limit = 4, callback;
+		var source_path, concurrency_limit = 4, callback;
 
-	    //console.log('load_file_as_string sig ' + sig);
+		//console.log('load_file_as_string sig ' + sig);
 
-	    if (sig == '[a,n,f]') {
-	        source_path = a[0];
-	        concurrency_limit = a[1];
-	        callback = a[2];
-	    }
-	    if (sig == '[s,n,f]') {
-	        source_path = a[0];
-	        concurrency_limit = a[1];
-	        callback = a[2];
-	    }
-	    if (sig == '[a,f]') {
-	        source_path = a[0];
-	        callback = a[1];
-	    }
-	    if (sig == '[s,f]') {
-	        source_path = a[0];
-	        callback = a[1];
-	    }
+		if (sig == '[a,n,f]') {
+			source_path = a[0];
+			concurrency_limit = a[1];
+			callback = a[2];
+		}
+		if (sig == '[s,n,f]') {
+			source_path = a[0];
+			concurrency_limit = a[1];
+			callback = a[2];
+		}
+		if (sig == '[a,f]') {
+			source_path = a[0];
+			callback = a[1];
+		}
+		if (sig == '[s,f]') {
+			source_path = a[0];
+			callback = a[1];
+		}
 
-	    if (tof(source_path) == 'string') {
-	        fs.readFile(source_path, function(err, data_buffer) {
-                  if (err) {
-                      callback(err);
-                  } else {
-                      callback(null, data_buffer.toString());
-                  }
-                  //console.log('OK: ' + filename);
-                  //console.log(data)
-              });
+		if (tof(source_path) == 'string') {
+			fs.readFile(source_path, function(err, data_buffer) {
+				if (err) {
+					callback(err);
+				} else {
+					callback(null, data_buffer.toString());
+				}
+				//console.log('OK: ' + filename);
+				//console.log(data)
+			});
 
-	    } else if (tof(source_path) == 'array') {
-	        var res = {};
-	        var fns = [];
-	        each(source_path, function(i, source_path_item) {
-	            fns.push([fs2.load_file_as_string, [source_path_item], function(err, res_loaded) {
-	                if (err) throw err;
+		} else if (tof(source_path) == 'array') {
+			var res = {};
+			var fns = [];
+			each(source_path, function(i, source_path_item) {
+				fns.push([fs2.load_file_as_string, [source_path_item], function(err, res_loaded) {
+					if (err) throw err;
 
-	                res[source_path_item] = res_loaded;
+					res[source_path_item] = res_loaded;
 
-	            }]);
-	        });
-	        call_multi(fns, function(err, res_multi) {
-	            if (err) throw err;
-	            callback(null, res);
-	        });
-	    }
+				}]);
+			});
+			call_multi(fns, function(err, res_multi) {
+				if (err) throw err;
+				callback(null, res);
+			});
+		}
 
-	    //fs.readFile(filename, 'utf8', function(err, data_buffer) {
+		//fs.readFile(filename, 'utf8', function(err, data_buffer) {
 
 	}),
 
@@ -570,17 +581,17 @@ var fs2 = {
 
 
 	'dir_files_by_extension': fp(function(a, sig) {
-	    var path = a[0], extension = a[1], include_metadata = false, callback;
+		var path = a[0], extension = a[1], include_metadata = false, callback;
 
-	    if (a.l == 3) {
-	        callback = a[2];
-	    }
-	    if (a.l == 4) {
-	        include_metadata = a[2];
-	        callback = a[3];
-	    }
+		if (a.l == 3) {
+			callback = a[2];
+		}
+		if (a.l == 4) {
+			include_metadata = a[2];
+			callback = a[3];
+		}
 
-	    var contents_cb = function(err, dir_contents) {
+		var contents_cb = function(err, dir_contents) {
 			if (err) {
 
 			} else {
@@ -593,10 +604,10 @@ var fs2 = {
 					var file_name;
 
 					if (tof(v) == 'array') {
-					    file_name = v[0];
+						file_name = v[0];
 					}
 					if (tof(v) == 'string') {
-					    file_name = v[1];
+						file_name = v[1];
 					}
 
 					var file_extension = node_path.extname(file_name);
@@ -614,10 +625,10 @@ var fs2 = {
 		};
 
 		if (include_metadata) {
-		    fs2.dir_contents(path, include_metadata, contents_cb);
+			fs2.dir_contents(path, include_metadata, contents_cb);
 		} else {
 
-		    fs2.dir_contents(path, contents_cb);
+			fs2.dir_contents(path, contents_cb);
 		}
 
 	}),
@@ -632,26 +643,26 @@ var fs2 = {
 	//  we may then want to get the contents of a bunch of dirs.
 
 	'dir_dirs': fp(function(a, sig) {
-	    // can still apply to multiple dirs.
-	    // source_dir, callback
+		// can still apply to multiple dirs.
+		// source_dir, callback
 
-	    var source_dir, callback;
+		var source_dir, callback;
 
-	    //console.log('dir_dirs sig ' + sig);
+		//console.log('dir_dirs sig ' + sig);
 
-	    if (sig == '[s,f]') {
-	        source_dir = a[0];
-	        callback = a[1];
-	        this.dir_contents(source_dir, {'files_or_directories': 'directories'}, callback);
-	    }
-	    if (sig == '[s,o,f]') {
-	        source_dir = a[0];
-	        options = a[1];
-	        callback = a[2];
-	        options.files_or_directories = 'directories';
-	        this.dir_contents(source_dir, options, callback);
-	    }
-	    // but do want this to allow a filter as well.
+		if (sig == '[s,f]') {
+			source_dir = a[0];
+			callback = a[1];
+			this.dir_contents(source_dir, {'files_or_directories': 'directories'}, callback);
+		}
+		if (sig == '[s,o,f]') {
+			source_dir = a[0];
+			options = a[1];
+			callback = a[2];
+			options.files_or_directories = 'directories';
+			this.dir_contents(source_dir, options, callback);
+		}
+		// but do want this to allow a filter as well.
 
 	}),
 
@@ -659,136 +670,136 @@ var fs2 = {
 
 	// could have this get directory contents recursively to a path... or maybe use the specialised function for that.
 	'dir_contents': arrayify(0, fp(function(a, sig) {
-	    // path, callback
+		// path, callback
 
-	    var path = a[0], filter, include_metadata = false, include_file_contents = false, callback, t_filter;
-	    var fs_paths = false;
-	    // with an extension filter...
+		var path = a[0], filter, include_metadata = false, include_file_contents = false, callback, t_filter;
+		var fs_paths = false;
+		// with an extension filter...
 
-	    var extension_filter;
-	    var regex_filter;
+		var extension_filter;
+		var regex_filter;
 
-	    var res_format = 'array';
+		var res_format = 'array';
 
-	    //console.log('dir_contents sig ' + sig);
+		//console.log('dir_contents sig ' + sig);
 
-	    // may want to specify options object.
-	    //  may want to load the directories, that could be specified as an option.
+		// may want to specify options object.
+		//  may want to load the directories, that could be specified as an option.
 
-	    var files_or_directories;
-	    if (a.l == 2) {
-	        // [s,f]
-	        callback = a[1];
-	    }
-	    if (a.l == 3) {
+		var files_or_directories;
+		if (a.l == 2) {
+			// [s,f]
+			callback = a[1];
+		}
+		if (a.l == 3) {
 
-	        // [s,s,f]
-	        //  it has an extension filter.
+			// [s,s,f]
+			//  it has an extension filter.
 
-	        if (sig == '[s,s,f]') {
-	            filter = a[1];
-	            extension_filter = filter;
-	            t_filter = 'extension';
-	            callback = a[2];
-	            var options = {};
-	            options.files_or_directories = 'files';
-	        }
+			if (sig == '[s,s,f]') {
+				filter = a[1];
+				extension_filter = filter;
+				t_filter = 'extension';
+				callback = a[2];
+				var options = {};
+				options.files_or_directories = 'files';
+			}
 
-	        // [s,b,f]
+			// [s,b,f]
 
-	        // [s,r,f]
+			// [s,r,f]
 
-	        // [s,o,f]
-	        //  can have an options object there.
-	        //  another option can be files_or_directories??? better name?
+			// [s,o,f]
+			//  can have an options object there.
+			//  another option can be files_or_directories??? better name?
 
-	        if (sig == '[s,o,f]') {
-	            //include_metadata = a[1];
-	            var options = a[1];
-	            if (options.include_metadata) include_metadata = options.include_metadata;
-	            if (options.files_or_directories) files_or_directories = options.files_or_directories;
-	            if (options.include_file_contents) include_file_contents = options.include_file_contents;
-	            if (options.res_format) res_format = options.res_format;
+			if (sig == '[s,o,f]') {
+				//include_metadata = a[1];
+				var options = a[1];
+				if (options.include_metadata) include_metadata = options.include_metadata;
+				if (options.files_or_directories) files_or_directories = options.files_or_directories;
+				if (options.include_file_contents) include_file_contents = options.include_file_contents;
+				if (options.res_format) res_format = options.res_format;
 
-	            if (options.filter) {
-	                filter = options.filter;
-	                t_filter = tof(filter);
+				if (options.filter) {
+					filter = options.filter;
+					t_filter = tof(filter);
 
-	                // then if t_filter is 'object', there will be more filter properties.
+					// then if t_filter is 'object', there will be more filter properties.
 
-	                if (t_filter == 'object') {
-	                    if (filter.extension) {
-	                        //filter = filter.extension;
-	                        //t_filter = 'extension';
-	                        extension_filter = filter.extension;
+					if (t_filter == 'object') {
+						if (filter.extension) {
+							//filter = filter.extension;
+							//t_filter = 'extension';
+							extension_filter = filter.extension;
 
-	                    }
-	                    if (filter.regex) {
-	                        //filter = filter.extension;
-	                        //t_filter = 'extension';
-	                        regex_filter = filter.regex;
+						}
+						if (filter.regex) {
+							//filter = filter.extension;
+							//t_filter = 'extension';
+							regex_filter = filter.regex;
 
-	                    }
-	                }
-	            }
-	            if (options.fs_paths) {
-	                fs_paths = options.fs_paths;
-	                //throw 'stop';
-	            }
-	            callback = a[2];
-	            //console.log('sof');
-	        }
+						}
+					}
+				}
+				if (options.fs_paths) {
+					fs_paths = options.fs_paths;
+					//throw 'stop';
+				}
+				callback = a[2];
+				//console.log('sof');
+			}
 
-	        if (sig == '[s,b,f]') {
-	            include_metadata = a[1];
-	            callback = a[2];
-	        }
-	        if (sig == '[s,r,f]') {
-	            filter = a[1];
-	            t_filter = 'regex';
-	            regex_filter = filter;
-	            callback = a[2];
-	        }
-
-
-
-	        // regex being the filter
-	    }
-	    if (a.l == 4) {
-	        if (sig == '[s,s,b,f]') {
-	            filter = a[1];
-	            t_filter = 'extension';
-	            include_metadata = a[2];
-	            callback = a[3];
-	        }
-	        if (sig == '[s,s,o,f]') {
-	            filter = a[1];
-	            t_filter = 'extension';
-	            extension_filter = filter;
-
-	            //include_metadata = a[2];
-	            var options = a[2];
-	            if (options.metadata) {
-	                include_metadata = options.metadata;
-	            }
-	            if (options.include_metadata) {
-	                include_metadata = options.include_metadata;
-	            }
-	            if (options.fs_paths) {
-	                fs_paths = options.fs_paths;
-	                //throw 'stop';
-	            }
-	            if (options.files_or_directories) files_or_directories = options.files_or_directories;
-	            if (options.include_file_contents) include_file_contents = options.include_file_contents;
-	            if (options.res_format) res_format = options.res_format;
+			if (sig == '[s,b,f]') {
+				include_metadata = a[1];
+				callback = a[2];
+			}
+			if (sig == '[s,r,f]') {
+				filter = a[1];
+				t_filter = 'regex';
+				regex_filter = filter;
+				callback = a[2];
+			}
 
 
-	            callback = a[3];
-	        }
-	    }
 
-	    // ssbff?
-	    //console.log ('!callback ' + tof(callback));
+			// regex being the filter
+		}
+		if (a.l == 4) {
+			if (sig == '[s,s,b,f]') {
+				filter = a[1];
+				t_filter = 'extension';
+				include_metadata = a[2];
+				callback = a[3];
+			}
+			if (sig == '[s,s,o,f]') {
+				filter = a[1];
+				t_filter = 'extension';
+				extension_filter = filter;
+
+				//include_metadata = a[2];
+				var options = a[2];
+				if (options.metadata) {
+					include_metadata = options.metadata;
+				}
+				if (options.include_metadata) {
+					include_metadata = options.include_metadata;
+				}
+				if (options.fs_paths) {
+					fs_paths = options.fs_paths;
+					//throw 'stop';
+				}
+				if (options.files_or_directories) files_or_directories = options.files_or_directories;
+				if (options.include_file_contents) include_file_contents = options.include_file_contents;
+				if (options.res_format) res_format = options.res_format;
+
+
+				callback = a[3];
+			}
+		}
+
+		// ssbff?
+		//console.log ('!callback ' + tof(callback));
 		//path = path.replace(/\//g, '\\');
 		//console.log('dir_contents path ' + path);
 
@@ -817,25 +828,25 @@ var fs2 = {
 				//console.log ('!2callback ' + tof(callback));
 				var cb = function() {
 					//console.log('cb ');
-                      //console.log('files_or_directories', files_or_directories);
-				    if (files_or_directories == 'files') {
-				        callback(null, res_files);
-				    } else if (files_or_directories == 'directories') {
-				        callback(null, res_directories);
-				    } else {
+					//console.log('files_or_directories', files_or_directories);
+					if (files_or_directories == 'files') {
+						callback(null, res_files);
+					} else if (files_or_directories == 'directories') {
+						callback(null, res_directories);
+					} else {
 
-              if (res_files.length > 0) {
-                  res.files = res_files;
-              }
-              if (res_directories.length > 0) {
-                  res.directories = res_directories;
-              }
-              //return res;
-              //console.log('res ' + stringify(res));
-              //console.log('tof callback ' + tof(callback));
-              //console.log('callback ' + stringify(callback));
-              callback(null, res);
-				    }
+						if (res_files.length > 0) {
+							res.files = res_files;
+						}
+						if (res_directories.length > 0) {
+							res.directories = res_directories;
+						}
+						//return res;
+						//console.log('res ' + stringify(res));
+						//console.log('tof callback ' + tof(callback));
+						//console.log('callback ' + stringify(callback));
+						callback(null, res);
+					}
 
 				}
 
@@ -849,20 +860,20 @@ var fs2 = {
 					cb();
 				}
 
-        //console.log('files.length', files.length);
+				//console.log('files.length', files.length);
 
-        //console.log('files', files);
+				//console.log('files', files);
 
 
 
 				each(files, function(i, v) {
-				  var file_name = v;
+					var file_name = v;
 					var file_or_dir_full_path;
 
 					if (path.substr(path.length - 1) == '/') {
-					    file_or_dir_full_path = path + v;
+						file_or_dir_full_path = path + v;
 					} else {
-					    file_or_dir_full_path = path + dir_separator + v;
+						file_or_dir_full_path = path + dir_separator + v;
 					}
 
 
@@ -880,281 +891,281 @@ var fs2 = {
 					//console.log('regex_filter ' + regex_filter);
 
 					if (extension_filter) {
-					    var ext = node_path.extname(file_name);
-					    //console.log('ext ' + ext);
-					    proceed = ext == extension_filter;
+						var ext = node_path.extname(file_name);
+						//console.log('ext ' + ext);
+						proceed = ext == extension_filter;
 					}
 					if (proceed && regex_filter) {
-					    //console.log('file_name ' + file_name);
-					    proceed = regex_filter.test(file_name);
+						//console.log('file_name ' + file_name);
+						proceed = regex_filter.test(file_name);
 					}
 					//console.log('proceed ' + proceed);
 
 					/*
-					if (filter) {
+					 if (filter) {
 
-					    if (t_filter == 'regex') {
-					        //RegExpObject.test(string)
-					        proceed = filter.test(v);
-					    }
-					    if (t_filter == 'extension') {
-					        var ext = node_path.extname(v);
-					        proceed = ext == filter;
-					    }
+					 if (t_filter == 'regex') {
+					 //RegExpObject.test(string)
+					 proceed = filter.test(v);
+					 }
+					 if (t_filter == 'extension') {
+					 var ext = node_path.extname(v);
+					 proceed = ext == filter;
+					 }
 
-					}
-					*/
+					 }
+					 */
 
 					if (proceed) {
 
-					    fs.stat(file_or_dir_full_path, function(err, stats) {
+						fs.stat(file_or_dir_full_path, function(err, stats) {
 
 
-                if (err) {
-
-
-
-                	//console.log('stats unavailable for ' + file_or_dir_full_path);
-
-                	var item_res = file_name;
-                	res_files.push(item_res);
-
-                  // Probably don't fail whole thing with error...
-
-                	c--;
-                  //console.log('c', c);
-                  if (c == 0) {
-                      cb();
-                  }
-
-                    //throw(err);
-
-                } else {
-                    //console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));
-
-                    var is_dir = stats.isDirectory();
-
-                    //console.log('file_name', file_name);
-
-                    //console.log('files_or_directories ' + files_or_directories);
-                    //console.log('is_dir ' + is_dir);
-                    //console.log('file_or_dir_full_path ' + file_or_dir_full_path);
-
-                    // not a dir anyway???
-                    if (is_dir && files_or_directories != 'files') {
-                        if (fs_paths) {
-                            res_directories.push(file_or_dir_full_path);
-                        } else {
-                            res_directories.push(v);
-                        }
-
-                        c--;
-                        if (c == 0) {
-                            cb();
-                        }
-                    } else if (files_or_directories != 'directories') {
-
-                        // can load the whole file as string if asked to do so.
-
-                        // options.load_file == 'string'.
-
-                        // if including the file contents... load it as a string.
-
-                        // if including both the metadata and the content...
-                        //  could load them both at once.
-                        //   would like the Fns() system with .go rather than using call_multi.
-
-                        // it can load the required data... calling a function that loads the metadata as well as a function that loads the file.
-                        //  when there are multiple file calls, the results should arrive in an array I think.
-
-                        // fns.go seems like it would be very useful indeed.
-
-                        var fns = Fns();
-
-                        // and in the results we may need to include the full paths.
-                        //  that could be an option in the metadata function.
-
-                        //fns.push([]);
-
-                        if (include_metadata) {
-                            fns.push([fs2.metadata, [file_or_dir_full_path]]);
-                            // could become fns.push(fs2.metadata, file_or_dir_full_path);
-                        }
-                        if (include_file_contents) {
-                            fns.push([fs2.load_file_as_string, [file_or_dir_full_path]]);
-                        }
-
-                        //console.log('fns.length ' + fns.length);
-
-                        if (fns.length > 0) {
-
-
-                          fns.go(function(err, fns_res) {
-                              if (err) {
-                                  throw err;
-                              } else {
-
-                                  //console.log('fns_res ' + stringify(fns_res));
-                                  //console.log('tof(fns_res) ' + tof(fns_res));
-
-                                  // we may need to return the fs paths with the data...
-                                  // path, content, metadata
-                                  if (include_metadata && include_file_contents) {
-                                      var metadata = fns_res[0];
-                                      var file_contents = fns_res[1];
-
-                                      if (res_format == 'array') {
-                                          //var res
-                                          var item_res = [file_or_dir_full_path, metadata, file_contents];
-                                          res_files.push(item_res);
-                                      } else if (res_format == 'map') {
-                                          var item_res = {
-                                              //'path': file_or_dir_full_path,
-                                              'name': file_name,
-                                              'metadata': metadata,
-                                              'contents': file_contents
-                                          }
-                                          if (fs_paths) {
-                                              item_res.path = file_or_dir_full_path;
-                                          }
-                                          res_files.push(item_res);
-                                      }
-
-                                  } else if (include_metadata) {
-                                      var metadata = fns_res[0];
-                                      if (res_format == 'array') {
-                                          var item_res = [file_or_dir_full_path, metadata];
-                                          res_files.push(item_res);
-                                      } else if (res_format == 'map') {
-                                          var item_res = {
-                                              //'path': file_or_dir_full_path,
-                                              'name': file_name,
-                                              'metadata': metadata
-                                          }
-                                          if (fs_paths) {
-                                              item_res.path = file_or_dir_full_path;
-                                          }
-                                          res_files.push(item_res);
-                                      }
-
-                                  } else if (include_file_contents) {
-                                      var file_contents = fn_res[0];
-
-                                      if (res_format == 'array') {
-                                          if (fs_paths) {
-                                              var item_res = [file_or_dir_full_path, file_contents];
-                                          } else {
-                                              var item_res = [file_name, file_contents];
-                                          }
-
-
-                                          res_files.push(item_res);
-                                      } else if (res_format == 'map') {
-                                          var item_res = {
-                                              //'path': file_or_dir_full_path,
-                                              'name': file_name,
-                                              'contents': file_contents
-                                          }
-                                          if (fs_paths) {
-                                              item_res.path = file_or_dir_full_path;
-                                          }
-                                          res_files.push(item_res);
-                                      }
-                                  } else {
-                                      // no results in the callback anyway.
-
-                                      if (fs_paths) {
-                                          var item_res = file_or_dir_full_path;
-                                      } else {
-                                          var item_res = file_name;
-                                      }
-
-                                      res_files.push(item_res);
-
-                                      //throw 'not yet implemented';
-                                  }
-
-                                  c--;
-                                  if (c == 0) {
-                                      cb();
-                                  }
-
-                                  //throw 'stop';
-                              }
-                          })
-
-                        } else {
-                          res_files.push(file_name);
-                          c--;
-                          if (c == 0) {
-                              cb();
-                          }
-                        }
+							if (err) {
 
 
 
-                        //throw 'stop';
+								//console.log('stats unavailable for ' + file_or_dir_full_path);
 
-                        /*
+								var item_res = file_name;
+								res_files.push(item_res);
 
-                        if (include_metadata) {
-                            fs2.metadata(file_or_dir_full_path, function(err, file_data) {
-                                if (err) {
-                                    throw err;
-                                } else {
-                                    //var f_val = [v, metadata];
-                                    //var f_val = file_data;
+								// Probably don't fail whole thing with error...
 
-                                    if (fs_paths) {
-                                        // maybe have different ways to return the results...
-                                        /// can format the results as an array, can format results as map.
+								c--;
+								//console.log('c', c);
+								if (c == 0) {
+									cb();
+								}
 
-                                        if (res_format == 'array') {
-                                            res_files.push([file_or_dir_full_path, file_data]);
-                                        } else if (res_format == 'map') {
-                                            res_files.push({'path': file_or_dir_full_path, 'data': file_data});
-                                        }
+								//throw(err);
 
-                                    } else {
-                                        res_files.push(file_data);
-                                    }
+							} else {
+								//console.log('stats.isDirectory() ' + stringify(stats.isDirectory()));
 
-                                    //res_files.push(f_val);
-                                    c--;
-                                    if (c == 0) {
-                                        cb();
-                                    }
-                                }
-                            })
+								var is_dir = stats.isDirectory();
+
+								//console.log('file_name', file_name);
+
+								//console.log('files_or_directories ' + files_or_directories);
+								//console.log('is_dir ' + is_dir);
+								//console.log('file_or_dir_full_path ' + file_or_dir_full_path);
+
+								// not a dir anyway???
+								if (is_dir && files_or_directories != 'files') {
+									if (fs_paths) {
+										res_directories.push(file_or_dir_full_path);
+									} else {
+										res_directories.push(v);
+									}
+
+									c--;
+									if (c == 0) {
+										cb();
+									}
+								} else if (files_or_directories != 'directories') {
+
+									// can load the whole file as string if asked to do so.
+
+									// options.load_file == 'string'.
+
+									// if including the file contents... load it as a string.
+
+									// if including both the metadata and the content...
+									//  could load them both at once.
+									//   would like the Fns() system with .go rather than using call_multi.
+
+									// it can load the required data... calling a function that loads the metadata as well as a function that loads the file.
+									//  when there are multiple file calls, the results should arrive in an array I think.
+
+									// fns.go seems like it would be very useful indeed.
+
+									var fns = Fns();
+
+									// and in the results we may need to include the full paths.
+									//  that could be an option in the metadata function.
+
+									//fns.push([]);
+
+									if (include_metadata) {
+										fns.push([fs2.metadata, [file_or_dir_full_path]]);
+										// could become fns.push(fs2.metadata, file_or_dir_full_path);
+									}
+									if (include_file_contents) {
+										fns.push([fs2.load_file_as_string, [file_or_dir_full_path]]);
+									}
+
+									//console.log('fns.length ' + fns.length);
+
+									if (fns.length > 0) {
 
 
-                        } else {
-                            res_files.push(v);
-                            c--;
-                            if (c == 0) {
-                                cb();
-                            }
-                        }
-                        */
+										fns.go(function(err, fns_res) {
+											if (err) {
+												throw err;
+											} else {
 
-                    } else {
-                        c--;
-                        if (c == 0) {
-                            cb();
-                        }
-                        //throw 'stop';
-                    }
+												//console.log('fns_res ' + stringify(fns_res));
+												//console.log('tof(fns_res) ' + tof(fns_res));
 
-                }
-            })
+												// we may need to return the fs paths with the data...
+												// path, content, metadata
+												if (include_metadata && include_file_contents) {
+													var metadata = fns_res[0];
+													var file_contents = fns_res[1];
+
+													if (res_format == 'array') {
+														//var res
+														var item_res = [file_or_dir_full_path, metadata, file_contents];
+														res_files.push(item_res);
+													} else if (res_format == 'map') {
+														var item_res = {
+															//'path': file_or_dir_full_path,
+															'name': file_name,
+															'metadata': metadata,
+															'contents': file_contents
+														}
+														if (fs_paths) {
+															item_res.path = file_or_dir_full_path;
+														}
+														res_files.push(item_res);
+													}
+
+												} else if (include_metadata) {
+													var metadata = fns_res[0];
+													if (res_format == 'array') {
+														var item_res = [file_or_dir_full_path, metadata];
+														res_files.push(item_res);
+													} else if (res_format == 'map') {
+														var item_res = {
+															//'path': file_or_dir_full_path,
+															'name': file_name,
+															'metadata': metadata
+														}
+														if (fs_paths) {
+															item_res.path = file_or_dir_full_path;
+														}
+														res_files.push(item_res);
+													}
+
+												} else if (include_file_contents) {
+													var file_contents = fn_res[0];
+
+													if (res_format == 'array') {
+														if (fs_paths) {
+															var item_res = [file_or_dir_full_path, file_contents];
+														} else {
+															var item_res = [file_name, file_contents];
+														}
+
+
+														res_files.push(item_res);
+													} else if (res_format == 'map') {
+														var item_res = {
+															//'path': file_or_dir_full_path,
+															'name': file_name,
+															'contents': file_contents
+														}
+														if (fs_paths) {
+															item_res.path = file_or_dir_full_path;
+														}
+														res_files.push(item_res);
+													}
+												} else {
+													// no results in the callback anyway.
+
+													if (fs_paths) {
+														var item_res = file_or_dir_full_path;
+													} else {
+														var item_res = file_name;
+													}
+
+													res_files.push(item_res);
+
+													//throw 'not yet implemented';
+												}
+
+												c--;
+												if (c == 0) {
+													cb();
+												}
+
+												//throw 'stop';
+											}
+										})
+
+									} else {
+										res_files.push(file_name);
+										c--;
+										if (c == 0) {
+											cb();
+										}
+									}
+
+
+
+									//throw 'stop';
+
+									/*
+
+									 if (include_metadata) {
+									 fs2.metadata(file_or_dir_full_path, function(err, file_data) {
+									 if (err) {
+									 throw err;
+									 } else {
+									 //var f_val = [v, metadata];
+									 //var f_val = file_data;
+
+									 if (fs_paths) {
+									 // maybe have different ways to return the results...
+									 /// can format the results as an array, can format results as map.
+
+									 if (res_format == 'array') {
+									 res_files.push([file_or_dir_full_path, file_data]);
+									 } else if (res_format == 'map') {
+									 res_files.push({'path': file_or_dir_full_path, 'data': file_data});
+									 }
+
+									 } else {
+									 res_files.push(file_data);
+									 }
+
+									 //res_files.push(f_val);
+									 c--;
+									 if (c == 0) {
+									 cb();
+									 }
+									 }
+									 })
+
+
+									 } else {
+									 res_files.push(v);
+									 c--;
+									 if (c == 0) {
+									 cb();
+									 }
+									 }
+									 */
+
+								} else {
+									c--;
+									if (c == 0) {
+										cb();
+									}
+									//throw 'stop';
+								}
+
+							}
+						})
 
 
 
 					} else {
-					    c--;
-                          if (c == 0) {
-                              cb();
-                          }
+						c--;
+						if (c == 0) {
+							cb();
+						}
 					}
 
 				})
@@ -1174,12 +1185,12 @@ var fs2 = {
 	//  possibly have a core version that gets data such as last modified and file size.
 	'metadata': function(path, callback) {
 
-	    // this may have options, like including the path in the results?
+		// this may have options, like including the path in the results?
 
 
 
-	    // calling metadata on a directory...
-	    //  should this get the metadata for files in the dir?
+		// calling metadata on a directory...
+		//  should this get the metadata for files in the dir?
 
 		// mainly for file metadata.
 		// check to see if it exists.
@@ -1221,35 +1232,35 @@ var fs2 = {
 
 					/*
 
-					var mime_type = map_extension_mime_types[extname2];
-					//console.log('mime_type ' + mime_type);
+					 var mime_type = map_extension_mime_types[extname2];
+					 //console.log('mime_type ' + mime_type);
 
-					var fn_spec_md = specific_metadata[mime_type];
+					 var fn_spec_md = specific_metadata[mime_type];
 
-					if (fn_spec_md) {
-						//console.log('has fn_spec_md');
-						// then use that specific mime type to load the metadata.
+					 if (fn_spec_md) {
+					 //console.log('has fn_spec_md');
+					 // then use that specific mime type to load the metadata.
 
-						fn_spec_md(path, function(err, specific_metadata) {
-							if (err) {
-								console.log(err);
-								throw(err);
-							} else {
-								each(specific_metadata, function(i, v) {
-									res[i] = v;
-								});
-								//console.log('specific_metadata ' + stringify(specific_metadata));
-								callback(null, [basename, res]);
+					 fn_spec_md(path, function(err, specific_metadata) {
+					 if (err) {
+					 console.log(err);
+					 throw(err);
+					 } else {
+					 each(specific_metadata, function(i, v) {
+					 res[i] = v;
+					 });
+					 //console.log('specific_metadata ' + stringify(specific_metadata));
+					 callback(null, [basename, res]);
 
-							}
-						});
+					 }
+					 });
 
-					} else {
+					 } else {
 
-						//console.log('no metadata loading for type ' + mime_type);
-						callback(null, [basename, res]);
-					}
-					*/
+					 //console.log('no metadata loading for type ' + mime_type);
+					 callback(null, [basename, res]);
+					 }
+					 */
 				});
 			}
 		});
@@ -1275,61 +1286,61 @@ var fs2 = {
 
 
 	'instruct': fp(function(a, sig) {
-	    // if it is just an array, and a callback...
+		// if it is just an array, and a callback...
 
-	    //console.log('instruct sig ' + sig);
+		//console.log('instruct sig ' + sig);
 
-	    var is_multi_callback = false;
+		var is_multi_callback = false;
 
-	    if (a.l == 2) {
-	        if (tof(a[0]) == 'array' && tof(a[1]) == 'function') {
-	            // a bunch of instructions to execute, and then a callback.
-	            var fns = [];
-	            var instructions = a[0];
-	            var callback = a[1];
-	            is_multi_callback = true;
+		if (a.l == 2) {
+			if (tof(a[0]) == 'array' && tof(a[1]) == 'function') {
+				// a bunch of instructions to execute, and then a callback.
+				var fns = [];
+				var instructions = a[0];
+				var callback = a[1];
+				is_multi_callback = true;
 
-	            each(instructions, function(i, instruction) {
-	                fns.push([fs2.instruct, instruction])
-	            })
+				each(instructions, function(i, instruction) {
+					fns.push([fs2.instruct, instruction])
+				})
 
-	            call_multiple_callback_functions(fns, function(err, res_multi) {
-	                if (err) {
-	                    throw err;
-	                } else {
-	                    callback(null, res_multi);
-	                }
-	            })
-
-
-	        }
-	    }
-
-	    if (!is_multi_callback) {
-	        // then check to see if the last one is a callback.
-	        //  the ones before it will be parameters of various kinds.
-	        //  if first is string, last is function.
-
-	        var last_arg = a[a.l - 1];
-	        //console.log('tof(last_arg) ' + tof(last_arg));
-
-	        if (tof(a[0]) == 'string' && tof(last_arg) == 'function') {
-	            var command_name = a[0];
-	            var callback = last_arg;
-
-	            // but basically want to call the right function with the params.
-
-	            var new_args = a.slice(1);
-
-	            if (command_name == 'copy') {
-	                fs2.copy.apply(this, new_args);
-	            }
-	        }
+				call_multiple_callback_functions(fns, function(err, res_multi) {
+					if (err) {
+						throw err;
+					} else {
+						callback(null, res_multi);
+					}
+				})
 
 
-	    }
+			}
+		}
 
-	    // [s,s,s]
+		if (!is_multi_callback) {
+			// then check to see if the last one is a callback.
+			//  the ones before it will be parameters of various kinds.
+			//  if first is string, last is function.
+
+			var last_arg = a[a.l - 1];
+			//console.log('tof(last_arg) ' + tof(last_arg));
+
+			if (tof(a[0]) == 'string' && tof(last_arg) == 'function') {
+				var command_name = a[0];
+				var callback = last_arg;
+
+				// but basically want to call the right function with the params.
+
+				var new_args = a.slice(1);
+
+				if (command_name == 'copy') {
+					fs2.copy.apply(this, new_args);
+				}
+			}
+
+
+		}
+
+		// [s,s,s]
 
 
 
@@ -1362,67 +1373,67 @@ var fs2 = {
 		var ctu = true;
 
 		var the_rest = function() {
-		    ncp(source_path, dest_path, function (err) {
-                  if (err) {
-                      return console.error(err);
-                  }
-                  callback(null, true);
-                  //console.log('done!');
-              });
+			ncp(source_path, dest_path, function (err) {
+				if (err) {
+					return console.error(err);
+				}
+				callback(null, true);
+				//console.log('done!');
+			});
 		}
 
 		if (test_for_same_files) {
-		    // get the checksum for the source, and the dest.
+			// get the checksum for the source, and the dest.
 
-		    checksum(source_path, function(err, source_checksum) {
-		        checksum(dest_path, function(err, dest_checksum) {
-		            if (source_checksum != dest_checksum) {
-		                the_rest();
-		            } else {
-		                callback(null, false);
-		            }
+			checksum(source_path, function(err, source_checksum) {
+				checksum(dest_path, function(err, dest_checksum) {
+					if (source_checksum != dest_checksum) {
+						the_rest();
+					} else {
+						callback(null, false);
+					}
 
-		        })
-		    })
+				})
+			})
 
 		} else {
 			the_rest();
 		}
 
 		/*
-		fs.stat(dest_path, function(err, stats) {
-			if (err) {
+		 fs.stat(dest_path, function(err, stats) {
+		 if (err) {
 
-			} else {
+		 } else {
 
-				if (stats.isDirectory()) {
+		 if (stats.isDirectory()) {
 
-					fs.stat(source_path, function(err, stats) {
-						if (err) {
+		 fs.stat(source_path, function(err, stats) {
+		 if (err) {
 
-						} else {
+		 } else {
 
-							if (stats.isDirectory()) {
+		 if (stats.isDirectory()) {
 
-								// create the corresponding directory
-								// copy every file and directory within that directory to the corresponding directory
+		 // create the corresponding directory
+		 // copy every file and directory within that directory to the corresponding directory
 
-								// This can be built up using fns.
+		 // This can be built up using fns.
 
 
 
-						    } else {
+		 } else {
 
-						    }
+		 }
 
-						}
-					});
+		 }
+		 });
 
-			    }
+		 }
 
-			}
-		});
-		*/
+		 }
+		 });
+		 */
 		// source can be a file or directory.
 
 		// when copying a directory, copy all directories inside it as well (recursively).
@@ -1561,15 +1572,15 @@ var fs2 = {
 
 
 								/*
-								if (path_from_start.substr(path_from_start.length -1) == dir_separator) {
-									throw 'stop';
-									var next_path_from_start = path_from_start + directory_name;
-									fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
-								} else {
-									var next_path_from_start = path_from_start + directory_name + dir_separator;
-									fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
-								}
-								*/
+								 if (path_from_start.substr(path_from_start.length -1) == dir_separator) {
+								 throw 'stop';
+								 var next_path_from_start = path_from_start + directory_name;
+								 fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
+								 } else {
+								 var next_path_from_start = path_from_start + directory_name + dir_separator;
+								 fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
+								 }
+								 */
 
 								var next_path_from_start = path_from_start + directory_name + dir_separator;
 								fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
@@ -1745,15 +1756,15 @@ var fs2 = {
 
 
 								/*
-								if (path_from_start.substr(path_from_start.length -1) == dir_separator) {
-									throw 'stop';
-									var next_path_from_start = path_from_start + directory_name;
-									fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
-								} else {
-									var next_path_from_start = path_from_start + directory_name + dir_separator;
-									fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
-								}
-								*/
+								 if (path_from_start.substr(path_from_start.length -1) == dir_separator) {
+								 throw 'stop';
+								 var next_path_from_start = path_from_start + directory_name;
+								 fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
+								 } else {
+								 var next_path_from_start = path_from_start + directory_name + dir_separator;
+								 fns.push([process_path, [next_path_from_start, next_arr_path, current_res_obj]]);
+								 }
+								 */
 
 								// check it's the next directory name.
 
@@ -1854,34 +1865,34 @@ var fs2 = {
 						}
 					});
 					/*
-					var res_files = [];
-					res.files = res_files;
-					var c = dir_contents.files.length;
+					 var res_files = [];
+					 res.files = res_files;
+					 var c = dir_contents.files.length;
 
-					each(dir_contents.files, function(i, file_name) {
-						var full_path = path + dir_separator + file_name;
-						console.log('dir_contents_with_metadata full_path ' + full_path);
+					 each(dir_contents.files, function(i, file_name) {
+					 var full_path = path + dir_separator + file_name;
+					 console.log('dir_contents_with_metadata full_path ' + full_path);
 
-						fs2.metadata(full_path, function(err, file_metadata) {
-							if (err) {
-								console.log('err ' + err);
-							} else {
-								console.log('file_metadata ' + stringify(file_metadata));
+					 fs2.metadata(full_path, function(err, file_metadata) {
+					 if (err) {
+					 console.log('err ' + err);
+					 } else {
+					 console.log('file_metadata ' + stringify(file_metadata));
 
-								if (file_metadata !== false) {
-									res_files.push([file_name, file_metadata]);
-								} else {
-									res_files.push(file_name);
-								}
+					 if (file_metadata !== false) {
+					 res_files.push([file_name, file_metadata]);
+					 } else {
+					 res_files.push(file_name);
+					 }
 
-								c--;
-								console.log('c ' + c);
-								if (c == 0) cb();
-							}
-						});
+					 c--;
+					 console.log('c ' + c);
+					 if (c == 0) cb();
+					 }
+					 });
 
-					});
-					*/
+					 });
+					 */
 				} else {
 					cb();
 				}
@@ -1892,7 +1903,7 @@ var fs2 = {
 }
 
 
-	//module.exports = fs2;
+//module.exports = fs2;
 //	return fs2;
 //});
 

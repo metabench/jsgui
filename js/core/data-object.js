@@ -3256,7 +3256,7 @@ var Data_Object = Evented_Class.extend({
         // will also be looking at the output processors.
 
 
-        console.log('Data_Object get this.__type_name', this.__type_name);
+        //console.log('Data_Object get this.__type_name', this.__type_name);
 
         var do_typed_processing = false;
 
@@ -3267,7 +3267,7 @@ var Data_Object = Evented_Class.extend({
 
             // should possibly have this assigned for controls...
             //var raw_input = a;
-            console.log('this.__type_name is defined: ' + this.__type_name);
+            //console.log('this.__type_name is defined: ' + this.__type_name);
 
             //var parsed_input_obj = jsgui.input_processors[this.__type_name](raw_input);
             if (a.l == 0) {
@@ -3317,7 +3317,7 @@ var Data_Object = Evented_Class.extend({
 
             // check to see if there is a field defined.
             if (sig == '[s]') {
-                console.log('get param: ' + a[0]);
+                //console.log('get param: ' + a[0]);
                 var fc = this.fc;
 
                 // let's have a look at the fields
@@ -3469,7 +3469,7 @@ var Data_Object = Evented_Class.extend({
 
                     // do we know the field name yet?
                     // yes
-                    console.log('field_name ' + field_name);
+                    //console.log('field_name ' + field_name);
                     //console.log('this._[field_name] ' + this._[field_name]);
 
 
@@ -3483,7 +3483,7 @@ var Data_Object = Evented_Class.extend({
                         var sig_field = get_item_sig(field, 20);
 
 
-                        console.log('1) sig_field ' + stringify(sig_field));
+                        //console.log('1) sig_field ' + stringify(sig_field));
 
 
                         //console.log('field ' + stringify(field));
@@ -3509,7 +3509,7 @@ var Data_Object = Evented_Class.extend({
 
                             // But if it is a String, maybe we use a Data_Value
 
-                            if (fieldDef == String) {
+                            if (fieldDef === String) {
                                 //console.log('is a String');
                                 //throw 'stop';
 
@@ -3520,7 +3520,7 @@ var Data_Object = Evented_Class.extend({
                                 return this._[field_name];
 
 
-                            } else if (fieldDef == Number) {
+                            } else if (fieldDef === Number) {
                                 //console.log('is a String');
                                 //throw 'stop';
 
@@ -3531,7 +3531,7 @@ var Data_Object = Evented_Class.extend({
                                 return this._[field_name];
 
 
-                            } else if (fieldStrType == 'Class') {
+                            } else if (fieldStrType === 'Class') {
                                 // Can't create a new string like this...
 
                                 var FieldConstructor = fieldDef;
@@ -3547,13 +3547,13 @@ var Data_Object = Evented_Class.extend({
 
                         }
 
-                        if (sig_field == '[s,[s,u]]') {
+                        if (sig_field === '[s,[s,u]]') {
                             // it looks like it has gone wrong.
                             var stack = new Error().stack;
                             console.log(stack);
                         }
 
-                        if (sig_field == '[s,s,o]') {
+                        if (sig_field === '[s,s,o]') {
                             var field_name = field[0];
                             var field_type_name = field[1];
                             var field_info = field[2];
@@ -3571,7 +3571,7 @@ var Data_Object = Evented_Class.extend({
 
 
 
-                            if (field_type_name == 'collection') {
+                            if (field_type_name === 'collection') {
                                 //console.log('lazy loading - creating new collection');
                                 this._[field_name] = new jsgui.Collection({
                                     'context': this._context
@@ -3583,7 +3583,7 @@ var Data_Object = Evented_Class.extend({
                                 // 'data_object'
                                 //  may get the data_type_object_constructor here.
 
-                                if (field_type_name == 'data_object') {
+                                if (field_type_name === 'data_object') {
                                     var dobj = new Data_Object({'context': this._context});
                                     this._[field_name] = dobj;
                                     dobj.parent(this);
@@ -3591,7 +3591,7 @@ var Data_Object = Evented_Class.extend({
                                 }
 
 
-                                if (field_type_name == 'ordered_string_list') {
+                                if (field_type_name === 'ordered_string_list') {
                                     console.log('Ordered_String_List field_name', field_name);
                                     var osl = new Ordered_String_List();
                                     this._[field_name] = osl;
@@ -4231,7 +4231,7 @@ var Data_Object = Evented_Class.extend({
                     // Looks like the el is no longer stored in a Data_Value.
 
 
-                    console.log('* property_name', property_name);
+                    //console.log('* property_name', property_name);
 
 
 
@@ -4304,8 +4304,8 @@ var Data_Object = Evented_Class.extend({
                         }
 
                         //console.log('***** data_object_next.__type_name ' + data_object_next.__type_name);
-                        console.log('data_object_next', data_object_next);
-                        console.log('value', value);
+                        //console.log('data_object_next', data_object_next);
+                        //console.log('value', value);
                         data_object_next.set(value);
                     }
 

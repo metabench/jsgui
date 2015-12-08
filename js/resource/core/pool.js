@@ -345,9 +345,15 @@ var Resource = require('./resource');
 
 				// Not sure it's being indexed properly by attached properties.
 
+				console.log('this._resources', this._resources);
 
 
-				var res = this._resources.find({'attached': {'meta': 'name'}}, obj_lookup_val)[0];
+				var find_result = this._resources.find({'attached': {'meta': 'name'}}, obj_lookup_val);
+
+				if (find_result) {
+					var res = find_result[0];
+				}
+
 				//console.log('post find resource');
 
 				//var res = this._resources.find(stringify(["attached", "meta", "name"]), obj_lookup_val)[0];
@@ -365,6 +371,10 @@ var Resource = require('./resource');
 		// have resources as a field?
 		//  Means no need for the boilerplate code when it is linked.
 		//'resources'
+
+		'count': function() {
+			return this._resources.length();
+		},
 		
 		
 		// May be useful to have a callback parameter here rather than just publish / subscribe.

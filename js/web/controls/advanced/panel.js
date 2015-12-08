@@ -47,20 +47,37 @@ var Panel = Control.extend({
         this.__type_name = 'panel';
 
         this.set('dom.attributes.class', 'panel');
+
+        // With name as a field, that field should get sent to the client...
+
+
+
         //console.log('spec.el', spec.el);
 
         if (!spec.abstract && !spec.el) {
 
 
-            /*
+
+            var l = 0;
+
+
             var ctrl_fields = {
-                'ctrl_relative': div_relative._id(),
-                'title_bar': title_bar._id()
             }
 
+            var name = this.get('name').value();
 
-            this.set('dom.attributes.data-jsgui-ctrl-fields', stringify(ctrl_fields).replace(/"/g, "'"));
-            */
+
+            //console.log('panel name', name);
+
+            if (is_defined(name)) {
+                this._fields = this._fields || {};
+                this._fields['name'] = name;
+            }
+            //throw 'stop';
+
+
+            //
+
 
 
         }

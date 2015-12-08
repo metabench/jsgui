@@ -50,13 +50,17 @@ var server = new jsgui.Server.JSGUI_Server({
     }
 });
 
-
 var rp = server.get('resource_pool');
 var Control = jsgui.Control;
 
-//console.log('rp ' + rp);
-var rp = server.get('resource_pool');
+console.log('rp ', rp);
+//throw 'stop';
+//var rp = server.get('resource_pool');
+
+// Should get the resource_pool itself.
+
 var ar = rp.get_resource('Server Router');
+console.log('ar', ar);
 var rt = ar.get('routing_tree');
 
 server.start(port, function(ree, res_started) {
@@ -88,7 +92,7 @@ server.start(port, function(ree, res_started) {
 			'context': server_page_context
 		});
 		//ctrl_0.resizable();
-    body.add(ctrl_0);
+    	body.add(ctrl_0);
 		ctrl_0.active();
 
 		// style should at least set the CSS.

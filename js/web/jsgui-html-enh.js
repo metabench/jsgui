@@ -278,9 +278,14 @@ Control = jsgui.Control = jsgui.Control.extend({
             // DBL_QT
             //console.log('s_pre_parse', s_pre_parse);
 
-            //console.log('s_pre_parse', tof(s_pre_parse));
+              //console.log('s_pre_parse', (s_pre_parse));
+
+            //console.log('tof s_pre_parse', tof(s_pre_parse));
 
             var props = JSON.parse(s_pre_parse);
+
+              // The just get put in the properties.
+              //  That means they must be defined as a field in the Class definition for it to work.
 
             extend(spec, props);
           }
@@ -926,7 +931,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
 
-                //console.log('jsgui_id ' + jsgui_id);
+                console.log('jsgui_id ' + jsgui_id);
                 if (jsgui_id) {
 
 
@@ -937,6 +942,9 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
                     var ctrl = map_controls[jsgui_id];
+
+                    console.log('jsgui_id', jsgui_id);
+                    console.log('!!ctrl', !!ctrl);
 
                     /*
                     if (parent_control) {
@@ -1073,7 +1081,12 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                 var listener = this.mapListeners[event_name];
                 var that = this;
-                var el = this.get('dom.el');
+                var dv_el = this.get('dom.el');
+                var el;
+
+                if (dv_el) {
+                    el = dv_el.value();
+                }
 
                 //console.log('el' + el);
 
@@ -1152,6 +1165,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
       if (!this.__active) {
         this.__active = true;
+          //console.log('el', el);
         if (el) {
             this.set('dom.el', el);
         }
@@ -1206,7 +1220,7 @@ Control = jsgui.Control = jsgui.Control.extend({
         var dom_attributes = this.get('dom.attributes');
         //console.log('dom_attributes', dom_attributes);
 
-        var el = this.get('dom.el');
+        var el = this.get('dom.el').value();
 
         dom_attributes.on('change', function(e_change) {
             var property_name = e_change.name, dval = e_change.value;
@@ -1247,7 +1261,7 @@ Control = jsgui.Control = jsgui.Control.extend({
                 dval = dval.value();
             }
 
-            if (el) {
+            if (el && el.nodeType === 1) {
               el.setAttribute(property_name, dval);
             }
 
@@ -1259,6 +1273,7 @@ Control = jsgui.Control = jsgui.Control.extend({
     'activate_content_listen': function() {
         //console.log('activate_content_listen');
 
+
         var content = this.get('content');
 
         //console.log('1) content.length()', content.length());
@@ -1268,59 +1283,155 @@ Control = jsgui.Control = jsgui.Control.extend({
         var map_controls = context.map_controls;
 
 
+
+        //console.log('that', that);
+        //console.log('that._id()', that._id());
+
+
+
+
         content.on('change', function(e_change) {
             //console.log('activated control content change');
 
-            var el = that.get('dom.el');
+            // Has it put DOM elements into a Data_Value now?
+            //  Seems like a string can get put within the content.
+
+
+
+
+            var el;
+            var dv_el = that.get('dom.el');
+            //console.log('that.__id', that.__id);
+            if (dv_el) el = dv_el.value();
+
+
+
+            //var el = that.get('dom.el').value();
+
             var type = e_change.type;
 
-            if (type == 'insert') {
+            if (type === 'insert') {
+                //console.log('e_change', e_change);
                 var item = e_change.item;
 
-                var itemDomEl = item.get('dom.el');
+                // So it looks like a string has literally been added as a DOM node.
+                //  The problem is, if a string is a DOM node, then there is not the ordinary DOM node functionality.
 
-                // need to render the item ID in there too.
-                //var id = item._id();
+                // Looks like the element was not created properly.
 
-                if (!itemDomEl) {
-                  if (context.map_els[item._id()]) {
-                    itemDomEl = context.map_els[item._id()];
-                  }
+                // Could try a click to add content test example.
 
+                // But the item is a Data_Value.
+
+
+
+
+
+                var retrieved_item_dom_el = item.get('dom.el');
+
+                var t_ret = tof(retrieved_item_dom_el);
+                //console.log('t_ret', t_ret);
+                //throw 'stop';
+                if (t_ret === 'string') {
+                    itemDomEl = retrieved_item_dom_el;
+
+                } else {
+                    //console.log('item', item);
+
+                    // Not so sure it's a Data_Value here.
+                    //  It generally should be, but it may not always be.
+
+                    //console.log('dv_item_dom_el', retrieved_item_dom_el);
+
+
+                    var itemDomEl;
+
+                    //console.log('retrieved_item_dom_el', retrieved_item_dom_el);
+                    if (retrieved_item_dom_el) console.log('keys dv_item_dom_el', Object.keys(retrieved_item_dom_el));
+                    //console.log('tof retrieved_item_dom_el', tof(retrieved_item_dom_el));
+
+                    //throw 'stop';
+
+                    if (retrieved_item_dom_el) {
+                        itemDomEl = dv_item_dom_el.value();
+                    }
+
+                    //if (itemDomEl) console.log('1) itemDomEl', itemDomEl);
+
+                    // need to render the item ID in there too.
+                    //var id = item._id();
+
+                    if (!itemDomEl) {
+                        //console.log('item._id()', item._id());
+                        if (context.map_els[item._id()]) {
+                            itemDomEl = context.map_els[item._id()];
+                        }
+
+                    }
+                    //console.log('2) itemDomEl', itemDomEl);
+                    if (!itemDomEl) {
+                        var item_tag_name = 'div';
+                        var dv_tag_name = item.get('dom.tagName');
+
+                        // no, it's dom.tag_name
+
+                        if (dv_tag_name) {
+                            item_tag_name = dv_tag_name.value();
+                        }
+                        var temp_el;
+
+                        //console.log('item_tag_name', item_tag_name);
+
+
+                        if (item_tag_name == 'circle' || item_tag_name == 'line' || item_tag_name == 'polyline') {
+                            // Can make SVG inside an element, with the right namespace.
+
+                            // TODO Maybe we can have a global temporary SVG container.
+
+                            var temp_svg_container = e_change.item._context.document.createElement('div');
+
+
+
+                            temp_svg_container.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">' + e_change.item.all_html_render() + '</svg>';
+                            itemDomEl = temp_svg_container.childNodes[0].childNodes[0];
+                            //
+
+                            //itemDomEl = e_change.item._context.document.createElementNS("http://www.w3.org/2000/svg", item_tag_name);
+                            //console.log('itemDomEl', itemDomEl);
+                            //throw 'stop';
+
+
+                        } else {
+                            temp_el = e_change.item._context.document.createElement('div');
+                            temp_el.innerHTML = e_change.item.all_html_render();
+                            itemDomEl = temp_el.childNodes[0];
+                        }
+                        item._.el = itemDomEl;
+                        e_change.item.set('dom.el', itemDomEl);
+                        item.active();
+                    };
                 }
-                if (!itemDomEl) {
-                    var item_tag_name = 'div';
-                    var dv_tag_name = item.get('tag_name');
-                    if (dv_tag_name) {
-                      item_tag_name = dv_tag_name.value();
-                    }
-                    var temp_el;
 
-
-                    if (item_tag_name == 'circle' || item_tag_name == 'line' || item_tag_name == 'polyline') {
-                        // Can make SVG inside an element, with the right namespace.
-
-                        var temp_svg_container = e_change.item._context.document.createElement('div');
-                        temp_svg_container.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">' + e_change.item.all_html_render() + '</svg>';
-                        itemDomEl = temp_svg_container.childNodes[0].childNodes[0];
-                        //
-
-
-                    } else {
-                        temp_el = e_change.item._context.document.createElement('div');
-                        temp_el.innerHTML = e_change.item.all_html_render();
-                        itemDomEl = temp_el.childNodes[0];
-                    }
-                    item._.el = itemDomEl;
-                    e_change.item.set('dom.el', itemDomEl);
-                    item.active();
-                };
-                //console.log('itemDomEl', itemDomEl);
                 var t_item_dom_el = tof(itemDomEl);
 
                 if (t_item_dom_el === 'string') {
-                  itemDomEl = document.createTextNode(itemDomEl);
+                    itemDomEl = document.createTextNode(itemDomEl);
                 }
+
+
+
+
+
+                // In a different part, text would be rendered as a DOM element.
+                //  Here, though, we have not created a new text node.
+
+
+
+
+
+
+                //console.log('itemDomEl', itemDomEl);
+
 
                 //el.insertBefore(itemDomEl, el.childNodes[0]);
 
@@ -1328,17 +1439,39 @@ Control = jsgui.Control = jsgui.Control.extend({
                 //console.log('that', that);
 
 
+
+
                 if (!el) {
                   //console.log('*** that._id()', that._id());
-                  that.parent().parent().rec_desc_ensure_ctrl_el_refs();
+                    var grandparent = that.parent().parent();
+                    //console.log('grandparent', grandparent);
+
+                    grandparent.rec_desc_ensure_ctrl_el_refs();
+
+                    //console.log('that.__id', that.__id);
+                    //console.log('that._id()', that._id());
+                    //console.log('context.map_els', context.map_els);
+
+
                   el = context.map_els[that._id()];
+
+                    //console.log('el', el);
+
                   that.set('dom.el', el);
-                  that._.el = el;
+
+                  // It's a new Data_Value now...
+
+
+                  //that._.el = el;
+
+
                   //console.log('* el', el);
                 }
 
-
                 el.appendChild(itemDomEl);
+
+
+
 
                 // May not have actually gone into the DOM yet!
 
@@ -1358,8 +1491,8 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             }
 
-            if (type == 'clear') {
-                el.innerHTML = '';
+            if (type === 'clear') {
+                if (el) el.innerHTML = '';
             }
 
 
@@ -1369,11 +1502,49 @@ Control = jsgui.Control = jsgui.Control.extend({
     },
 
     'rec_desc_ensure_ctrl_el_refs': function(el) {
-      el = el || this.get('dom.el') || this._.el;
+
+        var retrieved_el = this.get('dom.el');
+        //console.log('retrieved_el', retrieved_el);
+
+        var el;
+
+        if (retrieved_el) {
+            if (retrieved_el.__data_value)  {
+                el = retrieved_el.value();
+            } else {
+                el = retrieved_el;
+            }
+        } else {
+            if (this._.el && this._.el._) {
+                el = this._.el._;
+            }
+        }
+
+
+        //var dv_el = this.get('dom.el').value();
+
+        /*
+        if (!el) {
+            if (dv_el) {
+                el = dv_el.value();
+            } else {
+                if (this._.el && this._.el._) {
+                    el = this._.el._;
+                }
+            }
+
+        }
+        */
+
+
+
+      //el = el || .value() || this._.el._;
 
       //if (!el) {
       //  el = this._context.map
       //}
+
+        //console.log('el', el);
 
       var context = this._context;
 
@@ -1460,7 +1631,12 @@ Control = jsgui.Control = jsgui.Control.extend({
       // This could do with some enhancement, so that it automatically does a recursive activation.
       // ensure content dom el refs
       //  recursively ensures the DOM node references for the elements inside.
-      var el = this.get('dom.el');
+        var dv_el = this.get('dom.el');
+        var el;
+
+        if (dv_el) {
+            el = dv_el.value();
+        }
 
 
 
@@ -1561,7 +1737,16 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         //console.log('activate_dom_attributes');
 
-        var el = this.get('dom.el');
+        var dv_el = this.get('dom.el');
+        var el;
+
+
+
+        if (dv_el) {
+            el = dv_el.value();
+        }
+
+        //console.log('** el', el);
 
         // may not have el....?
         var that = this;
@@ -3795,6 +3980,9 @@ var activate = function(context) {
         }
 
         recursive_dom_iterate(document, function(el) {
+
+            //console.log('recursive_dom_iterate el', el);
+            //console.log('tof el', tof(el));
             //console.log('2) el.tagName ' + el.tagName);
             var nt = el.nodeType;
             //console.log('nt ' + nt);
@@ -3867,6 +4055,8 @@ var activate = function(context) {
                 // use the context's map_Controls
 
                 var Cstr = context.map_Controls[type];
+
+                //console.log('!!Cstr', !!Cstr);
                 //console.log('Cstr ' + Cstr.prototype);
 
                 // then we can construct the control, and put it within the map.
@@ -3893,12 +4083,33 @@ var activate = function(context) {
 
 
                 if (Cstr) {
+                    //console.log('arr_controls.length', arr_controls.length);
+                    //console.log('!!map_controls[jsgui_id]', !!map_controls[jsgui_id]);
+
+                    //console.log('3) jsgui_id', jsgui_id);
+
                     var ctrl = new Cstr({
                         'context': context,
                         '_id': jsgui_id,
                         'el': el
                     })
-                    map_controls[jsgui_id] = ctrl;
+
+                    //console.log('ctrl.__id', ctrl.__id);
+
+
+
+                    //console.log('ctrl.__type_name', ctrl.__type_name);
+
+                    // no need to add it, it gets added automatically when constructed and given a context (I think)
+                    //console.log('!!map_controls[jsgui_id]', !!map_controls[jsgui_id]);
+                    //console.log('arr_controls.length', arr_controls.length);
+
+                    //if (map_controls[jsgui_id]) {
+                    //    console.log('jsgui_id', jsgui_id);
+                    //    throw 'unexpected: control already exists.'
+                    //}
+
+                    //map_controls[jsgui_id] = ctrl;
                     arr_controls.push(ctrl);
 
                     //console.log('el.tagName', el.tagName);
@@ -3918,7 +4129,7 @@ var activate = function(context) {
                         '_id': jsgui_id,
                         'el': el
                     })
-                    map_controls[jsgui_id] = ctrl;
+                    //map_controls[jsgui_id] = ctrl;
                     arr_controls.push(ctrl);
 
                 }
@@ -3945,11 +4156,21 @@ var activate = function(context) {
                 //console.log('* jsgui_id ' + jsgui_id);
                 if (jsgui_id) {
 
+                    //console.log('map_controls', map_controls);
+
                     var ctrl = map_controls[jsgui_id];
-                    ctrl.__activating == true;
+                    ctrl.__activating = true;
+
+
                     //console.log('tof ctrl ' + tof(ctrl));
+                    //console.log('ctrl.__type_name', ctrl.__type_name);
+                    //console.log('ctrl', ctrl);
                     ctrl.activate();
-                    ctrl.__activating == false;
+
+                    // Type name being set in initialization?
+
+
+                    ctrl.__activating = false;
                     //console.log('jsgui_type ' + jsgui_type);
                 }
             }

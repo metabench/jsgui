@@ -34,7 +34,10 @@ JeSuisXML = require('../web/jsgui-je-suis-xml'), Cookies = require('cookies');
 		// Need to return this in a way that is useful for Windows too.
 
 		var net_info = os.networkInterfaces();
-		//console.log('net_info ' + stringify(net_info));
+		console.log('net_info ' + stringify(net_info));
+		console.log('tof(net_info) ' + tof(net_info));
+
+		//throw 'stop';
 		// still not working in Windows... need a quick fix.
 
 		// will get the info from ipconfig... will read various results from that to start with.
@@ -450,7 +453,11 @@ JeSuisXML = require('../web/jsgui-je-suis-xml'), Cookies = require('cookies');
 
 							nis.push(item);
 
+							// Does not seem to be indexed with the 0.5 version.
+
 						});
+
+						// but is it then getting indexed properly?
 
 						//throw 'stop';
 

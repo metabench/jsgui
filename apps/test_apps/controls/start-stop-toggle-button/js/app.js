@@ -34,6 +34,12 @@ window.onload = function() {
 
     console.log('start_stop_toggle_button', start_stop_toggle_button);
 
+    // 8/12/2015 Not being set up right.
+    //  Looks like the 'start' span control has been initialised twice, and there are two versions of it in the content of start_stop_toggle_button.
+
+    console.log('sstb content length:', start_stop_toggle_button.get('content').length());
+
+
     start_stop_toggle_button.on('start', function() {
       console.log('start');
     });

@@ -78,6 +78,8 @@ var Page_Context = jsgui.Evented_Class.extend({
         var map_objects = {};
 
         var _get_new_typed_object_id = function(type_name) {
+            //console.log('map_new_ids', map_new_ids);
+
             if (!is_defined(map_new_ids[type_name])) {
                 map_new_ids[type_name] = 0;
             }
@@ -92,7 +94,8 @@ var Page_Context = jsgui.Evented_Class.extend({
         this.new_id = _get_new_typed_object_id;
 
         this.set_max_ids = function(map_max_ids) {
-            each(map_max_ids, function(i, v) {
+
+            each(map_max_ids, function(v, i) {
                 map_new_ids[i] = v + 1;
             })
         }
