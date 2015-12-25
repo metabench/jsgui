@@ -10,6 +10,8 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
     var assert;
     var test_utils;
 
+    var stringify;
+
     // -----------------------------------------------------
     //	jsgui:
     // -----------------------------------------------------
@@ -42,6 +44,7 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
         // jsgui:
         //
         jsgui = Enhanced_Data_Object.prototype.mod_link();
+        stringify = jsgui.stringify;
     });
 
 
@@ -106,6 +109,30 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
             //assert.deepEqual(jsgui.stringify(edo.get('flags')), 'Collection("test", "test")');
         });
 
+        it("flags issue (doc: new Enhanced_Data_Object())", function () {
+            var edo = new Enhanced_Data_Object();
+            var flags = edo.get('flags');
+            assert.deepEqual(stringify(flags), "Collection()");
+            //
+            flags.add('selectable');
+            flags.add('resizable');
+            assert.deepEqual(stringify(flags), 'Collection("selectable", "resizable")');
+            //
+            // the Enhanced_Data_Object() constructor does not set data_type constraint
+            // for the "flags" collection. 
+            // So, flags.has() result is always undefined: !!!
+            assert.deepEqual(flags._data_type_constraint, undefined);
+            assert.deepEqual(flags.has('selectable'), undefined);
+            assert.deepEqual(flags.has('resizable'), undefined);
+            //
+            //
+            // the Enhanced_Data_Object() constructor does not set indexes
+            // for the "flags" collection. 
+            // So, flags.remove() throws an error: !!!
+            assert.throws(function () { flags.remove('selectable'); });
+            assert.deepEqual(stringify(flags), 'Collection("selectable", "resizable")'); // must be: 'Collection("resizable")' !!!
+        });
+
         // -----------------------------------------------------
         //	extend()
         // -----------------------------------------------------
@@ -120,6 +147,14 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
             var edo2 = new EDO2();
             assert.deepEqual(edo2._flags, undefined);
             assert.deepEqual(edo2.flags, []);
+        });
+
+        it("extend() doc example", function () {
+            var EDO2 = Enhanced_Data_Object.extend({ NewProperty: [] });
+            //
+            var edo2 = new EDO2();
+            //
+            assert.deepEqual(edo2.NewProperty, []);
         });
 
     });
@@ -199,30 +234,6 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
             set_result = data_object.set("Field4", date_value);
             assert.deepEqual(data_object.get("Field4"), date_value); // !!!
             assert.deepEqual(set_result, date_value);
-        });
-
-        xit("allows to set anything if the field exists", function () {
-            var data_object = new Enhanced_Data_Object();
-            var set_result = null;
-            //
-            // if the field was set previously, then Data_Object allows to set anything without the internal Data_Object creation
-            // bug?
-            //
-            set_result = data_object.set("Field1", [123]);
-            assert.deepEqual(data_object.get("Field1"), [123]);
-            assert.deepEqual(set_result, [123]);
-            //
-            set_result = data_object.set("Field1", 123);
-            assert.deepEqual(data_object.get("Field1"), 123); // !!!
-            assert.deepEqual(set_result, 123);
-            //
-            set_result = data_object.set("Field3", false);
-            assert.deepEqual(data_object.get("Field3"), new Data_Value({ value: false }));
-            assert.deepEqual(set_result, false);
-            //
-            set_result = data_object.set("Field3", true);
-            assert.deepEqual(data_object.get("Field3"), true);
-            assert.deepEqual(set_result, true);
         });
 
         it("should prevent read-only fields from setting", function () {
@@ -309,11 +320,11 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
             assert.deepEqual(change_eventArgs, null);
         });
 
-        xit("set() should include a source property to the change event when a control is passed", function () {
+        it("set() should include a source property to the change event when a control is passed", function () {
             //
-            // something like data_object.set("Field1", [123], control);
+            // something like data_object.set("Field1", 123, control);
             //
-            // TODO: complete the test when controls code will be processed
+            // !!! TODO: complete the test when controls code will be processed
         });
 
         it("set() using object instead of name/value pairs", function () {
@@ -342,9 +353,9 @@ describe("z_core/data-object /Enhanced_Data_Object.spec.js ", function () {
             assert.deepEqual(set_result, data_object_as_value);
         });
 
-        xit("set() using control instead of name/value pairs", function () {
+        it("set() using control instead of name/value pairs", function () {
             //
-            // TODO: complete the test when controls code will be processed
+            // !!! TODO: complete the test when controls code will be processed
             // maybe James means "Collection"? but "c" sig is "control"...
             // anyway it must not works
             //

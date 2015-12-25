@@ -55,7 +55,7 @@
 	        test_utils.assertDeepEqual(stringify(new Collection(String)), "Collection()");
 	    });
 
-	    it("test require('../../../core/enhanced-data-object')", function () {
+	    it("test require(enhanced-data-object)", function () {
 	        //
 	        // everything is ok:
 	        test_utils.assertDeepEqual(String.abstract, undefined);

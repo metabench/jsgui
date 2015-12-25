@@ -7,6 +7,7 @@
 
 describe("z_core/data-object /Data_Object-with-EDO.spec.js ", function () {
 
+    var Data_Value;
     var Data_Object;
     var Data_Structures;
     var Constraint;
@@ -28,6 +29,7 @@ describe("z_core/data-object /Data_Object-with-EDO.spec.js ", function () {
         var data_object_module_name = require.resolve('../../../core/data-object');
         delete require.cache[data_object_module_name];
         //
+        Data_Value = require('../../../core/data-value');
         Data_Object = require('../../../core/data-object');
         Data_Structures = require('../../../core/jsgui-data-structures');
         Constraint = require('../../../core/constraint');
@@ -144,9 +146,9 @@ describe("z_core/data-object /Data_Object-with-EDO.spec.js ", function () {
         //
         // set values:
         //
-        data_object = Data_Object.dobj({ Field1: [111], Field2: [222] });
-        assert.deepEqual(data_object.get("Field1"), [111]);
-        assert.deepEqual(data_object.get("Field2"), [222]);
+        data_object = Data_Object.dobj({ Field1: 111, Field2: 222 });
+        assert.deepEqual(data_object.get("Field1"), new Data_Value({ value: 111 }));
+        assert.deepEqual(data_object.get("Field2"), new Data_Value({ value: 222 }));
     });
 
     // -----------------------------------------------------

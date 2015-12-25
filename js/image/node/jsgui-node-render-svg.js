@@ -8,7 +8,7 @@ if (typeof define !== 'function') {
 
 //define(['./jsgui-lang-essentials', 'fs', './jsgui-node-fs2-core', 'temp', 'node-phantom', 'chimera'], 
 //    function(jsgui, fs, fs2, temp, phantom, chimera) {
-define(['./../../core/jsgui-lang-essentials', 'fs', './../fs/jsgui-node-fs2-core', 'node-phantom', './jsgui-node-png'],
+define(['./../../core/jsgui-lang-essentials', 'fs', './../../fs/jsgui-node-fs2-core', 'node-phantom', './jsgui-node-png'],
     function(jsgui, fs, fs2, phantom, jsgui_png) {
         
         var stringify = jsgui.stringify, each = jsgui.each, is_defined = jsgui.is_defined;

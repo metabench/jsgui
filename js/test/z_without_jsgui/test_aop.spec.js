@@ -23,7 +23,7 @@ define(['assert'], function (assert) {
 			  
 			  // put together the map of number of occurrances.
 			  //  maybe array will be better?
-			  //  map!!!
+			  //  map ! ! !
 			  
 			  var map_num_letter_occurrances = {};
 			  for (var c = 0, l = arr_chars.length; c < l; c++) {

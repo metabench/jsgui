@@ -12,7 +12,7 @@ if (typeof define !== 'function') {
 }
 
 define(['../../core/jsgui-lang-essentials', 'fs', 'path', 'module',
-    './jsgui-sprite-arrange', './jsgui-node-png', './jsgui-node-image', './pixel-buffer'],
+    './../jsgui-sprite-arrange', './jsgui-node-png', './jsgui-node-image', './pixel-buffer'],
     function(jsgui, fs, path, module,
         jsgui_sprite_arrange, node_png, node_image, Pixel_Buffer) {
 //define(['jsgui-lang-essentials', 'fs', 'path', 'module', 'jsgui-sprite-arrange', 'jsgui-node-png', 'jsgui-node-image'],

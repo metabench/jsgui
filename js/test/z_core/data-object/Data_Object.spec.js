@@ -2862,36 +2862,6 @@ describe("Data_Object tests", function () {
             Data_Object.set_Enhanced_Data_Object(null);
         });
 
-        // -----------------------------------------------------
-        //	extend_side_effect
-        // -----------------------------------------------------
-
-        it("extend_side_effect", function () {
-            //
-            var stringify = jsgui.stringify;
-            //
-            // everything is ok:
-            assert.deepEqual(String.abstract, undefined);
-            assert.deepEqual(stringify(new Data_Object(String)), "Data_Object({})");
-            assert.deepEqual(stringify(new Collection(String)), "Collection()");
-            //
-            // Collection(String) call sets String.abstract = true:
-            var abstract_collection = Collection(String);
-            //
-            // now it's broken:
-            assert.deepEqual(String.abstract, true);
-            assert.deepEqual(stringify(new Data_Object(String)), "Data_Object(undefined)");
-            assert.deepEqual(stringify(new Collection(String)), "~Collection(String)");
-            //
-            // fix back:
-            delete String.abstract;
-            //
-            // now it's fixed:
-            assert.deepEqual(String.abstract, undefined);
-            assert.deepEqual(stringify(new Data_Object(String)), "Data_Object({})");
-            assert.deepEqual(stringify(new Collection(String)), "Collection()");
-        });
-
     });
 
 });

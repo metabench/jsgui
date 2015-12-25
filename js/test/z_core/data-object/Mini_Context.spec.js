@@ -33,7 +33,7 @@ describe("z_core/data-object /Mini_Context.spec.js ", function () {
     //                  the test:
     // =========================================
 
-    it("new_id() should throw", function () {
+    it("!!! new_id() should throw", function () {
         //
         var mini_context = new Data_Object.Mini_Context();
         //
@@ -54,6 +54,7 @@ describe("z_core/data-object /Mini_Context.spec.js ", function () {
         //
         var data_object = new Data_Object({ abstract: true });
         //
+        // !!!! exception!
         assert.throws(function () { mini_context.make(data_object); }, function (err) { return err === "stop Mini_Context typed id"; });
         //
         //
