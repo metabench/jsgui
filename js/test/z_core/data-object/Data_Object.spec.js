@@ -1842,17 +1842,16 @@ describe("Data_Object tests", function () {
                 data_object.set_field("Field2", "int");
                 assert.deepEqual(data_object.get("Field2"), new Data_Value()); // without __type_name !!!
                 //
-                // without field definition: create Data_Value for 'string', 'number', 'boolean', 'date':
+                // without field definition: create Data_Value:
                 //
                 data_object.set("Field3", "abc");
                 assert.deepEqual(data_object.get("Field3"), new Data_Value({ value: "abc" }));
-                //
-                // without field definition: create Data_Value too:
                 //
                 data_object.set("Field4", ["abc"]);
                 assert.deepEqual(data_object.get("Field4"), new Data_Value({value: ["abc"]}));
                 //
                 // without field definition: set Data_Value:
+                //
                 var data_value_31 = new Data_Value({ value: 31 });
                 data_object.set("Field5", data_value_31);
                 assert.deepEqual(data_object.get("Field5"), data_value_31);
