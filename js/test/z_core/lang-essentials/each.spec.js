@@ -2,14 +2,14 @@
 describe("z_core/essentials/each.spec.js", function () {
 
     var jsgui;
-    var collection;
-    var data_object;
+    var Collection;
+    var Data_Object;
     var assert;
 
     before(function () {
         jsgui = require('../../../core/jsgui-lang-essentials');
-        collection = require('../../../core/collection');
-        data_object = require('../../../core/data-object');
+        Collection = require('../../../core/collection');
+        Data_Object = require('../../../core/data-object');
         assert = require('assert');
     });
 
@@ -17,43 +17,43 @@ describe("z_core/essentials/each.spec.js", function () {
     //	Collection
     // -----------------------------------------------------
 
-    xit("should iterate over Collection", function () {
-        var result = "";
+    it("each() should iterate over Collection", function () {
+        var result = [];
         //
-
-        var President = data_object.Data_Object.extend({
+        var President = Data_Object.extend({
             'fields': [
                 ['name', 'indexed text(32)'],
                 ['party', 'indexed text(32)'],
                 ['y1', 'int'],
                 ['y2', 'int']
             ],
-            // connect_fields was connect
             'connect_fields': true
         });
-
-
+        //
         var arr_presidents = [
             { 'name': 'George Washington', 'y1': 1789, 'y2': 1797 },
             { 'name': 'John Adams', 'y1': 1797, 'y2': 1801, 'party': 'Federalist' },
             { 'name': 'Thomas Jefferson', 'y1': 1801, 'y2': 1809, 'party': 'Democratic-Republican' }
         ];
-
-
-        var presidentsCollection = new collection.Collection(President, arr_presidents);
+        //
+        var presidentsCollection = new Collection(President, arr_presidents);
         //
         jsgui.each(presidentsCollection, function (index, element, stop) {
-            //result += index + ":" + element + "/";
+            result.push([index, jsgui.stringify(element)]);
         });
         //
-        //assert.equal(result, "0:1/1:2/2:3/3:4/4:5/");
+        assert.deepEqual(result,[
+            [0, 'Data_Object({"name": "George Washington", "y1": 1789, "y2": 1797, "party": undefined})'],
+            [1, 'Data_Object({"name": "John Adams", "y1": 1797, "y2": 1801, "party": "Federalist"})'],
+            [2, 'Data_Object({"name": "Thomas Jefferson", "y1": 1801, "y2": 1809, "party": "Democratic-Republican"})']
+        ]);
     });
 
     // -----------------------------------------------------
     //	Array
     // -----------------------------------------------------
 
-    it("should iterate over Array", function () {
+    it("each() should iterate over Array", function () {
         var result = "";
         //
         jsgui.each([1, 2, 3, 4, 5], function (index, element, stop) {
@@ -67,7 +67,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	Object
     // -----------------------------------------------------
 
-    it("should iterate over Object", function () {
+    it("each() should iterate over Object", function () {
         var result = "";
         //
         var obj = { a: 1, b: 2, c: 3 };
@@ -82,7 +82,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	context
     // -----------------------------------------------------
 
-    it("should bind to context", function () {
+    it("each() should bind to context", function () {
         var result = "";
         //
         var obj = {};
@@ -99,7 +99,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	null
     // -----------------------------------------------------
 
-    it("should do nothing if no collection is given", function () {
+    it("each() should do nothing if no collection is given", function () {
         var result = "";
         //
         jsgui.each(null, function (index, element, stop) {
@@ -114,7 +114,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	stop - array
     // -----------------------------------------------------
 
-    it("should should break array iteration when the stop function is called", function () {
+    it("each() should should break array iteration when the stop function is called", function () {
         var result = "";
         //
         jsgui.each([1, 2, 3, 4, 5], function (index, element, stop) {
@@ -129,7 +129,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	stop - object
     // -----------------------------------------------------
 
-    it("should should break object iteration when the stop function is called", function () {
+    it("each() should should break object iteration when the stop function is called", function () {
         var result = "";
         //
         jsgui.each({ a: 1, b: 2, c: 3, d: 4, e: 5 }, function (index, element, stop) {
@@ -149,43 +149,43 @@ describe("z_core/essentials/each.spec.js", function () {
     //	Collection
     // -----------------------------------------------------
 
-    xit("should iterate over Collection", function () {
-        var result = "";
+    it("eac() should iterate over Collection", function () {
+        var result = [];
         //
-
-        var President = data_object.Data_Object.extend({
+        var President = Data_Object.extend({
             'fields': [
                 ['name', 'indexed text(32)'],
                 ['party', 'indexed text(32)'],
                 ['y1', 'int'],
                 ['y2', 'int']
             ],
-            // connect_fields was connect
             'connect_fields': true
         });
-
-
+        //
         var arr_presidents = [
             { 'name': 'George Washington', 'y1': 1789, 'y2': 1797 },
             { 'name': 'John Adams', 'y1': 1797, 'y2': 1801, 'party': 'Federalist' },
             { 'name': 'Thomas Jefferson', 'y1': 1801, 'y2': 1809, 'party': 'Democratic-Republican' }
         ];
-
-
-        var presidentsCollection = new collection.Collection(President, arr_presidents);
         //
-        jsgui.eac(presidentsCollection, function (index, element, stop) {
-            //result += index + ":" + element + "/";
+        var presidentsCollection = new Collection(President, arr_presidents);
+        //
+        jsgui.eac(presidentsCollection, function (element, index, stop) {
+            result.push([index, jsgui.stringify(element)]);
         });
         //
-        //assert.equal(result, "0:1/1:2/2:3/3:4/4:5/");
+        assert.deepEqual(result, [
+            [0, 'Data_Object({"name": "George Washington", "y1": 1789, "y2": 1797, "party": undefined})'],
+            [1, 'Data_Object({"name": "John Adams", "y1": 1797, "y2": 1801, "party": "Federalist"})'],
+            [2, 'Data_Object({"name": "Thomas Jefferson", "y1": 1801, "y2": 1809, "party": "Democratic-Republican"})']
+        ]);
     });
 
     // -----------------------------------------------------
     //	Array
     // -----------------------------------------------------
 
-    it("should iterate over Array", function () {
+    it("eac() should iterate over Array", function () {
         var result = "";
         //
         jsgui.eac([1, 2, 3, 4, 5], function (element, index, stop) {
@@ -199,7 +199,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	Object
     // -----------------------------------------------------
 
-    it("should iterate over Object", function () {
+    it("eac() should iterate over Object", function () {
         var result = "";
         //
         var obj = { a: 1, b: 2, c: 3 };
@@ -214,7 +214,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	context
     // -----------------------------------------------------
 
-    it("should bind to context", function () {
+    it("eac() should bind to context", function () {
         var result = "";
         //
         var obj = {};
@@ -231,7 +231,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	null
     // -----------------------------------------------------
 
-    it("should do nothing if no collection is given", function () {
+    it("eac() should do nothing if no collection is given", function () {
         var result = "";
         //
         jsgui.eac(null, function (element, index, stop) {
@@ -246,7 +246,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	stop - array
     // -----------------------------------------------------
 
-    it("should should break array iteration when the stop function is called", function () {
+    it("eac() should should break array iteration when the stop function is called", function () {
         var result = "";
         //
         jsgui.eac([1, 2, 3, 4, 5], function (element, index, stop) {
@@ -261,7 +261,7 @@ describe("z_core/essentials/each.spec.js", function () {
     //	stop - object
     // -----------------------------------------------------
 
-    xit("should should break object iteration when the stop function is called", function () {
+    it("eac() should should break object iteration when the stop function is called", function () {
         var result = "";
         //
         jsgui.eac({ a: 1, b: 2, c: 3, d: 4, e: 5 }, function (element, index, stop) {
@@ -269,7 +269,7 @@ describe("z_core/essentials/each.spec.js", function () {
             if (element >= 3) stop();
         });
         //
-        assert.equal(result, "a:1/b:2/c:3");
+        assert.equal(result, "a:1/b:2/c:3/");
     });
 
 

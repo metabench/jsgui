@@ -189,8 +189,8 @@ describe("z_core/lang/jsgui-lang-util.spec.js", function () {
         test_utils.assertDeepEqual(fn_mapified("h1 div"), { h1: "h1+", div: "div+" });
         test_utils.assertDeepEqual(fn_mapified(["h1", "div"]), { h1: "h1+", div: "div+" });
         //
-        test_utils.assertDeepEqual(fn_mapified("h1"), "h1+"); // !!!
-        test_utils.assertDeepEqual(fn_mapified(""), "+"); // !!!
+        test_utils.assertDeepEqual(fn_mapified("h1"), "h1+"); // string instead of object !!!
+        test_utils.assertDeepEqual(fn_mapified(""), "+"); // string instead of object !!!
         //
         test_utils.assertDeepEqual(fn_mapified(["h1"]), { h1: "h1+" });
     });

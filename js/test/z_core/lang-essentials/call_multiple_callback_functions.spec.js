@@ -14,15 +14,19 @@ describe("z_core/essentials /call_multiple_callback_functions.spec.js ", functio
     //	empty arr_functions_params_pairs
     // -----------------------------------------------------
 
-    xit("should call the callback when the arr_functions_params_pairs array is empty", function (done) {
-
-        var callback = function (err, res) {
-            assert.equal(err, null);
-            assert.equal(res, null);
-            done();
-        };
-
+    it("should call the callback when the tasks array is empty", function (done) {
+        //
+        // !!! if the tasks array is empty, then the callback is not called
+        //
+        var callback_called = false;
+        var callback = function (err, res) { callback_called = true; };
+        //
         jsgui.call_multiple_callback_functions([], callback);
+        //
+        setTimeout(function () {
+            assert.equal(callback_called, false); // not called !!!
+            done();
+        }, 100);
     });
 
     // -----------------------------------------------------

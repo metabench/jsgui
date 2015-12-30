@@ -36,21 +36,21 @@ describe("z_core /test_enhanced_data_object.spec.js ", function() {
 	    // the Enhanced_Data_Object() constructor does not set data_type constraint
 	    // for the "flags" collection. 
         // So, flags.has() result is always undefined:
-	    assert.equal(flags._data_type_constraint, undefined);
-	    assert.equal(flags.has('selectable'), undefined);
-	    assert.equal(flags.has('resizable'), undefined);
+	    assert.equal(flags._data_type_constraint, undefined); // !!!
+	    assert.equal(flags.has('selectable'), undefined); // !!!
+	    assert.equal(flags.has('resizable'), undefined); // !!!
 	    //
         //
 	    // the Enhanced_Data_Object() constructor does not set indexes
 	    // for the "flags" collection. 
 	    // So, flags.remove() throws an error:
-	    assert.throws(function(){ flags.remove('selectable');});
+	    assert.throws(function () { flags.remove('selectable'); }); // !!!
 	    // must be: assert.equal(stringify(flags), 'Collection("resizable")');
         //
-	    assert.equal(flags.has('selectable'), undefined);
-	    assert.equal(flags.has('resizable'), undefined);
+	    assert.equal(flags.has('selectable'), undefined); // !!!
+	    assert.equal(flags.has('resizable'), undefined); // !!!
         //
-	    assert.throws(function () { edo.add_flag('hidden'); });
+	    assert.throws(function () { edo.add_flag('hidden'); }); // !!!
 	    //assert.equal(stringify(flags), 'Collection("selectable", "resizable", "hidden")');
 	});
 

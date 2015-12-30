@@ -601,7 +601,7 @@ describe("z_core /test_data_object_data_types.spec.js ", function() {
         //assert.throws(function () { new Color({ 'red': 255, 'green': 0, 'blue': 122 }); }, /not yet implemented/);
 
         // --------------------------------------------------------------------------------------------
-        // !!! it does not use the input_processors and output_processors from jsgui-lang-util.js module,
+        // BTW it does not use the input_processors and output_processors from jsgui-lang-util.js module,
         // but use the processors from this file instead
         // --------------------------------------------------------------------------------------------
 

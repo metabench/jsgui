@@ -2,10 +2,14 @@
 describe("z_core/essentials/other.spec.js", function () {
 
     var jsgui;
+    var Collection;
+    var Data_Object;
     var assert;
 
     before(function () {
         jsgui = require('../../../core/jsgui-lang-essentials');
+        Collection = require('../../../core/collection');
+        Data_Object = require('../../../core/data-object');
         assert = require('assert');
     });
 
@@ -168,12 +172,15 @@ describe("z_core/essentials/other.spec.js", function () {
     //	is_ctrl()
     // -----------------------------------------------------
 
-    xit("should ....", function () {
-
-        //assert.deepEqual(jsgui.is_ctrl(["a", "b", "c"]), ["a", "b", "c"]);
-        //assert.deepEqual(jsgui.arr_like_to_arr([]), []);
-
-
+    it("is_ctrl() should detect a ctrl...", function () {
+        assert.deepEqual(jsgui.is_ctrl(undefined), false);
+        assert.deepEqual(jsgui.is_ctrl(null), false);
+        assert.deepEqual(jsgui.is_ctrl(123), false);
+        assert.deepEqual(jsgui.is_ctrl({}), false);
+        //
+        assert.deepEqual(jsgui.is_ctrl(new Data_Object()), true); // but... probably it must return true for Control only? !!!
+        //
+        // !!! TODO: add test for new Control()
     });
 
     // -----------------------------------------------------
@@ -282,29 +289,29 @@ describe("z_core/essentials/other.spec.js", function () {
     //	tof() - 2
     // -----------------------------------------------------
 
-    xit("tof() should return the type of an object - TODO", function () {
+    it("tof() should return the type of an object - 2", function () {
 
         // obj.__type
 
-        // TODO: real usage sample
+        assert.equal(jsgui.tof(new Data_Object()), "data_object");
 
-        // control
+        // control: TODO !!!
 
-        // TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         // readable_stream
 
-        assert.equal(jsgui.tof(process.stdin), "readable_stream"); // passed
+        assert.equal(jsgui.tof(process.stdin), "readable_stream");
 
         // writable_stream
 
         var crypto = require("crypto");
         var verify = crypto.createVerify("RSA-SHA256");
-        assert.equal(jsgui.tof(verify), "writable_stream"); // passed
+        assert.equal(jsgui.tof(verify), "writable_stream");
 
-        assert.equal(jsgui.tof(process.stdout), "writable_stream"); // "readable_stream" actually, or "object" if the "readable_stream" is commented off in the tof() code
-        assert.equal(jsgui.tof(process.stderr), "writable_stream"); // the same as above
+        // ???
 
+        assert.equal(jsgui.tof(process.stdout), "readable_stream"); // must be "writable_stream", isn't? !!!
+        assert.equal(jsgui.tof(process.stderr), "readable_stream"); // must be "writable_stream", isn't? !!!
     });
 
     // -----------------------------------------------------
@@ -415,7 +422,7 @@ describe("z_core/essentials/other.spec.js", function () {
         assert.equal(jsgui.get_item_sig("1"), "s");
         assert.equal(jsgui.get_item_sig(1), "n");
         assert.equal(jsgui.get_item_sig(false), "b");
-        //assert.equal(jsgui.get_item_sig(setInterval), "f"); // not works in IE8 !!!
+        assert.equal(jsgui.get_item_sig(parseInt), "f");
         assert.equal(jsgui.get_item_sig([]), "a");
         assert.equal(jsgui.get_item_sig({}), "o");
         assert.equal(jsgui.get_item_sig(undefined), "u");
@@ -438,7 +445,9 @@ describe("z_core/essentials/other.spec.js", function () {
     //	get_item_sig() - TODO
     // -----------------------------------------------------
 
-    xit("get_item_sig() should return type signature - TODO", function () {
+    it("get_item_sig() should return type signature - TODO", function () {
+
+        // TODO: !!!
 
         //* - "c" (control)
         //* - "R" (readable_stream)
@@ -620,7 +629,9 @@ describe("z_core/essentials/other.spec.js", function () {
         assert.equal(jsgui.are_equal("", 0), false);
         assert.equal(jsgui.are_equal(true, false), false);
         assert.equal(jsgui.are_equal(false, true), false);
-        //assert.equal(jsgui.are_equal(setInterval, setTimeout), false); // not work in IE8 !!!
+
+        assert.equal(jsgui.are_equal(parseInt, parseFloat), false);
+        assert.equal(jsgui.are_equal(parseInt, parseInt), true);
 
         // arrays
 
@@ -910,7 +921,9 @@ describe("z_core/essentials/other.spec.js", function () {
         assert.deepEqual(jsgui.is_constructor_fn(new Object()), false);
 
         assert.deepEqual(jsgui.is_constructor_fn(add), true);
-        //assert.deepEqual(jsgui.is_constructor_fn(setInterval), true);  // not work in IE8 !!!
+
+        assert.deepEqual(jsgui.is_constructor_fn(setInterval), true); 
+        assert.deepEqual(jsgui.is_constructor_fn(parseInt), false);
 
         assert.deepEqual(jsgui.is_constructor_fn({ prototype: null }), true);
 

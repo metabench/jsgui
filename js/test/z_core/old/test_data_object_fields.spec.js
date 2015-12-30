@@ -123,7 +123,7 @@ describe("z_core /test_data_object_fields.spec.js ", function () {
 
     var get_coll_presidents = function () {
         //console.log('pre c 1');
-        var coll_presidents = new jsgui.Collection({
+        var coll_presidents = new Collection({
 
             'fields': [
                 ['name', 'indexed text(32)'],
@@ -283,17 +283,13 @@ describe("z_core /test_data_object_fields.spec.js ", function () {
 	//	test_coll_fields
 	// -----------------------------------------------------
 			
-	xit("test_coll_fields", function() {
-		
-		var test_coll_fields = function() {
-			var cp = get_coll_presidents();
-				
-		}
-		test_coll_fields();
-			
-		// Want to test collections as fields too.
-		
-		assert.equal(11111, 11111);
+	it("test_coll_fields", function () {
+
+	    var cp = get_coll_presidents();
+
+	    // Want to test collections as fields too.
+
+	    // TODO? !!!
 	});
 					
 });
