@@ -123,18 +123,27 @@ describe("z_core /test_data_object_fields.spec.js ", function () {
 
     var get_coll_presidents = function () {
         //console.log('pre c 1');
-        var coll_presidents = new Collection({
-
+        //var coll_presidents = new Collection({
+        //    'fields': [
+        //        ['name', 'indexed text(32)'],
+        //        ['party', 'indexed text(32)'],
+        //        ['y1', 'int'],
+        //        ['y2', 'int']
+        //    ],
+        //    'items': get_arr_presidents()
+        //});
+        //
+        var President = Data_Object.extend({
             'fields': [
                 ['name', 'indexed text(32)'],
                 ['party', 'indexed text(32)'],
                 ['y1', 'int'],
                 ['y2', 'int']
             ],
-
-            'items': get_arr_presidents()
+            'connect_fields': true
         });
-
+        //
+        var coll_presidents = new Collection(President, get_arr_presidents());
         return coll_presidents;
     }
 

@@ -114,7 +114,7 @@ describe("z_core/collection/Collection-ItemsRead.spec.js ", function () {
         test_utils.assertDeepEqual(stringify(find_result), '[Data_Object({"name": "George Washington", "y1": 1789, "y2": 1797, "party": undefined})]');
         //
         find_result = presidents.find({ 'party': undefined });
-        test_utils.assertDeepEqual(find_result, undefined);
+        test_utils.assertDeepEqual(find_result, []);
         //
         assert.throws(function () { find_result = presidents.find({ 'y1': 1789 }); }, /stop/); // no index for 'y1' field
         //
@@ -179,19 +179,19 @@ describe("z_core/collection/Collection-ItemsRead.spec.js ", function () {
         //
         // non-indexed field:
         find_result = presidents.find([['y1', '1789']]);
-        test_utils.assertDeepEqual(find_result, undefined);
+        test_utils.assertDeepEqual(find_result, []);
         //
         // indexed + indexed (different indexes), not work:
         find_result = presidents.find([['name', 'George Washington'], ['party', undefined]]);
-        test_utils.assertDeepEqual(find_result, undefined);
+        test_utils.assertDeepEqual(find_result, []);
         //
         // indexed + indexed (different indexes), not work again:
         find_result = presidents.find([['name', 'William Henry Harrison'], ['party', 'Whig']]);
-        test_utils.assertDeepEqual(find_result, undefined);
+        test_utils.assertDeepEqual(find_result, []);
         //
         // indexed + non-indexed, not work (it's expected):
         find_result = presidents.find([['name', 'George Washington'], ['y1', '1789']]);
-        test_utils.assertDeepEqual(find_result, undefined);
+        test_utils.assertDeepEqual(find_result, []);
         //
         // add 2 fields index:
         //
@@ -277,7 +277,7 @@ describe("z_core/collection/Collection-ItemsRead.spec.js ", function () {
         test_utils.assertDeepEqual(stringify(find_result), '[Data_Object({"name": "George Washington", "y1": 1789, "y2": 1797, "party": undefined})]');
         //
         find_result = presidents.find('party', undefined);
-        test_utils.assertDeepEqual(find_result, undefined);
+        test_utils.assertDeepEqual(find_result, []);
         //
         find_result = presidents.find('party', 'Whig');
         test_utils.assertDeepEqual(find_result.length, 4);

@@ -270,8 +270,8 @@
     //	push(value) - 'control'
     // -----------------------------------------------------
 
-    xit("test push(value) - 'control'", function () {
-        // TODO...
+    it("test push(value) - 'control'", function () {
+        // TODO!!!
     });
 
     // -----------------------------------------------------

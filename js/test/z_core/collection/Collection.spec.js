@@ -64,12 +64,18 @@ describe("z_core/collection/Collection.spec.js ", function () {
         collection = new Collection();
         test_utils.assertDeepEqual(collection._id(), undefined);
         //
+        test_utils.assertDeepEqual(collection.__type_name, "data_object"); // !!!! 
+        test_utils.assertDeepEqual(collection.__type, "collection");
+        //
         var nextId = 7;
         var context = { new_id: function (prefix) { return prefix + "_00" + nextId++; } };
         //
+        // !!!! the generated ids was "collection_008" and "collection_009". 
+        // !!!! Now they are changed to "data_object_008" and "data_object_009" because of the collection.__type_name
+        //
         collection = new Collection({ context: context });
-        test_utils.assertDeepEqual(collection._id(), "collection_008"); // "collection_007" was generated in the constructor!
-        test_utils.assertDeepEqual(collection._id(), "collection_009"); // new ID generated !!!
+        test_utils.assertDeepEqual(collection._id(), "data_object_008"); // "data_object_007" was generated in the constructor!
+        test_utils.assertDeepEqual(collection._id(), "data_object_009"); // new ID generated !!!
     });
 
     //#endregion
