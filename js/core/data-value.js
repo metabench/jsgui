@@ -141,6 +141,8 @@ var Data_Value = Evented_Class.extend({
 
         var old_val = this._;
 
+        //console.log('old_val', old_val);
+
         this._ = val;
         //console.log('val', val);
 

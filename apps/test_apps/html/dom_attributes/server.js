@@ -103,9 +103,9 @@ server.start(port, function(ree, res_started) {
 		//console.log('pre set size');
 		//console.log('ctrl_0.__type_name', ctrl_0.__type_name);
 
-		//console.log('');
-		//console.log('');
-		//console.log('pre set size');
+		console.log('');
+		console.log('');
+		console.log('pre get dom_attributes');
 
 		// Basically gets the size object, then sets it.
 
@@ -116,11 +116,11 @@ server.start(port, function(ree, res_started) {
 		//dv_size.set([800, 600]);
 
 		var dom_attributes = ctrl_0.get('dom.attributes');
-		console.log('dom_attributes.fields', dom_attributes.fields);
-		console.log('tof dom_attributes.fields', tof(dom_attributes.fields));
+		console.log('dom_attributes.field', dom_attributes.field);
+		console.log('tof dom_attributes.field', tof(dom_attributes.field));
 		
 		
-		throw 'stop';
+		//throw 'stop';
 
 		// Seems like the DOM attribute fields go wrong.
 

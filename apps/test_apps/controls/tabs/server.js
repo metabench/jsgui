@@ -45,28 +45,48 @@ var fromObject = j.fromObject;
 var port = 80;
 
 var server = new jsgui.Server.JSGUI_Server({
-    '*': {
-        'name': 'start-stop-toggle-button'
-    }
+	'*': {
+		'name': 'start-stop-toggle-button'
+	}
 });
 
 
 var rp = server.get('resource_pool');
 var Control = jsgui.Control;
 
+// List of resources in the pool...
+
+console.log('rp.count()', rp.count());
+//throw 'stop';
+
+
 //console.log('rp ' + rp);
 var rp = server.get('resource_pool');
 var ar = rp.get_resource('Server Router');
+
+console.log('!!ar', !!ar);
+
+
+
 var rt = ar.get('routing_tree');
 
+// Would be best if the server built the client side on start, if needed.
+//  Could have a version numbering system that could tell if it's not needed - or check last modified times of files.
+
+
+
+
 server.start(port, function(ree, res_started) {
+
+	console.log('started server');
+	//throw 'stop';
 
 	// Maybe it's best to use je-suis-xml for setting up the page.
 
 	// Set up jsgui-html-client-stylish within the js serving resource.
 	//  It gets served as if it's within /js/web
 
-  // Automatic generation of a new page context?
+	// Automatic generation of a new page context?
 	rt.set('/', function(req, res) {
 		// Better to make a proper JSGUI client document.
 
@@ -84,20 +104,98 @@ server.start(port, function(ree, res_started) {
 
 		var body = hd.body();
 
-    // Want easy access to the various tabs and panels here.
-    //  Both through exposed references to them, as well as (probably best) in construction.
+		// Want easy access to the various tabs and panels here.
+		//  Both through exposed references to them, as well as (probably best) in construction.
 
-    // Would be nice to have a more declarative way of expressing this.
+		// Would be nice to have a more declarative way of expressing this.
 
 
+		// add and make function
+
+		// Dont want to just add a string...
+		//  That's the text (for the moment).
+		//  Could have a different way of adding text, such as a text function.
+
+
+
+		// .add('<code');
+		//  seems like most convenient syntax.
+
+
+
+
+
+		// .add(text(...));
+
+		// New syntax for this.make
+		//  Will have some translation layers between HTML-like trees and the parameters for
+
+		/*
+		var ctrl_0 = this.make(`
+		<Tabs>
+			<Tab>Content 1</Tab>
+			<Tab>Content 2</Tab>
+			<Tab>Content 3</Tab>
+		</Tabs>`);
+		*/
 
 		var ctrl_0 = new Tabs({
 			'context': server_page_context,
-      'tabs': ['Tab1', 'Tab2', 'Tab3']
+			'tabs': ['Tab1', 'Tab2', 'Tab3']
+		});
+
+		ctrl_0.panel(0).add('Tab index 0 content');
+		ctrl_0.panel(1).add('Tab index 1 content');
+		ctrl_0.panel(2).add('Tab index 2 content');
+
+
+
+
+		/*
+		var ctrl_0 = new Tabs({
+			'context': server_page_context,
+			'tabs': ['Tab1', 'Tab2', 'Tab3'],
+			'def': `
+				<div>Content 1</div>
+				<div>Content 2</div>
+				<Start_Stop_Button name="ssb1"/>
+				`
+
 		});
 		//ctrl_0.resizable();
-    body.add(ctrl_0);
+
+
+
+
+		//ctrl_0.panel(2).add('Tab index 2 content');
+
+		//ctrl_0.panel(2).jesui('<Calendar year="2015" />');
+
+		//ctrl_0.panel(2).jesui('<Start_Stop_Button name="ssb1"/>');
+
+		//var ssb1 = this.find('ssb1');
+		*/
+
+		// A combination of declatative definitions, and then searching for
+
+
+
+		// Identity or naming contexts would make sense.
+		//  So when we are defining a control, we can keep track of various names of subcontrols.
+		//  In fact, we already have ctrl_fields.
+
+
+
+
+		// Use an HTML parser to start with, then change it to xml.
+
+
+
+
+		body.add(ctrl_0);
 		ctrl_0.active();
+
+
 
 		// style should at least set the CSS.
 		//
@@ -120,11 +218,11 @@ server.start(port, function(ree, res_started) {
 	rt.setRoot404(function(req, res) {
 
 		res.writeHead(404, {"Content-Type": "text/html"});
-	  	res.write("<!DOCTYPE \"html\">");
-	  	res.write("<html>");
-	  	res.write("<head>");
-	  	res.write("<title>Page Not Found</title>");
-	  	res.write("</head>");
+		res.write("<!DOCTYPE \"html\">");
+		res.write("<html>");
+		res.write("<head>");
+		res.write("<title>Page Not Found</title>");
+		res.write("</head>");
 		res.write("<body>");
 		res.write("<h1>Page Not Found</h1>");
 		res.write("</body>");

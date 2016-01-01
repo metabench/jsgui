@@ -87,6 +87,7 @@ var Website_Resource = Web_Resource.extend({
 
     'init': function(spec) {
 
+        console.log('Init website resource');
         //console.log('Website_Resource spec', spec);
 
         // speck could be a string, such as 'static'
@@ -190,7 +191,18 @@ var Website_Resource = Web_Resource.extend({
         // Needs to have a router inside it.
 
         var router = new Router();
+
+
         this.set('router', router);
+        this._router = router;
+        // termorary fix to get/set problem.
+
+
+
+
+        //var router_2 = this.get('router');
+        //console.log('router_2', router_2);
+        //throw 'stop';
 
 
         // May start an admin web resource without a database connection.
@@ -346,8 +358,15 @@ var Website_Resource = Web_Resource.extend({
 
 
         if (!is_defined(spec)) spec = {};
+        console.log('pre super');
 
-        this._super(spec);
+        // Super call was not working for some reason.
+
+        Web_Resource.prototype.init.call(this, spec);
+
+
+
+        //this._super(spec);
 
     },
 
@@ -410,7 +429,16 @@ var Website_Resource = Web_Resource.extend({
         //console.log(new Error().stack);
         //throw 'stop';
 
-        var router = this.get('router');
+        //console.log('this', this);
+        //throw 'stop';
+
+        var router = this._router;
+
+
+        //var router = this.get('router');
+
+
+        console.log('router', router);
 
         // Not just have the router process it I think?
         //  Need to handle the 404 as well.

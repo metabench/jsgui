@@ -104,7 +104,25 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
             each(spec, function(app_spec, route) {
                 // Create a new Application Resource.
 
+                console.log('app_spec', app_spec);
+
                 var app = new Website_Resource(app_spec);
+
+
+                // And is the website's resource put in the server's resource pool?
+
+                // Or is there a separate list of websites?
+                console.log('app.meta', app.meta);
+                //throw 'stop';
+                //resource_pool.push(app);
+
+
+
+
+                //resource_pool.push(app);
+
+
+
                 //console.log('made Website_Resource');
 
                 // But the right context?
@@ -144,13 +162,14 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
         //throw 'stop';
 
         var that = this;
-        //console.log('pre start resource pool');
+        console.log('pre start resource pool');
 
         resource_pool.start(function(err) {
             if (err) {
                 throw err;
             } else {
-                //console.log('jsgui-server resource pool started');
+                console.log('jsgui-server resource pool started');
+                //throw 'stop';
 
                 var rp = that.get('resource_pool');
                 //console.log('rp ' + rp);
@@ -163,6 +182,9 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                 //throw 'stop';
 
                 var js = rp.get_resource('Site JavaScript');
+
+                console.log('js', js);
+                //throw 'stop';
                 var css = rp.get_resource('Site CSS');
                 var images = rp.get_resource('Site Images');
                 var audio = rp.get_resource('Site Audio');

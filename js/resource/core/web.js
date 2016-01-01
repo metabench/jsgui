@@ -27,6 +27,8 @@ var Web_Resource = Resource.extend({
 
     'init': function(spec) {
         //
+
+        console.log('Init web resource');
         if (!is_defined(spec)) spec = {};
 
         this._super(spec);

@@ -97,9 +97,11 @@ extend(jsgui.data_types_info, {
         'margin': 'margin',
         // when dealing with 'any': there may need to be a map that says if a value is contained.
         //  could even store these maps in a tree. would use something like 'ensure'
-        'cursor': ['any', ['auto', 'crosshair', 'default', 'e-resize', 'help', 'move', 'n-resize', 'ne-resize', 'nw-resize', 'pointer', 'progress', 's-resize', 'se-resize', 'sw-resize', 'text', 'w-resize', 'wait', 'inherit']]
+        'cursor': ['any', ['auto', 'crosshair', 'default', 'e-resize', 'help', 'move', 'n-resize', 'ne-resize', 'nw-resize',
+				'pointer', 'progress', 's-resize', 'se-resize', 'sw-resize', 'text', 'w-resize', 'wait', 'inherit']]
     }
 });
+
 
 // Want an underlying system that represents CSS well.
 //  Making it a lot easier to work with CSS, as it is in the browser.
@@ -128,6 +130,12 @@ jsgui.input_processors['distance'] = function (input) {
 jsgui.input_processors['margin'] = function (input) {
     return jsgui.input_processors['optional_array'](['left', 'top', 'right', 'bottom'], 'distance', input);
 };
+
+// Looks very interesting... assignment of the input processor for a specific format.
+//  Need to have input <> output for the data formats. Any supported format <> Internal representation
+//  Internal representation <> DOM representation
+
+
 
 jsgui.input_processors['size'] = function (input) {
     // use the n_units processor, but with 'px'

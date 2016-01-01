@@ -46,6 +46,8 @@ var Resource = Data_Object.extend({
     //},
 
     'init': function(spec) {
+
+        console.log('Resource init');
         //
         if (!is_defined(spec)) spec = {};
 
