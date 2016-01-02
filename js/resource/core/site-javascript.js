@@ -189,12 +189,42 @@ var Site_JavaScript = Resource.extend({
 	'build_client': function(callback) {
 		// Need the reference relative to the application directory.
 
-		var path = __dirname + '/js/app.js';
-		var b = browserify();
-		b.add(path);
-		b.bundle().pipe(process.stdout);
+		//var path = __dirname + '/js/app.js';
+		var appDir = path.dirname(require.main.filename);
+		//console.log('appDir', appDir);
 
-		throw 'stop';
+		var app_path = appDir + '/js/app.js';
+		var app_bundle_path = appDir + '/js/app-bundle.js';
+
+		//
+		var wstream = fs.createWriteStream(app_bundle_path);
+		var b = browserify();
+
+		//b.require(app_path, {
+		//	entry: true,
+		//	debug: true
+		//});
+		b.add(app_path);
+		//console.log('app_path', app_path);
+		//console.log('pre browserify bundle');
+		//b.bundle().pipe(process.stdout);
+
+		b.bundle().pipe(wstream);
+
+		wstream.end = function (data) {
+
+			//console.log('file bundle write complete');
+
+			callback(null, app_bundle_path);
+			// no more writes after end
+			// emit "close" (optional)
+		}
+
+		//setTimeout(function() {
+		//	throw 'stop';
+		//}, 20000);
+
+
 
 		//browserify(path)
 	},

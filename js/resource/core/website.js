@@ -87,7 +87,7 @@ var Website_Resource = Web_Resource.extend({
 
     'init': function(spec) {
 
-        console.log('Init website resource');
+        //console.log('Init website resource');
         //console.log('Website_Resource spec', spec);
 
         // speck could be a string, such as 'static'
@@ -99,7 +99,11 @@ var Website_Resource = Web_Resource.extend({
         // A website have a resource pool as well.
 
         var resource_pool = new Resource_Pool({});
-        this.set('resource_pool', resource_pool);
+
+
+        //console.log('this._.resource_pool', this._.resource_pool);
+
+        //throw 'stop';
 
 
 
@@ -193,7 +197,7 @@ var Website_Resource = Web_Resource.extend({
         var router = new Router();
 
 
-        this.set('router', router);
+
         this._router = router;
         // termorary fix to get/set problem.
 
@@ -358,16 +362,30 @@ var Website_Resource = Web_Resource.extend({
 
 
         if (!is_defined(spec)) spec = {};
-        console.log('pre super');
+        //console.log('pre super');
+        Web_Resource.prototype.init.call(this, spec);
+
+        this.set('router', router);
+        this.set('resource_pool', resource_pool);
 
         // Super call was not working for some reason.
 
-        Web_Resource.prototype.init.call(this, spec);
+
 
 
 
         //this._super(spec);
 
+    },
+
+    'get_resource': function(resource_name) {
+        var resource_pool = this.get('resource_pool');
+        //console.log('resource_pool', resource_pool);
+
+        //console.log('this._.resource_pool', this._.resource_pool);
+
+        //throw 'stop';
+        return resource_pool.get_resource(resource_name);
     },
 
     'start': function(callback) {

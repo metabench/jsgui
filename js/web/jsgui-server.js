@@ -109,12 +109,14 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
                 var app = new Website_Resource(app_spec);
 
 
+
+
                 // And is the website's resource put in the server's resource pool?
 
                 // Or is there a separate list of websites?
                 console.log('app.meta', app.meta);
                 //throw 'stop';
-                //resource_pool.push(app);
+                resource_pool.push(app);
 
 
 
