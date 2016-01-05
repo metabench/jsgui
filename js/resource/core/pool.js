@@ -345,7 +345,7 @@ var Resource = require('./resource');
 
 				// Not sure it's being indexed properly by attached properties.
 
-				console.log('this._resources', this._resources);
+				//console.log('this._resources', this._resources);
 
 
 				var find_result = this._resources.find({'attached': {'meta': 'name'}}, obj_lookup_val);

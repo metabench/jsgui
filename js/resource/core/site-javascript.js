@@ -173,14 +173,25 @@ var Site_JavaScript = Resource.extend({
 
 		console.log('Site_JavaScript start');
 
+		var build_on_start = this.meta.value('build_on_start');
+
+
+		if (build_on_start) {
+			this.build_client(function(err, res_build) {
+				if (err) {
+					callback(err)
+				} else {
+					callback(null, true);
+				}
+			})
+		} else {
+			callback(null, true);
+		}
+
 		// Let's have it build the client-side code.
-		this.build_client(function(err, res_build) {
-			if (err) {
-				callback(err)
-			} else {
-				callback(null, true);
-			}
-		})
+		//  Need the options to ignore various files, as well as to include the source maps in the output.
+
+
 
 
 

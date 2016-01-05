@@ -1220,12 +1220,17 @@ Control = jsgui.Control = jsgui.Control.extend({
         var dom_attributes = this.get('dom.attributes');
         //console.log('dom_attributes', dom_attributes);
 
-        var el = this.get('dom.el').value();
+        var dv_el = this.get('dom.el');
+
+
+        //var el = .value();
+
+        if (dv_el) el = dv_el.value();
 
         dom_attributes.on('change', function(e_change) {
             var property_name = e_change.name, dval = e_change.value;
 
-            //console.log('dom_attributes change', property_name, dval);
+            console.log('dom_attributes change', property_name, dval);
 
             /*
             if (property_name == 'style') {

@@ -999,7 +999,7 @@ var Constraint = require('./constraint');
 			//   an attached field.
 
 			
-			console.log('search_for_index_with_fields ' + sig);
+			//console.log('search_for_index_with_fields ' + sig);
 			//console.log('a ' + stringify(a));
 			
 			if (sig == '[s]') {
@@ -1035,7 +1035,7 @@ var Constraint = require('./constraint');
 				
 					
 					
-					console.log('iterate_indexes index ' + index);
+					//console.log('iterate_indexes index ' + index);
 					//console.log('iterate_indexes index.fields ' + stringify(index.fields));
 					//console.log('iterate_indexes index.fields ' + stringify(index.fields));
 					//console.log('fields ' + stringify(fields));
@@ -1135,7 +1135,7 @@ var Constraint = require('./constraint');
 			
 			// var found = coll_presidents.find([['name', 'Franklin Pierce'], ['party', 'Republican']]);
 			
-			console.log('Collection_Index_System find sig ' + sig);
+			//console.log('Collection_Index_System find sig ' + sig);
 			//console.log('a.l ' + a.l);
 
 			if (sig == '[o]') {
@@ -1450,7 +1450,7 @@ var Constraint = require('./constraint');
 				// can put in the object to the search.
 				//  will it get stringified later?
 				//   this needs to be used as a key for a string field though.
-				console.log('fieldDef', fieldDef);
+				//console.log('fieldDef', fieldDef);
 
 				var index = this.search_for_index_with_fields(fieldDef);
 
@@ -1458,7 +1458,7 @@ var Constraint = require('./constraint');
 
 				//var index = this.search_for_index_with_fields(strField);
 				//  may consult different indexes / look for them in a specific order when doing a lookup operation.
-				console.log('index ' + stringify(index));
+				//console.log('index ' + stringify(index));
 				if (index) {
 					//console.log('a[1] ' + stringify(a[1]));
 					var res = index.get(a[1]);
@@ -1699,7 +1699,7 @@ var Constraint = require('./constraint');
 			//   if so, it is a single index.
 			
 			
-			console.log('Collection_Index_System ensure_index sig ' + sig);
+			//console.log('Collection_Index_System ensure_index sig ' + sig);
 			
 			if (a.l == 1 && is_arr_of_strs(a[0])) {
 				// not specifying the type of index here.

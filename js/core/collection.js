@@ -539,14 +539,14 @@ var Collection = Data_Object.extend({
         // var found = coll_presidents.find([['name', 'Franklin Pierce'], ['party', 'Republican']]);
 
         // it can be an array of fields.
-        console.log('collection find ' + sig);
+        //console.log('collection find ' + sig);
         //console.log('a ' + stringify(a));
         if (a.l == 1) {
 
             // Make it so that index_system handles object queries...
             //  field: value
 
-            console.log('this.index_system', this.index_system);
+            //console.log('this.index_system', this.index_system);
 
             //throw 'stop';
 
@@ -616,16 +616,16 @@ var Collection = Data_Object.extend({
         if (sig == '[s,o]') {
             var propertyName = a[0];
             var query = a[1];
-            console.log('propertyName ' + propertyName);
-            console.log('query ' + stringify(query));
+            //console.log('propertyName ' + propertyName);
+            //console.log('query ' + stringify(query));
 
-            console.log('this.index_system', this.index_system);
+            //console.log('this.index_system', this.index_system);
 
             // So when items got added / pushed into the collection, with the current 0.5 version they are not ending up mapped in the index.
 
 
 
-            console.log('this.length()', this.length());
+            //console.log('this.length()', this.length());
 
             //throw 'stop';
 

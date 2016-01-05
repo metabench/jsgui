@@ -3237,6 +3237,24 @@ var Data_Object = Evented_Class.extend({
     //  It seems like it is definitely worth getting unit testing done.
 
 
+    'value': fp(function(a, sig) {
+        // could operate like both get and set, but does not return data_objects, returns the value itself.
+        var name;
+        //var res;
+
+        if (sig === '[s]') {
+            name = a[0];
+            var dv_val = this.get(name);
+            if (dv_val) {
+                return dv_val.value();
+            } else {
+                return undefined;
+            }
+        }
+
+
+    }),
+
 
     'get': fp(function(a, sig) {
 

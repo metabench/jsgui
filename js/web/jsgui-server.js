@@ -479,7 +479,7 @@ var JSGUI_Server = Enhanced_Data_Object.extend({
 
 
                     http_server.listen(port, ipAddress);
-                    //console.log('* Server running at http://' + ipAddress + ':' + port + '/');
+                    console.log('* Server running at http://' + ipAddress + ':' + port + '/');
 
 
 
