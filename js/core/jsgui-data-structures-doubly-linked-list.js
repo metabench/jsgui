@@ -16,12 +16,6 @@ define(["./jsgui-lang-essentials"], function(jsgui) {
 
 var jsgui = require('./jsgui-lang-essentials');
 
-    /** 
-    * Doubly linked list module.
-    * @module core/jsgui-data-structures-doubly-linked-list 
-    * @exports Doubly_Linked_List
-    */
-
 	// Essentials provides a fair few things... at least I can use functional polymorphism.
 
 	var j = jsgui;
@@ -73,17 +67,6 @@ var jsgui = require('./jsgui-lang-essentials');
 	//  Ordered_KVS makes sense when each value has a key but the order needs to be preserved.
 	//   Could be a wrapper around Linked_Map.
 	
-    /**
-    * Creates the node.
-    * @constructor
-    * @classdesc Represents a doubly linked list item (named "node").
-    * @alias Doubly_Linked_List.Node
-    * @param {object} spec - {value: (node value)}
-    * @memberof module:core/jsgui-data-structures-doubly-linked-list
-    * @example
-    *
-    * var node101 = new Doubly_Linked_List.Node({ value: 101 });
-    */
 	var Node = Class.extend({
 		'init': function(spec) {
 			// previous and next held as an array.
@@ -101,12 +84,6 @@ var jsgui = require('./jsgui-lang-essentials');
 			
 			this.neighbours = spec.neighbours || [];
 			
-		    /**
-            * The node's value.
-            * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node
-            * @instance
-            * @name value
-            */
 		    // Adding and removing while maintaining an order?
 			this.value = spec.value;
 			
@@ -114,17 +91,9 @@ var jsgui = require('./jsgui-lang-essentials');
 			// parent
 			
 		},
-	    /**
-        * Returns previous node in the list.
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.prototype
-        */
 		'previous': function () {
 			return this.neighbours[0];
 		},
-	    /**
-        * Returns next node in the list.
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.Node.prototype
-        */
 		'next': function () {
 			return this.neighbours[1];
 		}
@@ -164,12 +133,6 @@ var jsgui = require('./jsgui-lang-essentials');
 	}
 	
 	
-    /**
-    * Creates the doubly linked list.
-    * @constructor
-    * @classdesc Represents a doubly linked list.
-    * @memberof module:core/jsgui-data-structures-doubly-linked-list
-    */
 	var Doubly_Linked_List = Class.extend({
 		'init': function(spec) {
 			// spec could be the initial items for the list.
@@ -185,23 +148,6 @@ var jsgui = require('./jsgui-lang-essentials');
 			
 		},
 		
-	    /**
-        * Iterates over the list nodes calling the function for each node.
-        * @param {function} callback - callback function: callback(node, stop)
-        * - node: the list node
-        * - stop: function to break iterations.
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * function getNodes(list) {
-        *     var result = [];
-        *     //
-        *     list.each_node(function (node) { result.push(node); });
-        *     //
-        *     return result;
-        * }
-        *
-        */
 		'each_node': function (callback) {
 			//console.log('each_node this.length ' + this.length);
 			
@@ -216,43 +162,12 @@ var jsgui = require('./jsgui-lang-essentials');
 			}
 		},
 		
-	    /**
-        * Iterates over the list nodes calling the function for each node's value.
-        * @param {function} callback - callback function: callback(value, stop)
-        * - value: the list node value
-        * - stop: function to break iterations.
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * function getValues(list) {
-        *     var result = [];
-        *     //
-        *     list.each(function (value) { result.push(value); });
-        *     //
-        *     return result;
-        * }
-        *
-        */
 		'each': function (callback) {
 			this.each_node(function(node, stop) {
 				callback(node.value, stop);
 			});
 		},
 		
-	    /**
-        * Removes the node from the list.
-        * @param {Node} node - node to remove
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * var list = new Doubly_Linked_List();
-        * var node101 = new Doubly_Linked_List.Node({ value: 101 });
-        *
-        * list.push(node101);
-        * list.remove(node101);
-        *
-        * // the list is empty now
-        */
 		'remove': (function (node) {
 			
 			// can not remove a value... have to remove a node.
@@ -283,20 +198,6 @@ var jsgui = require('./jsgui-lang-essentials');
 		//  if it is, can insert it as a node, otherwise create the node object and insert it.
 		//   a bit like wrapping values in Data_Value.
 		
-	    /**
-        * Inserts the node at the beginning of the list.
-        * @param {Node|*} node - node to insert, or node value
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * var list = new Doubly_Linked_List();
-        * var node101 = new Doubly_Linked_List.Node({ value: 101 });
-        *
-        * list.insert_beginning(node101);
-        * list.insert_beginning(102);
-        *
-        * // list values: 102, 101
-        */
 		'insert_beginning': function (val) {
 			if (val instanceof Node) {
 				if (this.first == null) {
@@ -321,21 +222,6 @@ var jsgui = require('./jsgui-lang-essentials');
 		// could use a nodify function.
 		//  or ensure_data_wrapper
 		
-	    /**
-        * Inserts the node before the specified node.
-        * @param {Node|*} val - node to insert, or node value
-        * @param {Node} node - insert point
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * var list = new Doubly_Linked_List();
-        * var node101 = new Doubly_Linked_List.Node({ value: 101 });
-        *
-        * list.push(node101);
-        * list.insert_before(102, node101);
-        *
-        * // list values: 102, 101
-        */
 		'insert_before': function (val, node) {
 			// check to see if the new value is a node.
 			
@@ -360,21 +246,6 @@ var jsgui = require('./jsgui-lang-essentials');
 			
 		},
 		
-	    /**
-        * Inserts the node after the specified node.
-        * @param {Node|*} val - node to insert, or node value
-        * @param {Node} node - insert point
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * var list = new Doubly_Linked_List();
-        * var node101 = new Doubly_Linked_List.Node({ value: 101 });
-        *
-        * list.push(node101);
-        * list.insert_after(102, node101);
-        *
-        * // list values: 101, 102
-        */
 		'insert_after': function (val, node) {
 			if (val instanceof Node) {
 				//console.log('insert after node ' + node);
@@ -410,20 +281,6 @@ var jsgui = require('./jsgui-lang-essentials');
 		
 		//  Maybe we could put more private variables, such as 'neighbours' as a var within the init statement.
 		
-	    /**
-        * Inserts the node at the end of the list.
-        * @param {Node|*} val - node to insert, or node value
-        * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List.prototype
-        * @example
-        *
-        * var list = new Doubly_Linked_List();
-        * var node101 = new Doubly_Linked_List.Node({ value: 101 });
-        *
-        * list.push(node101);
-        * list.push(102);
-        *
-        * // list values: 101, 102
-        */
 		'push': function (val) {
 			
 			if (val instanceof Node) {
@@ -457,12 +314,6 @@ var jsgui = require('./jsgui-lang-essentials');
 		}
 	});
 	
-    /**
-    * The list node class.
-    * @memberof module:core/jsgui-data-structures-doubly-linked-list.Doubly_Linked_List
-    * @name Doubly_Linked_List.Node
-    */
-
 	Doubly_Linked_List.Node = Node;
 	
 	
