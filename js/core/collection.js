@@ -1,6 +1,4 @@
 
-/* * @module core/collection */
-
 /*
  if (typeof define !== 'function') {
  var define = require('amdefine')(module);
@@ -97,10 +95,6 @@ var new_set_field = fp(function(a, sig) {
 
 dop.set_field = new_set_field;
 
-/**
- * @param obj
- * @param query
- */
 var obj_matches_query_obj = function(obj, query) {
     //console.log('obj_matches_query_obj');
     //console.log('obj ' + stringify(obj));
@@ -140,14 +134,6 @@ var obj_matches_query_obj = function(obj, query) {
 //   Like inserting a control into another control's contents as the first.
 
 
-/*
- * @constructor
- */
-
-/**
- * A module representing a collection.
- * @exports core/collection
- */
 var Collection = Data_Object.extend({
 
     'init': function(spec, arr_values) {
@@ -315,10 +301,6 @@ var Collection = Data_Object.extend({
 
     // maybe use fp, and otherwise apply with the same params and context.
 
-    /**
-     * @func
-     * @param value
-     */
     'set': function(value) {
         // get the tof(value)
         var tval = tof(value);
@@ -362,9 +344,6 @@ var Collection = Data_Object.extend({
 
     },
 
-    /**
-     * @func
-     */
     'clear': function() {
         this._arr_idx = 0;
         this._arr = [];
@@ -380,9 +359,6 @@ var Collection = Data_Object.extend({
         })
     },
 
-    /**
-     * @func
-     */
     'stringify': function() {
         var res = [];
         if (this._abstract) {
@@ -419,17 +395,11 @@ var Collection = Data_Object.extend({
         return res.join('');
     },
 
-    /**
-     * @func
-     */
     'toString': function() {
         return stringify(this._arr);
 
     },
 
-    /**
-     * @func
-     */
     'toObject': function() {
         var res = [];
         this.each(function(i, v) {
@@ -438,10 +408,6 @@ var Collection = Data_Object.extend({
         return res;
     },
 
-    /**
-     * @func
-     * @param ...
-     */
     'each' : fp(function(a, sig) {
         // was callback, context
         // ever given the context?
@@ -495,9 +461,6 @@ var Collection = Data_Object.extend({
     }),
 
 
-    /**
-     * @func
-     */
     '_id' : function() {
         // gets the id.
 
@@ -521,18 +484,11 @@ var Collection = Data_Object.extend({
     },
 
 
-    /**
-     * @func
-     */
     'length': function() {
         return this._arr.length;
     },
 
 
-    /**
-     * @func
-     * @param ...
-     */
     'find': fp(function(a, sig) {
 
 
@@ -687,10 +643,6 @@ var Collection = Data_Object.extend({
     // get seems like the way to get unique values.
 
 
-    /**
-     * @func
-     * @param ...
-     */
     'get' : fp(function(a, sig, _super) {
 
 
@@ -743,10 +695,6 @@ var Collection = Data_Object.extend({
 
     // Will a control always know what position it's in?
 
-    /**
-     * @func
-     * @param ...
-     */
     'insert': function(item, pos) {
         // use array splice...
         //  then modify the index somehow.
@@ -784,10 +732,6 @@ var Collection = Data_Object.extend({
     // may have efficiencies for adding and removing multiple items at once.
     //  can be sorted for insertion into index with more rapid algorithmic time.
 
-    /**
-     * @func
-     * @param ...
-     */
     'remove': fp(function(a, sig) {
         var that = this;
 
@@ -886,10 +830,6 @@ var Collection = Data_Object.extend({
 
     }),
 
-    /**
-     * @func
-     * @param obj_key
-     */
     'has': function(obj_key) {
         // will operate differently depending on how the collection is being used.
         //console.log('this._data_type_constraint ' + stringify(this._data_type_constraint));
@@ -914,10 +854,6 @@ var Collection = Data_Object.extend({
     // Unique index being replaced with a constraint, and it also makes the index when the constraint is put in place if the index is not already there.
 
 
-    /**
-     * @func
-     * @param ...
-     */
     'get_index': fp(function(a, sig) {
         if (sig == '[s]') {
             return this.index_system.search(a[0]);
@@ -940,10 +876,6 @@ var Collection = Data_Object.extend({
     // Don't want to change the syntax, and make developers have to type 'Constraint' all the time, but I think that Constraints is the right
     //  way of expressing the underlying system, partly to aid transitions to databases, and its proven to be a flexible (inflexible) model.
 
-    /**
-     * @func
-     * @param field
-     */
     'find_unique_constraint': function(field) {
         // can be one field, or an array.
 
@@ -982,10 +914,6 @@ var Collection = Data_Object.extend({
     // The constraints will also be available, but they will likely make for a less user-friendly interface than fields.
 
 
-    /**
-     * @func
-     * @param ...
-     */
     'fields': fp(function(a, sig) {
 
         //console.log('Collection fields sig ' + sig);
@@ -1035,10 +963,6 @@ var Collection = Data_Object.extend({
 
     // May be the fields from the prototype, as well as fields that have been added.
 
-    /**
-     * @func
-     * @param ...
-     */
     'set_field': fp(function(a, sig) {
         //console.log('set_field');
         // sets a field?
@@ -1085,10 +1009,6 @@ var Collection = Data_Object.extend({
     }),
 
 
-    /**
-     * @func
-     * @param ...
-     */
     'remove_field': fp(function(a, sig) {
         var doc = this._data_object_constraint;
 
@@ -1105,9 +1025,6 @@ var Collection = Data_Object.extend({
 
     // Give a data type to give a type constraint.
 
-    /**
-     * @func
-     */
     'get_data_type_constraint': function() {
         // there may just be one ._data_type_constraint.
         //  not having all the constraints listed together.
@@ -1117,10 +1034,6 @@ var Collection = Data_Object.extend({
 
     },
 
-    /**
-     * @func
-     * @param ...
-     */
     'constraint': fp(function(a, sig) {
         if (sig == '[]') {
             // Get all of the constraints.
@@ -1264,10 +1177,6 @@ var Collection = Data_Object.extend({
     //  May have some different data wiring / connection options.
     // Likely to be best to do a lot in the abstract so changes can be viewed before being made.
 
-    /**
-     * @func
-     * @param fields
-     */
     'get_unique_constraint': function(fields) {
         if (tof(fields) == 'string') fields = [fields];
         each(this._unique_constraints, function(i, unique_constraint) {
@@ -1278,10 +1187,6 @@ var Collection = Data_Object.extend({
         });
     },
 
-    /**
-     * @func
-     * @param ...
-     */
     'unique': fp(function(a, sig) {
         var that = this;
         //console.log('a[0] ' + stringify(a[0]));
@@ -1311,10 +1216,6 @@ var Collection = Data_Object.extend({
     // indexes
     //  will get all the indexes... may set a particular index? Or replace the indexes?
 
-    /**
-     * @func
-     * @param ...
-     */
     'indexes': fp(function(a, sig) {
         if (a.l == 0) {
             // get all indexes.
@@ -1329,10 +1230,6 @@ var Collection = Data_Object.extend({
     //  may just use the index() method, but that could call index_by to make things a bit clearer.
 
 
-    /**
-     * @func
-     * @param ...
-     */
     'index_by': fp(function(a, sig) {
         var that = this;
         //console.log('index_by a ' + stringify(a));
@@ -1457,10 +1354,6 @@ var Collection = Data_Object.extend({
         }
     }),
 
-    /**
-     * @func
-     * @param ...
-     */
     'index': fp(function(a, sig) {
 
         if (a.l == 1) {
@@ -1471,10 +1364,6 @@ var Collection = Data_Object.extend({
     }),
 
 
-    /**
-     * @func
-     * @param obj
-     */
     'test_object_against_constraints': function(obj) {
         // will do the test for the various constraints
         //console.log('test_object_against_constraints');
@@ -1538,11 +1427,6 @@ var Collection = Data_Object.extend({
         return res;
     },
 
-
-    /**
-     * @func
-     * @param value
-     */
 
     // Sometimes wrap a normal JS obj as a Data_Value, Data_Object or Collection?
 
@@ -1797,19 +1681,11 @@ var Collection = Data_Object.extend({
     },
 
 
-    /**
-     * @func
-     * @param value
-     */
     //'add': function(value) {
     //    return this.push(value);
     //},
 
 
-    /**
-     * @func
-     * @param arr
-     */
     'load_array': function(arr) {
         var that = this;
         console.log('load_array arr ' + stringify(arr));
@@ -1858,20 +1734,6 @@ var Collection = Data_Object.extend({
     },
 
 
-    /**
-     * polymorphic version
-     * @name values
-     * @func
-     * @param {string} parm1 - param description
-     * @memberof module:core/collection
-     * @inner
-     */
-
-    /**
-     * @func
-     * @param ...
-     * @variation 2
-     */
     'values': fp(function(a, sig) {
         if (a.l == 0) {
             return this._arr;
@@ -1886,9 +1748,6 @@ var Collection = Data_Object.extend({
     }),
 
 
-    /**
-     * @func
-     */
     'value': function() {
         var res = [];
         this.each(function(i, v) {
@@ -1925,10 +1784,6 @@ var p = Collection.prototype;
 p.add = p.push;
 
 
-/**
- * @function
- * @static
- */
 Collection.extend = function() {
     var a = arguments;
     var args = [a[0]];

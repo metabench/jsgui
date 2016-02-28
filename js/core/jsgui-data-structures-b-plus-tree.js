@@ -14,12 +14,6 @@ define(["./jsgui-lang-essentials", "./jsgui-data-structures-stiffarray"], functi
 var jsgui = require('./jsgui-lang-essentials');
 var StiffArray = require('./jsgui-data-structures-stiffarray');
 
-    /** 
-    * B+ Tree module.
-    * @module core/jsgui-data-structures-b-plus-tree
-    * @exports core/jsgui-data-structures-b-plus-tree
-    */
-
     // B+ Tree
 
     // some B+ Tree description can be found here:
@@ -185,66 +179,6 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
     // Using Crockford's Module Pattern.
     //  Need to be careful about how it is not initialized with a constructor and the 'new' keyword.
 
-    /**
-    *
-    * @constructor
-    * @classdesc
-    *
-    * This class is used for the findFirst/findNext iteration pattern:
-    * - findFirst() gets the search criteria, finds the first item, store the search state to FindInfo
-    * (including the criteria, found item, and all other related information), and returns the FindInfo.
-    * - the client process the found item (from the returned FindInfo), and calls findNext() passing the FindInfo.
-    * - findNext() uses the search state from FindInfo to find next item, updates the search state, and returns the updated FindInfo.
-    * - the client process the found item, and calls findNext() again and again - until null will be returned.
-    *
-    * The FindInfo() constructor is intended for internal use only. You should call findFirst(), findNext(), findLast() etc. to get the FindInfo object.
-    *
-    * @--param {*} key
-    * @--param {*} value
-    * @--param {boolean} isPrefixSearch
-    * @memberof module:core/jsgui-data-structures-b-plus-tree
-    * 
-    * @example
-    * 
-    *     // get all the key/value pairs:
-    * 
-    *     var findInfo = tree.findFirst();
-    *     while (findInfo !== null) {
-    *       console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());
-    *       findInfo = tree.findNext(findInfo);
-    *     }
-    * 
-    * 
-    *     // get all the key/value pairs in reverse order:
-    * 
-    *     var findInfo = tree.findLast();
-    *     while (findInfo !== null) {
-    *       console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());
-    *       findInfo = tree.findPrevious(findInfo);
-    *     }
-    * 
-    * 
-    *     // get all the values for "010" key:
-    * 
-    *     var findInfo = tree.findFirst("010");
-    *     while (findInfo !== null) {
-    *       console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());
-    *       findInfo = tree.findNext(findInfo);
-    *     }
-    * 
-    * 
-    *     // get all the key/value pairs prefixed by "01" in reverse order:
-    * 
-    *     var findInfo = tree.findLastPrefix("01");
-    *     while (findInfo !== null) {
-    *       console.log("key=" + findInfo.foundKey() + " value=" + findInfo.foundValue());
-    *       findInfo = tree.findPrevious(findInfo);
-    *     }
-    * 
-    * 
-    * 
-    */
-
     var FindInfo = function (key, value, isPrefixSearch) {
         isPrefixSearch = !!isPrefixSearch;
         var isKeyPresent = (key != undefined);
@@ -259,50 +193,14 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
         }
         //
         return {
-            /* * 
-            * key to find (if present)
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             key: key,     // key to find (if present)
-            /* * 
-            * value to find (if present)
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             value: value, // value to find (if present)
-            /* * 
-            * prefix search mode
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             isPrefixSearch: isPrefixSearch, // prefix search mode
-            /* * 
-            * found leaf
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             leaf: null,   // found leaf
-            /* * 
-            * found leaf item index
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             index: -1,    // found leaf item index
-            /* * 
-            * is the search criteria contains key
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             isKeyPresent: isKeyPresent, // function () { return this.key !== undefined; }, // is the search criteria contains key
-            /* * 
-            * is the search criteria contains value
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             isValuePresent: isValuePresent, // function () { return this.value !== undefined; }, // is the search criteria contains value
-            /** 
-            * found items's key
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             foundKey: function () { return this.leaf.keys.items[this.index]; }, // found items's key
-            /** 
-            * found item's value
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.FindInfo.prototype 
-            */
             foundValue: function () { return this.leaf.values.items[this.index]; }, // found item's value
             //
             prefix_length: prefixLength, // prefix length
@@ -331,106 +229,25 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
         //              public interface:
         // -----------------------------------------
 
-        /**
-        * Creates the B+ Tree.
-        * @constructor
-        * @classdesc 
-        *
-        * B+ Tree
-        *
-        * some B+ Tree description can be found here:
-        *
-        * {@link http://www.cs.berkeley.edu/~kamil/teaching/su02/080802.pdf}
-        *
-        * {@link http://baze.fri.uni-lj.si/dokumenti/B+%20Trees.pdf}
-        *
-        * sample tree classic presentation:
-        *
-        * <pre>
-        * <code>
-        *                 [] 7 []
-        *                 /     \
-        *                /       -----------------
-        *               /                         \
-        *              /                           \
-        *        [] 3 [] 5 []                  [] 8 [] 8 []
-        *        /    |     \                  /     \    \
-        *       /     |      \                /       |    ----
-        *      /      |       \              /         \       \
-        *   {1,2}   {3,4}    {5,6,7}      {8,8,8}    {8,8}    {8,9}
-        * </code>
-        * </pre>
-        *
-        *   the diagram notation:
-        *  - numbers are "keys" array items
-        *  - "[]" figures are "children" array items
-        *
-        * @alias B_Plus_Tree
-        * @param {number} [nodeCapacity=10] - tree node capacity (maximum possible number of items in each node).
-        * @memberof  module:core/jsgui-data-structures-b-plus-tree
-        * @example
-        *
-        * var tree = new B_Plus_Tree();
-        */
-
 
         var m_public = {
-            /** 
-            * the tree root node
-            * @type {B_Plus_Node|B_Plus_Leaf}
-            * @instance
-            */
             // tree root:
             root: new B_Plus_Leaf(nodeCapacity),
             //
-            /** 
-            * first leaf in the "all leaves" chain
-            * @type {B_Plus_Leaf}
-            * @instance
-            */
             // leafs chain:
             firstLeaf: null,
             //
-            /** 
-            * last leaf in the "all leaves" chain
-            * @type {B_Plus_Leaf}
-            * @instance
-            */
             lastLeaf: null,
             //
             // ---------------------
             //     editing:
             // ---------------------
             //
-            /** 
-            * clear the tree (remove all items)
-            * @func
-            * @instance
-            */
             // clear the tree:
             clear: function () {
                 p_Clear();
             },
             //
-
-            /** 
-            * insert key and value
-            * @name insert
-            * @func
-            * @variation 1
-            * @param {*} key
-            * @param {*} value
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            * insert key and value: key is arr[0], value is arr[1]; i.e. `insert([key, value])`
-            * @func
-            * @variation 2
-            * @param {array} arr
-            * @instance
-            */
 
             // insert(key, value)
             // insert([key, value])
@@ -442,24 +259,6 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
                 }
             },
             //
-
-            /** 
-            * remove all values with given key
-            * @name remove
-            * @func
-            * @param {*} key
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            * remove one value occurrence
-            * @func
-            * @param {*} key
-            * @param {*} value
-            * @instance
-            */
-
 
             // remove(key) - remove all values with given key
             // remove(key, value) - remove one value occurrence
@@ -475,39 +274,6 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
             //       finding:
             // ---------------------
             //
-
-            /** 
-            * find the very first item
-            * @func
-            * @name findFirst
-            * @variation 1
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            * find the first item for the given key
-            * @func
-            * @name findFirst
-            * @variation 2
-            * @param {*} key
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            * find the first key+value occurrence
-            * @func
-            * @name findFirst
-            * @variation 3
-            * @param {*} key
-            * @param {*} value
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
 
             // findFirst() - find the very first item
             // findFirst(key) - find the first item for the given key
@@ -527,65 +293,15 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
                 return p_FindFirst(key, value);
             },
             //
-            /** 
-            * find first key matching the prefix
-            * @func
-            * @param {string} prefix
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
             // find first key matching the prefix:
             findFirstPrefix: function (prefix) {
                 return p_FindFirst(prefix, undefined, true);
             },
             //
-            /** 
-            * find next search conditions occurence
-            * @func
-            * @param {module:core/jsgui-data-structures-b-plus-tree.FindInfo} findInfo
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
             // find next search conditions occurence
             findNext: function (findInfo) {
                 return p_FindNext(findInfo);
             },
-
-            /** 
-            * find the very last item
-            * @func
-            * @name findLast
-            * @variation 1
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            * find the last item for the given key
-            * @func
-            * @name findLast
-            * @variation 2
-            * @param {*} key
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            *  find the last key+value occurrence
-            * @func
-            * @name findLast
-            * @variation 3
-            * @param {*} key
-            * @param {*} value
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
 
             //
             // findLast() - find the very last item
@@ -595,27 +311,11 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
                 return p_FindLast(key, value);
             },
             //
-            /** 
-            * find last key matching the prefix
-            * @func
-            * @param {string} prefix
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
             // find last key matching the prefix:
             findLastPrefix: function (prefix) {
                 return p_FindLast(prefix, undefined, true);
             },
             //
-            /** 
-            * find previous search conditions occurence
-            * @func
-            * @param {module:core/jsgui-data-structures-b-plus-tree.FindInfo} findInfo
-            * @returns {module:core/jsgui-data-structures-b-plus-tree.FindInfo} - find info
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
             // find previous search conditions occurence
             findPrevious: function (findInfo) {
                 return p_FindPrev(findInfo);
@@ -625,49 +325,10 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
             // dictionary-like usage:
             // ---------------------
             //
-            /** 
-            * get one value by key (or null if the key not found)
-            *
-            * [getValue()]{@link module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree#getValue} and [setValue()]{@link module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree#setValue} methods pair provides a dictionary-like usage pattern.
-            *
-            * @func
-            * @param {*} key
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.setValue(101, "value 101");
-            * tree.setValue(101, "value 101.2");
-            *
-            * tree.getValue(101) // "value 101.2"
-            * tree.getValue(102) // null
-            *
-            */
             // get one value by key (or null):
             getValue: function (key) {
                 return p_GetValue(key);
             },
-            /** 
-            * set one value by key (insert or update)
-            *
-            * [getValue()]{@link module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree#getValue} and [setValue()]{@link module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree#setValue} methods pair provides a dictionary-like usage pattern.
-            *
-            * @func
-            * @param {*} key
-            * @param {*} value
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.setValue(101, "value 101");   // insert
-            * tree.setValue(101, "value 101.2"); // update
-            *
-            * tree.getValue(101) // "value 101.2"
-            * tree.getValue(102) // null
-            *
-            */
             // set one value by key (insert or update):
             setValue: function (key, value) {
                 p_SetValue(key, value);
@@ -678,23 +339,6 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
             //   other functions:
             // ---------------------
             //
-
-            /** 
-            * count all values
-            * @name count
-            * @func
-            * @variation 1
-            * @instance
-            * @memberof module:core/jsgui-data-structures-b-plus-tree.B_Plus_Tree
-            */
-
-            /** 
-            * count values with the given key
-            * @func
-            * @variation 2
-            * @param {*} key
-            * @instance
-            */
 
             // count() - count all values
             // count(key) - count values with the given key
@@ -707,11 +351,6 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
             },
             //
 
-            /** 
-            * returns the tree nodes capacity (also referred somewhere as "node order")
-            * @func
-            * @instance
-            */
             // tree capacity:
             getCapacity: function () {
                 return m_nodeMaxCount;
@@ -721,130 +360,33 @@ var StiffArray = require('./jsgui-data-structures-stiffarray');
             // additional functions:
             // ---------------------
             //
-            /** 
-            * iterate through each key + value pair<br />
-            * callback is `function(key, value)`
-            * @func
-            * @param {function} callback
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.insert(101, "value 101");
-            * tree.insert(102, "value 102");
-            * tree.insert(103, "value 103");
-            * //
-            * tree.each(function(key, value) {
-            *   console.log("key=" + key + " value=" + value);
-            * });
-            *
-            */
             // iterate through each key + value pair
             // callback is function(key, value)
             'each': function (callback) {
                 return p_each(callback);
             },
             //
-            /** 
-            * get all keys
-            * @func
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.insert(101, "value 101");
-            * tree.insert(102, "value 102");
-            * tree.insert(103, "value 103");
-            * //
-            * console.log(tree.keys()); // 101,102,103
-            *
-            */
             // get all keys
             'keys': function () {
                 return p_keys();
             },
             //
-            /** 
-            * get all [key, value] pairs
-            * @func
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.insert(101, "value 101");
-            * tree.insert(102, "value 102");
-            * tree.insert(103, "value 103");
-            * //
-            * console.log(tree.keys_and_values()); // [101,"value 101"],[102,"value 102"],[103,"value 103"]
-            *
-            */
             // get all [key, value] pairs
             'keys_and_values': function () {
                 return p_keys_and_values();
             },
             //
             //
-            /** 
-            * get keys and values by prefix
-            * @func
-            * @param {string} prefix
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.insert("111", "value 111");
-            * tree.insert("122", "value 122");
-            * tree.insert("123", "value 123");
-            * //
-            * console.log(tree.get_by_prefix("12")); // ["122","value 122"],["123","value 123"]
-            *
-            */
             // get keys and values by prefix
             'get_by_prefix': function (prefix) {
                 return p_get_by_prefix(prefix);
             },
             //
-            /** 
-            * get keys by prefix
-            * @func
-            * @param {string} prefix
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.insert("111", "value 111");
-            * tree.insert("122", "value 122");
-            * tree.insert("123", "value 123");
-            * //
-            * console.log(tree.get_keys_by_prefix("12")); // "122","123"
-            *
-            */
             // get keys by prefix
             'get_keys_by_prefix': function (prefix) {
                 return p_get_keys_by_prefix(prefix);
             },
             //
-            /** 
-            * get values related to the passed key
-            * @func
-            * @param {*} key
-            * @instance
-            * @example
-            *
-            * var tree = new B_Plus_Tree();
-            * //
-            * tree.insert("101", "value 101");
-            * tree.insert("102", "value 102.1");
-            * tree.insert("102", "value 102.2");
-            * //
-            * console.log(tree.get_values_by_key("102")); // "value 102.1","value 102.2"
-            *
-            */
             // get values at key...
             'get_values_by_key': function (key) {
                 return p_get_values_by_key(key);
