@@ -30,6 +30,8 @@ var map_Controls = jsgui.map_Controls;
 var extend = jsgui.extend;
 var is_ctrl = jsgui.is_ctrl;
 
+var Text_Node = jsgui.Text_Node;
+
 //var Context_Menu;
 
 // Don't include context-menu in enh...
@@ -380,6 +382,15 @@ Control = jsgui.Control = jsgui.Control.extend({
             //throw 'stop';
         }
     }),
+
+    'add_text': function(value) {
+        var tn = new Text_Node({
+            'context': this.context,
+            'text': value + ''
+        })
+        this.add(tn);
+        return tn;
+    },
 
     'computed_style': fp(function(a, sig) {
         if (sig == '[s]') {
@@ -4276,7 +4287,7 @@ var core_extension_no_closing_tag = str_arr_mapify(function (tagName) {
 
 
 
-core_extension('html head title body div span h1 h2 h3 h4 h5 label p a script button form img ul li audio video');
+core_extension('html head title body div span h1 h2 h3 h4 h5 h6 label p a script button form img ul li audio video table tr td caption thead colgroup col');
 core_extension_no_closing_tag('link input');
 // link tag needs to have no closing tag.
 //  core_extension_no_closing_tag

@@ -456,7 +456,7 @@ var Website_Resource = Web_Resource.extend({
         //var router = this.get('router');
 
 
-        console.log('router', router);
+        //console.log('router', router);
 
         // Not just have the router process it I think?
         //  Need to handle the 404 as well.

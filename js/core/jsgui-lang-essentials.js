@@ -1258,9 +1258,23 @@ if (typeof window === 'undefined') {
 
 					} else {
 
+						if (t === 'data_grid') {
+							if (i._abstract) {
+								res = '~G';
+							} else {
+								res = 'G';
+							}
+
+
+						} else {
+							throw 'Unexpected object type ' + t;
+						}
+
+						//if ()
+
 
 						//console.log('t ' + t);
-						throw 'Unexpected object type ' + t;
+
 					}
 				}
 

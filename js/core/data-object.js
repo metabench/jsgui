@@ -944,7 +944,7 @@ var Data_Object = Evented_Class.extend({
                     // DataObject being so generally used as a basis for
                     // things like controls.
 
-                    if (typeof that[i] == 'function') {
+                    if (typeof that[i] === 'function') {
                         // connected by now!
 
                         // such as setting the fields...
@@ -4370,7 +4370,7 @@ var Data_Object = Evented_Class.extend({
 
                                 if (tv === 'object') {
 
-                                    if (value.__data_object || value.__data_value) {
+                                    if (value.__data_object || value.__data_value || value.__data_grid) {
                                         dv = value;
                                     } else {
                                         dv = new Data_Value({'value': value});

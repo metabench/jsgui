@@ -3130,7 +3130,7 @@ var escape_html = function (str) {
 };
 
 
-jsgui.textNode = Control.extend({
+jsgui.Text_Node = jsgui.textNode = Control.extend({
     'init': function (spec) {
 
 
