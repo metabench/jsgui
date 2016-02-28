@@ -68,7 +68,7 @@ var Grid = Control.extend({
 
             var range = data.get('range');
 
-            console.log('range', range);
+            //console.log('range', range);
 
 
 
@@ -116,7 +116,7 @@ var Grid = Control.extend({
         // Will need to add a bunch of new controls.
         //  XML/HTML-like shortcut syntax would help a lot.
 
-        console.log('full_compose_as_table');
+        //console.log('full_compose_as_table');
 
         this.set('dom.tagName', 'table');
 
@@ -124,8 +124,8 @@ var Grid = Control.extend({
 
         var data = this.get('data');
 
-        console.log('data', data);
-        console.log('t data', tof(data));
+        //console.log('data', data);
+        //console.log('t data', tof(data));
 
         var range = this.get('data.range');
 
@@ -143,19 +143,19 @@ var Grid = Control.extend({
 
             // Retrieval of all values from all cells within the range.
 
-            console.log('range', range);
+            //console.log('range', range);
 
 
             var x, y, max_x = range[0], max_y = range[1];
 
-            for (x = 0; x <= max_x; x++) {
+            for (y = 0; y <= max_y; y++) {
 
                 var ctrl_row = new jsgui.tr({
                     'context': this.context
                 });
                 this.add(ctrl_row);
 
-                for (y = 0; y <= max_y; y++) {
+                for (x = 0; x <= max_x; x++) {
                     var ctrl_cell = new jsgui.td({
                         'context': this.context
                     });
@@ -174,6 +174,8 @@ var Grid = Control.extend({
                     //   because it's not intrinsic to the Control's core operations.
 
                     value = data.get(x, y);
+                    //console.log('x, y', x, y);
+                    //console.log('value', value);
 
                     ctrl_cell.add_text(value);
 

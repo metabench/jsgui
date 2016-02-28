@@ -214,7 +214,7 @@ var Data_Grid = Evented_Class.extend({
     },
 
     'load_array': function(p_arr) {
-        console.log('load_array', p_arr);
+        //console.log('load_array', p_arr);
 
         // That array should contain arrays
         // Then each item in there is a call.
@@ -246,29 +246,58 @@ var Data_Grid = Evented_Class.extend({
 
         var max_x = 0, max_y = l - 1;
 
-        for (i_column = 0; i_column < l; i_column++) {
-            //
+        /*
 
-            inner_arr = p_arr[i_column];
 
-            l_inner = inner_arr.length;
+        */
 
-            if (l_inner - 1 > max_x) max_x = l_inner - 1;
+        var t_inner;
 
-            for (i_row = 0; i_row < l_inner; i_row++) {
-                key = this.str_key(i_column, i_row);
-                val = inner_arr[i_row];
 
-                console.log('key', key);
-                console.log('val', val);
+        for (i_row = 0; i_row < l; i_row++) {
 
+            inner_arr = p_arr[i_row];
+
+            t_inner = tof(inner_arr);
+
+            //console.log('t_inner', t_inner);
+
+            if (t_inner === 'array') {
+                l_inner = inner_arr.length;
+
+                for (i_column = 0; i_column < l_inner; i_column++) {
+                    //
+
+
+
+
+
+                    if (l_inner - 1 > max_x) max_x = l_inner - 1;
+
+
+                    key = this.str_key(i_column, i_row);
+
+                    //console.log('inner_arr', inner_arr);
+                    val = inner_arr[i_column];
+
+                    //console.log('key', key);
+                    //console.log('val', val);
+
+                    kvs[key] = val;
+
+
+
+                    //for (i_row = 0; r_row < )
+
+
+
+                }
+            } else {
+                key = this.str_key(0, i_row);
+                val = inner_arr;
+                //console.log('val', val);
                 kvs[key] = val;
-
             }
-
-            //for (i_row = 0; r_row < )
-
-
 
 
 
@@ -277,8 +306,8 @@ var Data_Grid = Evented_Class.extend({
 
         }
 
-        console.log('max_x', max_x);
-        console.log('max_y', max_y);
+        //console.log('max_x', max_x);
+        //console.log('max_y', max_y);
 
         // Could set a range field that gets sent to the client.
 
