@@ -717,3 +717,16 @@ div.radio-button > input {
 	margin-left: 1px;
 	margin-right: 1px;
 }
+
+
+table.grid {
+	background-color: #eceff1;
+	border: 1px solid #546e7a;
+	padding: 2px;
+	cursor: default;
+
+}
+
+table.grid td {
+	padding: 1px;
+}
