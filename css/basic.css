@@ -727,6 +727,12 @@ table.grid {
 
 }
 
+table.grid tbody {
+	overflow: hidden;
+	display: block;
+
+}
+
 table.grid td {
 	padding: 1px;
 }
