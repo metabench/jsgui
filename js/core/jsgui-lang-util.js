@@ -560,7 +560,7 @@ var extend = jsgui.extend, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsg
 
 // Connecting these input processors in this instance to the Enhanced_Data_Object?
 
-
+// So keep the color declaration here. Outside of HTML?
 
 extend(jsgui.data_types_info, {
 
@@ -844,6 +844,9 @@ jsgui.input_processors['indexed_array'] = fp(function (a, sig) {
     // it may be taking some kind of data type that things need to be applied to.
     // eg 'size': ['indexed_array', ['distance', ['width', 'height']]],
     // would need to take in objects with the names of the properties as well.
+
+    console.log('indexed_array sig', sig);
+
     if (a.l == 2) {
         var ia_params = a[0],
             input = a[1];
@@ -951,7 +954,7 @@ jsgui.input_processors['color'] = function(input) {
 
 
 	var res;
-	//console.log('processing color input: ' + stringify(input));
+	console.log('processing color input: ' + stringify(input));
 
 	var input_sig = get_item_sig(input, 2);
 	//console.log('input_sig ' + input_sig);
@@ -976,7 +979,7 @@ jsgui.input_processors['color'] = function(input) {
 	// not sure that using the preprocessor is right...
 	//  it returns a function, I think it applies to a function.
 	//throw '!!stop';
-	//console.log('res ' + stringify(res));
+	console.log('res ' + stringify(res));
 	return res;
 }
 

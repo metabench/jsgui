@@ -3238,22 +3238,68 @@ var Data_Object = Evented_Class.extend({
 
 
     'value': fp(function(a, sig) {
+
+
+
         // could operate like both get and set, but does not return data_objects, returns the value itself.
         var name;
         //var res;
 
         if (sig === '[s]') {
+
+
+
             name = a[0];
-            var dv_val = this.get(name);
-            if (dv_val) {
-                return dv_val.value();
-            } else {
-                return undefined;
+            var possibly_dobj = this.get(name);
+
+            //var t_obj = tof(possibly_dobj);
+
+            if (possibly_dobj) {
+                if (possibly_dobj.value && typeof possibly_dobj.value === 'function') {
+                    return possibly_dobj.value();
+                } else {
+                    return possibly_dobj;
+
+                }
             }
+
+
+
+
+
         }
 
 
     }),
+
+    /*
+
+    'val': function(key) {
+        var possibly_dobj = this.get(key);
+
+        //var t_obj = tof(possibly_dobj);
+
+        if (possibly_dobj.value && typeof possibly_dobj.value === 'function') {
+            return possibly_dobj.value();
+        } else {
+            return possibly_dobj;
+
+        }
+
+
+
+    },
+    */
+
+    // Indexed array type fields?
+    //  Other data types?
+    //  Should the .get produce a Data_Object or a Data_Value?
+
+    // 02/03/16 currently making a Data_Object for values of type 'color'.
+    //  Would prefer Data_Value objects.
+
+
+
 
 
     'get': fp(function(a, sig) {
@@ -3476,8 +3522,8 @@ var Data_Object = Evented_Class.extend({
 
 
                 if (field) {
-                    //console.log('tof(field) ' + tof(field));
-                    //console.log('field ' + stringify(field));
+                    console.log('tof(field) ' + tof(field));
+                    console.log('field ' + stringify(field));
 
                     //throw 'stop';
 
@@ -3501,7 +3547,7 @@ var Data_Object = Evented_Class.extend({
                         var sig_field = get_item_sig(field, 20);
 
 
-                        //console.log('1) sig_field ' + stringify(sig_field));
+                        console.log('1) sig_field ' + stringify(sig_field));
 
 
                         //console.log('field ' + stringify(field));
@@ -3552,7 +3598,12 @@ var Data_Object = Evented_Class.extend({
                             } else if (fieldStrType === 'Class') {
                                 // Can't create a new string like this...
 
+                                //console.log('fieldDef', fieldDef);
+
                                 var FieldConstructor = fieldDef;
+
+
+
                                 var nObj = new FieldConstructor({
                                     'context': this._context
                                 })
@@ -4255,6 +4306,11 @@ var Data_Object = Evented_Class.extend({
 
                     var data_object_next = this.get(property_name);
 
+                    // Getting some properties, of some types, should use a Data_Value rather than a Data_Object.
+
+
+
+
                     // For some reason this is returning a function sometimes.
 
 
@@ -4295,6 +4351,14 @@ var Data_Object = Evented_Class.extend({
                     // That data_object having an assigned type_name of size (when setting size)?
 
                     if (data_object_next) {
+
+                        // May want to use a Data_Value to hold some pieces of data.
+                        //  Such as a color.
+                        //  Data_Object has got a lot more functionality, and for holding an indexed_array, a Data_Value may do the job OK.
+
+
+
+
                         // Should be a Data_Object...
 
                         // Check to see if we are getting an object for a Field...
@@ -4317,8 +4381,13 @@ var Data_Object = Evented_Class.extend({
 
                             // Is this messing up controls / control activation?
                             //  Perhaps only set this if it's not there already.
-                            data_object_next.__type_name = data_object_next.__type_name || field[1];
 
+                            // Override the type name of the next data_object?
+                            //  That way it should have the right input / output processors.
+
+
+                            //data_object_next.__type_name = data_object_next.__type_name || field[1];
+                            data_object_next.__type_name = field[1] || data_object_next.__type_name;
                         }
 
                         //console.log('***** data_object_next.__type_name ' + data_object_next.__type_name);
@@ -4550,6 +4619,12 @@ var Data_Object = Evented_Class.extend({
             // Will use input processors.
             //  They will have that understanding built in.
             //  It's also a functional structure that could be extended, by having processing before another one is called.
+
+            // When setting colors...
+            //  The type name is not showing up.
+
+
+
 
 
             var input_processor = input_processors[this.__type_name];

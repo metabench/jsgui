@@ -1944,7 +1944,9 @@ if (typeof window === 'undefined') {
                     if (err) {
                         var stack = new Error().stack;
                         //console.log(stack);
-                        throw err;
+                        //throw err;
+
+						callback(err);
                     } else {
                         //console.log('i ' + i + ', res2 ' + res2);
                         if (return_params) {
