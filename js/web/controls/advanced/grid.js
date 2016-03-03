@@ -60,6 +60,7 @@ var Grid = Control.extend({
                     this.set('data', spec_data);
                     data = spec_data;
                 } else {
+                    console.log('pre create Data_Grid');
                     var dg = new Data_Grid(spec_data);
                     this.set('data', dg);
                     data = dg;
@@ -79,7 +80,7 @@ var Grid = Control.extend({
             // Then we may want to do partial rendering
             //  Becomes more complicated when the heights/sizes of items vary.
 
-
+            console.log('pre full_compose_as_table');
             this.full_compose_as_table();
 
 
@@ -118,6 +119,41 @@ var Grid = Control.extend({
 
         //console.log('full_compose_as_table');
 
+        // This takes a while with a large grid.
+        //  We could give it compressed / binary data for it to display.
+        //  Or it could download the data once it's displaying on the client.
+        //  It could provide the client with a URL to download the rest of the data from.
+
+        // This kind of test may be a good benchmark to test the speed of other parts.
+        //  Could make faster code more specifically for composition.
+        //  However, not right now.
+
+        // Different methods to transfer the data to the client seem the most appropriate.
+
+        // Also, giving the Data_Grid a fixed size and inner scrollbars will help.
+        //  They will need to be jsgui scrollbars, not browser supplied.
+
+        // Compressing and sending all of the data at once to the client would work well.
+        //  However, JSGUI was not designed with having thousands of controls render quickly as a goal.
+        //   Perhaps a new version could have that as a goal.
+        // JSGUI is flexible enough that it should make use of the controls that have been rendered to provide a view of the underlying data.
+        //  Not good to render big data sets all at once as HTML controls (yet).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         this.set('dom.tagName', 'table');
 
 
@@ -147,16 +183,44 @@ var Grid = Control.extend({
 
 
             var x, y, max_x = range[0], max_y = range[1];
+            var ctrl_cell, ctrl_row;
+
+            var size = this.size().value();
+
+            console.log('size', size);
+
+            //throw 'stop';
+
+            var tbody_params = {
+                'context': this.context,
+                'tagName': 'tbody'
+            }
+
+            if (size) {
+
+                tbody_params.size = [size[0][0], size[1][0]];
+            }
+
+
+            var tbody = new Control(tbody_params);
+
+            this.add(tbody);
+
+
+
+
 
             for (y = 0; y <= max_y; y++) {
 
-                var ctrl_row = new jsgui.tr({
+                ctrl_row = new jsgui.tr({
                     'context': this.context
                 });
-                this.add(ctrl_row);
+
+                tbody.add(ctrl_row);
+
 
                 for (x = 0; x <= max_x; x++) {
-                    var ctrl_cell = new jsgui.td({
+                    ctrl_cell = new jsgui.td({
                         'context': this.context
                     });
                     ctrl_row.add(ctrl_cell);
