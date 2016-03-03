@@ -54,6 +54,20 @@ extend(jsgui.data_types_info, {
     'border': ['oltrb', 'single_border'],
     'margin': ['oltrb', 'distance'],
     'size': ['indexed_array', ['distance', ['width', 'height']]],
+
+    // an indexed array for red, green, blue?
+
+    // want to say that rgb are char/byte/UInt8 values
+
+    // Color should already be defined.
+
+    //'color': ['indexed_array', ['uint8', ['r', 'g', 'b']]],
+
+
+
+
+    //'color': ['indexed_array', ],
+
     'control_collection': ['DataCollection', 'control'],
 
     // Defining the types that things will get automatically created as.
@@ -136,7 +150,8 @@ jsgui.input_processors['margin'] = function (input) {
 
 jsgui.input_processors['size'] = function (input) {
     // use the n_units processor, but with 'px'
-    //console.log('using jsgui size input processor');
+    console.log('using jsgui size input processor');
+    console.trace();
 
 		// Though, if size is an already defined type, we could have an input processor that deals with that.
 		//  Could also make use of a default unit, px.
@@ -145,6 +160,11 @@ jsgui.input_processors['size'] = function (input) {
 
     return jsgui.input_processors['indexed_array'](['width', 'height'], 'distance', input);
 };
+
+
+
+
+
 
 
 //console.log("jsgui.input_processors['color'] " + jsgui.input_processors['color']);
@@ -482,7 +502,18 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         ['content', 'collection'],
         ['dom', 'control_dom'],
-        ['size', 'size']//,
+        ['size', 'size'],
+        ['color', 'color']
+
+        // Including color in this section...
+        //  would go through the input processing.
+
+
+
+
+
+
+        //,
 
 				// Seems like it's automatically made functions to access the fields?
 
@@ -1916,6 +1947,38 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
 
+            // Possibly inner controls will be used when a control has got scrollbars.
+            //  However, what if there are multiple overlapping reasons for having such inner controls?
+
+            // Not sure of what examples where that will happen.
+            //  A Window control already makes use of inner_control.
+            //  It makes sense to have the scrollbars operate within a known outer area.
+            ///  ????? but will it fit right on the screen?
+
+            // Possibly make it so that controls that have an InnerConrol always need to be prepared to have scrollbars outside of that inner_control.
+
+            //  Could also have something specifying that the inner_control is acting as a clipping_area in accordance with the scrollbars and a specified size.
+
+            // Quite a lot of controls could have content that is longer than normally fits.
+            //  Should test a variety of controls with scrollbar.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             var inner_control = this.get('inner_control');
 
@@ -2711,6 +2774,14 @@ var Control = jsgui.Enhanced_Data_Object.extend({
     //  data formats are, and it works out or is told how to do translations between that internal representaion, and the formats it may be given, and may need to output.
 
 
+    // 01/03/2016
+    //  Better for color to be handled by the input and output processing systems and fields.
+    //  Not using a function within the Control definition space.
+    //  .size works like this already. Should be similar.
+    ///  ??? or not???
+
+
+
     'color': fp(function(a, sig) {
 
 			// It may be worth having a color field.
@@ -2718,7 +2789,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
 
-
+        console.log('color sig ', sig);
       // Should probably try to use color input and output processors.
 
       var input_processor = jsgui.input_processors['color'];
@@ -2739,19 +2810,21 @@ var Control = jsgui.Enhanced_Data_Object.extend({
         var processed = input_processor(a[0]);
         //console.log('processed', processed);
 
-				this.set('color', processed, false); // false not to raise change event from it?
+        this.set('color', processed, false); // false not to raise change event from it?
 
-				var html_color = output_processor(processed);
+        var html_color = output_processor(processed);
 
-				//console.log('html_color', html_color);
+        //console.log('html_color', html_color);
 
-				var color_property_name = this.__color_property_name || 'background-color';
+        var color_property_name = this.__color_property_name || 'background-color';
 
-				this.style(color_property_name, html_color);
+        this.style(color_property_name, html_color);
 
       }
 
     }),
+
+
 
     'offset': fp(function(a, sig) {
         if (sig == '[]') {

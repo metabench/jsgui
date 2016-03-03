@@ -183,82 +183,147 @@ var mapDomEventNames = {
 
 //var t_content;
 var desc = function(ctrl, callback) {
-  if (ctrl.get) {
+    if (ctrl.get) {
 
 
-    var content = ctrl.get('content');
-    //console.log('content', content);
-    var t_content = typeof content;
-    //console.log('t_content', t_content);
+        var content = ctrl.get('content');
+        //console.log('content', content);
+        var t_content = typeof content;
+        //console.log('t_content', t_content);
 
-    if (t_content === 'string' || t_content === 'number') {
-
-    } else {
-      // it's a Collection
-
-      var arr = content._arr;
-      var c, l = arr.length;
-
-      //console.log('l', l);
-      var item, t_item;
-
-      for (c = 0; c < l; c++) {
-        item = arr[c];
-        t_item = typeof item;
-        if (t_item === 'string' || t_item === 'numbers') {
+        if (t_content === 'string' || t_content === 'number') {
 
         } else {
-          callback(arr[c]);
-          desc(arr[c], callback);
+            // it's a Collection
+
+            var arr = content._arr;
+            var c, l = arr.length;
+
+            //console.log('l', l);
+            var item, t_item;
+
+            for (c = 0; c < l; c++) {
+                item = arr[c];
+                t_item = typeof item;
+                if (t_item === 'string' || t_item === 'numbers') {
+
+                } else {
+                    callback(arr[c]);
+                    desc(arr[c], callback);
+                }
+
+
+
+            }
+
+
+
+
         }
 
 
+        /*
+         var content = ctrl.get('content');
+         console.log('content', content);
+         each(content, function(v, i) {
+         if (typeof i !== 'string') {
+         callback(v);
+         desc(v, callback);
+         }
+         });
+         */
 
-      }
+    }
+}
 
+var dom_desc = function(el, callback) {
+    // Possibly need to look at the element's node type.
 
+    //
+    callback(el);
 
+    var cns = el.childNodes;
+
+    var l = cns.length;
+
+    for (var c = 0; c < l; c++) {
+        dom_desc(cns[c], callback);
 
     }
 
 
-      /*
-      var content = ctrl.get('content');
-      console.log('content', content);
-      each(content, function(v, i) {
-          if (typeof i !== 'string') {
-              callback(v);
-              desc(v, callback);
-          }
-      });
-      */
-
-  }
-}
-
-var dom_desc = function(el, callback) {
-  // Possibly need to look at the element's node type.
-
-  //
-  callback(el);
-
-  var cns = el.childNodes;
-
-  var l = cns.length;
-
-  for (var c = 0; c < l; c++) {
-    dom_desc(cns[c], callback);
-
-  }
-
-
 }
 
 
-Control = jsgui.Control = jsgui.Control.extend({
+// Will have an option of composing and rendering using view_window and view_tiles.
+//  A scrollbar will default to using a single tile within the scrollable area.
+
+
+// Control Rendering Modes
+
+// With internal view
+//  Advantage: When using an internal view control, all of the contents will be within that control. It will be quicker to move everything into another tile because it's already encasulated.
+
+// With hscrollbar
+//      vscrollbar
+//      scrollbars
+
+// For controls that accept scrollbars, it may be worth (automatically) changing the composition mode.
+//  This will mean there is a precomposition stage.
+
+// Precompose may fit in as a function name, or stage to note in the control lifecycle.
+
+
+
+
+
+
+
+
+
+
+
+// .setup_view_window_tile_system
+
+// Perhaps making use of a single control for this, inside of a control, makes sense.
+
+// Adding a new Scroll_Area control, and then adding everything currently in the control to that area makes sense.
+//  However, would be best to have the control rendered like this at the beginning.
+
+
+// Scroll_Area
+//
+
+
+
+// Can have scroll modes set?
+// Want it so the scrolling property gets set in the control
+
+// could be a fields
+
+
+// 'both', 'none', 'horizontal', 'vertical'.
+
+// Want it so that the scrollbars property gets listened to, and when that property gets changed, the component updates automatically.
+//  Should probably work like that whether the component is active or not.
+
+// Scrollbars may not have been set...
+
+
+
+
+
+
+
+
+
+
+
+var Control = jsgui.Control = jsgui.Control.extend({
     'fields': {
         'selection_scope': Object,
-        'is_selectable': Boolean
+        'is_selectable': Boolean,
+        'scrollbars': String
     },
 
     'init': function(spec) {
@@ -267,30 +332,30 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
         if (spec.el) {
-          var jgf = spec.el.getAttribute('data-jsgui-fields');
+            var jgf = spec.el.getAttribute('data-jsgui-fields');
 
-          if (jgf) {
+            if (jgf) {
 
-            //console.log('str_ctrl_fields ' + str_ctrl_fields);
-            //console.log('str_properties', str_properties);
-            //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
-            var s_pre_parse = jgf.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
-            s_pre_parse = s_pre_parse.replace(/\'/g, '"');
+                //console.log('str_ctrl_fields ' + str_ctrl_fields);
+                //console.log('str_properties', str_properties);
+                //var s_pre_parse = str_properties.replace(/'/g, '"').replace(/♥/g, '\'').replace(/☺/g, '"');
+                var s_pre_parse = jgf.replace(/\[DBL_QT\]/g, '"').replace(/\[SNG_QT\]/g, '\'');
+                s_pre_parse = s_pre_parse.replace(/\'/g, '"');
 
-            // DBL_QT
-            //console.log('s_pre_parse', s_pre_parse);
+                // DBL_QT
+                //console.log('s_pre_parse', s_pre_parse);
 
-              //console.log('s_pre_parse', (s_pre_parse));
+                //console.log('s_pre_parse', (s_pre_parse));
 
-            //console.log('tof s_pre_parse', tof(s_pre_parse));
+                //console.log('tof s_pre_parse', tof(s_pre_parse));
 
-            var props = JSON.parse(s_pre_parse);
+                var props = JSON.parse(s_pre_parse);
 
-              // The just get put in the properties.
-              //  That means they must be defined as a field in the Class definition for it to work.
+                // The just get put in the properties.
+                //  That means they must be defined as a field in the Class definition for it to work.
 
-            extend(spec, props);
-          }
+                extend(spec, props);
+            }
 
         }
 
@@ -306,17 +371,45 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
         if (typeof spec.selection_scope !== 'undefined') {
-          //console.log('spec.selection_scope', spec.selection_scope);
+            //console.log('spec.selection_scope', spec.selection_scope);
 
-          var selection_scope = this._context.get_selection_scope_by_id(spec.selection_scope);
-          //  Do we need to set the control of the selection scope?
+            var selection_scope = this._context.get_selection_scope_by_id(spec.selection_scope);
+            //  Do we need to set the control of the selection scope?
 
-          //console.log('selection_scope', selection_scope);
+            //console.log('selection_scope', selection_scope);
 
 
-          this.set('selection_scope', selection_scope);
+            this.set('selection_scope', selection_scope);
 
-          // then if we have the selection scope, we should set it up for the control.
+            // then if we have the selection scope, we should set it up for the control.
+
+
+            var scrollbars = this.value('scrollbars');
+            console.log('scrollbars', scrollbars);
+
+
+            var active_scroll = false;
+
+            if (scrollbars === 'both' || scrollbars === 'horizontal' || scrollbars === 'vertical') {
+                active_scroll = true;
+
+                // Put a Scroll_View in place in this control.
+
+
+                var scroll_view = new Scroll_View({
+                    'context': this._context
+                })
+
+                this.add(scroll_view);
+
+
+
+
+
+
+            }
+
+
 
 
 
@@ -327,8 +420,102 @@ Control = jsgui.Control = jsgui.Control.extend({
         }
 
         if (spec.is_selectable) {
-          this.selectable();
+            this.selectable();
         }
+
+
+        // Handling of inner windowing and tiling.
+        //  This will be useful for scrollbars and scrollable controls such as maps.
+
+        // It may just be possible to make toolbars fit/dock into areas outside of the inner part of a control.
+        //  Maybe at the top.
+
+        // The Grid9 system may just be of use for scrollbars.
+        //  Not so sure I'll put in the time to think about / implement that here though.
+        // Grid9, if it were a more fully defeloped abstraction, would be useful for this.
+
+        // May be worth making some things not directly addressible as controls.
+        //  So we don't refer to the inner area that is not the scrollbars - they are just there, and operate as the control itself.
+
+
+        // We could avoid having this in composition.
+        //  Just have it in rendering?
+        //   Makes activation more complicated though.
+        //   Library code would get more complex still, with reference and special cases being made to the DOM structures associated with scrollbars.
+
+        // Could at least make it so that controls can render with their own internal view area.
+        //  Best though if this were to use controls themselves to implement the scroll functionality.
+        //  Can implement it on a higher level using what already exists rather than going into the code and putting scrollbar functionality in the rendering and activation code.
+        //   Would be better separation of concerns.
+
+
+        // ScrollPanel
+        //  Used to contain other content. A Control, when it operates with scrollbars, would create a ScrollPanel inside itself. Then it would move its normal content inside that
+        //  ScrollPanel.
+
+        // The Grid9 Method could be quite effective at putting scrollbars in place.
+
+        // ScrollPanel seems like a logical component to be using.
+        //  Will not be hiding it (so much) by embedding the scrolling into lower level code.
+        //  Will not risk breaking the framework so much.
+
+        // Putting Scrollbars in a Grid9 position may make sense.
+        //  The ScrollPanel would be a view window. It would contain at least one tile.
+
+        //  But we don't yet have nested Grid9 layouts.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // want it so that a control could have something specified that will say how it's going to get precomposed.
+
+        //  .__precompose = 'view_window_tile_system'
+        //   'view_window_tile'
+        //     makes a single tile
+
+
+        // When that precompositon takes place, it creates a view_window inside of the Control
+        //  It creates a tile inside of the view_window
+        //   That tile is tile (0, 0).
+
+        // When that tile system is in operation, .add adds it to the active tile
+        // That inner tile can then be moved within the view_window.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -405,8 +592,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         }
     }),
 
-		// Likely to be within the core.
-		//  Meaning it's not done with progressive enhancement.
+    // Likely to be within the core.
+    //  Meaning it's not done with progressive enhancement.
 
     'padding': fp(function(a, sig) {
         if (sig == '[]') {
@@ -459,23 +646,23 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             /*
 
-            var s_c_padding = c_padding.split(' ');
-            console.log('s_c_padding.length', s_c_padding.length);
+             var s_c_padding = c_padding.split(' ');
+             console.log('s_c_padding.length', s_c_padding.length);
 
-            if (s_c_padding.length == 3) {
-                // top, right, bottom
-                top = parseInt(s_c_padding[0], 10);
-                right = parseInt(s_c_padding[1], 10);
-                bottom = parseInt(s_c_padding[2], 10);
+             if (s_c_padding.length == 3) {
+             // top, right, bottom
+             top = parseInt(s_c_padding[0], 10);
+             right = parseInt(s_c_padding[1], 10);
+             bottom = parseInt(s_c_padding[2], 10);
 
-                // returns as l, t, r, b
+             // returns as l, t, r, b
 
-                //return [0, top, right, bottom];
+             //return [0, top, right, bottom];
 
-                return [0, top, right, bottom];
+             return [0, top, right, bottom];
 
-            }
-            */
+             }
+             */
 
 
 
@@ -793,85 +980,85 @@ Control = jsgui.Control = jsgui.Control.extend({
 
     /*
 
-    'create_ghost_copy': function() {
-        // Needs to clone the control, and put it into the body.
+     'create_ghost_copy': function() {
+     // Needs to clone the control, and put it into the body.
 
-        // May need to do some in-depth work on cloning a control.
-        //  Don't want to complicate the code too much though.
-        //  Could just add the HTML from inside the other one.
+     // May need to do some in-depth work on cloning a control.
+     //  Don't want to complicate the code too much though.
+     //  Could just add the HTML from inside the other one.
 
-        var ghost_copy = new Control({
-            'context': this._context
-        });
+     var ghost_copy = new Control({
+     'context': this._context
+     });
 
-        var el = this.get('dom.el');
+     var el = this.get('dom.el');
 
-        // Can't reuse IDs
-        //  I think we need a means of cloning controls (properly).
-        //  Need to run a clone procedure on the Control and its subcontrols.
-        //  Would make a clone within the same context but it would get a new ID.
-
-
+     // Can't reuse IDs
+     //  I think we need a means of cloning controls (properly).
+     //  Need to run a clone procedure on the Control and its subcontrols.
+     //  Would make a clone within the same context but it would get a new ID.
 
 
 
 
-        if (el) {
-            //ghost_copy.add(el.innerHTML)
-
-            var my_clone = this.clone();
-
-            // then put the clone in the body.
-
-            var body = this._context.body();
-            body.add(my_clone);
-        }
 
 
-    },
-    */
+     if (el) {
+     //ghost_copy.add(el.innerHTML)
+
+     var my_clone = this.clone();
+
+     // then put the clone in the body.
+
+     var body = this._context.body();
+     body.add(my_clone);
+     }
+
+
+     },
+     */
 
     // can have different monomorphic versions.
 
     'set': function(name, value) {
-      // Used for setting controls, on the server, that get persisted to the client.
+        // Used for setting controls, on the server, that get persisted to the client.
 
-      // when the value is a control, we also want to set the ._jsgui_ctrl_fields
-
-
-
-      if (typeof value !== 'undefined') {
-          //var t_val = tof(value);
-          //console.log('t_val', t_val);
-
-          if (is_ctrl(value)) {
-              var cf = this._ctrl_fields = this._ctrl_fields || {};
-
-              //extend(cf, {
-              //  'btn_single_bound': tb_single_bound,
-              //  'btn_dual_bound': tb_dual_bound,
-              //  'btn_ga': tb_genetic,
-              //  'panel_single_bound': panel_single_bound,
-              //  'panel_dual_bound': panel_dual_bound,
-              //  'panel_ga': panel_ga
-              //});
-
-              cf[name] = value;
-          }
-
-        return this._super(name, value);
-      } else {
-        return this._super(name);
-      }
+        // when the value is a control, we also want to set the ._jsgui_ctrl_fields
 
 
 
+        if (typeof value !== 'undefined') {
+            //var t_val = tof(value);
+            //console.log('t_val', t_val);
 
-      /*
+            if (is_ctrl(value)) {
+                var cf = this._ctrl_fields = this._ctrl_fields || {};
+
+                //extend(cf, {
+                //  'btn_single_bound': tb_single_bound,
+                //  'btn_dual_bound': tb_dual_bound,
+                //  'btn_ga': tb_genetic,
+                //  'panel_single_bound': panel_single_bound,
+                //  'panel_dual_bound': panel_dual_bound,
+                //  'panel_ga': panel_ga
+                //});
+
+                cf[name] = value;
+            }
+
+            return this._super(name, value);
+        } else {
+            return this._super(name);
+        }
 
 
 
-      */
+
+        /*
+
+
+
+         */
 
 
     },
@@ -958,11 +1145,11 @@ Control = jsgui.Control = jsgui.Control.extend({
                     console.log('!!ctrl', !!ctrl);
 
                     /*
-                    if (parent_control) {
-                      console.log('setting ctrl parent');
-                      ctrl.parent(parent_control);
-                    }
-                    */
+                     if (parent_control) {
+                     console.log('setting ctrl parent');
+                     ctrl.parent(parent_control);
+                     }
+                     */
 
                     //console.log('ctrl ' + ctrl);
 
@@ -992,68 +1179,68 @@ Control = jsgui.Control = jsgui.Control.extend({
     'add_event_listener': fp(function(a, sig) {
 
         /*
-        var el = this.get('dom.el');
-        if (el) {
+         var el = this.get('dom.el');
+         if (el) {
 
-            // Check if the element has that event listener...
-            //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
+         // Check if the element has that event listener...
+         //  Maybe maintain a map within the control of which DOM functions have been bound to the element.
 
 
 
-            el.addEventListener(event_name, handler, false);
-        }
-        */
+         el.addEventListener(event_name, handler, false);
+         }
+         */
 
         // In enh - with this only working post-activation?
 
         // see http://www.w3schools.com/tags/ref_av_dom.asp
         /*
-        abort	Fires when the loading of an audio/video is aborted
-        canplay	Fires when the browser can start playing the audio/video
-        canplaythrough	Fires when the browser can play through the audio/video without stopping for buffering
-        durationchange	Fires when the duration of the audio/video is changed
-        emptied	Fires when the current playlist is empty
-        ended	Fires when the current playlist is ended
-        error	Fires when an error occurred during the loading of an audio/video
-        loadeddata	Fires when the browser has loaded the current frame of the audio/video
-        loadedmetadata	Fires when the browser has loaded meta data for the audio/video
-        loadstart	Fires when the browser starts looking for the audio/video
-        pause	Fires when the audio/video has been paused
-        play	Fires when the audio/video has been started or is no longer paused
-        playing	Fires when the audio/video is ready to play after having been paused or stopped for buffering
-        progress	Fires when the browser is downloading the audio/video
-        ratechange	Fires when the playing speed of the audio/video is changed
-        seeked	Fires when the user is finished moving/skipping to a new position in the audio/video
-        seeking	Fires when the user starts moving/skipping to a new position in the audio/video
-        stalled	Fires when the browser is trying to get media data, but data is not available
-        suspend	Fires when the browser is intentionally not getting media data
-        timeupdate	Fires when the current playback position has changed
-        volumechange	Fires when the volume has been changed
-        waiting	Fires when the video stops because it needs to buffer the next frame
+         abort	Fires when the loading of an audio/video is aborted
+         canplay	Fires when the browser can start playing the audio/video
+         canplaythrough	Fires when the browser can play through the audio/video without stopping for buffering
+         durationchange	Fires when the duration of the audio/video is changed
+         emptied	Fires when the current playlist is empty
+         ended	Fires when the current playlist is ended
+         error	Fires when an error occurred during the loading of an audio/video
+         loadeddata	Fires when the browser has loaded the current frame of the audio/video
+         loadedmetadata	Fires when the browser has loaded meta data for the audio/video
+         loadstart	Fires when the browser starts looking for the audio/video
+         pause	Fires when the audio/video has been paused
+         play	Fires when the audio/video has been started or is no longer paused
+         playing	Fires when the audio/video is ready to play after having been paused or stopped for buffering
+         progress	Fires when the browser is downloading the audio/video
+         ratechange	Fires when the playing speed of the audio/video is changed
+         seeked	Fires when the user is finished moving/skipping to a new position in the audio/video
+         seeking	Fires when the user starts moving/skipping to a new position in the audio/video
+         stalled	Fires when the browser is trying to get media data, but data is not available
+         suspend	Fires when the browser is intentionally not getting media data
+         timeupdate	Fires when the current playback position has changed
+         volumechange	Fires when the volume has been changed
+         waiting	Fires when the video stops because it needs to buffer the next frame
 
-        abort
-        canplay
-        canplaythrough
-        durationchange
-        emptied
-        ended
-        error
-        loadeddata
-        loadedmetadata
-        loadstart
-        pause
-        play
-        playing
-        progress
-        ratechange
-        seeked
-        seeking
-        stalled
-        suspend
-        timeupdate
-        volumechange
-        waiting
-        */
+         abort
+         canplay
+         canplaythrough
+         durationchange
+         emptied
+         ended
+         error
+         loadeddata
+         loadedmetadata
+         loadstart
+         pause
+         play
+         playing
+         progress
+         ratechange
+         seeked
+         seeking
+         stalled
+         suspend
+         timeupdate
+         volumechange
+         waiting
+         */
 
 
 
@@ -1063,10 +1250,10 @@ Control = jsgui.Control = jsgui.Control.extend({
         // But does this apply itself???
 
         if (a.l === 2) {
-          this._super.apply(this, a);
+            this._super.apply(this, a);
         }
         if (a.l === 3) {
-          this._super.apply(this, [a[0], a[2]]);
+            this._super.apply(this, [a[0], a[2]]);
         }
 
 
@@ -1159,59 +1346,59 @@ Control = jsgui.Control = jsgui.Control.extend({
 
     'activate': function(el) {
 
-      // Need to prevent activation while it's activating already.
-      // For the moment, it would take quite a lot of boilerplate.
-      //  Perhaps some functional programming would solve that.
+        // Need to prevent activation while it's activating already.
+        // For the moment, it would take quite a lot of boilerplate.
+        //  Perhaps some functional programming would solve that.
 
-      // Or have an inner activate function. At each level, it calls the inner function if necessary.
-      //  A simple function locking system, where it only runs if non-active?
+        // Or have an inner activate function. At each level, it calls the inner function if necessary.
+        //  A simple function locking system, where it only runs if non-active?
 
-      // could have a non-active function wrapper that only runs the function if the control is non-active.
-      //  Only set active to be true on Control.
-
-
+        // could have a non-active function wrapper that only runs the function if the control is non-active.
+        //  Only set active to be true on Control.
 
 
-      //console.log('enh ctrl activate');
 
-      if (!this.__active) {
-        this.__active = true;
-          //console.log('el', el);
-        if (el) {
-            this.set('dom.el', el);
+
+        //console.log('enh ctrl activate');
+
+        if (!this.__active) {
+            this.__active = true;
+            //console.log('el', el);
+            if (el) {
+                this.set('dom.el', el);
+            }
+
+            this.rec_desc_ensure_ctrl_el_refs();
+
+            //console.log('activate ' + this._id());
+            // activate content controls.
+            //console.log('1) ' + this._.content._arr.length);
+
+            // But have this done before initialization?
+            //  Probably want to use some values that have been read in for initialization.
+            //   May disable this later, once the data is being read on initialization.
+            this.activate_dom_attributes();
+
+
+            //console.log('2) ' + this._.content._arr.length);
+
+            this.activate_content_controls();
+            //console.log('3) ' + this._.content._arr.length);
+
+            // then is there is a selection_scope as true, create a new Selection_Scope object, then set it so that subcontrols point
+            //  to it with their selection_scope property.
+
+            // so after the fields have been set up.
+
+            this.activate_content_listen();
+            //console.log('4) ' + this._.content._arr.length);
+
+            // Activate style change listen?
+            //  Or generally dom attributes change listen?
+
+            this.activate_other_changes_listen();
+            //console.log('5) ' + this._.content._arr.length);
         }
-
-        this.rec_desc_ensure_ctrl_el_refs();
-
-        //console.log('activate ' + this._id());
-        // activate content controls.
-        //console.log('1) ' + this._.content._arr.length);
-
-        // But have this done before initialization?
-        //  Probably want to use some values that have been read in for initialization.
-        //   May disable this later, once the data is being read on initialization.
-        this.activate_dom_attributes();
-
-
-        //console.log('2) ' + this._.content._arr.length);
-
-        this.activate_content_controls();
-        //console.log('3) ' + this._.content._arr.length);
-
-        // then is there is a selection_scope as true, create a new Selection_Scope object, then set it so that subcontrols point
-        //  to it with their selection_scope property.
-
-        // so after the fields have been set up.
-
-        this.activate_content_listen();
-        //console.log('4) ' + this._.content._arr.length);
-
-        // Activate style change listen?
-        //  Or generally dom attributes change listen?
-
-        this.activate_other_changes_listen();
-        //console.log('5) ' + this._.content._arr.length);
-      }
 
 
 
@@ -1220,14 +1407,14 @@ Control = jsgui.Control = jsgui.Control.extend({
     'activate_other_changes_listen': function() {
 
         /*
-        var style = this.get('dom.attributes.style');
+         var style = this.get('dom.attributes.style');
 
-        console.log('style', style);
+         console.log('style', style);
 
-        style.on('change', function(e_change) {
-            console.log('style change', e_change);
-        })
-        */
+         style.on('change', function(e_change) {
+         console.log('style change', e_change);
+         })
+         */
         var el;
         var dom_attributes = this.get('dom.attributes');
         //console.log('dom_attributes', dom_attributes);
@@ -1245,24 +1432,24 @@ Control = jsgui.Control = jsgui.Control.extend({
             //console.log('dom_attributes change', property_name, dval);
 
             /*
-            if (property_name == 'style') {
-                // need to update it on the element.
+             if (property_name == 'style') {
+             // need to update it on the element.
 
-                if (tof(dval) == 'string') {
-                    el.setAttribute('style', dval);
-                } else {
-                    el.setAttribute('style', dval.value());
-                }
-            } else if (property_name == 'class') {
-                // need to update it on the element.
+             if (tof(dval) == 'string') {
+             el.setAttribute('style', dval);
+             } else {
+             el.setAttribute('style', dval.value());
+             }
+             } else if (property_name == 'class') {
+             // need to update it on the element.
 
-                if (tof(dval) == 'string') {
-                    el.setAttribute('class', dval);
-                } else {
-                    el.setAttribute('class', dval.value());
-                }
-            }
-            */
+             if (tof(dval) == 'string') {
+             el.setAttribute('class', dval);
+             } else {
+             el.setAttribute('class', dval.value());
+             }
+             }
+             */
 
             // I think this works better, 02/05/14
 
@@ -1279,7 +1466,7 @@ Control = jsgui.Control = jsgui.Control.extend({
             }
 
             if (el && el.nodeType === 1) {
-              el.setAttribute(property_name, dval);
+                el.setAttribute(property_name, dval);
             }
 
 
@@ -1459,7 +1646,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
                 if (!el) {
-                  //console.log('*** that._id()', that._id());
+                    //console.log('*** that._id()', that._id());
                     var grandparent = that.parent().parent();
                     //console.log('grandparent', grandparent);
 
@@ -1470,19 +1657,19 @@ Control = jsgui.Control = jsgui.Control.extend({
                     //console.log('context.map_els', context.map_els);
 
 
-                  el = context.map_els[that._id()];
+                    el = context.map_els[that._id()];
 
                     //console.log('el', el);
 
-                  that.set('dom.el', el);
+                    that.set('dom.el', el);
 
-                  // It's a new Data_Value now...
-
-
-                  //that._.el = el;
+                    // It's a new Data_Value now...
 
 
-                  //console.log('* el', el);
+                    //that._.el = el;
+
+
+                    //console.log('* el', el);
                 }
 
                 el.appendChild(itemDomEl);
@@ -1541,113 +1728,113 @@ Control = jsgui.Control = jsgui.Control.extend({
         //var dv_el = this.get('dom.el').value();
 
         /*
-        if (!el) {
-            if (dv_el) {
-                el = dv_el.value();
-            } else {
-                if (this._.el && this._.el._) {
-                    el = this._.el._;
-                }
-            }
+         if (!el) {
+         if (dv_el) {
+         el = dv_el.value();
+         } else {
+         if (this._.el && this._.el._) {
+         el = this._.el._;
+         }
+         }
 
-        }
-        */
+         }
+         */
 
 
 
-      //el = el || .value() || this._.el._;
+        //el = el || .value() || this._.el._;
 
-      //if (!el) {
-      //  el = this._context.map
-      //}
+        //if (!el) {
+        //  el = this._context.map
+        //}
 
         //console.log('el', el);
 
-      var context = this._context;
+        var context = this._context;
 
 
-      if (el) {
-        var c, l, cns;
+        if (el) {
+            var c, l, cns;
 
 
-        var jsgui_id;
+            var jsgui_id;
 
-        var map_els = {};
+            var map_els = {};
 
-        dom_desc(el, function(el) {
-          //console.log('dom_desc el', el);
-          if (el.getAttribute) {
-            jsgui_id = el.getAttribute('data-jsgui-id');
-            //console.log('found jsgui_id', jsgui_id);
+            dom_desc(el, function(el) {
+                //console.log('dom_desc el', el);
+                if (el.getAttribute) {
+                    jsgui_id = el.getAttribute('data-jsgui-id');
+                    //console.log('found jsgui_id', jsgui_id);
 
-            if (jsgui_id) {
+                    if (jsgui_id) {
 
-              //map_controls[jsgui_id] = el;
+                        //map_controls[jsgui_id] = el;
 
-              // Make a map of elements...?
-              map_els[jsgui_id] = el;
-              context.map_els[jsgui_id] = el;
+                        // Make a map of elements...?
+                        map_els[jsgui_id] = el;
+                        context.map_els[jsgui_id] = el;
 
-            }
+                    }
 
-          }
+                }
 
-        });
+            });
 
-        desc(this, function(ctrl) {
-          // ensure the control is registered with the context.
-          //console.log('desc ctrl', ctrl);
+            desc(this, function(ctrl) {
+                // ensure the control is registered with the context.
+                //console.log('desc ctrl', ctrl);
 
-          var t_ctrl = tof(ctrl);
-          //console.log('t_ctrl', t_ctrl);
+                var t_ctrl = tof(ctrl);
+                //console.log('t_ctrl', t_ctrl);
 
-          if (ctrl !== this && t_ctrl === 'control') {
-            var id = ctrl._id();
-            //console.log('id', id);
+                if (ctrl !== this && t_ctrl === 'control') {
+                    var id = ctrl._id();
+                    //console.log('id', id);
 
-            // Seems like it's not in the map.
+                    // Seems like it's not in the map.
 
-            if (map_els[id]) {
-              //console.log('map_els[id]', map_els[id]);
+                    if (map_els[id]) {
+                        //console.log('map_els[id]', map_els[id]);
 
-              ctrl.set('dom.el', map_els[id]);
-              ctrl._.el = map_els[id];
-            }
-
-
-
-            //ctrl.activate();
-
-          }
-
-        });
+                        ctrl.set('dom.el', map_els[id]);
+                        ctrl._.el = map_els[id];
+                    }
 
 
 
-      }
+                    //ctrl.activate();
+
+                }
+
+            });
+
+
+
+        }
     },
 
     'rec_desc_activate': function() {
-      desc(this, function(ctrl) {
-        // ensure the control is registered with the context.
-        //console.log('desc ctrl', ctrl);
+        desc(this, function(ctrl) {
+            // ensure the control is registered with the context.
+            //console.log('desc ctrl', ctrl);
 
-        var t_ctrl = tof(ctrl);
+            var t_ctrl = tof(ctrl);
 
-        if (t_ctrl === 'control') {
+            if (t_ctrl === 'control') {
 
 
-          ctrl.activate();
+                ctrl.activate();
 
-        }
+            }
 
-      });
+        });
     },
 
     'activate_content_controls': function() {
-      // This could do with some enhancement, so that it automatically does a recursive activation.
-      // ensure content dom el refs
-      //  recursively ensures the DOM node references for the elements inside.
+        // This could do with some enhancement, so that it automatically does a recursive activation.
+        // ensure content dom el refs
+        //  recursively ensures the DOM node references for the elements inside.
         var dv_el = this.get('dom.el');
         var el;
 
@@ -1657,95 +1844,95 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
 
-      if (el) {
-        var context = this._context;
+        if (el) {
+            var context = this._context;
 
-        var ctrl_fields = {};
-        var that = this;
-        var c, l;
+            var ctrl_fields = {};
+            var that = this;
+            var c, l;
 
-        var my_content = this.get('content');
+            var my_content = this.get('content');
 
-        var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
-        if (str_ctrl_fields) {
-            //console.log('str_ctrl_fields ' + str_ctrl_fields);
-            ctrl_fields = JSON.parse(str_ctrl_fields.replace(/'/g, '"'));
-        }
+            var str_ctrl_fields = el.getAttribute('data-jsgui-ctrl-fields');
+            if (str_ctrl_fields) {
+                //console.log('str_ctrl_fields ' + str_ctrl_fields);
+                ctrl_fields = JSON.parse(str_ctrl_fields.replace(/'/g, '"'));
+            }
 
-        var ctrl_fields_keys = Object.keys(ctrl_fields);
+            var ctrl_fields_keys = Object.keys(ctrl_fields);
 
-        var l_ctrl_fields_keys = ctrl_fields_keys.length;
-        var key, value;
-        for (c = 0; c < l_ctrl_fields_keys; c++) {
-          key = ctrl_fields_keys[c];
-          value = ctrl_fields[key];
+            var l_ctrl_fields_keys = ctrl_fields_keys.length;
+            var key, value;
+            for (c = 0; c < l_ctrl_fields_keys; c++) {
+                key = ctrl_fields_keys[c];
+                value = ctrl_fields[key];
 
-          var referred_to_control = context.map_controls[value];
-          //console.log('referred_to_control', referred_to_control);
-          that.set(key, referred_to_control);
-        }
+                var referred_to_control = context.map_controls[value];
+                //console.log('referred_to_control', referred_to_control);
+                that.set(key, referred_to_control);
+            }
 
-        //each(ctrl_fields, function(v, i) {
+            //each(ctrl_fields, function(v, i) {
             //fields_ctrl.set(i, v);
 
             //fields_ctrl[v] = i;
-        //    var referred_to_control = context.map_controls[v];
+            //    var referred_to_control = context.map_controls[v];
             //console.log('referred_to_control', referred_to_control);
-        //    that.set(i, referred_to_control);
-        //});
+            //    that.set(i, referred_to_control);
+            //});
 
 
-        var cns = el.childNodes;
-        var content = this.get('content');
-        // Adding the content again?
-        //console.log('cns', cns);
-        //console.log('cns.length', cns.length);
-        for (c = 0, l = cns.length; c < l; c++) {
-            var cn = cns[c];
+            var cns = el.childNodes;
+            var content = this.get('content');
+            // Adding the content again?
+            //console.log('cns', cns);
+            //console.log('cns.length', cns.length);
+            for (c = 0, l = cns.length; c < l; c++) {
+                var cn = cns[c];
 
-            if (cn) {
-              var nt = cn.nodeType;
-              //console.log('* nt ' + nt);
-              if (nt == 1) {
-                  var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
-                  //console.log('cn_jsgui_id ' + cn_jsgui_id);
-                  var cctrl = context.map_controls[cn_jsgui_id];
-                  // quick check to see if the control is not already there.
-                  var found = false;
-                  if (cctrl) {
-                      var ctrl_id = cctrl.__id;
-                      //console.log('* ctrl_id', ctrl_id);
-                      if (ctrl_id) {
-                          content.each(function(v, i) {
-                              if (v.__id) {
-                                  if (v.__id == ctrl_id) found = true;
-                              }
-                          });
-                      }
+                if (cn) {
+                    var nt = cn.nodeType;
+                    //console.log('* nt ' + nt);
+                    if (nt == 1) {
+                        var cn_jsgui_id = cn.getAttribute('data-jsgui-id');
+                        //console.log('cn_jsgui_id ' + cn_jsgui_id);
+                        var cctrl = context.map_controls[cn_jsgui_id];
+                        // quick check to see if the control is not already there.
+                        var found = false;
+                        if (cctrl) {
+                            var ctrl_id = cctrl.__id;
+                            //console.log('* ctrl_id', ctrl_id);
+                            if (ctrl_id) {
+                                content.each(function(v, i) {
+                                    if (v.__id) {
+                                        if (v.__id == ctrl_id) found = true;
+                                    }
+                                });
+                            }
 
-                      if (!found) {
-                        my_content.add(cctrl);
-                      }
-                      //cctrl.activate();
-                  }
-              }
-              if (nt == 3) {
-                  // text
-                  var val = cn.nodeValue;
-                  //console.log('val ' + val);
-                  content.push(val);
+                            if (!found) {
+                                my_content.add(cctrl);
+                            }
+                            //cctrl.activate();
+                        }
+                    }
+                    if (nt == 3) {
+                        // text
+                        var val = cn.nodeValue;
+                        //console.log('val ' + val);
+                        content.push(val);
 
-              }
+                    }
+                }
+
+                //console.log('cn', cn);
+
+                // we can get the ctrl reference
+
             }
 
-            //console.log('cn', cn);
-
-            // we can get the ctrl reference
-
         }
-
-      }
-      this.rec_desc_activate();
+        this.rec_desc_activate();
     },
 
     'activate_dom_attributes': function() {
@@ -1770,50 +1957,50 @@ Control = jsgui.Control = jsgui.Control.extend({
         var dom_attributes = this.get('dom.attributes');
 
         if (el) {
-          for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
-              //arr.push(attrs.item(i).nodeName);
-              var item = attrs.item(i);
-              var name = item.name;
-              var value = item.value;
+            for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++){
+                //arr.push(attrs.item(i).nodeName);
+                var item = attrs.item(i);
+                var name = item.name;
+                var value = item.value;
 
-              if (name == 'data-jsgui-id') {
-                  // Handled elsewhere - not so sure it should be but won't change that right now.
-              } else if (name == 'data-jsgui-type') {
-                  // ^
-              } else if (name == 'style') {
+                if (name == 'data-jsgui-id') {
+                    // Handled elsewhere - not so sure it should be but won't change that right now.
+                } else if (name == 'data-jsgui-type') {
+                    // ^
+                } else if (name == 'style') {
 
-                  var map_inline_css = this._icss;
+                    var map_inline_css = this._icss;
 
-                  var arr_style_items = value.split(';');
-                  //console.log('arr_style_items', arr_style_items);
+                    var arr_style_items = value.split(';');
+                    //console.log('arr_style_items', arr_style_items);
 
-                  //each(arr_style_items)
-                  for (var c = 0, l2 = arr_style_items.length; c < l2; c++) {
-                      //map_inline_css[]
+                    //each(arr_style_items)
+                    for (var c = 0, l2 = arr_style_items.length; c < l2; c++) {
+                        //map_inline_css[]
 
-                      var style_item = arr_style_items[c];
-                      //var style_item_name =
-                      var arr_style_item = style_item.split(':');
+                        var style_item = arr_style_items[c];
+                        //var style_item_name =
+                        var arr_style_item = style_item.split(':');
 
-                      if (arr_style_item[0]) {
-                          map_inline_css[arr_style_item[0]] = arr_style_item[1];
-                      }
-                  }
-              //} else if (name == 'data-jsgui-fields') {
-                // Should probably rely on using init a lot more now.
+                        if (arr_style_item[0]) {
+                            map_inline_css[arr_style_item[0]] = arr_style_item[1];
+                        }
+                    }
+                    //} else if (name == 'data-jsgui-fields') {
+                    // Should probably rely on using init a lot more now.
 
 
-              //    var str_properties = value;
+                    //    var str_properties = value;
 
-              //    if (str_properties) {
+                    //    if (str_properties) {
 
-              //    }
-              } else {
-                  // set the dom attributes value... silent set?
+                    //    }
+                } else {
+                    // set the dom attributes value... silent set?
 
-                  dom_attributes.set(name, value);
-              }
-          }
+                    dom_attributes.set(name, value);
+                }
+            }
         }
     },
     'hide': function() {
@@ -2148,10 +2335,10 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         // Respond to right clicks only.
         /*
-        this.on('click', function(e_click) {
-            console.log('e_click', e_click);
-        })
-        */
+         this.on('click', function(e_click) {
+         console.log('e_click', e_click);
+         })
+         */
 
         this.on('contextmenu', function(e_contextmenu) {
             //console.log('e_contextmenu', e_contextmenu);
@@ -2374,152 +2561,152 @@ Control = jsgui.Control = jsgui.Control.extend({
 
 
     /*
-    'drag': function(fn_mousedown, fn_begin, fn_move, fn_end) {
+     'drag': function(fn_mousedown, fn_begin, fn_move, fn_end) {
 
-        var screen_down_x, screen_down_y;
+     var screen_down_x, screen_down_y;
 
-        // Want ways of restricting or cancelling a drag.
-        var ctrl_html_root = this._context.ctrl_document;
-
-
-        this.add_event_listener('mousedown', function(e) {
-            //console.log('hover mouseover');
-
-            //console.log('drag mousedown ', e);
-
-            screen_down_x = e.screenX;
-            screen_down_y = e.screenY;
-
-            //var moved = false;
-            var drag_initiated = false;
-
-            fn_mousedown(e);
-
-            var first = true;
-
-            var handle_move = function(e) {
-
-                console.log('handle_move');
-
-                var screen_move_x = e.screenX;
-                var screen_move_y = e.screenY;
-
-                var screen_offset_x = screen_move_x - screen_down_x;
-                var screen_offset_y = screen_move_y - screen_down_y;
-
-                if (first) {
-                    ctrl_html_root.add_class('cursor-default');
-                    first = false;
-                }
-
-                // Screen movement offset.
-
-                // Anyway, we need the position within the div / element where the mouse went down.
-                //  We use that to calculate the position to move the control to, we need to take account of that inital offset.
+     // Want ways of restricting or cancelling a drag.
+     var ctrl_html_root = this._context.ctrl_document;
 
 
+     this.add_event_listener('mousedown', function(e) {
+     //console.log('hover mouseover');
 
-                // could find the position of the srcElement.
+     //console.log('drag mousedown ', e);
 
-                // that may be better.
-                //  then we use the client x and client y properties to determine the offset into the item clicked.
+     screen_down_x = e.screenX;
+     screen_down_y = e.screenY;
+
+     //var moved = false;
+     var drag_initiated = false;
+
+     fn_mousedown(e);
+
+     var first = true;
+
+     var handle_move = function(e) {
+
+     console.log('handle_move');
+
+     var screen_move_x = e.screenX;
+     var screen_move_y = e.screenY;
+
+     var screen_offset_x = screen_move_x - screen_down_x;
+     var screen_offset_y = screen_move_y - screen_down_y;
+
+     if (first) {
+     ctrl_html_root.add_class('cursor-default');
+     first = false;
+     }
+
+     // Screen movement offset.
+
+     // Anyway, we need the position within the div / element where the mouse went down.
+     //  We use that to calculate the position to move the control to, we need to take account of that inital offset.
 
 
 
-                //console.log('screen_offset_x', screen_offset_x, 'screen_offset_y', screen_offset_y);
+     // could find the position of the srcElement.
 
-                // but we already have an offset property from the event.
-
-                // maybe call our new one a movement offset.
-
-
-
-                var e = {
-                    'offsetX': screen_offset_x,
-                    'offsetY': screen_offset_y,
-                    'screenX': screen_move_x,
-                    'screenY': screen_move_y,
-                    'clientX': e.clientX,
-                    'clientY': e.clientY,
-                    'pageX': e.pageX,
-                    'pageY': e.pageY
-                }
-
-                if (!drag_initiated) {
-
-                    //see how far it is...
-
-                    // want to use a function that calculates the magnitude of the distance.
-
-                    var dbp = jsgui.distance_between_points([[0, 0], [screen_offset_x, screen_offset_y]]);
-
-                    //console.log('dbp ' + dbp);
-
-                    // drag_initiation_distance
-
-                    var drag_initiation_distance = 16;
-                    if (dbp >= 16) {
-                        drag_initiated = true;
-                        ctrl_html_root.add_class('dragging');
-                        //ctrl_html_root.add_class('cursor-default');
-
-                        fn_begin(e);
-
-                    }
-
-
-                    // can just use the magnitude of the offset.
-                    //  dbp taking just 2 values...
+     // that may be better.
+     //  then we use the client x and client y properties to determine the offset into the item clicked.
 
 
 
+     //console.log('screen_offset_x', screen_offset_x, 'screen_offset_y', screen_offset_y);
 
-                }
+     // but we already have an offset property from the event.
 
-                if (drag_initiated) {
-                    fn_move(e);
-                }
-
-
-            }
-
-            var handle_mouseup = function(e) {
-                //document.removeEventListener('mousemove', handle_move);
-                //document.removeEventListener('mouseup', handle_mouseup);
-
-                ctrl_html_root.off('mousemove', handle_move);
-                ctrl_html_root.off('mouseup', handle_mouseup);
-
-                ctrl_html_root.remove_class('dragging');
-                ctrl_html_root.remove_class('cursor-default');
-
-                var screen_mouseup_x = e.screenX;
-                var screen_mouseup_y = e.screenY;
-
-                var screen_offset_x = screen_mouseup_x - screen_down_x;
-                var screen_offset_y = screen_mouseup_y - screen_down_y;
-
-                console.log('screen_offset_x', screen_offset_x, 'screen_offset_y', screen_offset_y);
-
-                var e = {
-                    'offsetX': screen_offset_x,
-                    'offsetY': screen_offset_y
-                }
-                fn_end(e);
-
-            }
-
-            ctrl_html_root.on('mousemove', handle_move);
-            ctrl_html_root.on('mouseup', handle_mouseup);
-
-            //document.addEventListener('mousemove', handle_move, false);
-            //document.addEventListener('mouseup', handle_mouseup, false);
+     // maybe call our new one a movement offset.
 
 
-            //fn_in();
-        })
-    },
-    */
+
+     var e = {
+     'offsetX': screen_offset_x,
+     'offsetY': screen_offset_y,
+     'screenX': screen_move_x,
+     'screenY': screen_move_y,
+     'clientX': e.clientX,
+     'clientY': e.clientY,
+     'pageX': e.pageX,
+     'pageY': e.pageY
+     }
+
+     if (!drag_initiated) {
+
+     //see how far it is...
+
+     // want to use a function that calculates the magnitude of the distance.
+
+     var dbp = jsgui.distance_between_points([[0, 0], [screen_offset_x, screen_offset_y]]);
+
+     //console.log('dbp ' + dbp);
+
+     // drag_initiation_distance
+
+     var drag_initiation_distance = 16;
+     if (dbp >= 16) {
+     drag_initiated = true;
+     ctrl_html_root.add_class('dragging');
+     //ctrl_html_root.add_class('cursor-default');
+
+     fn_begin(e);
+
+     }
+
+
+     // can just use the magnitude of the offset.
+     //  dbp taking just 2 values...
+
+
+
+
+     }
+
+     if (drag_initiated) {
+     fn_move(e);
+     }
+
+
+     }
+
+     var handle_mouseup = function(e) {
+     //document.removeEventListener('mousemove', handle_move);
+     //document.removeEventListener('mouseup', handle_mouseup);
+
+     ctrl_html_root.off('mousemove', handle_move);
+     ctrl_html_root.off('mouseup', handle_mouseup);
+
+     ctrl_html_root.remove_class('dragging');
+     ctrl_html_root.remove_class('cursor-default');
+
+     var screen_mouseup_x = e.screenX;
+     var screen_mouseup_y = e.screenY;
+
+     var screen_offset_x = screen_mouseup_x - screen_down_x;
+     var screen_offset_y = screen_mouseup_y - screen_down_y;
+
+     console.log('screen_offset_x', screen_offset_x, 'screen_offset_y', screen_offset_y);
+
+     var e = {
+     'offsetX': screen_offset_x,
+     'offsetY': screen_offset_y
+     }
+     fn_end(e);
+
+     }
+
+     ctrl_html_root.on('mousemove', handle_move);
+     ctrl_html_root.on('mouseup', handle_mouseup);
+
+     //document.addEventListener('mousemove', handle_move, false);
+     //document.addEventListener('mouseup', handle_mouseup, false);
+
+
+     //fn_in();
+     })
+     },
+     */
 
     'drag_handle_to': function(ctrl) {
         // Also involved with drag and drop actions.
@@ -2604,14 +2791,14 @@ Control = jsgui.Control = jsgui.Control.extend({
                 ctrl.unanchor();
 
                 /*
-                var unanchored_size = ctrl.get('unanchored_size');
-                console.log('unanchored_size', unanchored_size);
+                 var unanchored_size = ctrl.get('unanchored_size');
+                 console.log('unanchored_size', unanchored_size);
 
-                ctrl.size(unanchored_size);
-                ctrl.style({
-                    'position': 'absolute'
-                })
-                */
+                 ctrl.size(unanchored_size);
+                 ctrl.style({
+                 'position': 'absolute'
+                 })
+                 */
             }
 
 
@@ -2698,24 +2885,24 @@ Control = jsgui.Control = jsgui.Control.extend({
                 //
             }
             /*
-            var unanchored_offset = ctrl.get('unanchored_offset');
-            console.log('unanchored_offset', unanchored_offset);
+             var unanchored_offset = ctrl.get('unanchored_offset');
+             console.log('unanchored_offset', unanchored_offset);
 
-            if (unanchored_offset) {
-                // want to find out what zone it is anchored in.
-                var anchored_to = ctrl.get('anchored_to');
-                var zone = anchored_to[2];
+             if (unanchored_offset) {
+             // want to find out what zone it is anchored in.
+             var anchored_to = ctrl.get('anchored_to');
+             var zone = anchored_to[2];
 
-                console.log('zone', zone);
+             console.log('zone', zone);
 
-                if (zone == 'left' || zone == 'top' || zone == 'bottom') {
-                    ctrl_pos = jsgui.v_add(ctrl_pos, [unanchored_offset[0], 0]);
-                }
+             if (zone == 'left' || zone == 'top' || zone == 'bottom') {
+             ctrl_pos = jsgui.v_add(ctrl_pos, [unanchored_offset[0], 0]);
+             }
 
 
-                //
-            }
-            */
+             //
+             }
+             */
 
 
             if (ctrl_pos[0] < 0) ctrl_pos[0] = 0;
@@ -2787,21 +2974,21 @@ Control = jsgui.Control = jsgui.Control.extend({
     // Possibly put this back?
     //  But maybe don't want to be talking about click or touch too much, maybe talk about pointer actions.
     /*
-    'click_to_select': function(ctrl) {
-        ctrl = ctrl || this;
+     'click_to_select': function(ctrl) {
+     ctrl = ctrl || this;
 
-        this.click(function(e) {
-            // is control held down?
-            //console.log('e', e);
-            var ctrl_key = e.ctrlKey;
-            if (ctrl_key) {
-                ctrl.action_select_toggle();
-            } else {
-                ctrl.action_select_only();
-            }
-        });
-    },
-    */
+     this.click(function(e) {
+     // is control held down?
+     //console.log('e', e);
+     var ctrl_key = e.ctrlKey;
+     if (ctrl_key) {
+     ctrl.action_select_toggle();
+     } else {
+     ctrl.action_select_only();
+     }
+     });
+     },
+     */
 
     'resize_handle_to': function(ctrl, handle_position) {
         // The control needs to be draggable normally?
@@ -2890,26 +3077,26 @@ Control = jsgui.Control = jsgui.Control.extend({
 
             /*
 
-            var jsf = that.get('dom.attributes.data-jsgui-fields');
-            //console.log('jsf', jsf);
+             var jsf = that.get('dom.attributes.data-jsgui-fields');
+             //console.log('jsf', jsf);
 
 
 
-            if (jsf) {
+             if (jsf) {
 
-                throw 'pre-existing jsgui fields, nyi'
-            } else {
-                var obj = {
-                    'is_selectable': true
-                }
+             throw 'pre-existing jsgui fields, nyi'
+             } else {
+             var obj = {
+             'is_selectable': true
+             }
 
 
 
-                that.set('dom.attributes.data-jsgui-fields', JSON.stringify(obj).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
+             that.set('dom.attributes.data-jsgui-fields', JSON.stringify(obj).replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]"));
 
-                //.replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]")
-            }
-            */
+             //.replace(/"/g, "[DBL_QT]").replace(/'/g, "[SNG_QT]")
+             }
+             */
             that._fields = that._fields || {};
             that._fields['is_selectable'] = true;
 
@@ -3048,8 +3235,8 @@ Control = jsgui.Control = jsgui.Control.extend({
         this.style('height', h + 'px', true);
     },
 
-		// grid_9 Likely should be it's own module.
-		//  It would make more sense as a mix-in.
+    // grid_9 Likely should be it's own module.
+    //  It would make more sense as a mix-in.
 
     'grid_9': function() {
         var res = this.get('grid_9');
@@ -3091,7 +3278,7 @@ Control = jsgui.Control = jsgui.Control.extend({
 
         //console.log('el_grid_9.childNodes.length ' + el_grid_9.childNodes.length );
 
-
+        // Would be better to set properties in the JSGUI API and have lower level code processing the DOM changes.
 
         el.insertBefore(el_grid_9, el.childNodes[0]);
 
@@ -3219,36 +3406,36 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                         /*
 
-                        var g9w = g9el.offsetWidth;
+                         var g9w = g9el.offsetWidth;
 
 
 
-                        var g9c = grid_9.get('content');
-                        //console.log('g9c', g9c.length());
+                         var g9c = grid_9.get('content');
+                         //console.log('g9c', g9c.length());
 
-                        //console.log('m_stripe', m_stripe);
+                         //console.log('m_stripe', m_stripe);
 
-                        var cell_3 = m_stripe.get('content').get(0);
+                         var cell_3 = m_stripe.get('content').get(0);
 
-                        // need to measure and shrink the central cell.
+                         // need to measure and shrink the central cell.
 
-                        //var w = cell4_el.offsetWidth;
+                         //var w = cell4_el.offsetWidth;
 
-                        //console.log('w ' + w);
+                         //console.log('w ' + w);
 
-                        // or remove that style declaration?
-                        cell_4.style({
-                            //'width': null
-                            'width': '100%'
-                        })
+                         // or remove that style declaration?
+                         cell_4.style({
+                         //'width': null
+                         'width': '100%'
+                         })
 
 
 
-                        //console.log('cell_3', cell_3);
-                        cell_3.remove_class('dock-placeholder');
-                        this.set('dock_placeholder_pos', false);
+                         //console.log('cell_3', cell_3);
+                         cell_3.remove_class('dock-placeholder');
+                         this.set('dock_placeholder_pos', false);
 
-                        */
+                         */
                     }
 
                     if (dpp_val == 'top') {
@@ -3260,27 +3447,27 @@ Control = jsgui.Control = jsgui.Control.extend({
                         grid_9.close_placeholder();
 
                         /*
-                        var cell_1 = t_stripe.get('content').get(1);
-                        //console.log('cell_3', cell_3);
-                        cell_1.remove_class('dock-placeholder');
-                        this.set('dock_placeholder_pos', false);
-                        */
+                         var cell_1 = t_stripe.get('content').get(1);
+                         //console.log('cell_3', cell_3);
+                         cell_1.remove_class('dock-placeholder');
+                         this.set('dock_placeholder_pos', false);
+                         */
 
                     }
 
                     if (dpp_val == 'right') {
                         grid_9.close_placeholder();
                         /*
-                        var cell_5 = grid_9.get('content').get(1).get('content').get(2);
-                        //console.log('cell_3', cell_3);
-                        cell_5.remove_class('dock-placeholder');
-                        this.set('dock_placeholder_pos', false);
+                         var cell_5 = grid_9.get('content').get(1).get('content').get(2);
+                         //console.log('cell_3', cell_3);
+                         cell_5.remove_class('dock-placeholder');
+                         this.set('dock_placeholder_pos', false);
 
-                        cell_4.style({
-                            //'width': null
-                            'width': '100%'
-                        })
-                        */
+                         cell_4.style({
+                         //'width': null
+                         'width': '100%'
+                         })
+                         */
                     }
 
                     if (dpp_val == 'bottom') {
@@ -3316,57 +3503,57 @@ Control = jsgui.Control = jsgui.Control.extend({
 
                     /*
 
-                    var cw = document.documentElement.clientWidth;
-                    grid_9.style({
-                        'width': cw + 'px'
-                    })
+                     var cw = document.documentElement.clientWidth;
+                     grid_9.style({
+                     'width': cw + 'px'
+                     })
 
 
 
-                    //console.log('m_stripe', m_stripe);
-                    var cell_3 = m_stripe.get('content').get(0);
+                     //console.log('m_stripe', m_stripe);
+                     var cell_3 = m_stripe.get('content').get(0);
 
-                    //var cell_4 = m_stripe.get('content').get(1);
-                    var cell3_el = cell_3.get('dom.el');
-                    //var cell4_el = cell_4.get('dom.el');
-                    var c4w = cell4_el.offsetWidth;
+                     //var cell_4 = m_stripe.get('content').get(1);
+                     var cell3_el = cell_3.get('dom.el');
+                     //var cell4_el = cell_4.get('dom.el');
+                     var c4w = cell4_el.offsetWidth;
 
-                    //console.log('* c4w ' + c4w);
+                     //console.log('* c4w ' + c4w);
 
-                    //throw 'stop';
-                    //console.log('cell_3', cell_3);
-                    // ensure class?
-                    cell_3.add_class('dock-placeholder');
+                     //throw 'stop';
+                     //console.log('cell_3', cell_3);
+                     // ensure class?
+                     cell_3.add_class('dock-placeholder');
 
-                    var c3w = cell3_el.offsetWidth;
-                    var nw = c4w - c3w;
-                    //console.log('nw ' + nw);
-
-
-
-                    cell_4.style({
-                        'width': (nw) + 'px'
-                    })
-                    //console.log('* c3w ' + c3w);
+                     var c3w = cell3_el.offsetWidth;
+                     var nw = c4w - c3w;
+                     //console.log('nw ' + nw);
 
 
-                    this.set('dock_placeholder_pos', 'left');
 
-                    */
+                     cell_4.style({
+                     'width': (nw) + 'px'
+                     })
+                     //console.log('* c3w ' + c3w);
+
+
+                     this.set('dock_placeholder_pos', 'left');
+
+                     */
                 }
                 if (pos == 'top') {
                     //var g9c = grid_9.get('content');
                     //console.log('g9c', g9c.length());
 
                     /*
-                    var m_stripe = grid_9.get('content').get(0);
-                    //console.log('m_stripe', m_stripe);
-                    var cell_1 = m_stripe.get('content').get(1);
-                    //console.log('cell_3', cell_3);
-                    // ensure class?
-                    cell_1.add_class('dock-placeholder');
-                    this.set('dock_placeholder_pos', 'top');
-                    */
+                     var m_stripe = grid_9.get('content').get(0);
+                     //console.log('m_stripe', m_stripe);
+                     var cell_1 = m_stripe.get('content').get(1);
+                     //console.log('cell_3', cell_3);
+                     // ensure class?
+                     cell_1.add_class('dock-placeholder');
+                     this.set('dock_placeholder_pos', 'top');
+                     */
 
                     grid_9.open_placeholder('top');
                 }
@@ -3523,14 +3710,14 @@ var Grid_9 = jsgui.Control.extend({
             cell_5.remove_class('dock-placeholder');
 
             /*
-            this.set('open', 'right');
-            var cell5_el = cell_5.get('dom.el');
-            var c5w = cell5_el.offsetWidth;
-            var nw = c4w - c5w;
-            cell_4.style({
-                'width': (nw) + 'px'
-            })
-            */
+             this.set('open', 'right');
+             var cell5_el = cell_5.get('dom.el');
+             var c5w = cell5_el.offsetWidth;
+             var nw = c4w - c5w;
+             cell_4.style({
+             'width': (nw) + 'px'
+             })
+             */
         }
 
 
@@ -3703,7 +3890,7 @@ var Grid_9 = jsgui.Control.extend({
 
         if (zone == 'top') {
             //var m_stripe = grid_9.get('content').get(0);
-                    //console.log('m_stripe', m_stripe);
+            //console.log('m_stripe', m_stripe);
             var cell_1 = t_stripe.get('content').get(1);
             //console.log('cell_3', cell_3);
             // ensure class?
@@ -3835,35 +4022,35 @@ var Grid_9 = jsgui.Control.extend({
 
 
         /*
-        var g9w = g9el.offsetWidth;
+         var g9w = g9el.offsetWidth;
 
 
 
-                        var g9c = grid_9.get('content');
-                        //console.log('g9c', g9c.length());
+         var g9c = grid_9.get('content');
+         //console.log('g9c', g9c.length());
 
-                        //console.log('m_stripe', m_stripe);
+         //console.log('m_stripe', m_stripe);
 
-                        var cell_3 = m_stripe.get('content').get(0);
+         var cell_3 = m_stripe.get('content').get(0);
 
-                        // need to measure and shrink the central cell.
+         // need to measure and shrink the central cell.
 
-                        //var w = cell4_el.offsetWidth;
+         //var w = cell4_el.offsetWidth;
 
-                        //console.log('w ' + w);
+         //console.log('w ' + w);
 
-                        // or remove that style declaration?
-                        cell_4.style({
-                            //'width': null
-                            'width': '100%'
-                        })
+         // or remove that style declaration?
+         cell_4.style({
+         //'width': null
+         'width': '100%'
+         })
 
 
 
-                        //console.log('cell_3', cell_3);
-                        cell_3.remove_class('dock-placeholder');
-                        this.set('dock_placeholder_pos', false);
-        */
+         //console.log('cell_3', cell_3);
+         cell_3.remove_class('dock-placeholder');
+         this.set('dock_placeholder_pos', false);
+         */
     }
 
 
@@ -3963,237 +4150,237 @@ var activate = function(context) {
     // Not so sure we can have the client page context here - does it use resources?
 
     //ensure_Context_Menu_loaded(function(_Context_Menu) {
-        //Context_Menu = _Context_Menu;
-        if (!context) {
-            throw 'jsgui-html-enh activate(context) - need to supply context parameter.';
-        }
-        //context = context || new Page_Context();
-        //console.log('jsgui-html-enh activate context', context);
+    //Context_Menu = _Context_Menu;
+    if (!context) {
+        throw 'jsgui-html-enh activate(context) - need to supply context parameter.';
+    }
+    //context = context || new Page_Context();
+    //console.log('jsgui-html-enh activate context', context);
 
-        var map_jsgui_els = {};
-        var map_jsgui_types = {};
-        //console.log('activate - beginning mapping');
-        // Could put together the array of controls in order found.
+    var map_jsgui_els = {};
+    var map_jsgui_types = {};
+    //console.log('activate - beginning mapping');
+    // Could put together the array of controls in order found.
 
-        var arr_controls = [];
-        // element registration
-        // Recursive iteration where the innermost get called first....
-        //  Would be useful here.
-        // counting up the typed id numbers.
+    var arr_controls = [];
+    // element registration
+    // Recursive iteration where the innermost get called first....
+    //  Would be useful here.
+    // counting up the typed id numbers.
 
-        var max_typed_ids = {};
+    var max_typed_ids = {};
 
-        var id_before__ = function(id) {
-            var pos1 = id.lastIndexOf('_');
-            var res = id.substr(0, pos1);
-            return res;
-        }
+    var id_before__ = function(id) {
+        var pos1 = id.lastIndexOf('_');
+        var res = id.substr(0, pos1);
+        return res;
+    }
 
-        var num_after = function(id) {
-            //var pos1 = id.lastIndexOf('_');
-            //var res = parseInt(id.substr(pos1 + 1), 10);
-            //return res;
-            return parseInt(id.substr(id.lastIndexOf('_') + 1), 10);
-        }
+    var num_after = function(id) {
+        //var pos1 = id.lastIndexOf('_');
+        //var res = parseInt(id.substr(pos1 + 1), 10);
+        //return res;
+        return parseInt(id.substr(id.lastIndexOf('_') + 1), 10);
+    }
 
-        recursive_dom_iterate(document, function(el) {
+    recursive_dom_iterate(document, function(el) {
 
-            //console.log('recursive_dom_iterate el', el);
-            //console.log('tof el', tof(el));
-            //console.log('2) el.tagName ' + el.tagName);
-            var nt = el.nodeType;
-            //console.log('nt ' + nt);
+        //console.log('recursive_dom_iterate el', el);
+        //console.log('tof el', tof(el));
+        //console.log('2) el.tagName ' + el.tagName);
+        var nt = el.nodeType;
+        //console.log('nt ' + nt);
 
-            // So for the 'HTML' tag name...
-            //  We should make a control for the HTML document - or it should get activated.
-
-
-
-            if (nt == 1) {
-                var jsgui_id = el.getAttribute('data-jsgui-id');
-                // Give the HTML document an ID?
+        // So for the 'HTML' tag name...
+        //  We should make a control for the HTML document - or it should get activated.
 
 
-                //console.log('jsgui_id ' + jsgui_id);
-                if (jsgui_id) {
-                    var ib = id_before__(jsgui_id);
-                    var num =  num_after(jsgui_id);
-                    if (!max_typed_ids[ib]) {
-                        max_typed_ids[ib] = num;
-                    } else {
-                        if (num > max_typed_ids[ib]) max_typed_ids[ib] = num;
-                    }
 
-                    map_jsgui_els[jsgui_id] = el;
-                    var jsgui_type = el.getAttribute('data-jsgui-type');
-                    //console.log('jsgui_type ' + jsgui_type);
-                    map_jsgui_types[jsgui_id] = jsgui_type;
-                    //console.log('jsgui_type ' + jsgui_type);
-                }
-            }
-        });
-        context.set_max_ids(max_typed_ids);
-        //console.log('max_typed_ids ' + stringify(max_typed_ids));
-        //throw 'stop';
-        //console.log('activate - finished mapping');
+        if (nt == 1) {
+            var jsgui_id = el.getAttribute('data-jsgui-id');
+            // Give the HTML document an ID?
 
-        // Then activate
-        //  (but an activation where it does not yet know the references to various necessary other controls)
-        //  This is about creating the controls, within the page_context.
 
-        // if the control does not have its own recursive activation...
-        //  Do the control creation, then there should be various properties and behaviours that get set.
-
-        // create the controls.
-        //console.log('map_jsgui_types ' + stringify(map_jsgui_types));
-        //console.log('map_jsgui_els ' + stringify(map_jsgui_els));
-
-        //console.log('map_controls_by_type ' + stringify(map_controls_by_type));
-        //throw 'stop';
-
-        //console.log('context.map_controls', context.map_controls);
-        //console.log('map_jsgui_types', map_jsgui_types);
-
-        var map_controls = context.map_controls;
-        // Control construction and registration
-        each(map_jsgui_els, function(el, jsgui_id) {
             //console.log('jsgui_id ' + jsgui_id);
-            //console.log('3) el.tagName ' + el.tagName);
-            var l_tag_name = el.tagName.toLowerCase();
             if (jsgui_id) {
-                var type = map_jsgui_types[jsgui_id];
-                //console.log('type ' + type);
-                //var cstr = jsgui.constructor_from_type(type);
-
-                //var cstr = jsgui.constructor_from_type(type);
-
-                //console.log('cstr ' + cstr);
-
-                // use the context's map_Controls
-
-                var Cstr = context.map_Controls[type];
-
-                //console.log('!!Cstr', !!Cstr);
-                //console.log('Cstr ' + Cstr.prototype);
-
-                // then we can construct the control, and put it within the map.
-                //  A later stage of activation will recreate the relationships between the controls.
-
-                // OK, but have we got variables to initialize the controls with?
-                //  It would maybe be most efficient to take delivery of them as one object.
-                //   With just the control types and the data contained in them we can do a lot of reconstruction of the actual controls.
-
-                // With the object viewer, we can even reconstruct the initial object from the rendered view.
-                //  Not sure quite how much point there is in doing that. May work out most efficient because 1st view is prerendered and
-                //  it does not need to send the data twice.
-                // Eg can hook up the key (viewer), the value (viewer) and the comma.
-
-                // for the document element we specifically add the control to the context.
-
-                // Also want to read fields out for use in initialization.
-                //  Not the ctrl_fields (for the moment)
-                //  Just the data-jsgui-fields.
-                //   However, it's likely they could be used in the initialization.
-                //    And merged with the spec.
-
-
-
-
-                if (Cstr) {
-                    //console.log('arr_controls.length', arr_controls.length);
-                    //console.log('!!map_controls[jsgui_id]', !!map_controls[jsgui_id]);
-
-                    //console.log('3) jsgui_id', jsgui_id);
-
-                    var ctrl = new Cstr({
-                        'context': context,
-                        '_id': jsgui_id,
-                        'el': el
-                    })
-
-                    //console.log('ctrl.__id', ctrl.__id);
-
-
-
-                    //console.log('ctrl.__type_name', ctrl.__type_name);
-
-                    // no need to add it, it gets added automatically when constructed and given a context (I think)
-                    //console.log('!!map_controls[jsgui_id]', !!map_controls[jsgui_id]);
-                    //console.log('arr_controls.length', arr_controls.length);
-
-                    //if (map_controls[jsgui_id]) {
-                    //    console.log('jsgui_id', jsgui_id);
-                    //    throw 'unexpected: control already exists.'
-                    //}
-
-                    //map_controls[jsgui_id] = ctrl;
-                    arr_controls.push(ctrl);
-
-                    //console.log('el.tagName', el.tagName);
-
-                    if (l_tag_name === 'html') {
-                        //console.log('el is document root el');
-
-                        // The html element represents the root of a document.
-                        //throw '2) stop';
-
-                        context.ctrl_document = ctrl;
-                    }
+                var ib = id_before__(jsgui_id);
+                var num =  num_after(jsgui_id);
+                if (!max_typed_ids[ib]) {
+                    max_typed_ids[ib] = num;
                 } else {
-                    console.log('Missing context.map_Controls for type ' + type + ', using generic Control');
-                    var ctrl = new Control({
-                        'context': context,
-                        '_id': jsgui_id,
-                        'el': el
-                    })
-                    //map_controls[jsgui_id] = ctrl;
-                    arr_controls.push(ctrl);
-
+                    if (num > max_typed_ids[ib]) max_typed_ids[ib] = num;
                 }
 
-
-                //console.log('jsgui_id ' + jsgui_id);
-                //console.log('ctrl._id() ' + ctrl._id());
-
+                map_jsgui_els[jsgui_id] = el;
+                var jsgui_type = el.getAttribute('data-jsgui-type');
+                //console.log('jsgui_type ' + jsgui_type);
+                map_jsgui_types[jsgui_id] = jsgui_type;
+                //console.log('jsgui_type ' + jsgui_type);
             }
-            // get the constructor from the id?
-        });
-        //console.log('arr_controls ' + stringify(arr_controls));
-        // depth-first activation?
-        //  But connecting up the activated subcontrols with the control getting activated?
-        //   They could be the content.
+        }
+    });
+    context.set_max_ids(max_typed_ids);
+    //console.log('max_typed_ids ' + stringify(max_typed_ids));
+    //throw 'stop';
+    //console.log('activate - finished mapping');
 
-        //console.log('pre recursive_dom_iterate_depth');
-        recursive_dom_iterate_depth(document, function(el) {
-            //console.log('el ' + el);
-            var nt = el.nodeType;
-            //console.log('nt ' + nt);
-            if (nt == 1) {
-                var jsgui_id = el.getAttribute('data-jsgui-id');
-                //console.log('* jsgui_id ' + jsgui_id);
-                if (jsgui_id) {
+    // Then activate
+    //  (but an activation where it does not yet know the references to various necessary other controls)
+    //  This is about creating the controls, within the page_context.
 
-                    //console.log('map_controls', map_controls);
+    // if the control does not have its own recursive activation...
+    //  Do the control creation, then there should be various properties and behaviours that get set.
 
-                    var ctrl = map_controls[jsgui_id];
-                    ctrl.__activating = true;
+    // create the controls.
+    //console.log('map_jsgui_types ' + stringify(map_jsgui_types));
+    //console.log('map_jsgui_els ' + stringify(map_jsgui_els));
+
+    //console.log('map_controls_by_type ' + stringify(map_controls_by_type));
+    //throw 'stop';
+
+    //console.log('context.map_controls', context.map_controls);
+    //console.log('map_jsgui_types', map_jsgui_types);
+
+    var map_controls = context.map_controls;
+    // Control construction and registration
+    each(map_jsgui_els, function(el, jsgui_id) {
+        //console.log('jsgui_id ' + jsgui_id);
+        //console.log('3) el.tagName ' + el.tagName);
+        var l_tag_name = el.tagName.toLowerCase();
+        if (jsgui_id) {
+            var type = map_jsgui_types[jsgui_id];
+            //console.log('type ' + type);
+            //var cstr = jsgui.constructor_from_type(type);
+
+            //var cstr = jsgui.constructor_from_type(type);
+
+            //console.log('cstr ' + cstr);
+
+            // use the context's map_Controls
+
+            var Cstr = context.map_Controls[type];
+
+            //console.log('!!Cstr', !!Cstr);
+            //console.log('Cstr ' + Cstr.prototype);
+
+            // then we can construct the control, and put it within the map.
+            //  A later stage of activation will recreate the relationships between the controls.
+
+            // OK, but have we got variables to initialize the controls with?
+            //  It would maybe be most efficient to take delivery of them as one object.
+            //   With just the control types and the data contained in them we can do a lot of reconstruction of the actual controls.
+
+            // With the object viewer, we can even reconstruct the initial object from the rendered view.
+            //  Not sure quite how much point there is in doing that. May work out most efficient because 1st view is prerendered and
+            //  it does not need to send the data twice.
+            // Eg can hook up the key (viewer), the value (viewer) and the comma.
+
+            // for the document element we specifically add the control to the context.
+
+            // Also want to read fields out for use in initialization.
+            //  Not the ctrl_fields (for the moment)
+            //  Just the data-jsgui-fields.
+            //   However, it's likely they could be used in the initialization.
+            //    And merged with the spec.
 
 
-                    //console.log('tof ctrl ' + tof(ctrl));
-                    //console.log('ctrl.__type_name', ctrl.__type_name);
-                    //console.log('ctrl', ctrl);
-                    ctrl.activate();
-
-                    // Type name being set in initialization?
 
 
-                    ctrl.__activating = false;
-                    //console.log('jsgui_type ' + jsgui_type);
+            if (Cstr) {
+                //console.log('arr_controls.length', arr_controls.length);
+                //console.log('!!map_controls[jsgui_id]', !!map_controls[jsgui_id]);
+
+                //console.log('3) jsgui_id', jsgui_id);
+
+                var ctrl = new Cstr({
+                    'context': context,
+                    '_id': jsgui_id,
+                    'el': el
+                })
+
+                //console.log('ctrl.__id', ctrl.__id);
+
+
+
+                //console.log('ctrl.__type_name', ctrl.__type_name);
+
+                // no need to add it, it gets added automatically when constructed and given a context (I think)
+                //console.log('!!map_controls[jsgui_id]', !!map_controls[jsgui_id]);
+                //console.log('arr_controls.length', arr_controls.length);
+
+                //if (map_controls[jsgui_id]) {
+                //    console.log('jsgui_id', jsgui_id);
+                //    throw 'unexpected: control already exists.'
+                //}
+
+                //map_controls[jsgui_id] = ctrl;
+                arr_controls.push(ctrl);
+
+                //console.log('el.tagName', el.tagName);
+
+                if (l_tag_name === 'html') {
+                    //console.log('el is document root el');
+
+                    // The html element represents the root of a document.
+                    //throw '2) stop';
+
+                    context.ctrl_document = ctrl;
                 }
-            }
-        });
+            } else {
+                console.log('Missing context.map_Controls for type ' + type + ', using generic Control');
+                var ctrl = new Control({
+                    'context': context,
+                    '_id': jsgui_id,
+                    'el': el
+                })
+                //map_controls[jsgui_id] = ctrl;
+                arr_controls.push(ctrl);
 
-        // Image uploader seems not to be activating properly...
+            }
+
+
+            //console.log('jsgui_id ' + jsgui_id);
+            //console.log('ctrl._id() ' + ctrl._id());
+
+        }
+        // get the constructor from the id?
+    });
+    //console.log('arr_controls ' + stringify(arr_controls));
+    // depth-first activation?
+    //  But connecting up the activated subcontrols with the control getting activated?
+    //   They could be the content.
+
+    //console.log('pre recursive_dom_iterate_depth');
+    recursive_dom_iterate_depth(document, function(el) {
+        //console.log('el ' + el);
+        var nt = el.nodeType;
+        //console.log('nt ' + nt);
+        if (nt == 1) {
+            var jsgui_id = el.getAttribute('data-jsgui-id');
+            //console.log('* jsgui_id ' + jsgui_id);
+            if (jsgui_id) {
+
+                //console.log('map_controls', map_controls);
+
+                var ctrl = map_controls[jsgui_id];
+                ctrl.__activating = true;
+
+
+                //console.log('tof ctrl ' + tof(ctrl));
+                //console.log('ctrl.__type_name', ctrl.__type_name);
+                //console.log('ctrl', ctrl);
+                ctrl.activate();
+
+                // Type name being set in initialization?
+
+
+                ctrl.__activating = false;
+                //console.log('jsgui_type ' + jsgui_type);
+            }
+        }
+    });
+
+    // Image uploader seems not to be activating properly...
 
     //})
 
@@ -4207,23 +4394,23 @@ var activate = function(context) {
 
     /*
 
-    each(arr_controls, function(i, ctrl) {
-        // Call activate on the control...
-        //  usually it's going to set up the contents.
+     each(arr_controls, function(i, ctrl) {
+     // Call activate on the control...
+     //  usually it's going to set up the contents.
 
 
-        // activate_contents activate_control_contents
+     // activate_contents activate_control_contents
 
-        ctrl.activate();
-        // Activate from bottom up
-        //  Most inwards, upwards?
+     ctrl.activate();
+     // Activate from bottom up
+     //  Most inwards, upwards?
 
-        //  So inner controls are active by the time it reaches outside....
+     //  So inner controls are active by the time it reaches outside....
 
 
 
-    });
-    */
+     });
+     */
 
     // Then another rec dom it.
     //  When activating various controls, we'll be looking for specific subcontrols to get a reference to.
@@ -4357,21 +4544,21 @@ jsgui.Label = Control.extend({
         //console.log('_for ' + stringify(_for));
         //throw 'stop';
         /*
-        var groupName = this.get('group_name').get();
-        var checked = this.get('checked').get();
-        var value = this.get('value').get();
-        //console.log('checked ' + stringify(checked));
-        //throw 'stop';
-        if (groupName) {
-            domAttributes.set('name', groupName);
-        }
-        if (checked) {
-            domAttributes.set('checked', checked.toString());
-        }
-        if (is_defined(value)) {
-            domAttributes.set('value', value);
-        }
-        */
+         var groupName = this.get('group_name').get();
+         var checked = this.get('checked').get();
+         var value = this.get('value').get();
+         //console.log('checked ' + stringify(checked));
+         //throw 'stop';
+         if (groupName) {
+         domAttributes.set('name', groupName);
+         }
+         if (checked) {
+         domAttributes.set('checked', checked.toString());
+         }
+         if (is_defined(value)) {
+         domAttributes.set('value', value);
+         }
+         */
     }
 });
 
@@ -4649,5 +4836,5 @@ jsgui.group_hover_class = group_hover_class;
 
 module.exports = jsgui;
 
-	//}
+//}
 //);
