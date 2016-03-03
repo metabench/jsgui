@@ -43,7 +43,61 @@ var Window = Control.extend({
 				title_h2.add(title);
 			}
 
+			// So it having relative positioning would help that inner area to scroll.
+			//  May have a listener for the inner control being set.
+
+			// May also need to size the inner control so that the scrollbars also fit.
+			//  Then inside that inner control, there is a larger logical area.
+			//   A div that does not have any size or overflow set.
+			//   That div can get moved around.
+
+			// Not so sure about setting an inner size.
+			//  Seems appropriate though.
+			//  Could have a large control inside the inner control if necessary.
+
+			// The scrollbar system should be baked into enhanced controls.
+
+			// enhanced_control.scrollbars();
+
+			// should be that easy to switch on the jsgui scrollbars.
+
+			// It should not make use of the standard inner_control... or if it does, inner_control functionality needs to be written around scrollbar functionality.
+
+			// So to start with, we need to make sure that a control makes use of an inner control area.
+			//  Difficulty comes from a control that does not take scrollbars into account and has its own inner_control.
+
+
+			// Possibly the Window control is not the best example to start with.
+			// Or work on the Window control as well as some more generic examples.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			var inner_control = div_relative.add(make(Control({'class': 'inner'})));
+
+
+
 			//console.log('this._id() ' + this._id());
 			//console.log('inner_control._id() ' + inner_control._id());
 			this.set('inner_control', inner_control);
@@ -142,6 +196,8 @@ var Window = Control.extend({
 			'value': menu_spec,
 			'context': this._context
 		}
+
+
 
 		//menu_spec.context = this._context;
 
