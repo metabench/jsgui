@@ -78,6 +78,9 @@ var Routing_Tree = jsgui.Class.extend({
                 var isWildcard = strLevel == '*';
                 if (isVariable) {
                     var variableName = strLevel.substr(1);
+
+                    console.log('variableName', variableName);
+
                     if (!currentNode.variableChild) {
                         currentNode.variableChild = new Variable_Routing_Tree_Node({'name': variableName});
                         if (c == splitRoute.length - 1) {
@@ -168,11 +171,20 @@ var Routing_Tree = jsgui.Class.extend({
                 if (currentNode) {
                     var next_level_node = currentNode.mapNormalPathChildren[strLevel];
                     if (next_level_node) {
+                        console.log('no next level node');
+
                     } else {
                         if (currentNode.variableChild) {
                             next_level_node = currentNode.variableChild;
+
+                            console.log('next_level_node', next_level_node);
+
                             params = params || {};
                             params[currentNode.variableChild.name] = strLevel;
+
+
+
+
                         } else {
                             if (currentNode.wildcardChild) {
                                 var arr_the_rest = splitUrl.slice(c);
@@ -187,13 +199,25 @@ var Routing_Tree = jsgui.Class.extend({
                         }
                     }
                 }
-                if (c == splitUrl.length - 1) {
+
+
+                if (c === splitUrl.length - 1) {
+
+                    console.log('the last');
+
+                    console.log('!!next_level_node', !!next_level_node);
+
                     if (next_level_node) {
+
+                        console.log('next_level_node', next_level_node);
+
                         //console.log('next_level_node.handler ' + next_level_node.handler);
                         if (next_level_node.handler) {
                             if (params) {
                                 if (next_level_node.context) {
                                     return [next_level_node.context, next_level_node.handler, params];
+                                } else {
+                                    return [next_level_node.handler, params];
                                 }
                             } else {
                                 if (next_level_node.context) {
@@ -227,6 +251,19 @@ var Routing_Tree = jsgui.Class.extend({
                             }
                             // Could handle a variable handler here?
                         }
+                    } else {
+                        // This looks like it gets reached when the last one was a variable node.
+                        //  That variable node may need a handler.
+
+                        console.log('reached last');
+
+                        console.log('currentNode', currentNode);
+
+                        return [currentNode.handler, params];
+
+
+
+
                     }
                 }
                 currentNode = next_level_node;
@@ -263,14 +300,17 @@ var Router = Resource.extend({
     'process': function(req, res) {
         var remoteAddress = req.connection.remoteAddress;
         var rt = this.get('routing_tree');
+
+        //console.log('rt', rt);
+
         var url_parts = url.parse(req.url, true);
         var splitPath = url_parts.path.substr(1).split('/');
         var route_res = rt.get(req.url);
         var processor_values_pair;
-        if (tof(route_res) == 'array') {
+        if (tof(route_res) === 'array') {
             processor_values_pair = route_res;
             var context, handler, params;
-            if (route_res.length == 2) {
+            if (route_res.length === 2) {
                 var rr_sig = get_item_sig(route_res, 1);
                 if (rr_sig == '[D,f]') {
                     context = processor_values_pair[0];
@@ -281,7 +321,7 @@ var Router = Resource.extend({
                     params = processor_values_pair[1];
                 }
             }
-            if (route_res.length == 3) {
+            if (route_res.length === 3) {
                 context = processor_values_pair[0];
                 handler = processor_values_pair[1];
                 params = processor_values_pair[2];
@@ -293,7 +333,7 @@ var Router = Resource.extend({
             } else {
                 handler(req, res);
             }
-        } else if (tof(route_res) == 'function') {
+        } else if (tof(route_res) === 'function') {
             if (context) {
                 route_res.call(context, req, res);
             } else {
@@ -301,7 +341,9 @@ var Router = Resource.extend({
                 //  call using the context when it exists, within the wildcard handler.
                 route_res(req, res);
             }
-        } else if (tof(route_res) == 'undefined') {
+        } else if (tof(route_res) === 'undefined') {
+
+
             console.log('no defined route result');
             return false;
         }
