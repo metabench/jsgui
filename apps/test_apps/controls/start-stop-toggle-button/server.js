@@ -48,9 +48,9 @@ var port = 80;
 
 var server = new jsgui.Server.JSGUI_Server({
 	'*': {
-		//'meta': {
+		'meta': {
 			'name': 'start-stop-toggle-button'
-		//}
+		}
 	}
 });
 //'*': {
@@ -62,8 +62,8 @@ var rp = server.get('resource_pool');
 //  should we have the js resource there?
 
 
-console.log('rp', rp);
-console.log('rp.resources()', rp.resources());
+//console.log('rp', rp);
+//console.log('rp.resources()', rp.resources());
 
 // No, get the resource pool of the * application.
 
@@ -71,8 +71,8 @@ console.log('rp.resources()', rp.resources());
 
 
 
-var website_resource = rp.get_resource('start-stop-toggle-button');
-console.log('website_resource', website_resource);
+
+//console.log('website_resource', website_resource);
 
 
 
@@ -83,16 +83,16 @@ console.log('website_resource', website_resource);
 var Control = jsgui.Control;
 
 //console.log('rp ', rp);
-
-var js = rp.get_resource('Site JavaScript');
+var website_resource = rp.get_resource('start-stop-toggle-button');
+var js = website_resource.get_resource('Site JavaScript');
 //js.set('auto_build_client', true);
 // or call a function...
 //  seems more specific.
 
 var ar = rp.get_resource('Server Router');
-console.log('ar', ar);
+//console.log('ar', ar);
 var rt = ar.get('routing_tree');
-console.log('js', js);
+//console.log('js', js);
 
 js.build_client(function(err, res_build_client) {
 

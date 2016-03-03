@@ -50,7 +50,7 @@ var Multi_Layout_Document = Client_HTML_Document.extend({
             // And then we want to directly link to the multi-layout subcontrols.
 
             var pnl_misc = mlm.get('misc');
-            console.log('pnl_misc', pnl_misc);
+            //console.log('pnl_misc', pnl_misc);
 
             this.set('misc', pnl_misc);
             this.set('main', mlm.get('main'));

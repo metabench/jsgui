@@ -66,6 +66,20 @@ var ar = rp.get_resource('Server Router');
 var rt = ar.get('routing_tree');
 //console.log('js', js);
 
+
+var col_name = function(n) {
+	var ordA = 'a'.charCodeAt(0);
+	var ordZ = 'z'.charCodeAt(0);
+	var len = ordZ - ordA + 1;
+
+	var s = "";
+	while(n >= 0) {
+		s = String.fromCharCode(n % len + ordA) + s;
+		n = Math.floor(n / len) - 1;
+	}
+	return s;
+}
+
 js.build_client(function(err, res_build_client) {
 
 	server.start(port, function(ree, res_started) {
@@ -87,18 +101,100 @@ js.build_client(function(err, res_build_client) {
 
 			var body = hd.body();
 
+			var num_columns = 6;
+			var num_rows = 120;
+
+			var x, y;
+
+			var data = [];
+
+
+			for (y = 0; y < num_rows; y++) {
+				var row = [];
+				data.push(row);
+
+				for (x = 0; x < num_columns; x++) {
+					var val = col_name(x) + (y + 1);
+					row.push(val);
+				}
+			}
+
+
 			// The Grid should use an underlying DataGrid.
+
+			// Seems like decent syntax to put in a single scrollbar.
+			//  When scrollbars are in use, the control's contents need to be packaged into some kind of inner control.
+			//   The control may make use of an inner_control property, not for use as the area inside the scrollbar, but it may be further inside something else.
+			// For that reason, it may be worth having a scrollable_internal, or scroll_internal Control.
+
+			// The control would insert another control between itself and its current content.
+			//  That would be trickier when the control itself is not a DIV.
+			//  So a Table control, would need to render itself as a DIV, with the table inside the control.
+			//   (possibly inside another view window DIV - that seems most stable)
+
+			// There needs to be a fair bit of rearrangement of controls when scrollbars are in operation.
+
+			// There may be a case for having controls start up with a view window inside.
+			//  At least some of the larger controls that can accept scrollbars.
+
+			// Adding view window functionality to controls / enchanced controls may be the first step to take in this.
+			//  A control may possibly have multiple view tiles.
+
+			// VIEW TILES are the way it should be called.
+			//  Could have a single view tile / tile within a control.
+			//  Could possibly have more than one view tile.
+			//  Those tiles / that tile would exist within a view window.
+			//  That window itself would not move, but its contents would move.
+
+
+			//  Would set things up by default as being a single view window with
+			//   no view tiles / view tiles not used
+			//   a single view tile
+			// ctrl view_window view_tiles
+
+			// This is a decent logical hierachy that will also work for Google Maps type tiling.
+			//  However, it does not deal with the inner_control as things stand. That may be an advantage.
+
+			// For the moment, stay aware of how tiles may be used in the future. For the moment, we just need a single tile, within a view window (that does not move), within the control.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 			var ctrl_0 = new Grid({
 				'context': server_page_context,
-				'data': [
-					['IBM'],
-					['Coca-Cola'],
-					['Boeing'],
-					['Apple']
-				]
+				'data': data,
+				'scrollbar': 'horizontal'
 
 			});
+
+
+
 			//ctrl_0.resizable();
 			body.add(ctrl_0);
 
