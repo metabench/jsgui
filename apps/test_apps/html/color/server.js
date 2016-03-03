@@ -91,9 +91,9 @@ server.start(port, function(ree, res_started) {
 
 
 
-		var ctrl_0 = new Control({
-			'context': server_page_context
-		});
+	var ctrl_0 = new Control({
+		'context': server_page_context
+	});
     ctrl_0.size([800, 600]);
 
     /*
@@ -102,7 +102,7 @@ server.start(port, function(ree, res_started) {
     });
     */
 
-
+	console.log('pre set color');
     ctrl_0.color([255, 0, 0]);
 
     // Setting .color
