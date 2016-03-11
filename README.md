@@ -1,13 +1,7 @@
 jsgui library
 =============
 
-JavaScript Graphical User Interface Library v0.4.0.
-
-It's an incomplete framework that aims to do very many things.
-
-This has had a lot of functionality added since 0.3.
-
-Some documentation and testing of the more core functionality exists in the doc directory.
+JavaScript Graphical User Interface Library v0.5.0.
 
 # Core Features
 
@@ -31,9 +25,6 @@ Some documentation and testing of the more core functionality exists in the doc 
 -   HTML Basic Controls - Control defaults to a div but there is syntax that makes it quick to make other elements as JSGUI controls.
 -   Advanced Controls - A variety of Controls that do a bunch of different things in various stages of completeness, eg Horizontal_Slider. Some are not really that advanced but they are built on top of functionality that's basic so I'm sticking with that name for the moment.
 
-## Build size for client:
-
-Currently weighing in at about 220KB minified but not gzipped. I have plans to work on compression of this further, either manually or automatically making some JavaScript files that are not encapsulated as separate modules but are a big file using lots of local variables.
 
 ## Server:
 
