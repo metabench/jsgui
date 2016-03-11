@@ -562,7 +562,13 @@ var extend = jsgui.extend, fp = jsgui.fp, stringify = jsgui.stringify, tof = jsg
 
 // So keep the color declaration here. Outside of HTML?
 
+// color is an indexed array.
+//  Does that mean it should be stored as a Data_Value?
+
+
 extend(jsgui.data_types_info, {
+
+    // Automatically created constructor function from the data types info?
 
     'color': ['indexed_array', [
         ['red', 'number'],
@@ -917,6 +923,9 @@ var ensure_data_type_data_object_constructor = function (data_type_name) {
     //console.log('');
     //console.log('');
 
+    console.log('ensure_data_type_data_object_constructor data_type_name', data_type_name);
+    console.log('!!jsgui.map_data_type_data_object_constructors[data_type_name]', !!jsgui.map_data_type_data_object_constructors[data_type_name]);
+
     if (!jsgui.map_data_type_data_object_constructors[data_type_name]) {
         //console.log('html module: creating new Data_Object constructor for data_type: ' + data_type_name)
         //throw 'stop';
@@ -934,13 +943,63 @@ var ensure_data_type_data_object_constructor = function (data_type_name) {
         //var dti = jsgui.get('dti');
         //console.log('dti ' + dti);
         //throw 'stop';
+
+
+        // Won't there be some data types that should have a Data_Value?
+
+        // Some constructors, such as size are done using indexed_array.
+        //  se it seeems
+
+        // Others, such as color, also use indexed_array but are not currently being represented as Data_value objects
+        //  Would help if the field definition said if it should be held as a data_object or data_values.
+        //  Data_Values correspond better with simpler JavaScript types. When not using a Collection to hold an Array, a Data_Value would work well.
+        //   They are supposed to be more light-weight and still provide evented functionality.
+
+
+
+
+
         var dto = jsgui.data_types_info[data_type_name];
        //console.log('dto ' + stringify(dto));
         //console.log()
         //throw 'stop';
-        var dtc = Data_Object.extend({
-            'fields': dto
-        })
+
+        // Currently only using 'color' here.
+        //  That should be a Data_Value
+
+        // May need some annotation to say we should use a Data_Object, if necessary.
+
+        // And 'color' works when using a Data_Value.
+
+        // Generally will use Data_Values for fields.
+        //  In other cases, they will have JSGUI types specified.
+
+
+
+        var dtc;
+
+        var use_data_value = function() {
+
+            // And I'm not sure that a Data_Value has got fields.
+
+            dtc = Data_Value.extend({
+                'fields': dto
+            })
+
+        };
+
+        var use_data_object = function() {
+            dtc = Data_Object.extend({
+                'fields': dto
+            })
+
+        };
+
+        use_data_value();
+
+
+
+
         dtc.prototype._data_type_name = data_type_name;
         jsgui.map_data_type_data_object_constructors[data_type_name] = dtc;
     }
@@ -980,6 +1039,16 @@ jsgui.input_processors['color'] = function(input) {
 	//  it returns a function, I think it applies to a function.
 	//throw '!!stop';
 	console.log('res ' + stringify(res));
+
+    // So, the 'color' property gets set.
+    //  Then would need to set the CSS background-color property?
+    //   Depening on what type of Control it is.
+
+
+    console.log('color input_processors output', res);
+
+
+
 	return res;
 }
 
@@ -1028,6 +1097,8 @@ var group = function() {
 
     //console.log('C ' + C);
     //console.log('p ' + p);
+
+    var i;
 
     for (i in p) {
 
