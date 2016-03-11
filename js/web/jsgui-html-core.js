@@ -139,16 +139,21 @@ ensure_data_type_data_object_constructor('control_dom');
 // also a processor for distance?
 //  a curried function for n_units basically?
 
-jsgui.input_processors['distance'] = function (input) {
+var input_processors = jsgui.input_processors;
+var output_processors = jsgui.output_processors;
+
+
+
+input_processors['distance'] = function (input) {
     // use the n_units processor, but with 'px'
     return jsgui.input_processors['n_units']('px', input);
 };
 // not sure about using oltrb right now. Could compress by having a single arr_ltrb variable.
-jsgui.input_processors['margin'] = function (input) {
+input_processors['margin'] = function (input) {
     return jsgui.input_processors['optional_array'](['left', 'top', 'right', 'bottom'], 'distance', input);
 };
 
-jsgui.input_processors['size'] = function (input) {
+input_processors['size'] = function (input) {
     // use the n_units processor, but with 'px'
     console.log('using jsgui size input processor');
     console.trace();
@@ -183,7 +188,7 @@ jsgui.input_processors['size'] = function (input) {
 
 
 
-jsgui.output_processors['string'] = function (value) {
+output_processors['string'] = function (value) {
     // need to escapr it
     return value;
 }
@@ -574,6 +579,16 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         //do_init_call(this, spec);
         this.mapListeners = {};
+
+        // Some of the Control initialization makes sense to do before the Data_Object initialization.
+        //  Data_Object will run the fields as function calls to set the values.
+        // When setting the color upon init, it's not setting the color in the css.
+        //  However, size is working OK.
+
+
+
+
+
         do_init.call(this, spec);
 
 
@@ -697,38 +712,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 //  a context at some stage.
             }
 
-            if (spec.size) {
 
-							/*
-                var size = spec.size;
-                var t_size = tof(size);
-                if (t_size == 'array') {
-                    var width = size[0];
-                    var height = size[1];
-
-                    // far from ideal
-                    //  Really should set inline styles separately.
-                    //  I had lost some of the JSGUI style system before because I redid control based on Data_Object, it may have got too complicated before though.
-                    //
-
-                    // Want to be able to access css styles.
-                    //  Want to be able to access styles on a different level though - things which may not be supported by CSS directly.
-                    //  Will do things more based on the CSS standard where possible, and shifting to use other methods when not possible.
-
-                    this.set('dom.attributes.style', 'width: ' + width + 'px; height: ' + height + 'px;');
-
-                    // Needs to set inline styles.
-                }
-								*/
-							//console.log('spec.size', spec.size);
-							//console.log('this.size', this.size);
-
-                // Though, maybe fields should automatically be settable in the spec.
-
-                //this.size(spec.size);
-
-
-            }
 
             if (spec['class']) {
                 //this.set('dom.attributes.class', spec['class']);
@@ -796,6 +780,9 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             // Want a 'target' for the change event.
 
             var size = this.get('size');
+            console.log('tof size', tof(size));
+
+            //throw 'stop';
 
 
             // has the value been set?
@@ -809,13 +796,29 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 //console.log('width', width);
                 //console.log('height', height);
 
-
                 that.style({
                     'width': width,
                     'height': height
                 });
-            }
+            };
 
+            var set_dom_color = function(color) {
+                var color_css_property = 'background-color';
+
+                // need to run output processor on the inernal color value
+
+                var out_color = output_processors['color'](color);
+
+                //console.log('out_color');
+
+
+                that.style(color_css_property, out_color);
+            };
+
+
+            // This is where it sets the size to begin with.
+            //  Need the same for color.
+            //  Possibly need the same for a whole load of properties.
             if (size._) {
                 set_dom_size(size._);
             }
@@ -834,6 +837,63 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
             });
+
+
+            // Need to listen for changes in the color as well.
+
+            var color = this.get('color');
+
+
+            // Quite sure that color should be a Data_Value, not a Data_Object.
+            //  It gets created within Data_Object get.
+            //  Want these types to be defined within a Data_Value.
+            //   Some of the types should carry on within a Data_Object though.
+            //
+
+            // Size already gets created as as Data_Value
+            //  possibly specify that within color as well as have code that recognises that its specified.
+
+
+
+
+
+
+
+
+
+
+            console.log('color', color);
+            console.log('tof color', tof(color));
+
+            if (color._) {
+                console.log('color._', color._);
+                set_dom_color(color._);
+            }
+
+            color.on('change', function(e_color_change) {
+                console.log('core ctrl e_color_change', e_color_change);
+
+                var value = e_color_change.value;
+
+                // Some controls will have color property apply to a different css property
+
+                var color_css_property = 'background-color';
+
+                // need to run output processor on the inernal color value
+
+                var out_color = output_processors['color'](value);
+
+                console.log('out_color');
+
+
+                that.style(color_css_property, out_color);
+
+
+
+            });
+
+
+
         }
 
     },
@@ -1905,11 +1965,29 @@ var Control = jsgui.Enhanced_Data_Object.extend({
             });
             return res;
         } else {
-            if (!new_content._context) {
-                if (this._context) {
-                    new_content._context = this._context;
+
+            if (new_content) {
+                if (!new_content._context) {
+                    if (this._context) {
+                        new_content._context = this._context;
+                    }
+                }
+                var inner_control = this.get('inner_control');
+
+
+                //console.log('inner_control', inner_control);
+
+                // Does it add a Data_Object successfully?
+
+                // Could adding this cause content inside the content that's being added to duplicate?
+
+                if (inner_control) {
+                    return inner_control.get('content').add(new_content);
+                } else {
+                    return this.get('content').add(new_content);
                 }
             }
+
 
             /*
             console.log('add context: ' + this._context);
@@ -1980,20 +2058,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
 
 
-            var inner_control = this.get('inner_control');
 
-
-            //console.log('inner_control', inner_control);
-
-            // Does it add a Data_Object successfully?
-
-            // Could adding this cause content inside the content that's being added to duplicate?
-
-            if (inner_control) {
-                return inner_control.get('content').add(new_content);
-            } else {
-                return this.get('content').add(new_content);
-            }
 
 
 
