@@ -331,7 +331,15 @@ var Router = Resource.extend({
             if (context) {
                 handler.call(context, req, res);
             } else {
-                handler(req, res);
+
+                if (typeof handler === 'function') {
+                    handler(req, res);
+                } else {
+                    console.log('handler', handler);
+                    throw 'Expected handler to be a function';
+                }
+
+
             }
         } else if (tof(route_res) === 'function') {
             if (context) {
