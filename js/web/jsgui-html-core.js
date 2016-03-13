@@ -2655,9 +2655,9 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
     'is_ancestor_of': function(target) {
         var t_target = tof(target);
-        console.log('t_target', t_target);
+        //console.log('t_target', t_target);
 
-        var el = this.get('dom.el');
+        var el = this.value('dom.el');
 
         var inner = function(target2) {
 
@@ -2697,7 +2697,7 @@ var Control = jsgui.Enhanced_Data_Object.extend({
 
         var ps = parent.get('selection_scope');
 
-        if (s == ps) {
+        if (s === ps) {
             // Probably would be much more convenient to get a data value just as its value,
             //  or have a more convenient data value idiom.
             var psel = parent.get('selected');

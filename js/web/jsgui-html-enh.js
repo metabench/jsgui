@@ -1086,11 +1086,10 @@ var Control = jsgui.Control = jsgui.Control.extend({
 
 
 
-            console.log('one mousedown', e_mousedown);
-            console.log('e_el', e_el);
+            //console.log('one mousedown', e_mousedown);
+            //console.log('e_el', e_el);
 
             // Want to see if the element clicked on is a descendant of this's el.
-
             var iao = that.is_ancestor_of(e_el);
             //console.log('iao', iao);
 
