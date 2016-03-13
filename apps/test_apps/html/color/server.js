@@ -44,6 +44,12 @@ var fromObject = j.fromObject;
 
 var port = 80;
 
+
+// Could wrap things in a Single_Main_Control_App
+
+
+
+
 var server = new jsgui.Server.JSGUI_Server({
     '*': {
         'name': 'start-stop-toggle-button'
@@ -92,9 +98,11 @@ server.start(port, function(ree, res_started) {
 
 
 	var ctrl_0 = new Control({
-		'context': server_page_context
+		'context': server_page_context,
+		'size': [800, 600],
+		'color': [255, 0, 0]
 	});
-    ctrl_0.size([800, 600]);
+    //ctrl_0.size([800, 600]);
 
     /*
     ctrl_0.style({
@@ -102,8 +110,8 @@ server.start(port, function(ree, res_started) {
     });
     */
 
-	console.log('pre set color');
-    ctrl_0.color([255, 0, 0]);
+	//console.log('pre set color');
+    //ctrl_0.color([255, 0, 0]);
 
     // Setting .color
     //  In some cases will change the background color.

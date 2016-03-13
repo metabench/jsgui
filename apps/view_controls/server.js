@@ -1,8 +1,8 @@
 
 
-var jsgui = require('../../js/web/jsgui-server');
-var Window = require('../../js/web/controls/advanced/window');
-var Server_Page_Context = require("../../js/web/server-page-context");
+var jsgui = require('../../../web/jsgui-server');
+var Window = require('../../../web/controls/advanced/window');
+var Server_Page_Context = require("../../../web/server-page-context");
 
 var Data_Object = jsgui.Data_Object;
 var Collection = jsgui.Collection;
@@ -98,7 +98,7 @@ server.start(port, function(ree, res_started) {
 
     // columns-2 view.
 
-    
+
 
 
 
