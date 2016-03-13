@@ -2491,6 +2491,14 @@ var Control = jsgui.Control = jsgui.Control.extend({
                     if (handle_dragstart) {
                         e_mousemove.control = that;
 
+
+                        // set the body's css cursor to 'default'
+                        //body.style('cursor', 'default');
+                        body.add_class('no-text-select');
+                        //body.add_class('dragging');
+
+
+
                         handle_dragstart(e_mousemove);
                     }
                 }
@@ -2528,6 +2536,7 @@ var Control = jsgui.Control = jsgui.Control.extend({
             body.off('mouseup', fn_mouseup);
 
             body.remove_class('no-text-select');
+           //body.remove_class('dragging');
         }
 
         this.on('mousedown', function(e_mousedown) {
