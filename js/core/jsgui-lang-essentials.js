@@ -2043,17 +2043,12 @@ if (typeof window === 'undefined') {
 	});
 
 	var multi = call_multiple_callback_functions;
-
 	var call_multi = call_multiple_callback_functions;
 
 	var Fns = function() {
 	    var fns = [];
 	    fns.go = function(parallel, delay, callback) {
-
             // Should have better param checking here.
-
-
-
 
             //if (!callback) {
             //    call_multi(fns, parallel);
@@ -2063,8 +2058,6 @@ if (typeof window === 'undefined') {
 
             var a = arguments;
             var al = a.length;
-
-
 
             // No, we may give the number in parallel, alongside a callback.
 
@@ -2082,9 +2075,6 @@ if (typeof window === 'undefined') {
             if (al == 3) {
                 call_multi(parallel, delay, fns, callback);
             }
-
-
-
 
 	    }
 	    return fns;

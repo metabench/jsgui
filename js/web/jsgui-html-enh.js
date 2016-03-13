@@ -2507,6 +2507,7 @@ var Control = jsgui.Control = jsgui.Control.extend({
 
                 if (handle_dragmove) {
                     e_mousemove.control = that;
+                    //console.log('e_mousemove', e_mousemove);
                     handle_dragmove(e_mousemove);
                 }
 
@@ -2742,7 +2743,12 @@ var Control = jsgui.Control = jsgui.Control.extend({
             var targetPos = findPos(target);
             //console.log('targetPos ' + stringify(targetPos));
 
-            var ctrl_el_pos = findPos(ctrl.get('dom.el'));
+            var el_ctrl = ctrl.value('dom.el');
+
+            //console.log('el_ctrl', el_ctrl);
+
+
+            var ctrl_el_pos = findPos(el_ctrl);
 
             // and use the client x, client y
 
@@ -2750,10 +2756,15 @@ var Control = jsgui.Control = jsgui.Control.extend({
 
             var e_pos_on_page = [e_mousedown.pageX, e_mousedown.pageY];
 
+            //console.log('e_pos_on_page', e_pos_on_page);
+            //console.log('ctrl_el_pos', ctrl_el_pos);
+
             // then subtract the vectors.
 
             //var offset_within_target = jsgui.v_subtract(e_pos_on_page, targetPos);
             mousedown_offset_from_ctrl_lt = jsgui.v_subtract(e_pos_on_page, ctrl_el_pos);
+
+            //console.log('mousedown_offset_from_ctrl_lt', mousedown_offset_from_ctrl_lt);
             //console.log('mousedown_offset_from_ctrl_lt ' + stringify(mousedown_offset_from_ctrl_lt));
 
             // not bad...
@@ -2838,6 +2849,9 @@ var Control = jsgui.Control = jsgui.Control.extend({
             var clientX = e_move.clientX;
             var clientY = e_move.clientY;
 
+            //console.log('clientX', clientX);
+            //console.log('clientY', clientY);
+
             //var pageX = e_move.pageX;
             //var pageY = e_move.pageY;
 
@@ -2864,6 +2878,8 @@ var Control = jsgui.Control = jsgui.Control.extend({
 
             var window_size = get_window_size();
 
+            //console.log('mousedown_offset_from_ctrl_lt', mousedown_offset_from_ctrl_lt);
+
 
             var ctrl_pos = jsgui.v_subtract([clientX, clientY], mousedown_offset_from_ctrl_lt);
 
@@ -2877,6 +2893,8 @@ var Control = jsgui.Control = jsgui.Control.extend({
             var offset_adjustment = ctrl.get('offset_adjustment');
             //console.log('offset_adjustment', offset_adjustment);
 
+            //console.log('1) ctrl_pos', ctrl_pos);
+
             if (offset_adjustment) {
                 // want to find out what zone it is anchored in.
 
@@ -2884,6 +2902,8 @@ var Control = jsgui.Control = jsgui.Control.extend({
 
                 //
             }
+
+            //console.log('2) ctrl_pos', ctrl_pos);
             /*
              var unanchored_offset = ctrl.get('unanchored_offset');
              console.log('unanchored_offset', unanchored_offset);
@@ -2902,7 +2922,7 @@ var Control = jsgui.Control = jsgui.Control.extend({
 
              //
              }
-             */
+            */
 
 
             if (ctrl_pos[0] < 0) ctrl_pos[0] = 0;

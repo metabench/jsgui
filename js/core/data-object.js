@@ -3421,7 +3421,7 @@ var Data_Object = Evented_Class.extend({
 
                     var level = 0, l = arr_field_names.length;
                     var current_obj = this, new_obj, fname;
-                    while(level < l) {
+                    while (level < l) {
                         fname = arr_field_names[level];
                         if (!current_obj) {
                             return undefined;
@@ -3740,6 +3740,8 @@ var Data_Object = Evented_Class.extend({
                                         }
                                         //if (data_type_name == '')
                                     } else {
+
+
                                         var dtoc = this.mod_link().ensure_data_type_data_object_constructor(field_type_name);
                                         //console.log('dtoc ' + dtoc);
                                         // then use this to construct the empty field.
@@ -4419,7 +4421,8 @@ var Data_Object = Evented_Class.extend({
                          }
                          */
                         var dv;
-                        //console.log('tv ' + tv);
+                        console.log('property_name', property_name);
+                        console.log('tv ' + tv);
 
                         // And for an array?
 
@@ -4703,12 +4706,6 @@ var Data_Object = Evented_Class.extend({
                     return value;
                 }
             }
-
-
-
-
-
-
         }
 
     }),
@@ -5201,7 +5198,7 @@ var ensure_data_type_data_object_constructor = function(data_type_name) {
 
     //console.log('');
     //console.log('');
-    //console.log('jsgui.map_data_type_data_object_constructors[data_type_name] ' + stringify(jsgui.map_data_type_data_object_constructors[data_type_name]));
+    console.log('jsgui.map_data_type_data_object_constructors[data_type_name] ' + stringify(jsgui.map_data_type_data_object_constructors[data_type_name]));
     //console.log('');
     //console.log('');
 

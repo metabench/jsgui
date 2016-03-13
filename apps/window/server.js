@@ -44,7 +44,10 @@ var port = 80;
 
 var server = new jsgui.Server.JSGUI_Server({
     '*': {
-        'name': 'window'
+		'meta': {
+			'name': 'window'
+		}
+
     }
 });
 
@@ -53,91 +56,107 @@ var rp = server.get('resource_pool');
 var Control = jsgui.Control;
 
 //console.log('rp ' + rp);
-var rp = server.get('resource_pool');
+//var rp = server.get('resource_pool');
 var ar = rp.get_resource('Server Router');
 var rt = ar.get('routing_tree');
 
-server.start(port, function(ree, res_started) {
+var website_resource = rp.get_resource('window');
+var js = website_resource.get_resource('Site JavaScript');
+//js.set('auto_build_client', true);
+// or call a function...
+//  seems more specific.
 
-	// Maybe it's best to use je-suis-xml for setting up the page.
+//var ar = rp.get_resource('Server Router');
+//console.log('ar', ar);
+//var rt = ar.get('routing_tree');
+//console.log('js', js);
 
-	// Set up jsgui-html-client-stylish within the js serving resource.
-	//  It gets served as if it's within /js/web
+//js.build_client(function(err, res_build_client) {
+	server.start(port, function(ree, res_started) {
+
+		// Maybe it's best to use je-suis-xml for setting up the page.
+
+		// Set up jsgui-html-client-stylish within the js serving resource.
+		//  It gets served as if it's within /js/web
 
 
-	rt.set('/', function(req, res) {
-		// Better to make a proper JSGUI client document.
+		rt.set('/', function(req, res) {
+			// Better to make a proper JSGUI client document.
 
-		var server_page_context = new Server_Page_Context({
-			'req': req,
-			'res': res
+			var server_page_context = new Server_Page_Context({
+				'req': req,
+				'res': res
+			});
+
+			var hd = new jsgui.Client_HTML_Document({
+				'context': server_page_context
+			});
+
+			hd.include_client_css();
+			hd.include_js('/js/app-bundle.js');
+
+			var body = hd.body();
+
+			var ctrl_0 = new Window({
+				'context': server_page_context
+			});
+			ctrl_0.resizable();
+			ctrl_0.active();
+
+			// style should at least set the CSS.
+			//
+
+			ctrl_0.style('background-color', '#DDDDDD');
+			ctrl_0.style('width', '300px');
+			ctrl_0.style('height', '300px');
+
+			// Would be nice to be able to set up a menu with some simple JSON like this.
+
+
+			ctrl_0.menu({
+				'file': ['New', 'Open', 'Save', 'Exit'],
+				'edit': ['Select All', 'Copy', 'Paste', 'Cut', 'Undo']
+			});
+
+			body.add(ctrl_0);
+
+			hd.all_html_render(function(err, deferred_html) {
+				if (err) {
+					throw err;
+				} else {
+					//console.log('deferred_html', deferred_html);
+					var mime_type = 'text/html';
+					//console.log('mime_type ' + mime_type);
+
+					res.writeHead(200, { 'Content-Type': mime_type });
+					res.end(deferred_html, 'utf-8');
+				}
+			});
 		});
 
-		var hd = new jsgui.Client_HTML_Document({
-			'context': server_page_context
+
+		rt.setRoot404(function(req, res) {
+
+			res.writeHead(404, {"Content-Type": "text/html"});
+			res.write("<!DOCTYPE \"html\">");
+			res.write("<html>");
+			res.write("<head>");
+			res.write("<title>Page Not Found</title>");
+			res.write("</head>");
+			res.write("<body>");
+			res.write("<h1>Page Not Found</h1>");
+			res.write("</body>");
+			res.write("</html>");
+			res.end();
+
 		});
 
-		hd.include_client_css();
-		hd.include_js('/js/app-bundle.js');
+		// We should be able to put info into the db.
 
-		var body = hd.body();
-
-		var ctrl_0 = new Window({
-			'context': server_page_context
-		});
-		ctrl_0.resizable();
-		ctrl_0.active();
-
-		// style should at least set the CSS.
-		//
-
-		ctrl_0.style('background-color', '#DDDDDD');
-		ctrl_0.style('width', '300px');
-		ctrl_0.style('height', '300px');
-
-		// Would be nice to be able to set up a menu with some simple JSON like this.
-
-
-		ctrl_0.menu({
-			'file': ['New', 'Open', 'Save', 'Exit'],
-			'edit': ['Select All', 'Copy', 'Paste', 'Cut', 'Undo']
-		});
-
-		body.add(ctrl_0);
-
-		hd.all_html_render(function(err, deferred_html) {
-			if (err) {
-				throw err;
-			} else {
-				//console.log('deferred_html', deferred_html);
-				var mime_type = 'text/html';
-				//console.log('mime_type ' + mime_type);
-
-				res.writeHead(200, { 'Content-Type': mime_type });
-				res.end(deferred_html, 'utf-8');
-			}
-		});
 	});
 
 
-	rt.setRoot404(function(req, res) {
+//});
 
-		res.writeHead(404, {"Content-Type": "text/html"});
-	  	res.write("<!DOCTYPE \"html\">");
-	  	res.write("<html>");
-	  	res.write("<head>");
-	  	res.write("<title>Page Not Found</title>");
-	  	res.write("</head>");
-		res.write("<body>");
-		res.write("<h1>Page Not Found</h1>");
-		res.write("</body>");
-		res.write("</html>");
-		res.end();
-
-	});
-
-	// We should be able to put info into the db.
-
-});
 
 //});

@@ -2313,9 +2313,9 @@ var Control = jsgui.Enhanced_Data_Object.extend({
                 that.style(i, v, false);
             });
 
-            var style = this.get('dom.attributes.style');
+            var style = this.value('dom.attributes.style');
 
-            var el = this.get('dom.el');
+            var el = this.value('dom.el');
 
             if (el) {
                 el.style.cssText = style;

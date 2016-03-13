@@ -157,6 +157,8 @@ var Horizontal_Menu = Control.extend({
 
 					// And mousedown anywhere (else) to close.
 
+					console.log('pre setup one mousedown anywhere');
+
 					v.one_mousedown_anywhere(function(e_mousedown) {
 						//console.log('e_mousedown.within_this ' + e_mousedown.within_this);
 

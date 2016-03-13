@@ -30,10 +30,7 @@ var Window = Control.extend({
 			var div_relative = add(Control({'class': 'relative'}))
 
 			var title_bar = div_relative.add(make(Control({'class': 'title bar'})));
-
-
 			var dv_title = this.get('title');
-
 			var title_h2 = make(jsgui.h2());
 
 			title_bar.add(title_h2);
@@ -69,29 +66,6 @@ var Window = Control.extend({
 
 			// Possibly the Window control is not the best example to start with.
 			// Or work on the Window control as well as some more generic examples.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 			var inner_control = div_relative.add(make(Control({'class': 'inner'})));
@@ -217,6 +191,8 @@ var Window = Control.extend({
 		//console.log('ic_parent', ic_parent);
 		//throw 'stop';
 		//console.log('ic', ic);
+
+
 
 		h_menu.insert_before(ic);
 		// So needs to be able to access parent controls.

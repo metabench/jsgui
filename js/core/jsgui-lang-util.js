@@ -26,7 +26,7 @@ if (typeof define !== 'function') {
 define(["./jsgui-lang-essentials", "./jsgui-data-structures", "./data-object", "./collection"],
 	function(jsgui, Data_Structures, Data_Object, Collection) {
 	*/
-    var jsgui = require('./jsgui-lang-essentials');
+var jsgui = require('./jsgui-lang-essentials');
 var Data_Structures = require('./jsgui-data-structures');
 var Data_Value = require('./data-value');
 var Evented_Class = require('./evented-class');
@@ -960,7 +960,7 @@ var ensure_data_type_data_object_constructor = function (data_type_name) {
 
 
         var dto = jsgui.data_types_info[data_type_name];
-       //console.log('dto ' + stringify(dto));
+        console.log('dto ' + stringify(dto));
         //console.log()
         //throw 'stop';
 
