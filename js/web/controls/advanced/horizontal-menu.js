@@ -136,14 +136,17 @@ var Horizontal_Menu = Control.extend({
 
 			// The menu items should have 'state' properties
 
+			var last_clicked;
+
+
+
 			this.get('content').each(function(i, v) {
 				//console.log('i', i);
 				//console.log('v', v);
 
 				//v.close_all();
 
-				var v_state = v.get('state');
-				//console.log('v_state', v_state);
+
 
 				// Undefined state?
 
@@ -153,21 +156,52 @@ var Horizontal_Menu = Control.extend({
 				v.on('click', function(e_click) {
 					//console.log('menu item clicked');
 
-					v.open();
 
-					// And mousedown anywhere (else) to close.
+					// if it is already open?
 
-					console.log('pre setup one mousedown anywhere');
+					var v_state = v.get('state');
+					//console.log('v_state', v_state);
 
-					v.one_mousedown_anywhere(function(e_mousedown) {
-						//console.log('e_mousedown.within_this ' + e_mousedown.within_this);
 
-						if (!e_mousedown.within_this) {
-							v.close();
-						}
-					});
+
+
+					// Don't open if we are reclicking on the same menu item?
+					//if (last_clicked !== v) {
+						v.open();
+
+						// And mousedown anywhere (else) to close.
+
+						//console.log('pre setup one mousedown anywhere');
+
+						// mousedown anywhere else?
+
+
+
+						v.one_mousedown_anywhere(function(e_mousedown) {
+							//console.log('e_mousedown.within_this ' + e_mousedown.within_this);
+
+							if (!e_mousedown.within_this) {
+								v.close();
+								//
+							} else {
+
+							}
+
+						});
+					//}
+
+
+
+
+					//last_clicked = v;
 
 				})
+
+				v.on('mouseup', function(e_mouseup) {
+					//setTimeout(function() {
+					//	last_clicked = null;
+					//}, 0);
+				});
 			});
 		}
 
