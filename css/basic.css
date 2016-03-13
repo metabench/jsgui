@@ -616,12 +616,17 @@ Smaller / compact modes such as when there is an audio player acting as a compon
 }
 
 .no-text-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+
+}
+
+.default-cursor {
+	cursor: default;
 }
 
 
